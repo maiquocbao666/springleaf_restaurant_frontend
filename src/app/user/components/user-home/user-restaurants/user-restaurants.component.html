@@ -1,0 +1,26 @@
+<h1>Restauran</h1>
+<ul class="products container">
+    <table class="table table-light">
+        <tbody>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Address</td>
+                <td>Phone</td>
+                <td>Email</td>
+
+
+            </tr>
+            <tr *ngFor="let res of restaurants">
+                <th>
+                    {{ res.restaurantId }}
+                </th>
+                <th>{{ res.restaurantName }}</th>
+                <th>{{ res.address }}</th>
+                <th>{{ res.phone }}</th>
+                <th>{{ res.email }}</th>
+            </tr>
+        </tbody>
+    </table>
+</ul>
+<router-outlet></router-outlet>

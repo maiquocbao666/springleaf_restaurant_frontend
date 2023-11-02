@@ -1,0 +1,79 @@
+<div class="modal-header">
+  <h4 class="modal-title">Login</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="productForm" (ngSubmit)="updateProduct()">
+    <div class="row">
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">Mã sản phẩm</label>
+        <div class="mb-3">
+          <input type="text" formControlName="menuItemId" class="form-control">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">Tên sản phẩm</label>
+        <div class="mb-3">
+          <input type="text" formControlName="name" class="form-control">
+        </div>
+        <div
+          *ngIf="productForm.get('name')?.invalid && (productForm.get('name')?.dirty || productForm.get('name')?.touched)"
+          class="alert alert-danger">Không bỏ trống!
+        </div> <br>
+      </div>
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">Giá</label>
+        <div class="mb-3">
+          <input type="number" formControlName="price" class="form-control">
+        </div>
+        <div
+          *ngIf="productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)"
+          class="alert alert-danger">Không bỏ trống!
+        </div> <br>
+      </div>
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">ImageUrl</label>
+        <div class="mb-3">
+          <input type="text" formControlName="imageUrl" class="form-control">
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label>Đang bán: </label>
+        <input id="categoryActiveYes" formControlName="status" type="radio" [value]="true"
+          [checked]="productForm.get('status')?.value === true"> Có
+        <input id="categoryActiveNo" formControlName="status" type="radio" [value]="false"
+          [checked]="productForm.get('status')?.value === false"> Không <br>
+      </div>
+      <div class="col-sm-6">
+        <label for="exampleInputPassword1" class="form-label">Category</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="categoryId">
+            <option [value]="">Chọn </option>
+            <option *ngFor="let category of categories" [value]="category.categoryId"> {{ category.name }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="productForm.get('categoryId')?.invalid && (productForm.get('categoryId')?.dirty || productForm.get('categoryId')?.touched)"
+          class="alert alert-danger">Không bỏ trống!
+        </div> <br>
+      </div>
+      <div class="col-sm-12">
+        <label for="exampleInputPassword1" class="form-label">Mô tả</label>
+        <div class="mb-3">
+          <textarea class="form-control" formControlName="description" id="" cols="30" rows="10"></textarea>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
+    Đóng
+  </button>
+</div>

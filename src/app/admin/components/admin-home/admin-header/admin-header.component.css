@@ -1,0 +1,191 @@
+
+
+/* entypo   */
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+
+[class*="en-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+}
+
+nav {
+  position: relative;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 100%;
+  background-color: black;
+  color: #fff;
+  float: left;
+  overflow: hidden;
+  transition: width .3s ease-in-out;
+  box-shadow: 0 0 1px #000;
+  -ms-transform: none;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -ms-transform: none;
+  -o-transform: none;
+  transform: none;
+  z-index: 100;
+}
+
+.sidebar:hover {
+  width: 250px;
+  overflow-y: auto;
+}
+
+.canvas-toggle {
+  position: fixed;
+  z-index: 1199;
+}
+
+input[type="text"] {
+  background: transparent;
+  position: absolute;
+  left: 20%;
+  top: 10px;
+  color: #bbb;
+  width: 70%;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  padding: 0;
+}
+
+input[type="text"]:focus {
+  color: #fff;
+  outline: 0;
+}
+
+.sidebar:hover input[type="text"] {
+  padding: 5px 10px;
+}
+
+.sidebar:hover .main-nav ul li a {
+  opacity: 1;
+  left: 0;
+  font-weight: 900;
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar .main-nav ul li {
+  min-height: 50px;
+  line-height: 50px;
+  position: relative;
+}
+
+.sidebar .main-nav ul li.logo {
+  margin-bottom: 10px;
+}
+
+.sidebar .main-nav ul li.logo a {
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.sidebar .main-nav ul li.logo i:before {
+  color: yellow;
+  font-size: 1.6em;
+}
+
+.sidebar .main-nav ul li a {
+  display: block;
+  padding-left: 50px;
+  position: relative;
+  left: 15px;
+  opacity: 0;
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.sidebar .main-nav ul li i {
+  font-weight: 100;
+  position: absolute;
+  font-size: 1.2em;
+  width: 50px;
+  height: 50px;
+  top: 15px;
+  left: 0;
+  text-align: center;
+}
+
+.sidebar .main-nav ul li i:before {
+  font-size: 1.25em;
+  transition: all .3s ease-in-out;
+}
+
+.sidebar .main-nav ul li:hover {
+  background-color: #111;
+  border-left: 3px solid yellow;
+}
+
+.sidebar .main-nav li a:focus {
+  border-left: 3px solid yellow;
+}
+
+.sidebar .main-nav ul li:hover i:before {
+  color: yellow;
+}
+
+.sidebar:hover + .menu {
+  transition: all 0.5s ease;
+  position: relative;
+  float: left;
+}
+
+nav:hover ~ .menu {
+  transition: all 0.5s ease;
+  position: relative;
+  left: 10%;
+  width: 90%;
+}
+
+.menu {
+  position: relative;
+  left: 3%;
+  width: 97%;
+}
+
+.page {
+  position: relative;
+  padding-left: 50px;
+}
+
+.page.color-1 {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.page .content {
+  width: 100%;
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+.page .content h1,
+.page .content h2,
+.page .content p {
+  margin-bottom: 1em;
+}

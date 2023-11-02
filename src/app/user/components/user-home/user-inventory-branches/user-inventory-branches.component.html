@@ -1,0 +1,76 @@
+<div class="container">
+  <form [formGroup]="inventoryBranchForm">
+    <div class="row">
+      <div class="col-lg-3">
+        <label for="exampleInputPassword1" class="form-label">ID chi nhánh</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="supplier">
+            <option value="">Chọn nhà sản xuất</option>
+            <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <label for="exampleInputPassword1" class="form-label">Nhà hàng</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="restaurant">
+            <option value="">Chọn nhà hàng</option>
+            <option *ngFor="let restaurant of restaurants " [value]="restaurant.restaurantId">{{
+              restaurant.restaurantName
+              }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Ingredient</label>
+          <div class="mb-3">
+            <select class="form-select" aria-label="Default select example" formControlName="ingredient">
+              <option value="">Chọn nguyên liệu</option>
+              <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+  <div class="col-2">
+    <select class="form-select" (change)="onTableSizeChange($event)">
+      <option value="">Page</option>
+      <option *ngFor="let size of tableSizes">
+        {{size}}
+      </option>
+    </select>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Ingredient</th>
+        <th scope="col">Supplier</th>
+        <th scope="col">Chức năng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let inventoryBranch of inventoryBranches | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+        <td>{{inventoryBranch.inventoryBranchId}}</td>
+        <td>{{inventoryBranch.ingredient}}</td>
+        <!-- <td>{{ (getIngredientById(inventoryBranch.ingredient) | async)?.name }}</td> -->
+        <!-- <td>{{ (getSupplierById(inventoryBranch.supplier) | async)?.name }}</td> -->
+        <td>
+          <!-- <button type="button" class="btn btn-outline-primary"
+                  (click)="openInventoryDetailModal(inventory)">Edit</button>
+              <button type="button" class="btn btn-outline-danger"
+                  (click)="deleteInventory(inventory)">Delete</button> -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

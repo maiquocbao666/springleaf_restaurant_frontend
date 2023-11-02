@@ -1,0 +1,253 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0
+}
+
+a{
+  text-decoration: none;
+  color: #000;
+}
+.product-card {
+  background-color: #ffcd41;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  padding: 5px;
+  width: 230px;
+  margin: 10px;
+
+}
+
+.product-card img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.product-name {
+  font-size: 24px;
+  margin: 10px 0;
+  color: #d30e17;
+  height: 70px;
+}
+
+.product-description {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.product-price {
+  font-size: 20px;
+  margin: 10px 0;
+  color: #d30e17;
+  height: 15px;
+}
+
+.buy-button {
+  background-color: #d30e17;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.buy-button:hover {
+  background-color: #c4a8a9;
+}
+
+/* Hiệu ứng chuyển động */
+button.btn {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 30px;
+  background-color: #ec8f51;
+}
+
+/* Hiệu ứng hover */
+button.btn:hover {
+  transform: scale(1.05);
+  /* Phóng to nút khi hover */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  /* Đổ bóng ở góc */
+}
+
+/****************** most_popular start ***************/
+.most_popular {
+  padding: 40px 0px 10px;
+}
+
+.most_popular .title {
+  padding: 0px 0px 30px;
+  text-transform: uppercase;
+}
+
+.most_popular_item {
+  position: relative;
+  margin: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.most_popular_thumb {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  width: 100%;
+}
+
+.most_popular_thumb img {
+  width: 100%;
+  height: 100%;
+}
+
+.hover_zoom_brightness img {
+  transition: transform 2s, filter 1.5s ease-in-out;
+  transform-origin: center center;
+  filter: brightness(100%);
+}
+
+.hover_zoom_brightness:hover img {
+  filter: brightness(50%);
+  transform: scale(1.3);
+}
+
+.item_action ul li {
+  background-color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  padding: 10px 0px;
+  color: #ff5353;
+}
+
+.item_action ul li:hover {
+  background-color: #ff5353;
+  transition: all 0.5s linear;
+}
+
+.item_action ul li a:hover {
+  color: #fff;
+}
+
+.item_action ul li a {
+  color: #000;
+}
+
+.item_action {
+  position: absolute;
+  bottom: 0;
+  color: #f1f1f1;
+  width: 100%;
+  transition: 2s ease;
+  opacity: 0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+.most_popular_item:hover .item_action {
+  opacity: 1;
+}
+
+.mostpopular_content {
+  padding: 10px 0px;
+}
+
+.mostpopular_name{
+height: 50px;
+}
+
+.mostpopular_rating a {
+  color: #3d3e13;
+}
+
+.mostpopular_rating a:hover {
+  color: #fbff08;
+}
+.mostpopular_content .price {
+  font-weight: 700;
+}
+
+/****************** most_popular end ***************/
+.Btn {
+  position: relative;
+  width: 150px;
+  height: 55px;
+  border-radius: 45px;
+  border: none;
+  background-color: rgb(255, 95, 140);
+  color: white;
+  box-shadow: 0px 10px 10px rgb(241, 130, 82) inset,
+  0px 5px 10px rgba(5, 5, 5, 0.212),
+  0px -10px 10px rgb(226, 84, 84) inset;
+  cursor: pointer;
+  
+  align-items: center;
+  justify-content: center;
+}
+
+.Btn::before {
+  width: 70%;
+  height: 2px;
+  position: absolute;
+  background-color: rgba(250, 250, 250, 0.678);
+  content: "";
+  filter: blur(1px);
+  top: 7px;
+  border-radius: 50%;
+}
+
+.Btn::after {
+  width: 70%;
+  height: 2px;
+  position: absolute;
+  background-color: rgba(250, 250, 250, 0.137);
+  content: "";
+  filter: blur(1px);
+  bottom: 7px;
+  border-radius: 50%;
+}
+
+.Btn:hover {
+  animation: jello-horizontal 0.9s both;
+}
+
+@keyframes jello-horizontal {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}

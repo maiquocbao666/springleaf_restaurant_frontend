@@ -1,0 +1,66 @@
+<div class="container">
+    <h1>Nguyên liệu</h1>
+    <form [formGroup]="ingredientForm" (ngSubmit)="addIngredient()">
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="exampleInputPassword1" class="form-label">Name</label>
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="name"
+                        placeholder="Nhập tên nguyên liệu...">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label for="exampleInputPassword1" class="form-label">OrderThreshold</label>
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="orderThreshold"
+                        placeholder="Nhập số lượng ...">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Description</label>
+                <div class="mb-3">
+                    <textarea class="form-control" cols="30" rows="10" formControlName="description"
+                        placeholder="Nhập mô tả..."></textarea>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-info">Save</button>
+    </form>
+    <div class="col-2">
+        <select class="form-select" (change)="onTableSizeChange($event)">
+            <option value="">Page</option>
+            <option *ngFor="let size of tableSizes">
+                {{size}}
+            </option>
+        </select>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">OrderThreshold</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let ingredient of ingredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                <td>{{ingredient.ingredientId}}</td>
+                <td>{{ingredient.name}}</td>
+                <td>{{ingredient.description}}</td>
+                <td>{{ingredient.orderThreshold}}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary"
+                        (click)="openIngredientDetailModal(ingredient)">Edit</button>
+                    <button type="button" class="btn btn-outline-danger"
+                        (click)="deleteIngredient(ingredient)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <pagination-controls previousLabel="Prev" nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
+</div>

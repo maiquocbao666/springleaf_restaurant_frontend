@@ -1,0 +1,15 @@
+<router-outlet *ngIf="dataLoaded; else loadingTemplate">
+
+</router-outlet>
+<ng-toast></ng-toast>
+<!-- <app-date-time></app-date-time> -->
+
+<ng-template #loadingTemplate>
+    <!-- Hiển thị thông báo hoặc spinner khi đang tải dữ liệu -->
+    <div class="container">
+        <div class="item item-1"></div>
+        <div class="item item-2"></div>
+        <div class="item item-3"></div>
+        <div class="item item-4"></div>
+    </div>
+</ng-template>

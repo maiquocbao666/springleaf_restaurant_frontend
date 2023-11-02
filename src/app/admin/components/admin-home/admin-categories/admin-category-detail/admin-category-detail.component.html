@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h4 class="modal-title">Login</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+
+        <label for="categoryId">Category id: </label>
+        <input id="categoryId" formControlName="id" readonly />
+        <div *ngIf="categoryForm.get('id')?.invalid && (categoryForm.get('id')?.dirty || categoryForm.get('id')?.touched)"
+            class="alert alert-danger">
+        </div> <br>
+
+        <label for="categoryName">Category name: </label>
+        <input id="categoryName" formControlName="name" />
+        <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.dirty || categoryForm.get('name')?.touched)"
+            class="alert alert-danger">
+            <div *ngIf="categoryForm.get('name')?.hasError('required')">
+                Name is required
+            </div>
+            <div *ngIf="categoryForm.get('name')?.hasError('minlength')">
+                Name must be at least 3 characters long
+            </div>
+        </div> <br>
+
+        <label>Đang bán: </label>
+        <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true"
+            [checked]="categoryForm.get('active')?.value === true"> Có
+        <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false"
+            [checked]="categoryForm.get('active')?.value === false"> Không <br>
+
+        <label for="categoryDescription">Category description: </label>
+        <input id="categoryDescription" formControlName="description" /> <br>
+
+        <button type="submit" class="add-button" [disabled]="categoryForm.invalid">
+            Save category
+        </button>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
+        Đóng
+    </button>
+</div>

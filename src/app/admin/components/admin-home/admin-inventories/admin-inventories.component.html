@@ -1,0 +1,60 @@
+<div class="container">
+    <h1>Kho</h1>
+    <form [formGroup]="inventoryForm" (ngSubmit)="addInventory()">
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Ingredient</label>
+            <div class="mb-3">
+                <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
+                    <option value="">Chọn nguyên liệu</option>
+                    <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Supplier</label>
+            <div class="mb-3">
+                <select class="form-select" aria-label="Default select example" formControlName="supplierId">
+                    <option value="">Chọn nhà sản xuất</option>
+                    <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <div class="col-2">
+        <select class="form-select" (change)="onTableSizeChange($event)">
+            <option value="">Page</option>
+            <option *ngFor="let size of tableSizes">
+                {{size}}
+            </option>
+        </select>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Ingredient</th>
+                <th scope="col">Supplier</th>
+                <th scope="col">Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let inventory of inventories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                <td>{{inventory.inventoryId}}</td>
+                <td>{{ (getIngredientById(inventory.ingredientId) | async)?.name }}</td>
+                <td>{{ (getSupplierById(inventory.supplierId) | async)?.name }}</td>
+                <td><button type="button" class="btn btn-outline-primary"
+                        (click)="openInventoryDetailModal(inventory)">Edit</button>
+                    <button type="button" class="btn btn-outline-danger"
+                        (click)="deleteInventory(inventory)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <pagination-controls previousLabel="Prev" nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
+</div>

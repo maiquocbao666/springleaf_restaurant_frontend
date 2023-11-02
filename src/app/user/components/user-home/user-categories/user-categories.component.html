@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 mt-3">
+            <nav class="mobile-category" *ngIf="isMobile">
+                <ul class="mobile-category-list">
+                    <li class="mobile-category-item" *ngFor="let category of categories$ | async">
+                        <a [routerLink]="['/user/index/category', category.categoryId, 'products']"
+                            class="mobile-category-link"> {{ category.name }}</a>
+                    </li>
+                </ul>
+            </nav>
+            <div *ngIf="!isMobile">
+                <div class=" search col-12 mb-3">
+                    <div class="col-12" id="search-component">
+                        <input class="form-control" #searchBox id="search-box" (input)="search(searchBox.value)"
+                            autocomplete="off" placeholder="Tìm kiếm theo loại..." />
+                    </div>
+                </div>
+            </div>
+            <nav class="category" *ngIf="!isMobile">
+                <ul class="list-group">
+                    <h4><i class="fas fa-utensils"></i>
+                        Category</h4>
+                    <li *ngFor="let category of categories$ | async" class="list-group-item">
+                        <a class="nav-link" [routerLink]="['/user/index/category', category.categoryId, 'products']">
+                            {{ category.name }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Reponsive -->
+            <!-- <div class="accordion accordion-flush" id="accordionFlushExample" *ngIf="isMobile">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            <i class="fas fa-utensils"></i>
+                            Category
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse"
+                        data-bs-parent="#accordionFlushExample" *ngFor="let category of categories$ | async"
+                        class="list-group-item">
+                        <div class="accordion-body"> <a
+                                [routerLink]="['/user/index/category', category.categoryId, 'products']">
+                                {{ category.name }}
+                            </a></div>
+                    </div>
+                </div>
+            </div> -->
+
+
+        </div>
+        <div class="col-md-9">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+
+<!-- <button type="button" class="delete" title="delete hero" (click)="delete(hero)">x</button> -->

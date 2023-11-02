@@ -1,0 +1,28 @@
+<form (submit)="updateProfile()" [formGroup]="profileForm">
+    <div>
+      <label for="fullName">First Name</label>
+      <input type="text" id="fullName" formControlName="fullName" name="fullName">
+    </div>
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" formControlName="username" name="username">
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" formControlName="password" name="password">
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input type="text" id="email" formControlName="email" name="email">
+    </div>
+    <div>
+        <label for="phone">Phone number</label>
+        <input type="text" id="phone" formControlName="phone" name="phone">
+      </div>
+    <div>
+      <label for="address">Address</label>
+      <input type="number" id="address" formControlName="address" name="address">
+    </div>
+    <button type="submit">Update Profile</button>
+  </form>
+  

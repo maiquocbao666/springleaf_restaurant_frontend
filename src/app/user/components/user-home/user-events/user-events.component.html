@@ -1,0 +1,27 @@
+<h1>Event</h1>
+<ul class="products container">
+    <table class="table table-light">
+        <tbody>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Date</td>
+                <td>Number Of Guests</td>
+                <td>Combo</td>
+                <td>Order</td>
+
+            </tr>
+            <tr *ngFor="let event of events">
+                <th>
+                    {{ event.eventId }}
+                </th>
+                <th>{{ event.eventName }}</th>
+                <th>{{ event.eventDate }}</th>
+                <th>{{ event.numberOfGuests }}</th>
+                <th>{{ event.combo }}</th>
+                <th>{{ event.order }}</th>
+            </tr>
+        </tbody>
+    </table>
+</ul>
+<router-outlet></router-outlet>

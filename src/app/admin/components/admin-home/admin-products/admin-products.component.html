@@ -1,0 +1,93 @@
+<div class="container">
+  <h1>Product</h1>
+  <form [formGroup]="productForm" (ngSubmit)="addProduct()">
+    <div class="row">
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">Tên sản phẩm</label>
+        <div class="mb-3">
+          <input type="text" formControlName="name" class="form-control" placeholder="Nhập tên sản phẩm...">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">Giá</label>
+        <div class="mb-3">
+          <input type="number" formControlName="price" class="form-control" placeholder="Nhập giá...">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">ImageUrl</label>
+        <div class="mb-3">
+          <input type="text" formControlName="imageUrl" class="form-control">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <label for="exampleInputPassword1" class="form-label">Category</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="categoryId">
+            <option value="">Chọn loại </option>
+            <option *ngFor="let category of categories" [value]="category.categoryId"> {{ category.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label>Đang bán: </label>
+        <input id="categoryActiveYes" formControlName="status" type="radio" [value]="true"
+          [checked]="productForm.get('status')?.value === true"> Có
+        <input id="categoryActiveNo" formControlName="status" type="radio" [value]="false"
+          [checked]="productForm.get('status')?.value === false"> Không <br>
+      </div>
+      <div class="col-sm-12">
+        <label for="exampleInputPassword1" class="form-label">Mô tả</label>
+        <div class="mb-3">
+          <textarea class="form-control" formControlName="description" id="" cols="30" rows="10"
+            placeholder="Nhập mô tả..."></textarea>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Save</button>
+
+  </form>
+  <div class="col-2">
+    <select class="form-select" (change)="onTableSizeChange($event)">
+      <option value="">Page</option>
+      <option *ngFor="let size of tableSizes">
+        {{size}}
+      </option>
+    </select>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Price</th>
+        <th scope="col">Image</th>
+        <th scope="col">Category</th>
+        <th scope="col">Status</th>
+      </tr>
+
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let product of products | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+        <td>{{product.menuItemId}}</td>
+        <td>{{product.name}}</td>
+        <td>{{product.description}}</td>
+        <td>{{product.price | currency:'VND':true}}</td>
+        <td>{{product.imageUrl}}</td>
+        <td>{{ (getCategoryById(product.categoryId) | async)?.name }}</td>
+        <td>{{product.status ? 'Còn':'Hết'}}</td>
+        <td><button type="button" class="btn btn-outline-primary"
+            (click)="openProductDetailModal(product)">Edit</button>
+          <button type="button" class="btn btn-outline-danger" (click)="deleteProduct(product)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

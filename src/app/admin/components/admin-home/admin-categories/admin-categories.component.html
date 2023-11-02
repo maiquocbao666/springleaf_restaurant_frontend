@@ -1,0 +1,69 @@
+<h1>Categoriy Form</h1>
+
+<form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+    <label for="categoryName">Category name: </label>
+    <input id="categoryName" formControlName="name" />
+    <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.dirty || categoryForm.get('name')?.touched)"
+        class="alert alert-danger">
+        <div *ngIf="categoryForm.get('name')?.hasError('required')">
+            Name is required
+        </div>
+        <div *ngIf="categoryForm.get('name')?.hasError('minlength')">
+            Name must be at least 3 characters long
+        </div>
+    </div> <br>
+
+    <label>Đang bán: </label>
+    <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true"
+        [checked]="categoryForm.get('active')?.value === true"> Có
+    <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false"
+        [checked]="categoryForm.get('active')?.value === false"> Không <br>
+
+    <label for="categoryDescription">Category description: </label>
+    <input id="categoryDescription" formControlName="description" /> <br>
+
+    <button type="submit" class="add-button" [disabled]="categoryForm.invalid">
+        Add category
+    </button>
+</form>
+
+<h1>Categories table</h1>
+<div>
+    <select (change)="onTableSizeChange($event)">
+        <option *ngFor="let size of tableSizes">
+            {{size}}
+        </option>
+    </select>
+</div>
+<br>
+<table class="table table-light container">
+    <tbody>
+        <tr>
+            <td>ID</td>
+            <td>Name</td>
+            <td>Active</td>
+            <td>Description</td>
+            <td>Edit</td>
+            <td>Delete</td>
+        </tr>
+        <tr
+            *ngFor="let category of categories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+            <th>{{category.categoryId}}</th>
+            <th>{{category.name}}</th>
+            <th>{{category.active}}</th>
+            <th>{{category.description}}</th>
+            <!-- <th> <a routerLink="/admin/category/{{category.categoryId}}" type="button">Edit
+                </a></th> -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <button (click)="openCategoryDetailModal(category)">Edit</button>
+                </li>
+            </ul>
+            <th><button (click)="deleteCategory(category)" disabled>Delete</button></th>
+        </tr>
+    </tbody>
+</table>
+<div>
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>

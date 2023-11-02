@@ -1,0 +1,68 @@
+/* Reset CSS để loại bỏ margin và padding mặc định của trình duyệt */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.products {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 75%; /* Điều chỉnh kích thước theo nhu cầu */
+}
+
+.product-item {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.menu-item {
+    font-weight: bold;
+}
+
+.quantity {
+    margin-left: 10px;
+}
+
+.select-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Điều chỉnh kích thước theo nhu cầu */
+}
+
+.select-column {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.select {
+    width: 100%;
+    padding: 5px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
