@@ -11,12 +11,12 @@ addEventListener('message', async (event) => {
             const responses = await Promise.all([
                 fetch(`${domain}/v1/auth/authenticate`, {
                     method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(loginData),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData),
                 }),
-                
+
             ]);
 
             const responseData = await Promise.all(responses.map(async (response) => {
@@ -28,11 +28,11 @@ addEventListener('message', async (event) => {
             }));
 
             const dataMap = {
-                loginResponse : responseData[0],
+                loginResponse: responseData[0],
             }
             postMessage(dataMap);
-            
-        }catch {
+
+        } catch {
 
         }
     };
@@ -41,12 +41,12 @@ addEventListener('message', async (event) => {
         const token = "d6f64767-329b-11ee-af43-6ead57e9219a";
         try {
             const responses = await Promise.all([
-                
+
                 fetch(`${domain}/auth/your-profile`, {
                     method: 'GET',
-                headers: {
-                    'token' : token,
-                },
+                    headers: {
+                        'token': token,
+                    },
 
                 })
             ]);
@@ -61,11 +61,11 @@ addEventListener('message', async (event) => {
 
             const dataMap = {
                 provinceResponse: responseData[0],
-                
+
             }
             postMessage(dataMap);
-            
-        }catch {
+
+        } catch {
 
         }
     };
@@ -95,7 +95,7 @@ addEventListener('message', async (event) => {
         } catch (error) {
             // Xử lý bất kỳ ngoại lệ nào xảy ra trong quá trình gửi yêu cầu
             console.error("On worker: Error", error);
-            
+
         }
     }
 });

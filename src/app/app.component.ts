@@ -66,8 +66,6 @@ export class AppComponent implements OnDestroy {
     private suppliersService: SupplierService,
     private tableStatusesService: TableStatusService,
     private ingredientsService: IngredientService,
-    private rolesService: RoleService,
-    private roleFunctionsService: RoleFunctionService,
     private billsService: BillService,
     private billDetailsService: BillDetailService,
     private cartsService: CartService,
@@ -102,8 +100,6 @@ export class AppComponent implements OnDestroy {
       suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
       tableStatuses: { cache: this.tableStatusesService.tableStatusesCache, localStorageKey: 'tableStatuses' },
       ingredients: { cache: this.ingredientsService.ingredientsCache, localStorageKey: 'ingredients' },
-      roles: { cache: this.rolesService.rolesCache, localStorageKey: 'roles' },
-      roleFunctions: { cache: this.roleFunctionsService.roleFunctionsCache, localStorageKey: 'roleFunctions' },
       bills: { cache: this.billsService.billsCache, localStorageKey: 'bills' },
       billDetails: { cache: this.billDetailsService.billDetailsCache, localStorageKey: 'billDetails' },
       carts: { cache: this.cartsService.cartsCache, localStorageKey: 'carts' },
@@ -148,9 +144,9 @@ export class AppComponent implements OnDestroy {
 
         if (localStorage.getItem(localStorageKey)) {
           this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
-          //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
+          console.log(`Lấy dữ liệu ${type} từ Local Storage`);
           (this as any)[`${type}Service`][`${type}Cache`] = this.services[type].cache;
-          //console.log(`[get-datas-from-local-storage.worker.ts] Received ${type}:`, this.services[type].cache);
+          console.log(`[get-datas-from-local-storage.worker.ts] Received ${type}:`, this.services[type].cache);
         }
 
       });
@@ -165,23 +161,22 @@ export class AppComponent implements OnDestroy {
       Object.keys(this.services).forEach((type: string) => {
         const { cache, localStorageKey } = this.services[type];
 
-        
         if (JSON.stringify(JSON.parse(localStorage.getItem(localStorageKey) || 'null')) === JSON.stringify(data[type])) {
           // Cập nhật từ Local Storage
           this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
-          //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
+          console.log(`Lấy dữ liệu ${type} từ Local Storage`);
         } else {
           // Cập nhật từ dữ liệu API và lưu vào Local Storage
           this.services[type].cache = data[type];
           localStorage.setItem(localStorageKey, JSON.stringify(data[type]));
-          //console.log(`Lấy dữ liệu ${type} từ API`);
+          console.log(`Lấy dữ liệu ${type} từ API`);
         }
         //}
 
         // Cập nhật dữ liệu vào caches tương ứng sử dụng dynamic property
         (this as any)[`${type}Service`][`${type}Cache`] = this.services[type].cache;
 
-        //console.log(`Received ${type}:`, this.services[type].cache);
+        console.log(`Received ${type}:`, this.services[type].cache);
       });
 
       this.dataLoaded = true;
