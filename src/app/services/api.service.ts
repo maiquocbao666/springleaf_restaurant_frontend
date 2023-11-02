@@ -7,7 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8080/api'; // Thay đổi base URL của API của bạn
+  private baseUrl = 'https://springleafrestaurantbackend.onrender.com/api'; // Thay đổi base URL của API của bạn
 
   constructor(private http: HttpClient) { }
 

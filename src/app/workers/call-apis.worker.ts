@@ -4,7 +4,7 @@
 // Trong worker script (call-apis.worker.ts)
 addEventListener('message', async ({ data }) => {
         console.log("Call Apis Worker Works", data);
-        const domain = 'http://localhost:8080/api';
+        const domain = 'https://springleafrestaurantbackend.onrender.com/api';
         if (data === 'start') {
                 try {
                         const responses = await Promise.all([

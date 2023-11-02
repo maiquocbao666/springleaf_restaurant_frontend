@@ -3,7 +3,7 @@
 addEventListener('message', async (event) => {
     const { type, loginData, tokenUser } = event.data;
     console.log("Call all this User Apis Worker Works", type);
-    const domain = 'http://localhost:8080/api';
+    const domain = 'https://springleafrestaurantbackend.onrender.com/api';
 
     if (type === 'login') {
         const { username, password } = loginData;
@@ -42,7 +42,7 @@ addEventListener('message', async (event) => {
         try {
             const responses = await Promise.all([
                 
-                fetch(`localhost:8080/api/auth/your-profile`, {
+                fetch(`${domain}/auth/your-profile`, {
                     method: 'GET',
                 headers: {
                     'token' : token,

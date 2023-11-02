@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private apiUrl = 'http://localhost:8080/api/v1/auth'; // Thay thế bằng URL của Spring Boot API
+  private apiUrl = 'https://springleafrestaurantbackend.onrender.com/api/v1/auth'; // Thay thế bằng URL của Spring Boot API
   private userCache: User | null = null;
   private cachedDataSubject = new BehaviorSubject<User | null>(null);
   getDatasOfThisUserWorker: Worker;
