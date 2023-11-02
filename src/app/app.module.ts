@@ -53,6 +53,8 @@ import { ChatService } from './services/chat.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { UserBannerComponent } from './user/components/user-home/user-banner/user-banner.component';
 
+import { PathLocationStrategy, LocationStrategy } from '@angular/common';
+
 
 @NgModule({
   declarations: [
@@ -113,6 +115,7 @@ import { UserBannerComponent } from './user/components/user-home/user-banner/use
   providers: [
     WebSocketService,
     ChatService,
+    { provide: LocationStrategy, useClass: PathLocationStrategy } ,
   ],
   bootstrap: [AppComponent]
 })
