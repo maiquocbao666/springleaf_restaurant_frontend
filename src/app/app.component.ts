@@ -169,6 +169,9 @@ export class AppComponent implements OnDestroy {
   callAllApis(): void {
     this.callAPIsWorker.postMessage('start');
     this.callAPIsWorker.onmessage = ({ data }) => {
+      if(data === null){
+        return;
+      }
       Object.keys(this.services).forEach((type: string) => {
         const { cache, localStorageKey } = this.services[type];
 
