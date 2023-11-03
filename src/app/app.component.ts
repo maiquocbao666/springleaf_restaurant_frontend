@@ -32,6 +32,8 @@ import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
 import { AuthenticationService } from "./services/authentication.service";
+import { Subscription } from "rxjs";
+import { OnlineOfflineService } from "./services/online-offline.service";
 
 
 interface DataService<T> {
@@ -55,21 +57,11 @@ export class AppComponent implements OnDestroy {
   getDatasFromLocalStorageWorker: Worker;
   callAPIsWorker: Worker;
   services: ServiceMap;
-  isOnline: boolean = navigator.onLine;
-
-  @HostListener('window:online', ['$event'])
-  onOnline(event: Event) {
-    this.isOnline = true;
-    console.log('Ứng dụng đang online.');
-  }
-
-  @HostListener('window:offline', ['$event'])
-  onOffline(event: Event) {
-    this.isOnline = false;
-    console.log('Ứng dụng đang offline.');
-  }
+  isOnline: boolean = true;
+  onlineSubscription: Subscription;
 
   constructor(
+    private onlineOfflineService: OnlineOfflineService,
     private authentication: AuthenticationService,
     private categoriesService: CategoryService,
     private productsService: ProductService,
@@ -142,6 +134,10 @@ export class AppComponent implements OnDestroy {
     this.getDatasFromLocalStorageWorker = new Worker(new URL('./workers/get-datas-from-local-storage.worker', import.meta.url));
     this.callAPIsWorker = new Worker(new URL('./workers/call-apis.worker', import.meta.url));
 
+    this.onlineSubscription = this.onlineOfflineService.getOnlineStatus().subscribe(isOnline => {
+      this.isOnline = isOnline;
+    });
+
   }
 
   ngOnInit(): void {
@@ -153,11 +149,13 @@ export class AppComponent implements OnDestroy {
       this.authentication.checkUserByAccessToken(accessToken, refreshToken);
     }
 
-    if (this.isOnline === true) {
+    if (this.isOnline) {
       this.getAllDatasFromLocalStorage();
       this.callAllApis();
+      console.log("Ứng dụng đang online")
     } else {
       this.getAllDatasFromLocalStorage();
+      console.log("Ứng dụng đang offline")
     }
 
   }
