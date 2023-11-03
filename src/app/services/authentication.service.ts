@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { User } from '../interfaces/user';
 import { ApiService } from './api.service';
+import { UserInventoryBranchesModule } from '../user/components/user-home/user-inventory-branches/user-inventory-branches.module';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,33 @@ export class AuthenticationService {
           localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
           this.setUserCache(data.loginResponse.user);
           console.log("Login success");
+          resolve(true);
+        }
+      };
+    });
+  }
+
+  checkUserByAccessToken(accessToken : string, refreshToken : string ) : Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      const tokenData = {
+        accessToken: accessToken,
+        refreshToken: refreshToken
+      };
+      this.getDatasOfThisUserWorker.postMessage({
+        type: 'check_access_token',
+        tokenData
+      });
+  
+      this.getDatasOfThisUserWorker.onmessage = ({ data }) => {
+        if (data.checkTokenRespone === null) {
+          console.log("Login failed");
+          resolve(false);
+        } else {
+          localStorage.setItem('access_token', data.checkTokenRespone.access_token);
+          localStorage.setItem('refresh_token', data.checkTokenRespone.refresh_token);
+          localStorage.setItem('user_login_name', data.checkTokenRespone.user.lastName);
+          this.setUserCache(data.checkTokenRespone.user);
+          console.log("Auto Login success");
           resolve(true);
         }
       };
