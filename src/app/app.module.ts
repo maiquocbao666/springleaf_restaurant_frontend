@@ -115,7 +115,7 @@ import { PathLocationStrategy, LocationStrategy } from '@angular/common';
   providers: [
     WebSocketService,
     ChatService,
-    { provide: LocationStrategy, useClass: PathLocationStrategy } ,
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
   ],
   bootstrap: [AppComponent]
 })

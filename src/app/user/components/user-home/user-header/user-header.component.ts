@@ -18,7 +18,7 @@ export class UserHeaderComponent {
   user: User | null = null;
   isMobile: boolean = false;
   isIPad: boolean = false;
-
+  isMenuOpen: boolean = false;
 
 
   constructor(
@@ -27,6 +27,7 @@ export class UserHeaderComponent {
     private renderer: Renderer2,
     private el: ElementRef,
     private mediaObserver: MediaObserver,
+    
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -62,7 +63,7 @@ export class UserHeaderComponent {
 
   ngOnInit(): void {
     this.user = this.authService.getUserCache(); // Lấy thông tin người dùng từ userCache
-    this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
+    //this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
 
     window.onscroll = () => {
@@ -75,18 +76,14 @@ export class UserHeaderComponent {
       prevScrollPos = currentScrollPos;
     };
 
-    // this.checkScreenSize();
-    // this.checkIfIPad();
-
-    // window.addEventListener('resize', () => {
-    //   this.checkScreenSize();
-    //   this.checkIfIPad();
-    // });
-
   }
 
   openProfileModel() {
     const modalRef = this.modalService.open(ProfileComponent);
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   truncateString(inputString: string): string {

@@ -1,28 +1,32 @@
-<form (submit)="updateProfile()" [formGroup]="profileForm">
-    <div>
+<h3>Your Profile</h3>
+<div class="form-container">
+  <form (submit)="updateProfile()" [formGroup]="profileForm" class="grid-form">
+    <div class="form-group">
       <label for="fullName">First Name</label>
       <input type="text" id="fullName" formControlName="fullName" name="fullName">
     </div>
-    <div>
+    <div class="form-group">
       <label for="username">Username</label>
       <input type="text" id="username" formControlName="username" name="username">
     </div>
-    <div>
+    <div class="form-group">
       <label for="password">Password</label>
       <input type="password" id="password" formControlName="password" name="password">
     </div>
-    <div>
+    <div class="form-group">
       <label for="email">Email</label>
       <input type="text" id="email" formControlName="email" name="email">
     </div>
-    <div>
-        <label for="phone">Phone number</label>
-        <input type="text" id="phone" formControlName="phone" name="phone">
-      </div>
-    <div>
-      <label for="address">Address</label>
-      <input type="number" id="address" formControlName="address" name="address">
+    <div class="form-group">
+      <label for="phone">Phone number</label>
+      <input type="text" id="phone" formControlName="phone" name="phone">
     </div>
-    <button type="submit">Update Profile</button>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <input type="text" id="address" formControlName="address" name="address">
+    </div>
+    <div class="form-group">
+      <button type="submit">Update Profile</button>
+    </div>
   </form>
-  
+</div>

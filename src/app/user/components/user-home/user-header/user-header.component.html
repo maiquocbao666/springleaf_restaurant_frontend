@@ -6,6 +6,7 @@
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <a class="navbar-brand" routerLink="/user/index"><i
                 class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -62,6 +63,31 @@
                     <i class="fa fa-search"></i>
                 </span>
             </div>
+            <!-- <div class="input-container">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" routerLink="/user/event"
+                                    routerLinkActive="active">Event</a>
+                                <a class="nav-link"
+                                    routerLink="/user/inventoryBranches"
+                                    routerLinkActive="active">InventoryBranch</a>
+                                <a class="nav-link" routerLink="/user/combo"
+                                    routerLinkActive="active">Combo</a>
+                                <a class="nav-link" routerLink="/user/cart"
+                                    routerLinkActive="active">Cart</a>
+                                <a class="nav-link" routerLink="/chat"
+                                    routerLinkActive="active">Chat</a>
+                                <a class="nav-link" routerLink="/user/table"
+                                    routerLinkActive="active">Table</a>
+                                <a class="nav-link"
+                                    routerLink="/user/restaurant"
+                                    routerLinkActive="active">Restaurant</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div> -->
             <ul class="navbar-nav mx-auto">
                 <div class="nav-item" *ngIf="user">
                     <li class="nav-item dropdown">
@@ -80,9 +106,7 @@
                         </div>
                     </li>
                 </div>
-                <div class="nav-item" 
-                
-                >
+                <div class="nav-item" *ngIf="!user">
                     <button class="nav-link" (click)="openLoginModal()"><i
                             class="fa-solid fa-right-to-bracket"></i>
                         Đăng nhập</button>
@@ -92,8 +116,10 @@
     </div>
 </nav>
 
+
+
 <!-- Nav tablet -->
-<nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light shadow-lg"
+<!-- <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light shadow-lg"
     *ngIf="isIPad">
     <button class="navbar-toggler m-2" type="button" data-bs-toggle="offcanvas"
         data-bs-target="#offcanvasRight"
@@ -180,10 +206,10 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav> -->
 
 <!-- Nav mobile -->
-<nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light shadow-lg"
+<!-- <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light shadow-lg"
     *ngIf="isMobile && !isIPad">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -194,9 +220,9 @@
         </button>
         <a class="navbar-brand" routerLink="/user/index"><i
                 class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse" id="navbarNav"> -->
             <!-- Menu cho điện thoại -->
-            <ul class="navbar-nav d-block d-lg-none">
+            <!-- <ul class="navbar-nav d-block d-lg-none">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#"
@@ -264,4 +290,4 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav> -->
