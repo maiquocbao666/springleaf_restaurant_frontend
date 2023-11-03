@@ -55,19 +55,6 @@ export class AppComponent implements OnDestroy {
   getDatasFromLocalStorageWorker: Worker;
   callAPIsWorker: Worker;
   services: ServiceMap;
-  isOnline: boolean = navigator.onLine;
-
-  @HostListener('window:online', ['$event'])
-  onOnline(event: Event) {
-    this.isOnline = true;
-    console.log('Ứng dụng đang online.');
-  }
-
-  @HostListener('window:offline', ['$event'])
-  onOffline(event: Event) {
-    this.isOnline = false;
-    console.log('Ứng dụng đang offline.');
-  }
 
   constructor(
     private authentication: AuthenticationService,
@@ -153,12 +140,8 @@ export class AppComponent implements OnDestroy {
       this.authentication.checkUserByAccessToken(accessToken, refreshToken);
     }
 
-    if (this.isOnline === true) {
-      this.getAllDatasFromLocalStorage();
-      this.callAllApis();
-    } else {
-      this.getAllDatasFromLocalStorage();
-    }
+    this.getAllDatasFromLocalStorage();
+    this.callAllApis();
 
   }
 
