@@ -28,12 +28,9 @@ import { ReceiptService } from "./services/receipt.service";
 import { ReservationService } from "./services/reservation.service";
 import { RestaurantTableService } from "./services/restaurant-table.service";
 import { RestaurantService } from "./services/restaurant.service";
-import { RoleFunctionService } from "./services/role-function.service";
-import { RoleService } from "./services/role.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
-import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from "./services/authentication.service";
 
 
@@ -60,7 +57,6 @@ export class AppComponent implements OnDestroy {
 
   constructor(
     private authentication: AuthenticationService,
-    private cookieService: CookieService,
     private categoriesService: CategoryService,
     private productsService: ProductService,
     private cartDetailsService: CartDetailService,
@@ -149,7 +145,7 @@ export class AppComponent implements OnDestroy {
   getAllDatasFromLocalStorage() {
     this.getDatasFromLocalStorageWorker.postMessage('start');
     this.getDatasFromLocalStorageWorker.onmessage = ({ data }) => {
-      //console.log("bruh")
+
       Object.keys(this.services).forEach((type: string) => {
 
         const { cache, localStorageKey } = this.services[type];
@@ -173,19 +169,16 @@ export class AppComponent implements OnDestroy {
       Object.keys(this.services).forEach((type: string) => {
         const { cache, localStorageKey } = this.services[type];
 
-        //if (JSON.stringify(JSON.parse(localStorage.getItem(localStorageKey) || 'null')) === JSON.stringify(data[type])) {
-        if (JSON.stringify(JSON.parse(this.cookieService.get(localStorageKey) || 'null')) === JSON.stringify(data[type])) {
+        if (JSON.stringify(JSON.parse(localStorage.getItem(localStorageKey) || 'null')) === JSON.stringify(data[type])) {
           // Cập nhật từ Local Storage
-          // this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
+          this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
           // console.log(`Lấy dữ liệu ${type} từ Local Storage`);
-          this.services[type].cache = JSON.parse(this.cookieService.get(localStorageKey) || 'null');
           console.log(`Lấy dữ liệu ${type} từ Cookie`);
         } else {
           // Cập nhật từ dữ liệu API và lưu vào Local Storage
           this.services[type].cache = data[type];
-          //localStorage.setItem(localStorageKey, JSON.stringify(data[type]));
+          localStorage.setItem(localStorageKey, JSON.stringify(data[type]));
           // Cập nhật từ dữ liệu API và lưu vào Cookie
-          this.cookieService.set(localStorageKey, JSON.stringify(data[type]));
           console.log(`Lấy dữ liệu ${type} từ API`);
         }
         //}
