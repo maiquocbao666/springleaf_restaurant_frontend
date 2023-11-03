@@ -49,11 +49,25 @@ interface ServiceMap {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnDestroy {
+
   title = 'springleaf_restaurant';
   dataLoaded = false;
   getDatasFromLocalStorageWorker: Worker;
   callAPIsWorker: Worker;
   services: ServiceMap;
+  isOnline: boolean = navigator.onLine;
+
+  @HostListener('window:online', ['$event'])
+  onOnline(event: Event) {
+    this.isOnline = true;
+    console.log('Ứng dụng đang online.');
+  }
+
+  @HostListener('window:offline', ['$event'])
+  onOffline(event: Event) {
+    this.isOnline = false;
+    console.log('Ứng dụng đang offline.');
+  }
 
   constructor(
     private authentication: AuthenticationService,
@@ -126,20 +140,26 @@ export class AppComponent implements OnDestroy {
     };
 
     this.getDatasFromLocalStorageWorker = new Worker(new URL('./workers/get-datas-from-local-storage.worker', import.meta.url));
-
     this.callAPIsWorker = new Worker(new URL('./workers/call-apis.worker', import.meta.url));
+
   }
 
   ngOnInit(): void {
+
     var accessToken = localStorage.getItem('access_token');
     var refreshToken = localStorage.getItem('refresh_token');
     console.log(accessToken);
-    if(accessToken != null && refreshToken != null){
-      this.authentication.checkUserByAccessToken(accessToken , refreshToken );
+    if (accessToken != null && refreshToken != null) {
+      this.authentication.checkUserByAccessToken(accessToken, refreshToken);
     }
-    
-    this.getAllDatasFromLocalStorage();
-    this.callAllApis();
+
+    if (this.isOnline === true) {
+      this.getAllDatasFromLocalStorage();
+      this.callAllApis();
+    } else {
+      this.getAllDatasFromLocalStorage();
+    }
+
   }
 
   getAllDatasFromLocalStorage() {

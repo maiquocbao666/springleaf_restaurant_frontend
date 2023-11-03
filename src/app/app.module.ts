@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -54,6 +54,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { UserBannerComponent } from './user/components/user-home/user-banner/user-banner.component';
 
 import { PathLocationStrategy, LocationStrategy } from '@angular/common';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 @NgModule({
@@ -111,6 +112,12 @@ import { PathLocationStrategy, LocationStrategy } from '@angular/common';
     NgxPaginationModule,
     NgToastModule,
     FlexLayoutModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [
     WebSocketService,
