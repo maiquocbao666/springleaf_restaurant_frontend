@@ -155,9 +155,9 @@ export class AppComponent implements OnDestroy {
 
         if (localStorage.getItem(localStorageKey)) {
           this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
-          console.log(`Lấy dữ liệu ${type} từ Local Storage`);
+          //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
           (this as any)[`${type}Service`][`${type}Cache`] = this.services[type].cache;
-          console.log(`[get-datas-from-local-storage.worker.ts] Received ${type}:`, this.services[type].cache);
+          //console.log(`[get-datas-from-local-storage.worker.ts] Received ${type}:`, this.services[type].cache);
         }
 
       });
@@ -169,30 +169,34 @@ export class AppComponent implements OnDestroy {
   callAllApis(): void {
     this.callAPIsWorker.postMessage('start');
     this.callAPIsWorker.onmessage = ({ data }) => {
-      if(data === null){
-        return;
-      }
       Object.keys(this.services).forEach((type: string) => {
+
         const { cache, localStorageKey } = this.services[type];
 
         if (JSON.stringify(JSON.parse(localStorage.getItem(localStorageKey) || 'null')) === JSON.stringify(data[type])) {
           // Cập nhật từ Local Storage
           this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
           // console.log(`Lấy dữ liệu ${type} từ Local Storage`);
-          console.log(`Lấy dữ liệu ${type} từ Cookie`);
+          //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
         } else {
           // Cập nhật từ dữ liệu API và lưu vào Local Storage
-          this.services[type].cache = data[type];
-          localStorage.setItem(localStorageKey, JSON.stringify(data[type]));
-          // Cập nhật từ dữ liệu API và lưu vào Cookie
-          console.log(`Lấy dữ liệu ${type} từ API`);
+
+          if (data[type] === null) {
+            //console.log(`Không gọi được api ${type} hoặc là đang offline`)
+          } else {
+            this.services[type].cache = data[type];
+            localStorage.setItem(localStorageKey, JSON.stringify(data[type]));
+            // Cập nhật từ dữ liệu API và lưu vào Cookie
+            //console.log(`Lấy dữ liệu ${type} từ API`);
+          }
+
         }
         //}
 
         // Cập nhật dữ liệu vào caches tương ứng sử dụng dynamic property
         (this as any)[`${type}Service`][`${type}Cache`] = this.services[type].cache;
 
-        console.log(`Received ${type}:`, this.services[type].cache);
+        //console.log(`Received ${type}:`, this.services[type].cache);
       });
 
       this.dataLoaded = true;
