@@ -134,10 +134,9 @@ export class AppComponent implements OnDestroy {
   ngOnInit(): void {
 
     var accessToken = localStorage.getItem('access_token');
-    var refreshToken = localStorage.getItem('refresh_token');
     console.log(accessToken);
-    if (accessToken != null && refreshToken != null) {
-      this.authentication.checkUserByAccessToken(accessToken, refreshToken);
+    if (accessToken != null) {
+      this.authentication.checkUserByAccessToken(accessToken);
     }
 
     this.getAllDatasFromLocalStorage();

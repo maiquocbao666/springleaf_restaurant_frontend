@@ -66,27 +66,28 @@ export class AuthenticationService {
     });
   }
 
-  checkUserByAccessToken(accessToken : string, refreshToken : string ) : Promise<boolean> {
+  checkUserByAccessToken(accessToken : string) : Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const tokenData = {
-        accessToken: accessToken,
-        refreshToken: refreshToken
-      };
+      const token = accessToken;
       this.getDatasOfThisUserWorker.postMessage({
         type: 'check_access_token',
-        tokenData
+        token
       });
-  
+      
       this.getDatasOfThisUserWorker.onmessage = ({ data }) => {
-        if (data.checkTokenRespone === null) {
-          console.log("Login failed");
+        if (data.checkTokenRespone.error === 'Session has expired') {
+          console.log("Phiên làm việc hết hạn");
           resolve(false);
-        } else {
+        }else if (data.checkTokenRespone.error === 'Token was wrong') {
+          console.log("Token không đúng");
+          resolve(false);
+        }
+         else {
+          localStorage.setItem('user_login_name', data.checkTokenRespone.user.fullName);
           localStorage.setItem('access_token', data.checkTokenRespone.access_token);
-          localStorage.setItem('refresh_token', data.checkTokenRespone.refresh_token);
-          localStorage.setItem('user_login_name', data.checkTokenRespone.user.lastName);
           this.setUserCache(data.checkTokenRespone.user);
           console.log("Auto Login success");
+          
           resolve(true);
         }
       };
@@ -99,32 +100,12 @@ export class AuthenticationService {
 
   }
 
-  // AuthenticationService trong Angular
-  refreshToken(refreshToken: string): Observable<any> {
-    const tokenData = {
-      refreshToken: refreshToken
-    };
-
-    return this.http.post(`${this.apiUrl}/refreshToken`, tokenData).pipe(
-      map((response: any) => {
-        // Lưu trữ JWT mới sau khi làm mới token vào Local Storage
-        localStorage.setItem('jwtToken', response.accessToken);
-        return response;
-      })
-    );
-  }
-
-
+  
   logout() {
     // Xóa token JWT khỏi Local Storage khi đăng xuất
     
     console.log("logout")
     localStorage.removeItem('jwtToken');
-  }
-
-  getToken(): string | null {
-    // Lấy token JWT từ lưu trữ
-    return localStorage.getItem('jwtToken');
   }
 
   getUserCache(): User | null {

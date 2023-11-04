@@ -1,24 +1,23 @@
 /// <reference lib="webworker" />
 
 addEventListener('message', async (event) => {
-    const { type, loginData, tokenData, tokenUser } = event.data;
+    const { type, loginData, token, tokenUser } = event.data;
     console.log("Call all this User Apis Worker Works", type);
     const domain = 'https://springleafrestaurantbackend.onrender.com/api';
 
     if (type === 'check_access_token') {
-        const { accessToken, refreshToken } = tokenData;
+        const  accessToken  = token;
         try {
             const responses = await Promise.all([
-                fetch(`${domain}/v1/auth/username`, {
+                fetch(`${domain}/v1/auth/auto-login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(tokenData),
+                        'Authorization': `Bearer ${accessToken}` // Thêm tiêu đề Authorization với token Bearer
+                    }
                 }),
-
             ]);
-
+    
             const responseData = await Promise.all(responses.map(async (response) => {
                 if (response.ok) {
                     return await response.json();
@@ -26,14 +25,14 @@ addEventListener('message', async (event) => {
                     return null;
                 }
             }));
-
+    
             const dataMap = {
                 checkTokenRespone: responseData[0],
             }
             postMessage(dataMap);
-
+            console.log('Data Map: ' + JSON.stringify(dataMap));
         } catch {
-
+            // Xử lý lỗi nếu cần
         }
     };
     if (type === 'login') {
