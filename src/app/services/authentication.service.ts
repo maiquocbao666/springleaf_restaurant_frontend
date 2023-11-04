@@ -9,6 +9,7 @@ import { UserInventoryBranchesModule } from '../user/components/user-home/user-i
   providedIn: 'root'
 })
 export class AuthenticationService {
+  //private apiUrl = 'https://springleafrestaurantbackend.onrender.com/api';
   private apiUrl = 'http://localhost:8080/api/v1/auth'; // Thay thế bằng URL của Spring Boot API
   private userCache: User | null = null;
   private cachedDataSubject = new BehaviorSubject<User | null>(null);

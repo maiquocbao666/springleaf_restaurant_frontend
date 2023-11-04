@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -27,7 +28,7 @@ export class UserHeaderComponent {
     private renderer: Renderer2,
     private el: ElementRef,
     private mediaObserver: MediaObserver,
-    
+    private httpClient: HttpClient
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -60,6 +61,8 @@ export class UserHeaderComponent {
     this.authService.setUserCache(null);
     this.authService.logout();
   }
+
+  
 
   ngOnInit(): void {
     this.user = this.authService.getUserCache(); // Lấy thông tin người dùng từ userCache
@@ -97,5 +100,26 @@ export class UserHeaderComponent {
       // Trường hợp không có khoảng trắng
       return inputString;
     }
+  }
+
+  getAdminCheck() {
+    // Lấy token từ localStorage hoặc sessionStorage
+    const token = localStorage.getItem('access_token'); // Thay 'token' bằng key lưu trữ token thực tế
+
+    // Tạo header với Authorization
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // Gọi API với HttpClient
+    this.httpClient.get(`http://localhost:8080/admin/products`, { headers: headers }).subscribe(
+      (data) => {
+        // Xử lý dữ liệu từ API ở đây
+        console.log(data);
+      },
+      (error) => {
+        console.error('There was a problem with the API request:', error);
+      }
+    );
   }
 }
