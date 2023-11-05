@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -24,6 +25,7 @@ export class UserProductsComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
+    private http: HttpClient
   ) {
     window.addEventListener('storage', (event) => {
       if (event.key && event.oldValue !== null) {
@@ -84,6 +86,18 @@ export class UserProductsComponent implements OnInit {
           this.products = products;
         });
     }
+  }
+
+  addToCart(productId: number): void {
+    this.http.post('http://localhost:8080/api/product/addToCart', productId, { headers: { 'Content-Type': 'application/json' }})
+      .subscribe(
+        (response: any) => {
+          console.log(response); // In thông báo từ server hoặc xử lý response theo cách bạn muốn
+        },
+        (error) => {
+          console.error(error); // Xử lý lỗi nếu có
+        }
+      );
   }
 
 }
