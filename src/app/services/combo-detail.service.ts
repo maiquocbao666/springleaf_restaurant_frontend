@@ -11,6 +11,7 @@ import { ComboDetail } from '../interfaces/combo-detail';
 export class ComboDetailService {
 
     private comboDetailsUrl = 'comboDetails';
+    private comboDetailUrl = 'comboDetail';
     comboDetailsCache!: ComboDetail[];
 
     constructor(

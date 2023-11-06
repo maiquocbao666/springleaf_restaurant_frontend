@@ -10,7 +10,8 @@ import { ReceiptDetail } from '../interfaces/receipt-detail';
 })
 export class ReceiptDetailService {
 
-    private receiptDetailsUrl = 'restaurants';
+    private receiptDetailsUrl = 'receiptDetails';
+    private receiptDetailUrl = 'receiptDetail';
     receiptDetailsCache!: ReceiptDetail[];
 
     constructor(private apiService: ApiService) { }

@@ -12,6 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class MergeTableService {
 
     private mergeTablesUrl = 'mergeTables'; 
+    private mergeTableUrl = 'mergeTable'; 
     mergeTablesCache!: MergeTable[];
 
     constructor(private apiService: ApiService) { }

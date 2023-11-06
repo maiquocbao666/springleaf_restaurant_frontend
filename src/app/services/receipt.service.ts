@@ -10,22 +10,23 @@ import { Receipt } from '../interfaces/receipt';
 })
 export class ReceiptService {
 
-    private receiptsUrl = 'restaurants';
+    private receiptsUrl = 'receiptsUrl';
+    private receiptUrl = 'receiptUrl';
     receiptsCache!: Receipt[];
 
     constructor(private apiService: ApiService) { }
 
     getReceipts(): Observable<Receipt[]> {
-    
+
         if (this.receiptsCache) {
-            
+
             return of(this.receiptsCache);
 
         }
 
         const receiptsObservable = this.apiService.request<Receipt[]>('get', this.receiptsUrl);
 
-        
+
         receiptsObservable.subscribe(data => {
 
             this.receiptsCache = data;
@@ -33,7 +34,7 @@ export class ReceiptService {
         });
 
         return receiptsObservable;
-        
+
     }
 
     addReceipt(newReceipt: Receipt): Observable<Receipt> {

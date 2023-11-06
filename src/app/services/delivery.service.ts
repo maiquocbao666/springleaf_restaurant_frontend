@@ -12,6 +12,7 @@ import { Delivery } from '../interfaces/delivery';
 export class DeliveryService {
 
     private deliveriesUrl = 'deliveries';
+    private deliveryUrl = 'delivery';
     deliveriesCache!: Delivery[];
 
     constructor(private apiService: ApiService) { }

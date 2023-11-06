@@ -106,7 +106,7 @@ export class CategoryService {
 
       tap(() => {
 
-        const index = this.categoriesCache.findIndex(cat => cat.categoryId === id);
+        const index = this.categoriesCache.findIndex(category => category.categoryId === id);
 
         if (index !== -1) {
 

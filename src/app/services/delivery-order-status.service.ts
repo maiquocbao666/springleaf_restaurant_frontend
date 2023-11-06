@@ -12,6 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class DeliveryOrderStatusService {
 
     private deliveryOrderStatusesUrl = 'deliveryOrderStatuses'; 
+    private deliveryOrderStatusUrl = 'deliveryOrderStatus'; 
     deliveryOrderStatusesCache!: DeliveryOrderStatus[]; 
 
     constructor(private apiService: ApiService) { }

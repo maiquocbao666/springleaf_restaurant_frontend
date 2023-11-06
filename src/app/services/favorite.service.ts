@@ -12,6 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class FavoriteService {
 
     private favoritesUrl = 'favorites';
+    private favoriteUrl = 'favorite';
     favoritesCache!: Favorite[];
 
     constructor(private apiService: ApiService) { }

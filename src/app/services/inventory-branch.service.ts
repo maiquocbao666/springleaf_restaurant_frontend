@@ -13,6 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class InventoryBranchService {
 
     private inventoryBranchesUrl = 'inventoryBranches';
+    private inventoryBranchUrl = 'inventoryBranch';
     inventoryBranchesCache!: InventoryBranch[];
 
     constructor(private apiService: ApiService) { } 

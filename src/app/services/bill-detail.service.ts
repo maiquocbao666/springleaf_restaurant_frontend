@@ -8,6 +8,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class BillDetailService {
 
     private billDetailsUrl = 'billDetails';
+    private billUrl = 'billDetail';
     billDetailsCache!: BillDetail[];
 
     constructor(private apiService: ApiService) { }
@@ -65,6 +66,28 @@ export class BillDetailService {
 
             })
 
+        );
+
+    }
+
+    deleteBillDetail(id: number): Observable<any> {
+
+        const url = `${this.billUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.billDetailsCache.findIndex(billDetail => billDetail.billDetailId === id);
+
+                if (index !== -1) {
+
+                    this.billDetailsCache.splice(index, 1);
+                    localStorage.setItem('categories', JSON.stringify(this.billDetailsCache));
+
+                }
+
+            })
         );
 
     }

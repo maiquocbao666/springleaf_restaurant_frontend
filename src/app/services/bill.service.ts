@@ -12,6 +12,7 @@ export class BillService {
 
     private billsUrl = 'bills';
     billsCache!: Bill[];
+    billUrl: string = 'bill';
 
     constructor(private apiService: ApiService) { }
 
@@ -74,5 +75,27 @@ export class BillService {
         );
 
     }
+
+    deletebill(id: number): Observable<any> {
+
+        const url = `${this.billUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+          tap(() => {
+    
+            const index = this.billsCache.findIndex(bill => bill.billId === id);
+    
+            if (index !== -1) {
+    
+              this.billsCache.splice(index, 1);
+              localStorage.setItem('categories', JSON.stringify(this.billsCache));
+    
+            }
+    
+          })
+        );
+    
+      }
 
 }

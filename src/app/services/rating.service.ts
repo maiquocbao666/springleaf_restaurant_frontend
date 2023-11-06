@@ -10,23 +10,24 @@ import { Rating } from '../interfaces/rating';
 })
 export class RatingService {
 
-    private ratingsUrl = 'restaurants';
+    private ratingsUrl = 'ratings';
+    private ratingUrl = 'rating';
     ratingsCache!: Rating[];
 
     constructor(private apiService: ApiService) { }
 
-   
+
     getRatings(): Observable<Rating[]> {
-        
+
         if (this.ratingsCache) {
 
             return of(this.ratingsCache);
-            
+
         }
 
         const ratingsObservable = this.apiService.request<Rating[]>('get', this.ratingsUrl);
 
-        
+
         ratingsObservable.subscribe(data => {
 
             this.ratingsCache = data;

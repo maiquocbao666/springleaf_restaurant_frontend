@@ -11,8 +11,9 @@ import { Combo } from '../interfaces/combo';
 export class ComboService {
 
     private combosUrl = 'combos';
-    combosCache!: Combo[];
     private comboUrl = 'combo';
+    combosCache!: Combo[];
+    
     constructor(private apiService: ApiService) { }
 
 

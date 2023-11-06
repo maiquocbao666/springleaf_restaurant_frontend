@@ -11,6 +11,7 @@ import { Event } from '../interfaces/event';
 export class EventService {
 
     private eventsUrl = 'events';
+    private eventUrl = 'event';
     eventsCache!: Event[];
 
     constructor(private apiService: ApiService) { }
