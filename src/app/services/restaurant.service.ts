@@ -72,4 +72,27 @@ export class RestaurantService {
 
     }
 
+    updateRestaurant(updatedrestaurant: Restaurant): Observable<any> {
+
+        const url = `${this.restaurantsUrl}/${updatedrestaurant.restaurantId}`;
+
+        return this.apiService.request('put', url, updatedrestaurant).pipe(
+
+            tap(() => {
+
+                const index = this.restaurantsCache!.findIndex(restaurant => restaurant.restaurantId === updatedrestaurant.restaurantId);
+
+                if (index !== -1) {
+
+                    this.restaurantsCache![index] = updatedrestaurant;
+                    localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

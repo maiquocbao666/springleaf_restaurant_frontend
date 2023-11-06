@@ -51,4 +51,27 @@ export class ReceiptService {
 
     }
 
+    updateReceipt(updatedReceipt: Receipt): Observable<any> {
+
+        const url = `${this.receiptsUrl}/${updatedReceipt.receiptId}`;
+
+        return this.apiService.request('put', url, updatedReceipt).pipe(
+
+            tap(() => {
+
+                const index = this.receiptsCache!.findIndex(receipt => receipt.receiptId === updatedReceipt.receiptId);
+
+                if (index !== -1) {
+
+                    this.receiptsCache![index] = updatedReceipt;
+                    localStorage.setItem(this.receiptsUrl, JSON.stringify(this.receiptsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

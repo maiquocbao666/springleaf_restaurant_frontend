@@ -98,7 +98,7 @@ export class ProductService {
 
       tap(() => {
 
-        const index = this.productsCache!.findIndex(cat => cat.menuItemId === updatedProduct.menuItemId);
+        const index = this.productsCache!.findIndex(products => products.menuItemId === updatedProduct.menuItemId);
 
         if (index !== -1) {
 

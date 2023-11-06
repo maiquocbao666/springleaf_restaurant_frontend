@@ -54,4 +54,27 @@ export class MergeTableService {
 
     }
 
+    updateMergeTable(updatedMergeTable: MergeTable): Observable<any> {
+
+        const url = `${this.mergeTablesUrl}/${updatedMergeTable.mergeTableId}`;
+
+        return this.apiService.request('put', url, updatedMergeTable).pipe(
+
+            tap(() => {
+
+                const index = this.mergeTablesCache!.findIndex(mergeTable => mergeTable.mergeTableId === updatedMergeTable.mergeTableId);
+
+                if (index !== -1) {
+
+                    this.mergeTablesCache![index] = updatedMergeTable;
+                    localStorage.setItem(this.mergeTablesUrl, JSON.stringify(this.mergeTablesCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

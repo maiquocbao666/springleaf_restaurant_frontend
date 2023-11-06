@@ -53,4 +53,27 @@ export class OrderThresholdService {
 
     }
 
+    updateOrderThreshold(updatedOrderThreshold: OrderThreshold): Observable<any> {
+
+        const url = `${this.orderThresholdsUrl}/${updatedOrderThreshold.orderThresholdId}`;
+
+        return this.apiService.request('put', url, updatedOrderThreshold).pipe(
+
+            tap(() => {
+
+                const index = this.orderThresholdsCache!.findIndex(orderThreshold => orderThreshold.orderThresholdId === updatedOrderThreshold.orderThresholdId);
+
+                if (index !== -1) {
+
+                    this.orderThresholdsCache![index] = updatedOrderThreshold;
+                    localStorage.setItem(this.orderThresholdsUrl, JSON.stringify(this.orderThresholdsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

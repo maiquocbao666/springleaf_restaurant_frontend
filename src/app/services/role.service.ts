@@ -51,4 +51,27 @@ export class RoleService {
 
     }
 
+    updateRole(updatedrole: Role): Observable<any> {
+
+        const url = `${this.rolesUrl}/${updatedrole.roleId}`;
+
+        return this.apiService.request('put', url, updatedrole).pipe(
+
+            tap(() => {
+
+                const index = this.rolesCache!.findIndex(role => role.roleId === updatedrole.roleId);
+
+                if (index !== -1) {
+
+                    this.rolesCache![index] = updatedrole;
+                    localStorage.setItem(this.rolesUrl, JSON.stringify(this.rolesCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

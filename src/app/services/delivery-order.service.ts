@@ -53,4 +53,27 @@ export class DeliveryOrderService {
 
     }
 
+    updateDeliveryOrder(updatedDeliveryOrder: DeliveryOrder): Observable<any> {
+
+        const url = `${this.deliveryOrdersUrl}/${updatedDeliveryOrder.deliveryOrderId}`;
+
+        return this.apiService.request('put', url, updatedDeliveryOrder).pipe(
+
+            tap(() => {
+
+                const index = this.deliveryOrdersCache!.findIndex(deliveryOrder => deliveryOrder.deliveryOrderId === updatedDeliveryOrder.deliveryOrderId);
+
+                if (index !== -1) {
+
+                    this.deliveryOrdersCache![index] = updatedDeliveryOrder;
+                    localStorage.setItem(this.deliveryOrdersUrl, JSON.stringify(this.deliveryOrdersCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

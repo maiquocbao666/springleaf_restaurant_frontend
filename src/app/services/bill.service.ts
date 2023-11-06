@@ -52,4 +52,27 @@ export class BillService {
 
     }
 
+    updateBill(updatedBill: Bill): Observable<any> {
+
+        const url = `${this.billsUrl}/${updatedBill.billId}`;
+
+        return this.apiService.request('put', url, updatedBill).pipe(
+
+            tap(() => {
+
+                const index = this.billsCache!.findIndex(bill => bill.billId === updatedBill.billId);
+
+                if (index !== -1) {
+
+                    this.billsCache![index] = updatedBill;
+                    localStorage.setItem(this.billsUrl, JSON.stringify(this.billsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

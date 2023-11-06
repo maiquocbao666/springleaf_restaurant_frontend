@@ -50,4 +50,27 @@ export class PaymentService {
 
     }
 
+    updatePayment(updatedPayment: Payment): Observable<any> {
+
+        const url = `${this.paymentsUrl}/${updatedPayment.paymentId}`;
+
+        return this.apiService.request('put', url, updatedPayment).pipe(
+
+            tap(() => {
+
+                const index = this.paymentsCache!.findIndex(payment => payment.paymentId === updatedPayment.paymentId);
+
+                if (index !== -1) {
+
+                    this.paymentsCache![index] = updatedPayment;
+                    localStorage.setItem(this.paymentsUrl, JSON.stringify(this.paymentsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

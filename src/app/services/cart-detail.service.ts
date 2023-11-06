@@ -51,6 +51,27 @@ export class CartDetailService {
 
     }
 
+    updateCartDetail(updatedCartDetail: CartDetail): Observable<any> {
 
+        const url = `${this.cartDetailsUrl}/${updatedCartDetail.orderDetailId}`;
+
+        return this.apiService.request('put', url, updatedCartDetail).pipe(
+
+            tap(() => {
+
+                const index = this.cartDetailsCache!.findIndex(cartDetail => cartDetail.orderDetailId === updatedCartDetail.orderDetailId);
+
+                if (index !== -1) {
+
+                    this.cartDetailsCache![index] = updatedCartDetail;
+                    localStorage.setItem(this.cartDetailsUrl, JSON.stringify(this.cartDetailsCache));
+
+                }
+
+            })
+
+        );
+
+    }
 
 }

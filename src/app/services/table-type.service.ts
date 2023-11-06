@@ -58,22 +58,45 @@ export class TableTypeService {
       return this.apiService.request<TableType>('get', url);
 
     }
-    
+
   }
 
   addTableType(newTableType: TableType): Observable<TableType> {
 
     return this.apiService.request<TableType>('post', this.tableTypesUrl, newTableType).pipe(
 
-        tap((addedTableType: TableType) => {
+      tap((addedTableType: TableType) => {
 
-            this.tableTypesCache.push(addedTableType);
-            localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
+        this.tableTypesCache.push(addedTableType);
+        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
 
-        })
+      })
 
     );
 
-}
+  }
+
+  updateTableType(updatedtableType: TableType): Observable<any> {
+
+    const url = `${this.tableTypesUrl}/${updatedtableType.tableTypeId}`;
+
+    return this.apiService.request('put', url, updatedtableType).pipe(
+
+      tap(() => {
+
+        const index = this.tableTypesCache!.findIndex(tableType => tableType.tableTypeId === updatedtableType.tableTypeId);
+
+        if (index !== -1) {
+
+          this.tableTypesCache![index] = updatedtableType;
+          localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
+
+        }
+
+      })
+
+    );
+
+  }
 
 }

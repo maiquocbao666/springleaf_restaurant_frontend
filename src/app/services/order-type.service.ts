@@ -52,4 +52,27 @@ export class OrderTypeService {
 
     }
 
+    updateOrderType(updatedOrderType: OrderType): Observable<any> {
+
+        const url = `${this.orderTypesUrl}/${updatedOrderType.orderTypeId}`;
+
+        return this.apiService.request('put', url, updatedOrderType).pipe(
+
+            tap(() => {
+
+                const index = this.orderTypesCache!.findIndex(orderType => orderType.orderTypeId === updatedOrderType.orderTypeId);
+
+                if (index !== -1) {
+
+                    this.orderTypesCache![index] = updatedOrderType;
+                    localStorage.setItem(this.orderTypesUrl, JSON.stringify(this.orderTypesCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

@@ -73,4 +73,27 @@ export class TableStatusService {
 
     }
 
+    updateTableStatus(updatedtableStatus: TableStatus): Observable<any> {
+
+        const url = `${this.tableStatusesUrl}/${updatedtableStatus.tableStatusId}`;
+
+        return this.apiService.request('put', url, updatedtableStatus).pipe(
+
+            tap(() => {
+
+                const index = this.tableStatusesCache!.findIndex(tableStatus => tableStatus.tableStatusId === updatedtableStatus.tableStatusId);
+
+                if (index !== -1) {
+
+                    this.tableStatusesCache![index] = updatedtableStatus;
+                    localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

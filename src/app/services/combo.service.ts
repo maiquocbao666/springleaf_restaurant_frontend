@@ -56,7 +56,7 @@ export class ComboService {
 
             tap(() => {
 
-                const index = this.combosCache!.findIndex(cat => cat.comboId === updatedCombo.comboId);
+                const index = this.combosCache!.findIndex(combo => combo.comboId === updatedCombo.comboId);
 
                 if (index !== -1) {
 

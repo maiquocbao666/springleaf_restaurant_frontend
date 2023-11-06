@@ -57,4 +57,27 @@ export class ComboDetailService {
 
     }
 
+    updateComboDetail(updatedComboDetail: ComboDetail): Observable<any> {
+
+        const url = `${this.comboDetailsUrl}/${updatedComboDetail.comboDetailId}`;
+
+        return this.apiService.request('put', url, updatedComboDetail).pipe(
+
+            tap(() => {
+
+                const index = this.comboDetailsCache!.findIndex(comboDetail => comboDetail.comboDetailId === updatedComboDetail.comboDetailId);
+
+                if (index !== -1) {
+
+                    this.comboDetailsCache![index] = updatedComboDetail;
+                    localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

@@ -53,4 +53,27 @@ export class DeliveryService {
 
     }
 
+    updateDelivery(updatedDelivery: Delivery): Observable<any> {
+
+        const url = `${this.deliveriesUrl}/${updatedDelivery.deliveryId}`;
+
+        return this.apiService.request('put', url, updatedDelivery).pipe(
+
+            tap(() => {
+
+                const index = this.deliveriesCache!.findIndex(delivery => delivery.deliveryId === updatedDelivery.deliveryId);
+
+                if (index !== -1) {
+
+                    this.deliveriesCache![index] = updatedDelivery;
+                    localStorage.setItem(this.deliveriesUrl, JSON.stringify(this.deliveriesCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

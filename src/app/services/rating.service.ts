@@ -51,4 +51,27 @@ export class RatingService {
 
     }
 
+    updateRating(updatedRating: Rating): Observable<any> {
+
+        const url = `${this.ratingsUrl}/${updatedRating.ratingId}`;
+
+        return this.apiService.request('put', url, updatedRating).pipe(
+
+            tap(() => {
+
+                const index = this.ratingsCache!.findIndex(rating => rating.ratingId === updatedRating.ratingId);
+
+                if (index !== -1) {
+
+                    this.ratingsCache![index] = updatedRating;
+                    localStorage.setItem(this.ratingsUrl, JSON.stringify(this.ratingsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

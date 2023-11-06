@@ -53,4 +53,27 @@ export class MenuItemIngredientService {
 
     }
 
+    updateMenuItemIngredient(updatedMenuItemIngredient: MenuItemIngredient): Observable<any> {
+
+        const url = `${this.menuItemIngredientsUrl}/${updatedMenuItemIngredient.menuItemIngredientId}`;
+
+        return this.apiService.request('put', url, updatedMenuItemIngredient).pipe(
+
+            tap(() => {
+
+                const index = this.menuItemIngredientsCache!.findIndex(ienuItemIngredient => ienuItemIngredient.menuItemIngredientId === updatedMenuItemIngredient.menuItemIngredientId);
+
+                if (index !== -1) {
+
+                    this.menuItemIngredientsCache![index] = updatedMenuItemIngredient;
+                    localStorage.setItem(this.menuItemIngredientsUrl, JSON.stringify(this.menuItemIngredientsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

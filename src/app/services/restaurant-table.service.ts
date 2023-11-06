@@ -65,7 +65,7 @@ export class RestaurantTableService {
 
             tap(() => {
                 
-                const index = this.restaurantTablesCache!.findIndex(cat => cat.tableId === updatedRestaurantTable.tableId);
+                const index = this.restaurantTablesCache!.findIndex(restaurantTable => restaurantTable.tableId === updatedRestaurantTable.tableId);
 
                 if (index !== -1) {
                     

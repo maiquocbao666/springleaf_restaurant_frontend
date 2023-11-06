@@ -85,10 +85,13 @@ export class IngredientService {
 
             tap(() => {
                 
-                const index = this.ingredientsCache!.findIndex(cat => cat.ingredientId === updatedIngredient.ingredientId);
+                const index = this.ingredientsCache!.findIndex(ingregient => ingregient.ingredientId === updatedIngredient.ingredientId);
+
                 if (index !== -1) {
+
                     this.ingredientsCache![index] = updatedIngredient;
                     localStorage.setItem('ingredients', JSON.stringify(this.ingredientsCache));
+
                 }
 
             })

@@ -67,11 +67,13 @@ export class InventoryService {
 
                 this.updateInventoryCache(updatedInventory);
                 
-                const index = this.inventoriesCache!.findIndex(cat => cat.inventoryId === updatedInventory.inventoryId);
+                const index = this.inventoriesCache!.findIndex(inventory => inventory.inventoryId === updatedInventory.inventoryId);
 
                 if (index !== -1) {
+
                     this.inventoriesCache![index] = updatedInventory;
                     localStorage.setItem('inventories', JSON.stringify(this.inventoriesCache));
+
                 }
 
             })

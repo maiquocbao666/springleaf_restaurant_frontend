@@ -56,4 +56,27 @@ export class InventoryBranchService {
 
     }
 
+    updateInventoryBranche(updatedInventoryBranche: InventoryBranch): Observable<any> {
+
+        const url = `${this.inventoryBranchesUrl}/${updatedInventoryBranche.inventoryBranchId}`;
+
+        return this.apiService.request('put', url, updatedInventoryBranche).pipe(
+
+            tap(() => {
+
+                const index = this.inventoryBranchesCache!.findIndex(inventoryBranche => inventoryBranche.inventoryBranchId === updatedInventoryBranche.inventoryBranchId);
+
+                if (index !== -1) {
+
+                    this.inventoryBranchesCache![index] = updatedInventoryBranche;
+                    localStorage.setItem(this.inventoryBranchesUrl, JSON.stringify(this.inventoryBranchesCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

@@ -47,4 +47,27 @@ export class EventService {
 
     }
 
+    updateEvent(updatedEvent: Event): Observable<any> {
+
+        const url = `${this.eventsUrl}/${updatedEvent.eventId}`;
+
+        return this.apiService.request('put', url, updatedEvent).pipe(
+
+            tap(() => {
+
+                const index = this.eventsCache!.findIndex(event => event.eventId === updatedEvent.eventId);
+
+                if (index !== -1) {
+
+                    this.eventsCache![index] = updatedEvent;
+                    localStorage.setItem(this.eventsUrl, JSON.stringify(this.eventsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

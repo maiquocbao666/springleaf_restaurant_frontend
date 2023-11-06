@@ -80,7 +80,7 @@ export class SupplierService {
 
             tap(() => {
                 
-                const index = this.suppliersCache!.findIndex(cat => cat.supplierId === updatedSupplier.supplierId);
+                const index = this.suppliersCache!.findIndex(supplier => supplier.supplierId === updatedSupplier.supplierId);
 
                 if (index !== -1) {
 

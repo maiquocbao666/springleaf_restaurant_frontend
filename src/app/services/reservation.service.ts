@@ -51,4 +51,27 @@ export class ReservationService {
 
     }
 
+    updateReservation(updatedReservation: Reservation): Observable<any> {
+
+        const url = `${this.reservationsUrl}/${updatedReservation.reservationId}`;
+
+        return this.apiService.request('put', url, updatedReservation).pipe(
+
+            tap(() => {
+
+                const index = this.reservationsCache!.findIndex(reservation => reservation.reservationId === updatedReservation.reservationId);
+
+                if (index !== -1) {
+
+                    this.reservationsCache![index] = updatedReservation;
+                    localStorage.setItem(this.reservationsUrl, JSON.stringify(this.reservationsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

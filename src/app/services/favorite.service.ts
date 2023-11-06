@@ -54,4 +54,27 @@ export class FavoriteService {
 
     }
 
+    updateFavorite(updatedFavorite: Favorite): Observable<any> {
+
+        const url = `${this.favoritesUrl}/${updatedFavorite.favoriteId}`;
+
+        return this.apiService.request('put', url, updatedFavorite).pipe(
+
+            tap(() => {
+
+                const index = this.favoritesCache!.findIndex(favorite => favorite.favoriteId === updatedFavorite.favoriteId);
+
+                if (index !== -1) {
+
+                    this.favoritesCache![index] = updatedFavorite;
+                    localStorage.setItem(this.favoritesUrl, JSON.stringify(this.favoritesCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }

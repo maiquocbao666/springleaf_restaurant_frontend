@@ -52,4 +52,27 @@ export class RoleFunctionService {
 
     }
 
+    updateRoleFunction(updatedroleFunction: RoleFunction): Observable<any> {
+
+        const url = `${this.RoleFunctionsUrl}/${updatedroleFunction.roleFunctionId}`;
+
+        return this.apiService.request('put', url, updatedroleFunction).pipe(
+
+            tap(() => {
+
+                const index = this.roleFunctionsCache!.findIndex(roleFunction => roleFunction.roleFunctionId === updatedroleFunction.roleFunctionId);
+
+                if (index !== -1) {
+
+                    this.roleFunctionsCache![index] = updatedroleFunction;
+                    localStorage.setItem(this.RoleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
+
+                }
+
+            })
+
+        );
+
+    }
+
 }
