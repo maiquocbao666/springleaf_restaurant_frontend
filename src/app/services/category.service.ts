@@ -88,7 +88,7 @@ export class CategoryService {
         if (index !== -1) {
 
           this.categoriesCache![index] = updatedCategory;
-          localStorage.setItem('categories', JSON.stringify(this.categoriesCache));
+          localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
 
         }
 

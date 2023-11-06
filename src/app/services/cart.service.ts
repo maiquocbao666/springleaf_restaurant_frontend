@@ -10,8 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class CartService {
 
-  private cartsUrl = 'carts'; // URL to web api, không cần thêm base URL
-  cartsCache!: Cart[]; // Cache for categories
+  private cartsUrl = 'carts';
+  cartsCache!: Cart[];
   getDatasOfThisUserWorker: Worker;
 
   // Province

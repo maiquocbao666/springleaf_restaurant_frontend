@@ -59,7 +59,16 @@ export class SupplierService {
    
     addSupplier(newSupplier: Supplier): Observable<Supplier> {
 
-        return this.apiService.request<Supplier>('post', this.supplierUrl, newSupplier);
+        return this.apiService.request<Supplier>('post', this.suppliersUrl, newSupplier).pipe(
+
+            tap((addedSupplier: Supplier) => {
+
+                this.suppliersCache.push(addedSupplier);
+                localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
+
+            })
+
+        );
 
     }
 

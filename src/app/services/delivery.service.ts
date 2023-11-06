@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Combo } from '../interfaces/combo';
 import { Delivery } from '../interfaces/delivery';
@@ -38,6 +38,19 @@ export class DeliveryService {
         
     }
 
+    addDelivery(newDelivery: Delivery): Observable<Delivery> {
 
+        return this.apiService.request<Delivery>('post', this.deliveriesUrl, newDelivery).pipe(
+
+            tap((addedDelivery: Delivery) => {
+
+                this.deliveriesCache.push(addedDelivery);
+                localStorage.setItem(this.deliveriesUrl, JSON.stringify(this.deliveriesCache));
+
+            })
+
+        );
+
+    }
 
 }

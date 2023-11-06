@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { ComboDetail } from '../interfaces/combo-detail';
 
@@ -40,6 +40,21 @@ export class ComboDetailService {
 
         return comboDetailsObservable;
         
+    }
+
+    addComboDetail(newComboDetail: ComboDetail): Observable<ComboDetail> {
+
+        return this.apiService.request<ComboDetail>('post', this.comboDetailsUrl, newComboDetail).pipe(
+
+            tap((addedBill: ComboDetail) => {
+
+                this.comboDetailsCache.push(addedBill);
+                localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
+
+            })
+
+        );
+
     }
 
 }

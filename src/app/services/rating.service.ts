@@ -1,6 +1,6 @@
 import { Restaurant } from '../interfaces/restaurant';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Rating } from '../interfaces/rating';
 
@@ -36,6 +36,19 @@ export class RatingService {
         return ratingsObservable;
     }
 
+    addRating(newRating: Rating): Observable<Rating> {
 
+        return this.apiService.request<Rating>('post', this.ratingsUrl, newRating).pipe(
+
+            tap((addedRating: Rating) => {
+
+                this.ratingsCache.push(addedRating);
+                localStorage.setItem(this.ratingsUrl, JSON.stringify(this.ratingsCache));
+
+            })
+
+        );
+
+    }
 
 }

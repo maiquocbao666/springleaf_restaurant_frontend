@@ -1,6 +1,6 @@
 import { CartDetail } from '../interfaces/cart-detail';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -34,6 +34,21 @@ export class CartDetailService {
 
         return cartDetailsObservable;
         
+    }
+
+    addCartDetail(newCartDetail: CartDetail): Observable<CartDetail> {
+
+        return this.apiService.request<CartDetail>('post', this.cartDetailsUrl, newCartDetail).pipe(
+
+            tap((addedBill: CartDetail) => {
+
+                this.cartDetailsCache.push(addedBill);
+                localStorage.setItem(this.cartDetailsUrl, JSON.stringify(this.cartDetailsCache));
+
+            })
+
+        );
+
     }
 
 

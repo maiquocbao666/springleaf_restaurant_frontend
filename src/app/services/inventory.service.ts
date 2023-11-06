@@ -44,7 +44,16 @@ export class InventoryService {
     
     addInventory(newInventory: Inventory): Observable<Inventory> {
 
-        return this.apiService.request<Inventory>('post', this.inventoryUrl, newInventory);
+        return this.apiService.request<Inventory>('post', this.inventoriesUrl, newInventory).pipe(
+
+            tap((addedInventory: Inventory) => {
+
+                this.inventoriesCache.push(addedInventory);
+                localStorage.setItem(this.inventoriesUrl, JSON.stringify(this.inventoriesCache));
+
+            })
+
+        );
 
     }
     

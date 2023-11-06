@@ -63,7 +63,16 @@ export class IngredientService {
 
     addIngredient(newIngredient: Ingredient): Observable<Ingredient> {
 
-        return this.apiService.request<Ingredient>('post', this.ingredientUrl, newIngredient);
+        return this.apiService.request<Ingredient>('post', this.ingredientsUrl, newIngredient).pipe(
+
+            tap((addedIngredient: Ingredient) => {
+
+                this.ingredientsCache.push(addedIngredient);
+                localStorage.setItem(this.ingredientsUrl, JSON.stringify(this.ingredientsCache));
+
+            })
+
+        );
 
     }
 

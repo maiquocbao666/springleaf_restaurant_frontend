@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Payment } from '../interfaces/payment';
 
@@ -35,6 +35,19 @@ export class PaymentService {
         
     }
 
+    addPayMent(newPayMent: Payment): Observable<Payment> {
 
+        return this.apiService.request<Payment>('post', this.paymentsUrl, newPayMent).pipe(
+
+            tap((addedPayMent: Payment) => {
+
+                this.paymentsCache.push(addedPayMent);
+                localStorage.setItem(this.paymentsUrl, JSON.stringify(this.paymentsCache));
+
+            })
+
+        );
+
+    }
 
 }

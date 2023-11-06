@@ -1,7 +1,7 @@
 import { OrderThreshold } from './../interfaces/order-threshold';
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -38,6 +38,19 @@ export class OrderThresholdService {
         
     }
 
+    addOrderThreshold(newOrderThreshold: OrderThreshold): Observable<OrderThreshold> {
 
+        return this.apiService.request<OrderThreshold>('post', this.orderThresholdsUrl, newOrderThreshold).pipe(
+
+            tap((addedOrderThreshold: OrderThreshold) => {
+
+                this.orderThresholdsCache.push(addedOrderThreshold);
+                localStorage.setItem(this.orderThresholdsUrl, JSON.stringify(this.orderThresholdsCache));
+
+            })
+
+        );
+
+    }
 
 }

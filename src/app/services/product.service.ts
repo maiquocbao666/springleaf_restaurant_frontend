@@ -11,12 +11,12 @@ export class ProductService {
   private productsUrl = 'products';
   private categoryUrl = 'category';
   private productUrl = 'product';
-  productsCache!: Product[]; 
+  productsCache!: Product[];
 
   constructor(private apiService: ApiService) { }
 
   getProducts(): Observable<Product[]> {
-    
+
     if (this.productsCache) {
       return of(this.productsCache);
     }
@@ -34,22 +34,22 @@ export class ProductService {
   }
 
   getProduct(id: number): Observable<Product> {
-   
+
     if (!this.productsCache) {
-     
-     this.getProducts();
+
+      this.getProducts();
 
     }
 
-   
+
     const productFromCache = this.productsCache.find(Product => Product.menuItemId === id);
 
     if (productFromCache) {
-      
+
       return of(productFromCache);
 
     } else {
-      
+
       const url = `${this.productsUrl}/${id}`;
       return this.apiService.request<Product>('get', url);
 
@@ -57,7 +57,7 @@ export class ProductService {
 
   }
 
-  
+
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {
 
     if (this.productsCache) {
@@ -73,14 +73,23 @@ export class ProductService {
     return this.apiService.request<Product[]>('get', url);
 
   }
-  
+
   addProduct(newProduct: Product): Observable<Product> {
 
-    return this.apiService.request<Product>('post', this.productUrl, newProduct);
+    return this.apiService.request<Product>('post', this.productsUrl, newProduct).pipe(
+
+      tap((addedProduct: Product) => {
+
+        this.productsCache.push(addedProduct);
+        localStorage.setItem(this.productsUrl, JSON.stringify(this.productsCache));
+
+      })
+
+    );
 
   }
 
-  
+
   updateProduct(updatedProduct: Product): Observable<any> {
 
     const url = `${this.productUrl}/${updatedProduct.menuItemId}`;
@@ -126,5 +135,5 @@ export class ProductService {
     return this.apiService.request('delete', url);
 
   }
-  
+
 }

@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Event } from '../interfaces/event';
 
@@ -32,6 +32,19 @@ export class EventService {
         
     }
 
+    addEvent(newEvent: Event): Observable<Event> {
 
+        return this.apiService.request<Event>('post', this.eventsUrl, newEvent).pipe(
+
+            tap((addedEvent: Event) => {
+
+                this.eventsCache.push(addedEvent);
+                localStorage.setItem(this.eventsUrl, JSON.stringify(this.eventsCache));
+
+            })
+
+        );
+
+    }
 
 }

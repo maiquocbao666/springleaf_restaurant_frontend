@@ -1,7 +1,7 @@
 import { Bill } from '../interfaces/bill';
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -34,6 +34,21 @@ export class BillService {
         });
 
         return billsObservable;
+
+    }
+
+    addBill(newBill: Bill): Observable<Bill> {
+
+        return this.apiService.request<Bill>('post', this.billsUrl, newBill).pipe(
+
+            tap((addedBill: Bill) => {
+
+                this.billsCache.push(addedBill);
+                localStorage.setItem(this.billsUrl, JSON.stringify(this.billsCache));
+
+            })
+
+        );
 
     }
 

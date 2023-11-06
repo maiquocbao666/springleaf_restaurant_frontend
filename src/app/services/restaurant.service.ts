@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Restaurant } from '../interfaces/restaurant';
 
@@ -57,5 +57,19 @@ export class RestaurantService {
         }
     }
 
+    addRestaurant(newRestaurant: Restaurant): Observable<Restaurant> {
+
+        return this.apiService.request<Restaurant>('post', this.restaurantsUrl, newRestaurant).pipe(
+
+            tap((addedRestaurant: Restaurant) => {
+
+                this.restaurantsCache.push(addedRestaurant);
+                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
+
+            })
+
+        );
+
+    }
 
 }

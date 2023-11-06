@@ -12,7 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class RestaurantTableService {
 
     private restaurantTablesUrl = 'restaurantTables';
-    restaurantTablesCache: RestaurantTable[] | null = null;
+    restaurantTablesCache!: RestaurantTable[];
     private restaurantTableUrl = 'restaurantTable';
     constructor(private apiService: ApiService) { }
 
@@ -37,7 +37,16 @@ export class RestaurantTableService {
 
     addRestaurantTable(newRestaurantTable: RestaurantTable): Observable<RestaurantTable> {
 
-        return this.apiService.request<RestaurantTable>('post', this.restaurantTableUrl, newRestaurantTable);
+        return this.apiService.request<RestaurantTable>('post', this.restaurantTablesUrl, newRestaurantTable).pipe(
+
+            tap((addedRestaurantTable: RestaurantTable) => {
+
+                this.restaurantTablesCache.push(addedRestaurantTable);
+                localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
+
+            })
+
+        );
 
     }
 

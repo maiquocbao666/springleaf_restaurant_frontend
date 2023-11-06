@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Role } from '../interfaces/role';
 
@@ -36,6 +36,19 @@ export class RoleService {
         
     }
 
+    addRole(newRole: Role): Observable<Role> {
 
+        return this.apiService.request<Role>('post', this.rolesUrl, newRole).pipe(
+
+            tap((addedRole: Role) => {
+
+                this.rolesCache.push(addedRole);
+                localStorage.setItem(this.rolesUrl, JSON.stringify(this.rolesCache));
+
+            })
+
+        );
+
+    }
 
 }

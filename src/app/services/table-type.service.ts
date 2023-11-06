@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { TableType } from '../interfaces/table-type';
 
@@ -61,5 +61,19 @@ export class TableTypeService {
     
   }
 
+  addTableType(newTableType: TableType): Observable<TableType> {
+
+    return this.apiService.request<TableType>('post', this.tableTypesUrl, newTableType).pipe(
+
+        tap((addedTableType: TableType) => {
+
+            this.tableTypesCache.push(addedTableType);
+            localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
+
+        })
+
+    );
+
+}
 
 }

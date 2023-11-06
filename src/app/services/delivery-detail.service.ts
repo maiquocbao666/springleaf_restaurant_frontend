@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DeliveryDetail } from '../interfaces/delivery-detail';
 
@@ -34,6 +34,19 @@ export class DeliveryDetailService {
 
     }
 
+    addDeliveryDetail(newDeliveryDetail: DeliveryDetail): Observable<DeliveryDetail> {
 
+        return this.apiService.request<DeliveryDetail>('post', this.deliveryDetailsUrl, newDeliveryDetail).pipe(
+
+            tap((addedDeliveryDetail: DeliveryDetail) => {
+
+                this.deliveryDetailsCache.push(addedDeliveryDetail);
+                localStorage.setItem(this.deliveryDetailsUrl, JSON.stringify(this.deliveryDetailsCache));
+
+            })
+
+        );
+
+    }
 
 }

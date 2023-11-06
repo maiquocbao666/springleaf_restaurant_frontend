@@ -1,6 +1,6 @@
 import { MergeTable } from './../interfaces/merge-table';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -39,6 +39,19 @@ export class MergeTableService {
         
     }
 
+    addMergeTable(newMergeTable: MergeTable): Observable<MergeTable> {
 
+        return this.apiService.request<MergeTable>('post', this.mergeTablesUrl, newMergeTable).pipe(
+
+            tap((addedMergeTable: MergeTable) => {
+
+                this.mergeTablesCache.push(addedMergeTable);
+                localStorage.setItem(this.mergeTablesUrl, JSON.stringify(this.mergeTablesCache));
+
+            })
+
+        );
+
+    }
 
 }

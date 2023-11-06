@@ -1,6 +1,6 @@
 import { Favorite } from './../interfaces/favorite';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -39,6 +39,19 @@ export class FavoriteService {
 
     }
 
+    addFavorite(newFavorite: Favorite): Observable<Favorite> {
 
+        return this.apiService.request<Favorite>('post', this.favoritesUrl, newFavorite).pipe(
+
+            tap((addedFavorite: Favorite) => {
+
+                this.favoritesCache.push(addedFavorite);
+                localStorage.setItem(this.favoritesUrl, JSON.stringify(this.favoritesCache));
+
+            })
+
+        );
+
+    }
 
 }

@@ -1,6 +1,6 @@
 import { Restaurant } from '../interfaces/restaurant';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Receipt } from '../interfaces/receipt';
 
@@ -36,6 +36,19 @@ export class ReceiptService {
         
     }
 
+    addReceipt(newReceipt: Receipt): Observable<Receipt> {
 
+        return this.apiService.request<Receipt>('post', this.receiptsUrl, newReceipt).pipe(
+
+            tap((addedReceipt: Receipt) => {
+
+                this.receiptsCache.push(addedReceipt);
+                localStorage.setItem(this.receiptsUrl, JSON.stringify(this.receiptsCache));
+
+            })
+
+        );
+
+    }
 
 }

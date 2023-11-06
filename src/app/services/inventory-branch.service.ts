@@ -1,7 +1,7 @@
 import { InventoryBranch } from './../interfaces/inventory-branch';
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -41,5 +41,19 @@ export class InventoryBranchService {
     }
 
 
+    addInventoryBranch(newInventoryBranch: InventoryBranch): Observable<InventoryBranch> {
+
+        return this.apiService.request<InventoryBranch>('post', this.inventoryBranchesUrl, newInventoryBranch).pipe(
+
+            tap((addedInventoryBranch: InventoryBranch) => {
+
+                this.inventoryBranchesCache.push(addedInventoryBranch);
+                localStorage.setItem(this.inventoryBranchesUrl, JSON.stringify(this.inventoryBranchesCache));
+
+            })
+
+        );
+
+    }
 
 }

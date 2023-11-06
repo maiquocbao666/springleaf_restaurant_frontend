@@ -35,7 +35,16 @@ export class ComboService {
 
     addCombo(newCombo: Combo): Observable<Combo> {
 
-        return this.apiService.request<Combo>('post', this.comboUrl, newCombo);
+        return this.apiService.request<Combo>('post', this.combosUrl, newCombo).pipe(
+
+            tap((addedCombo: Combo) => {
+
+                this.combosCache.push(addedCombo);
+                localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
+
+            })
+
+        );
 
     }
 

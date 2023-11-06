@@ -1,6 +1,6 @@
 import { OrderType } from './../interfaces/order-type';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -37,6 +37,19 @@ export class OrderTypeService {
         
     }
 
+    addOrderType(newOrderType: OrderType): Observable<OrderType> {
 
+        return this.apiService.request<OrderType>('post', this.orderTypesUrl, newOrderType).pipe(
+
+            tap((addedOrderType: OrderType) => {
+
+                this.orderTypesCache.push(addedOrderType);
+                localStorage.setItem(this.orderTypesUrl, JSON.stringify(this.orderTypesCache));
+
+            })
+
+        );
+
+    }
 
 }

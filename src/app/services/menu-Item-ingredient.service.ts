@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { MenuItemIngredient } from '../interfaces/menu-item-ingredient';
 
@@ -38,6 +38,19 @@ export class MenuItemIngredientService {
 
     }
 
+    addMenuItemIngredient(newMenuItemIngredient: MenuItemIngredient): Observable<MenuItemIngredient> {
 
+        return this.apiService.request<MenuItemIngredient>('post', this.menuItemIngredientsUrl, newMenuItemIngredient).pipe(
+
+            tap((addedMenuItemIngredient: MenuItemIngredient) => {
+
+                this.menuItemIngredientsCache.push(addedMenuItemIngredient);
+                localStorage.setItem(this.menuItemIngredientsUrl, JSON.stringify(this.menuItemIngredientsCache));
+
+            })
+
+        );
+
+    }
 
 }

@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Reservation } from '../interfaces/reservation';
 
@@ -11,24 +11,24 @@ import { Reservation } from '../interfaces/reservation';
 export class ReservationService {
 
     private reservationsUrl = 'reservations';
-    reservationsCache!: Reservation[] ;
+    reservationsCache!: Reservation[];
 
     constructor(private apiService: ApiService) { }
 
     getReservations(): Observable<Reservation[]> {
-    
+
         if (this.reservationsCache) {
-            
+
             return of(this.reservationsCache);
 
         }
 
         const reservationsObservable = this.apiService.request<Reservation[]>('get', this.reservationsUrl);
 
-       
+
         reservationsObservable.subscribe(data => {
 
-            this.reservationsCache = data; 
+            this.reservationsCache = data;
 
         });
 
@@ -36,6 +36,19 @@ export class ReservationService {
 
     }
 
+    addReservation(newReservation: Reservation): Observable<Reservation> {
 
+        return this.apiService.request<Reservation>('post', this.reservationsUrl, newReservation).pipe(
+
+            tap((addedReservation: Reservation) => {
+
+                this.reservationsCache.push(addedReservation);
+                localStorage.setItem(this.reservationsUrl, JSON.stringify(this.reservationsCache));
+
+            })
+
+        );
+
+    }
 
 }

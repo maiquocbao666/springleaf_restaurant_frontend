@@ -38,7 +38,7 @@ export class BillDetailService {
             tap((addedCategory: BillDetail) => {
 
                 this.billDetailsCache.push(addedCategory);
-                localStorage.setItem("categories", JSON.stringify(this.billDetailsCache));
+                localStorage.setItem(this.billDetailsUrl, JSON.stringify(this.billDetailsCache));
 
             })
 
