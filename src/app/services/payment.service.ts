@@ -9,26 +9,30 @@ import { Payment } from '../interfaces/payment';
 })
 export class PaymentService {
 
-    private paymentsUrl = 'restaurants'; // URL to web api, không cần thêm base URL
-    paymentsCache!: Payment[]; // Cache for categories
+    private paymentsUrl = 'restaurants'; 
+    paymentsCache!: Payment[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
     getPayments(): Observable<Payment[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+        
         if (this.paymentsCache) {
+
             return of(this.paymentsCache);
+
         }
 
         const paymentsObservable = this.apiService.request<Payment[]>('get', this.paymentsUrl);
 
-        // Cache the categories observable
+        
         paymentsObservable.subscribe(data => {
-            this.paymentsCache = data; // Store the fetched data in the cache
+
+            this.paymentsCache = data;
+
         });
 
         return paymentsObservable;
+        
     }
 
 

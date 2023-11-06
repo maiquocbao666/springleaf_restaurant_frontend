@@ -10,26 +10,30 @@ import { Role } from '../interfaces/role';
 })
 export class RoleService {
 
-    private rolesUrl = 'roles'; // URL to web api, không cần thêm base URL
-    rolesCache!: Role[]; // Cache for categories
+    private rolesUrl = 'roles';
+    rolesCache!: Role[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
+   
     getRoles(): Observable<Role[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+        
         if (this.rolesCache) {
+
             return of(this.rolesCache);
+
         }
 
         const rolesObservable = this.apiService.request<Role[]>('get', this.rolesUrl);
 
-        // Cache the categories observable
         rolesObservable.subscribe(data => {
-            this.rolesCache = data; // Store the fetched data in the cache
+
+            this.rolesCache = data; 
+
         });
 
         return rolesObservable;
+        
     }
 
 

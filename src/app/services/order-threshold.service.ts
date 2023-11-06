@@ -10,27 +10,32 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class OrderThresholdService {
 
-    private orderThresholdsUrl = 'ingredients'; // URL to web api, không cần thêm base URL
-    orderThresholdsCache!: OrderThreshold[]; // Cache for categories
+    private orderThresholdsUrl = 'ingredients';
+    orderThresholdsCache!: OrderThreshold[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
+    
     getOrderThresholds(): Observable<OrderThreshold[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+       
         if (this.orderThresholdsCache) {
+
             console.log("Có ingredients cache");
             return of(this.orderThresholdsCache);
+
         }
 
         const orderThresholdsObservable = this.apiService.request<OrderThreshold[]>('get', this.orderThresholdsUrl);
 
-        // Cache the categories observable
+       
         orderThresholdsObservable.subscribe(data => {
-            this.orderThresholdsCache = data; // Store the fetched data in the cache
+
+            this.orderThresholdsCache = data;
+            
         });
 
         return orderThresholdsObservable;
+        
     }
 
 

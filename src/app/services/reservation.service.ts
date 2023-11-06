@@ -10,26 +10,30 @@ import { Reservation } from '../interfaces/reservation';
 })
 export class ReservationService {
 
-    private reservationsUrl = 'reservations'; // URL to web api, không cần thêm base URL
-    reservationsCache!: Reservation[] ; // Cache for categories
+    private reservationsUrl = 'reservations';
+    reservationsCache!: Reservation[] ;
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
     getReservations(): Observable<Reservation[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+    
         if (this.reservationsCache) {
+            
             return of(this.reservationsCache);
+
         }
 
         const reservationsObservable = this.apiService.request<Reservation[]>('get', this.reservationsUrl);
 
-        // Cache the categories observable
+       
         reservationsObservable.subscribe(data => {
-            this.reservationsCache = data; // Store the fetched data in the cache
+
+            this.reservationsCache = data; 
+
         });
 
         return reservationsObservable;
+
     }
 
 

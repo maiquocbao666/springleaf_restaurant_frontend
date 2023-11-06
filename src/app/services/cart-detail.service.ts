@@ -9,26 +9,31 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class CartDetailService {
 
-    private cartDetailsUrl = 'cartDetails'; // URL to web api, không cần thêm base URL
-    cartDetailsCache!: CartDetail[] ; // Cache for categories
+    private cartDetailsUrl = 'cartDetails';
+    cartDetailsCache!: CartDetail[] ;
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { } 
 
-    // Sử dụng ApiService để gửi yêu cầu GET
+    
     getCartDetails(): Observable<CartDetail[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+        
         if (this.cartDetailsCache) {
+
             return of(this.cartDetailsCache);
+
         }
 
         const cartDetailsObservable = this.apiService.request<CartDetail[]>('get', this.cartDetailsUrl);
 
-        // Cache the categories observable
+        
         cartDetailsObservable.subscribe(data => {
-            this.cartDetailsCache = data; // Store the fetched data in the cache
+
+            this.cartDetailsCache = data; 
+
         });
 
         return cartDetailsObservable;
+        
     }
 
 

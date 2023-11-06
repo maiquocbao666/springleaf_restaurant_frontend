@@ -9,44 +9,51 @@ import { Restaurant } from '../interfaces/restaurant';
 })
 export class RestaurantService {
 
-    private restaurantsUrl = 'restaurants'; // URL to web api, không cần thêm base URL
-    restaurantsCache!: Restaurant[]; // Cache for categories
+    private restaurantsUrl = 'restaurants';
+    restaurantsCache!: Restaurant[];
     private restaurantUrl = 'restaurant';
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
+   
     getRestaurants(): Observable<Restaurant[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+        
         if (this.restaurantsCache) {
+            
             return of(this.restaurantsCache);
+
         }
 
         const restaurantsObservable = this.apiService.request<Restaurant[]>('get', this.restaurantsUrl);
 
-        // Cache the categories observable
+        
         restaurantsObservable.subscribe(data => {
-            this.restaurantsCache = data; // Store the fetched data in the cache
+
+            this.restaurantsCache = data;
+
         });
 
         return restaurantsObservable;
+
     }
-    // Lấy tên theo ID
+   
     getRestaurantById(id: number): Observable<Restaurant> {
-        // Check if categoriesCache is null or empty
+        
         if (!this.restaurantsCache) {
-            // Fetch the data from the API if cache is empty
+            
             this.getRestaurants();
         }
 
         const restaurantFromCache = this.restaurantsCache.find(restaurant => restaurant.restaurantId === id);
 
         if (restaurantFromCache) {
-            // If found in cache, return it as an observable
+           
             return of(restaurantFromCache);
+
         } else {
-            // If not found in cache, fetch it from the API
+            
             const url = `${this.restaurantUrl}/${id}`;
             return this.apiService.request<Restaurant>('get', url);
+
         }
     }
 

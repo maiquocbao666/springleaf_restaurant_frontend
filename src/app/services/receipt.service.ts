@@ -10,26 +10,30 @@ import { Receipt } from '../interfaces/receipt';
 })
 export class ReceiptService {
 
-    private receiptsUrl = 'restaurants'; // URL to web api, không cần thêm base URL
-    receiptsCache!: Receipt[]; // Cache for categories
+    private receiptsUrl = 'restaurants';
+    receiptsCache!: Receipt[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
     getReceipts(): Observable<Receipt[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+    
         if (this.receiptsCache) {
+            
             return of(this.receiptsCache);
+
         }
 
         const receiptsObservable = this.apiService.request<Receipt[]>('get', this.receiptsUrl);
 
-        // Cache the categories observable
+        
         receiptsObservable.subscribe(data => {
-            this.receiptsCache = data; // Store the fetched data in the cache
+
+            this.receiptsCache = data;
+
         });
 
         return receiptsObservable;
+        
     }
 
 

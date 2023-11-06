@@ -63,8 +63,14 @@ const routes: Routes = [
           import('./admin-products/admin-products.module').then(
             (m) => m.AdminProductsModule
           ),
+      },
+      {
+        path: 'tableStatuses',
+        loadChildren: () =>
+          import('./admin-table-statuses/admin-table-statuses.module').then(
+            (m) => m.AdminTableStatusesModule
+          ),
       }
-
 
     ]
   },

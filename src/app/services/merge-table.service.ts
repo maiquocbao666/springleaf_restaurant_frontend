@@ -11,27 +11,32 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class MergeTableService {
 
-    private mergeTablesUrl = 'mergeTables'; // URL to web api, không cần thêm base URL
-    mergeTablesCache!: MergeTable[]; // Cache for categories
+    private mergeTablesUrl = 'mergeTables'; 
+    mergeTablesCache!: MergeTable[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
+   
     getMergeTablesUrls(): Observable<MergeTable[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+       
         if (this.mergeTablesCache) {
+
             console.log("Có Inventorys cache");
             return of(this.mergeTablesCache);
+
         }
 
         const mergeTablesObservable = this.apiService.request<MergeTable[]>('get', this.mergeTablesUrl);
 
-        // Cache the categories observable
+        
         mergeTablesObservable.subscribe(data => {
-            this.mergeTablesCache = data; // Store the fetched data in the cache
+
+            this.mergeTablesCache = data; 
+
         });
 
         return mergeTablesObservable;
+        
     }
 
 

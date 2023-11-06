@@ -10,23 +10,27 @@ import { Rating } from '../interfaces/rating';
 })
 export class RatingService {
 
-    private ratingsUrl = 'restaurants'; // URL to web api, không cần thêm base URL
-    ratingsCache!: Rating[]; // Cache for categories
+    private ratingsUrl = 'restaurants';
+    ratingsCache!: Rating[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
+   
     getRatings(): Observable<Rating[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+        
         if (this.ratingsCache) {
+
             return of(this.ratingsCache);
+            
         }
 
         const ratingsObservable = this.apiService.request<Rating[]>('get', this.ratingsUrl);
 
-        // Cache the categories observable
+        
         ratingsObservable.subscribe(data => {
-            this.ratingsCache = data; // Store the fetched data in the cache
+
+            this.ratingsCache = data;
+
         });
 
         return ratingsObservable;

@@ -1,37 +1,49 @@
 import { BillDetail } from '../interfaces/bill-detail';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-
-
-
 @Injectable({
     providedIn: 'root'
 })
 export class BillDetailService {
 
-    private billDetailsUrl = 'billDetails'; // URL to web api, không cần thêm base URL
-    billDetailsCache!: BillDetail[]; // Cache for categories
+    private billDetailsUrl = 'billDetails';
+    billDetailsCache!: BillDetail[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
     getBillDetails(): Observable<BillDetail[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+
         if (this.billDetailsCache) {
+
             return of(this.billDetailsCache);
+            
         }
 
         const billDetailsObservable = this.apiService.request<BillDetail[]>('get', this.billDetailsUrl);
 
-        // Cache the categories observable
         billDetailsObservable.subscribe(data => {
-            this.billDetailsCache = data; // Store the fetched data in the cache
+
+            this.billDetailsCache = data;
+
         });
 
         return billDetailsObservable;
     }
 
+    addBillDetail(newBillDetail: BillDetail): Observable<BillDetail> {
 
+        return this.apiService.request<BillDetail>('post', this.billDetailsUrl, newBillDetail).pipe(
+
+            tap((addedCategory: BillDetail) => {
+
+                this.billDetailsCache.push(addedCategory);
+                localStorage.setItem("categories", JSON.stringify(this.billDetailsCache));
+
+            })
+
+        );
+
+    }
 
 }

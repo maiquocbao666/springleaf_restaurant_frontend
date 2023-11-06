@@ -9,26 +9,27 @@ import { DeliveryOrderDetail } from '../interfaces/delivery-order-detail';
 })
 export class DeliveryOrderDetailService {
 
-    private deliveryOrderDetailsUrl = 'deliveryOrderDetails'; // URL to web api, không cần thêm base URL
-    deliveryOrderDetailsCache!: DeliveryOrderDetail[]; // Cache for categories
+    private deliveryOrderDetailsUrl = 'deliveryOrderDetails';
+    deliveryOrderDetailsCache!: DeliveryOrderDetail[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { } 
 
-    // Sử dụng ApiService để gửi yêu cầu GET
     getDeliveryOrderDetails(): Observable<DeliveryOrderDetail[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+        
         if (this.deliveryOrderDetailsCache) {
+
             return of(this.deliveryOrderDetailsCache);
         }
 
         const DeliveryOrderDetailsObservable = this.apiService.request<DeliveryOrderDetail[]>('get', this.deliveryOrderDetailsUrl);
 
-        // Cache the categories observable
+        
         DeliveryOrderDetailsObservable.subscribe(data => {
-            this.deliveryOrderDetailsCache = data; // Store the fetched data in the cache
+            this.deliveryOrderDetailsCache = data; 
         });
 
         return DeliveryOrderDetailsObservable;
+        
     }
 
 

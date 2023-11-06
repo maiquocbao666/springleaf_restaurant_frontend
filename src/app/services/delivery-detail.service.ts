@@ -9,26 +9,29 @@ import { DeliveryDetail } from '../interfaces/delivery-detail';
 })
 export class DeliveryDetailService {
 
-    private deliveryDetailsUrl = 'deliveryDetails'; // URL to web api, không cần thêm base URL
-    deliveryDetailsCache!: DeliveryDetail[]; // Cache for categories
+    private deliveryDetailsUrl = 'deliveryDetails';
+    deliveryDetailsCache!: DeliveryDetail[];
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
+    constructor(private apiService: ApiService) { }
 
-    // Sử dụng ApiService để gửi yêu cầu GET
     getDeliveryDetails(): Observable<DeliveryDetail[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+       
         if (this.deliveryDetailsCache) {
+
             return of(this.deliveryDetailsCache);
+
         }
 
         const DeliveryDetailsObservable = this.apiService.request<DeliveryDetail[]>('get', this.deliveryDetailsUrl);
 
-        // Cache the categories observable
         DeliveryDetailsObservable.subscribe(data => {
-            this.deliveryDetailsCache = data; // Store the fetched data in the cache
+
+            this.deliveryDetailsCache = data; 
+
         });
 
         return DeliveryDetailsObservable;
+
     }
 
 

@@ -13,46 +13,64 @@ export class TableStatusService {
 
     private tableStatusesUrl = 'tableStatuses';
     private tableStatusUrl = 'tableStatus';
-    tableStatusesCache!: TableStatus[]; // Cache for categories
+    tableStatusesCache!: TableStatus[];
+    constructor(private apiService: ApiService) { }
 
-    constructor(private apiService: ApiService) { } // Inject ApiService
 
-    // Sử dụng ApiService để gửi yêu cầu GET
     getTableStatuses(): Observable<TableStatus[]> {
-        // Kiểm tra nếu có dữ liệu trong cache, trả về dữ liệu đó
+
         if (this.tableStatusesCache) {
+
             return of(this.tableStatusesCache);
+
         }
 
         const tableStatusesObservable = this.apiService.request<TableStatus[]>('get', this.tableStatusesUrl);
 
-        // Cache the categories observable
         tableStatusesObservable.subscribe(data => {
-            this.tableStatusesCache = data; // Store the fetched data in the cache
+
+            this.tableStatusesCache = data;
+
         });
 
         return tableStatusesObservable;
     }
 
-    // Lấy sản phẩm theo ID
     getTableStatusById(id: number): Observable<TableStatus> {
-        // Check if categoriesCache is null or empty
+
         if (!this.tableStatusesCache) {
-            // Fetch the data from the API if cache is empty
-           this.getTableStatuses();
+
+            this.getTableStatuses();
+
         }
 
-        // Try to find the Category in the cache by its id
         const tableStatusFromCache = this.tableStatusesCache.find(tableStatus => tableStatus.tableStatusId === id);
 
         if (tableStatusFromCache) {
-            // If found in cache, return it as an observable
+
             return of(tableStatusFromCache);
+
         } else {
-            // If not found in cache, fetch it from the API
+
             const url = `${this.tableStatusUrl}/${id}`;
             return this.apiService.request<TableStatus>('get', url);
+
         }
+    }
+
+    addTableStatus(newTableStatus: TableStatus): Observable<TableStatus> {
+
+        return this.apiService.request<TableStatus>('post', this.tableStatusUrl, newTableStatus).pipe(
+
+            tap((addedTableStatus: TableStatus) => {
+
+                this.tableStatusesCache.push(addedTableStatus);
+                localStorage.setItem("tableStatuses", JSON.stringify(this.tableStatusesCache));
+
+            })
+
+        );
+
     }
 
 }
