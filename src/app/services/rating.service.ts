@@ -10,8 +10,8 @@ import { Rating } from '../interfaces/rating';
 })
 export class RatingService {
 
-    private ratingsUrl = 'ratings';
-    private ratingUrl = 'rating';
+    private ratingsUrl = 'ratingsUrl';
+    private ratingUrl = 'ratingUrl';
     ratingsCache!: Rating[];
 
     constructor(private apiService: ApiService) { }
@@ -39,7 +39,7 @@ export class RatingService {
 
     addRating(newRating: Rating): Observable<Rating> {
 
-        return this.apiService.request<Rating>('post', this.ratingsUrl, newRating).pipe(
+        return this.apiService.request<Rating>('post', this.ratingUrl, newRating).pipe(
 
             tap((addedRating: Rating) => {
 
@@ -54,7 +54,7 @@ export class RatingService {
 
     updateRating(updatedRating: Rating): Observable<any> {
 
-        const url = `${this.ratingsUrl}/${updatedRating.ratingId}`;
+        const url = `${this.ratingUrl}/${updatedRating.ratingId}`;
 
         return this.apiService.request('put', url, updatedRating).pipe(
 
@@ -75,4 +75,27 @@ export class RatingService {
 
     }
 
+
+    deleteRating(id: number): Observable<any> {
+
+        const url = `${this.ratingUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.ratingsCache.findIndex(rating => rating.ratingId === id);
+    
+                if (index !== -1) {
+    
+                    this.ratingsCache.splice(index, 1);
+                    localStorage.setItem(this.ratingsUrl, JSON.stringify(this.ratingsCache));
+    
+                }
+    
+            })
+        );
+    
+    }
+    
 }

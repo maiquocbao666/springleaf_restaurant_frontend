@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../interfaces/user';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { User } from '../interfaces/user';
 
 
 
@@ -11,7 +11,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class UserService {
 
-  private usersUrl = 'users';
+  private usersUrl = 'usersUrl';
+  private userUrl = 'userUrl';
   usersCache: User[] | null = null;
 
   private profileSubject = new Subject<User>();
@@ -80,7 +81,7 @@ export class UserService {
       };
 
     });
-    
+
   }
 
 
@@ -93,5 +94,7 @@ export class UserService {
     return this.http.put(url, updatedUserData, { headers });
 
   }
+
+
 
 }

@@ -10,15 +10,15 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class OrderThresholdService {
 
-    private orderThresholdsUrl = 'ingredients';
-    private orderThresholdUrl = 'ingredient';
+    private orderThresholdsUrl = 'ingredientsUrl';
+    private orderThresholdUrl = 'ingredientUrl';
     orderThresholdsCache!: OrderThreshold[];
 
     constructor(private apiService: ApiService) { }
 
-    
+
     getOrderThresholds(): Observable<OrderThreshold[]> {
-       
+
         if (this.orderThresholdsCache) {
 
             console.log("Có ingredients cache");
@@ -28,20 +28,20 @@ export class OrderThresholdService {
 
         const orderThresholdsObservable = this.apiService.request<OrderThreshold[]>('get', this.orderThresholdsUrl);
 
-       
+
         orderThresholdsObservable.subscribe(data => {
 
             this.orderThresholdsCache = data;
-            
+
         });
 
         return orderThresholdsObservable;
-        
+
     }
 
     addOrderThreshold(newOrderThreshold: OrderThreshold): Observable<OrderThreshold> {
 
-        return this.apiService.request<OrderThreshold>('post', this.orderThresholdsUrl, newOrderThreshold).pipe(
+        return this.apiService.request<OrderThreshold>('post', this.orderThresholdUrl, newOrderThreshold).pipe(
 
             tap((addedOrderThreshold: OrderThreshold) => {
 
@@ -56,7 +56,7 @@ export class OrderThresholdService {
 
     updateOrderThreshold(updatedOrderThreshold: OrderThreshold): Observable<any> {
 
-        const url = `${this.orderThresholdsUrl}/${updatedOrderThreshold.orderThresholdId}`;
+        const url = `${this.orderThresholdUrl}/${updatedOrderThreshold.orderThresholdId}`;
 
         return this.apiService.request('put', url, updatedOrderThreshold).pipe(
 
@@ -73,6 +73,29 @@ export class OrderThresholdService {
 
             })
 
+        );
+
+    }
+
+
+    deleteOrderThreshold(id: number): Observable<any> {
+
+        const url = `${this.orderThresholdUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.orderThresholdsCache.findIndex(orderThreshold => orderThreshold.orderThresholdId === id);
+
+                if (index !== -1) {
+
+                    this.orderThresholdsCache.splice(index, 1);
+                    localStorage.setItem(this.orderThresholdsUrl, JSON.stringify(this.orderThresholdsCache));
+
+                }
+
+            })
         );
 
     }

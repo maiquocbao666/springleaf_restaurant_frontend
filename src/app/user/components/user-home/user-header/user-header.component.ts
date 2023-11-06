@@ -17,8 +17,9 @@ export class UserHeaderComponent {
   previousScrollY = 0;
   user: User | null = null;
   isMobile: boolean = false;
-  isIPad: boolean = false;
-  isMenuOpen: boolean = false;
+  isTablet: boolean = false;
+  isLaptop: boolean = true;
+
 
 
   constructor(
@@ -27,7 +28,6 @@ export class UserHeaderComponent {
     private renderer: Renderer2,
     private el: ElementRef,
     private mediaObserver: MediaObserver,
-    
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -35,19 +35,14 @@ export class UserHeaderComponent {
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.checkScreenSize();
-    this.checkIfIPad();
-  }
-  checkScreenSize() {
-    this.isMobile = window.innerWidth < 740; // Số 768 là ngưỡng tùy chỉnh cho kích thước điện thoại
-  }
 
-  checkIfIPad() {
-    const minWidth = 740;
-    const maxWidth = 1024;
-    this.isIPad = window.innerWidth >= minWidth && window.innerWidth < maxWidth;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    const screenWidth = (event.target as Window).innerWidth;
+
+    this.isMobile = screenWidth <= 768;
+    this.isTablet = screenWidth > 768 && screenWidth <= 1024;
+    this.isLaptop = screenWidth > 1024;
   }
 
 
@@ -63,7 +58,7 @@ export class UserHeaderComponent {
 
   ngOnInit(): void {
     this.user = this.authService.getUserCache(); // Lấy thông tin người dùng từ userCache
-    //this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
+    this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
 
     window.onscroll = () => {
@@ -76,14 +71,18 @@ export class UserHeaderComponent {
       prevScrollPos = currentScrollPos;
     };
 
+    // this.checkScreenSize();
+    // this.checkIfIPad();
+
+    // window.addEventListener('resize', () => {
+    //   this.checkScreenSize();
+    //   this.checkIfIPad();
+    // });
+
   }
 
   openProfileModel() {
     const modalRef = this.modalService.open(ProfileComponent);
-  }
-
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
   }
 
   truncateString(inputString: string): string {

@@ -9,9 +9,10 @@ import { TableType } from '../interfaces/table-type';
 })
 export class TableTypeService {
 
-  private tableTypesUrl = 'tableTypes';
+  private tableTypesUrl = 'tableTypesUrl';
+  private tableTypeUrl = 'tableTypeUrl';
   tableTypesCache!: TableType[];
-  private tableTypeUrl = 'tableType';
+  
   constructor(private apiService: ApiService) { }
 
   getTableTypes(): Observable<TableType[]> {
@@ -63,7 +64,7 @@ export class TableTypeService {
 
   addTableType(newTableType: TableType): Observable<TableType> {
 
-    return this.apiService.request<TableType>('post', this.tableTypesUrl, newTableType).pipe(
+    return this.apiService.request<TableType>('post', this.tableTypeUrl, newTableType).pipe(
 
       tap((addedTableType: TableType) => {
 
@@ -78,7 +79,7 @@ export class TableTypeService {
 
   updateTableType(updatedtableType: TableType): Observable<any> {
 
-    const url = `${this.tableTypesUrl}/${updatedtableType.tableTypeId}`;
+    const url = `${this.tableTypeUrl}/${updatedtableType.tableTypeId}`;
 
     return this.apiService.request('put', url, updatedtableType).pipe(
 
@@ -98,5 +99,28 @@ export class TableTypeService {
     );
 
   }
+
+  deleteTableType(id: number): Observable<any> {
+
+    const url = `${this.tableTypeUrl}/${id}`;
+
+    return this.apiService.request('delete', url).pipe(
+
+        tap(() => {
+
+            const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === id);
+
+            if (index !== -1) {
+
+                this.tableTypesCache.splice(index, 1);
+                localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
+
+            }
+
+        })
+    );
+
+}
+
 
 }

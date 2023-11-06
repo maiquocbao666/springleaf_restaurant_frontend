@@ -9,8 +9,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class OrderTypeService {
 
-    private orderTypesUrl = 'ingredients';
-    private orderTypeUrl = 'ingredient';
+    private orderTypesUrl = 'ingredientsUrl';
+    private orderTypeUrl = 'ingredientUrl';
     orderTypesCache!: OrderType[];
 
     constructor(private apiService: ApiService) { }
@@ -40,7 +40,7 @@ export class OrderTypeService {
 
     addOrderType(newOrderType: OrderType): Observable<OrderType> {
 
-        return this.apiService.request<OrderType>('post', this.orderTypesUrl, newOrderType).pipe(
+        return this.apiService.request<OrderType>('post', this.orderTypeUrl, newOrderType).pipe(
 
             tap((addedOrderType: OrderType) => {
 
@@ -55,7 +55,7 @@ export class OrderTypeService {
 
     updateOrderType(updatedOrderType: OrderType): Observable<any> {
 
-        const url = `${this.orderTypesUrl}/${updatedOrderType.orderTypeId}`;
+        const url = `${this.orderTypeUrl}/${updatedOrderType.orderTypeId}`;
 
         return this.apiService.request('put', url, updatedOrderType).pipe(
 
@@ -75,5 +75,28 @@ export class OrderTypeService {
         );
 
     }
+
+    deleteOrderType(id: number): Observable<any> {
+
+        const url = `${this.orderTypeUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.orderTypesCache.findIndex(orderType => orderType.orderTypeId === id);
+    
+                if (index !== -1) {
+    
+                    this.orderTypesCache.splice(index, 1);
+                    localStorage.setItem(this.orderTypesUrl, JSON.stringify(this.orderTypesCache));
+    
+                }
+    
+            })
+        );
+    
+    }
+    
 
 }

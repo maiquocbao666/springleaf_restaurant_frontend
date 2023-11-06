@@ -11,8 +11,9 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class TableStatusService {
 
-    private tableStatusesUrl = 'tableStatuses';
-    private tableStatusUrl = 'tableStatus';
+    private tableStatusesUrl = 'tableStatusesUrl';
+    private tableStatusUrl = 'tableStatusUrl';
+    
     tableStatusesCache!: TableStatus[];
     constructor(private apiService: ApiService) { }
 
@@ -65,7 +66,7 @@ export class TableStatusService {
             tap((addedTableStatus: TableStatus) => {
 
                 this.tableStatusesCache.push(addedTableStatus);
-                localStorage.setItem("tableStatuses", JSON.stringify(this.tableStatusesCache));
+                localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
 
             })
 
@@ -75,7 +76,7 @@ export class TableStatusService {
 
     updateTableStatus(updatedtableStatus: TableStatus): Observable<any> {
 
-        const url = `${this.tableStatusesUrl}/${updatedtableStatus.tableStatusId}`;
+        const url = `${this.tableStatusUrl}/${updatedtableStatus.tableStatusId}`;
 
         return this.apiService.request('put', url, updatedtableStatus).pipe(
 
@@ -96,4 +97,26 @@ export class TableStatusService {
 
     }
 
+    deleteTableStatus(id: number): Observable<any> {
+
+        const url = `${this.tableStatusUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.tableStatusesCache.findIndex(tableStatus => tableStatus.tableStatusId === id);
+    
+                if (index !== -1) {
+    
+                    this.tableStatusesCache.splice(index, 1);
+                    localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
+    
+                }
+    
+            })
+        );
+    
+    }
+    
 }

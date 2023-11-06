@@ -9,14 +9,14 @@ import { DeliveryOrderDetail } from '../interfaces/delivery-order-detail';
 })
 export class DeliveryOrderDetailService {
 
-    private deliveryOrderDetailsUrl = 'deliveryOrderDetails';
-    private deliveryOrderDetailUrl = 'deliveryOrderDetail';
+    private deliveryOrderDetailsUrl = 'deliveryOrderDetailsUrl';
+    private deliveryOrderDetailUrl = 'deliveryOrderDetailUrl';
     deliveryOrderDetailsCache!: DeliveryOrderDetail[];
 
-    constructor(private apiService: ApiService) { } 
+    constructor(private apiService: ApiService) { }
 
     getDeliveryOrderDetails(): Observable<DeliveryOrderDetail[]> {
-        
+
         if (this.deliveryOrderDetailsCache) {
 
             return of(this.deliveryOrderDetailsCache);
@@ -24,18 +24,18 @@ export class DeliveryOrderDetailService {
 
         const DeliveryOrderDetailsObservable = this.apiService.request<DeliveryOrderDetail[]>('get', this.deliveryOrderDetailsUrl);
 
-        
+
         DeliveryOrderDetailsObservable.subscribe(data => {
-            this.deliveryOrderDetailsCache = data; 
+            this.deliveryOrderDetailsCache = data;
         });
 
         return DeliveryOrderDetailsObservable;
-        
+
     }
 
     addDeliveryOrderDetail(newDeliveryOrderDetail: DeliveryOrderDetail): Observable<DeliveryOrderDetail> {
 
-        return this.apiService.request<DeliveryOrderDetail>('post', this.deliveryOrderDetailsUrl, newDeliveryOrderDetail).pipe(
+        return this.apiService.request<DeliveryOrderDetail>('post', this.deliveryOrderDetailUrl, newDeliveryOrderDetail).pipe(
 
             tap((addedDeliveryOrderDetail: DeliveryOrderDetail) => {
 
@@ -50,7 +50,7 @@ export class DeliveryOrderDetailService {
 
     updateDeliveryOrderDetail(updatedDeliveryOrderDetail: DeliveryOrderDetail): Observable<any> {
 
-        const url = `${this.deliveryOrderDetailsUrl}/${updatedDeliveryOrderDetail.deliveryOrderDetailId}`;
+        const url = `${this.deliveryOrderDetailUrl}/${updatedDeliveryOrderDetail.deliveryOrderDetailId}`;
 
         return this.apiService.request('put', url, updatedDeliveryOrderDetail).pipe(
 
@@ -67,6 +67,28 @@ export class DeliveryOrderDetailService {
 
             })
 
+        );
+
+    }
+
+    deleteComboOrderDetail(id: number): Observable<any> {
+
+        const url = `${this.deliveryOrderDetailUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.deliveryOrderDetailsCache.findIndex(detail => detail.deliveryOrderDetailId === id);
+
+                if (index !== -1) {
+
+                    this.deliveryOrderDetailsCache.splice(index, 1);
+                    localStorage.setItem(this.deliveryOrderDetailsUrl, JSON.stringify(this.deliveryOrderDetailsCache));
+
+                }
+
+            })
         );
 
     }

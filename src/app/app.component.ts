@@ -1,4 +1,5 @@
-import { Component, HostListener, OnDestroy } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
+import { AuthenticationService } from "./services/authentication.service";
 import { BillDetailService } from "./services/bill-detail.service";
 import { BillService } from "./services/bill.service";
 import { CartDetailService } from "./services/cart-detail.service";
@@ -31,7 +32,6 @@ import { RestaurantService } from "./services/restaurant.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
-import { AuthenticationService } from "./services/authentication.service";
 
 
 interface DataService<T> {

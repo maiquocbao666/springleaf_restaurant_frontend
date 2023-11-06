@@ -1,7 +1,7 @@
-import { CartDetail } from '../interfaces/cart-detail';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { CartDetail } from '../interfaces/cart-detail';
 
 
 @Injectable({
@@ -9,8 +9,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class CartDetailService {
 
-    private cartDetailsUrl = 'cartDetails';
-    private cartDetailUrl = 'cartDetail';
+    private cartDetailsUrl = 'cartDetailsUrl';
+    private cartDetailUrl = 'cartDetailUrl';
     cartDetailsCache!: CartDetail[];
 
     constructor(private apiService: ApiService) { }
@@ -39,7 +39,7 @@ export class CartDetailService {
 
     addCartDetail(newCartDetail: CartDetail): Observable<CartDetail> {
 
-        return this.apiService.request<CartDetail>('post', this.cartDetailsUrl, newCartDetail).pipe(
+        return this.apiService.request<CartDetail>('post', this.cartDetailUrl, newCartDetail).pipe(
 
             tap((addedBill: CartDetail) => {
 
@@ -54,7 +54,7 @@ export class CartDetailService {
 
     updateCartDetail(updatedCartDetail: CartDetail): Observable<any> {
 
-        const url = `${this.cartDetailsUrl}/${updatedCartDetail.orderDetailId}`;
+        const url = `${this.cartDetailUrl}/${updatedCartDetail.orderDetailId}`;
 
         return this.apiService.request('put', url, updatedCartDetail).pipe(
 
@@ -88,7 +88,7 @@ export class CartDetailService {
                 if (index !== -1) {
 
                     this.cartDetailsCache.splice(index, 1);
-                    localStorage.setItem('categories', JSON.stringify(this.cartDetailsCache));
+                    localStorage.setItem(this.cartDetailsUrl, JSON.stringify(this.cartDetailsCache));
 
                 }
 

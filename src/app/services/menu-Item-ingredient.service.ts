@@ -11,27 +11,27 @@ import { MenuItemIngredient } from '../interfaces/menu-item-ingredient';
 })
 export class MenuItemIngredientService {
 
-    private menuItemIngredientsUrl = 'menuItemIngredients';
-    private menuItemIngredientUrl = 'menuItemIngredient';
-    menuItemIngredientsCache!: MenuItemIngredient[]; 
+    private menuItemIngredientsUrl = 'menuItemIngredientsUrl';
+    private menuItemIngredientUrl = 'menuItemIngredientUrl';
+    menuItemIngredientsCache!: MenuItemIngredient[];
 
-    constructor(private apiService: ApiService) { } 
+    constructor(private apiService: ApiService) { }
 
     getMenuItemIngredients(): Observable<MenuItemIngredient[]> {
-        
+
         if (this.menuItemIngredientsCache) {
 
             console.log("Có Inventorys cache");
             return of(this.menuItemIngredientsCache);
-            
+
         }
 
         const menuItemIngredientsObservable = this.apiService.request<MenuItemIngredient[]>('get', this.menuItemIngredientsUrl);
 
-        
+
         menuItemIngredientsObservable.subscribe(data => {
 
-            this.menuItemIngredientsCache = data; 
+            this.menuItemIngredientsCache = data;
 
         });
 
@@ -41,7 +41,7 @@ export class MenuItemIngredientService {
 
     addMenuItemIngredient(newMenuItemIngredient: MenuItemIngredient): Observable<MenuItemIngredient> {
 
-        return this.apiService.request<MenuItemIngredient>('post', this.menuItemIngredientsUrl, newMenuItemIngredient).pipe(
+        return this.apiService.request<MenuItemIngredient>('post', this.menuItemIngredientUrl, newMenuItemIngredient).pipe(
 
             tap((addedMenuItemIngredient: MenuItemIngredient) => {
 
@@ -56,7 +56,7 @@ export class MenuItemIngredientService {
 
     updateMenuItemIngredient(updatedMenuItemIngredient: MenuItemIngredient): Observable<any> {
 
-        const url = `${this.menuItemIngredientsUrl}/${updatedMenuItemIngredient.menuItemIngredientId}`;
+        const url = `${this.menuItemIngredientUrl}/${updatedMenuItemIngredient.menuItemIngredientId}`;
 
         return this.apiService.request('put', url, updatedMenuItemIngredient).pipe(
 
@@ -76,5 +76,28 @@ export class MenuItemIngredientService {
         );
 
     }
+
+    deleteMenuItemIngredient(id: number): Observable<any> {
+
+        const url = `${this.menuItemIngredientUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.menuItemIngredientsCache.findIndex(menuItemIngredient => menuItemIngredient.menuItemIngredientId === id);
+
+                if (index !== -1) {
+
+                    this.menuItemIngredientsCache.splice(index, 1);
+                    localStorage.setItem(this.menuItemIngredientsUrl, JSON.stringify(this.menuItemIngredientsCache));
+
+                }
+
+            })
+        );
+
+    }
+
 
 }

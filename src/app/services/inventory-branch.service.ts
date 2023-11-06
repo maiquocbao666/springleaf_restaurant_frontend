@@ -12,15 +12,16 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class InventoryBranchService {
 
-    private inventoryBranchesUrl = 'inventoryBranches';
-    private inventoryBranchUrl = 'inventoryBranch';
+    private inventoryBranchesUrl = 'inventoryBranchesUrl';
+    private inventoryBranchUrl = 'inventoryBranchUrl';
+
     inventoryBranchesCache!: InventoryBranch[];
 
-    constructor(private apiService: ApiService) { } 
+    constructor(private apiService: ApiService) { }
 
-    
+
     getInventoryBranches(): Observable<InventoryBranch[]> {
-        
+
         if (this.inventoryBranchesCache) {
 
             console.log("Có Inventories cache");
@@ -30,7 +31,7 @@ export class InventoryBranchService {
 
         const inventoryBranchesObservable = this.apiService.request<InventoryBranch[]>('get', this.inventoryBranchesUrl);
 
-        
+
         inventoryBranchesObservable.subscribe(data => {
 
             this.inventoryBranchesCache = data;
@@ -38,13 +39,13 @@ export class InventoryBranchService {
         });
 
         return inventoryBranchesObservable;
-        
+
     }
 
 
     addInventoryBranch(newInventoryBranch: InventoryBranch): Observable<InventoryBranch> {
 
-        return this.apiService.request<InventoryBranch>('post', this.inventoryBranchesUrl, newInventoryBranch).pipe(
+        return this.apiService.request<InventoryBranch>('post', this.inventoryBranchUrl, newInventoryBranch).pipe(
 
             tap((addedInventoryBranch: InventoryBranch) => {
 
@@ -59,7 +60,7 @@ export class InventoryBranchService {
 
     updateInventoryBranche(updatedInventoryBranche: InventoryBranch): Observable<any> {
 
-        const url = `${this.inventoryBranchesUrl}/${updatedInventoryBranche.inventoryBranchId}`;
+        const url = `${this.inventoryBranchUrl}/${updatedInventoryBranche.inventoryBranchId}`;
 
         return this.apiService.request('put', url, updatedInventoryBranche).pipe(
 
@@ -76,6 +77,28 @@ export class InventoryBranchService {
 
             })
 
+        );
+
+    }
+
+    deleteInventoryBranch(id: number): Observable<any> {
+
+        const url = `${this.inventoryBranchUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.inventoryBranchesCache.findIndex(inventoryBranch => inventoryBranch.inventoryBranchId === id);
+
+                if (index !== -1) {
+
+                    this.inventoryBranchesCache.splice(index, 1);
+                    localStorage.setItem(this.inventoryBranchesUrl, JSON.stringify(this.inventoryBranchesCache));
+
+                }
+
+            })
         );
 
     }

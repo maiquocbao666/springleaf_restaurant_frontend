@@ -10,9 +10,10 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class BillService {
 
-    private billsUrl = 'bills';
+    private billsUrl = 'billsUrl';
+    private billUrl = 'billUrl';
+    
     billsCache!: Bill[];
-    billUrl: string = 'bill';
 
     constructor(private apiService: ApiService) { }
 
@@ -40,7 +41,7 @@ export class BillService {
 
     addBill(newBill: Bill): Observable<Bill> {
 
-        return this.apiService.request<Bill>('post', this.billsUrl, newBill).pipe(
+        return this.apiService.request<Bill>('post', this.billUrl, newBill).pipe(
 
             tap((addedBill: Bill) => {
 
@@ -55,7 +56,7 @@ export class BillService {
 
     updateBill(updatedBill: Bill): Observable<any> {
 
-        const url = `${this.billsUrl}/${updatedBill.billId}`;
+        const url = `${this.billUrl}/${updatedBill.billId}`;
 
         return this.apiService.request('put', url, updatedBill).pipe(
 
@@ -79,23 +80,23 @@ export class BillService {
     deletebill(id: number): Observable<any> {
 
         const url = `${this.billUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
-          tap(() => {
-    
-            const index = this.billsCache.findIndex(bill => bill.billId === id);
-    
-            if (index !== -1) {
-    
-              this.billsCache.splice(index, 1);
-              localStorage.setItem('categories', JSON.stringify(this.billsCache));
-    
-            }
-    
-          })
+
+            tap(() => {
+
+                const index = this.billsCache.findIndex(bill => bill.billId === id);
+
+                if (index !== -1) {
+
+                    this.billsCache.splice(index, 1);
+                    localStorage.setItem(this.billsUrl, JSON.stringify(this.billsCache));
+
+                }
+
+            })
         );
-    
-      }
+
+    }
 
 }

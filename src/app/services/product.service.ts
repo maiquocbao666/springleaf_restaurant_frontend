@@ -8,9 +8,9 @@ import { ApiService } from './api.service';
 })
 export class ProductService {
 
-  private productsUrl = 'products';
-  private categoryUrl = 'category';
-  private productUrl = 'product';
+  private productsUrl = 'productsUrl';
+  private categoryUrl = 'categoryUrl';
+  private productUrl = 'productUrl';
   productsCache!: Product[];
 
   constructor(private apiService: ApiService) { }
@@ -76,7 +76,7 @@ export class ProductService {
 
   addProduct(newProduct: Product): Observable<Product> {
 
-    return this.apiService.request<Product>('post', this.productsUrl, newProduct).pipe(
+    return this.apiService.request<Product>('post', this.productUrl, newProduct).pipe(
 
       tap((addedProduct: Product) => {
 
@@ -103,7 +103,7 @@ export class ProductService {
         if (index !== -1) {
 
           this.productsCache![index] = updatedProduct;
-          localStorage.setItem('products', JSON.stringify(this.productsCache));
+          localStorage.setItem(this.productsUrl, JSON.stringify(this.productsCache));
 
         }
 
@@ -132,8 +132,23 @@ export class ProductService {
 
     const url = `${this.productUrl}/${id}`;
 
-    return this.apiService.request('delete', url);
+    return this.apiService.request('delete', url).pipe(
+
+      tap(() => {
+
+        const index = this.productsCache.findIndex(product => product.menuItemId === id);
+
+        if (index !== -1) {
+
+          this.productsCache.splice(index, 1);
+          localStorage.setItem(this.productsUrl, JSON.stringify(this.productsCache));
+
+        }
+
+      })
+    );
 
   }
+
 
 }

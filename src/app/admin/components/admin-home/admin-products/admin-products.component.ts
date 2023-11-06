@@ -100,10 +100,7 @@ export class AdminProductsComponent {
 
     this.productService.addProduct(newProduct)
       .subscribe(product => {
-        console.log('Inventory added:', product);
-        // Lấy tên của thành phần và nhà cung cấp dựa vào ID 
         this.products.push(product);
-        // Cập nhật inventoriesCache trong service
         this.productForm.get('status')?.setValue(true);
         this.productForm.reset();
       });

@@ -8,9 +8,9 @@ import { Category } from '../interfaces/category';
 })
 export class CategoryService {
 
-  private categoriesUrl = 'categories';
+  private categoriesUrl = 'categoriesUrl';
   categoriesCache!: Category[];
-  private categoryUrl = 'category';
+  private categoryUrl = 'categoryUrl';
 
   constructor(private apiService: ApiService) { }
 
@@ -66,7 +66,7 @@ export class CategoryService {
       tap((addedCategory: Category) => {
 
         this.categoriesCache.push(addedCategory);
-        localStorage.setItem("categories", JSON.stringify(this.categoriesCache));
+        localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
 
       })
 

@@ -1,14 +1,14 @@
-import { BillDetail } from '../interfaces/bill-detail';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { BillDetail } from '../interfaces/bill-detail';
 @Injectable({
     providedIn: 'root'
 })
 export class BillDetailService {
 
-    private billDetailsUrl = 'billDetails';
-    private billUrl = 'billDetail';
+    private billDetailsUrl = 'billDetailsUrl';
+    private billDetailUrl = 'billDetailUrl';
     billDetailsCache!: BillDetail[];
 
     constructor(private apiService: ApiService) { }
@@ -34,12 +34,12 @@ export class BillDetailService {
 
     addBillDetail(newBillDetail: BillDetail): Observable<BillDetail> {
 
-        return this.apiService.request<BillDetail>('post', this.billDetailsUrl, newBillDetail).pipe(
+        return this.apiService.request<BillDetail>('post', this.billDetailUrl, newBillDetail).pipe(
 
             tap((addedBillDetail: BillDetail) => {
 
                 this.billDetailsCache.push(addedBillDetail);
-                localStorage.setItem(this.billDetailsUrl, JSON.stringify(this.billDetailsCache));
+                localStorage.setItem(this.billDetailUrl, JSON.stringify(this.billDetailsCache));
 
             })
 
@@ -49,7 +49,7 @@ export class BillDetailService {
 
     updateBillDetail(updatedBillDetail: BillDetail): Observable<any> {
 
-        const url = `${this.billDetailsUrl}/${updatedBillDetail.billDetailId}`;
+        const url = `${this.billDetailUrl}/${updatedBillDetail.billDetailId}`;
 
         return this.apiService.request('put', url, updatedBillDetail).pipe(
 
@@ -72,7 +72,7 @@ export class BillDetailService {
 
     deleteBillDetail(id: number): Observable<any> {
 
-        const url = `${this.billUrl}/${id}`;
+        const url = `${this.billDetailUrl}/${id}`;
 
         return this.apiService.request('delete', url).pipe(
 
@@ -83,7 +83,7 @@ export class BillDetailService {
                 if (index !== -1) {
 
                     this.billDetailsCache.splice(index, 1);
-                    localStorage.setItem('categories', JSON.stringify(this.billDetailsCache));
+                    localStorage.setItem(this.billDetailsUrl, JSON.stringify(this.billDetailsCache));
 
                 }
 

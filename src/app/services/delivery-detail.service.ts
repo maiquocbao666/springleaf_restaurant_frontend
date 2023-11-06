@@ -9,14 +9,14 @@ import { DeliveryDetail } from '../interfaces/delivery-detail';
 })
 export class DeliveryDetailService {
 
-    private deliveryDetailsUrl = 'deliveryDetails';
-    private deliveryDetailUrl = 'deliveryDetail';
+    private deliveryDetailsUrl = 'deliveryDetailsUrl';
+    private deliveryDetailUrl = 'deliveryDetailUrl';
     deliveryDetailsCache!: DeliveryDetail[];
 
     constructor(private apiService: ApiService) { }
 
     getDeliveryDetails(): Observable<DeliveryDetail[]> {
-       
+
         if (this.deliveryDetailsCache) {
 
             return of(this.deliveryDetailsCache);
@@ -27,7 +27,7 @@ export class DeliveryDetailService {
 
         DeliveryDetailsObservable.subscribe(data => {
 
-            this.deliveryDetailsCache = data; 
+            this.deliveryDetailsCache = data;
 
         });
 
@@ -37,7 +37,7 @@ export class DeliveryDetailService {
 
     addDeliveryDetail(newDeliveryDetail: DeliveryDetail): Observable<DeliveryDetail> {
 
-        return this.apiService.request<DeliveryDetail>('post', this.deliveryDetailsUrl, newDeliveryDetail).pipe(
+        return this.apiService.request<DeliveryDetail>('post', this.deliveryDetailUrl, newDeliveryDetail).pipe(
 
             tap((addedDeliveryDetail: DeliveryDetail) => {
 
@@ -52,7 +52,7 @@ export class DeliveryDetailService {
 
     updateDeliveryDetail(updatedDeliveryDetail: DeliveryDetail): Observable<any> {
 
-        const url = `${this.deliveryDetailsUrl}/${updatedDeliveryDetail.deliveryDetailId}`;
+        const url = `${this.deliveryDetailUrl}/${updatedDeliveryDetail.deliveryDetailId}`;
 
         return this.apiService.request('put', url, updatedDeliveryDetail).pipe(
 
@@ -72,5 +72,28 @@ export class DeliveryDetailService {
         );
 
     }
+
+    deleteComboDetail(id: number): Observable<any> {
+
+        const url = `${this.deliveryDetailUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.deliveryDetailsCache.findIndex(detail => detail.deliveryDetailId === id);
+
+                if (index !== -1) {
+
+                    this.deliveryDetailsCache.splice(index, 1);
+                    localStorage.setItem(this.deliveryDetailsUrl, JSON.stringify(this.deliveryDetailsCache));
+
+                }
+
+            })
+        );
+
+    }
+
 
 }

@@ -45,7 +45,7 @@ export class ComboDetailService {
 
     addComboDetail(newComboDetail: ComboDetail): Observable<ComboDetail> {
 
-        return this.apiService.request<ComboDetail>('post', this.comboDetailsUrl, newComboDetail).pipe(
+        return this.apiService.request<ComboDetail>('post', this.comboDetailUrl, newComboDetail).pipe(
 
             tap((addedBill: ComboDetail) => {
 
@@ -60,7 +60,7 @@ export class ComboDetailService {
 
     updateComboDetail(updatedComboDetail: ComboDetail): Observable<any> {
 
-        const url = `${this.comboDetailsUrl}/${updatedComboDetail.comboDetailId}`;
+        const url = `${this.comboDetailUrl}/${updatedComboDetail.comboDetailId}`;
 
         return this.apiService.request('put', url, updatedComboDetail).pipe(
 
@@ -80,5 +80,28 @@ export class ComboDetailService {
         );
 
     }
+    
+    deleteComboDetail(id: number): Observable<any> {
+
+        const url = `${this.comboDetailUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+          tap(() => {
+    
+            const index = this.comboDetailsCache.findIndex(comboDetail => comboDetail.comboDetailId === id);
+    
+            if (index !== -1) {
+    
+              this.comboDetailsCache.splice(index, 1);
+              localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
+    
+            }
+    
+          })
+        );
+    
+    }
+    
 
 }

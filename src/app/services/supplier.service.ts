@@ -9,13 +9,13 @@ import { Supplier } from '../interfaces/supplier';
 })
 export class SupplierService {
 
-    private suppliersUrl = 'suppliers'; 
-    suppliersCache!: Supplier[]; 
-    private supplierUrl = 'supplier';
+    private suppliersUrl = 'suppliersUrl';
+    private supplierUrl = 'supplierUrl';
+    suppliersCache!: Supplier[];
     constructor(private apiService: ApiService) { }
-    
+
     getSuppliers(): Observable<Supplier[]> {
-        
+
         if (this.suppliersCache) {
 
             return of(this.suppliersCache);
@@ -31,35 +31,35 @@ export class SupplierService {
         });
 
         return suppliersObservable;
-        
+
     }
 
     getSupplier(id: number): Observable<Supplier> {
-      
+
         if (!this.suppliersCache) {
-           
-           this.getSuppliers();
+
+            this.getSuppliers();
 
         }
-  
+
         const SupplierFromCache = this.suppliersCache.find(Supplier => Supplier.supplierId === id);
 
         if (SupplierFromCache) {
-           
+
             return of(SupplierFromCache);
 
         } else {
-          
+
             const url = `${this.supplierUrl}/${id}`;
             return this.apiService.request<Supplier>('get', url);
 
         }
 
     }
-   
+
     addSupplier(newSupplier: Supplier): Observable<Supplier> {
 
-        return this.apiService.request<Supplier>('post', this.suppliersUrl, newSupplier).pipe(
+        return this.apiService.request<Supplier>('post', this.supplierUrl, newSupplier).pipe(
 
             tap((addedSupplier: Supplier) => {
 
@@ -79,13 +79,13 @@ export class SupplierService {
         return this.apiService.request('put', url, updatedSupplier).pipe(
 
             tap(() => {
-                
+
                 const index = this.suppliersCache!.findIndex(supplier => supplier.supplierId === updatedSupplier.supplierId);
 
                 if (index !== -1) {
 
                     this.suppliersCache![index] = updatedSupplier;
-                    localStorage.setItem('suppliers', JSON.stringify(this.suppliersCache));
+                    localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
 
                 }
             })
@@ -95,7 +95,7 @@ export class SupplierService {
     }
 
     updateSupplierCache(updatedSupplier: Supplier): void {
-    
+
         if (this.suppliersCache) {
 
             const index = this.suppliersCache.findIndex(cat => cat.supplierId === updatedSupplier.supplierId);
@@ -107,12 +107,28 @@ export class SupplierService {
             }
         }
     }
-   
+
     deleteSupplier(id: number): Observable<any> {
 
         const url = `${this.supplierUrl}/${id}`;
-        return this.apiService.request('delete', url);
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.suppliersCache.findIndex(supplier => supplier.supplierId === id);
+
+                if (index !== -1) {
+
+                    this.suppliersCache.splice(index, 1);
+                    localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
+
+                }
+
+            })
+        );
 
     }
-    
+
+
 }

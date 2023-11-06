@@ -10,15 +10,15 @@ import { Ingredient } from '../interfaces/ingredient';
 })
 export class IngredientService {
 
-    private ingredientsUrl = 'ingredients';
-    private ingredientUrl = 'ingredient';
+    private ingredientsUrl = 'ingredientsUrl';
+    private ingredientUrl = 'ingredientUrl';
     ingredientsCache!: Ingredient[];
 
-    constructor(private apiService: ApiService) { } 
+    constructor(private apiService: ApiService) { }
 
     // Sử dụng ApiService để gửi yêu cầu GET
     getIngredients(): Observable<Ingredient[]> {
-        
+
         if (this.ingredientsCache) {
 
             console.log("Có ingredients cache");
@@ -39,22 +39,22 @@ export class IngredientService {
     }
 
     getIngredient(id: number): Observable<Ingredient> {
-        
+
         if (!this.ingredientsCache) {
-            
-           this.getIngredients();
+
+            this.getIngredients();
 
         }
 
-        
+
         const ingredientFromCache = this.ingredientsCache.find(ingredient => ingredient.ingredientId === id);
 
         if (ingredientFromCache) {
-            
+
             return of(ingredientFromCache);
 
         } else {
-        
+
             const url = `${this.ingredientUrl}/${id}`;
             return this.apiService.request<Ingredient>('get', url);
         }
@@ -63,7 +63,7 @@ export class IngredientService {
 
     addIngredient(newIngredient: Ingredient): Observable<Ingredient> {
 
-        return this.apiService.request<Ingredient>('post', this.ingredientsUrl, newIngredient).pipe(
+        return this.apiService.request<Ingredient>('post', this.ingredientUrl, newIngredient).pipe(
 
             tap((addedIngredient: Ingredient) => {
 
@@ -76,7 +76,7 @@ export class IngredientService {
 
     }
 
-    
+
     updateIngredient(updatedIngredient: Ingredient): Observable<any> {
 
         const url = `${this.ingredientUrl}/${updatedIngredient.ingredientId}`;
@@ -84,24 +84,24 @@ export class IngredientService {
         return this.apiService.request('put', url, updatedIngredient).pipe(
 
             tap(() => {
-                
+
                 const index = this.ingredientsCache!.findIndex(ingregient => ingregient.ingredientId === updatedIngredient.ingredientId);
 
                 if (index !== -1) {
 
                     this.ingredientsCache![index] = updatedIngredient;
-                    localStorage.setItem('ingredients', JSON.stringify(this.ingredientsCache));
+                    localStorage.setItem(this.ingredientsUrl, JSON.stringify(this.ingredientsCache));
 
                 }
 
             })
-            
+
         );
 
     }
 
     updateIngredientCache(updatedIngredient: Ingredient): void {
-        
+
         if (this.ingredientsCache) {
 
             const index = this.ingredientsCache.findIndex(cat => cat.ingredientId === updatedIngredient.ingredientId);
@@ -119,12 +119,27 @@ export class IngredientService {
 
 
 
-    // Xoá sản phẩm
     deleteIngredient(id: number): Observable<any> {
 
         const url = `${this.ingredientUrl}/${id}`;
-        return this.apiService.request('delete', url);
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.ingredientsCache.findIndex(ingredient => ingredient.ingredientId === id);
+
+                if (index !== -1) {
+
+                    this.ingredientsCache.splice(index, 1);
+                    localStorage.setItem(this.ingredientsUrl, JSON.stringify(this.ingredientsCache));
+
+                }
+
+            })
+        );
 
     }
-    
+
+
 }

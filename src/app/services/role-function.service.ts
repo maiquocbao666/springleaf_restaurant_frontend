@@ -10,23 +10,24 @@ import { RoleFunction } from '../interfaces/role-function';
 })
 export class RoleFunctionService {
 
-    private RoleFunctionsUrl = 'roleFunctions';
+    private roleFunctionsUrl = 'roleFunctionsUrl';
+    private roleFunctionUrl = 'roleFunctionUrl';
     roleFunctionsCache!: RoleFunction[];
 
     constructor(private apiService: ApiService) { }
 
-   
+
     getRoleFunctions(): Observable<RoleFunction[]> {
-        
+
         if (this.roleFunctionsCache) {
 
             return of(this.roleFunctionsCache);
 
         }
 
-        const RoleFunctionsObservable = this.apiService.request<RoleFunction[]>('get', this.RoleFunctionsUrl);
+        const RoleFunctionsObservable = this.apiService.request<RoleFunction[]>('get', this.roleFunctionsUrl);
 
-        
+
         RoleFunctionsObservable.subscribe(data => {
 
             this.roleFunctionsCache = data;
@@ -34,17 +35,17 @@ export class RoleFunctionService {
         });
 
         return RoleFunctionsObservable;
-        
+
     }
 
     addRoleFunction(newRoleFunction: RoleFunction): Observable<RoleFunction> {
 
-        return this.apiService.request<RoleFunction>('post', this.RoleFunctionsUrl, newRoleFunction).pipe(
+        return this.apiService.request<RoleFunction>('post', this.roleFunctionUrl, newRoleFunction).pipe(
 
             tap((addedRoleFunction: RoleFunction) => {
 
                 this.roleFunctionsCache.push(addedRoleFunction);
-                localStorage.setItem(this.RoleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
+                localStorage.setItem(this.roleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
 
             })
 
@@ -54,7 +55,7 @@ export class RoleFunctionService {
 
     updateRoleFunction(updatedroleFunction: RoleFunction): Observable<any> {
 
-        const url = `${this.RoleFunctionsUrl}/${updatedroleFunction.roleFunctionId}`;
+        const url = `${this.roleFunctionUrl}/${updatedroleFunction.roleFunctionId}`;
 
         return this.apiService.request('put', url, updatedroleFunction).pipe(
 
@@ -65,12 +66,34 @@ export class RoleFunctionService {
                 if (index !== -1) {
 
                     this.roleFunctionsCache![index] = updatedroleFunction;
-                    localStorage.setItem(this.RoleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
+                    localStorage.setItem(this.roleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
 
                 }
 
             })
 
+        );
+
+    }
+
+    deleteRoleFunction(id: number): Observable<any> {
+
+        const url = `${this.roleFunctionUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.roleFunctionsCache.findIndex(roleFunction => roleFunction.roleFunctionId === id);
+
+                if (index !== -1) {
+
+                    this.roleFunctionsCache.splice(index, 1);
+                    localStorage.setItem(this.roleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
+
+                }
+
+            })
         );
 
     }

@@ -11,9 +11,9 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class RestaurantTableService {
 
-    private restaurantTablesUrl = 'restaurantTables';
+    private restaurantTablesUrl = 'restaurantTablesUrl';
+    private restaurantTableUrl = 'restaurantTableUrl';
     restaurantTablesCache!: RestaurantTable[];
-    private restaurantTableUrl = 'restaurantTable';
     constructor(private apiService: ApiService) { }
 
     getRestaurantTables(): Observable<RestaurantTable[]> {
@@ -37,7 +37,7 @@ export class RestaurantTableService {
 
     addRestaurantTable(newRestaurantTable: RestaurantTable): Observable<RestaurantTable> {
 
-        return this.apiService.request<RestaurantTable>('post', this.restaurantTablesUrl, newRestaurantTable).pipe(
+        return this.apiService.request<RestaurantTable>('post', this.restaurantTableUrl, newRestaurantTable).pipe(
 
             tap((addedRestaurantTable: RestaurantTable) => {
 
@@ -50,12 +50,28 @@ export class RestaurantTableService {
 
     }
 
-    deleteTable(id: number): Observable<any> {
+    deleteRestaurantTable(id: number): Observable<any> {
 
         const url = `${this.restaurantTableUrl}/${id}`;
-        return this.apiService.request('delete', url);
-
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.restaurantTablesCache.findIndex(restaurantTable => restaurantTable.tableId === id);
+    
+                if (index !== -1) {
+    
+                    this.restaurantTablesCache.splice(index, 1);
+                    localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
+    
+                }
+    
+            })
+        );
+    
     }
+    
 
     updateRestaurantTable(updatedRestaurantTable: RestaurantTable): Observable<any> {
 
@@ -70,7 +86,7 @@ export class RestaurantTableService {
                 if (index !== -1) {
                     
                     this.restaurantTablesCache![index] = updatedRestaurantTable;
-                    localStorage.setItem('restaurantTables', JSON.stringify(this.restaurantTablesCache));
+                    localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
 
                 }
 

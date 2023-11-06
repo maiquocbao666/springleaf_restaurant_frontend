@@ -1,4 +1,3 @@
-import { Restaurant } from '../interfaces/restaurant';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -10,15 +9,15 @@ import { ReceiptDetail } from '../interfaces/receipt-detail';
 })
 export class ReceiptDetailService {
 
-    private receiptDetailsUrl = 'receiptDetails';
-    private receiptDetailUrl = 'receiptDetail';
+    private receiptDetailsUrl = 'receiptDetailsUrl';
+    private receiptDetailUrl = 'receiptDetailUrl';
     receiptDetailsCache!: ReceiptDetail[];
 
     constructor(private apiService: ApiService) { }
 
-    
+
     getReceiptDetails(): Observable<ReceiptDetail[]> {
-        
+
         if (this.receiptDetailsCache) {
 
             return of(this.receiptDetailsCache);
@@ -27,11 +26,11 @@ export class ReceiptDetailService {
 
         const receiptDetailsObservable = this.apiService.request<ReceiptDetail[]>('get', this.receiptDetailsUrl);
 
-       
+
         receiptDetailsObservable.subscribe(data => {
 
             this.receiptDetailsCache = data;
-            
+
         });
 
         return receiptDetailsObservable;
@@ -40,7 +39,7 @@ export class ReceiptDetailService {
 
     addReceiptDetail(newReceiptDetail: ReceiptDetail): Observable<ReceiptDetail> {
 
-        return this.apiService.request<ReceiptDetail>('post', this.receiptDetailsUrl, newReceiptDetail).pipe(
+        return this.apiService.request<ReceiptDetail>('post', this.receiptDetailUrl, newReceiptDetail).pipe(
 
             tap((addedReceiptDetail: ReceiptDetail) => {
 
@@ -55,7 +54,7 @@ export class ReceiptDetailService {
 
     updateReceiptDetail(updatedReceiptDetail: ReceiptDetail): Observable<any> {
 
-        const url = `${this.receiptDetailsUrl}/${updatedReceiptDetail.receiptDetailId}`;
+        const url = `${this.receiptDetailUrl}/${updatedReceiptDetail.receiptDetailId}`;
 
         return this.apiService.request('put', url, updatedReceiptDetail).pipe(
 
@@ -72,6 +71,28 @@ export class ReceiptDetailService {
 
             })
 
+        );
+
+    }
+
+    deleteReceiptDetail(id: number): Observable<any> {
+
+        const url = `${this.receiptDetailUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.receiptDetailsCache.findIndex(receiptDetail => receiptDetail.receiptDetailId === id);
+
+                if (index !== -1) {
+
+                    this.receiptDetailsCache.splice(index, 1);
+                    localStorage.setItem(this.receiptDetailsUrl, JSON.stringify(this.receiptDetailsCache));
+
+                }
+
+            })
         );
 
     }

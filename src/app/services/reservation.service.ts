@@ -10,7 +10,8 @@ import { Reservation } from '../interfaces/reservation';
 })
 export class ReservationService {
 
-    private reservationsUrl = 'reservations';
+    private reservationsUrl = 'reservationsUrl';
+    private reservationUrl = 'reservationUrl';
     reservationsCache!: Reservation[];
 
     constructor(private apiService: ApiService) { }
@@ -38,7 +39,7 @@ export class ReservationService {
 
     addReservation(newReservation: Reservation): Observable<Reservation> {
 
-        return this.apiService.request<Reservation>('post', this.reservationsUrl, newReservation).pipe(
+        return this.apiService.request<Reservation>('post', this.reservationUrl, newReservation).pipe(
 
             tap((addedReservation: Reservation) => {
 
@@ -53,7 +54,7 @@ export class ReservationService {
 
     updateReservation(updatedReservation: Reservation): Observable<any> {
 
-        const url = `${this.reservationsUrl}/${updatedReservation.reservationId}`;
+        const url = `${this.reservationUrl}/${updatedReservation.reservationId}`;
 
         return this.apiService.request('put', url, updatedReservation).pipe(
 
@@ -74,4 +75,27 @@ export class ReservationService {
 
     }
 
+
+    deleteReservation(id: number): Observable<any> {
+
+        const url = `${this.reservationUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.reservationsCache.findIndex(reservation => reservation.reservationId === id);
+    
+                if (index !== -1) {
+    
+                    this.reservationsCache.splice(index, 1);
+                    localStorage.setItem(this.reservationsUrl, JSON.stringify(this.reservationsCache));
+    
+                }
+    
+            })
+        );
+    
+    }
+    
 }

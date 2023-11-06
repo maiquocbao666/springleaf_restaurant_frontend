@@ -124,7 +124,7 @@ export class AdminRestaurantTablesComponent {
 
   deleteTable(restaurantTable: RestaurantTable): void {
     this.restaurantTables = this.restaurantTables.filter(i => i !== restaurantTable);
-    this.restaurantTablesService.deleteTable(restaurantTable.tableId).subscribe();
+    this.restaurantTablesService.deleteRestaurantTable(restaurantTable.tableId).subscribe();
   }
 
   openRestaurantTableDetailModal(restaurantTable: RestaurantTable) {

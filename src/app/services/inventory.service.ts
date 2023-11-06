@@ -4,23 +4,21 @@ import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Inventory } from 'src/app/interfaces/inventory';
 import { ApiService } from 'src/app/services/api.service';
-import { Supplier } from '../interfaces/supplier';
-import { Ingredient } from '../interfaces/ingredient';
 
 @Injectable({
     providedIn: 'root'
 })
 export class InventoryService {
 
-    private inventoriesUrl = 'inventories';
-    private inventoryUrl = 'inventory';
+    private inventoriesUrl = 'inventoriesUrl';
+    private inventoryUrl = 'inventoryUrl';
     inventoriesCache!: Inventory[];
 
     constructor(private apiService: ApiService, private httpClient: HttpClient) { }
 
-    
+
     getInventories(): Observable<Inventory[]> {
-        
+
         if (this.inventoriesCache) {
 
             console.log("Có categories cache");
@@ -41,10 +39,10 @@ export class InventoryService {
         return categoriesObservable;
 
     }
-    
+
     addInventory(newInventory: Inventory): Observable<Inventory> {
 
-        return this.apiService.request<Inventory>('post', this.inventoriesUrl, newInventory).pipe(
+        return this.apiService.request<Inventory>('post', this.inventoryUrl, newInventory).pipe(
 
             tap((addedInventory: Inventory) => {
 
@@ -56,7 +54,7 @@ export class InventoryService {
         );
 
     }
-    
+
     updateInventory(updatedInventory: Inventory): Observable<any> {
 
         const url = `${this.inventoryUrl}/${updatedInventory.inventoryId}`;
@@ -66,13 +64,13 @@ export class InventoryService {
             tap(() => {
 
                 this.updateInventoryCache(updatedInventory);
-                
+
                 const index = this.inventoriesCache!.findIndex(inventory => inventory.inventoryId === updatedInventory.inventoryId);
 
                 if (index !== -1) {
 
                     this.inventoriesCache![index] = updatedInventory;
-                    localStorage.setItem('inventories', JSON.stringify(this.inventoriesCache));
+                    localStorage.setItem(this.inventoriesUrl, JSON.stringify(this.inventoriesCache));
 
                 }
 
@@ -81,7 +79,7 @@ export class InventoryService {
         );
 
     }
-    
+
     updateInventoryCache(updatedInventory: Inventory): void {
 
         if (this.inventoriesCache) {
@@ -101,11 +99,26 @@ export class InventoryService {
     deleteInventory(id: number): Observable<any> {
 
         const url = `${this.inventoryUrl}/${id}`;
-        return this.apiService.request('delete', url);
-        
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.inventoriesCache.findIndex(inventory => inventory.inventoryId === id);
+
+                if (index !== -1) {
+
+                    this.inventoriesCache.splice(index, 1);
+                    localStorage.setItem(this.inventoriesUrl, JSON.stringify(this.inventoriesCache));
+
+                }
+
+            })
+        );
+
     }
 
 
-    
+
 
 }

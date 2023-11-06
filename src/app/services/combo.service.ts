@@ -10,8 +10,8 @@ import { Combo } from '../interfaces/combo';
 })
 export class ComboService {
 
-    private combosUrl = 'combos';
-    private comboUrl = 'combo';
+    private combosUrl = 'combosUrl';
+    private comboUrl = 'comboUrl';
     combosCache!: Combo[];
     
     constructor(private apiService: ApiService) { }
@@ -36,7 +36,7 @@ export class ComboService {
 
     addCombo(newCombo: Combo): Observable<Combo> {
 
-        return this.apiService.request<Combo>('post', this.combosUrl, newCombo).pipe(
+        return this.apiService.request<Combo>('post', this.comboUrl, newCombo).pipe(
 
             tap((addedCombo: Combo) => {
 
@@ -62,7 +62,7 @@ export class ComboService {
                 if (index !== -1) {
 
                     this.combosCache![index] = updatedCombo;
-                    localStorage.setItem('combos', JSON.stringify(this.combosCache));
+                    localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
 
                 }
 
@@ -90,9 +90,25 @@ export class ComboService {
     deleteCombo(id: number): Observable<any> {
 
         const url = `${this.comboUrl}/${id}`;
-        return this.apiService.request('delete', url);
-
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.combosCache.findIndex(combo => combo.comboId === id);
+    
+                if (index !== -1) {
+    
+                    this.combosCache.splice(index, 1);
+                    localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
+    
+                }
+    
+            })
+        );
+    
     }
+    
 
 
 }

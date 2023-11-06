@@ -188,3 +188,17 @@
         transform: translateY(calc(-50% - 5px)) scale(1.1);
     }
 }
+
+/* Đáp ứng cho thiết bị có màn hình nhỏ (điện thoại) */
+@media (max-width: 768px) {
+    body {
+      font-size: 14px;
+    }
+  }
+  
+  /* Đáp ứng cho iPad hoặc thiết bị với màn hình lớn hơn */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    body {
+      font-size: 18px;
+    }
+  }

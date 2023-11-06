@@ -10,32 +10,32 @@ import { Event } from '../interfaces/event';
 })
 export class EventService {
 
-    private eventsUrl = 'events';
-    private eventUrl = 'event';
+    private eventsUrl = 'eventsUrl';
+    private eventUrl = 'eventUrl';
     eventsCache!: Event[];
 
     constructor(private apiService: ApiService) { }
 
     getEvents(): Observable<Event[]> {
-       
+
         if (this.eventsCache) {
             return of(this.eventsCache);
         }
 
         const eventsObservable = this.apiService.request<Event[]>('get', this.eventsUrl);
 
-        
+
         eventsObservable.subscribe(data => {
             this.eventsCache = data;
         });
 
         return eventsObservable;
-        
+
     }
 
     addEvent(newEvent: Event): Observable<Event> {
 
-        return this.apiService.request<Event>('post', this.eventsUrl, newEvent).pipe(
+        return this.apiService.request<Event>('post', this.eventUrl, newEvent).pipe(
 
             tap((addedEvent: Event) => {
 
@@ -50,7 +50,7 @@ export class EventService {
 
     updateEvent(updatedEvent: Event): Observable<any> {
 
-        const url = `${this.eventsUrl}/${updatedEvent.eventId}`;
+        const url = `${this.eventUrl}/${updatedEvent.eventId}`;
 
         return this.apiService.request('put', url, updatedEvent).pipe(
 
@@ -70,5 +70,28 @@ export class EventService {
         );
 
     }
+
+    deleteEvent(id: number): Observable<any> {
+
+        const url = `${this.eventUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.eventsCache.findIndex(event => event.eventId === id);
+
+                if (index !== -1) {
+
+                    this.eventsCache.splice(index, 1);
+                    localStorage.setItem(this.eventsUrl, JSON.stringify(this.eventsCache));
+
+                }
+
+            })
+        );
+
+    }
+
 
 }

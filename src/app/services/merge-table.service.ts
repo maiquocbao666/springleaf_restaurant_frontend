@@ -1,7 +1,7 @@
-import { MergeTable } from './../interfaces/merge-table';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { MergeTable } from './../interfaces/merge-table';
 
 
 
@@ -11,15 +11,15 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class MergeTableService {
 
-    private mergeTablesUrl = 'mergeTables'; 
-    private mergeTableUrl = 'mergeTable'; 
+    private mergeTablesUrl = 'mergeTablesUrl';
+    private mergeTableUrl = 'mergeTableUrl';
     mergeTablesCache!: MergeTable[];
 
     constructor(private apiService: ApiService) { }
 
-   
+
     getMergeTablesUrls(): Observable<MergeTable[]> {
-       
+
         if (this.mergeTablesCache) {
 
             console.log("Có Inventorys cache");
@@ -29,20 +29,20 @@ export class MergeTableService {
 
         const mergeTablesObservable = this.apiService.request<MergeTable[]>('get', this.mergeTablesUrl);
 
-        
+
         mergeTablesObservable.subscribe(data => {
 
-            this.mergeTablesCache = data; 
+            this.mergeTablesCache = data;
 
         });
 
         return mergeTablesObservable;
-        
+
     }
 
     addMergeTable(newMergeTable: MergeTable): Observable<MergeTable> {
 
-        return this.apiService.request<MergeTable>('post', this.mergeTablesUrl, newMergeTable).pipe(
+        return this.apiService.request<MergeTable>('post', this.mergeTableUrl, newMergeTable).pipe(
 
             tap((addedMergeTable: MergeTable) => {
 
@@ -57,7 +57,7 @@ export class MergeTableService {
 
     updateMergeTable(updatedMergeTable: MergeTable): Observable<any> {
 
-        const url = `${this.mergeTablesUrl}/${updatedMergeTable.mergeTableId}`;
+        const url = `${this.mergeTableUrl}/${updatedMergeTable.mergeTableId}`;
 
         return this.apiService.request('put', url, updatedMergeTable).pipe(
 
@@ -74,6 +74,29 @@ export class MergeTableService {
 
             })
 
+        );
+
+    }
+
+
+    deleteMergeTable(id: number): Observable<any> {
+
+        const url = `${this.mergeTableUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.mergeTablesCache.findIndex(mergeTable => mergeTable.id === id);
+
+                if (index !== -1) {
+
+                    this.mergeTablesCache.splice(index, 1);
+                    localStorage.setItem(this.mergeTablesUrl, JSON.stringify(this.mergeTablesCache));
+
+                }
+
+            })
         );
 
     }

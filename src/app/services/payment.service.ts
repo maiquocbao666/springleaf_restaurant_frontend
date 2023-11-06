@@ -9,14 +9,14 @@ import { Payment } from '../interfaces/payment';
 })
 export class PaymentService {
 
-    private paymentsUrl = 'payments'; 
-    private paymentUrl = 'payment'; 
+    private paymentsUrl = 'paymentsUrl';
+    private paymentUrl = 'paymentUrl';
     paymentsCache!: Payment[];
 
     constructor(private apiService: ApiService) { }
 
     getPayments(): Observable<Payment[]> {
-        
+
         if (this.paymentsCache) {
 
             return of(this.paymentsCache);
@@ -25,7 +25,7 @@ export class PaymentService {
 
         const paymentsObservable = this.apiService.request<Payment[]>('get', this.paymentsUrl);
 
-        
+
         paymentsObservable.subscribe(data => {
 
             this.paymentsCache = data;
@@ -33,12 +33,12 @@ export class PaymentService {
         });
 
         return paymentsObservable;
-        
+
     }
 
     addPayMent(newPayMent: Payment): Observable<Payment> {
 
-        return this.apiService.request<Payment>('post', this.paymentsUrl, newPayMent).pipe(
+        return this.apiService.request<Payment>('post', this.paymentUrl, newPayMent).pipe(
 
             tap((addedPayMent: Payment) => {
 
@@ -53,7 +53,7 @@ export class PaymentService {
 
     updatePayment(updatedPayment: Payment): Observable<any> {
 
-        const url = `${this.paymentsUrl}/${updatedPayment.paymentId}`;
+        const url = `${this.paymentUrl}/${updatedPayment.paymentId}`;
 
         return this.apiService.request('put', url, updatedPayment).pipe(
 
@@ -73,5 +73,28 @@ export class PaymentService {
         );
 
     }
+
+    deletePayment(id: number): Observable<any> {
+
+        const url = `${this.paymentUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.paymentsCache.findIndex(payment => payment.paymentId === id);
+
+                if (index !== -1) {
+
+                    this.paymentsCache.splice(index, 1);
+                    localStorage.setItem(this.paymentsUrl, JSON.stringify(this.paymentsCache));
+
+                }
+
+            })
+        );
+
+    }
+
 
 }

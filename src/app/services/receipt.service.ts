@@ -39,7 +39,7 @@ export class ReceiptService {
 
     addReceipt(newReceipt: Receipt): Observable<Receipt> {
 
-        return this.apiService.request<Receipt>('post', this.receiptsUrl, newReceipt).pipe(
+        return this.apiService.request<Receipt>('post', this.receiptUrl, newReceipt).pipe(
 
             tap((addedReceipt: Receipt) => {
 
@@ -54,7 +54,7 @@ export class ReceiptService {
 
     updateReceipt(updatedReceipt: Receipt): Observable<any> {
 
-        const url = `${this.receiptsUrl}/${updatedReceipt.receiptId}`;
+        const url = `${this.receiptUrl}/${updatedReceipt.receiptId}`;
 
         return this.apiService.request('put', url, updatedReceipt).pipe(
 
@@ -74,5 +74,28 @@ export class ReceiptService {
         );
 
     }
+
+    deleteReceipt(id: number): Observable<any> {
+
+        const url = `${this.receiptUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.receiptsCache.findIndex(receipt => receipt.receiptId === id);
+    
+                if (index !== -1) {
+    
+                    this.receiptsCache.splice(index, 1);
+                    localStorage.setItem(this.receiptsUrl, JSON.stringify(this.receiptsCache));
+    
+                }
+    
+            })
+        );
+    
+    }
+    
 
 }

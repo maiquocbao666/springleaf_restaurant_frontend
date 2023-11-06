@@ -10,14 +10,15 @@ import { Role } from '../interfaces/role';
 })
 export class RoleService {
 
-    private rolesUrl = 'roles';
+    private rolesUrl = 'rolesUrl';
+    private roleUrl = 'roleUrl';
     rolesCache!: Role[];
 
     constructor(private apiService: ApiService) { }
 
-   
+
     getRoles(): Observable<Role[]> {
-        
+
         if (this.rolesCache) {
 
             return of(this.rolesCache);
@@ -28,17 +29,17 @@ export class RoleService {
 
         rolesObservable.subscribe(data => {
 
-            this.rolesCache = data; 
+            this.rolesCache = data;
 
         });
 
         return rolesObservable;
-        
+
     }
 
     addRole(newRole: Role): Observable<Role> {
 
-        return this.apiService.request<Role>('post', this.rolesUrl, newRole).pipe(
+        return this.apiService.request<Role>('post', this.roleUrl, newRole).pipe(
 
             tap((addedRole: Role) => {
 
@@ -53,7 +54,7 @@ export class RoleService {
 
     updateRole(updatedrole: Role): Observable<any> {
 
-        const url = `${this.rolesUrl}/${updatedrole.roleId}`;
+        const url = `${this.roleUrl}/${updatedrole.roleId}`;
 
         return this.apiService.request('put', url, updatedrole).pipe(
 
@@ -70,6 +71,29 @@ export class RoleService {
 
             })
 
+        );
+
+    }
+
+
+    deleteRole(id: number): Observable<any> {
+
+        const url = `${this.roleUrl}/${id}`;
+
+        return this.apiService.request('delete', url).pipe(
+
+            tap(() => {
+
+                const index = this.rolesCache.findIndex(role => role.roleId === id);
+
+                if (index !== -1) {
+
+                    this.rolesCache.splice(index, 1);
+                    localStorage.setItem(this.rolesUrl, JSON.stringify(this.rolesCache));
+
+                }
+
+            })
         );
 
     }

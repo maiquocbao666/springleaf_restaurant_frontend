@@ -1,293 +1,70 @@
-<nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light shadow-lg">
+<nav id="navbar" class="navbar navbar-expand-lg navbar-light"
+    [ngClass]="{'mobile-content': isMobile, 'tablet-content': isTablet, 'laptop-content': isLaptop}">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false"
-            aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
-        <a class="navbar-brand" routerLink="/user/index"><i
-                class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
+        <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <!-- Menu cho máy tính -->
-            <ul class="navbar-nav mx-auto d-none d-lg-block">
+            <ul class="navbar-nav mx-auto">
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#"
-                                id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-bars"></i> Danh mục
                             </a>
-                            <div class="dropdown-menu"
-                                aria-labelledby="navbarDropdown">
-                                <a class="nav-link" routerLink="/user/event"
-                                    routerLinkActive="active">Event</a>
-                                <a class="nav-link"
-                                    routerLink="/user/inventoryBranches"
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link" routerLink="/user/event" routerLinkActive="active">Event</a>
+                                <a class="nav-link" routerLink="/user/inventoryBranches"
                                     routerLinkActive="active">InventoryBranch</a>
-                                <a class="nav-link" routerLink="/user/combo"
-                                    routerLinkActive="active">Combo</a>
-                                <a class="nav-link" routerLink="/user/cart"
-                                    routerLinkActive="active">Cart</a>
-                                <a class="nav-link" routerLink="/chat"
-                                    routerLinkActive="active">Chat</a>
-                                <a class="nav-link" routerLink="/user/table"
-                                    routerLinkActive="active">Table</a>
-                                <a class="nav-link"
-                                    routerLink="/user/restaurant"
+                                <a class="nav-link" routerLink="/user/combo" routerLinkActive="active">Combo</a>
+                                <a class="nav-link" routerLink="/user/cart" routerLinkActive="active">Cart</a>
+                                <a class="nav-link" routerLink="/chat" routerLinkActive="active">Chat</a>
+                                <a class="nav-link" routerLink="/user/table" routerLinkActive="active">Table</a>
+                                <a class="nav-link" routerLink="/user/restaurant"
                                     routerLinkActive="active">Restaurant</a>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center"
-                                routerLink="/user/index"
+                            <a class="nav-link d-flex align-items-center" routerLink="/user/index"
                                 routerLinkActive="active">
                                 Home</a>
                         </li>
                         <li class="nav-item d-flex align-items-center">
-                            <a class="nav-link" routerLink="/admin"
-                                routerLinkActive="active">
+                            <a class="nav-link" routerLink="/admin" routerLinkActive="active">
                                 Admin</a>
                         </li>
                     </ul>
-
                 </div>
             </ul>
             <div class="input-container">
-                <input type="text" name="text" class="input"
-                    placeholder="search...">
+                <input type="text" name="text" class="input" placeholder="search...">
                 <span class="icon">
                     <i class="fa fa-search"></i>
                 </span>
             </div>
-            <!-- <div class="input-container">
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link" routerLink="/user/event"
-                                    routerLinkActive="active">Event</a>
-                                <a class="nav-link"
-                                    routerLink="/user/inventoryBranches"
-                                    routerLinkActive="active">InventoryBranch</a>
-                                <a class="nav-link" routerLink="/user/combo"
-                                    routerLinkActive="active">Combo</a>
-                                <a class="nav-link" routerLink="/user/cart"
-                                    routerLinkActive="active">Cart</a>
-                                <a class="nav-link" routerLink="/chat"
-                                    routerLinkActive="active">Chat</a>
-                                <a class="nav-link" routerLink="/user/table"
-                                    routerLinkActive="active">Table</a>
-                                <a class="nav-link"
-                                    routerLink="/user/restaurant"
-                                    routerLinkActive="active">Restaurant</a>
-                        </li>
-                    </ul>
-
-                </div>
-            </div> -->
             <ul class="navbar-nav mx-auto">
                 <div class="nav-item" *ngIf="user">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#"
-                            id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="fa fa-user"></i> {{
-                            truncateString(user.fullName) }}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i> {{ truncateString(user.fullName) }}
                         </a>
-                        <div class="dropdown-menu"
-                            aria-labelledby="navbarDropdown">
-                            <a class="nav-link" (click)="openProfileModel()">Hồ
-                                sơ cá nhân</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="nav-link" (click)="openProfileModel()">Hồ sơ cá nhân</a>
                             <a class="nav-link" (click)="logOut()">Đăng xuất</a>
                         </div>
                     </li>
                 </div>
                 <div class="nav-item" *ngIf="!user">
-                    <button class="nav-link" (click)="openLoginModal()"><i
-                            class="fa-solid fa-right-to-bracket"></i>
+                    <button class="nav-link" (click)="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i>
                         Đăng nhập</button>
                 </div>
             </ul>
         </div>
     </div>
 </nav>
-
-
-
-<!-- Nav tablet -->
-<!-- <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light shadow-lg"
-    *ngIf="isIPad">
-    <button class="navbar-toggler m-2" type="button" data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasRight"
-        aria-controls="offcanvasRight"> <span class="navbar-toggler-icon"></span></button>
-    <a class="navbar-brand float-end m-2" routerLink="/user/index"><i
-            class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-        aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasRightLabel"> <a
-                    class="navbar-brand float-end"
-                    routerLink="/user/index"><i class="fa-solid fa-seedling"></i>
-                    SPRINGLEAF</a></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#"
-                        id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        <i class="fa fa-bars"></i> Danh mục
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="nav-link" routerLink="/user/event"
-                            routerLinkActive="active">Event</a>
-                        <a class="nav-link" routerLink="/user/inventoryBranches"
-                            routerLinkActive="active">InventoryBranch</a>
-                        <a class="nav-link" routerLink="/user/combo"
-                            routerLinkActive="active">Combo</a>
-                        <a class="nav-link" routerLink="/user/cart"
-                            routerLinkActive="active">Cart</a>
-                        <a class="nav-link" routerLink="/chat"
-                            routerLinkActive="active">Chat</a>
-                        <a class="nav-link" routerLink="/user/table"
-                            routerLinkActive="active">Table</a>
-                        <a class="nav-link" routerLink="/user/restaurant"
-                            routerLinkActive="active">Restaurant</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center"
-                        routerLink="/user/index" routerLinkActive="active">
-                        Home</a>
-                </li>
-                <li class="nav-item d-flex align-items-center">
-                    <a class="nav-link" routerLink="/admin"
-                        routerLinkActive="active">
-                        Admin</a>
-                </li>
-                <div class="input-container">
-                    <input type="text" name="text" class="input"
-                        placeholder="search...">
-                    <span class="icon">
-                        <i class="fa fa-search"></i>
-                    </span>
-                </div>
-                <ul class="navbar-nav mx-auto">
-                    <div class="nav-item" *ngIf="user">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#"
-                                id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="fa fa-user"></i> {{
-                                truncateString(user.fullName) }}
-                            </a>
-                            <div class="dropdown-menu"
-                                aria-labelledby="navbarDropdown">
-                                <a class="nav-link" (click)="openProfileModel()">Hồ
-                                    sơ cá nhân</a>
-                                <a class="nav-link" (click)="logOut()">Đăng xuất</a>
-                            </div>
-                        </li>
-                    </div>
-                    <div class="nav-item" *ngIf="!user">
-                        <button class="nav-link" (click)="openLoginModal()"><i
-                                class="fa-solid fa-right-to-bracket"></i>
-                            Đăng nhập</button>
-                    </div>
-                </ul>
-            </ul>
-        </div>
-    </div>
-</nav> -->
-
-<!-- Nav mobile -->
-<!-- <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light shadow-lg"
-    *ngIf="isMobile && !isIPad">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" routerLink="/user/index"><i
-                class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
-        <div class="collapse navbar-collapse" id="navbarNav"> -->
-            <!-- Menu cho điện thoại -->
-            <!-- <ul class="navbar-nav d-block d-lg-none">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#"
-                            id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="fa fa-bars"></i> Danh mục
-                        </a>
-                        <div class="dropdown-menu"
-                            aria-labelledby="navbarDropdown">
-                            <a class="nav-link" routerLink="/user/event"
-                                routerLinkActive="active">Event</a>
-                            <a class="nav-link"
-                                routerLink="/user/inventoryBranches"
-                                routerLinkActive="active">InventoryBranch</a>
-                            <a class="nav-link" routerLink="/user/combo"
-                                routerLinkActive="active">Combo</a>
-                            <a class="nav-link" routerLink="/user/cart"
-                                routerLinkActive="active">Cart</a>
-                            <a class="nav-link" routerLink="/chat"
-                                routerLinkActive="active">Chat</a>
-                            <a class="nav-link" routerLink="/user/table"
-                                routerLinkActive="active">Table</a>
-                            <a class="nav-link" routerLink="/user/restaurant"
-                                routerLinkActive="active">Restaurant</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/user/index"
-                            routerLinkActive="active">
-                            Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/admin"
-                            routerLinkActive="active">
-                            Admin</a>
-                    </li>
-                    <ul class="navbar-nav mx-auto">
-                        <div class="nav-item" *ngIf="user">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#"
-                                    id="navbarDropdown" role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-user"></i> {{
-                                    truncateString(user.fullName) }}
-                                </a>
-                                <div class="dropdown-menu"
-                                    aria-labelledby="navbarDropdown">
-                                    <a class="nav-link"
-                                        (click)="openProfileModel()">Hồ sơ cá
-                                        nhân</a>
-                                    <a class="nav-link" (click)="logOut()">Đăng
-                                        xuất</a>
-                                </div>
-                            </li>
-                        </div>
-                        <div class="nav-item" *ngIf="!user">
-                            <button class="nav-link" (click)="openLoginModal()"><i
-                                    class="fa-solid fa-right-to-bracket"></i>
-                                Đăng nhập</button>
-                        </div>
-                    </ul>
-                </ul>
-            </ul>
-        </div>
-    </div>
-</nav> -->
+<!--  -->

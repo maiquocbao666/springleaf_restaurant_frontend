@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Cart } from '../interfaces/cart';
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, Observable, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { Cart } from '../interfaces/cart';
 
 
 @Injectable({
@@ -10,7 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class CartService {
 
-  private cartsUrl = 'carts';
+  private cartsUrl = 'cartsUrl';
+  private cartUrl = 'cartUrl';
   cartsCache!: Cart[];
   getDatasOfThisUserWorker: Worker;
 
@@ -34,7 +35,7 @@ export class CartService {
   }
 
   getCartDetails(): Observable<Cart[]> {
-   
+
     if (this.cartsCache) {
 
       return of(this.cartsCache);
@@ -43,10 +44,10 @@ export class CartService {
 
     const cartsObservable = this.apiService.request<Cart[]>('get', this.cartsUrl);
 
-    
+
     cartsObservable.subscribe(data => {
 
-      this.cartsCache = data; 
+      this.cartsCache = data;
 
     });
 
@@ -132,6 +133,28 @@ export class CartService {
       console.log(this.wardData$);
 
     });
+
+  }
+
+  deleteCart(id: number): Observable<any> {
+
+    const url = `${this.cartUrl}/${id}`;
+
+    return this.apiService.request('delete', url).pipe(
+
+      tap(() => {
+
+        const index = this.cartsCache.findIndex(cart => cart.orderId === id);
+
+        if (index !== -1) {
+
+          this.cartsCache.splice(index, 1);
+          localStorage.setItem(this.cartsUrl, JSON.stringify(this.cartsCache));
+
+        }
+
+      })
+    );
 
   }
 

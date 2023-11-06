@@ -11,8 +11,8 @@ import { DeliveryOrder } from '../interfaces/delivery-order';
 })
 export class DeliveryOrderService {
 
-    private deliveryOrdersUrl = 'deliveryOrders';
-    private deliveryOrderUrl = 'deliveryOrder';
+    private deliveryOrdersUrl = 'deliveryOrdersUrl';
+    private deliveryOrderUrl = 'deliveryOrderUrl';
     deliveryOrdersCache!: DeliveryOrder[];
 
     constructor(private apiService: ApiService) { } 
@@ -41,7 +41,7 @@ export class DeliveryOrderService {
 
     addDeliveryOrder(newDeliveryOrder: DeliveryOrder): Observable<DeliveryOrder> {
 
-        return this.apiService.request<DeliveryOrder>('post', this.deliveryOrdersUrl, newDeliveryOrder).pipe(
+        return this.apiService.request<DeliveryOrder>('post', this.deliveryOrderUrl, newDeliveryOrder).pipe(
 
             tap((addedDeliveryOrder: DeliveryOrder) => {
 
@@ -56,7 +56,7 @@ export class DeliveryOrderService {
 
     updateDeliveryOrder(updatedDeliveryOrder: DeliveryOrder): Observable<any> {
 
-        const url = `${this.deliveryOrdersUrl}/${updatedDeliveryOrder.deliveryOrderId}`;
+        const url = `${this.deliveryOrderUrl}/${updatedDeliveryOrder.deliveryOrderId}`;
 
         return this.apiService.request('put', url, updatedDeliveryOrder).pipe(
 
@@ -76,5 +76,28 @@ export class DeliveryOrderService {
         );
 
     }
+
+    deleteDeliveryOrder(id: number): Observable<any> {
+
+        const url = `${this.deliveryOrderUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.deliveryOrdersCache.findIndex(deliveryOrder => deliveryOrder.deliveryOrderId === id);
+    
+                if (index !== -1) {
+    
+                    this.deliveryOrdersCache.splice(index, 1);
+                    localStorage.setItem(this.deliveryOrdersUrl, JSON.stringify(this.deliveryOrdersCache));
+    
+                }
+    
+            })
+        );
+    
+    }
+    
 
 }

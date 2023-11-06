@@ -9,9 +9,9 @@ import { Restaurant } from '../interfaces/restaurant';
 })
 export class RestaurantService {
 
-    private restaurantsUrl = 'restaurants';
+    private restaurantsUrl = 'restaurantsUrl';
+    private restaurantUrl = 'restaurantUrl';
     restaurantsCache!: Restaurant[];
-    private restaurantUrl = 'restaurant';
     constructor(private apiService: ApiService) { }
 
    
@@ -59,7 +59,7 @@ export class RestaurantService {
 
     addRestaurant(newRestaurant: Restaurant): Observable<Restaurant> {
 
-        return this.apiService.request<Restaurant>('post', this.restaurantsUrl, newRestaurant).pipe(
+        return this.apiService.request<Restaurant>('post', this.restaurantUrl, newRestaurant).pipe(
 
             tap((addedRestaurant: Restaurant) => {
 
@@ -74,7 +74,7 @@ export class RestaurantService {
 
     updateRestaurant(updatedrestaurant: Restaurant): Observable<any> {
 
-        const url = `${this.restaurantsUrl}/${updatedrestaurant.restaurantId}`;
+        const url = `${this.restaurantUrl}/${updatedrestaurant.restaurantId}`;
 
         return this.apiService.request('put', url, updatedrestaurant).pipe(
 
@@ -94,5 +94,28 @@ export class RestaurantService {
         );
 
     }
+
+    deleteRestaurant(id: number): Observable<any> {
+
+        const url = `${this.restaurantUrl}/${id}`;
+    
+        return this.apiService.request('delete', url).pipe(
+    
+            tap(() => {
+    
+                const index = this.restaurantsCache.findIndex(restaurant => restaurant.restaurantId === id);
+    
+                if (index !== -1) {
+    
+                    this.restaurantsCache.splice(index, 1);
+                    localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
+    
+                }
+    
+            })
+        );
+    
+    }
+    
 
 }
