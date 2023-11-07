@@ -9,8 +9,8 @@ import { UserInventoryBranchesModule } from '../user/components/user-home/user-i
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private apiUrl = 'https://springleafrestaurantbackend.onrender.com/api/v1/auth';
-  //private apiUrl = 'http://localhost:8080/api/v1/auth';
+  private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
+  //private apiUrl = 'http://localhost:8080/auth';
   private userCache: User | null = null;
   private cachedDataSubject = new BehaviorSubject<User | null>(null);
   getDatasOfThisUserWorker: Worker;
@@ -48,7 +48,7 @@ export class AuthenticationService {
   login(username: string, password: string): Promise<boolean> {
 
     return new Promise<boolean>((resolve, reject) => {
-
+      console.log("auth service" + username);
       const loginData = {
 
         userName: username,

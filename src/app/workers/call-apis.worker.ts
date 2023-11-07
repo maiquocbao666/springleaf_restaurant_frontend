@@ -2,36 +2,34 @@
 
 addEventListener('message', async ({ data }) => {
         console.log("Call Apis Worker Works", data);
-        const domain = 'https://springleafrestaurantbackend.onrender.com/api';
-        //const domain = 'http://localhost:8080/api';
+        const domain = 'https://springleafrestaurantbackend.onrender.com/api/public';
+        //const domain = 'http://localhost:8080/api/public';
         if (data === 'start') {
                 try {
                         const endpoints = [
                                 'categories',
-                                'products',
-                                'cartDetails',
                                 'combos',
-                                'events',
-                                'restaurantTables',
-                                'restaurants',
-                                'suppliers',
-                                'tableStatuses',
-                                'ingredients',
-                                'bills',
-                                'billDetails',
-                                'carts',
                                 'comboDetails',
                                 'deliveries',
                                 'deliveryDetails',
                                 'deliveryOrders',
-                                'deliveryOrderStatuses',
                                 'deliveryOrderDetails',
+                                'deliveryOrderStatuses',
+                                // discounts,
+                                //'cartDetails',
+                                'events',
                                 'favorites',
+                                'restaurantTables',
+                                'restaurants',
+                                //'ingredients',
                                 'inventories',
                                 'inventoryBranches',
-                                'menuItemIngredients',
-                                'orderThresholds',
+                                'products',
+                                //'menuItemIngredients',
                                 'mergeTables',
+                                //'orderThresholds',
+                                //'suppliers',
+                                'tableStatuses',
                                 'orderTypes',
                                 'payments',
                                 'ratings',
@@ -39,6 +37,9 @@ addEventListener('message', async ({ data }) => {
                                 'receiptDetails',
                                 'reservations',
                                 'tableTypes',
+                                //'bills',
+                                //'billDetails',
+                                //'carts',
                         ];
 
                         const responses = await Promise.all(endpoints.map(async (endpoint) => {
