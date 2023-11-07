@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { Product } from 'src/app/interfaces/product';
+import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.service';
 declare var $: any;
@@ -20,14 +21,20 @@ export class UserProductsComponent implements OnInit {
   categoryId: number | undefined; // Khởi tạo categoryId là undefined
   visibleProductCount: number = 12; // Số sản phẩm ban đầu hiển thị
   remainingProducts: number | undefined;
+  user: User | null = null;
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
-    private http: HttpClient
+    private authService: AuthenticationService
   ) {
     window.addEventListener('storage', (event) => {
+      this.authService.cachedData$.subscribe((data) => {
+        this.user = data;
+        console.log(this.user);
+        // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
+      });
       if (event.key && event.oldValue !== null) {
         localStorage.setItem(event.key, event.oldValue);
       }
@@ -89,15 +96,18 @@ export class UserProductsComponent implements OnInit {
   }
 
   addToCart(productId: number): void {
-    this.http.post('http://localhost:8080/api/product/addToCart', productId, { headers: { 'Content-Type': 'application/json' }})
-      .subscribe(
-        (response: any) => {
-          console.log(response); // In thông báo từ server hoặc xử lý response theo cách bạn muốn
-        },
-        (error) => {
-          console.error(error); // Xử lý lỗi nếu có
+      this.productService.addToCart(productId).subscribe(respone =>{
+
+      },
+      error => {
+        if (error.status === 401) {
+          alert("vui lòng đăng nhập")
+        } else {
+          // Xử lý các lỗi khác
         }
-      );
-  }
+      });
+    }
+  
+    
 
 }

@@ -64,7 +64,6 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
-  
       if (await this.authService.login(username, password) === true) {
         this.activeModal.close('Login Successful');
       }
