@@ -14,7 +14,7 @@ export class ProductService {
   private productUrl = 'productUrl';
   productsCache!: Product[];
 
-  constructor(private apiService: ApiService, private http : HttpClient) { } // Inject ApiService
+  constructor(private apiService: ApiService, private http: HttpClient) { } // Inject ApiService
 
   // Sử dụng ApiService để gửi yêu cầu GET
   getProducts(): Observable<Product[]> {
@@ -133,15 +133,6 @@ export class ProductService {
   deleteProduct(id: number): Observable<any> {
 
     const url = `${this.productUrl}/${id}`;
-    return this.apiService.request('delete', url);
-  }
-
-  addToCart(productId: number): Observable<any> {
-    const jwtToken = localStorage.getItem('access_token');
-    console.log(jwtToken);
-    const url = `product/addToCart?productId=${productId}`;
-    return this.apiService.request('post', url);
-  }
 
     return this.apiService.request('delete', url).pipe(
 
@@ -157,9 +148,16 @@ export class ProductService {
         }
 
       })
+
     );
 
   }
 
+  addToCart(productId: number): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+    console.log(jwtToken);
+    const url = `product/addToCart?productId=${productId}`;
+    return this.apiService.request('post', url);
+  }
 
 }
