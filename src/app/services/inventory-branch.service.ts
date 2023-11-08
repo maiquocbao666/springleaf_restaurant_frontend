@@ -13,7 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class InventoryBranchService {
 
     private inventoryBranchesUrl = 'inventoryBranchesUrl';
-    private inventoryBranchUrl = 'inventoryBranchUrl';
+    private inventoryBranchUrl = 'inventoryBranch';
 
     inventoryBranchesCache!: InventoryBranch[];
 
@@ -42,6 +42,29 @@ export class InventoryBranchService {
 
     }
 
+    getInventoryBranchById(id: number): Observable<InventoryBranch> {
+
+        if (!this.inventoryBranchesCache) {
+
+            this.getInventoryBranches();
+
+        }
+
+
+        const inventoryBranchFromCache = this.inventoryBranchesCache.find(inventoryBranch => inventoryBranch.inventoryBranchId === id);
+
+        if (inventoryBranchFromCache) {
+
+            return of(inventoryBranchFromCache);
+
+        } else {
+
+            const url = `${this.inventoryBranchUrl}/${id}`;
+            return this.apiService.request<InventoryBranch>('get', url);
+        }
+
+    }
+
 
     addInventoryBranch(newInventoryBranch: InventoryBranch): Observable<InventoryBranch> {
 
@@ -58,19 +81,19 @@ export class InventoryBranchService {
 
     }
 
-    updateInventoryBranche(updatedInventoryBranche: InventoryBranch): Observable<any> {
+    updateInventoryBranch(updatedInventoryBranch: InventoryBranch): Observable<any> {
 
-        const url = `${this.inventoryBranchUrl}/${updatedInventoryBranche.inventoryBranchId}`;
+        const url = `${this.inventoryBranchUrl}/${updatedInventoryBranch.inventoryBranchId}`;
 
-        return this.apiService.request('put', url, updatedInventoryBranche).pipe(
+        return this.apiService.request('put', url, updatedInventoryBranch).pipe(
 
             tap(() => {
 
-                const index = this.inventoryBranchesCache!.findIndex(inventoryBranche => inventoryBranche.inventoryBranchId === updatedInventoryBranche.inventoryBranchId);
+                const index = this.inventoryBranchesCache!.findIndex(inventoryBranche => inventoryBranche.inventoryBranchId === updatedInventoryBranch.inventoryBranchId);
 
                 if (index !== -1) {
 
-                    this.inventoryBranchesCache![index] = updatedInventoryBranche;
+                    this.inventoryBranchesCache![index] = updatedInventoryBranch;
                     localStorage.setItem(this.inventoryBranchesUrl, JSON.stringify(this.inventoryBranchesCache));
 
                 }
@@ -103,4 +126,19 @@ export class InventoryBranchService {
 
     }
 
+
+    updateInventoryBranchCache(updatedInventoryBranch: InventoryBranch): void {
+
+        if (this.inventoryBranchesCache) {
+
+            const index = this.inventoryBranchesCache.findIndex(inventoryBranch => inventoryBranch.inventoryBranchId === updatedInventoryBranch.inventoryBranchId);
+
+            if (index !== -1) {
+
+                this.inventoryBranchesCache[index] = updatedInventoryBranch;
+
+            }
+        }
+
+    }
 }

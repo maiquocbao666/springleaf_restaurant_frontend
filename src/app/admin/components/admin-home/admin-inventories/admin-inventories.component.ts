@@ -72,11 +72,11 @@ export class AdminInventoriesComponent {
   }
 
   getIngredientById(ingredientId: number): Observable<Ingredient> {
-    return this.ingredientService.getIngredient(ingredientId);
+    return this.ingredientService.getIngredientById(ingredientId);
   }
 
   getSupplierById(supplierId: number): Observable<Supplier> {
-    return this.supplierService.getSupplier(supplierId);
+    return this.supplierService.getSupplierById(supplierId);
   }
 
   getInventories(): void {
@@ -100,9 +100,8 @@ export class AdminInventoriesComponent {
       return;
     }
 
-    // Tạo một đối tượng Inventory và gán giá trị
     const newInventory: Inventory = {
-      inventoryId: 0, // Không cần gán giá trị cho trường này vì nó có thể được tạo tự động
+      inventoryId: 0,
       ingredientId: ingredientId,
       supplierId: supplierId
     };
@@ -110,11 +109,7 @@ export class AdminInventoriesComponent {
     this.inventoryService.addInventory(newInventory)
       .subscribe(inventory => {
         console.log('Inventory added:', inventory);
-        // Lấy tên của thành phần và nhà cung cấp dựa vào ID 
         this.inventories.push(inventory);
-        // Cập nhật inventoriesCache trong service
-        // this.inventoriesService.updateInventoryCache(this.inventories);
-
         this.inventoryForm.reset();
       });
 
@@ -124,7 +119,6 @@ export class AdminInventoriesComponent {
     this.inventoryService.deleteInventory(inventory.inventoryId).subscribe();
   }
   openInventoryDetailModal(inventory: Inventory) {
-    //this.getCategory();
     const modalRef = this.modalService.open(AdminInventoryDetailComponent, { size: 'lg' });
     modalRef.componentInstance.inventory = inventory;
 

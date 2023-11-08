@@ -71,7 +71,38 @@ const routes: Routes = [
             (m) => m.AdminTableStatusesModule
           ),
       }
-
+      ,
+      {
+        path: 'inventoryBranches',
+        loadChildren: () =>
+          import('./admin-inventory-branches/admin-inventory-branches.module').then(
+            (m) => m.AdminInventoryBranchesModule
+          ),
+      }
+      ,
+      {
+        path: 'combos',
+        loadChildren: () =>
+          import('./admin-combos/admin-combos.module').then(
+            (m) => m.AdminCombosModule
+          ),
+      }
+      ,
+      {
+        path: 'deliveries',
+        loadChildren: () =>
+          import('./admin-deliveries/admin-deliveries.module').then(
+            (m) => m.AdminDeliveriesModule
+          ),
+      }
+      ,
+      {
+        path: 'events',
+        loadChildren: () =>
+          import('./admin-events/admin-events.module').then(
+            (m) => m.AdminEventsModule
+          ),
+      }
     ]
   },
   {

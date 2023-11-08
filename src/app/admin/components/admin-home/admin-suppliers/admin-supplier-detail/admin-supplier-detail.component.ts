@@ -21,6 +21,11 @@ export class AdminSupplierDetailComponent {
     private modalService: NgbModal,
     public activeModal: NgbActiveModal,
     private zone: NgZone) {
+    window.addEventListener('storage', (event) => {
+      if (event.key && event.oldValue !== null) {
+        localStorage.setItem(event.key, event.oldValue);
+      }
+    });
     this.supplierForm = this.formBuilder.group({
       supplierId: ['', [Validators.required]],
       name: ['', [Validators.required]],

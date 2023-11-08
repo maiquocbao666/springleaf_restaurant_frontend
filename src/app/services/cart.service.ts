@@ -34,7 +34,7 @@ export class CartService {
 
   }
 
-  getCartDetails(): Observable<Cart[]> {
+  getCarts(): Observable<Cart[]> {
 
     if (this.cartsCache) {
 
@@ -53,6 +53,30 @@ export class CartService {
 
     return cartsObservable;
   }
+
+  getCartById(id: number): Observable<Cart> {
+
+    if (!this.cartsCache) {
+
+      this.getCarts();
+
+    }
+
+    const cartFromCache = this.cartsCache.find(cart => cart.orderId === id);
+
+    if (cartFromCache) {
+
+      return of(cartFromCache);
+
+    } else {
+
+      const url = `${this.cartUrl}/${id}`;
+      return this.apiService.request<Cart>('get', url);
+
+    }
+
+  }
+
 
   setProvinceData(provinceData: Province[]): void {
 

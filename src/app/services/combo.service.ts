@@ -13,7 +13,7 @@ export class ComboService {
     private combosUrl = 'combosUrl';
     private comboUrl = 'comboUrl';
     combosCache!: Combo[];
-    
+
     constructor(private apiService: ApiService) { }
 
 
@@ -31,6 +31,29 @@ export class ComboService {
         });
 
         return combosObservable;
+
+    }
+
+    getComboById(id: number): Observable<Combo> {
+
+        if (!this.combosCache) {
+
+            this.getCombos();
+
+        }
+
+
+        const comboFromCache = this.combosCache.find(combo => combo.comboId === id);
+
+        if (comboFromCache) {
+
+            return of(comboFromCache);
+
+        } else {
+
+            const url = `${this.comboUrl}/${id}`;
+            return this.apiService.request<Combo>('get', url);
+        }
 
     }
 
@@ -90,25 +113,25 @@ export class ComboService {
     deleteCombo(id: number): Observable<any> {
 
         const url = `${this.comboUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
+
             tap(() => {
-    
+
                 const index = this.combosCache.findIndex(combo => combo.comboId === id);
-    
+
                 if (index !== -1) {
-    
+
                     this.combosCache.splice(index, 1);
                     localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
-    
+
                 }
-    
+
             })
         );
-    
+
     }
-    
+
 
 
 }

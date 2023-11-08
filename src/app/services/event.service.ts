@@ -94,4 +94,19 @@ export class EventService {
     }
 
 
+    updateEventCache(updatedEvent: Event): void {
+
+        if (this.eventsCache) {
+
+            const index = this.eventsCache.findIndex(event => event.eventId === updatedEvent.eventId);
+
+            if (index !== -1) {
+
+                this.eventsCache[index] = updatedEvent;
+
+            }
+        }
+
+    }
+
 }

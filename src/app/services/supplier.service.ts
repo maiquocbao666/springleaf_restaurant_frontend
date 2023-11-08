@@ -34,7 +34,7 @@ export class SupplierService {
 
     }
 
-    getSupplier(id: number): Observable<Supplier> {
+    getSupplierById(id: number): Observable<Supplier> {
 
         if (!this.suppliersCache) {
 

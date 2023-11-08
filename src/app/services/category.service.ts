@@ -10,7 +10,7 @@ export class CategoryService {
 
   private categoriesUrl = 'categoriesUrl';
   categoriesCache!: Category[];
-  private categoryUrl = 'categoryUrl';
+  private categoryUrl = 'category';
 
   constructor(private apiService: ApiService) { }
 

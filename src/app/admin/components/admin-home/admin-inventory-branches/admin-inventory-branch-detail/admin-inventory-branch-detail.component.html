@@ -1,5 +1,11 @@
-<div class="container">
-  <form [formGroup]="inventoryBranchForm" (ngSubmit)="addInventoryBranch()">
+<div class="modal-header">
+  <h4 class="modal-title">Update</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="inventoryBranchForm" (ngSubmit)="updateInventoryBranch()">
     <div class="row">
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Nhà sản xuất</label>
@@ -36,39 +42,10 @@
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
   </form>
-  <div class="col-2">
-    <select class="form-select" (change)="onTableSizeChange($event)">
-      <option value="">Page</option>
-      <option *ngFor="let size of tableSizes">
-        {{size}}
-      </option>
-    </select>
-  </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Ingredient</th>
-        <th scope="col">Supplier</th>
-        <th scope="col">Restaurant</th>
-        <th scope="col">Chức năng</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let inventoryBranch of inventoryBranches">
-        <td>{{inventoryBranch.inventoryBranchId}}</td>
-        <td>{{ (getIngredientById(inventoryBranch.ingredient) | async)?.name }}</td>
-        <td>{{ (getSupplierById(inventoryBranch.supplier) | async)?.name }}</td>
-        <td><button type="button" class="btn btn-outline-primary"
-          (click)="openInventoryBranchDetailModal(inventoryBranch)">Edit</button>
-      <button type="button" class="btn btn-outline-danger"
-          (click)="deleteInventoryBranch(inventoryBranch)">Delete</button>
-  </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="text-center">
-    <pagination-controls previousLabel="Prev" nextLabel="Next"
-      (pageChange)="onTableDataChange($event)"></pagination-controls>
-  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
+    Đóng
+  </button>
 </div>

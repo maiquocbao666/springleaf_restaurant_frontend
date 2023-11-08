@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <h1>Cập nhật </h1>
+  <form [formGroup]="deliveryForm" (ngSubmit)="updateDelivery()">
+    <div class="mb-3">
+      <label for="inventoryBranch" class="form-label">Chi nhánh hàng tồn</label>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranch">
+          <option value="">Chọn chi nhánh hàng tồn</option>
+          <option *ngFor="let branch of inventoryBranches " [value]="branch.inventoryBranchId">{{
+            branch.inventoryBranchId }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="date" class="form-label">Ngày giao hàng</label>
+      <div class="mb-3">
+        <input type="date" class="form-control" formControlName="date">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="warehouseManager" class="form-label">Quản lý kho</label>
+      <div class="mb-3">
+        <input type="text" class="form-control" formControlName="warehouseManager">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="user" class="form-label">Người dùng</label>
+      <div class="mb-3">
+        <input type="text" class="form-control" formControlName="user">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+  </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
+      Đóng
+    </button>
+  </div>

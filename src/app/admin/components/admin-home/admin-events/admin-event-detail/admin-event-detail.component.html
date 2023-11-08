@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h4 class="modal-title">Login</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="eventForm" (ngSubmit)="updateEvent()">
+    <div class="row">
+      <div class="col-sm-6">
+        <label for="exampleInputPassword1" class="form-label">Tên sự kiện</label>
+        <div class="mb-3">
+          <input type="text" class="form-control" formControlName="eventName" placeholder="Nhập tên sự kiện...">
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="exampleInputPassword1" class="form-label">Ngày</label>
+        <div class="mb-3">
+          <input type="date" class="form-control" formControlName="eventDate" placeholder="Chọn ngày ...">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">numberOfGuests</label>
+        <div class="mb-3">
+          <input type="number" class="form-control" formControlName="numberOfGuests"
+            placeholder="Chọn numberOfGuests ...">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Cart</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="order">
+            <option value="">Chọn Cart</option>
+            <option *ngFor="let cart of carts " [value]="cart.orderId">{{ cart.orderId }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Combo</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="combo">
+            <option value="">Chọn combo</option>
+            <option *ngFor="let combo of combos" [value]="combo.comboId"> {{ combo.comboName }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-info">Save</button>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
+    Đóng
+  </button>
+</div>

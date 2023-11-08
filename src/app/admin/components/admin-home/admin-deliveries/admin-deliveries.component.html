@@ -1,0 +1,73 @@
+<div class="container">
+  <h1>Quản lý Giao hàng</h1>
+  <form [formGroup]="deliveryForm" (ngSubmit)="addDelivery()">
+    <div class="mb-3">
+      <label for="inventoryBranch" class="form-label">Chi nhánh hàng tồn</label>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranch">
+          <option value="">Chọn chi nhánh hàng tồn</option>
+          <option *ngFor="let branch of inventoryBranches " [value]="branch.inventoryBranchId">{{
+            branch.inventoryBranchId }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="date" class="form-label">Ngày giao hàng</label>
+      <div class="mb-3">
+        <input type="date" class="form-control" formControlName="date">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="warehouseManager" class="form-label">Quản lý kho</label>
+      <div class="mb-3">
+        <input type="text" class="form-control" formControlName="warehouseManager">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="user" class="form-label">Người dùng</label>
+      <div class="mb-3">
+        <input type="text" class="form-control" formControlName="user">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+  </form>
+  <div class="col-2">
+    <select class="form-select" (change)="onTableSizeChange($event)">
+      <option value="">Trang</option>
+      <option *ngFor="let size of tableSizes">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Chi nhánh hàng tồn</th>
+        <th scope="col">Ngày giao hàng</th>
+        <th scope="col">Quản lý kho</th>
+        <th scope="col">Người dùng</th>
+        <th scope="col">Chức năng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let delivery of deliveries | paginate: { itemsPerPage: tableSize, currentPage: page, totalItems: count }; let i = index">
+        <td>{{ delivery.deliveryId }}</td>
+        <td>{{ (getInventoryBranchById(delivery.inventoryBranch) | async)?.inventoryBranchId }}</td>
+        <td>{{ delivery.date | date }}</td>
+        <td>{{ delivery.warehouseManager }}</td>
+        <td>{{ delivery.user }}</td>
+        <td>heheheee</td>
+        <td>
+          <button type="button" class="btn btn-outline-primary" (click)="openDeliveryDetailModal(delivery)">Sửa</button>
+          <button type="button" class="btn btn-outline-danger" (click)="deleteDelivery(delivery)">Xóa</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Trước" nextLabel="Tiếp"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

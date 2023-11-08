@@ -38,7 +38,7 @@ export class IngredientService {
 
     }
 
-    getIngredient(id: number): Observable<Ingredient> {
+    getIngredientById(id: number): Observable<Ingredient> {
 
         if (!this.ingredientsCache) {
 

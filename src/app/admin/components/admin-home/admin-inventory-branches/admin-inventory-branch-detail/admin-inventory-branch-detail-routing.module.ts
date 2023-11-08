@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminInventoryBranchesComponent } from './admin-inventory-branches.component';
+import { AdminInventoryBranchDetailComponent } from './admin-inventory-branch-detail.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: AdminInventoryBranchesComponent,
+    path: "",
+    component: AdminInventoryBranchDetailComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdminInventoryBranchesRoutingModule { }
+export class AdminInventoryBranchDetailRoutingModule { }

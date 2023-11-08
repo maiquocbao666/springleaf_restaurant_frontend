@@ -17,7 +17,7 @@ export class DeliveryService {
     constructor(private apiService: ApiService) { }
 
 
-    getDeliverys(): Observable<Delivery[]> {
+    getDeliveries(): Observable<Delivery[]> {
 
         if (this.deliveriesCache) {
 
@@ -37,6 +37,10 @@ export class DeliveryService {
         return deliverysObservable;
 
     }
+
+
+
+
 
     addDelivery(newDelivery: Delivery): Observable<Delivery> {
 
@@ -97,5 +101,18 @@ export class DeliveryService {
 
     }
 
+    updateDeliveryCache(updatedDelivery: Delivery): void {
 
+        if (this.deliveriesCache) {
+
+            const index = this.deliveriesCache.findIndex(delivery => delivery.deliveryId === updatedDelivery.deliveryId);
+
+            if (index !== -1) {
+
+                this.deliveriesCache[index] = updatedDelivery;
+
+            }
+        }
+
+    }
 }

@@ -1,0 +1,86 @@
+<div class="container">
+  <h1>Nguyên liệu</h1>
+  <form [formGroup]="eventForm" (ngSubmit)="addEvent()">
+    <div class="row">
+      <div class="col-sm-6">
+        <label for="exampleInputPassword1" class="form-label">Tên sự kiện</label>
+        <div class="mb-3">
+          <input type="text" class="form-control" formControlName="eventName" placeholder="Nhập tên sự kiện...">
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="exampleInputPassword1" class="form-label">Ngày</label>
+        <div class="mb-3">
+          <input type="date" class="form-control" formControlName="eventDate" placeholder="Chọn ngày ...">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">numberOfGuests</label>
+        <div class="mb-3">
+          <input type="number" class="form-control" formControlName="numberOfGuests"
+            placeholder="Chọn numberOfGuests ...">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Cart</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="order">
+            <option value="">Chọn Cart</option>
+            <option *ngFor="let cart of carts " [value]="cart.orderId">{{ cart.orderId }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Combo</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="combo">
+            <option value="">Chọn combo</option>
+            <option *ngFor="let combo of combos" [value]="combo.comboId"> {{ combo.comboName }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-info">Save</button>
+  </form>
+  <div class="col-2">
+    <select class="form-select" (change)="onTableSizeChange($event)">
+      <option value="">Page</option>
+      <option *ngFor="let size of tableSizes">
+        {{size}}
+      </option>
+    </select>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Tên </th>
+        <th scope="col">Ngày</th>
+        <th scope="col">numberOfGuests</th>
+        <th scope="col">Cart</th>
+        <th scope="col">Combo</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let event of events | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+        <td>{{event.eventId}}</td>
+        <td>{{event.eventName}}</td>
+        <td>{{event.numberOfGuests}}</td>
+        <td>{{event.order}}</td>
+        <td>{{event.combo}}</td>
+        <td>
+          <button type="button" class="btn btn-outline-primary"
+            (click)="openEventDetailModal(event)">Edit</button>
+          <button type="button" class="btn btn-outline-danger" (click)="deleteEvent(event)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

@@ -36,6 +36,7 @@ export class AdminIngredientDetailComponent {
   ngOnInit(): void {
     this.setValue();
   }
+  
   setValue() {
     if (this.ingredient) {
       this.ingredientForm.patchValue({
