@@ -8,7 +8,7 @@ import { Category } from '../interfaces/category';
 })
 export class CategoryService {
 
-  private categoriesUrl = 'categoriesUrl';
+  private categoriesUrl = 'categories';
   categoriesCache!: Category[];
   private categoryUrl = 'category';
 

@@ -11,8 +11,8 @@ import { MenuItemIngredient } from '../interfaces/menu-item-ingredient';
 })
 export class MenuItemIngredientService {
 
-    private menuItemIngredientsUrl = 'menuItemIngredientsUrl';
-    private menuItemIngredientUrl = 'menuItemIngredientUrl';
+    private menuItemIngredientsUrl = 'menuItemIngredients';
+    private menuItemIngredientUrl = 'menuItemIngredient';
     menuItemIngredientsCache!: MenuItemIngredient[];
 
     constructor(private apiService: ApiService) { }

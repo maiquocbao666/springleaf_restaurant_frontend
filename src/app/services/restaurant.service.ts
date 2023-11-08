@@ -9,8 +9,8 @@ import { Restaurant } from '../interfaces/restaurant';
 })
 export class RestaurantService {
 
-    private restaurantsUrl = 'restaurantsUrl';
-    private restaurantUrl = 'restaurantUrl';
+    private restaurantsUrl = 'restaurants';
+    private restaurantUrl = 'restaurant';
     restaurantsCache!: Restaurant[];
     constructor(private apiService: ApiService) { }
 

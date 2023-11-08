@@ -10,8 +10,8 @@ import { Ingredient } from '../interfaces/ingredient';
 })
 export class IngredientService {
 
-    private ingredientsUrl = 'ingredientsUrl';
-    private ingredientUrl = 'ingredientUrl';
+    private ingredientsUrl = 'ingredients';
+    private ingredientUrl = 'ingredient';
     ingredientsCache!: Ingredient[];
 
     constructor(private apiService: ApiService) { }

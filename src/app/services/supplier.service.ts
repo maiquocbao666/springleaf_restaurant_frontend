@@ -9,8 +9,8 @@ import { Supplier } from '../interfaces/supplier';
 })
 export class SupplierService {
 
-    private suppliersUrl = 'suppliersUrl';
-    private supplierUrl = 'supplierUrl';
+    private suppliersUrl = 'suppliers';
+    private supplierUrl = 'supplier';
     suppliersCache!: Supplier[];
     constructor(private apiService: ApiService) { }
 

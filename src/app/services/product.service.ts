@@ -2,19 +2,21 @@ import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { Product } from '../interfaces/product';
 import { ApiService } from './api.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  private productsUrl = 'productsUrl';
-  private categoryUrl = 'categoryUrl';
+  private productsUrl = 'products';
+  private categoryUrl = 'category';
   private productUrl = 'productUrl';
   productsCache!: Product[];
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private http: HttpClient) { } // Inject ApiService
 
+  // Sử dụng ApiService để gửi yêu cầu GET
   getProducts(): Observable<Product[]> {
 
     if (this.productsCache) {
@@ -146,9 +148,16 @@ export class ProductService {
         }
 
       })
+
     );
 
   }
 
+  addToCart(productId: number): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+    console.log(jwtToken);
+    const url = `product/addToCart?productId=${productId}`;
+    return this.apiService.request('post', url);
+  }
 
 }

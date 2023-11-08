@@ -9,8 +9,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class OrderTypeService {
 
-    private orderTypesUrl = 'ingredientsUrl';
-    private orderTypeUrl = 'ingredientUrl';
+    private orderTypesUrl = 'ingredients';
+    private orderTypeUrl = 'ingredient';
     orderTypesCache!: OrderType[];
 
     constructor(private apiService: ApiService) { }

@@ -11,8 +11,8 @@ import { DeliveryOrder } from '../interfaces/delivery-order';
 })
 export class DeliveryOrderService {
 
-    private deliveryOrdersUrl = 'deliveryOrdersUrl';
-    private deliveryOrderUrl = 'deliveryOrderUrl';
+    private deliveryOrdersUrl = 'deliveryOrders';
+    private deliveryOrderUrl = 'deliveryOrder';
     deliveryOrdersCache!: DeliveryOrder[];
 
     constructor(private apiService: ApiService) { } 

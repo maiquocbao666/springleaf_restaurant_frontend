@@ -10,8 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class InventoryService {
 
-    private inventoriesUrl = 'inventoriesUrl';
-    private inventoryUrl = 'inventoryUrl';
+    private inventoriesUrl = 'inventories';
+    private inventoryUrl = 'inventory';
     inventoriesCache!: Inventory[];
 
     constructor(private apiService: ApiService, private httpClient: HttpClient) { }

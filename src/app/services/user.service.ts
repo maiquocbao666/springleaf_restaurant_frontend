@@ -11,8 +11,8 @@ import { User } from '../interfaces/user';
 })
 export class UserService {
 
-  private usersUrl = 'usersUrl';
-  private userUrl = 'userUrl';
+  private usersUrl = 'users';
+  private userUrl = 'user';
   usersCache: User[] | null = null;
 
   private profileSubject = new Subject<User>();

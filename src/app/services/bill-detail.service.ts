@@ -7,8 +7,8 @@ import { BillDetail } from '../interfaces/bill-detail';
 })
 export class BillDetailService {
 
-    private billDetailsUrl = 'billDetailsUrl';
-    private billDetailUrl = 'billDetailUrl';
+    private billDetailsUrl = 'billDetails';
+    private billDetailUrl = 'billDetail';
     billDetailsCache!: BillDetail[];
 
     constructor(private apiService: ApiService) { }

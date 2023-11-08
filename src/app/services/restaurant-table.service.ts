@@ -11,8 +11,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class RestaurantTableService {
 
-    private restaurantTablesUrl = 'restaurantTablesUrl';
-    private restaurantTableUrl = 'restaurantTableUrl';
+    private restaurantTablesUrl = 'restaurantTables';
+    private restaurantTableUrl = 'restaurantTable';
     restaurantTablesCache!: RestaurantTable[];
     constructor(private apiService: ApiService) { }
 

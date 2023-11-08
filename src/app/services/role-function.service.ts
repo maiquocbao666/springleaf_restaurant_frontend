@@ -10,8 +10,8 @@ import { RoleFunction } from '../interfaces/role-function';
 })
 export class RoleFunctionService {
 
-    private roleFunctionsUrl = 'roleFunctionsUrl';
-    private roleFunctionUrl = 'roleFunctionUrl';
+    private roleFunctionsUrl = 'roleFunctions';
+    private roleFunctionUrl = 'roleFunction';
     roleFunctionsCache!: RoleFunction[];
 
     constructor(private apiService: ApiService) { }

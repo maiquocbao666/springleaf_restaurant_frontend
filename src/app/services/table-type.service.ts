@@ -9,8 +9,8 @@ import { TableType } from '../interfaces/table-type';
 })
 export class TableTypeService {
 
-  private tableTypesUrl = 'tableTypesUrl';
-  private tableTypeUrl = 'tableTypeUrl';
+  private tableTypesUrl = 'tableTypes';
+  private tableTypeUrl = 'tableType';
   tableTypesCache!: TableType[];
   
   constructor(private apiService: ApiService) { }

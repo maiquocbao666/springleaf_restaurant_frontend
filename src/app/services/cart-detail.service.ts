@@ -9,8 +9,8 @@ import { CartDetail } from '../interfaces/cart-detail';
 })
 export class CartDetailService {
 
-    private cartDetailsUrl = 'cartDetailsUrl';
-    private cartDetailUrl = 'cartDetailUrl';
+    private cartDetailsUrl = 'cartDetails';
+    private cartDetailUrl = 'cartDetail';
     cartDetailsCache!: CartDetail[];
 
     constructor(private apiService: ApiService) { }

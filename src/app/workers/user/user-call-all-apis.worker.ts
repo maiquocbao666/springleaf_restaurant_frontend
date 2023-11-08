@@ -3,13 +3,13 @@
 addEventListener('message', async (event) => {
     const { type, loginData, token, tokenUser } = event.data;
     console.log("Call all this User Apis Worker Works", type);
-    const domain = 'https://springleafrestaurantbackend.onrender.com/api';
-    //const domain = 'http://localhost:8080/api';
+    const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
+    //const domain = 'http://localhost:8080/auth';
     if (type === 'check_access_token') {
         const  accessToken  = token;
         try {
             const responses = await Promise.all([
-                fetch(`${domain}/v1/auth/auto-login`, {
+                fetch(`${domain}/auto-login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -36,10 +36,11 @@ addEventListener('message', async (event) => {
         }
     };
     if (type === 'login') {
-        const { username, password } = loginData;
+        const { userName, password } = loginData;
+        console.log(userName + ", " + password);
         try {
             const responses = await Promise.all([
-                fetch(`${domain}/v1/auth/authenticate`, {
+                fetch(`${domain}/authenticate`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ addEventListener('message', async (event) => {
         try {
             const responses = await Promise.all([
 
-                fetch(`${domain}/auth/your-profile`, {
+                fetch(`${domain}/your-profile`, {
                     method: 'GET',
                     headers: {
                         'token': token,
@@ -103,7 +104,7 @@ addEventListener('message', async (event) => {
     if (type === 'profile') {
         const token = tokenUser; // Sử dụng token được cung cấp bởi worker
         try {
-            const response = await fetch(`${domain}/auth/your-profile`, {
+            const response = await fetch(`${domain}/your-profile`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

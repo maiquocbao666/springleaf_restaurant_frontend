@@ -9,8 +9,8 @@ import { Payment } from '../interfaces/payment';
 })
 export class PaymentService {
 
-    private paymentsUrl = 'paymentsUrl';
-    private paymentUrl = 'paymentUrl';
+    private paymentsUrl = 'payments';
+    private paymentUrl = 'payment';
     paymentsCache!: Payment[];
 
     constructor(private apiService: ApiService) { }

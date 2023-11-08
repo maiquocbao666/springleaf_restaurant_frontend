@@ -10,8 +10,8 @@ import { Cart } from '../interfaces/cart';
 })
 export class CartService {
 
-  private cartsUrl = 'cartsUrl';
-  private cartUrl = 'cartUrl';
+  private cartsUrl = 'carts';
+  private cartUrl = 'cart';
   cartsCache!: Cart[];
   getDatasOfThisUserWorker: Worker;
 
