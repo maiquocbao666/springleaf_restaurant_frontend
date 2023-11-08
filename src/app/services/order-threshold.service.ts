@@ -10,8 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class OrderThresholdService {
 
-    private orderThresholdsUrl = 'ingredientsUrl';
-    private orderThresholdUrl = 'ingredientUrl';
+    private orderThresholdsUrl = 'ingredients';
+    private orderThresholdUrl = 'ingredient';
     orderThresholdsCache!: OrderThreshold[];
 
     constructor(private apiService: ApiService) { }

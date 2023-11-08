@@ -9,8 +9,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ProductService {
 
-  private productsUrl = 'productsUrl';
-  private categoryUrl = 'categoryUrl';
+  private productsUrl = 'products';
+  private categoryUrl = 'category';
   private productUrl = 'productUrl';
   productsCache!: Product[];
 

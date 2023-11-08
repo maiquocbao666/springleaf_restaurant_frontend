@@ -10,8 +10,8 @@ import { Rating } from '../interfaces/rating';
 })
 export class RatingService {
 
-    private ratingsUrl = 'ratingsUrl';
-    private ratingUrl = 'ratingUrl';
+    private ratingsUrl = 'ratings';
+    private ratingUrl = 'rating';
     ratingsCache!: Rating[];
 
     constructor(private apiService: ApiService) { }

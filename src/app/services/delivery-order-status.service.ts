@@ -11,8 +11,8 @@ import { DeliveryOrderStatus } from './../interfaces/delivery-order-status';
 })
 export class DeliveryOrderStatusService {
 
-    private deliveryOrderStatusesUrl = 'deliveryOrderStatusesUrl';
-    private deliveryOrderStatusUrl = 'deliveryOrderStatusUrl';
+    private deliveryOrderStatusesUrl = 'deliveryOrderStatuses';
+    private deliveryOrderStatusUrl = 'deliveryOrderStatus';
     deliveryOrderStatusesCache!: DeliveryOrderStatus[];
 
     constructor(private apiService: ApiService) { }

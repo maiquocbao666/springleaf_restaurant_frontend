@@ -11,8 +11,8 @@ import { MergeTable } from './../interfaces/merge-table';
 })
 export class MergeTableService {
 
-    private mergeTablesUrl = 'mergeTablesUrl';
-    private mergeTableUrl = 'mergeTableUrl';
+    private mergeTablesUrl = 'mergeTables';
+    private mergeTableUrl = 'mergeTable';
     mergeTablesCache!: MergeTable[];
 
     constructor(private apiService: ApiService) { }

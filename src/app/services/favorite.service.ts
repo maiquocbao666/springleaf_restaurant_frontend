@@ -11,8 +11,8 @@ import { Favorite } from './../interfaces/favorite';
 })
 export class FavoriteService {
 
-    private favoritesUrl = 'favoritesUrl';
-    private favoriteUrl = 'favoriteUrl';
+    private favoritesUrl = 'favorites';
+    private favoriteUrl = 'favorite';
     favoritesCache!: Favorite[];
 
     constructor(private apiService: ApiService) { }

@@ -9,8 +9,8 @@ import { ReceiptDetail } from '../interfaces/receipt-detail';
 })
 export class ReceiptDetailService {
 
-    private receiptDetailsUrl = 'receiptDetailsUrl';
-    private receiptDetailUrl = 'receiptDetailUrl';
+    private receiptDetailsUrl = 'receiptDetails';
+    private receiptDetailUrl = 'receiptDetail';
     receiptDetailsCache!: ReceiptDetail[];
 
     constructor(private apiService: ApiService) { }

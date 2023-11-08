@@ -10,8 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class BillService {
 
-    private billsUrl = 'billsUrl';
-    private billUrl = 'billUrl';
+    private billsUrl = 'bills';
+    private billUrl = 'bill';
     
     billsCache!: Bill[];
 

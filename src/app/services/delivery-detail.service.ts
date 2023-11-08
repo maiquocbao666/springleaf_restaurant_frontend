@@ -9,8 +9,8 @@ import { DeliveryDetail } from '../interfaces/delivery-detail';
 })
 export class DeliveryDetailService {
 
-    private deliveryDetailsUrl = 'deliveryDetailsUrl';
-    private deliveryDetailUrl = 'deliveryDetailUrl';
+    private deliveryDetailsUrl = 'deliveryDetails';
+    private deliveryDetailUrl = 'deliveryDetail';
     deliveryDetailsCache!: DeliveryDetail[];
 
     constructor(private apiService: ApiService) { }

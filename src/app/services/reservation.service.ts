@@ -10,8 +10,8 @@ import { Reservation } from '../interfaces/reservation';
 })
 export class ReservationService {
 
-    private reservationsUrl = 'reservationsUrl';
-    private reservationUrl = 'reservationUrl';
+    private reservationsUrl = 'reservations';
+    private reservationUrl = 'reservation';
     reservationsCache!: Reservation[];
 
     constructor(private apiService: ApiService) { }

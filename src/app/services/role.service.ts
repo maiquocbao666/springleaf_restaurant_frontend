@@ -10,8 +10,8 @@ import { Role } from '../interfaces/role';
 })
 export class RoleService {
 
-    private rolesUrl = 'rolesUrl';
-    private roleUrl = 'roleUrl';
+    private rolesUrl = 'roles';
+    private roleUrl = 'role';
     rolesCache!: Role[];
 
     constructor(private apiService: ApiService) { }

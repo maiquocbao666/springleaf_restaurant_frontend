@@ -10,8 +10,8 @@ import { Event } from '../interfaces/event';
 })
 export class EventService {
 
-    private eventsUrl = 'eventsUrl';
-    private eventUrl = 'eventUrl';
+    private eventsUrl = 'events';
+    private eventUrl = 'event';
     eventsCache!: Event[];
 
     constructor(private apiService: ApiService) { }

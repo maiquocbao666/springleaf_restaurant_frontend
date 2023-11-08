@@ -11,8 +11,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class TableStatusService {
 
-    private tableStatusesUrl = 'tableStatusesUrl';
-    private tableStatusUrl = 'tableStatusUrl';
+    private tableStatusesUrl = 'tableStatuses';
+    private tableStatusUrl = 'tableStatus';
     
     tableStatusesCache!: TableStatus[];
     constructor(private apiService: ApiService) { }

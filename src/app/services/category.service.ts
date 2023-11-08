@@ -8,9 +8,9 @@ import { Category } from '../interfaces/category';
 })
 export class CategoryService {
 
-  private categoriesUrl = 'categoriesUrl';
+  private categoriesUrl = 'categories';
   categoriesCache!: Category[];
-  private categoryUrl = 'categoryUrl';
+  private categoryUrl = 'category';
 
   constructor(private apiService: ApiService) { }
 

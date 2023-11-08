@@ -10,8 +10,8 @@ import { Combo } from '../interfaces/combo';
 })
 export class ComboService {
 
-    private combosUrl = 'combosUrl';
-    private comboUrl = 'comboUrl';
+    private combosUrl = 'combos';
+    private comboUrl = 'combo';
     combosCache!: Combo[];
     
     constructor(private apiService: ApiService) { }
