@@ -1,9 +1,5 @@
 import { Component, OnDestroy } from "@angular/core";
 import { AuthenticationService } from "./services/authentication.service";
-import { BillDetailService } from "./services/bill-detail.service";
-import { BillService } from "./services/bill.service";
-import { CartDetailService } from "./services/cart-detail.service";
-import { CartService } from "./services/cart.service";
 import { CategoryService } from "./services/category.service";
 import { ComboDetailService } from "./services/combo-detail.service";
 import { ComboService } from "./services/combo.service";
@@ -14,12 +10,9 @@ import { DeliveryOrderService } from "./services/delivery-order.service";
 import { DeliveryService } from "./services/delivery.service";
 import { EventService } from "./services/event.service";
 import { FavoriteService } from "./services/favorite.service";
-import { IngredientService } from "./services/ingredient.service";
 import { InventoryBranchService } from "./services/inventory-branch.service";
 import { InventoryService } from "./services/inventory.service";
-import { MenuItemIngredientService } from "./services/menu-Item-ingredient.service";
 import { MergeTableService } from "./services/merge-table.service";
-import { OrderThresholdService } from "./services/order-threshold.service";
 import { OrderTypeService } from "./services/order-type.service";
 import { PaymentService } from "./services/payment.service";
 import { ProductService } from "./services/product.service";
@@ -65,7 +58,7 @@ export class AppComponent implements OnDestroy {
     private eventsService: EventService,
     private restaurantTablesService: RestaurantTableService,
     private restaurantsService: RestaurantService,
-    //private suppliersService: SupplierService,
+    // private suppliersService: SupplierService,
     private tableStatusesService: TableStatusService,
     //private ingredientsService: IngredientService,
     //private billsService: BillService,
@@ -99,7 +92,7 @@ export class AppComponent implements OnDestroy {
       events: { cache: this.eventsService.eventsCache, localStorageKey: 'events' },
       restaurantTables: { cache: this.restaurantTablesService.restaurantTablesCache, localStorageKey: 'restaurantTables' },
       restaurants: { cache: this.restaurantsService.restaurantsCache, localStorageKey: 'restaurants' },
-      //suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
+      // suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
       tableStatuses: { cache: this.tableStatusesService.tableStatusesCache, localStorageKey: 'tableStatuses' },
       //ingredients: { cache: this.ingredientsService.ingredientsCache, localStorageKey: 'ingredients' },
       //bills: { cache: this.billsService.billsCache, localStorageKey: 'bills' },

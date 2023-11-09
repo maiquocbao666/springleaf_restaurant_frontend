@@ -28,7 +28,7 @@ addEventListener('message', async ({ data }) => {
                                 //'menuItemIngredients',
                                 'mergeTables',
                                 //'orderThresholds',
-                                //'suppliers',
+                                // 'suppliers',
                                 'tableStatuses',
                                 'orderTypes',
                                 'payments',

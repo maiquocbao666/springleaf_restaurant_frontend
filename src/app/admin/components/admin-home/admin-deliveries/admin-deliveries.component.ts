@@ -31,7 +31,7 @@ export class AdminDeliveriesComponent {
   ) {
     this.deliveryForm = this.formBuilder.group({
       deliveryId: ['', [Validators.required]],
-      inventoryBranch: ['', [Validators.required]],
+      inventoryBrand: ['', [Validators.required]],
       date: ['', [Validators.required]],
       warehouseManager: ['', [Validators.required]],
       user: ['', [Validators.required]]
@@ -40,6 +40,7 @@ export class AdminDeliveriesComponent {
 
   ngOnInit(): void {
     this.getDeliveries();
+    this.getInventoryBranches();
   }
 
   onTableDataChange(event: any) {
@@ -67,31 +68,19 @@ export class AdminDeliveriesComponent {
     return this.inventoryBranchService.getInventoryBranchById(inventoryBranchId);
   }
 
+
+
   addDelivery(): void {
-    // Lấy giá trị từ các trường input
-    const inventoryBranch = this.deliveryForm.get('inventoryBranch')?.value;
+
+    const inventoryBrand = this.deliveryForm.get('inventoryBrand')?.value;
     const date = this.deliveryForm.get('date')?.value;
     const warehouseManager = this.deliveryForm.get('warehouseManager')?.value;
     const user = this.deliveryForm.get('user')?.value;
 
-    // Kiểm tra xem người dùng đã nhập đầy đủ thông tin chưa
-    if (!inventoryBranch || !date || !warehouseManager || !user) {
-      alert('Vui lòng điền đầy đủ thông tin.');
-      return;
-    }
-
-    const newDelivery: Delivery = {
-      deliveryId: 0,
-      inventoryBranch: inventoryBranch,
-      date: date,
-      warehouseManager: warehouseManager,
-      user: user
-    };
-
-    this.deliveryService.addDelivery(newDelivery)
+    this.deliveryService.addDelivery({ inventoryBrand, date, warehouseManager, user } as Delivery)
       .subscribe(delivery => {
-        console.log('Delivery added:', delivery);
         this.deliveries.push(delivery);
+        this.getDeliveries();
         this.deliveryForm.reset();
       });
   }

@@ -9,7 +9,7 @@
     <div class="mb-3">
       <label for="inventoryBranch" class="form-label">Chi nhánh hàng tồn</label>
       <div class="mb-3">
-        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranch">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBrand">
           <option value="">Chọn chi nhánh hàng tồn</option>
           <option *ngFor="let branch of inventoryBranches " [value]="branch.inventoryBranchId">{{
             branch.inventoryBranchId }}</option>

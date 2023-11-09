@@ -1,66 +1,70 @@
 <div class="container">
-  <h1>Combo</h1>
-  <form [formGroup]="comboForm" (ngSubmit)="addCombo()">
-      <div class="row">
-          <div class="col-sm-6">
-              <label for="exampleInputPassword1" class="form-label">Tên Combo</label>
-              <div class="mb-3">
-                  <input type="text" class="form-control" formControlName="comboName" placeholder="Nhập tên combo...">
-              </div>
-          </div>
-          <div class="col-sm-6">
-              <label for="exampleInputPassword1" class="form-label">Người đặt</label>
-              <div class="mb-3">
-                  <input type="text" class="form-control" formControlName="comboUser"
-                      placeholder="Nhập tên người đặt ...">
-              </div>
-          </div>
-          <div class="col-sm-6">
-              <label for="exampleInputPassword1" class="form-label">Tổng tiền</label>
-              <div class="mb-3">
-                  <input type="number" class="form-control" formControlName="totalAmount"
-                      placeholder="Nhập tổng tiền ...">
-              </div>
-          </div>
-      </div>
-      <button type="submit" class="btn btn-info">Lưu</button>
-  </form>
-  <div class="col-2">
-      <select class="form-select" (change)="onTableSizeChange($event)">
-          <option value="">Page</option>
-          <option *ngFor="let size of tableSizes">
-              {{size}}
-          </option>
-      </select>
-  </div>
-  <table class="table">
-      <thead>
-          <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Tên Combo</th>
-              <th scope="col">Người đặt</th>
-              <th scope="col">Tổng tiền</th>
-              <th scope="col"></th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr
-              *ngFor="let combo of combos | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-              <td>{{combo.comboId}}</td>
-              <td>{{combo.comboName}}</td>
-              <td>{{combo.comboUser}}</td>
-              <td>{{combo.totalAmount}}</td>
+    <h1>Combo</h1>
+    <form [formGroup]="comboForm" (ngSubmit)="addCombo()">
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="exampleInputPassword1" class="form-label">Tên Combo</label>
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="comboName" placeholder="Nhập tên combo...">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label for="exampleInputPassword1" class="form-label">Người đặt</label>
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="comboUser"
+                        placeholder="Nhập tên người đặt ...">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label for="exampleInputPassword1" class="form-label">Tổng tiền</label>
+                <div class="mb-3">
+                    <input type="number" class="form-control" formControlName="totalAmount"
+                        placeholder="Nhập tổng tiền ...">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-info">Lưu</button>
+    </form>
+    <div class="col-2">
+        <select class="form-select" (change)="onTableSizeChange($event)">
+            <option value="">Page</option>
+            <option *ngFor="let size of tableSizes">
+                {{size}}
+            </option>
+        </select>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Tên Combo</th>
+                <th scope="col">Người đặt</th>
+                <th scope="col">Tổng tiền</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let combo of combos | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                <td>{{combo.comboId}}</td>
+                <td>{{combo.comboName}}</td>
+                <td>{{combo.comboUser}}</td>
+                <td>{{ formatAmount(combo.totalAmount) }}</td>
 
-              <td>
-                  <button type="button" class="btn btn-outline-primary"
-                      (click)="openComboDetailModal(combo)">Edit</button>
-                  <button type="button" class="btn btn-outline-danger" (click)="deleteCombo(combo)">Delete</button>
-              </td>
-          </tr>
-      </tbody>
-  </table>
-  <div class="text-center">
-      <pagination-controls previousLabel="Prev" nextLabel="Next"
-          (pageChange)="onTableDataChange($event)"></pagination-controls>
-  </div>
+
+
+
+
+                <td>
+                    <button type="button" class="btn btn-outline-primary"
+                        (click)="openComboDetailModal(combo)">Edit</button>
+                    <button type="button" class="btn btn-outline-danger" (click)="deleteCombo(combo)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <pagination-controls previousLabel="Prev" nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
 </div>

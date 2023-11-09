@@ -61,6 +61,11 @@ export class AdminCombosComponent {
     this.getCombos();
   }
 
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  }
+
+
   addCombo(): void {
 
     const comboName = this.comboForm.get('comboName')?.value;
@@ -70,6 +75,7 @@ export class AdminCombosComponent {
     this.comboService.addCombo({ comboName, comboUser, totalAmount } as Combo)
       .subscribe(combo => {
         this.combos.push(combo);
+        this.getCombos();
         this.comboForm.reset();
       });
   }

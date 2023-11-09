@@ -33,7 +33,7 @@ export class AdminDeliveryDetailComponent {
     });
     this.deliveryForm = this.formBuilder.group({
       deliveryId: ['', [Validators.required]],
-      inventoryBranch: ['', [Validators.required]],
+      inventoryBrand: ['', [Validators.required]],
       date: ['', [Validators.required]],
       warehouseManager: ['', [Validators.required]],
       user: ['', [Validators.required]],
@@ -53,10 +53,11 @@ export class AdminDeliveryDetailComponent {
 
   setValue() {
     if (this.delivery) {
+      const formattedDate = new Date(this.delivery.date).toISOString().slice(0, 10);
       this.deliveryForm.patchValue({
         deliveryId: this.delivery.deliveryId,
-        inventoryBranch: this.delivery.inventoryBranch,
-        date: this.delivery.date,
+        inventoryBrand: this.delivery.inventoryBrand,
+        date: formattedDate, // Gán giá trị date đã được chuyển đổi
         warehouseManager: this.delivery.warehouseManager,
         user: this.delivery.user,
       });
@@ -68,7 +69,7 @@ export class AdminDeliveryDetailComponent {
     if (this.deliveryForm.valid) {
       const updatedDelivery: Delivery = {
         deliveryId: this.deliveryForm.get('deliveryId')?.value,
-        inventoryBranch: this.deliveryForm.get('inventoryBranch')?.value,
+        inventoryBrand: this.deliveryForm.get('inventoryBrand')?.value,
         date: this.deliveryForm.get('date')?.value,
         warehouseManager: this.deliveryForm.get('warehouseManager')?.value,
         user: this.deliveryForm.get('user')?.value,

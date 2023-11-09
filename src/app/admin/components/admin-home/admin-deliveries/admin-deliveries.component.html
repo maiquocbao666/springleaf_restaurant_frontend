@@ -4,7 +4,7 @@
     <div class="mb-3">
       <label for="inventoryBranch" class="form-label">Chi nhánh hàng tồn</label>
       <div class="mb-3">
-        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranch">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBrand">
           <option value="">Chọn chi nhánh hàng tồn</option>
           <option *ngFor="let branch of inventoryBranches " [value]="branch.inventoryBranchId">{{
             branch.inventoryBranchId }}</option>
@@ -54,11 +54,10 @@
       <tr
         *ngFor="let delivery of deliveries | paginate: { itemsPerPage: tableSize, currentPage: page, totalItems: count }; let i = index">
         <td>{{ delivery.deliveryId }}</td>
-        <td>{{ (getInventoryBranchById(delivery.inventoryBranch) | async)?.inventoryBranchId }}</td>
-        <td>{{ delivery.date | date }}</td>
+        <td>{{ (getInventoryBranchById(delivery.inventoryBrand) | async)?.inventoryBranchId }}</td>
+        <td>{{ delivery.date | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         <td>{{ delivery.warehouseManager }}</td>
         <td>{{ delivery.user }}</td>
-        <td>heheheee</td>
         <td>
           <button type="button" class="btn btn-outline-primary" (click)="openDeliveryDetailModal(delivery)">Sửa</button>
           <button type="button" class="btn btn-outline-danger" (click)="deleteDelivery(delivery)">Xóa</button>

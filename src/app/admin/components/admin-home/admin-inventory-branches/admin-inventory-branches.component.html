@@ -57,13 +57,13 @@
     <tbody>
       <tr *ngFor="let inventoryBranch of inventoryBranches">
         <td>{{inventoryBranch.inventoryBranchId}}</td>
-        <td>{{ (getIngredientById(inventoryBranch.ingredient) | async)?.name }}</td>
-        <td>{{ (getSupplierById(inventoryBranch.supplier) | async)?.name }}</td>
+        <td>{{ (getIngredientById(inventoryBranch.ingredientId) | async)?.name }}</td>
+        <!-- <td>{{ (getSupplierById(inventoryBranch.supplier) | async)?.name }}</td> -->
         <td><button type="button" class="btn btn-outline-primary"
-          (click)="openInventoryBranchDetailModal(inventoryBranch)">Edit</button>
-      <button type="button" class="btn btn-outline-danger"
-          (click)="deleteInventoryBranch(inventoryBranch)">Delete</button>
-  </td>
+            (click)="openInventoryBranchDetailModal(inventoryBranch)">Edit</button>
+          <button type="button" class="btn btn-outline-danger"
+            (click)="deleteInventoryBranch(inventoryBranch)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>

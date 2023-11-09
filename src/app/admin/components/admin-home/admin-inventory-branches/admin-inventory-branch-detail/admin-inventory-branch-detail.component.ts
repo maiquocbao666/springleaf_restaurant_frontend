@@ -42,7 +42,7 @@ export class AdminInventoryBranchDetailComponent {
     });
     this.inventoryBranchForm = this.formBuilder.group({
       inventoryBranchId: ['', [Validators.required]],
-      ingredient: ['', [Validators.required]],
+      ingredientId: ['', [Validators.required]],
       supplier: ['', [Validators.required]],
       restaurant: ['', [Validators.required]]
     });
@@ -75,7 +75,7 @@ export class AdminInventoryBranchDetailComponent {
     if (this.inventoryBranch) {
       this.inventoryBranchForm.patchValue({
         inventoryBranchId: this.inventoryBranch.inventoryBranchId,
-        ingredient: this.inventoryBranch.ingredient,
+        ingredient: this.inventoryBranch.ingredientId,
         supplier: this.inventoryBranch.supplier,
         restaurant: this.inventoryBranch.restaurant,
       });
@@ -87,7 +87,7 @@ export class AdminInventoryBranchDetailComponent {
     if (this.inventoryBranchForm.valid) {
       const updateInventoryBranch: InventoryBranch = {
         inventoryBranchId: this.inventoryBranchForm.get('inventoryBranchId')?.value,
-        ingredient: this.inventoryBranchForm.get('ingredient')?.value,
+        ingredientId: this.inventoryBranchForm.get('ingredient')?.value,
         supplier: this.inventoryBranchForm.get('supplier')?.value,
         restaurant: this.inventoryBranchForm.get('restaurant')?.value
       };

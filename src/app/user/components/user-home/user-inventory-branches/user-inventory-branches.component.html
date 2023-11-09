@@ -57,8 +57,8 @@
       <tr
         *ngFor="let inventoryBranch of inventoryBranches | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
         <td>{{inventoryBranch.inventoryBranchId}}</td>
-        <td>{{inventoryBranch.ingredient}}</td>
-        <!-- <td>{{ (getIngredientById(inventoryBranch.ingredient) | async)?.name }}</td> -->
+
+        <td>{{ (getIngredientById(inventoryBranch.ingredientId) | async)?.name }}</td>
         <!-- <td>{{ (getSupplierById(inventoryBranch.supplier) | async)?.name }}</td> -->
         <td>
           <!-- <button type="button" class="btn btn-outline-primary"

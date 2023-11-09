@@ -1,6 +1,6 @@
 export interface Delivery {
     deliveryId: number;
-    inventoryBranch: number;
+    inventoryBrand: number;
     date: Date;
     warehouseManager: number;
     user: number

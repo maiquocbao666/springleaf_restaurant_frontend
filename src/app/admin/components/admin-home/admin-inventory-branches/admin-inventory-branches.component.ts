@@ -49,7 +49,7 @@ export class AdminInventoryBranchesComponent {
     });
     this.inventoryBranchForm = this.formBuilder.group({
       inventoryBranchId: ['', [Validators.required]],
-      ingredient: ['', [Validators.required]],
+      ingredientId: ['', [Validators.required]],
       supplier: ['', [Validators.required]],
       restaurant: ['', [Validators.required]]
     });
@@ -108,10 +108,10 @@ export class AdminInventoryBranchesComponent {
 
   addInventoryBranch(): void {
 
-    const ingredient = this.inventoryBranchForm.get('ingredient')?.value;
+    const ingredientId = this.inventoryBranchForm.get('ingredient')?.value;
     const supplier = this.inventoryBranchForm.get('supplier')?.value;
     const restaurant = this.inventoryBranchForm.get('restaurant')?.value;
-    this.inventoryBranchService.addInventoryBranch({ ingredient, supplier, restaurant } as InventoryBranch)
+    this.inventoryBranchService.addInventoryBranch({ ingredientId, supplier, restaurant } as InventoryBranch)
       .subscribe(inventoryBranch => {
         this.inventoryBranches.push(inventoryBranch);
         this.inventoryBranchForm.reset();
