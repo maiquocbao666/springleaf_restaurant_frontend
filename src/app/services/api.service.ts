@@ -15,14 +15,9 @@ export class ApiService {
     this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public' + uri;
   }
 
-  request<T>(method: string, endpoint: string, data: any = null): Observable<T> {
+  request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders): Observable<T> {
 
-    const headers = new HttpHeaders({
-
-      'Content-Type': 'application/json',
-      // Thêm các headers khác nếu cần
-
-    });
+    const headers = customHeaders.append('Content-Type', 'application/json');
 
     const url = `${this.baseUrl}/${endpoint}`;
 
