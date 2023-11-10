@@ -12,7 +12,7 @@ export class BillService {
 
     private billsUrl = 'bills';
     private billUrl = 'bill';
-    
+
     billsCache!: Bill[];
 
     constructor(private apiService: ApiService) { }

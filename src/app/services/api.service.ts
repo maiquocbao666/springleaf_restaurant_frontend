@@ -15,11 +15,19 @@ export class ApiService {
     this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public' + uri;
   }
 
-  request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders): Observable<T> {
+  request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders | null = null): Observable<T> {
 
-    const headers = customHeaders.append('Content-Type', 'application/json');
+    let headers: HttpHeaders;
 
-    const url = `${this.baseUrl}/${endpoint}`;
+    if (customHeaders) {
+      headers = customHeaders.append('Content-Type', 'application/json');
+      // Thêm các headers khác nếu cần
+    } else {
+      headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        // Thêm các headers khác nếu cần
+      });
+    }
 
     switch (method.toLowerCase()) {
 
@@ -27,13 +35,13 @@ export class ApiService {
 
         this.setUrl(``);
 
-        return this.http.get<T>(url, { headers }).pipe(
+        return this.http.get<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
 
           }),
 
-          catchError(this.handleError<T>(`GET ${url}`))
+          catchError(this.handleError<T>(`GET ${this.baseUrl}`))
 
         );
 
@@ -41,13 +49,13 @@ export class ApiService {
 
         this.setUrl(`create/${endpoint}`);
 
-        return this.http.post<T>(url, data, { headers }).pipe(
+        return this.http.post<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
 
           }),
 
-          catchError(this.handleError<T>(`POST ${url}`))
+          catchError(this.handleError<T>(`POST ${this.baseUrl}`))
 
         );
 
@@ -55,13 +63,13 @@ export class ApiService {
 
         this.setUrl(`update/${endpoint}`);
 
-        return this.http.put<T>(url, data, { headers }).pipe(
+        return this.http.put<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
 
           }),
 
-          catchError(this.handleError<T>(`PUT ${url}`))
+          catchError(this.handleError<T>(`PUT ${this.baseUrl}`))
 
         );
 
@@ -69,13 +77,13 @@ export class ApiService {
 
         this.setUrl(`delete/${endpoint}`);
 
-        return this.http.delete<T>(url, { headers }).pipe(
+        return this.http.delete<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
 
           }),
 
-          catchError(this.handleError<T>(`DELETE ${url}`))
+          catchError(this.handleError<T>(`DELETE ${this.baseUrl}`))
 
         );
 
