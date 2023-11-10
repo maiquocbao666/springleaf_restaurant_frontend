@@ -7,9 +7,13 @@ import { catchError, map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://springleafrestaurantbackend.onrender.com/public'; // Thay đổi base URL của API của bạn
+  private baseUrl = ''; // Thay đổi base URL của API của bạn
   //private baseUrl = 'http://localhost:8080/public';
   constructor(private http: HttpClient) { }
+
+  setUrl(uri: string) {
+    this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public' + uri;
+  }
 
   request<T>(method: string, endpoint: string, data: any = null): Observable<T> {
 
@@ -26,6 +30,8 @@ export class ApiService {
 
       case 'get':
 
+        this.setUrl(``);
+
         return this.http.get<T>(url, { headers }).pipe(
 
           tap(response => {
@@ -37,6 +43,8 @@ export class ApiService {
         );
 
       case 'post':
+
+        this.setUrl(`create/${endpoint}`);
 
         return this.http.post<T>(url, data, { headers }).pipe(
 
@@ -50,6 +58,8 @@ export class ApiService {
 
       case 'put':
 
+        this.setUrl(`update/${endpoint}`);
+
         return this.http.put<T>(url, data, { headers }).pipe(
 
           tap(response => {
@@ -62,12 +72,14 @@ export class ApiService {
 
       case 'delete':
 
+        this.setUrl(`delete/${endpoint}`);
+
         return this.http.delete<T>(url, { headers }).pipe(
 
           tap(response => {
 
           }),
-          
+
           catchError(this.handleError<T>(`DELETE ${url}`))
 
         );
