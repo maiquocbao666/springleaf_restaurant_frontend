@@ -10,6 +10,7 @@ import { DeliveryOrderService } from "./services/delivery-order.service";
 import { DeliveryService } from "./services/delivery.service";
 import { EventService } from "./services/event.service";
 import { FavoriteService } from "./services/favorite.service";
+import { IngredientService } from "./services/ingredient.service";
 import { InventoryBranchService } from "./services/inventory-branch.service";
 import { InventoryService } from "./services/inventory.service";
 import { MergeTableService } from "./services/merge-table.service";
@@ -58,9 +59,9 @@ export class AppComponent implements OnDestroy {
     private eventsService: EventService,
     private restaurantTablesService: RestaurantTableService,
     private restaurantsService: RestaurantService,
-    // private suppliersService: SupplierService,
+    private suppliersService: SupplierService,
     private tableStatusesService: TableStatusService,
-    //private ingredientsService: IngredientService,
+    private ingredientsService: IngredientService,
     //private billsService: BillService,
     //private billDetailsService: BillDetailService,
     //private cartsService: CartService,
@@ -92,9 +93,9 @@ export class AppComponent implements OnDestroy {
       events: { cache: this.eventsService.eventsCache, localStorageKey: 'events' },
       restaurantTables: { cache: this.restaurantTablesService.restaurantTablesCache, localStorageKey: 'restaurantTables' },
       restaurants: { cache: this.restaurantsService.restaurantsCache, localStorageKey: 'restaurants' },
-      // suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
+      suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
       tableStatuses: { cache: this.tableStatusesService.tableStatusesCache, localStorageKey: 'tableStatuses' },
-      //ingredients: { cache: this.ingredientsService.ingredientsCache, localStorageKey: 'ingredients' },
+      ingredients: { cache: this.ingredientsService.ingredientsCache, localStorageKey: 'ingredients' },
       //bills: { cache: this.billsService.billsCache, localStorageKey: 'bills' },
       //billDetails: { cache: this.billDetailsService.billDetailsCache, localStorageKey: 'billDetails' },
       //carts: { cache: this.cartsService.cartsCache, localStorageKey: 'carts' },

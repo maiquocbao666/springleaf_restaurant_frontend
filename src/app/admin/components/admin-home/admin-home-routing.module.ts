@@ -103,6 +103,14 @@ const routes: Routes = [
             (m) => m.AdminEventsModule
           ),
       }
+      ,
+      {
+        path: 'tableTypes',
+        loadChildren: () =>
+          import('./admin-table-types/admin-table-types.module').then(
+            (m) => m.AdminTableTypesModule
+          ),
+      }
     ]
   },
   {

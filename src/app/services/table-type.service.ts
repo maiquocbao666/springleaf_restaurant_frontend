@@ -12,7 +12,7 @@ export class TableTypeService {
   private tableTypesUrl = 'tableTypes';
   private tableTypeUrl = 'tableType';
   tableTypesCache!: TableType[];
-  
+
   constructor(private apiService: ApiService) { }
 
   getTableTypes(): Observable<TableType[]> {
@@ -106,21 +106,33 @@ export class TableTypeService {
 
     return this.apiService.request('delete', url).pipe(
 
-        tap(() => {
+      tap(() => {
 
-            const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === id);
+        const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === id);
 
-            if (index !== -1) {
+        if (index !== -1) {
 
-                this.tableTypesCache.splice(index, 1);
-                localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
+          this.tableTypesCache.splice(index, 1);
+          localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
 
-            }
+        }
 
-        })
+      })
     );
 
+  }
+
+  updateTableTypesCache(updatedTableType: TableType): void {
+
+    if (this.tableTypesCache) {
+
+        const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === updatedTableType.tableTypeId);
+
+        if (index !== -1) {
+
+            this.tableTypesCache[index] = updatedTableType;
+
+        }
+    }
 }
-
-
 }

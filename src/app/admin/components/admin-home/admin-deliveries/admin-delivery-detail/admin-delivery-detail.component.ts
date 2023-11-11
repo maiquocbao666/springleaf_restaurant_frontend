@@ -1,4 +1,4 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Delivery } from 'src/app/interfaces/delivery';
@@ -11,7 +11,7 @@ import { InventoryBranchService } from 'src/app/services/inventory-branch.servic
   templateUrl: './admin-delivery-detail.component.html',
   styleUrls: ['./admin-delivery-detail.component.css']
 })
-export class AdminDeliveryDetailComponent {
+export class AdminDeliveryDetailComponent  implements OnInit {
   @Input() delivery: Delivery | undefined;
   deliveries: Delivery[] = [];
   inventoryBranches: InventoryBranch[] = [];

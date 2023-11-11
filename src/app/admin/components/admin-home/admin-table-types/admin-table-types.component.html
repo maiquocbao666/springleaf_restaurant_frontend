@@ -1,0 +1,47 @@
+<div class="container">
+  <h1>Trạng thái bàn</h1>
+  <form [formGroup]="tableTypeForm" (ngSubmit)="addTableType()">
+    <div class="row">
+      <div class="col-sm-6">
+        <label for="exampleInputPassword1" class="form-label">Name</label>
+        <div class="mb-3">
+          <input type="text" class="form-control" formControlName="name" placeholder="Nhập kiểu bàn...">
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-info">Save</button>
+  </form>
+  <div class="col-2">
+    <select class="form-select" (change)="onTableSizeChange($event)">
+      <option value="">Page</option>
+      <option *ngFor="let size of tableSizes">
+        {{size}}
+      </option>
+    </select>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let tableType of tableTypes | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+        <td>{{tableType.tableTypeId}}</td>
+        <td>{{tableType.name}}</td>
+        <td>
+          <button type="button" class="btn btn-outline-primary"
+            (click)="openTableTypeDetailModal(tableType)">Edit</button>
+          <button type="button" class="btn btn-outline-danger" (click)="deleteTableType(tableType)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

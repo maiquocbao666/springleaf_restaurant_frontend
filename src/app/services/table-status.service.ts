@@ -1,7 +1,7 @@
 import { TableStatus } from '../interfaces/table-status';
 
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, tap, throwError } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 
@@ -13,7 +13,7 @@ export class TableStatusService {
 
     private tableStatusesUrl = 'tableStatuses';
     private tableStatusUrl = 'tableStatus';
-    
+
     tableStatusesCache!: TableStatus[];
     constructor(private apiService: ApiService) { }
 
@@ -100,23 +100,35 @@ export class TableStatusService {
     deleteTableStatus(id: number): Observable<any> {
 
         const url = `${this.tableStatusUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
+
             tap(() => {
-    
+
                 const index = this.tableStatusesCache.findIndex(tableStatus => tableStatus.tableStatusId === id);
-    
+
                 if (index !== -1) {
-    
+
                     this.tableStatusesCache.splice(index, 1);
                     localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
-    
+
                 }
-    
+
             })
         );
-    
+
     }
-    
+    updateTableStatusesCache(updatedTableStatus: TableStatus): void {
+
+        if (this.tableStatusesCache) {
+
+            const index = this.tableStatusesCache.findIndex(tableStatus => tableStatus.tableStatusId === updatedTableStatus.tableStatusId);
+
+            if (index !== -1) {
+
+                this.tableStatusesCache[index] = updatedTableStatus;
+
+            }
+        }
+    }
 }

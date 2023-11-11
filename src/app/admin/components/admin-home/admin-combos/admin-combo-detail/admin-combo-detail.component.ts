@@ -1,4 +1,4 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Combo } from 'src/app/interfaces/combo';
@@ -9,7 +9,7 @@ import { ComboService } from 'src/app/services/combo.service';
   templateUrl: './admin-combo-detail.component.html',
   styleUrls: ['./admin-combo-detail.component.css']
 })
-export class AdminComboDetailComponent {
+export class AdminComboDetailComponent implements OnInit {
   @Input() combo: Combo | undefined;
   combos: Combo[] = [];
   fieldNames: string[] = [];

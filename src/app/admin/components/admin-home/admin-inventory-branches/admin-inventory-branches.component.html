@@ -4,7 +4,7 @@
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Nhà sản xuất</label>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="supplier">
+          <select class="form-select" aria-label="Default select example" formControlName="supplierId">
             <option value="">Chọn nhà sản xuất</option>
             <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.name }}
             </option>
@@ -14,7 +14,7 @@
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Nhà hàng</label>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="restaurant">
+          <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
             <option value="">Chọn nhà hàng</option>
             <option *ngFor="let restaurant of restaurants " [value]="restaurant.restaurantId">{{
               restaurant.restaurantName
@@ -26,7 +26,7 @@
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Nguyên liệu</label>
           <div class="mb-3">
-            <select class="form-select" aria-label="Default select example" formControlName="ingredient">
+            <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
               <option value="">Chọn nguyên liệu</option>
               <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
             </select>
@@ -58,7 +58,8 @@
       <tr *ngFor="let inventoryBranch of inventoryBranches">
         <td>{{inventoryBranch.inventoryBranchId}}</td>
         <td>{{ (getIngredientById(inventoryBranch.ingredientId) | async)?.name }}</td>
-        <!-- <td>{{ (getSupplierById(inventoryBranch.supplier) | async)?.name }}</td> -->
+        <td>{{ (getSupplierById(inventoryBranch.supplierId) | async)?.name }}</td>
+        <td>{{ (getRestaurantById(inventoryBranch.restaurantId) | async)?.restaurantName }}</td>
         <td><button type="button" class="btn btn-outline-primary"
             (click)="openInventoryBranchDetailModal(inventoryBranch)">Edit</button>
           <button type="button" class="btn btn-outline-danger"

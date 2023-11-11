@@ -63,6 +63,10 @@ import { AdminEventDetailComponent } from './admin/components/admin-home/admin-e
 import { AdminEventsComponent } from './admin/components/admin-home/admin-events/admin-events.component';
 import { AdminInventoryBranchDetailComponent } from './admin/components/admin-home/admin-inventory-branches/admin-inventory-branch-detail/admin-inventory-branch-detail.component';
 import { AdminInventoryBranchesComponent } from './admin/components/admin-home/admin-inventory-branches/admin-inventory-branches.component';
+import { AdminTableStatusDetailComponent } from './admin/components/admin-home/admin-table-statuses/admin-table-status-detail/admin-table-status-detail.component';
+import { AdminTableStatusesComponent } from './admin/components/admin-home/admin-table-statuses/admin-table-statuses.component';
+import { AdminTableTypeDetailComponent } from './admin/components/admin-home/admin-table-types/admin-table-type-detail/admin-table-type-detail.component';
+import { AdminTableTypesComponent } from './admin/components/admin-home/admin-table-types/admin-table-types.component';
 import { AppComponent } from './app.component';
 
 
@@ -112,6 +116,10 @@ import { AppComponent } from './app.component';
     AdminDeliveryDetailComponent,
     AdminEventsComponent,
     AdminEventDetailComponent,
+    AdminTableStatusesComponent,
+    AdminTableStatusDetailComponent,
+    AdminTableTypesComponent,
+    AdminTableTypeDetailComponent,
 
     ChatComponent,
     LoginComponent,

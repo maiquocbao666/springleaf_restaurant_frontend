@@ -13,7 +13,6 @@ import { AdminHomeRoutingModule } from './admin-home-routing.module';
   ],
 
   declarations: [
-
   ],
 
 })

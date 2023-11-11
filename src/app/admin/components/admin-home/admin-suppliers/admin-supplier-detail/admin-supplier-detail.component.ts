@@ -1,4 +1,4 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Supplier } from 'src/app/interfaces/supplier';
@@ -9,7 +9,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
   templateUrl: './admin-supplier-detail.component.html',
   styleUrls: ['./admin-supplier-detail.component.css']
 })
-export class AdminSupplierDetailComponent {
+export class AdminSupplierDetailComponent  implements OnInit {
   @Input() supplier: Supplier | undefined;
   suppliers: Supplier[] = [];
   fieldNames: string[] = [];

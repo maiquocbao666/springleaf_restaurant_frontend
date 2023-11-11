@@ -50,8 +50,8 @@ export class AdminInventoryBranchesComponent {
     this.inventoryBranchForm = this.formBuilder.group({
       inventoryBranchId: ['', [Validators.required]],
       ingredientId: ['', [Validators.required]],
-      supplier: ['', [Validators.required]],
-      restaurant: ['', [Validators.required]]
+      supplierId: ['', [Validators.required]],
+      restaurantId: ['', [Validators.required]]
     });
   }
 
@@ -102,16 +102,17 @@ export class AdminInventoryBranchesComponent {
     return this.supplierService.getSupplierById(supplierId);
   }
 
+
   getRestaurantById(restaurantId: number): Observable<Restaurant> {
     return this.restaurantService.getRestaurantById(restaurantId);
   }
 
   addInventoryBranch(): void {
 
-    const ingredientId = this.inventoryBranchForm.get('ingredient')?.value;
-    const supplier = this.inventoryBranchForm.get('supplier')?.value;
-    const restaurant = this.inventoryBranchForm.get('restaurant')?.value;
-    this.inventoryBranchService.addInventoryBranch({ ingredientId, supplier, restaurant } as InventoryBranch)
+    const ingredientId = this.inventoryBranchForm.get('ingredientId')?.value;
+    const supplierId = this.inventoryBranchForm.get('supplierId')?.value;
+    const restaurantId = this.inventoryBranchForm.get('restaurantId')?.value;
+    this.inventoryBranchService.addInventoryBranch({ ingredientId, supplierId, restaurantId } as InventoryBranch)
       .subscribe(inventoryBranch => {
         this.inventoryBranches.push(inventoryBranch);
         this.inventoryBranchForm.reset();

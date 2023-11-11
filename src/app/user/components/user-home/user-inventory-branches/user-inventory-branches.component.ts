@@ -45,9 +45,9 @@ export class UserInventoryBranchesComponent {
     });
     this.inventoryBranchForm = this.formBuilder.group({
       // inventoryBranchId: ['', [Validators.required]],
-      supplier: ['', [Validators.required]],
+      supplierId: ['', [Validators.required]],
       ingredientId: ['', [Validators.required]],
-      restaurant: ['', [Validators.required]],
+      restaurantId: ['', [Validators.required]],
     });
   }
 

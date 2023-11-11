@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
   templateUrl: './admin-inventory-branch-detail.component.html',
   styleUrls: ['./admin-inventory-branch-detail.component.css']
 })
-export class AdminInventoryBranchDetailComponent {
+export class AdminInventoryBranchDetailComponent  implements OnInit {
   @Input() inventoryBranch: InventoryBranch | undefined;
   inventoryBranches: InventoryBranch[] = [];
   ingredients: Ingredient[] = [];
@@ -43,8 +43,8 @@ export class AdminInventoryBranchDetailComponent {
     this.inventoryBranchForm = this.formBuilder.group({
       inventoryBranchId: ['', [Validators.required]],
       ingredientId: ['', [Validators.required]],
-      supplier: ['', [Validators.required]],
-      restaurant: ['', [Validators.required]]
+      supplierId: ['', [Validators.required]],
+      restaurantId: ['', [Validators.required]]
     });
   }
 
@@ -75,9 +75,9 @@ export class AdminInventoryBranchDetailComponent {
     if (this.inventoryBranch) {
       this.inventoryBranchForm.patchValue({
         inventoryBranchId: this.inventoryBranch.inventoryBranchId,
-        ingredient: this.inventoryBranch.ingredientId,
-        supplier: this.inventoryBranch.supplier,
-        restaurant: this.inventoryBranch.restaurant,
+        ingredientId: this.inventoryBranch.ingredientId,
+        supplierId: this.inventoryBranch.supplierId,
+        restaurantId: this.inventoryBranch.restaurantId,
       });
     }
   }
@@ -87,9 +87,9 @@ export class AdminInventoryBranchDetailComponent {
     if (this.inventoryBranchForm.valid) {
       const updateInventoryBranch: InventoryBranch = {
         inventoryBranchId: this.inventoryBranchForm.get('inventoryBranchId')?.value,
-        ingredientId: this.inventoryBranchForm.get('ingredient')?.value,
-        supplier: this.inventoryBranchForm.get('supplier')?.value,
-        restaurant: this.inventoryBranchForm.get('restaurant')?.value
+        ingredientId: this.inventoryBranchForm.get('ingredientId')?.value,
+        supplierId: this.inventoryBranchForm.get('supplierId')?.value,
+        restaurantId: this.inventoryBranchForm.get('restaurantId')?.value
       };
 
       this.inventoryBranchService.updateInventoryBranch(updateInventoryBranch).subscribe(() => {

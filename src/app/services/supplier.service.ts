@@ -42,11 +42,11 @@ export class SupplierService {
 
         }
 
-        const SupplierFromCache = this.suppliersCache.find(Supplier => Supplier.supplierId === id);
+        const supplierFromCache = this.suppliersCache.find(supplier => supplier.supplierId === id);
 
-        if (SupplierFromCache) {
+        if (supplierFromCache) {
 
-            return of(SupplierFromCache);
+            return of(supplierFromCache);
 
         } else {
 

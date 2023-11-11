@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Cart } from 'src/app/interfaces/cart';
@@ -13,7 +13,7 @@ import { EventService } from 'src/app/services/event.service';
   templateUrl: './admin-event-detail.component.html',
   styleUrls: ['./admin-event-detail.component.css']
 })
-export class AdminEventDetailComponent {
+export class AdminEventDetailComponent  implements OnInit {
   @Input() event: Event | undefined; 
   fieldNames: string[] = [];
   events: Event[] = []; 

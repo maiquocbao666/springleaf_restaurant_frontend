@@ -1,4 +1,4 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Restaurant } from 'src/app/interfaces/restaurant';
@@ -15,7 +15,7 @@ import { TableTypeService } from 'src/app/services/table-type.service';
   templateUrl: './admin-restaurant-table-detail.component.html',
   styleUrls: ['./admin-restaurant-table-detail.component.css']
 })
-export class AdminRestaurantTableDetailComponent {
+export class AdminRestaurantTableDetailComponent  implements OnInit {
   @Input() restaurantTable: RestaurantTable | undefined;
   tableTypes: TableType[] = [];
   tableStatuses: TableStatus[] = [];

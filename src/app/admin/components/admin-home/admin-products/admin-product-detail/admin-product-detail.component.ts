@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Category } from 'src/app/interfaces/category';
@@ -11,7 +11,7 @@ import { ProductService } from 'src/app/services/product.service';
   templateUrl: './admin-product-detail.component.html',
   styleUrls: ['./admin-product-detail.component.css']
 })
-export class AdminProductDetailComponent {
+export class AdminProductDetailComponent  implements OnInit {
   @Input() product: Product | undefined;
   products: Product[] = [];
   categories: Category[] = [];

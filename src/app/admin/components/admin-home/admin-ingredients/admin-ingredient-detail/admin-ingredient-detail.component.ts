@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
@@ -9,7 +9,7 @@ import { IngredientService } from 'src/app/services/ingredient.service';
   templateUrl: './admin-ingredient-detail.component.html',
   styleUrls: ['./admin-ingredient-detail.component.css']
 })
-export class AdminIngredientDetailComponent {
+export class AdminIngredientDetailComponent  implements OnInit {
   @Input() ingredient: Ingredient | undefined;
   fieldNames: string[] = [];
   ingredients: Ingredient[] = [];

@@ -1,1 +1,48 @@
-<label>Table status name: </label> <input type="text" name="" id="">
+<div class="container">
+    <h1>Trạng thái bàn</h1>
+    <form [formGroup]="tableStatusForm" (ngSubmit)="addTableStatus()">
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="exampleInputPassword1" class="form-label">Name</label>
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="name"
+                        placeholder="Nhập tên nhà cung cấp...">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-info">Save</button>
+    </form>
+    <div class="col-2">
+        <select class="form-select" (change)="onTableSizeChange($event)">
+            <option value="">Page</option>
+            <option *ngFor="let size of tableSizes">
+                {{size}}
+            </option>
+        </select>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let tableStatus of tableStatuses | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                <td>{{tableStatus.tableStatusId}}</td>
+                <td>{{tableStatus.name}}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary"
+                        (click)="openTableStatusDetailModal(tableStatus)">Edit</button>
+                    <button type="button" class="btn btn-outline-danger"
+                        (click)="deleteTableStatus(tableStatus)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <pagination-controls previousLabel="Prev" nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
+</div>

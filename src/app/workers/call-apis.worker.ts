@@ -2,8 +2,8 @@
 
 addEventListener('message', async ({ data }) => {
         console.log("Call Apis Worker Works", data);
-        const domain = 'https://springleafrestaurantbackend.onrender.com/public';
-        //const domain = 'http://localhost:8080/public';
+        // const domain = 'https://springleafrestaurantbackend.onrender.com/public';
+        const domain = 'http://localhost:8080/public';
         if (data === 'start') {
                 try {
                         const endpoints = [
@@ -21,14 +21,14 @@ addEventListener('message', async ({ data }) => {
                                 'favorites',
                                 'restaurantTables',
                                 'restaurants',
-                                //'ingredients',
+                                'ingredients',
                                 'inventories',
                                 'inventoryBranches',
                                 'products',
                                 //'menuItemIngredients',
                                 'mergeTables',
                                 //'orderThresholds',
-                                // 'suppliers',
+                                'suppliers',
                                 'tableStatuses',
                                 'orderTypes',
                                 'payments',
