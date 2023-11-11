@@ -7,68 +7,83 @@ import { catchError, map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  // private baseUrl = 'https://springleafrestaurantbackend.onrender.com/public'; // Thay đổi base URL của API của bạn
-  private baseUrl = 'http://localhost:8080/public';
+  private baseUrl = ''; // Thay đổi base URL của API của bạn
+  //private baseUrl = 'http://localhost:8080/public';
   constructor(private http: HttpClient) { }
 
-  request<T>(method: string, endpoint: string, data: any = null): Observable<T> {
+  setUrl(uri: string) {
+    this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public' + uri;
+  }
 
-    const headers = new HttpHeaders({
+  request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders | null = null): Observable<T> {
 
-      'Content-Type': 'application/json',
+    let headers: HttpHeaders;
+
+    if (customHeaders) {
+      headers = customHeaders.append('Content-Type', 'application/json');
       // Thêm các headers khác nếu cần
-
-    });
-
-    const url = `${this.baseUrl}/${endpoint}`;
+    } else {
+      headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        // Thêm các headers khác nếu cần
+      });
+    }
 
     switch (method.toLowerCase()) {
 
       case 'get':
 
-        return this.http.get<T>(url, { headers }).pipe(
+        this.setUrl(``);
+
+        return this.http.get<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
 
           }),
 
-          catchError(this.handleError<T>(`GET ${url}`))
+          catchError(this.handleError<T>(`GET ${this.baseUrl}`))
 
         );
 
       case 'post':
 
-        return this.http.post<T>(url, data, { headers }).pipe(
+        this.setUrl(`create/${endpoint}`);
+
+        return this.http.post<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
 
           }),
 
-          catchError(this.handleError<T>(`POST ${url}`))
+          catchError(this.handleError<T>(`POST ${this.baseUrl}`))
 
         );
 
       case 'put':
 
-        return this.http.put<T>(url, data, { headers }).pipe(
+        this.setUrl(`update/${endpoint}`);
+
+        return this.http.put<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
 
           }),
 
-          catchError(this.handleError<T>(`PUT ${url}`))
+          catchError(this.handleError<T>(`PUT ${this.baseUrl}`))
 
         );
 
       case 'delete':
 
-        return this.http.delete<T>(url, { headers }).pipe(
+        this.setUrl(`delete/${endpoint}`);
+
+        return this.http.delete<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
 
           }),
-          
-          catchError(this.handleError<T>(`DELETE ${url}`))
+
+          catchError(this.handleError<T>(`DELETE ${this.baseUrl}`))
 
         );
 
