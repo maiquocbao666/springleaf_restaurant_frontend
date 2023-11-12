@@ -1,6 +1,6 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
@@ -29,15 +29,8 @@ export class AdminRestaurantTableDetailComponent {
     private tableStatusService: TableStatusService,
     private restaurantService: RestaurantService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
     public activeModal: NgbActiveModal,
-    private zone: NgZone
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.restaurantTableForm = this.formBuilder.group({
       tableId: ['', [Validators.required]],
       tableName: ['', [Validators.required]],

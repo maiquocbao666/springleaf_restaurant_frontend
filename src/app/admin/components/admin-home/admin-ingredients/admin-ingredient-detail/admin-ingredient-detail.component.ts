@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { IngredientService } from 'src/app/services/ingredient.service';
 
@@ -18,13 +18,7 @@ export class AdminIngredientDetailComponent {
   constructor(
     private ingredientService: IngredientService,
     private formBuilder: FormBuilder,
-    public activeModal: NgbActiveModal,
-    private modalService: NgbModal,) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
+    public activeModal: NgbActiveModal) {
     this.ingredientForm = this.formBuilder.group({
       ingredientId: ['', [Validators.required]],
       name: ['', [Validators.required]],

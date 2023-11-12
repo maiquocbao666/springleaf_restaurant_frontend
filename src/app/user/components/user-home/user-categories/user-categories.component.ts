@@ -1,6 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject, Subscription, distinctUntilChanged, map, switchMap } from 'rxjs';
+import { Observable, Subject, distinctUntilChanged, map, switchMap } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -19,13 +18,8 @@ export class UserCategoriesComponent {
 
   constructor(
     private categoryService: CategoryService,
-    private route: ActivatedRoute,
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
+    
   }
 
 

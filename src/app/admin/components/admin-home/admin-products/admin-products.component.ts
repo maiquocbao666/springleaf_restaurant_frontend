@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
@@ -27,16 +26,10 @@ export class AdminProductsComponent {
 
   constructor(
     private productService: ProductService,
-    private route: ActivatedRoute,
     private categoryService: CategoryService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.productForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],

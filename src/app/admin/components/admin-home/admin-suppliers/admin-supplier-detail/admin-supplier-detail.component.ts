@@ -1,6 +1,6 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Supplier } from 'src/app/interfaces/supplier';
 import { SupplierService } from 'src/app/services/supplier.service';
 
@@ -18,14 +18,7 @@ export class AdminSupplierDetailComponent {
   constructor(
     private supplierService: SupplierService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
-    public activeModal: NgbActiveModal,
-    private zone: NgZone) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
+    public activeModal: NgbActiveModal) {
     this.supplierForm = this.formBuilder.group({
       supplierId: ['', [Validators.required]],
       name: ['', [Validators.required]],

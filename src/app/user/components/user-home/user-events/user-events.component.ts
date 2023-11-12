@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
 
@@ -11,13 +10,7 @@ import { Event } from 'src/app/interfaces/event';
 export class UserEventsComponent {
   events: Event[] = [];
 
-  constructor(private eventService: EventService, private route: ActivatedRoute) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
-  }
+  constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
     this.getEvents();

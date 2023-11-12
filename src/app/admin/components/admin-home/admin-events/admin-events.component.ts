@@ -37,11 +37,6 @@ export class AdminEventsComponent {
     private formBuilder: FormBuilder,
     private modalService: NgbModal
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.eventForm = this.formBuilder.group({
       eventId: ['', [Validators.required]],
       eventName: ['', [Validators.required]],

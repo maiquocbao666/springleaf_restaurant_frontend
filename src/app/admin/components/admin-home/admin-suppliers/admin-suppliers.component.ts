@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Supplier } from 'src/app/interfaces/supplier';
 import { SupplierService } from 'src/app/services/supplier.service';
@@ -24,15 +23,9 @@ export class AdminSuppliersComponent {
 
   constructor(
     private supplierService: SupplierService,
-    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private modalService: NgbModal
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.supplierForm = this.formBuilder.group({
       // supplierId: ['', [Validators.required]],
       name: ['', [Validators.required]],

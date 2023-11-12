@@ -18,14 +18,7 @@ export class AdminComboDetailComponent {
   constructor(
     private comboService: ComboService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
-    public activeModal: NgbActiveModal,
-    private zone: NgZone) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
+    public activeModal: NgbActiveModal) {
     this.comboForm = this.formBuilder.group({
       comboId: ['', [Validators.required]],
       comboName: ['', [Validators.required]],

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { InventoryBranch } from 'src/app/interfaces/inventory-branch';
 import { Restaurant } from 'src/app/interfaces/restaurant';
@@ -35,14 +34,8 @@ export class UserInventoryBranchesComponent {
     private supplierService: SupplierService,
     private ingredientService: IngredientService,
     private restaurantService: RestaurantService,
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private formBuilder: FormBuilder
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.inventoryBranchForm = this.formBuilder.group({
       // inventoryBranchId: ['', [Validators.required]],
       supplier: ['', [Validators.required]],

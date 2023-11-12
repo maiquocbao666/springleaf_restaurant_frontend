@@ -1,6 +1,6 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Delivery } from 'src/app/interfaces/delivery';
 import { InventoryBranch } from 'src/app/interfaces/inventory-branch';
 import { DeliveryService } from 'src/app/services/delivery.service';
@@ -22,15 +22,9 @@ export class AdminDeliveryDetailComponent {
     private inventoryBranchService: InventoryBranchService,
     private deliveryService: DeliveryService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
-    public activeModal: NgbActiveModal,
-    private zone: NgZone
+    public activeModal: NgbActiveModal
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
+    
     this.deliveryForm = this.formBuilder.group({
       deliveryId: ['', [Validators.required]],
       inventoryBrand: ['', [Validators.required]],

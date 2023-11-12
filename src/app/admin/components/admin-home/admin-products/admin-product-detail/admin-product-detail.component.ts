@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Category } from 'src/app/interfaces/category';
 import { Product } from 'src/app/interfaces/product';
 import { CategoryService } from 'src/app/services/category.service';
@@ -23,13 +23,7 @@ export class AdminProductDetailComponent {
     private categoryService: CategoryService,
     private formBuilder: FormBuilder,
     public activeModal: NgbActiveModal,
-    private modalService: NgbModal,
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.productForm = this.formBuilder.group({
       menuItemId: ['', [Validators.required]],
       name: ['', [Validators.required]],

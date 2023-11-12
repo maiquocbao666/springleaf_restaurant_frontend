@@ -20,14 +20,9 @@ export class UserCartComponent implements OnInit {
 
   constructor(
     private cartDetailsService: CartDetailService,
-    private route: ActivatedRoute,
     private cartService: CartService
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
+    
   }
 
   ngOnInit(): void {

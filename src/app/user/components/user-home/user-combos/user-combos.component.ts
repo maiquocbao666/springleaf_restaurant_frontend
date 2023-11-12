@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Combo } from 'src/app/interfaces/combo';
 import { ComboService } from 'src/app/services/combo.service';
@@ -25,14 +24,8 @@ export class UserCombosComponent {
 
   constructor(
     private comboService: ComboService,
-    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private modalService: NgbModal) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.comboForm = this.formBuilder.group({
       comboId: ['', [Validators.required]],
       comboName: ['', [Validators.required]],

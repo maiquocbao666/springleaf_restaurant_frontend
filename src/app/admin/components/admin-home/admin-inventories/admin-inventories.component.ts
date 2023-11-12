@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Ingredient } from 'src/app/interfaces/ingredient';
@@ -31,17 +30,11 @@ export class AdminInventoriesComponent {
 
   constructor(
     private inventoryService: InventoryService,
-    private route: ActivatedRoute,
     private ingredientService: IngredientService,
     private supplierService: SupplierService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.inventoryForm = this.formBuilder.group({
       inventoryId: ['', [Validators.required]],
       ingredientId: ['', [Validators.required]],
