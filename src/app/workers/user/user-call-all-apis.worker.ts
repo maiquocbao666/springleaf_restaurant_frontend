@@ -3,8 +3,8 @@
 addEventListener('message', async (event) => {
     const { type, loginData, token, tokenUser } = event.data;
     console.log("Call all this User Apis Worker Works", type);
-    const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
-    //const domain = 'http://localhost:8080/auth';
+    //const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
+    const domain = 'http://localhost:8080/auth';
     if (type === 'check_access_token') {
         const  accessToken  = token;
         try {

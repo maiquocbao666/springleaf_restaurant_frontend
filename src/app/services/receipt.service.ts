@@ -1,4 +1,3 @@
-import { Restaurant } from '../interfaces/restaurant';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -78,24 +77,33 @@ export class ReceiptService {
     deleteReceipt(id: number): Observable<any> {
 
         const url = `${this.receiptUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
+
             tap(() => {
-    
+
                 const index = this.receiptsCache.findIndex(receipt => receipt.receiptId === id);
-    
+
                 if (index !== -1) {
-    
+
                     this.receiptsCache.splice(index, 1);
                     localStorage.setItem(this.receiptsUrl, JSON.stringify(this.receiptsCache));
-    
+
                 }
-    
+
             })
         );
-    
+
     }
-    
+
+    updateReceiptCache(updatedReceipt: Receipt): void {
+        if (this.receiptsCache) {
+            const index = this.receiptsCache.findIndex(receipt => receipt.receiptId === updatedReceipt.receiptId);
+
+            if (index !== -1) {
+                this.receiptsCache[index] = updatedReceipt;
+            }
+        }
+    }
 
 }

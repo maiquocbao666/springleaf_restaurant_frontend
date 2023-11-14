@@ -3,13 +3,14 @@ import { AuthenticationService } from "./services/authentication.service";
 import { CategoryService } from "./services/category.service";
 import { ComboDetailService } from "./services/combo-detail.service";
 import { ComboService } from "./services/combo.service";
-import { DeliveryDetailService } from "./services/delivery-detail.service";
+// import { DeliveryDetailService } from "./services/delivery-detail.service";
 import { DeliveryOrderDetailService } from "./services/delivery-order-detail.service";
 import { DeliveryOrderStatusService } from "./services/delivery-order-status.service";
 import { DeliveryOrderService } from "./services/delivery-order.service";
-import { DeliveryService } from "./services/delivery.service";
 import { EventService } from "./services/event.service";
 import { FavoriteService } from "./services/favorite.service";
+import { GoodsReceiptDetailService } from "./services/goods-receipt-detail.service";
+import { GoodsReceiptService } from "./services/goods-receipt.service";
 import { IngredientService } from "./services/ingredient.service";
 import { InventoryBranchService } from "./services/inventory-branch.service";
 import { InventoryService } from "./services/inventory.service";
@@ -59,15 +60,15 @@ export class AppComponent implements OnDestroy {
     private eventsService: EventService,
     private restaurantTablesService: RestaurantTableService,
     private restaurantsService: RestaurantService,
-    private suppliersService: SupplierService,
+   private suppliersService: SupplierService,
     private tableStatusesService: TableStatusService,
-    private ingredientsService: IngredientService,
+    // private ingredientsService: IngredientService,
     //private billsService: BillService,
     //private billDetailsService: BillDetailService,
     //private cartsService: CartService,
     private comboDetailsService: ComboDetailService,
-    private deliveriesService: DeliveryService,
-    private deliveryDetailsService: DeliveryDetailService,
+    //private goodsReceiptsService: GoodsReceiptService,
+    //private goodsReceiptDetailsService: GoodsReceiptDetailService,
     private deliveryOrdersService: DeliveryOrderService,
     private deliveryOrderStatusesService: DeliveryOrderStatusService,
     private deliveryOrderDetailsService: DeliveryOrderDetailService,
@@ -77,7 +78,7 @@ export class AppComponent implements OnDestroy {
     //private menuItemIngredientsService: MenuItemIngredientService,
     //private orderThresholdsService: OrderThresholdService,
     private mergeTablesService: MergeTableService,
-    private orderTypesService: OrderTypeService,
+    //private orderTypesService: OrderTypeService,
     private paymentsService: PaymentService,
     private ratingsService: RatingService,
     private receiptsService: ReceiptService,
@@ -93,15 +94,15 @@ export class AppComponent implements OnDestroy {
       events: { cache: this.eventsService.eventsCache, localStorageKey: 'events' },
       restaurantTables: { cache: this.restaurantTablesService.restaurantTablesCache, localStorageKey: 'restaurantTables' },
       restaurants: { cache: this.restaurantsService.restaurantsCache, localStorageKey: 'restaurants' },
-      suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
+      // suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
       tableStatuses: { cache: this.tableStatusesService.tableStatusesCache, localStorageKey: 'tableStatuses' },
-      ingredients: { cache: this.ingredientsService.ingredientsCache, localStorageKey: 'ingredients' },
+      // ingredients: { cache: this.ingredientsService.ingredientsCache, localStorageKey: 'ingredients' },
       //bills: { cache: this.billsService.billsCache, localStorageKey: 'bills' },
       //billDetails: { cache: this.billDetailsService.billDetailsCache, localStorageKey: 'billDetails' },
       //carts: { cache: this.cartsService.cartsCache, localStorageKey: 'carts' },
       comboDetails: { cache: this.comboDetailsService.comboDetailsCache, localStorageKey: 'comboDetails' },
-      deliveries: { cache: this.deliveriesService.deliveriesCache, localStorageKey: 'deliveries' },
-      deliveryDetails: { cache: this.deliveryDetailsService.deliveryDetailsCache, localStorageKey: 'deliveryDetails' },
+      //goodsReceipts: { cache: this.goodsReceiptsService.goodsReceiptsCache, localStorageKey: ' goodsReceipts' },
+      //goodsReceiptDetails: { cache: this.goodsReceiptDetailsService.goodsReceiptDetailsCache, localStorageKey: 'goodsReceiptDetails' },
       deliveryOrders: { cache: this.deliveryOrdersService.deliveryOrdersCache, localStorageKey: 'deliveryOrders' },
       deliveryOrderStatuses: { cache: this.deliveryOrderStatusesService.deliveryOrderStatusesCache, localStorageKey: 'deliveryOrderStatuses' },
       deliveryOrderDetails: { cache: this.deliveryOrderDetailsService.deliveryOrderDetailsCache, localStorageKey: 'deliveryOrderDetails' },
@@ -111,7 +112,7 @@ export class AppComponent implements OnDestroy {
       //menuItemIngredients: { cache: this.menuItemIngredientsService.menuItemIngredientsCache, localStorageKey: 'menuItemIngredients' },
       //orderThresholds: { cache: this.orderThresholdsService.orderThresholdsCache, localStorageKey: 'orderThresholds' },
       mergeTables: { cache: this.mergeTablesService.mergeTablesCache, localStorageKey: 'mergeTables' },
-      orderTypes: { cache: this.orderTypesService.orderTypesCache, localStorageKey: 'orderTypes' },
+      // orderTypes: { cache: this.orderTypesService.orderTypesCache, localStorageKey: 'orderTypes' },
       payments: { cache: this.paymentsService.paymentsCache, localStorageKey: 'payments' },
       ratings: { cache: this.ratingsService.ratingsCache, localStorageKey: 'ratings' },
       receipts: { cache: this.receiptsService.receiptsCache, localStorageKey: 'receipts' },

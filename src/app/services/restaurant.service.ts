@@ -117,5 +117,15 @@ export class RestaurantService {
     
     }
     
+    updateRestaurantCache(updatedRestaurant: Restaurant): void {
+        if (this.restaurantsCache) {
+          const index = this.restaurantsCache.findIndex(restaurant => restaurant.restaurantId === updatedRestaurant.restaurantId);
+      
+          if (index !== -1) {
+            this.restaurantsCache[index] = updatedRestaurant;
+          }
+        }
+      }
+      
 
 }

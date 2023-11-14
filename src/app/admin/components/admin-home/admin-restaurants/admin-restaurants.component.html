@@ -1,0 +1,75 @@
+<div class="container">
+  <h1>Nhà hàng</h1>
+  <form [formGroup]="restaurantForm" (ngSubmit)="addRestaurant()">
+      <div class="row">
+          <div class="col-sm-6">
+              <label for="exampleInputPassword1" class="form-label">Tên nhà hàng</label>
+              <div class="mb-3">
+                  <input type="text" class="form-control" formControlName="restaurantName"
+                      placeholder="Nhập tên nhà hàng...">
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <label for="exampleInputPassword1" class="form-label">Địa chỉ</label>
+              <div class="mb-3">
+                  <input type="text" class="form-control" formControlName="address"
+                      placeholder="Nhập địa chỉ...">
+              </div>
+          </div>
+          <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Số điện thoại</label>
+              <div class="mb-3">
+                  <input type="text" class="form-control" formControlName="phone"
+                      placeholder="Nhập số điện thoại...">
+              </div>
+          </div>
+          <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Email</label>
+              <div class="mb-3">
+                  <input type="email" class="form-control" formControlName="email"
+                      placeholder="Nhập địa chỉ email...">
+              </div>
+          </div>
+      </div>
+      <button type="submit" class="btn btn-info">Lưu</button>
+  </form>
+  <div class="col-2">
+      <select class="form-select" (change)="onTableSizeChange($event)">
+          <option value="">Trang</option>
+          <option *ngFor="let size of tableSizes">
+              {{size}}
+          </option>
+      </select>
+  </div>
+  <table class="table">
+      <thead>
+          <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Tên nhà hàng</th>
+              <th scope="col">Địa chỉ</th>
+              <th scope="col">Số điện thoại</th>
+              <th scope="col">Email</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr
+              *ngFor="let restaurant of restaurants | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+              <td>{{restaurant.restaurantId}}</td>
+              <td>{{restaurant.restaurantName}}</td>
+              <td>{{restaurant.address}}</td>
+              <td>{{restaurant.phone}}</td>
+              <td>{{restaurant.email}}</td>
+              <td>
+                  <button type="button" class="btn btn-outline-primary"
+                      (click)="openRestaurantDetailModal(restaurant)">Sửa</button>
+                  <button type="button" class="btn btn-outline-danger"
+                      (click)="deleteRestaurant(restaurant)">Xóa</button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  <div class="text-center">
+      <pagination-controls previousLabel="Trước" nextLabel="Sau"
+          (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

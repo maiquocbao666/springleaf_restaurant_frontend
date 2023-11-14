@@ -1,5 +1,5 @@
-export interface Delivery {
-    deliveryId: number;
+export interface GoodsReceipt {
+    goodsReceiptId: number;
     inventoryBrand: number;
     date: Date;
     warehouseManager: number;

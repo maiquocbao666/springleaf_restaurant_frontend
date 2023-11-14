@@ -57,12 +57,16 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { AdminComboDetailComponent } from './admin/components/admin-home/admin-combos/admin-combo-detail/admin-combo-detail.component';
 import { AdminCombosComponent } from './admin/components/admin-home/admin-combos/admin-combos.component';
-import { AdminDeliveriesComponent } from './admin/components/admin-home/admin-deliveries/admin-deliveries.component';
-import { AdminDeliveryDetailComponent } from './admin/components/admin-home/admin-deliveries/admin-delivery-detail/admin-delivery-detail.component';
 import { AdminEventDetailComponent } from './admin/components/admin-home/admin-events/admin-event-detail/admin-event-detail.component';
 import { AdminEventsComponent } from './admin/components/admin-home/admin-events/admin-events.component';
+import { AdminGoodsReceiptDetailComponent } from './admin/components/admin-home/admin-goods-receipts/admin-goods-receipt-detail/admin-goods-receipt-detail.component';
+import { AdminGoodsReceiptsComponent } from './admin/components/admin-home/admin-goods-receipts/admin-goods-receipts.component';
 import { AdminInventoryBranchDetailComponent } from './admin/components/admin-home/admin-inventory-branches/admin-inventory-branch-detail/admin-inventory-branch-detail.component';
 import { AdminInventoryBranchesComponent } from './admin/components/admin-home/admin-inventory-branches/admin-inventory-branches.component';
+import { AdminReceiptDetailComponent } from './admin/components/admin-home/admin-receipts/admin-receipt-detail/admin-receipt-detail.component';
+import { AdminReceiptsComponent } from './admin/components/admin-home/admin-receipts/admin-receipts.component';
+import { AdminRestaurantDetailComponent } from './admin/components/admin-home/admin-restaurants/admin-restaurant-detail/admin-restaurant-detail.component';
+import { AdminRestaurantsComponent } from './admin/components/admin-home/admin-restaurants/admin-restaurants.component';
 import { AdminTableStatusDetailComponent } from './admin/components/admin-home/admin-table-statuses/admin-table-status-detail/admin-table-status-detail.component';
 import { AdminTableStatusesComponent } from './admin/components/admin-home/admin-table-statuses/admin-table-statuses.component';
 import { AdminTableTypeDetailComponent } from './admin/components/admin-home/admin-table-types/admin-table-type-detail/admin-table-type-detail.component';
@@ -112,14 +116,19 @@ import { AppComponent } from './app.component';
     AdminInventoryBranchDetailComponent,
     AdminCombosComponent,
     AdminComboDetailComponent,
-    AdminDeliveriesComponent,
-    AdminDeliveryDetailComponent,
+    AdminGoodsReceiptDetailComponent,
     AdminEventsComponent,
     AdminEventDetailComponent,
     AdminTableStatusesComponent,
     AdminTableStatusDetailComponent,
     AdminTableTypesComponent,
     AdminTableTypeDetailComponent,
+    AdminGoodsReceiptsComponent,
+    AdminRestaurantDetailComponent,
+    AdminRestaurantsComponent,
+    AdminReceiptDetailComponent,
+    AdminReceiptsComponent,
+
 
     ChatComponent,
     LoginComponent,

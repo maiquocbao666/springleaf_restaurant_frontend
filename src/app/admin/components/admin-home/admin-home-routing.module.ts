@@ -89,10 +89,10 @@ const routes: Routes = [
       }
       ,
       {
-        path: 'deliveries',
+        path: 'goodsReceipts',
         loadChildren: () =>
-          import('./admin-deliveries/admin-deliveries.module').then(
-            (m) => m.AdminDeliveriesModule
+          import('./admin-goods-receipts/admin-goods-receipts.module').then(
+            (m) => m.AdminGoodsReceiptsModule
           ),
       }
       ,
@@ -110,7 +110,21 @@ const routes: Routes = [
           import('./admin-table-types/admin-table-types.module').then(
             (m) => m.AdminTableTypesModule
           ),
-      }
+      },
+      {
+        path: 'restaurants',
+        loadChildren: () =>
+          import('./admin-restaurants/admin-restaurants.module').then(
+            (m) => m.AdminRestaurantsModule
+          ),
+      },
+      {
+        path: 'receipts',
+        loadChildren: () =>
+          import('./admin-receipts/admin-receipts.module').then(
+            (m) => m.AdminReceiptsModule
+          ),
+      },
     ]
   },
   {

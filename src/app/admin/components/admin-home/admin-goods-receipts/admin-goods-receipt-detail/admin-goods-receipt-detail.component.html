@@ -5,7 +5,7 @@
     </button>
   </div>
   <h1>Cập nhật </h1>
-  <form [formGroup]="deliveryForm" (ngSubmit)="updateDelivery()">
+  <form [formGroup]="goodsReceiptForm" (ngSubmit)="updateGoodsReceipt()">
     <div class="mb-3">
       <label for="inventoryBranch" class="form-label">Chi nhánh hàng tồn</label>
       <div class="mb-3">
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="mb-3">
-      <label for="date" class="form-label">Ngày giao hàng</label>
+      <label for="date" class="form-label">Ngày nhận hàng</label>
       <div class="mb-3">
         <input type="date" class="form-control" formControlName="date">
       </div>
@@ -41,3 +41,4 @@
       Đóng
     </button>
   </div>
+</div>

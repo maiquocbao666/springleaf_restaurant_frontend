@@ -1,8 +1,9 @@
+
 export interface Receipt {
     receiptId: number;
-    userId: string;
+    userId: number;
     supplier: number;
     date: Date;
-    totalAmount: Number;
+    totalAmount: number;
     inventory: number;
 }

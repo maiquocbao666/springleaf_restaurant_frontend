@@ -1,18 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  private currentUserSubject: BehaviorSubject<User | null>;
+  public currentUser: Observable<User | null>; // Có thể xóa nếu không cần
+  
   private baseUrl = ''; // Thay đổi base URL của API của bạn
-  //private baseUrl = 'http://localhost:8080/public';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User | null>(null);
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+  public setCurrentUser(user: User | null) {
+    this.currentUserSubject.next(user);
+    console.log('Api service user: ' + user?.username + ' roleId: ' + user?.roleId);
+  }
 
   setUrl(uri: string) {
-    this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public' + uri;
+    //this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public' + uri;
+    this.baseUrl = 'http://localhost:8080/public/' + uri;
   }
 
   request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders | null = null): Observable<T> {
