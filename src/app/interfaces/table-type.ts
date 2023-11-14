@@ -1,4 +1,4 @@
 export interface TableType {
-  tableTypeId: number;
+  tableTypeId?: number;
   name: string;
 }

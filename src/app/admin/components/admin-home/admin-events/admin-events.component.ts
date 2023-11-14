@@ -97,7 +97,16 @@ export class AdminEventsComponent {
     const numberOfGuests = this.eventForm.get('numberOfGuests')?.value;
     const combo = this.eventForm.get('combo')?.value;
     const order = this.eventForm.get('order')?.value;
-    this.eventService.addEvent({ eventName, eventDate, numberOfGuests, combo, order } as Event)
+
+    const newEvent: Event = {
+      eventName: eventName,
+      eventDate: eventDate,
+      numberOfGuests: numberOfGuests,
+      combo: combo,
+      order: order,
+    };
+
+    this.eventService.addEvent(newEvent)
       .subscribe(event => {
         this.events.push(event);
         this.eventForm.reset();
@@ -106,8 +115,15 @@ export class AdminEventsComponent {
   }
 
   deleteEvent(event: Event): void {
-    this.events = this.events.filter(i => i !== event);
-    this.eventService.deleteEvent(event.eventId).subscribe();
+
+    if (event.eventId) {
+      this.events = this.events.filter(i => i !== event);
+      this.eventService.deleteEvent(event.eventId).subscribe();
+    } else {
+      console.log("Không có eventId");
+    }
+
+
   }
 
   openEventDetailModal(event: Event) {

@@ -1,5 +1,5 @@
 export interface OrderThreshold {
-    orderThresholdId: number;
+    orderThresholdId?: number;
     reorderPoint: number;
     ingredient: number;
     inventoryBranch: number;

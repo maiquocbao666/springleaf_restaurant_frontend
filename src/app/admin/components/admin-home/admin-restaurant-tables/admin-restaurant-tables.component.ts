@@ -103,13 +103,20 @@ export class AdminRestaurantTablesComponent {
   }
 
   addRestaurantTable(): void {
-    const tableId = 0;
+
     const tableName = this.restaurantTableForm.get('tableName')?.value?.trim() ?? '';
     const tableTypeId = this.restaurantTableForm.get('tableTypeId')?.value;
     const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
     const restaurantId = this.restaurantTableForm.get('restaurantId')?.value;
 
-    this.restaurantTablesService.addRestaurantTable({ tableId, tableName, tableTypeId, tableStatusId, restaurantId } as RestaurantTable)
+    const newRestaurantTable: RestaurantTable = {
+      tableName: tableName,
+      tableTypeId: tableTypeId,
+      tableStatusId: tableStatusId,
+      restaurantId: restaurantId,
+    };
+
+    this.restaurantTablesService.addRestaurantTable(newRestaurantTable)
       .subscribe(restaurantTable => {
         this.restaurantTables.push(restaurantTable);
         this.restaurantTableForm.reset();
@@ -117,8 +124,15 @@ export class AdminRestaurantTablesComponent {
   }
 
   deleteTable(restaurantTable: RestaurantTable): void {
-    this.restaurantTables = this.restaurantTables.filter(i => i !== restaurantTable);
-    this.restaurantTablesService.deleteRestaurantTable(restaurantTable.tableId).subscribe();
+
+    if (restaurantTable.tableId) {
+      this.restaurantTables = this.restaurantTables.filter(i => i !== restaurantTable);
+      this.restaurantTablesService.deleteRestaurantTable(restaurantTable.tableId).subscribe();
+    } {
+      console.log("Không có restaurantTableId");
+    }
+
+
   }
 
   openRestaurantTableDetailModal(restaurantTable: RestaurantTable) {

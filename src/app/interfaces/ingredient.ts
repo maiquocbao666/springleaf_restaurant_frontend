@@ -1,5 +1,5 @@
 export interface Ingredient {
-    ingredientId: number;
+    ingredientId?: number;
     name: string;
     description: string;
     orderThreshold: number;

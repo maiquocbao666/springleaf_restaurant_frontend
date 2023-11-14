@@ -56,7 +56,7 @@ export class UserRestaurantTablesComponent {
   }
 
   bookTable(): void {
-    if (this.authenticationService.getUserCache() === null) {
+    if (!this.authenticationService.getUserCache()) {
       this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
     } else {
       this.toastService.showSuccess("Đặt bàn thành công");

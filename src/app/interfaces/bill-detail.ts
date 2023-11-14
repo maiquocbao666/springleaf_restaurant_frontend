@@ -1,5 +1,5 @@
 export interface BillDetail {
-    billDetailId: number;
+    billDetailId?: number;
     menuItem: number;
     quantity: number;
     bill: number;

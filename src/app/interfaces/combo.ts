@@ -1,5 +1,5 @@
 export interface Combo {
-    comboId: number;
+    comboId?: number;
     comboName: string;
     comboUser: number;
     totalAmount: number;

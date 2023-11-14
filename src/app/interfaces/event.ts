@@ -1,5 +1,5 @@
 export interface Event {
-    eventId: number;
+    eventId?: number;
     eventName: string;
     eventDate: Date;
     numberOfGuests: number;

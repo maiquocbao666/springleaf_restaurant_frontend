@@ -18,9 +18,9 @@ export class UserProductsComponent implements OnInit {
   categories$!: Observable<Category[]>;
   products!: Product[];
   categories: Category[] = [];
-  categoryId: number | undefined; // Khởi tạo categoryId là undefined
+  categoryId!: number; // Khởi tạo categoryId là undefined
   visibleProductCount: number = 12; // Số sản phẩm ban đầu hiển thị
-  remainingProducts: number | undefined;
+  remainingProducts!: number;
   user: User | null = null;
 
   constructor(
@@ -43,7 +43,7 @@ export class UserProductsComponent implements OnInit {
     this.getCategories();
     this.route.paramMap.subscribe(paramMap => {
       const categoryIdString = paramMap.get('id');
-      if (categoryIdString !== null) {
+      if (categoryIdString) {
         this.categoryId = parseInt(categoryIdString, 10);
         this.getProductsByCategoryId();
       }
@@ -84,7 +84,7 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProductsByCategoryId(): void {
-    if (this.categoryId !== undefined) {
+    if (this.categoryId) {
       this.productService.getProductsByCategoryId(this.categoryId)
         .subscribe(products => {
           this.products = products;
@@ -92,19 +92,25 @@ export class UserProductsComponent implements OnInit {
     }
   }
 
-  addToCart(productId: number): void {
-      this.productService.addToCart(productId).subscribe(respone =>{
-
-      },
-      error => {
-        if (error.status === 401) {
-          alert("vui lòng đăng nhập")
-        } else {
-          // Xử lý các lỗi khác
+  addToCart(product: Product): void {
+    if (product.menuItemId) {
+      this.productService.addToCart(product.menuItemId).subscribe(
+        response => {
+          // Handle the successful response, if needed
+        },
+        error => {
+          if (error.status === 401) {
+            alert("Vui lòng đăng nhập");
+          } else {
+            // Handle other errors
+          }
         }
-      });
+      );
+    } else {
+      console.error("Product ID is undefined. Cannot add to cart.");
     }
-  
-    
+  }
+
+
 
 }

@@ -1,4 +1,4 @@
 export interface TableStatus {
-    tableStatusId: number;
+    tableStatusId?: number;
     name: string;
 }

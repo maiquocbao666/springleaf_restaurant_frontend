@@ -39,11 +39,6 @@ export class AdminTableTypesComponent {
     private formBuilder: FormBuilder,
     private modalService: NgbModal
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.tableTypeForm = this.formBuilder.group({
       tableTypeId: ['', [Validators.required]],
       name: ['', [Validators.required]],
@@ -61,7 +56,12 @@ export class AdminTableTypesComponent {
 
   addTableType(): void {
     const name = this.tableTypeForm.get('name')?.value?.trim() ?? '';
-    this.tableTypeService.addTableType({ name } as TableType)
+
+    const newTableType: TableType = {
+      name: name,
+    };
+
+    this.tableTypeService.addTableType(newTableType)
       .subscribe(tableType => {
         this.tableTypes.push(tableType);
         this.tableTypeForm.reset();
@@ -69,8 +69,15 @@ export class AdminTableTypesComponent {
   }
 
   deleteTableType(tableType: TableType): void {
-    this.tableTypes = this.tableTypes.filter(i => i !== tableType);
-    this.tableTypeService.deleteTableType(tableType.tableTypeId).subscribe();
+
+    if (tableType.tableTypeId) {
+      this.tableTypes = this.tableTypes.filter(i => i !== tableType);
+      this.tableTypeService.deleteTableType(tableType.tableTypeId).subscribe();
+    } else {
+      console.log("Không có tableTypeId");
+    }
+
+
   }
 
   openTableTypeDetailModal(tableType: TableType) {

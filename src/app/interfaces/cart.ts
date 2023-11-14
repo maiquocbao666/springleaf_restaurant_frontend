@@ -1,5 +1,5 @@
 export interface Cart {
-    orderId: number;
+    orderId?: number;
     userName: string;
     orderDate: Date;
     totalAmount: number;

@@ -1,5 +1,5 @@
 export interface GoodsReceipt {
-    goodsReceiptId: number;
+    goodsReceiptId?: number;
     inventoryBrand: number;
     date: Date;
     warehouseManager: number;

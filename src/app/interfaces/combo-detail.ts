@@ -1,5 +1,5 @@
 export interface ComboDetail {
-    comboDetailId: number;
+    comboDetailId?: number;
     combo: string;
     menuItem: number;
     quantity: number;

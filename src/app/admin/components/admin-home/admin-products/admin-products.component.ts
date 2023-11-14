@@ -101,8 +101,15 @@ export class AdminProductsComponent {
   }
 
   deleteProduct(product: Product): void {
-    this.products = this.products.filter(c => c !== product);
-    this.productService.deleteProduct(product.menuItemId).subscribe();
+
+    if(product.menuItemId){
+      this.products = this.products.filter(c => c !== product);
+      this.productService.deleteProduct(product.menuItemId).subscribe();
+    } else {
+      console.log("Không có menuItemId");
+    }
+
+    
   }
   openProductDetailModal(product: Product) {
     //this.getCategory();

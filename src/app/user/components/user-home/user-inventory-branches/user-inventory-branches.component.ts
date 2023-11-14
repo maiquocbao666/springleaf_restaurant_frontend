@@ -21,7 +21,7 @@ export class UserInventoryBranchesComponent {
   suppliers: Supplier[] = [];
   ingredients: Ingredient[] = [];
   inventoryBranchForm: FormGroup;
-  inventoryBranch: InventoryBranch | undefined;
+  inventoryBranch!: InventoryBranch;
   fieldNames: string[] = [];
 
   page: number = 1;

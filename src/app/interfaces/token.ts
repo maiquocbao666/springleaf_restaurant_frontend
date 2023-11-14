@@ -1,5 +1,5 @@
 export interface Token {
-    tokenId: number;
+    tokenId?: number;
     token: string;
     revoked: boolean;
     expired: boolean;

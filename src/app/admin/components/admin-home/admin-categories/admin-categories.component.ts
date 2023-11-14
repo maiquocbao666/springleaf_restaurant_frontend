@@ -18,7 +18,7 @@ export class AdminCategoriesComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
-  category: Category | undefined;
+  category!: Category;
   categories: Category[] = [];
   categoryForm: FormGroup;
 
@@ -61,9 +61,18 @@ export class AdminCategoriesComponent {
     const active = this.categoryForm.get('active')?.value;
     const description = this.categoryForm.get('description')?.value;
 
-    if (!name || active === null) { return; }
+    if (!name || active === null) {
+      return;
+    }
 
-    this.categoryService.addCategory({ name, active, description } as Category)
+    // Tạo một đối tượng Inventory và gán giá trị
+    const newCategory: Category = {
+     name: name,
+     active: active,
+     description: description,
+    };
+
+    this.categoryService.addCategory(newCategory)
       .subscribe(() => {
         this.getCategories();
         this.categoryForm.reset();
@@ -72,8 +81,12 @@ export class AdminCategoriesComponent {
   }
 
   deleteCategory(category: Category): void {
-    this.categories = this.categories.filter(c => c !== category);
-    this.categoryService.deleteCategory(category.categoryId).subscribe();
+    if (category.categoryId) {
+      this.categories = this.categories.filter(c => c !== category);
+      this.categoryService.deleteCategory(category.categoryId).subscribe();
+    } else {
+      console.error("Cannot delete category with undefined categoryId.");
+    }
   }
 
   getCategory(): void {

@@ -1,5 +1,5 @@
 export interface Bill {
-    billId: number;
+    billId?: number;
     userName: number;
     orderId: number;
     billTime: Date;

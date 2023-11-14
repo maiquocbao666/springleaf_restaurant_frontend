@@ -62,7 +62,14 @@ export class AdminSuppliersComponent {
     const address = this.supplierForm.get('address')?.value;
     const email = this.supplierForm.get('email')?.value;
 
-    this.supplierService.addSupplier({ name, phone, address, email } as Supplier)
+    const newSupplier: Supplier = {
+      name: name,
+      address: address,
+      phone: phone,
+      email: email
+    };
+
+    this.supplierService.addSupplier(newSupplier)
       .subscribe(supplier => {
         this.suppliers.push(supplier);
         this.supplierForm.reset();
@@ -70,8 +77,15 @@ export class AdminSuppliersComponent {
   }
 
   deleteSupplier(supplier: Supplier): void {
-    this.suppliers = this.suppliers.filter(i => i !== supplier);
-    this.supplierService.deleteSupplier(supplier.supplierId).subscribe();
+
+    if (supplier.supplierId) {
+      this.suppliers = this.suppliers.filter(i => i !== supplier);
+      this.supplierService.deleteSupplier(supplier.supplierId).subscribe();
+    } else {
+      console.log("Không có supplierId");
+    }
+
+
   }
 
   openSupplierDetailModal(supplier: Supplier) {

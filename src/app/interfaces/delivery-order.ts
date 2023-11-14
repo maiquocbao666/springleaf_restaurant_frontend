@@ -1,5 +1,5 @@
 export interface DeliveryOrder {
-    deliveryOrderId: number;
+    deliveryOrderId?: number;
     user: number;
     orderDate: Date;
     deliveryAddress: string;

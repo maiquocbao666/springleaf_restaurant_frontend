@@ -12,11 +12,7 @@ export class UserRestaurantsComponent {
   restaurants: Restaurant[] = [];
 
   constructor(private restaurantsService: RestaurantService, private route: ActivatedRoute) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
+
   }
 
   ngOnInit(): void {

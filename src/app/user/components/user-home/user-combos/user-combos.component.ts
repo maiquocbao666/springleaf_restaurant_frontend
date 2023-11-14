@@ -14,7 +14,7 @@ export class UserCombosComponent {
 
   combos: Combo[] = [];
   comboForm: FormGroup;
-  combo: Combo | undefined;
+  combo!: Combo;
   fieldNames: string[] = [];
 
   page: number = 1;
@@ -68,9 +68,13 @@ export class UserCombosComponent {
   }
 
   deleteCombo(combo: Combo): void {
-    this.combos = this.combos.filter(i => i !== combo);
-    this.comboService.deleteCombo(combo.comboId).subscribe();
-  }
+    if (combo.comboId) {
+        this.combos = this.combos.filter(i => i !== combo);
+        this.comboService.deleteCombo(combo.comboId).subscribe();
+    } else {
+        console.error("Combo ID is undefined. Cannot delete combo.");
+    }
+}
 
   openComboDetailModal(combo: Combo) {
     const modalRef = this.modalService.open(UserComboDetailComponent, { size: 'lg' });

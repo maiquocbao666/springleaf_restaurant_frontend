@@ -86,7 +86,7 @@ export class AdminInventoriesComponent {
     // Lấy giá trị từ các trường select
     const ingredientId = this.inventoryForm.get('ingredientId')?.value;
     const supplierId = this.inventoryForm.get('supplierId')?.value;
-    console.log("Giá trị đâu :" + ingredientId);
+    
     // Kiểm tra xem người dùng đã chọn giá trị hợp lệ cho cả hai trường chưa
     if (!ingredientId && !supplierId) {
       alert('Vui lòng chọn cả nguyên liệu và nhà cung cấp.');
@@ -94,7 +94,6 @@ export class AdminInventoriesComponent {
     }
 
     const newInventory: Inventory = {
-      inventoryId: 0,
       ingredientId: ingredientId,
       supplierId: supplierId
     };
@@ -108,8 +107,15 @@ export class AdminInventoriesComponent {
 
   }
   deleteInventory(inventory: Inventory): void {
-    this.inventories = this.inventories.filter(i => i !== inventory);
+
+    if(inventory.inventoryId){
+      this.inventories = this.inventories.filter(i => i !== inventory);
     this.inventoryService.deleteInventory(inventory.inventoryId).subscribe();
+    } else {
+      console.log("Không có inventoryId");
+    }
+
+    
   }
   openInventoryDetailModal(inventory: Inventory) {
     const modalRef = this.modalService.open(AdminInventoryDetailComponent, { size: 'lg' });

@@ -74,7 +74,14 @@ export class AdminGoodsReceiptsComponent {
     const warehouseManager = this.goodsReceiptForm.get('warehouseManager')?.value;
     const user = this.goodsReceiptForm.get('user')?.value;
 
-    this.goodsReceiptService.addGoodsReceipt({ inventoryBrand, date, warehouseManager, user } as GoodsReceipt)
+    const newGoodsReceipt: GoodsReceipt = {
+      inventoryBrand: inventoryBrand,
+      date: date,
+      warehouseManager: warehouseManager,
+      user: user,
+    };
+
+    this.goodsReceiptService.addGoodsReceipt(newGoodsReceipt)
       .subscribe(goodsReceipt => {
         this.goodsReceipts.push(goodsReceipt);
         this.getGoodsReceipts();
@@ -83,8 +90,15 @@ export class AdminGoodsReceiptsComponent {
   }
 
   deleteGoodsReceipt(goodsReceipt: GoodsReceipt): void {
-    this.goodsReceipts = this.goodsReceipts.filter(g => g !== goodsReceipt);
-    this.goodsReceiptService.deleteGoodsReceipt(goodsReceipt.goodsReceiptId).subscribe();
+
+    if(goodsReceipt.goodsReceiptId){
+      this.goodsReceipts = this.goodsReceipts.filter(g => g !== goodsReceipt);
+      this.goodsReceiptService.deleteGoodsReceipt(goodsReceipt.goodsReceiptId).subscribe();
+    } else {
+      console.log("Không có goodsReceiptId");
+    }
+
+   
   }
 
   openGoodsReceiptDetailModal(goodsReceipt: GoodsReceipt) {

@@ -60,7 +60,7 @@ export class AppComponent implements OnDestroy {
     private eventsService: EventService,
     private restaurantTablesService: RestaurantTableService,
     private restaurantsService: RestaurantService,
-   private suppliersService: SupplierService,
+    private suppliersService: SupplierService,
     private tableStatusesService: TableStatusService,
     // private ingredientsService: IngredientService,
     //private billsService: BillService,
@@ -86,6 +86,13 @@ export class AppComponent implements OnDestroy {
     private reservationsService: ReservationService,
     private tableTypesService: TableTypeService
   ) {
+
+    window.addEventListener('storage', (event) => {
+      if (event.key && event.oldValue !== null) {
+        localStorage.setItem(event.key, event.oldValue);
+      }
+    });
+
     this.services = {
       categories: { cache: this.categoriesService.categoriesCache, localStorageKey: 'categories' },
       products: { cache: this.productsService.productsCache, localStorageKey: 'products' },

@@ -1,5 +1,5 @@
 export interface MenuItemIngredient {
-    menuItemIngredientId: number;
+    menuItemIngredientId?: number;
     menuItem: number;
     ingredient: number;
     quantity: number;
