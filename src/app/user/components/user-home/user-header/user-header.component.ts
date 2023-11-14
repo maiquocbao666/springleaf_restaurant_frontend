@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,6 +29,7 @@ export class UserHeaderComponent {
     private renderer: Renderer2,
     private el: ElementRef,
     private mediaObserver: MediaObserver,
+    private http : HttpClient,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -97,4 +99,24 @@ export class UserHeaderComponent {
       return inputString;
     }
   }
+
+  checkRole() {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    });
+  
+    this.http.get('http://localhost:8080/admin/checks', { headers, responseType: 'text' })
+  .subscribe({
+    next: (response) => {
+      console.log('Response', response); // This should print the text response
+    },
+    error: (error) => {
+      console.error('Error', error);
+    }
+  });
+
+  }
+  
 }

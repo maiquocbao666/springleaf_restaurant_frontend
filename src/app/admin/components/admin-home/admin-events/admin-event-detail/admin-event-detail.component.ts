@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Cart } from 'src/app/interfaces/cart';
 import { Combo } from 'src/app/interfaces/combo';
 import { Event } from 'src/app/interfaces/event';
@@ -26,14 +26,8 @@ export class AdminEventDetailComponent  implements OnInit {
     private cartService: CartService,
     private comboService: ComboService,
     private formBuilder: FormBuilder,
-    public activeModal: NgbActiveModal,
-    private modalService: NgbModal
+    public activeModal: NgbActiveModal
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.eventForm = this.formBuilder.group({
       eventId: ['', [Validators.required]],
       eventName: ['', [Validators.required]],

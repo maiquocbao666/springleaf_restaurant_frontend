@@ -35,9 +35,6 @@ export class UserProductsComponent implements OnInit {
         console.log(this.user);
         // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
       });
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
     });
   }
 

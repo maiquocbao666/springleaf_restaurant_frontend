@@ -6,13 +6,7 @@ declare var $: any;
   styleUrls: ['./user-product-detail.component.css']
 })
 export class UserProductDetailComponent {
-  constructor() {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
-  }
+  constructor() {}
   ngOnInit(): void {
   }
 }
