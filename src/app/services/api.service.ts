@@ -33,7 +33,7 @@ export class ApiService {
 
       case 'get':
 
-        this.setUrl(``);
+        this.setUrl('' + endpoint);
 
         return this.http.get<T>(this.baseUrl, { headers }).pipe(
 
