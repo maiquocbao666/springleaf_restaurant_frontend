@@ -81,15 +81,15 @@ export class UserInventoryBranchesComponent {
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
-  getRestaurantById(restaurantId: number): Observable<Restaurant> {
+  getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
     return this.restaurantService.getRestaurantById(restaurantId);
   }
 
-  getIngredientById(ingredientId: number): Observable<Ingredient> {
+  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
     return this.ingredientService.getIngredientById(ingredientId);
   }
 
-  getSupplierById(supplierId: number): Observable<Supplier> {
+  getSupplierById(supplierId: number): Observable<Supplier | null> {
     return this.supplierService.getSupplierById(supplierId);
   }
 }

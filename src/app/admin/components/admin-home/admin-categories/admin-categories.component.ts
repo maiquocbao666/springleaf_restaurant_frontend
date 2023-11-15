@@ -18,7 +18,7 @@ export class AdminCategoriesComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
-  category!: Category;
+  category!: Category | null;
   categories: Category[] = [];
   categoryForm: FormGroup;
 
@@ -36,6 +36,7 @@ export class AdminCategoriesComponent {
   }
 
   ngOnInit(): void {
+    console.log("Init admin category component");
     this.getCategories();
     this.categoryForm.get('active')?.setValue(true);
   }
@@ -67,9 +68,9 @@ export class AdminCategoriesComponent {
 
     // Tạo một đối tượng Inventory và gán giá trị
     const newCategory: Category = {
-     name: name,
-     active: active,
-     description: description,
+      name: name,
+      active: active,
+      description: description,
     };
 
     this.categoryService.addCategory(newCategory)
@@ -89,11 +90,14 @@ export class AdminCategoriesComponent {
     }
   }
 
-  getCategory(): void {
+  getCategoryById(): void {
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
-    this.categoryService.getCategory(id)
-      .subscribe(category => this.category = category);
-    this.categoryForm.get('name')?.setValue(this.category?.name);
+    this.categoryService.getCategoryById(id).subscribe(category => {
+      this.category = category;
+      if (category) {
+        this.categoryForm.get('name')?.setValue(category.name);
+      }
+    });
   }
 
   openCategoryDetailModal(category: Category) {

@@ -29,7 +29,7 @@
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
             <option [value]="">Chọn kiểu bàn</option>
-            <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId"> {{ tableType.name }}
+            <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId"> {{ tableType.tableTypeName }}
             </option>
           </select>
         </div>
@@ -39,7 +39,7 @@
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
             <option [value]="">Chọn trạng thái</option>
-            <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{ tableStatus.name
+            <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{ tableStatus.tableStatusName
               }}
             </option>
           </select>

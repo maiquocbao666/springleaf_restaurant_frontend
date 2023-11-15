@@ -64,7 +64,7 @@ export class AdminTableStatusesComponent {
     const name = this.tableStatusForm.get('name')?.value?.trim() ?? '';
 
     const newTableStatus: TableStatus = {
-      name: name,
+      tableStatusName: name,
     }
 
     this.tableStatusService.addTableStatus(newTableStatus)

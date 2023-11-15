@@ -74,8 +74,8 @@ export class UserProductsComponent implements OnInit {
       });
   }
 
-  getCategoryById(categoryId: number): Observable<Category> {
-    return this.categoryService.getCategory(categoryId);
+  getCategoryById(categoryId: number): Observable<Category | null> {
+    return this.categoryService.getCategoryById(categoryId);
   }
 
   getCategories(): void {

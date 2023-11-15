@@ -96,7 +96,7 @@ export class AdminInventoryBranchesComponent {
   }
 
 
-  getRestaurantById(restaurantId: number): Observable<Restaurant> {
+  getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
     return this.restaurantService.getRestaurantById(restaurantId);
   }
 

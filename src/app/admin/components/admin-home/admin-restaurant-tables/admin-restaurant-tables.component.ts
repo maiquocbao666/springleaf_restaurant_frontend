@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
@@ -89,17 +89,16 @@ export class AdminRestaurantTablesComponent {
   }
 
   //Lấy name theo id
-  getTableTypeById(tableType: number): Observable<TableType> {
-    return this.tableTypesService.getTableTypeById(tableType);
+  getTableTypeById(tableTypeId: number): Observable<TableType | null> {
+    return this.tableTypesService.getTableTypeById(tableTypeId);
   }
 
-  getRestaurantById(restaurantId: number): Observable<Restaurant> {
+  getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
     return this.restaurantService.getRestaurantById(restaurantId);
-
   }
 
-  getTableStatusById(tableStatus: number): Observable<TableStatus> {
-    return this.tableStatusesService.getTableStatusById(tableStatus);
+  getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
+    return this.tableStatusesService.getTableStatusById(tableStatusId);
   }
 
   addRestaurantTable(): void {

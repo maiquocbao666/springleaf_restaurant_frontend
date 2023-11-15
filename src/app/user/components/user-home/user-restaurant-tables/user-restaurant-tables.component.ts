@@ -43,7 +43,7 @@ export class UserRestaurantTablesComponent {
       .subscribe(restaurantTables => this.restaurantTables = restaurantTables);
   }
 
-  getTableStatusById(tableStatusId: number): Observable<TableStatus> {
+  getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
     return this.tableStatusService.getTableStatusById(tableStatusId);
   }
 

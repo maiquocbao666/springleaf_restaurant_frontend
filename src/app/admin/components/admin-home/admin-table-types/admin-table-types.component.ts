@@ -58,7 +58,7 @@ export class AdminTableTypesComponent {
     const name = this.tableTypeForm.get('name')?.value?.trim() ?? '';
 
     const newTableType: TableType = {
-      name: name,
+      tableTypeName: name,
     };
 
     this.tableTypeService.addTableType(newTableType)

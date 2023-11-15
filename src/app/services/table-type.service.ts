@@ -37,14 +37,17 @@ export class TableTypeService {
   }
 
 
-  getTableTypeById(id: number): Observable<TableType> {
+  getTableTypeById(id: number): Observable<TableType | null> {
+
+    if(!id){
+      return of(null);
+    }
 
     if (!this.tableTypesCache) {
 
       this.getTableTypes();
 
     }
-
 
     const TableTypeFromCache = this.tableTypesCache.find(TableType => TableType.tableTypeId === id);
 

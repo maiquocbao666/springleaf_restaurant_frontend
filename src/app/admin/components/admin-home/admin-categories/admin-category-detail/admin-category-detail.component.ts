@@ -49,12 +49,12 @@ export class AdminCategoryDetailComponent implements OnInit {
       const updatedCategory: Category = {
         categoryId: this.categoryForm.get('id')?.value,
         name: this.categoryForm.get('name')?.value,
+        description: this.categoryForm.get('description')?.value,
         active: this.categoryForm.get('active')?.value,
-        description: this.categoryForm.get('description')?.value
       };
 
       this.categoryService.updateCategory(updatedCategory).subscribe(() => {
-        // Cập nhật cache
+        console.log("Cập nhật cache category");
         this.categoryService.updateCategoryCache(updatedCategory);
       });
     }

@@ -1,6 +1,6 @@
 export interface Restaurant {
     restaurantId?: number;
-    restaurantName: number;
+    restaurantName: string;
     address: number;
     phone: string;
     email: string;

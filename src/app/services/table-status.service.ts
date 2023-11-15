@@ -37,7 +37,11 @@ export class TableStatusService {
         return tableStatusesObservable;
     }
 
-    getTableStatusById(id: number): Observable<TableStatus> {
+    getTableStatusById(id: number): Observable<TableStatus | null> {
+
+        if(!id){
+            return of(null);
+        }
 
         if (!this.tableStatusesCache) {
 
@@ -76,7 +80,7 @@ export class TableStatusService {
 
     updateTableStatus(updatedtableStatus: TableStatus): Observable<any> {
 
-        const url = `${this.tableStatusUrl}/${updatedtableStatus.tableStatusId}`;
+        const url = `${this.tableStatusUrl}`;
 
         return this.apiService.request('put', url, updatedtableStatus).pipe(
 

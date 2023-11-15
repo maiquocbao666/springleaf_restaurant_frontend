@@ -13,7 +13,7 @@ addEventListener('message', async ({ data }) => {
                                 //'deliveries',
                                 //'deliveryDetails',
                                 'deliveryOrders',
-                                'deliveryOrderDetails',
+                                //'deliveryOrderDetails',
                                 'deliveryOrderStatuses',
                                 // discounts,
                                 //'cartDetails',

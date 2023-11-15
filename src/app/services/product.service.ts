@@ -11,7 +11,7 @@ export class ProductService {
 
   private productsUrl = 'products';
   private categoryUrl = 'category';
-  private productUrl = 'productUrl';
+  private productUrl = 'product';
   productsCache!: Product[];
 
   constructor(private apiService: ApiService, private http: HttpClient) { } // Inject ApiService

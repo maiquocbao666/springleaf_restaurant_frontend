@@ -64,23 +64,27 @@ export class AdminRestaurantsComponent {
 
   addRestaurant(): void {
 
-    const restaurantName = this.restaurantForm.get('restaurantName')?.value?.trim() ?? '';
-    const address = this.restaurantForm.get('address')?.value;
-    const phone = this.restaurantForm.get('phone')?.value;
-    const email = this.restaurantForm.get('email')?.value;
+    try {
+      const restaurantName = this.restaurantForm.get('restaurantName')?.value?.trim() ?? '';
+      const address = this.restaurantForm.get('address')?.value;
+      const phone = this.restaurantForm.get('phone')?.value;
+      const email = this.restaurantForm.get('email')?.value;
 
-    const newRestaurant: Restaurant = {
-      restaurantName: restaurantName,
-      address: address,
-      phone: phone,
-      email: email,
+      const newRestaurant: Restaurant = {
+        restaurantName: restaurantName,
+        address: address,
+        phone: phone,
+        email: email,
+      }
+
+      this.restaurantService.addRestaurant(newRestaurant)
+        .subscribe(restaurant => {
+          this.restaurants.push(restaurant);
+          this.restaurantForm.reset();
+        });
+    } catch (error) {
+      console.log("Thêm nhà hàng: Lỗi");
     }
-
-    this.restaurantService.addRestaurant(newRestaurant)
-      .subscribe(restaurant => {
-        this.restaurants.push(restaurant);
-        this.restaurantForm.reset();
-      });
   }
 
   deleteRestaurant(restaurant: Restaurant): void {

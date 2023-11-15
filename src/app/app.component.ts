@@ -87,12 +87,6 @@ export class AppComponent implements OnDestroy {
     private tableTypesService: TableTypeService
   ) {
 
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
-
     this.services = {
       categories: { cache: this.categoriesService.categoriesCache, localStorageKey: 'categories' },
       products: { cache: this.productsService.productsCache, localStorageKey: 'products' },
@@ -112,7 +106,7 @@ export class AppComponent implements OnDestroy {
       //goodsReceiptDetails: { cache: this.goodsReceiptDetailsService.goodsReceiptDetailsCache, localStorageKey: 'goodsReceiptDetails' },
       deliveryOrders: { cache: this.deliveryOrdersService.deliveryOrdersCache, localStorageKey: 'deliveryOrders' },
       deliveryOrderStatuses: { cache: this.deliveryOrderStatusesService.deliveryOrderStatusesCache, localStorageKey: 'deliveryOrderStatuses' },
-      deliveryOrderDetails: { cache: this.deliveryOrderDetailsService.deliveryOrderDetailsCache, localStorageKey: 'deliveryOrderDetails' },
+      //deliveryOrderDetails: { cache: this.deliveryOrderDetailsService.deliveryOrderDetailsCache, localStorageKey: 'deliveryOrderDetails' },
       favorites: { cache: this.favoritesService.favoritesCache, localStorageKey: 'favorites' },
       inventories: { cache: this.inventoriesService.inventoriesCache, localStorageKey: 'inventories' },
       inventoryBranches: { cache: this.inventoryBranchesService.inventoryBranchesCache, localStorageKey: 'inventoryBranches' },

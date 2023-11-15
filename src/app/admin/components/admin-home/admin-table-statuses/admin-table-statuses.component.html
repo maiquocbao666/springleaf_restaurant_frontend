@@ -31,7 +31,7 @@
             <tr
                 *ngFor="let tableStatus of tableStatuses | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
                 <td>{{tableStatus.tableStatusId}}</td>
-                <td>{{tableStatus.name}}</td>
+                <td>{{tableStatus.tableStatusName}}</td>
                 <td>
                     <button type="button" class="btn btn-outline-primary"
                         (click)="openTableStatusDetailModal(tableStatus)">Edit</button>

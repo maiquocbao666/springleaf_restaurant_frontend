@@ -40,7 +40,7 @@ export class AdminTableStatusDetailComponent  implements OnInit {
     if (this.tableStatus) {
       this.tableStatusForm.patchValue({
         tableStatusId: this.tableStatus.tableStatusId,
-        name: this.tableStatus.name,
+        name: this.tableStatus.tableStatusName,
       });
     }
   }
@@ -50,7 +50,7 @@ export class AdminTableStatusDetailComponent  implements OnInit {
     if (this.tableStatusForm.valid) {
       const updatedTableStatus: TableStatus = {
         tableStatusId: this.tableStatusForm.get('tableStatusId')?.value,
-        name: this.tableStatusForm.get('name')?.value,
+        tableStatusName: this.tableStatusForm.get('name')?.value,
       };
 
       this.tableStatusService.updateTableStatus(updatedTableStatus).subscribe(() => {
