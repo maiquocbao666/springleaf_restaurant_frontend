@@ -103,6 +103,12 @@ export class AdminCategoriesComponent {
   openCategoryDetailModal(category: Category) {
     const modalRef = this.modalService.open(AdminCategoryDetailComponent, { size: 'lg' });
     modalRef.componentInstance.category = category;
+
+    // Subscribe to the emitted event
+    modalRef.componentInstance.categorySaved.subscribe(() => {
+      this.getCategories(); // Refresh data in the parent component
+    });
+
   }
 
 }

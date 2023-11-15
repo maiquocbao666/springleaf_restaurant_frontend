@@ -79,7 +79,7 @@ export class AdminRestaurantsComponent {
 
       this.restaurantService.addRestaurant(newRestaurant)
         .subscribe(restaurant => {
-          this.restaurants.push(restaurant);
+          this.getRestaurants();
           this.restaurantForm.reset();
         });
     } catch (error) {

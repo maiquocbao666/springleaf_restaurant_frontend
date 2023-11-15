@@ -69,7 +69,7 @@ export class AdminTableStatusesComponent {
 
     this.tableStatusService.addTableStatus(newTableStatus)
       .subscribe(tableStatus => {
-        this.tableStatuses.push(tableStatus);
+        this.getTableStatuses();
         this.tableStatusForm.reset();
       });
   }

@@ -114,7 +114,7 @@ export class AdminInventoryBranchesComponent {
 
     this.inventoryBranchService.addInventoryBranch(newInventoryBranch)
       .subscribe(inventoryBranch => {
-        this.inventoryBranches.push(inventoryBranch);
+        this.getInventoryBranches();
         this.inventoryBranchForm.reset();
       });
   }

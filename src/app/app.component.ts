@@ -87,6 +87,12 @@ export class AppComponent implements OnDestroy {
     private tableTypesService: TableTypeService
   ) {
 
+    window.addEventListener('storage', (event) => {
+      if (event.key && event.oldValue !== null) {
+        localStorage.setItem(event.key, event.oldValue);
+      }
+    });
+
     this.services = {
       categories: { cache: this.categoriesService.categoriesCache, localStorageKey: 'categories' },
       products: { cache: this.productsService.productsCache, localStorageKey: 'products' },

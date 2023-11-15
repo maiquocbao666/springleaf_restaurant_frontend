@@ -83,7 +83,6 @@ export class AdminGoodsReceiptsComponent {
 
     this.goodsReceiptService.addGoodsReceipt(newGoodsReceipt)
       .subscribe(goodsReceipt => {
-        this.goodsReceipts.push(goodsReceipt);
         this.getGoodsReceipts();
         this.goodsReceiptForm.reset();
       });

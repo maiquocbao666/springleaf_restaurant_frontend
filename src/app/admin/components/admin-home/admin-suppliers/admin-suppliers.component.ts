@@ -71,7 +71,7 @@ export class AdminSuppliersComponent {
 
     this.supplierService.addSupplier(newSupplier)
       .subscribe(supplier => {
-        this.suppliers.push(supplier);
+        this.getSuppliers();
         this.supplierForm.reset();
       });
   }

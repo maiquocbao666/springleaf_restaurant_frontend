@@ -1,6 +1,6 @@
 <div class="container">
   <h1>Bàn</h1>
-  <form [formGroup]="restaurantTableForm" (ngSubmit)="addRestaurantTable()">
+  <form [formGroup]="restaurantTableForm">
     <div class="row">
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Tên bàn</label>
@@ -41,14 +41,15 @@
             formControlName="tableStatusId">
             <option value>Chọn trạng thái</option>
             <option *ngFor="let tableStatus of tableStatuses"
-              [value]="tableStatus.tableStatusId"> {{ tableStatus.tableStatusName
+              [value]="tableStatus.tableStatusId"> {{
+              tableStatus.tableStatusName
               }}
             </option>
           </select>
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button (click)="addRestaurantTable()" class="btn btn-primary">Save</button>
     <!-- Trong template HTML của Angular component -->
 
   </form>
@@ -78,7 +79,8 @@
         <td>{{restaurantTable.tableName}}</td>
         <td>{{ (getRestaurantById(restaurantTable.restaurantId) |
           async)?.restaurantName }}</td>
-        <td>{{ (getTableStatusById(restaurantTable.tableStatusId) | async)?.tableStatusName
+        <td>{{ (getTableStatusById(restaurantTable.tableStatusId) |
+          async)?.tableStatusName
           }}</td>
         <td>{{ (getTableTypeById(restaurantTable.tableTypeId) |
           async)?.tableTypeName }}</td>

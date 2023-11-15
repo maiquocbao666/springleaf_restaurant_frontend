@@ -108,7 +108,7 @@ export class AdminEventsComponent {
 
     this.eventService.addEvent(newEvent)
       .subscribe(event => {
-        this.events.push(event);
+        this.getEvents();
         this.eventForm.reset();
       });
 

@@ -93,7 +93,7 @@ export class AdminProductsComponent {
 
     this.productService.addProduct(newProduct)
       .subscribe(product => {
-        this.products.push(product);
+        this.getProducts();
         this.productForm.get('status')?.setValue(true);
         this.productForm.reset();
       });

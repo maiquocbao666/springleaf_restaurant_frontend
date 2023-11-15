@@ -53,6 +53,7 @@ export class AdminIngredientsComponent {
     this.ingredientService.getIngredients()
       .subscribe(ingredients => this.ingredients = ingredients);
   }
+  
   addIngredient(): void {
 
     const name = this.ingredientForm.get('name')?.value?.trim() ?? '';
@@ -67,7 +68,7 @@ export class AdminIngredientsComponent {
 
     this.ingredientService.addIngredient(newIngredient)
       .subscribe(ingredient => {
-        this.ingredients.push(ingredient);
+        this.getIngredients();
         this.ingredientForm.reset();
       });
   }

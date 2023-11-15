@@ -15,12 +15,14 @@
                     {{ restaurantTable.tableId }}
                 </td>
                 <td>{{ restaurantTable.tableName }}</td>
-                <td>{{ (getTableTypeById(restaurantTable.tableTypeId) | async)?.tableTypeName }}</td>
-                <td>{{ (getTableStatusById(restaurantTable.tableStatusId) | async)?.tableStatusName }}</td>
-                <td>{{ (getRestaurantById(restaurantTable.restaurantId) | async)?.restaurantName }}</td>
+                <td>{{ (getTableTypeById(restaurantTable.tableTypeId) |
+                    async)?.tableTypeName }}</td>
+                <td>{{ (getTableStatusById(restaurantTable.tableStatusId) |
+                    async)?.tableStatusName }}</td>
+                <td>{{ (getRestaurantById(restaurantTable.restaurantId) |
+                    async)?.restaurantName }}</td>
                 <td><button (click)="bookTable()">Book</button></td>
             </tr>
         </tbody>
     </table>
 </ul>
-<router-outlet></router-outlet>

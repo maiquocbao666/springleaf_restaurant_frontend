@@ -63,7 +63,7 @@ export class AdminTableTypesComponent {
 
     this.tableTypeService.addTableType(newTableType)
       .subscribe(tableType => {
-        this.tableTypes.push(tableType);
+        this.getTableTypes();
         this.tableTypeForm.reset();
       });
   }

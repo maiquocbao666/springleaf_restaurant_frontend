@@ -100,8 +100,7 @@ export class AdminInventoriesComponent {
 
     this.inventoryService.addInventory(newInventory)
       .subscribe(inventory => {
-        console.log('Inventory added:', inventory);
-        this.inventories.push(inventory);
+        this.getInventories();
         this.inventoryForm.reset();
       });
 

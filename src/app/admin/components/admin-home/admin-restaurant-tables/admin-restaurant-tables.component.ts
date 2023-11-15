@@ -102,7 +102,6 @@ export class AdminRestaurantTablesComponent {
   }
 
   addRestaurantTable(): void {
-
     const tableName = this.restaurantTableForm.get('tableName')?.value?.trim() ?? '';
     const tableTypeId = this.restaurantTableForm.get('tableTypeId')?.value;
     const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
@@ -117,7 +116,7 @@ export class AdminRestaurantTablesComponent {
 
     this.restaurantTablesService.addRestaurantTable(newRestaurantTable)
       .subscribe(restaurantTable => {
-        this.restaurantTables.push(restaurantTable);
+        this.getRestaurantTables();
         this.restaurantTableForm.reset();
       });
   }

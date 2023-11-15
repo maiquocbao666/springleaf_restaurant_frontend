@@ -73,7 +73,6 @@ export class AdminCombosComponent {
 
     this.comboService.addCombo(newCombo)
       .subscribe(combo => {
-        this.combos.push(combo);
         this.getCombos();
         this.comboForm.reset();
       });
