@@ -8,7 +8,7 @@
                 <th>Loại bàn</th>
                 <th>Trạng thái</th>
                 <th>Chi nhánh nhà hàng</th>
-                <th>Đặt bàn</th>
+                <th>Thông tin</th>
             </tr>
             <tr *ngFor="let restaurantTable of restaurantTables">
                 <td>
@@ -21,7 +21,7 @@
                     async)?.tableStatusName }}</td>
                 <td>{{ (getRestaurantById(restaurantTable.restaurantId) |
                     async)?.restaurantName }}</td>
-                <td><button (click)="bookTable()">Book</button></td>
+                <td><button (click)="bookTable()">Đặt ngay</button></td>
             </tr>
         </tbody>
     </table>
