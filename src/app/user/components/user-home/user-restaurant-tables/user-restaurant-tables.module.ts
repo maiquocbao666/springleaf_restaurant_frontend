@@ -7,7 +7,6 @@ import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-
 
 @NgModule({
   declarations: [
-    UserRestaurantTableInfomationComponent
   ],
   imports: [
     CommonModule,
