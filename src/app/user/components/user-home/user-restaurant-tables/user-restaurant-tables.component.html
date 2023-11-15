@@ -21,7 +21,7 @@
                     async)?.tableStatusName }}</td>
                 <td>{{ (getRestaurantById(restaurantTable.restaurantId) |
                     async)?.restaurantName }}</td>
-                <td><button (click)="bookTable()">Đặt ngay</button></td>
+                <td><button (click)="openRestaurantTableInfomationModal(restaurantTable)">Xem thông tin</button></td>
             </tr>
         </tbody>
     </table>

@@ -39,6 +39,8 @@ export class ReservationService {
 
     addReservation(newReservation: Reservation): Observable<Reservation> {
 
+        alert("bruh");
+
         return this.apiService.request<Reservation>('post', this.reservationUrl, newReservation).pipe(
 
             tap((addedReservation: Reservation) => {
@@ -79,23 +81,23 @@ export class ReservationService {
     deleteReservation(id: number): Observable<any> {
 
         const url = `${this.reservationUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
+
             tap(() => {
-    
+
                 const index = this.reservationsCache.findIndex(reservation => reservation.reservationId === id);
-    
+
                 if (index !== -1) {
-    
+
                     this.reservationsCache.splice(index, 1);
                     localStorage.setItem(this.reservationsUrl, JSON.stringify(this.reservationsCache));
-    
+
                 }
-    
+
             })
         );
-    
+
     }
-    
+
 }
