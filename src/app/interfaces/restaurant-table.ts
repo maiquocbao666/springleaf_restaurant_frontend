@@ -1,5 +1,5 @@
 export interface RestaurantTable {
-    tableId: number;
+    tableId?: number;
     tableName: string;
     tableTypeId: number;
     tableStatusId: number;

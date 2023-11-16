@@ -96,7 +96,7 @@ export class AdminInventoryBranchesComponent {
   }
 
 
-  getRestaurantById(restaurantId: number): Observable<Restaurant> {
+  getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
     return this.restaurantService.getRestaurantById(restaurantId);
   }
 
@@ -105,16 +105,30 @@ export class AdminInventoryBranchesComponent {
     const ingredientId = this.inventoryBranchForm.get('ingredientId')?.value;
     const supplierId = this.inventoryBranchForm.get('supplierId')?.value;
     const restaurantId = this.inventoryBranchForm.get('restaurantId')?.value;
-    this.inventoryBranchService.addInventoryBranch({ ingredientId, supplierId, restaurantId } as InventoryBranch)
+
+    const newInventoryBranch: InventoryBranch = {
+      ingredientId: ingredientId,
+      supplierId: supplierId,
+      restaurantId: restaurantId,
+    };
+
+    this.inventoryBranchService.addInventoryBranch(newInventoryBranch)
       .subscribe(inventoryBranch => {
-        this.inventoryBranches.push(inventoryBranch);
+        this.getInventoryBranches();
         this.inventoryBranchForm.reset();
       });
   }
 
   deleteInventoryBranch(inventoryBranch: InventoryBranch): void {
-    this.inventoryBranches = this.inventoryBranches.filter(c => c !== inventoryBranch);
-    this.inventoryBranchService.deleteInventoryBranch(inventoryBranch.inventoryBranchId).subscribe();
+
+    if (inventoryBranch.inventoryBranchId) {
+      this.inventoryBranches = this.inventoryBranches.filter(c => c !== inventoryBranch);
+      this.inventoryBranchService.deleteInventoryBranch(inventoryBranch.inventoryBranchId).subscribe();
+    } else {
+      console.log("Không có inventoryBranchId");
+    }
+
+
   }
 
   openInventoryBranchDetailModal(inventoryBranch: InventoryBranch) {

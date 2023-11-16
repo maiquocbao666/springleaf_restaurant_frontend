@@ -73,7 +73,10 @@ import { AdminTableTypeDetailComponent } from './admin/components/admin-home/adm
 import { AdminTableTypesComponent } from './admin/components/admin-home/admin-table-types/admin-table-types.component';
 import { AppComponent } from './app.component';
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
+import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
+import { AdminReservationsComponent } from './admin/components/admin-home/admin-reservations/admin-reservations.component';
 
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
 
 
 @NgModule({
@@ -96,6 +99,7 @@ import { UserCheckoutComponent } from './user/components/user-home/user-checkout
     UserInventoryBranchesComponent,
     UserBannerComponent,
     UserCheckoutComponent,
+    UserRestaurantTableInfomationComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
@@ -130,13 +134,13 @@ import { UserCheckoutComponent } from './user/components/user-home/user-checkout
     AdminRestaurantsComponent,
     AdminReceiptDetailComponent,
     AdminReceiptsComponent,
-
+    AdminReservationsComponent,
 
     ChatComponent,
     LoginComponent,
     DateTimeComponent,
     ProfileComponent,
-
+    UploadFileComponent,
 
   ],
   imports: [

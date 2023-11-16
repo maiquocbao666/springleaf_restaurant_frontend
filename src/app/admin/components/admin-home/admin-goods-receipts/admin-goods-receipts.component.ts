@@ -76,15 +76,21 @@ export class AdminGoodsReceiptsComponent {
 
     this.goodsReceiptService.addGoodsReceipt({ inventoryBranch, date, warehouseManager, user } as GoodsReceipt)
       .subscribe(goodsReceipt => {
-        this.goodsReceipts.push(goodsReceipt);
         this.getGoodsReceipts();
         this.goodsReceiptForm.reset();
       });
   }
 
   deleteGoodsReceipt(goodsReceipt: GoodsReceipt): void {
-    this.goodsReceipts = this.goodsReceipts.filter(g => g !== goodsReceipt);
-    this.goodsReceiptService.deleteGoodsReceipt(goodsReceipt.goodsReceiptId).subscribe();
+
+    if(goodsReceipt.goodsReceiptId){
+      this.goodsReceipts = this.goodsReceipts.filter(g => g !== goodsReceipt);
+      this.goodsReceiptService.deleteGoodsReceipt(goodsReceipt.goodsReceiptId).subscribe();
+    } else {
+      console.log("Không có goodsReceiptId");
+    }
+
+   
   }
 
   openGoodsReceiptDetailModal(goodsReceipt: GoodsReceipt) {

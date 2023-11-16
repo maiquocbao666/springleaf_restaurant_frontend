@@ -1,5 +1,5 @@
 export interface Rating {
-    ratingId: number;
+    ratingId?: number;
     menuItem: number;
     user: number;
     rating: number;

@@ -94,13 +94,15 @@ export class AdminReceiptsComponent {
 
     if (!userId || !supplier || !date || !totalAmount || !inventory) { return; }
 
-    this.receiptService.addReceipt({
-      userId,
-      supplier,
-      date,
-      totalAmount,
-      inventory
-    } as Receipt)
+    const newReceipt: Receipt = {
+      userId: userId,
+      supplier: supplier,
+      date: date,
+      totalAmount: totalAmount,
+      inventory: inventory,
+    }
+
+    this.receiptService.addReceipt(newReceipt)
       .subscribe(() => {
         this.getReceipts();
         this.receiptForm.reset();
@@ -108,8 +110,15 @@ export class AdminReceiptsComponent {
   }
 
   deleteReceipt(receipt: Receipt): void {
-    this.receipts = this.receipts.filter(r => r !== receipt);
-    this.receiptService.deleteReceipt(receipt.receiptId).subscribe();
+
+    if (receipt.receiptId) {
+      this.receipts = this.receipts.filter(r => r !== receipt);
+      this.receiptService.deleteReceipt(receipt.receiptId).subscribe();
+    } else {
+      console.log("Không có receiptId");
+    }
+
+
   }
 
 

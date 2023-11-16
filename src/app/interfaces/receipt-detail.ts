@@ -1,5 +1,5 @@
 export interface ReceiptDetail {
-    receiptDetailId: number;
+    receiptDetailId?: number;
     ingredient: number;
     quantity: number;
     unitPrice: number;

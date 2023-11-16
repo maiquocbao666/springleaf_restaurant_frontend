@@ -5,7 +5,8 @@
       <div class="col-sm-6">
         <label for="exampleInputPassword1" class="form-label">Name</label>
         <div class="mb-3">
-          <input type="text" class="form-control" formControlName="name" placeholder="Nhập kiểu bàn...">
+          <input type="text" class="form-control" formControlName="name"
+            placeholder="Nhập kiểu bàn...">
         </div>
       </div>
     </div>
@@ -13,7 +14,7 @@
   </form>
   <div class="col-2">
     <select class="form-select" (change)="onTableSizeChange($event)">
-      <option value="">Page</option>
+      <option value>Page</option>
       <option *ngFor="let size of tableSizes">
         {{size}}
       </option>
@@ -31,11 +32,12 @@
       <tr
         *ngFor="let tableType of tableTypes | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
         <td>{{tableType.tableTypeId}}</td>
-        <td>{{tableType.name}}</td>
+        <td>{{tableType.tableTypeName}}</td>
         <td>
           <button type="button" class="btn btn-outline-primary"
             (click)="openTableTypeDetailModal(tableType)">Edit</button>
-          <button type="button" class="btn btn-outline-danger" (click)="deleteTableType(tableType)">Delete</button>
+          <button type="button" class="btn btn-outline-danger"
+            (click)="deleteTableType(tableType)">Delete</button>
         </td>
       </tr>
     </tbody>

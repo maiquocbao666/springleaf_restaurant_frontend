@@ -35,7 +35,11 @@ export class CategoryService {
 
   }
 
-  getCategory(id: number): Observable<Category> {
+  getCategoryById(id: number): Observable<Category | null> {
+
+    if (!id) {
+      return of(null);
+    }
 
     if (!this.categoriesCache) {
 
@@ -77,7 +81,7 @@ export class CategoryService {
 
   updateCategory(updatedCategory: Category): Observable<any> {
 
-    const url = `${this.categoryUrl}/${updatedCategory.categoryId}`;
+    const url = `${this.categoryUrl}`;
 
     return this.apiService.request('put', url, updatedCategory).pipe(
 

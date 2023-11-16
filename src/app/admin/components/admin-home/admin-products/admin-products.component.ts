@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { Product } from 'src/app/interfaces/product';
 import { CategoryService } from 'src/app/services/category.service';
@@ -66,8 +66,8 @@ export class AdminProductsComponent {
       .subscribe(products => this.products = products);
   }
 
-  getCategoryById(categoryId: number): Observable<Category> {
-    return this.categoryService.getCategory(categoryId);
+  getCategoryById(categoryId: number): Observable<Category | null> {
+    return this.categoryService.getCategoryById(categoryId);
   }
 
   addProduct(): void {
@@ -93,7 +93,7 @@ export class AdminProductsComponent {
 
     this.productService.addProduct(newProduct)
       .subscribe(product => {
-        this.products.push(product);
+        this.getProducts();
         this.productForm.get('status')?.setValue(true);
         this.productForm.reset();
       });
@@ -101,8 +101,15 @@ export class AdminProductsComponent {
   }
 
   deleteProduct(product: Product): void {
-    this.products = this.products.filter(c => c !== product);
-    this.productService.deleteProduct(product.menuItemId).subscribe();
+
+    if (product.menuItemId) {
+      this.products = this.products.filter(c => c !== product);
+      this.productService.deleteProduct(product.menuItemId).subscribe();
+    } else {
+      console.log("Không có menuItemId");
+    }
+
+
   }
   openProductDetailModal(product: Product) {
     //this.getCategory();

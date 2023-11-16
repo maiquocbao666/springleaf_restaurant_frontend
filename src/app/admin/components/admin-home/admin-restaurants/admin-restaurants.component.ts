@@ -63,28 +63,40 @@ export class AdminRestaurantsComponent {
   }
 
   addRestaurant(): void {
-    const restaurantId = this.restaurantForm.get('restaurantId')?.value;
-    const restaurantName = this.restaurantForm.get('restaurantName')?.value?.trim() ?? '';
-    const address = this.restaurantForm.get('address')?.value;
-    const phone = this.restaurantForm.get('phone')?.value;
-    const email = this.restaurantForm.get('email')?.value;
 
-    this.restaurantService.addRestaurant({
-      restaurantId,
-      restaurantName,
-      address,
-      phone,
-      email
-    } as Restaurant)
-      .subscribe(restaurant => {
-        this.restaurants.push(restaurant);
-        this.restaurantForm.reset();
-      });
+    try {
+      const restaurantName = this.restaurantForm.get('restaurantName')?.value?.trim() ?? '';
+      const address = this.restaurantForm.get('address')?.value;
+      const phone = this.restaurantForm.get('phone')?.value;
+      const email = this.restaurantForm.get('email')?.value;
+
+      const newRestaurant: Restaurant = {
+        restaurantName: restaurantName,
+        address: address,
+        phone: phone,
+        email: email,
+      }
+
+      this.restaurantService.addRestaurant(newRestaurant)
+        .subscribe(restaurant => {
+          this.getRestaurants();
+          this.restaurantForm.reset();
+        });
+    } catch (error) {
+      console.log("Thêm nhà hàng: Lỗi");
+    }
   }
 
   deleteRestaurant(restaurant: Restaurant): void {
-    this.restaurants = this.restaurants.filter(r => r !== restaurant);
-    this.restaurantService.deleteRestaurant(restaurant.restaurantId).subscribe();
+
+    if (restaurant.restaurantId) {
+      this.restaurants = this.restaurants.filter(r => r !== restaurant);
+      this.restaurantService.deleteRestaurant(restaurant.restaurantId).subscribe();
+    } else {
+      console.log("Không có restaurantId");
+    }
+
+
   }
 
   openRestaurantDetailModal(restaurant: Restaurant) {

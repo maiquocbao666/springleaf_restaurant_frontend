@@ -72,6 +72,10 @@ export class BillDetailService {
 
     deleteBillDetail(id: number): Observable<any> {
 
+        if(!id){
+            return of(null);
+        }
+
         const url = `${this.billDetailUrl}/${id}`;
 
         return this.apiService.request('delete', url).pipe(

@@ -53,21 +53,36 @@ export class AdminIngredientsComponent {
     this.ingredientService.getIngredients()
       .subscribe(ingredients => this.ingredients = ingredients);
   }
+  
   addIngredient(): void {
 
     const name = this.ingredientForm.get('name')?.value?.trim() ?? '';
     const description = this.ingredientForm.get('description')?.value;
     const orderThreshold = this.ingredientForm.get('orderThreshold')?.value;
-    this.ingredientService.addIngredient({ name, orderThreshold, description } as Ingredient)
+
+    const newIngredient: Ingredient = {
+      name: name,
+      description: description,
+      orderThreshold: orderThreshold
+    }
+
+    this.ingredientService.addIngredient(newIngredient)
       .subscribe(ingredient => {
-        this.ingredients.push(ingredient);
+        this.getIngredients();
         this.ingredientForm.reset();
       });
   }
 
   deleteIngredient(ingredient: Ingredient): void {
-    this.ingredients = this.ingredients.filter(i => i !== ingredient);
+
+    if(ingredient.ingredientId){
+      this.ingredients = this.ingredients.filter(i => i !== ingredient);
     this.ingredientService.deleteIngredient(ingredient.ingredientId).subscribe();
+    } else {
+      console.log("Không có ingredientId");
+    }
+
+    
   }
 
   openIngredientDetailModal(ingredient: Ingredient) {

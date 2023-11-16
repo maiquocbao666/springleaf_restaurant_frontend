@@ -1,5 +1,5 @@
 export interface DeliveryOrderDetail {
-    deliveryOrderDetailId: number;
+    deliveryOrderDetailId?: number;
     deliveryOrder: number;
     menuItem: number;
     quantity: number;

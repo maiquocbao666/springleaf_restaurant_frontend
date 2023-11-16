@@ -18,7 +18,7 @@ export class AdminCategoriesComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
-  category: Category | undefined;
+  category!: Category | null;
   categories: Category[] = [];
   categoryForm: FormGroup;
 
@@ -36,6 +36,7 @@ export class AdminCategoriesComponent {
   }
 
   ngOnInit(): void {
+    console.log("Init admin category component");
     this.getCategories();
     this.categoryForm.get('active')?.setValue(true);
   }
@@ -61,9 +62,18 @@ export class AdminCategoriesComponent {
     const active = this.categoryForm.get('active')?.value;
     const description = this.categoryForm.get('description')?.value;
 
-    if (!name || active === null) { return; }
+    if (!name || active === null) {
+      return;
+    }
 
-    this.categoryService.addCategory({ name, active, description } as Category)
+    // Tạo một đối tượng Inventory và gán giá trị
+    const newCategory: Category = {
+      name: name,
+      active: active,
+      description: description,
+    };
+
+    this.categoryService.addCategory(newCategory)
       .subscribe(() => {
         this.getCategories();
         this.categoryForm.reset();
@@ -72,20 +82,33 @@ export class AdminCategoriesComponent {
   }
 
   deleteCategory(category: Category): void {
-    this.categories = this.categories.filter(c => c !== category);
-    this.categoryService.deleteCategory(category.categoryId).subscribe();
+    if (category.categoryId) {
+      this.categories = this.categories.filter(c => c !== category);
+      this.categoryService.deleteCategory(category.categoryId).subscribe();
+    } else {
+      console.error("Cannot delete category with undefined categoryId.");
+    }
   }
 
-  getCategory(): void {
+  getCategoryById(): void {
     const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
-    this.categoryService.getCategory(id)
-      .subscribe(category => this.category = category);
-    this.categoryForm.get('name')?.setValue(this.category?.name);
+    this.categoryService.getCategoryById(id).subscribe(category => {
+      this.category = category;
+      if (category) {
+        this.categoryForm.get('name')?.setValue(category.name);
+      }
+    });
   }
 
   openCategoryDetailModal(category: Category) {
     const modalRef = this.modalService.open(AdminCategoryDetailComponent, { size: 'lg' });
     modalRef.componentInstance.category = category;
+
+    // Subscribe to the emitted event
+    modalRef.componentInstance.categorySaved.subscribe(() => {
+      this.getCategories(); // Refresh data in the parent component
+    });
+
   }
 
 }

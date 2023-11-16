@@ -1,4 +1,4 @@
 export interface Payment {
-    paymentId: number;
+    paymentId?: number;
     name: number;
 }

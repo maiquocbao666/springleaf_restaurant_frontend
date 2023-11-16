@@ -1,4 +1,4 @@
 export interface DeliveryOrderStatus {
-    deliveryOrderStatusId: number;
+    deliveryOrderStatusId?: number;
     name: string;
 }

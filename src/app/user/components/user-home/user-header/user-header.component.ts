@@ -13,15 +13,11 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./user-header.component.css']
 })
 export class UserHeaderComponent {
+
   navbarfixed: boolean = false; // Hiện header
   scrollCounter: number = 0;
   previousScrollY = 0;
   user: User | null = null;
-  isMobile: boolean = false;
-  isTablet: boolean = false;
-  isLaptop: boolean = true;
-
-
 
   constructor(
     private modalService: NgbModal,
@@ -37,16 +33,6 @@ export class UserHeaderComponent {
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
   }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
-    const screenWidth = (event.target as Window).innerWidth;
-
-    this.isMobile = screenWidth <= 768;
-    this.isTablet = screenWidth > 768 && screenWidth <= 1024;
-    this.isLaptop = screenWidth > 1024;
-  }
-
 
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent);

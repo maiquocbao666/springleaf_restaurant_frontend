@@ -79,6 +79,12 @@ const routes: Routes = [
           import('./user-products/user-product-detail/user-product-detail.module')
             .then(m => m.UserProductDetailModule),
       },
+      {
+        path: 'user/upload',
+        loadChildren: () =>
+          import('../../../components/upload-file/upload-file.module')
+            .then(m => m.UploadFileModule),
+      },
     ]
   },
 

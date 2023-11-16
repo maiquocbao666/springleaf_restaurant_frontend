@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/app/interfaces/category';
 import { CategoryService } from 'src/app/services/category.service';
@@ -12,6 +12,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class AdminCategoryDetailComponent implements OnInit {
 
   @Input() category: Category | undefined;
+  @Output() categorySaved: EventEmitter<void> = new EventEmitter<void>();
   categoryForm: FormGroup;
   fieldNames: string[] = [];
 
@@ -49,13 +50,14 @@ export class AdminCategoryDetailComponent implements OnInit {
       const updatedCategory: Category = {
         categoryId: this.categoryForm.get('id')?.value,
         name: this.categoryForm.get('name')?.value,
+        description: this.categoryForm.get('description')?.value,
         active: this.categoryForm.get('active')?.value,
-        description: this.categoryForm.get('description')?.value
       };
 
       this.categoryService.updateCategory(updatedCategory).subscribe(() => {
-        // Cập nhật cache
+        console.log("Cập nhật cache category");
         this.categoryService.updateCategoryCache(updatedCategory);
+        this.categorySaved.emit(); // Emit the event
       });
     }
   }

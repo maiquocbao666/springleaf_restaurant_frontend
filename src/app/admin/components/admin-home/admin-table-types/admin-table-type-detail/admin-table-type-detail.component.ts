@@ -43,7 +43,7 @@ export class AdminTableTypeDetailComponent  implements OnInit {
     if (this.tableType) {
       this.tableTypeForm.patchValue({
         tableTypeId: this.tableType.tableTypeId,
-        name: this.tableType.name,
+        name: this.tableType.tableTypeName,
       });
     }
   }
@@ -53,7 +53,7 @@ export class AdminTableTypeDetailComponent  implements OnInit {
     if (this.tableTypeForm.valid) {
       const updatedTableType: TableType = {
         tableTypeId: this.tableTypeForm.get('tableTypeId')?.value,
-        name: this.tableTypeForm.get('name')?.value,
+        tableTypeName: this.tableTypeForm.get('name')?.value,
       };
 
       this.tableTypeService.updateTableType(updatedTableType).subscribe(() => {

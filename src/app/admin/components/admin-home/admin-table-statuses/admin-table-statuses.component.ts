@@ -62,16 +62,27 @@ export class AdminTableStatusesComponent {
 
   addTableStatus(): void {
     const name = this.tableStatusForm.get('name')?.value?.trim() ?? '';
-    this.tableStatusService.addTableStatus({ name } as TableStatus)
+
+    const newTableStatus: TableStatus = {
+      tableStatusName: name,
+    }
+
+    this.tableStatusService.addTableStatus(newTableStatus)
       .subscribe(tableStatus => {
-        this.tableStatuses.push(tableStatus);
+        this.getTableStatuses();
         this.tableStatusForm.reset();
       });
   }
 
   deleteTableStatus(tableStatus: TableStatus): void {
-    this.tableStatuses = this.tableStatuses.filter(i => i !== tableStatus);
-    this.tableStatusService.deleteTableStatus(tableStatus.tableStatusId).subscribe();
+
+    if (tableStatus.tableStatusId) {
+      this.tableStatuses = this.tableStatuses.filter(i => i !== tableStatus);
+      this.tableStatusService.deleteTableStatus(tableStatus.tableStatusId).subscribe();
+    } else {
+      console.log("Không có tableStautsId");
+    }
+
   }
 
   openTableStatusDetailModal(tableStatus: TableStatus) {

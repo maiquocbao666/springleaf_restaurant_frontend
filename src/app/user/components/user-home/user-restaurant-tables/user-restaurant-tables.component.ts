@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
@@ -9,6 +10,7 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 import { TableStatusService } from 'src/app/services/table-status.service';
 import { TableTypeService } from 'src/app/services/table-type.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 
 @Component({
   selector: 'app-user-table',
@@ -20,6 +22,7 @@ export class UserRestaurantTablesComponent {
 
   constructor(
     private toastService: ToastService,
+    private modalService: NgbModal,
     private restaurantTableService: RestaurantTableService,
     private tableStatusService: TableStatusService,
     private authenticationService: AuthenticationService,
@@ -27,11 +30,6 @@ export class UserRestaurantTablesComponent {
     private restaurantService: RestaurantService,
     private route: ActivatedRoute
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -43,24 +41,34 @@ export class UserRestaurantTablesComponent {
       .subscribe(restaurantTables => this.restaurantTables = restaurantTables);
   }
 
-  getTableStatusById(tableStatusId: number): Observable<TableStatus> {
+  getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
     return this.tableStatusService.getTableStatusById(tableStatusId);
   }
 
-  getTableTypeById(tableTypeId: number){
+  getTableTypeById(tableTypeId: number) {
     return this.tableTypeService.getTableTypeById(tableTypeId);
   }
 
-  getRestaurantById(restaurantId: number){
+  getRestaurantById(restaurantId: number) {
     return this.restaurantService.getRestaurantById(restaurantId);
   }
 
-  bookTable(): void {
-    if (this.authenticationService.getUserCache() === null) {
-      this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+  openRestaurantTableInfomationModal(restaurantTable: RestaurantTable) {
+    if (!this.authenticationService.getUserCache()) {
+      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
     } else {
-      this.toastService.showSuccess("Đặt bàn thành công");
+      //this.toastService.showSuccess("Đặt bàn thành công");
+
+      const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'lg' });
+      modalRef.componentInstance.restaurantTable = restaurantTable;
+
+      // Subscribe to the emitted event
+      modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
+        this.getRestaurantTables(); // Refresh data in the parent component
+      });
+
     }
+
 
   }
 

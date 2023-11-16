@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h4 class="modal-title">Thông tin bàn</h4>
+    <button type="button" class="close" aria-label="Close"
+        (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="reservationForm">
+        <label for="selectedDate">Select date: </label>
+        <input type="date" id="selectedDate" formControlName="selectedDate" />
+        <label for="selectedTime">Select time: </label>
+        <input type="time" id="selectedTime" formControlName="selectedTime" />
+    </form>
+    <button (click)="bookingTable()">Đặt bàn ngay</button>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary"
+        (click)="activeModal.close('Close click')">
+        Đóng
+    </button>
+</div>

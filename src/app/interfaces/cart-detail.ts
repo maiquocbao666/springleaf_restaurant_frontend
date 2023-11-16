@@ -1,5 +1,5 @@
 export interface CartDetail {
-    orderDetailId: number;
+    orderDetailId?: number;
     order: number;
     menuItem: number;
     quantity: number;

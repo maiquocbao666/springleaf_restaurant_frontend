@@ -1,4 +1,4 @@
 export interface Major {
-    majorId: number;
+    majorId?: number;
     majorName: string;
 }

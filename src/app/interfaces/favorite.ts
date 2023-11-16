@@ -1,5 +1,5 @@
 export interface Favorite {
-    favoriteId: number;
+    favoriteId?: number;
     user: number;
     menuItem: number;
     favoriteDate: Date;

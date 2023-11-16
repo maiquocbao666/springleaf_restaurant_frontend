@@ -1,5 +1,5 @@
 export interface InventoryBranch {
-    inventoryBranchId: number;
+    inventoryBranchId?: number;
     ingredientId: number;
     supplierId: number;
     restaurantId: number;

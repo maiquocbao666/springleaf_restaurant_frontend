@@ -1,19 +1,22 @@
 <div class="container">
   <h1>Bàn</h1>
-  <form [formGroup]="restaurantTableForm" (ngSubmit)="addRestaurantTable()">
+  <form [formGroup]="restaurantTableForm">
     <div class="row">
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Tên bàn</label>
         <div class="mb-3">
-          <input type="text" class="form-control" formControlName="tableName" placeholder="Nhập tên bàn...">
+          <input type="text" class="form-control" formControlName="tableName"
+            placeholder="Nhập tên bàn...">
         </div>
       </div>
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Nhà hàng</label>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
-            <option value="">Chọn nhà hàng</option>
-            <option *ngFor="let restaurant of restaurants " [value]="restaurant.restaurantId">{{
+          <select class="form-select" aria-label="Default select example"
+            formControlName="restaurantId">
+            <option value>Chọn nhà hàng</option>
+            <option *ngFor="let restaurant of restaurants "
+              [value]="restaurant.restaurantId">{{
               restaurant.restaurantName
               }}</option>
           </select>
@@ -22,9 +25,11 @@
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Kiểu bàn</label>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
-            <option value="">Chọn kiểu bàn</option>
-            <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId"> {{ tableType.name }}
+          <select class="form-select" aria-label="Default select example"
+            formControlName="tableTypeId">
+            <option value>Chọn kiểu bàn</option>
+            <option *ngFor="let tableType of tableTypes"
+              [value]="tableType.tableTypeId"> {{ tableType.tableTypeName }}
             </option>
           </select>
         </div>
@@ -32,22 +37,25 @@
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Trạng thái bàn</label>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
-            <option value="">Chọn trạng thái</option>
-            <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{ tableStatus.name
+          <select class="form-select" aria-label="Default select example"
+            formControlName="tableStatusId">
+            <option value>Chọn trạng thái</option>
+            <option *ngFor="let tableStatus of tableStatuses"
+              [value]="tableStatus.tableStatusId"> {{
+              tableStatus.tableStatusName
               }}
             </option>
           </select>
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button (click)="addRestaurantTable()" class="btn btn-primary">Save</button>
     <!-- Trong template HTML của Angular component -->
 
   </form>
   <div class="col-2">
     <select class="form-select" (change)="onTableSizeChange($event)">
-      <option value="">Page</option>
+      <option value>Page</option>
       <option *ngFor="let size of tableSizes">
         {{size}}
       </option>
@@ -69,13 +77,18 @@
         *ngFor="let restaurantTable of restaurantTables | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
         <td>{{restaurantTable.tableId}}</td>
         <td>{{restaurantTable.tableName}}</td>
-        <td>{{ (getRestaurantById(restaurantTable.restaurantId) | async)?.restaurantName }}</td>
-        <td>{{ (getTableStatusById(restaurantTable.tableStatusId) | async)?.name }}</td>
-        <td>{{ (getTableTypeById(restaurantTable.tableTypeId) | async)?.name }}</td>
+        <td>{{ (getRestaurantById(restaurantTable.restaurantId) |
+          async)?.restaurantName }}</td>
+        <td>{{ (getTableStatusById(restaurantTable.tableStatusId) |
+          async)?.tableStatusName
+          }}</td>
+        <td>{{ (getTableTypeById(restaurantTable.tableTypeId) |
+          async)?.tableTypeName }}</td>
         <td>
           <button type="button" class="btn btn-outline-primary"
             (click)="openRestaurantTableDetailModal(restaurantTable)">Edit</button>
-          <button type="button" class="btn btn-outline-danger" (click)="deleteTable(restaurantTable)">Delete</button>
+          <button type="button" class="btn btn-outline-danger"
+            (click)="deleteTable(restaurantTable)">Delete</button>
         </td>
       </tr>
     </tbody>

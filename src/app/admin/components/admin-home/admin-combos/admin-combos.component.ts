@@ -65,17 +65,29 @@ export class AdminCombosComponent {
     const comboUser = this.comboForm.get('comboUser')?.value;
     const totalAmount = this.comboForm.get('totalAmount')?.value;
 
-    this.comboService.addCombo({ comboName, comboUser, totalAmount } as Combo)
+    const newCombo: Combo = {
+      comboName: comboName,
+      comboUser: comboUser,
+      totalAmount: totalAmount
+    };
+
+    this.comboService.addCombo(newCombo)
       .subscribe(combo => {
-        this.combos.push(combo);
         this.getCombos();
         this.comboForm.reset();
       });
   }
 
   deleteCombo(combo: Combo): void {
-    this.combos = this.combos.filter(i => i !== combo);
-    this.comboService.deleteCombo(combo.comboId).subscribe();
+
+    if (combo.comboId) {
+      this.combos = this.combos.filter(i => i !== combo);
+      this.comboService.deleteCombo(combo.comboId).subscribe();
+    } else {
+      console.log("Không có comboId");
+    }
+
+
   }
 
   openComboDetailModal(combo: Combo) {

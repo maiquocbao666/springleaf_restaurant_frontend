@@ -1,8 +1,8 @@
 export interface Reservation {
-    reservationId: number;
-    table: number;
-    order: number;
-    user: number;
-    reservationDate: Date;
+    reservationId?: number;
+    restaurantTableId: number;
+    userId: number;
+    reservationDate: string;
+    outTime: string;
     numberOfGuests: number;
 }

@@ -1,4 +1,4 @@
 export interface OrderType {
-    orderTypeId: number;
+    orderTypeId?: number;
     name: string;
 }

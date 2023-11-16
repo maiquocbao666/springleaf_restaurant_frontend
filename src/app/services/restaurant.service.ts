@@ -14,18 +14,18 @@ export class RestaurantService {
     restaurantsCache!: Restaurant[];
     constructor(private apiService: ApiService) { }
 
-   
+
     getRestaurants(): Observable<Restaurant[]> {
-        
+
         if (this.restaurantsCache) {
-            
+
             return of(this.restaurantsCache);
 
         }
 
         const restaurantsObservable = this.apiService.request<Restaurant[]>('get', this.restaurantsUrl);
 
-        
+
         restaurantsObservable.subscribe(data => {
 
             this.restaurantsCache = data;
@@ -35,22 +35,26 @@ export class RestaurantService {
         return restaurantsObservable;
 
     }
-   
-    getRestaurantById(id: number): Observable<Restaurant> {
-        
+
+    getRestaurantById(id: number): Observable<Restaurant | null> {
+
+        if (!id) {
+            return of(null);
+        }
+
         if (!this.restaurantsCache) {
-            
+
             this.getRestaurants();
         }
 
         const restaurantFromCache = this.restaurantsCache.find(restaurant => restaurant.restaurantId === id);
 
         if (restaurantFromCache) {
-           
+
             return of(restaurantFromCache);
 
         } else {
-            
+
             const url = `${this.restaurantUrl}/${id}`;
             return this.apiService.request<Restaurant>('get', url);
 
@@ -98,34 +102,34 @@ export class RestaurantService {
     deleteRestaurant(id: number): Observable<any> {
 
         const url = `${this.restaurantUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
+
             tap(() => {
-    
+
                 const index = this.restaurantsCache.findIndex(restaurant => restaurant.restaurantId === id);
-    
+
                 if (index !== -1) {
-    
+
                     this.restaurantsCache.splice(index, 1);
                     localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
-    
+
                 }
-    
+
             })
         );
-    
+
     }
-    
+
     updateRestaurantCache(updatedRestaurant: Restaurant): void {
         if (this.restaurantsCache) {
-          const index = this.restaurantsCache.findIndex(restaurant => restaurant.restaurantId === updatedRestaurant.restaurantId);
-      
-          if (index !== -1) {
-            this.restaurantsCache[index] = updatedRestaurant;
-          }
+            const index = this.restaurantsCache.findIndex(restaurant => restaurant.restaurantId === updatedRestaurant.restaurantId);
+
+            if (index !== -1) {
+                this.restaurantsCache[index] = updatedRestaurant;
+            }
         }
-      }
-      
+    }
+
 
 }

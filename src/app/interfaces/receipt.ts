@@ -1,6 +1,6 @@
 
 export interface Receipt {
-    receiptId: number;
+    receiptId?: number;
     userId: number;
     supplier: number;
     date: Date;
