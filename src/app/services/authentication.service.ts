@@ -13,9 +13,11 @@ export class AuthenticationService {
   private apiUrl = 'http://localhost:8080/auth';
   private userCache: User | null = null;
   private cachedDataSubject = new BehaviorSubject<User | null>(null);
+  private listRole  : String[] | null = null;
+  private listRoleDataSubject = new BehaviorSubject<String[] | null>(null);
   getDatasOfThisUserWorker: Worker;
 
-  constructor(private http: HttpClient, private apiService: ApiService) {
+  constructor(private http: HttpClient) {
 
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url));
 
@@ -23,12 +25,10 @@ export class AuthenticationService {
 
   // Đây là một observable để theo dõi sự thay đổi trong userCache
   cachedData$: Observable<User | null> = this.cachedDataSubject.asObservable();
-
+  roleCacheData$: Observable<String[] | null> = this.listRoleDataSubject.asObservable();
   setUserCache(user: User | null) {
-
     this.userCache = user;
     this.cachedDataSubject.next(user);
-
   }
 
   register(fullName: string, username: string, password: string, phone: string, email: string): Observable<any> {
@@ -76,6 +76,8 @@ export class AuthenticationService {
           localStorage.setItem('refresh_token', data.loginResponse.refresh_token);
           localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
           this.setUserCache(data.loginResponse.user);
+          this.listRole = data.loginResponse.user.roleName;
+          this.listRoleDataSubject.next(data.loginResponse.user.roleName);
           console.log("Login success");
           resolve(true);
 
@@ -118,6 +120,8 @@ export class AuthenticationService {
           localStorage.setItem('user_login_name', data.checkTokenRespone.user.fullName);
           localStorage.setItem('access_token', data.checkTokenRespone.access_token);
           this.setUserCache(data.checkTokenRespone.user);
+          this.listRole = data.checkTokenRespone.user.roleName;
+          this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
           console.log("Auto Login success");
 
           resolve(true);
@@ -137,9 +141,8 @@ export class AuthenticationService {
 
 
   logout() {
-
     console.log("logout")
-    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('access_token');
 
   }
 
