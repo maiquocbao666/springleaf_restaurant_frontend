@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, map, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Reservation } from '../interfaces/reservation';
 
@@ -96,5 +96,24 @@ export class ReservationService {
         );
 
     }
+
+    // Tìm kiếm tất cả reservation theo restaurantTableId
+    getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
+        if (this.reservationsCache) {
+          // If cache exists, filter reservations based on restaurantTableId
+          const filteredReservations = this.reservationsCache.filter(reservation => reservation.restaurantTableId === restaurantTableId);
+          return of(filteredReservations);
+        }
+    
+        const reservationsObservable = this.apiService.request<Reservation[]>('get', this.reservationsUrl);
+    
+        return reservationsObservable.pipe(
+          // Filter reservations based on restaurantTableId
+          map(reservations => {
+            this.reservationsCache = reservations;
+            return reservations.filter(reservation => reservation.restaurantTableId === restaurantTableId);
+          })
+        );
+      }
 
 }

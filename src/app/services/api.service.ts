@@ -2,16 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { AuthenticationService } from './authentication.service';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+
   private baseUrl = ''; // Thay đổi base URL của API của bạn
-  constructor(private http: HttpClient) { }
+  user: User | null = null;
+
+  constructor(
+    private http: HttpClient,
+  ) {
+    
+  }
 
   setUrl(uri: string) {
     //this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
+
     this.baseUrl = 'http://localhost:8080/public/' + uri;
   }
 
@@ -38,7 +48,7 @@ export class ApiService {
         return this.http.get<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`GET ${this.baseUrl}`))
@@ -66,7 +76,7 @@ export class ApiService {
         return this.http.put<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`PUT ${this.baseUrl}`))
@@ -80,7 +90,7 @@ export class ApiService {
         return this.http.delete<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`DELETE ${this.baseUrl}`))
