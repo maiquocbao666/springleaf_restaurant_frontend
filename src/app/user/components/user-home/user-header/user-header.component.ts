@@ -59,14 +59,6 @@ export class UserHeaderComponent {
       prevScrollPos = currentScrollPos;
     };
 
-    // this.checkScreenSize();
-    // this.checkIfIPad();
-
-    // window.addEventListener('resize', () => {
-    //   this.checkScreenSize();
-    //   this.checkIfIPad();
-    // });
-
   }
 
   openProfileModel() {

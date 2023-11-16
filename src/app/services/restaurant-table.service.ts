@@ -116,5 +116,18 @@ export class RestaurantTableService {
         return this.apiService.request<string>('post', 'reset/id', {});
 
     }
+
+
+    // Các chức năng tìm kiếm bàn
+
+    findTableByStatusId(tableStatusId: number): boolean{
+        const restaurantTable = this.restaurantTablesCache.find(restaurantTable => restaurantTable.tableStatusId === tableStatusId);
+        if(restaurantTable){
+            return true;
+        }
+        return false;
+    }
+
+    
     
 }
