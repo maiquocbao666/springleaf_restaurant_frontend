@@ -27,7 +27,7 @@ export class UserRestaurantTableInfomationComponent {
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
-      console.log(this.user);
+      //console.log(this.user);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
     this.reservationForm = this.formBuilder.group({
@@ -42,32 +42,39 @@ export class UserRestaurantTableInfomationComponent {
 
   addReservation() {
 
-    try {
-      const selectedDate = this.reservationForm.get('selectedDate')?.value;
-      const selectedTime = this.reservationForm.get('selectedTime')?.value;
-      const dateTimeString = selectedDate + 'T' + selectedTime;
-      const dateTime = new Date(dateTimeString);
-      const formattedDateTime = dateTime.toUTCString();
+    const selectedDate = this.reservationForm.get('selectedDate')?.value;
+    const selectedTime = this.reservationForm.get('selectedTime')?.value;
+    const dateTimeString = selectedDate + 'T' + selectedTime;
+    const dateTime = new Date(dateTimeString);
+    const formattedDateTime = dateTime.toUTCString();
 
-      const restaurantTableId = this.restaurantTable?.tableId;
-      const userId = this.user?.userId;
-      const reservationDate = formattedDateTime;
-      const outTime = '';
-      const numberOfGuests = 1;
+    const restaurantTableId = this.restaurantTable?.tableId;
+    const userId = this.user?.userId;
+    const reservationDate = formattedDateTime;
+    const outTime = '';
+    const numberOfGuests = 1;
 
-      const newReservation: Reservation = {
-        restaurantTableId: restaurantTableId!,
-        userId: userId!,
-        reservationDate: reservationDate!,
-        outTime: '',
-        numberOfGuests: 1,
-      };
+    const newReservation: Reservation = {
+      restaurantTableId: restaurantTableId!,
+      userId: userId!,
+      reservationDate: reservationDate,
+      outTime: outTime,
+      numberOfGuests: numberOfGuests,
+    };
 
-      //console.log(newReservation);
-      this.reservationService.addReservation(newReservation);
-    } catch (error) {
-      console.log("Thêm reservation thất bại");
-    }
+    this.reservationService.addReservation(newReservation).subscribe({
+      next: (addedReservation) => {
+          //console.log('Reservation added successfully:', addedReservation);
+          // Thực hiện các hành động khác nếu cần
+      },
+      error: (error) => {
+          console.error('Error adding reservation:', error);
+          // Xử lý lỗi nếu có
+      },
+      complete: () => {
+          // Xử lý khi Observable hoàn thành (nếu cần)
+      }
+  });
 
   }
 

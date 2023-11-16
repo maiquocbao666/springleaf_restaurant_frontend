@@ -38,18 +38,17 @@ export class ReservationService {
     }
 
     addReservation(newReservation: Reservation): Observable<Reservation> {
-
-        return this.apiService.request<Reservation>('post', this.reservationUrl, newReservation).pipe(
-
+        // Tạo một Observable bằng cách sử dụng phương thức 'request' từ 'apiService'
+        return this.apiService.request<Reservation>('post', 'reservation', newReservation).pipe(
+            // Sử dụng toán tử 'tap' để thực hiện các hành động không ảnh hưởng đến dữ liệu chính của Observable
             tap((addedReservation: Reservation) => {
-
+                // Thêm đặt bàn mới vào mảng 'reservationsCache'
                 this.reservationsCache.push(addedReservation);
+    
+                // Lưu mảng 'reservationsCache' vào localStorage dưới dạng JSON
                 localStorage.setItem(this.reservationsUrl, JSON.stringify(this.reservationsCache));
-
             })
-
         );
-
     }
 
     updateReservation(updatedReservation: Reservation): Observable<any> {
