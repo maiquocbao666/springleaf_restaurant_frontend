@@ -4,7 +4,7 @@
     <div class="mb-3">
       <label for="inventoryBranch" class="form-label">Chi nhánh hàng tồn</label>
       <div class="mb-3">
-        <select class="form-select" aria-label="Default select example" formControlName="inventoryBrand">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranch">
           <option value="">Chọn chi nhánh hàng tồn</option>
           <option *ngFor="let branch of inventoryBranches " [value]="branch.inventoryBranchId">{{
             branch.inventoryBranchId }}</option>
@@ -54,12 +54,13 @@
       <tr
         *ngFor="let goodsReceipt of goodsReceipts | paginate: { itemsPerPage: tableSize, currentPage: page, totalItems: count }; let i = index">
         <td>{{ goodsReceipt.goodsReceiptId }}</td>
-        <td>{{ (getInventoryBranchById(goodsReceipt.inventoryBrand) | async)?.inventoryBranchId }}</td>
+        <td>{{ (getInventoryBranchById(goodsReceipt.inventoryBranch) | async)?.inventoryBranchId }}</td>
         <td>{{ goodsReceipt.date | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         <td>{{ goodsReceipt.warehouseManager }}</td>
         <td>{{ goodsReceipt.user }}</td>
         <td>
-          <button type="button" class="btn btn-outline-primary" (click)="openGoodsReceiptDetailModal(goodsReceipt)">Sửa</button>
+          <button type="button" class="btn btn-outline-primary"
+            (click)="openGoodsReceiptDetailModal(goodsReceipt)">Sửa</button>
           <button type="button" class="btn btn-outline-danger" (click)="deleteGoodsReceipt(goodsReceipt)">Xóa</button>
         </td>
       </tr>

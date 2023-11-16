@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CartDetail } from 'src/app/interfaces/cart-detail';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { CartService } from 'src/app/services/cart.service';
@@ -22,7 +21,54 @@ export class UserCartComponent implements OnInit {
     private cartDetailsService: CartDetailService,
     private cartService: CartService
   ) {
-    
+
+  }
+  @ViewChild('likeBtn') likeBtn!: ElementRef;
+  @ViewChild('minusBtn') minusBtn!: ElementRef;
+  @ViewChild('plusBtn') plusBtn!: ElementRef;
+
+  ngAfterViewInit() {
+    this.likeButtonHandler();
+    this.minusButtonHandler();
+    this.plusButtonHandler();
+  }
+
+  likeButtonHandler() {
+    this.likeBtn.nativeElement.addEventListener('click', () => {
+      this.likeBtn.nativeElement.classList.toggle('is-active');
+    });
+  }
+
+  minusButtonHandler() {
+    this.minusBtn.nativeElement.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      const input = this.minusBtn.nativeElement.closest('div').querySelector('input');
+      let value = parseInt((input as HTMLInputElement).value);
+
+      if (value > 1) {
+        value -= 1;
+      } else {
+        value = 0;
+      }
+
+      (input as HTMLInputElement).value = value.toString();
+    });
+  }
+
+  plusButtonHandler() {
+    this.plusBtn.nativeElement.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      const input = this.plusBtn.nativeElement.closest('div').querySelector('input');
+      let value = parseInt((input as HTMLInputElement).value);
+
+      if (value < 100) {
+        value += 1;
+      } else {
+        value = 100;
+      }
+
+      (input as HTMLInputElement).value = value.toString();
+    });
   }
 
   ngOnInit(): void {

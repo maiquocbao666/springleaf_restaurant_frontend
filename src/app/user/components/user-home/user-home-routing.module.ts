@@ -1,4 +1,3 @@
-import { UserCartComponent } from './user-cart/user-cart.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserHomeComponent } from './user-home.component';
@@ -67,6 +66,12 @@ const routes: Routes = [
         loadChildren: () =>
           import('./user-restaurants/user-restaurants.module')
             .then(m => m.UserRestaurantsModule),
+      },
+      {
+        path: 'user/checkout',
+        loadChildren: () =>
+          import('./user-checkout/user-checkout.module')
+            .then(m => m.UserCheckoutModule),
       },
       {
         path: 'user/product/detail',

@@ -69,12 +69,12 @@ export class AdminGoodsReceiptsComponent {
   }
 
   addGoodsReceipt(): void {
-    const inventoryBrand = this.goodsReceiptForm.get('inventoryBrand')?.value;
+    const inventoryBranch = this.goodsReceiptForm.get('inventoryBranch')?.value;
     const date = this.goodsReceiptForm.get('date')?.value;
     const warehouseManager = this.goodsReceiptForm.get('warehouseManager')?.value;
     const user = this.goodsReceiptForm.get('user')?.value;
 
-    this.goodsReceiptService.addGoodsReceipt({ inventoryBrand, date, warehouseManager, user } as GoodsReceipt)
+    this.goodsReceiptService.addGoodsReceipt({ inventoryBranch, date, warehouseManager, user } as GoodsReceipt)
       .subscribe(goodsReceipt => {
         this.goodsReceipts.push(goodsReceipt);
         this.getGoodsReceipts();

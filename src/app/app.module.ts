@@ -72,6 +72,7 @@ import { AdminTableStatusesComponent } from './admin/components/admin-home/admin
 import { AdminTableTypeDetailComponent } from './admin/components/admin-home/admin-table-types/admin-table-type-detail/admin-table-type-detail.component';
 import { AdminTableTypesComponent } from './admin/components/admin-home/admin-table-types/admin-table-types.component';
 import { AppComponent } from './app.component';
+import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 
 
 
@@ -94,6 +95,7 @@ import { AppComponent } from './app.component';
     UserComboDetailComponent,
     UserInventoryBranchesComponent,
     UserBannerComponent,
+    UserCheckoutComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,

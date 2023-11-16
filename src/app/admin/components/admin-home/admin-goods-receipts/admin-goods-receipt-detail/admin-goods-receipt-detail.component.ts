@@ -55,7 +55,7 @@ export class AdminGoodsReceiptDetailComponent {
       const formattedDate = new Date(this.goodsReceipt.date).toISOString().slice(0, 10);
       this.goodsReceiptForm.patchValue({
         goodsReceiptId: this.goodsReceipt.goodsReceiptId,
-        inventoryBrand: this.goodsReceipt.inventoryBrand,
+        inventoryBranch: this.goodsReceipt.inventoryBranch,
         date: formattedDate, // Gán giá trị date đã được chuyển đổi
         warehouseManager: this.goodsReceipt.warehouseManager,
         user: this.goodsReceipt.user,
@@ -68,7 +68,7 @@ export class AdminGoodsReceiptDetailComponent {
     if (this.goodsReceiptForm.valid) {
       const updatedGoodsReceipt: GoodsReceipt = {
         goodsReceiptId: this.goodsReceiptForm.get('goodsReceiptId')?.value,
-        inventoryBrand: this.goodsReceiptForm.get('inventoryBrand')?.value,
+        inventoryBranch: this.goodsReceiptForm.get('inventoryBranch')?.value,
         date: this.goodsReceiptForm.get('date')?.value,
         warehouseManager: this.goodsReceiptForm.get('warehouseManager')?.value,
         user: this.goodsReceiptForm.get('user')?.value,
