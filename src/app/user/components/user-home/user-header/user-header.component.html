@@ -1,78 +1,110 @@
-<nav id="navbar" class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Menu cho máy tính -->
-            <ul class="navbar-nav mx-auto">
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-bars"></i> Danh mục
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="nav-link" routerLink="/user/upload" routerLinkActive="active">Upload</a>
-                                <a class="nav-link" routerLink="/user/event" routerLinkActive="active">Event</a>
-                                <a class="nav-link" routerLink="/user/inventoryBranches"
-                                    routerLinkActive="active">InventoryBranch</a>
-                                <a class="nav-link" routerLink="/user/combo" routerLinkActive="active">Combo</a>
-                                <a class="nav-link" routerLink="/user/cart" routerLinkActive="active">Cart</a>
-                                <a class="nav-link" routerLink="/chat" routerLinkActive="active">Chat</a>
-                                <a class="nav-link" routerLink="/user/table" routerLinkActive="active">Table</a>
-                                <a class="nav-link" routerLink="/user/restaurant"
-                                    routerLinkActive="active">Restaurant</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" routerLink="/user/index"
-                                routerLinkActive="active">
-                                Home</a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a class="nav-link" routerLink="/admin" routerLinkActive="active">
-                                Admin</a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a class="nav-link" (click)="checkRole()">
-                                Check</a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center">
-                            <a class="nav-link" routerLink="/user/checkout" routerLinkActive="active">
-                                Checkout</a>
-                        </li>
+
+<!--  -->
+<!-- Header Area -->
+<header class="header" >
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-5 col-12">
+                    <!-- Contact -->
+                    <ul class="top-link">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Doctors</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
                     </ul>
+                    <!-- End Contact -->
                 </div>
-            </ul>
-            <div class="input-container">
-                <input type="text" name="text" class="input" placeholder="search...">
-                <span class="icon">
-                    <i class="fa fa-search"></i>
-                </span>
+                <div class="col-lg-6 col-md-7 col-12">
+                    <!-- Top Contact -->
+                    <ul class="top-contact">
+                        <li><i class="fa fa-phone"></i>+880 1234 56789</li>
+                    </ul>
+                    <!-- End Top Contact -->
+                </div>
             </div>
-            <ul class="navbar-nav mx-auto">
-                <div class="nav-item" *ngIf="user">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user"></i> {{ truncateString(user.fullName) }}
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="nav-link" (click)="openProfileModel()">Hồ sơ cá nhân</a>
-                            <a class="nav-link" (click)="logOut()">Đăng xuất</a>
-                        </div>
-                    </li>
-                </div>
-                <div class="nav-item" *ngIf="!user">
-                    <button class="nav-link" (click)="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i>
-                        Đăng nhập</button>
-                </div>
-            </ul>
         </div>
     </div>
-</nav>
-<!--  -->
+    <!-- End Topbar -->
+    <!-- Header Inner -->
+    <div class="header-inner">
+        <div class="container">
+            <div class="inner">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-12">
+                        <!-- Start Logo -->
+                        <div class="logo">
+                            <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
+                        </div>
+                        <!-- End Logo -->
+                    </div>
+                    <div class="col-lg-7 col-md-9 col-12">
+                        <!-- Main Menu -->
+                        <div class="main-menu">
+                            <nav class="navigation">
+                                <ul class="nav menu">
+                                    <li class="active"><a href="#">Danh mục <i class="icofont-rounded-down"></i></a>
+                                        <ul class="dropdown">
+                                            <li><a routerLink="/user/upload" routerLinkActive="active">Upload</a></li>
+                                            <li><a routerLink="/user/event" routerLinkActive="active">Event</a></li>
+                                            <li>
+                                                <a routerLink="/user/inventoryBranches"
+                                                    routerLinkActive="active">InventoryBranch</a>
+                                            </li>
+                                            <li><a routerLink="/user/combo" routerLinkActive="active">Combo</a></li>
+                                            <li><a routerLink="/chat" routerLinkActive="active">Chat</a></li>
+                                            <li><a routerLink="/user/cart" routerLinkActive="active">Cart</a></li>
+                                            <li><a routerLink="/user/table" routerLinkActive="active">Table</a></li>
+                                            <li>
+                                                <a routerLink="/user/restaurant"
+                                                    routerLinkActive="active">Restaurant</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li><a routerLink="/user/index" routerLinkActive="active">Home</a></li>
+                                    <li><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
+                                    <li><a (click)="checkRole()">Check</a>
+                                        <ul class="dropdown">
+                                            <li><a href="404.html">404 Error</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
+                                        <ul class="dropdown">
+                                            <li><a href="blog-single.html">Blog Details</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="contact.html">Contact Us</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!--/ End Main Menu -->
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        <ul class="nav menu">
+                            <li *ngIf="user"><a href="#"><i class="fa fa-user"></i> {{ truncateString(user.fullName) }}<i class="icofont-rounded-down"></i></a>
+                                <ul class="dropdown" >
+                                    <li><a class="nav-link" (click)="openProfileModel()">Hồ sơ cá nhân</a></li>
+                                    <li><a class="nav-link" (click)="logOut()">Đăng xuất</a></li>
+                                    <div class="nav-item" *ngIf="!user">
+                                        <button class="nav-link" (click)="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i>
+                                            Đăng nhập</button>
+                                    </div>
+                                </ul>
+                            </li>
+                            <li *ngIf="!user">
+                                <a (click)="openLoginModal()">
+                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                        Đăng nhập
+                                </a>
+                            </li>        
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ End Header Inner -->
+</header>
+<!-- End Header Area -->
