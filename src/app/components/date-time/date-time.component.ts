@@ -5,22 +5,18 @@ import { DateTimeService } from 'src/app/services/date-time.service';
   selector: 'app-date-time',
   templateUrl: './date-time.component.html',
   styleUrls: ['./date-time.component.css'],
-  //encapsulation: ViewEncapsulation.None
 })
 export class DateTimeComponent {
 
-  currentDateTime: Date = new Date();
+  currentDateTime: string = '';
 
-  constructor(private dateTimeService: DateTimeService) {
-
-  }
+  constructor(private dateTimeService: DateTimeService) { }
 
   ngOnInit() {
-
-    this.dateTimeService.getCurrentTime().subscribe((dateTime: Date) => {
-      this.currentDateTime = dateTime;
+    this.dateTimeService.getCurrentTime().subscribe((dateObject: Date) => {
+      // Assuming the service emits Date objects
+      this.currentDateTime = dateObject.toISOString();
     });
-
   }
-
+  
 }
