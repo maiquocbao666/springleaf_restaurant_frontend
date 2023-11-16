@@ -75,6 +75,7 @@ import { AppComponent } from './app.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { AdminReservationsComponent } from './admin/components/admin-home/admin-reservations/admin-reservations.component';
 
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
 
 
 @NgModule({
@@ -137,7 +138,7 @@ import { AdminReservationsComponent } from './admin/components/admin-home/admin-
     LoginComponent,
     DateTimeComponent,
     ProfileComponent,
-
+    UploadFileComponent,
 
   ],
   imports: [
