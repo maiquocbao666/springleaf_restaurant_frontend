@@ -72,7 +72,7 @@ import { AdminTableStatusesComponent } from './admin/components/admin-home/admin
 import { AdminTableTypeDetailComponent } from './admin/components/admin-home/admin-table-types/admin-table-type-detail/admin-table-type-detail.component';
 import { AdminTableTypesComponent } from './admin/components/admin-home/admin-table-types/admin-table-types.component';
 import { AppComponent } from './app.component';
-
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
 
 
 @NgModule({
@@ -134,7 +134,7 @@ import { AppComponent } from './app.component';
     LoginComponent,
     DateTimeComponent,
     ProfileComponent,
-
+    UploadFileComponent,
 
   ],
   imports: [
