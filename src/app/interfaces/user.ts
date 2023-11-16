@@ -9,6 +9,4 @@ export interface User {
   image: string;
   managerId: number;
   restaurantBranchId: number; // Sử dụng tên trường giống với entity Spring Boot
-  roleId: number;
-  
 }
