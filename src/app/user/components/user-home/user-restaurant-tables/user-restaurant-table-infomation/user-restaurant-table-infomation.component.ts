@@ -46,7 +46,7 @@ export class UserRestaurantTableInfomationComponent {
     const selectedTime = this.reservationForm.get('selectedTime')?.value;
     const dateTimeString = selectedDate + 'T' + selectedTime;
     const dateTime = new Date(dateTimeString);
-    const formattedDateTime = dateTime.toUTCString();
+    const formattedDateTime = dateTime.toISOString();
 
     const restaurantTableId = this.restaurantTable?.tableId;
     const userId = this.user?.userId;
