@@ -39,8 +39,6 @@ export class ReservationService {
 
     addReservation(newReservation: Reservation): Observable<Reservation> {
 
-        alert("bruh");
-
         return this.apiService.request<Reservation>('post', this.reservationUrl, newReservation).pipe(
 
             tap((addedReservation: Reservation) => {

@@ -42,50 +42,33 @@ export class UserRestaurantTableInfomationComponent {
 
   addReservation() {
 
-    const selectedDate = this.reservationForm.get('selectedDate')?.value;
-    const selectedTime = this.reservationForm.get('selectedTime')?.value;
-    const dateTimeString = selectedDate + 'T' + selectedTime;
-    const dateTime = new Date(dateTimeString);
-    const formattedDateTime = dateTime.toLocaleString('en-US',{
-      year: 'numeric', 
-         month: '2-digit', 
-         day: '2-digit', 
-         hour: '2-digit', 
-         minute: '2-digit', 
-         second: '2-digit' 
-    });
+    try {
+      const selectedDate = this.reservationForm.get('selectedDate')?.value;
+      const selectedTime = this.reservationForm.get('selectedTime')?.value;
+      const dateTimeString = selectedDate + 'T' + selectedTime;
+      const dateTime = new Date(dateTimeString);
+      const formattedDateTime = dateTime.toUTCString();
 
-    // test() {
-    //   const datetimeString = this.selectedDate + 'T' + this.selectedTime;
-    //   const datetime = new Date(datetimeString);
-    //   const formattedDatetime = datetime.toLocaleString('en-US', { 
-    //     year: 'numeric', 
-    //     month: '2-digit', 
-    //     day: '2-digit', 
-    //     hour: '2-digit', 
-    //     minute: '2-digit', 
-    //     second: '2-digit' 
-    //   });
+      const restaurantTableId = this.restaurantTable?.tableId;
+      const userId = this.user?.userId;
+      const reservationDate = formattedDateTime;
+      const outTime = '';
+      const numberOfGuests = 1;
 
-    //   // Lưu giá trị datetime vào cơ sở dữ liệu tại đây
-    //   console.log(formattedDatetime); // In ra giá trị datetime để kiểm tra
-    // }
+      const newReservation: Reservation = {
+        restaurantTableId: restaurantTableId!,
+        userId: userId!,
+        reservationDate: reservationDate!,
+        outTime: '',
+        numberOfGuests: 1,
+      };
 
-    const formattedDateString = "2023-11-15 12:34:56.789123";
+      //console.log(newReservation);
+      this.reservationService.addReservation(newReservation);
+    } catch (error) {
+      console.log("Thêm reservation thất bại");
+    }
 
-    // Chuyển đổi chuỗi thành đối tượng Date
-    const formattedDateObject = new Date(formattedDateString);
-    alert(formattedDateObject);
-
-    const newReservation: Reservation = {
-      restaurantTableId: this.restaurantTable?.tableId!,
-      userId: this.user?.userId!,
-      reservationDate: formattedDateTime,
-      numberOfGuests: 1,
-    };
-
-    console.log(newReservation);
-    this.reservationService.addReservation(newReservation);
   }
 
 }

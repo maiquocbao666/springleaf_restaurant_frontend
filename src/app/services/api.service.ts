@@ -52,7 +52,7 @@ export class ApiService {
         return this.http.post<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`POST ${this.baseUrl}`))
