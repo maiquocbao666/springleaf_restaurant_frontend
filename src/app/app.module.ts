@@ -45,7 +45,6 @@ import { AdminUsersComponent } from './admin/components/admin-home/admin-users/a
 import { ChatComponent } from './components/chat/chat.component';
 import { LoginComponent } from './components/login/login.component';
 import { WebSocketService } from './services/web-socket.service';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgToastModule } from 'ng-angular-popup';
 import { DateTimeComponent } from './components/date-time/date-time.component';
@@ -65,6 +64,7 @@ import { AdminInventoryBranchDetailComponent } from './admin/components/admin-ho
 import { AdminInventoryBranchesComponent } from './admin/components/admin-home/admin-inventory-branches/admin-inventory-branches.component';
 import { AdminReceiptDetailComponent } from './admin/components/admin-home/admin-receipts/admin-receipt-detail/admin-receipt-detail.component';
 import { AdminReceiptsComponent } from './admin/components/admin-home/admin-receipts/admin-receipts.component';
+import { AdminReservationsComponent } from './admin/components/admin-home/admin-reservations/admin-reservations.component';
 import { AdminRestaurantDetailComponent } from './admin/components/admin-home/admin-restaurants/admin-restaurant-detail/admin-restaurant-detail.component';
 import { AdminRestaurantsComponent } from './admin/components/admin-home/admin-restaurants/admin-restaurants.component';
 import { AdminTableStatusDetailComponent } from './admin/components/admin-home/admin-table-statuses/admin-table-status-detail/admin-table-status-detail.component';
@@ -74,11 +74,7 @@ import { AdminTableTypesComponent } from './admin/components/admin-home/admin-ta
 import { AppComponent } from './app.component';
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
-import { AdminReservationsComponent } from './admin/components/admin-home/admin-reservations/admin-reservations.component';
-
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
-
-
 @NgModule({
   declarations: [
     AppComponent,

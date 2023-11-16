@@ -125,6 +125,7 @@ const routes: Routes = [
             (m) => m.AdminReceiptsModule
           ),
       },
+
     ]
   },
   {

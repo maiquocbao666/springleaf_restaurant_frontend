@@ -1,3 +1,4 @@
+
 <div class="most_popular">
     <div class="title text-center">
         <a [routerLink]="['/user/index']">
@@ -6,26 +7,21 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 col-sm-6"
-                *ngFor="let product of getVisibleProducts(); let i = index">
+            <div class="col-lg-3 col-sm-6" *ngFor="let product of getVisibleProducts(); let i = index">
                 <div class="most_popular_item">
                     <div class="most_popular_thumb hover_zoom_brightness">
                         <a href="javascript:void(0)">
-                            <img
-                                src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
+                            <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
                                 class="img-fluid" alt="most_popular">
                             <div class="item_action">
                                 <ul class="list-unstyled">
-                                    <li class="list-inline-item"><a href="#"
-                                            class="view icon"><i
+                                    <li class="list-inline-item"><a href="#" class="view icon"><i
                                                 class="fa-solid fa-eye"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"
-                                            class="wishlist icon"><i
+                                    <li class="list-inline-item"><a href="#" class="wishlist icon"><i
                                                 class="fa-regular fa-heart"></i></a></li>
-                                    <li class="list-inline-item"><a
-                                            class="buy icon"><i
-                                                class="fa-solid fa-cart-shopping"
-                                                (click)="addToCart(product)"></i></a></li>
+                                    <li class="list-inline-item"><a class="buy icon"><i
+                                                class="fa-solid fa-cart-shopping" (click)="addToCart(product)"></i></a>
+                                    </li>
                                 </ul>
                             </div>
                         </a>
@@ -50,8 +46,7 @@
 </div>
 
 <div class="text-center mb-5">
-    <button class="Btn" (click)="showMore()"
-        *ngIf="remainingProducts && remainingProducts > 0">Show
+    <button class="Btn" (click)="showMore()" *ngIf="remainingProducts && remainingProducts > 0">Show
         More</button>
     <button class="Btn" (click)="showLess()" *ngIf="visibleProductCount > 12">Show
         Less</button>

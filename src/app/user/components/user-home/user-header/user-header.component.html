@@ -1,6 +1,5 @@
-
 <!-- Header Area -->
-<header class="header" id="navbar">
+<header class="header " id="navbar">
     <!-- Topbar -->
     <div class="topbar">
         <div class="container">
@@ -34,7 +33,8 @@
                     <div class="col-lg-3 col-md-3 col-12">
                         <!-- Start Logo -->
                         <div class="logo">
-                            <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
+                            <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i>
+                                SPRINGLEAF</a>
                         </div>
                         <!-- End Logo -->
                     </div>
@@ -61,7 +61,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    
+
                                     <li><a routerLink="/user/index" routerLinkActive="active">Home</a></li>
                                     <li><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
                                     <li><a (click)="checkRole()">Check</a>
@@ -82,12 +82,14 @@
                     </div>
                     <div class="col-lg-2 col-12">
                         <ul class="nav menu">
-                            <li *ngIf="user"><a href="#"><i class="fa fa-user"></i> {{ truncateString(user.fullName) }}<i class="icofont-rounded-down"></i></a>
-                                <ul class="dropdown" >
+                            <li *ngIf="user"><a href="#"><i class="fa fa-user"></i> {{ truncateString(user.fullName)
+                                    }}<i class="icofont-rounded-down"></i></a>
+                                <ul class="dropdown">
                                     <li><a class="nav-link" (click)="openProfileModel()">Hồ sơ cá nhân</a></li>
                                     <li><a class="nav-link" (click)="logOut()">Đăng xuất</a></li>
                                     <div class="nav-item" *ngIf="!user">
-                                        <button class="nav-link" (click)="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i>
+                                        <button class="nav-link" (click)="openLoginModal()"><i
+                                                class="fa-solid fa-right-to-bracket"></i>
                                             Đăng nhập</button>
                                     </div>
                                 </ul>
@@ -95,9 +97,9 @@
                             <li *ngIf="!user">
                                 <a (click)="openLoginModal()">
                                     <i class="fa-solid fa-right-to-bracket"></i>
-                                        Đăng nhập
+                                    Đăng nhập
                                 </a>
-                            </li>        
+                            </li>
                         </ul>
                     </div>
                 </div>
