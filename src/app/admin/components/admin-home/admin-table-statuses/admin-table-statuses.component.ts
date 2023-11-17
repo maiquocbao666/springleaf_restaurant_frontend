@@ -6,6 +6,7 @@ import { TableStatus } from 'src/app/interfaces/table-status';
 import { TableStatusService } from 'src/app/services/table-status.service';
 import { AdminTableStatusDetailComponent } from './admin-table-status-detail/admin-table-status-detail.component';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-admin-table-statuses',
@@ -31,6 +32,7 @@ export class AdminTableStatusesComponent {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private restaurantTableService: RestaurantTableService,
+    private toastifyService: ToastService,
   ) {
     window.addEventListener('storage', (event) => {
       if (event.key && event.oldValue !== null) {
@@ -39,7 +41,7 @@ export class AdminTableStatusesComponent {
     });
     this.tableStatusForm = this.formBuilder.group({
       tableStatusId: ['', [Validators.required]],
-      statusName: new FormControl({ value: '', disabled: false }),
+      statusName: new FormControl({ value: 'Chọn trạng thái bàn', disabled: false }),
       name: new FormControl({ value: '', disabled: true }),
     });
   }
@@ -88,8 +90,16 @@ export class AdminTableStatusesComponent {
 
     if (this.isCustomChecked) {
       name = this.tableStatusForm.get('name')?.value?.trim() ?? '';
+      if (name === '') {
+        this.toastifyService.showWarn("Mời nhập trạng thái bàn");
+        return
+      }
     } else {
       name = this.tableStatusForm.get('statusName')?.value?.trim() ?? '';
+      if (name === 'Chọn trạng thái bàn') {
+        this.toastifyService.showWarn("Mời chọn trạng thái bàn");
+        return
+      }
     }
 
     const newTableStatus: TableStatus = {
@@ -108,7 +118,7 @@ export class AdminTableStatusesComponent {
 
     if (tableStatus.tableStatusId) {
 
-      if(this.restaurantTableService.findTableByStatusId(tableStatus?.tableStatusId)){
+      if (this.restaurantTableService.findTableByStatusId(tableStatus?.tableStatusId)) {
         console.log("Có bàn đang sử dụng status này, không thể xóa");
         return;
       }

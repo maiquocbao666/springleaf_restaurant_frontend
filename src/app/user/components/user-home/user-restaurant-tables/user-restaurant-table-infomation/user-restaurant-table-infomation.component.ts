@@ -87,6 +87,7 @@ export class UserRestaurantTableInfomationComponent {
       reservationDate: reservationDate,
       outTime: outTime,
       numberOfGuests: numberOfGuests,
+      reservationsStatus: 0
     };
 
     this.reservationService.addReservation(newReservation).subscribe(

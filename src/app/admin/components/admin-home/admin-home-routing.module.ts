@@ -125,7 +125,12 @@ const routes: Routes = [
             (m) => m.AdminReceiptsModule
           ),
       },
-
+      {
+        path: 'reservations',
+        loadChildren: () => import('./admin-reservations/admin-reservations.module').then(
+          (m) => m.AdminReservationsModule
+        )
+      }
     ]
   },
   {
