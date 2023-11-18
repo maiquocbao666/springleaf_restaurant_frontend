@@ -42,18 +42,20 @@ import { AdminSupplierDetailComponent } from './admin/components/admin-home/admi
 import { AdminSuppliersComponent } from './admin/components/admin-home/admin-suppliers/admin-suppliers.component';
 import { AdminUsersComponent } from './admin/components/admin-home/admin-users/admin-users.component';
 
-import { ChatComponent } from './components/chat/chat.component';
-import { LoginComponent } from './components/login/login.component';
-import { WebSocketService } from './services/web-socket.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgToastModule } from 'ng-angular-popup';
+import { ChatComponent } from './components/chat/chat.component';
 import { DateTimeComponent } from './components/date-time/date-time.component';
+import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ChatService } from './services/chat.service';
+import { WebSocketService } from './services/web-socket.service';
 import { UserBannerComponent } from './user/components/user-home/user-banner/user-banner.component';
 
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { AdminComboDetailsUpdateComponent } from './admin/components/admin-home/admin-combo-details-update/admin-combo-details-update.component';
+import { AdminComboDetailsComponent } from './admin/components/admin-home/admin-combo-details/admin-combo-details.component';
 import { AdminComboDetailComponent } from './admin/components/admin-home/admin-combos/admin-combo-detail/admin-combo-detail.component';
 import { AdminCombosComponent } from './admin/components/admin-home/admin-combos/admin-combos.component';
 import { AdminEventDetailComponent } from './admin/components/admin-home/admin-events/admin-event-detail/admin-event-detail.component';
@@ -72,10 +74,9 @@ import { AdminTableStatusesComponent } from './admin/components/admin-home/admin
 import { AdminTableTypeDetailComponent } from './admin/components/admin-home/admin-table-types/admin-table-type-detail/admin-table-type-detail.component';
 import { AdminTableTypesComponent } from './admin/components/admin-home/admin-table-types/admin-table-types.component';
 import { AppComponent } from './app.component';
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
-import { UploadFileComponent } from './components/upload-file/upload-file.component';
-import { AdminComboDetailsComponent } from './admin/components/admin-home/admin-combo-details/admin-combo-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -133,6 +134,7 @@ import { AdminComboDetailsComponent } from './admin/components/admin-home/admin-
     AdminReceiptsComponent,
     AdminReservationsComponent,
     AdminComboDetailsComponent,
+    AdminComboDetailsUpdateComponent,
 
     ChatComponent,
     LoginComponent,

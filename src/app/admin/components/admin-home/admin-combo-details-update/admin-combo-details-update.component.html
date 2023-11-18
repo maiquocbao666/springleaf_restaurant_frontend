@@ -1,0 +1,39 @@
+<form [formGroup]="comboDetailForm" (ngSubmit)="updateComboDetail()">
+  <div class="row">
+    <div class="col-lg-3">
+      <label for="exampleInputPassword1" class="form-label">Món ăn</label>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="menuItem">
+          <option value>Chọn món</option>
+          <option *ngFor="let product of products " [value]="product.menuItemId">{{
+            product.name
+            }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label for="exampleInputPassword1" class="form-label">Combo</label>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="comboId">
+          <option value>Chọn combo</option>
+          <option *ngFor="let combo of combos " [value]="combo.comboId">{{
+            combo.comboName
+            }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label for="exampleInputPassword1" class="form-label">Số lượng</label>
+      <div class="mb-3">
+        <input type="text" class="form-control" formControlName="quantity" placeholder="Nhập Số lượng...">
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label for="exampleInputPassword1" class="form-label">Loại Combo</label>
+      <div class="mb-3">
+        <input type="text" class="form-control" formControlName="comboTypeId" placeholder="Nhập ID Loại Combo...">
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Lưu</button>
+</form>

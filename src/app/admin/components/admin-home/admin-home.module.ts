@@ -9,6 +9,7 @@ import { AdminHomeRoutingModule } from './admin-home-routing.module';
     AdminHomeRoutingModule
   ],
   declarations: [
+
   ],
 
 })

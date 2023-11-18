@@ -8,6 +8,7 @@ import { Product } from 'src/app/interfaces/product';
 import { ComboDetailService } from 'src/app/services/combo-detail.service';
 import { ComboService } from 'src/app/services/combo.service';
 import { ProductService } from 'src/app/services/product.service';
+import { AdminComboDetailsUpdateComponent } from '../admin-combo-details-update/admin-combo-details-update.component';
 
 @Component({
   selector: 'app-admin-combo-detail',
@@ -88,15 +89,7 @@ export class AdminComboDetailsComponent {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
-  fillComboDetailForm(comboDetail: ComboDetail) {
-    this.comboDetailForm.patchValue({
-      // comboDetailId: comboDetail.comboDetailId,
-      comboId: comboDetail.comboId,
-      menuItem: comboDetail.menuItem,
-      quantity: comboDetail.quantity,
-      comboTypeId: comboDetail.comboTypeId
-    });
-  }
+  
 
 
   addComboDetail(): void {
@@ -122,25 +115,6 @@ export class AdminComboDetailsComponent {
       });
   }
 
-  updateComboDetail(): void {
-    if (this.comboDetailForm.valid) {
-      const updatedComboDetail: ComboDetail = {
-        comboDetailId: this.comboDetailForm.get('comboDetailId')?.value,
-        comboId: this.comboDetailForm.get('comboId')?.value,
-        menuItem: this.comboDetailForm.get('menuItem')?.value,
-        quantity: this.comboDetailForm.get('quantity')?.value,
-        comboTypeId: this.comboDetailForm.get('comboTypeId')?.value,
-      };
-
-      this.comboDetailService.updateComboDetail(updatedComboDetail).subscribe(() => {
-
-        // Cập nhật cache nếu cần
-        this.comboDetailService.updateComboDetailCache(updatedComboDetail);
-        this.comboDetailupdate.emit();
-      });
-    }
-  }
-
 
   deleteComboDetail(comboDetail: ComboDetail): void {
 
@@ -150,5 +124,16 @@ export class AdminComboDetailsComponent {
     } else {
       console.log("Không có comboDetailId");
     }
+  }
+
+  openComboDetailUpdateModal(comboDetail: ComboDetail) {
+    const modalRef = this.modalService.open(AdminComboDetailsUpdateComponent, { size: 'lg' });
+    modalRef.componentInstance.comboDetail = comboDetail;
+
+    // Subscribe to the emitted event
+    modalRef.componentInstance.comboDetailupdate.subscribe(() => {
+      this.getComboDetails(); // Refresh data in the parent component
+    });
+
   }
 }
