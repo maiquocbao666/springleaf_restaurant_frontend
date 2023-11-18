@@ -1,1 +1,54 @@
-<p>admin-reservations works!</p>
+<h1>Biểu mẫu đặt bàn</h1>
+
+<div>
+    <select (change)="onTableSizeChange($event)">
+        <option *ngFor="let size of tableSizes">
+            {{size}}
+        </option>
+    </select>
+</div>
+<br>
+<table class="table table-light container">
+    <tbody>
+        <tr>
+            <th>Reservation id</th>
+            <th>Resturant table</th>
+            <th>User</th>
+            <th>Ngày giờ tới</th>
+            <th>Ngày giờ đi</th>
+            <th>Trạng thái</th>
+            <th>Số lượng khách hàng</th>
+            <th>Thời gian vào trạng thái chờ</th>
+            <th>Thời gian chờ còn lại</th>
+            <th>Thời gian sử dụng còn lại</th>
+            <th></th>
+        </tr>
+        <tr
+            *ngFor="let reservation of reservations | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+            <td>{{ reservation.reservationId }}</td>
+            <td>{{ reservation.restaurantTableId }}</td>
+            <td>{{ reservation.userId }}</td>
+            <td>{{ reservation.reservationDate | date: 'EEEE, MMMM d, y, h:mm:ss a' }}</td>
+            <td>{{ reservation.outTime | date: 'EEEE, MMMM d, y, h:mm:ss a' }}</td>
+            <td>
+                {{ (minusDateTime(currentDateTime, reservation.reservationDate)) === "Đang chờ" ? "Đang chờ" : (minusDateTime(currentDateTime, reservation.reservationDate)) }}
+            </td>
+            <td>{{ reservation.numberOfGuests }}</td>
+            <td>{{ (minusDateTime(currentDateTime, reservation.reservationDate)) }}</td>
+            <td>{{ (reservationHoldTime(currentDateTime, reservation.reservationDate)) }}</td>
+            <td>{{ (hoursUse(currentDateTime, reservation.reservationDate)) }}</td>
+            <td><button (click)="deletereservation(reservation)">Delete</button></td>
+            <!-- <th> <a routerLink="/admin/reservation/{{reservation.reservationId}}" type="button">Edit
+                </a></th> -->
+            <!-- <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <button (click)="openreservationDetailModal(reservation)">Edit</button>
+                </li>
+            </ul> -->
+        </tr>
+    </tbody>
+</table>
+<div>
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>

@@ -9,19 +9,16 @@
                 <th>Trạng thái</th>
                 <th>Chi nhánh nhà hàng</th>
                 <th>Thông tin</th>
+                <th>Đã đặt</th>
             </tr>
             <tr *ngFor="let restaurantTable of restaurantTables">
-                <td>
-                    {{ restaurantTable.tableId }}
-                </td>
+                <td>{{ restaurantTable.tableId }}</td>
                 <td>{{ restaurantTable.tableName }}</td>
-                <td>{{ (getTableTypeById(restaurantTable.tableTypeId) |
-                    async)?.tableTypeName }}</td>
-                <td>{{ (getTableStatusById(restaurantTable.tableStatusId) |
-                    async)?.tableStatusName }}</td>
-                <td>{{ (getRestaurantById(restaurantTable.restaurantId) |
-                    async)?.restaurantName }}</td>
+                <td>{{ (getTableTypeById(restaurantTable.tableTypeId) | async)?.tableTypeName }}</td>
+                <td>{{ (getTableStatusById(restaurantTable.tableStatusId) | async)?.tableStatusName }}</td>
+                <td>{{ (getRestaurantById(restaurantTable.restaurantId) | async)?.restaurantName }}</td>
                 <td><button (click)="openRestaurantTableInfomationModal(restaurantTable)">Xem thông tin</button></td>
+                <td>True</td>
             </tr>
         </tbody>
     </table>

@@ -131,14 +131,20 @@ const routes: Routes = [
           import('./admin-combo-details/admin-combo-details.module').then(
             (m) => m.AdminComboDetailsModule
           ),
-      },
+      }, {
+        path: 'reservations',
+        loadChildren: () => import('./admin-reservations/admin-reservations.module').then(
+          (m) => m.AdminReservationsModule
+        )
+      }
     ]
   },
+
   {
     path: 'admin/product/detail/:id',
     loadChildren: () => import('./admin-products/admin-product-detail/admin-product-detail.module')
       .then(m => m.AdminProductDetailModule)
-  },
+  }
   // {
   //   path: 'admin/category/:id',
   //   loadChildren: () => import('./admin-category-detail/admin-category-detail.module')

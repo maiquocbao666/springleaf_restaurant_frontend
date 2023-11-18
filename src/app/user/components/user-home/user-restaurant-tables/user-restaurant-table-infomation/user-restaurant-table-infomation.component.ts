@@ -6,6 +6,7 @@ import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ReservationService } from 'src/app/services/reservation.service';
+import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 
 @Component({
   selector: 'app-user-restaurant-table-infomation',
@@ -18,12 +19,14 @@ export class UserRestaurantTableInfomationComponent {
   @Output() restaurantTableSaved: EventEmitter<void> = new EventEmitter<void>();
   user: User | null = null;
   reservationForm: FormGroup;
+  reservations: Reservation[] = [];
 
   constructor(
     public activeModal: NgbActiveModal,
     private authService: AuthenticationService,
     private reservationService: ReservationService,
     private formBuilder: FormBuilder,
+    private restaurantTableService: RestaurantTableService,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -36,8 +39,32 @@ export class UserRestaurantTableInfomationComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.getReservationsByTableId();
+  }
+
   bookingTable(): void {
     this.addReservation();
+    
+  }
+
+  getReservationsByTableId(): void{
+    if (this.restaurantTable?.tableId) {
+      this.reservationService.getReservationsByTableId(this.restaurantTable.tableId).subscribe(
+        {
+          next: (reservations) => {
+            this.reservations = reservations;
+            console.log(this.reservations);
+          },
+          error: (error) => {
+
+          },
+          complete: () => {
+
+          }
+        }
+      );
+    }
   }
 
   addReservation() {
@@ -60,21 +87,24 @@ export class UserRestaurantTableInfomationComponent {
       reservationDate: reservationDate,
       outTime: outTime,
       numberOfGuests: numberOfGuests,
+      reservationsStatus: 0
     };
 
-    this.reservationService.addReservation(newReservation).subscribe({
-      next: (addedReservation) => {
+    this.reservationService.addReservation(newReservation).subscribe(
+      {
+        next: (addedReservation) => {
           //console.log('Reservation added successfully:', addedReservation);
           // Thực hiện các hành động khác nếu cần
-      },
-      error: (error) => {
+        },
+        error: (error) => {
           console.error('Error adding reservation:', error);
           // Xử lý lỗi nếu có
-      },
-      complete: () => {
+        },
+        complete: () => {
           // Xử lý khi Observable hoàn thành (nếu cần)
+        }
       }
-  });
+    );
 
   }
 

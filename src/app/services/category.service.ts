@@ -89,6 +89,8 @@ export class CategoryService {
 
         const index = this.categoriesCache!.findIndex(category => category.categoryId === updatedCategory.categoryId);
 
+        const name = this.categoriesCache!.find(category => category.name === "bruh");
+
         if (index !== -1) {
 
           this.categoriesCache![index] = updatedCategory;

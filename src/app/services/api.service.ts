@@ -29,6 +29,8 @@ export class ApiService {
     
       this.baseUrl = 'http://localhost:8080/public/' + uri;
     //this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
+
+    this.baseUrl = 'http://localhost:8080/public/' + uri;
   }
   
   request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders | null = null): Observable<T> {
@@ -54,7 +56,7 @@ export class ApiService {
         return this.http.get<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`GET ${this.baseUrl}`))
@@ -82,7 +84,7 @@ export class ApiService {
         return this.http.put<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`PUT ${this.baseUrl}`))
@@ -96,7 +98,7 @@ export class ApiService {
         return this.http.delete<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`DELETE ${this.baseUrl}`))
