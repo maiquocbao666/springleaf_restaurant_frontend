@@ -2,10 +2,10 @@
 <div class="most_popular">
     <div class="title text-center">
         <a [routerLink]="['/user/index']">
-            <h2>PRODUCT</h2>
+            <h2>THỰC ĐƠN</h2>
         </a>
     </div>
-    <div class="container">
+    <!-- <div class="container">
         <div class="row">
             <div class="col-lg-3 col-sm-6" *ngFor="let product of getVisibleProducts(); let i = index">
                 <div class="most_popular_item">
@@ -42,6 +42,36 @@
                 </div>
             </div>
         </div>
+    </div> -->
+    <div class="tab-content">
+        <div id="tab-1" class="tab-pane fade show p-0 active">
+            <div class="row g-4">
+                <div class="col-lg-6 h-50" *ngFor="let product of getVisibleProducts(); let i = index">
+                    <div class="d-flex align-items-center">
+                        <img class="flex-shrink-0 img-fluid rounded w-50" 
+                            src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" 
+                                alt="">
+                        <div class="w-100 d-flex flex-column text-start ps-4">
+                            <h5 class="d-flex justify-content-between border-bottom pb-2">
+                                <span>{{product.name}}</span>
+                                <a class="text-primary btn-buy">
+                                    <i class="fa-solid fa-cart-plus" (click)="addToCart(product)"></i>
+                                </a>
+                            </h5>
+                            <h6><span class="text-primary">{{ product.price | currency: 'VND' }}</span></h6>
+                            <small class="fst-italic">{{product.description}}</small>
+                            <div class="mostpopular_rating">
+                                <a href="#"><i class="fa-solid fa-star"></i></a>
+                                <a href="#"><i class="fa-solid fa-star"></i></a>
+                                <a href="#"><i class="fa-solid fa-star"></i></a>
+                                <a href="#"><i class="fa-solid fa-star"></i></a>
+                                <a href="#"><i class="fa-solid fa-star"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -51,3 +81,4 @@
     <button class="Btn" (click)="showLess()" *ngIf="visibleProductCount > 12">Show
         Less</button>
 </div>
+

@@ -24,7 +24,6 @@ export class UserHeaderComponent {
     private authService: AuthenticationService,
     private renderer: Renderer2,
     private el: ElementRef,
-    private mediaObserver: MediaObserver,
     private http : HttpClient,
   ) {
     this.authService.cachedData$.subscribe((data) => {
@@ -54,7 +53,7 @@ export class UserHeaderComponent {
       if (prevScrollPos > currentScrollPos) {
         this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'top', '0');
       } else {
-        this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'top', '-100px');
+        this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'top', '-100%');
       }
       prevScrollPos = currentScrollPos;
     };

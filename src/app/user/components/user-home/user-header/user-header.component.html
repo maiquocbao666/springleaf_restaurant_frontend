@@ -1,49 +1,25 @@
+
 <!-- Header Area -->
-<header class="header " id="navbar">
-    <!-- Topbar -->
-    <div class="topbar">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-5 col-12">
-                    <!-- Contact -->
-                    <ul class="top-link">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Doctors</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">FAQ</a></li>
-                    </ul>
-                    <!-- End Contact -->
-                </div>
-                <div class="col-lg-6 col-md-7 col-12">
-                    <!-- Top Contact -->
-                    <ul class="top-contact">
-                        <li><i class="fa fa-phone"></i>+880 1234 56789</li>
-                    </ul>
-                    <!-- End Top Contact -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Topbar -->
+<header class="header navbar" id="navbar">
     <!-- Header Inner -->
     <div class="header-inner">
         <div class="container">
             <div class="inner">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-12">
+                <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                    <div class="col-lg-2 col-md-3 col-12">
                         <!-- Start Logo -->
                         <div class="logo">
-                            <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i>
-                                SPRINGLEAF</a>
+                            <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i> SPRINGLEAF</a>
                         </div>
                         <!-- End Logo -->
                     </div>
-                    <div class="col-lg-7 col-md-9 col-12">
+                    <div class="col-lg-6 col-md-9 col-12">
                         <!-- Main Menu -->
                         <div class="main-menu">
                             <nav class="navigation">
                                 <ul class="nav menu">
-                                    <li class="active"><a href="#">Danh mục <i class="icofont-rounded-down"></i></a>
+                                    <li class="active"><a routerLink="/user/index" routerLinkActive="active">Home</a></li>
+                                    <li><a href="#">Danh mục <i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
                                             <li><a routerLink="/user/upload" routerLinkActive="active">Upload</a></li>
                                             <li><a routerLink="/user/event" routerLinkActive="active">Event</a></li>
@@ -61,8 +37,6 @@
                                             </li>
                                         </ul>
                                     </li>
-
-                                    <li><a routerLink="/user/index" routerLinkActive="active">Home</a></li>
                                     <li><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
                                     <li><a (click)="checkRole()">Check</a>
                                         <ul class="dropdown">
@@ -80,16 +54,18 @@
                         </div>
                         <!--/ End Main Menu -->
                     </div>
-                    <div class="col-lg-2 col-12">
-                        <ul class="nav menu">
-                            <li *ngIf="user"><a href="#"><i class="fa fa-user"></i> {{ truncateString(user.fullName)
-                                    }}<i class="icofont-rounded-down"></i></a>
-                                <ul class="dropdown">
+                    <div class="col-lg-4 col-12">
+                        <ul class="nav menu" style="float: right;">
+                            <li><div class="get-quote">
+                                <a href="appointment.html" class="btn">Book Table</a>
+                            </div></li>
+                            <li><a href=""><i class="fa-solid fa-cart-shopping"></i></a></li>
+                            <li *ngIf="user"><a href="#"><i class="fa fa-user"></i> {{ truncateString(user.fullName) }}<i class="icofont-rounded-down"></i></a>
+                                <ul class="dropdown" >
                                     <li><a class="nav-link" (click)="openProfileModel()">Hồ sơ cá nhân</a></li>
                                     <li><a class="nav-link" (click)="logOut()">Đăng xuất</a></li>
                                     <div class="nav-item" *ngIf="!user">
-                                        <button class="nav-link" (click)="openLoginModal()"><i
-                                                class="fa-solid fa-right-to-bracket"></i>
+                                        <button class="nav-link" (click)="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i>
                                             Đăng nhập</button>
                                     </div>
                                 </ul>
@@ -97,9 +73,9 @@
                             <li *ngIf="!user">
                                 <a (click)="openLoginModal()">
                                     <i class="fa-solid fa-right-to-bracket"></i>
-                                    Đăng nhập
+                                        Đăng nhập
                                 </a>
-                            </li>
+                            </li>        
                         </ul>
                     </div>
                 </div>
