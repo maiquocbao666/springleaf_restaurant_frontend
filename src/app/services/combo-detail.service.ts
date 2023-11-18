@@ -15,7 +15,6 @@ export class ComboDetailService {
     comboDetailsCache!: ComboDetail[];
 
     constructor(
-
         private apiService: ApiService
 
     ) {
@@ -27,20 +26,13 @@ export class ComboDetailService {
         if (this.comboDetailsCache) {
 
             return of(this.comboDetailsCache);
-
         }
-
         const comboDetailsObservable = this.apiService.request<ComboDetail[]>('get', this.comboDetailsUrl);
-
-
         comboDetailsObservable.subscribe(data => {
-
             this.comboDetailsCache = data;
-
         });
-
         return comboDetailsObservable;
-        
+
     }
 
     addComboDetail(newComboDetail: ComboDetail): Observable<ComboDetail> {
@@ -60,7 +52,7 @@ export class ComboDetailService {
 
     updateComboDetail(updatedComboDetail: ComboDetail): Observable<any> {
 
-        const url = `${this.comboDetailUrl}/${updatedComboDetail.comboDetailId}`;
+        const url = `${this.comboDetailUrl}`;
 
         return this.apiService.request('put', url, updatedComboDetail).pipe(
 
@@ -80,28 +72,40 @@ export class ComboDetailService {
         );
 
     }
-    
+
+
+    updateComboDetailCache(updatedComboDetail: ComboDetail): void {
+        if (this.comboDetailsCache) {
+            const index = this.comboDetailsCache.findIndex(detail => detail.comboDetailId === updatedComboDetail.comboDetailId);
+
+            if (index !== -1) {
+                this.comboDetailsCache[index] = updatedComboDetail;
+            }
+        }
+    }
+
+
     deleteComboDetail(id: number): Observable<any> {
 
         const url = `${this.comboDetailUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
-          tap(() => {
-    
-            const index = this.comboDetailsCache.findIndex(comboDetail => comboDetail.comboDetailId === id);
-    
-            if (index !== -1) {
-    
-              this.comboDetailsCache.splice(index, 1);
-              localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
-    
-            }
-    
-          })
+
+            tap(() => {
+
+                const index = this.comboDetailsCache.findIndex(comboDetail => comboDetail.comboDetailId === id);
+
+                if (index !== -1) {
+
+                    this.comboDetailsCache.splice(index, 1);
+                    localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
+
+                }
+
+            })
         );
-    
+
     }
-    
+
 
 }

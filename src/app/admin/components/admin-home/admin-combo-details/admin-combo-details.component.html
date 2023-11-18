@@ -1,0 +1,140 @@
+<div class="container">
+  <h1>Chi tiết Combo</h1>
+  <form [formGroup]="comboDetailForm">
+    <div class="row">
+      <div class="col-lg-3">
+        <label for="exampleInputPassword1" class="form-label">Món ăn</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="menuItem">
+            <option value>Chọn món</option>
+            <option *ngFor="let product of products " [value]="product.menuItemId">{{
+              product.name
+              }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <label for="exampleInputPassword1" class="form-label">Combo</label>
+        <div class="mb-3">
+          <select class="form-select" aria-label="Default select example" formControlName="comboId">
+            <option value>Chọn combo</option>
+            <option *ngFor="let combo of combos " [value]="combo.comboId">{{
+              combo.comboName
+              }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <label for="exampleInputPassword1" class="form-label">Số lượng</label>
+        <div class="mb-3">
+          <input type="text" class="form-control" formControlName="quantity" placeholder="Nhập Số lượng...">
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <label for="exampleInputPassword1" class="form-label">Loại Combo</label>
+        <div class="mb-3">
+          <input type="text" class="form-control" formControlName="comboTypeId" placeholder="Nhập ID Loại Combo...">
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="addComboDetail()">Lưu</button>
+    <button type="submit" class="btn btn-primary" (click)="updateComboDetail()">Cập nhật</button>
+  </form>
+  <div class="col-2">
+    <select class="form-select" (change)="onTableSizeChange($event)">
+      <option value>Trang</option>
+      <option *ngFor="let size of tableSizes">
+        {{size}}
+      </option>
+    </select>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Combo</th>
+        <th scope="col">Món ăn</th>
+        <th scope="col">Số lượng</th>
+        <th scope="col">ID Loại Combo</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let comboDetail of comboDetails | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+        <td>{{comboDetail.comboDetailId}}</td>
+        <td>{{ (getComboById(comboDetail.comboId) |
+          async)?.comboName }}</td>
+        <td>{{ (getProductById(comboDetail.menuItem) |
+          async)?.name }}</td>
+        <td>{{comboDetail.quantity}}</td>
+        <td>{{comboDetail.comboTypeId}}</td>
+        <td>
+          <button type="button" class="btn btn-outline-primary" (click)="fillComboDetailForm(comboDetail)">Edit</button>
+          <button type="button" class="btn btn-outline-danger" (click)="deleteComboDetail(comboDetail)">Xóa</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Trước" nextLabel="Sau"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="comboDetailForm" (ngSubmit)="addComboDetail()">
+          <div class="row">
+            <div class="col-lg-3">
+              <label for="exampleInputPassword1" class="form-label">Món ăn</label>
+              <div class="mb-3">
+                <select class="form-select" aria-label="Default select example" formControlName="menuItem">
+                  <option value>Chọn món</option>
+                  <option *ngFor="let product of products " [value]="product.menuItemId">{{
+                    product.name
+                    }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <label for="exampleInputPassword1" class="form-label">Combo</label>
+              <div class="mb-3">
+                <select class="form-select" aria-label="Default select example" formControlName="comboId">
+                  <option value>Chọn combo</option>
+                  <option *ngFor="let combo of combos " [value]="combo.comboId">{{
+                    combo.comboName
+                    }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <label for="exampleInputPassword1" class="form-label">Số lượng</label>
+              <div class="mb-3">
+                <input type="text" class="form-control" formControlName="quantity" placeholder="Nhập Số lượng...">
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <label for="exampleInputPassword1" class="form-label">Loại Combo</label>
+              <div class="mb-3">
+                <input type="text" class="form-control" formControlName="comboTypeId"
+                  placeholder="Nhập ID Loại Combo...">
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Lưu</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

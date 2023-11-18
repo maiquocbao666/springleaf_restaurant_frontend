@@ -125,7 +125,13 @@ const routes: Routes = [
             (m) => m.AdminReceiptsModule
           ),
       },
-
+      {
+        path: 'comboDetails',
+        loadChildren: () =>
+          import('./admin-combo-details/admin-combo-details.module').then(
+            (m) => m.AdminComboDetailsModule
+          ),
+      },
     ]
   },
   {

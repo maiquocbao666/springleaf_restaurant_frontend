@@ -8,7 +8,8 @@ import { AdminHomeRoutingModule } from './admin-home-routing.module';
     CommonModule,
     AdminHomeRoutingModule
   ],
-  declarations: [],
+  declarations: [
+  ],
 
 })
 export class AdminHomeModule { }

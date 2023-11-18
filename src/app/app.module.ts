@@ -75,6 +75,7 @@ import { AppComponent } from './app.component';
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
+import { AdminComboDetailsComponent } from './admin/components/admin-home/admin-combo-details/admin-combo-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -131,6 +132,7 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
     AdminReceiptDetailComponent,
     AdminReceiptsComponent,
     AdminReservationsComponent,
+    AdminComboDetailsComponent,
 
     ChatComponent,
     LoginComponent,
