@@ -12,6 +12,7 @@ export class ApiService {
   user: User | null = null;
   roles : String[] | null = [];
   private baseUrl = ''; // Thay đổi base URL của API của bạn
+
   constructor(private http: HttpClient, private authService : AuthenticationService) { 
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -30,7 +31,7 @@ export class ApiService {
       this.baseUrl = 'http://localhost:8080/public/' + uri;
     //this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
 
-    this.baseUrl = 'http://localhost:8080/public/' + uri;
+    //this.baseUrl = 'http://localhost:8080/public/' + uri;
   }
   
   request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders | null = null): Observable<T> {

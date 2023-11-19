@@ -1,19 +1,17 @@
 <div class="container">
-    <h1>Trạng thái bàn</h1>
+    <h1>Trạng thái đặt bàn</h1>
 
-    <form [formGroup]="tableStatusForm" (ngSubmit)="addTableStatus()">
+    <form [formGroup]="reservationStatusForm" (ngSubmit)="addReservationStatus()">
         <div class="row">
 
             <div class="col-sm-6">
                 <label class="form-label">Trạng thái</label>
                 <div class="mb-3">
-                    <select class="form-select" formControlName="statusName">
-                        <option value="Chọn trạng thái bàn">Chọn trạng thái bàn</option>
+                    <select class="form-select" formControlName="reservationStatusName">
+                        <option value="Chọn trạng thái đặt bàn">Chọn trạng thái đặt bàn</option>
                         <option value="Đang sử dụng">Đang sử dụng</option>
                         <option value="Đang đợi">Đang đợi</option>
-                        <option value="Đang bảo dưỡng">Đang bảo dưỡng</option>
-                        <option value="Đang không có ai đặt">Đang không có ai đặt</option>
-                        <option value="Bàn chưa kín lịch">Bàn chưa kín lịch</option>
+                        <option value="Hết giờ sử dụng">Hết giờ sử dụng</option>
                     </select>
                 </div>
             </div>
@@ -29,7 +27,7 @@
 
                 <div class="mb-3">
                     <input type="text" class="form-control" formControlName="name"
-                        [attr.disabled]="tableStatusForm.get('name')?.disabled ? true : null">
+                        [attr.disabled]="reservationStatusForm.get('name')?.disabled ? true : null">
                 </div>
             </div>
 
@@ -55,14 +53,14 @@
         </thead>
         <tbody>
             <tr
-                *ngFor="let tableStatus of tableStatuses | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                <td>{{tableStatus.tableStatusId}}</td>
-                <td>{{tableStatus.tableStatusName}}</td>
+                *ngFor="let reservationStatus of reservationStatuses | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                <td>{{reservationStatus.reservationStatusId}}</td>
+                <td>{{reservationStatus.reservationStatusName}}</td>
                 <td>
-                    <button type="button" class="btn btn-outline-primary"
-                        (click)="openTableStatusDetailModal(tableStatus)">Edit</button>
+                    <!-- <button type="button" class="btn btn-outline-primary"
+                        (click)="openTableStatusDetailModal(tableStatus)">Edit</button> -->
                     <button type="button" class="btn btn-outline-danger"
-                        (click)="deleteTableStatus(tableStatus)">Delete</button>
+                        (click)="deleteReservationStatus(reservationStatus)">Delete</button>
                 </td>
             </tr>
         </tbody>

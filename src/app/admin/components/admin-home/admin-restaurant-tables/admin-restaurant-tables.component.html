@@ -5,18 +5,16 @@
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Tên bàn</label>
         <div class="mb-3">
-          <input type="text" class="form-control" formControlName="tableName"
-            placeholder="Nhập tên bàn...">
+          <input type="text" class="form-control" formControlName="tableName" placeholder="Nhập tên bàn...">
         </div>
       </div>
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Nhà hàng</label>
+        <a class="nav-link" routerLink="/admin/restaurants">Thêm nhà hàng</a>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example"
-            formControlName="restaurantId">
+          <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
             <option value>Chọn nhà hàng</option>
-            <option *ngFor="let restaurant of restaurants "
-              [value]="restaurant.restaurantId">{{
+            <option *ngFor="let restaurant of restaurants " [value]="restaurant.restaurantId">{{
               restaurant.restaurantName
               }}</option>
           </select>
@@ -24,24 +22,22 @@
       </div>
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Kiểu bàn</label>
+        <a class="nav-link" routerLink="/admin/tableTypes">Thêm kiểu bàn</a>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example"
-            formControlName="tableTypeId">
+          <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
             <option value>Chọn kiểu bàn</option>
-            <option *ngFor="let tableType of tableTypes"
-              [value]="tableType.tableTypeId"> {{ tableType.tableTypeName }}
+            <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId"> {{ tableType.tableTypeName }}
             </option>
           </select>
         </div>
       </div>
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Trạng thái bàn</label>
+        <a class="nav-link" routerLink="/admin/tableStatuses">Thêm trạng thái bàn</a>
         <div class="mb-3">
-          <select class="form-select" aria-label="Default select example"
-            formControlName="tableStatusId">
+          <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
             <option value>Chọn trạng thái</option>
-            <option *ngFor="let tableStatus of tableStatuses"
-              [value]="tableStatus.tableStatusId"> {{
+            <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{
               tableStatus.tableStatusName
               }}
             </option>
@@ -87,8 +83,7 @@
         <td>
           <button type="button" class="btn btn-outline-primary"
             (click)="openRestaurantTableDetailModal(restaurantTable)">Edit</button>
-          <button type="button" class="btn btn-outline-danger"
-            (click)="deleteTable(restaurantTable)">Delete</button>
+          <button type="button" class="btn btn-outline-danger" (click)="deleteTable(restaurantTable)">Delete</button>
         </td>
       </tr>
     </tbody>

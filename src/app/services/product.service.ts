@@ -94,7 +94,7 @@ export class ProductService {
 
   updateProduct(updatedProduct: Product): Observable<any> {
 
-    const url = `${this.productUrl}/${updatedProduct.menuItemId}`;
+    const url = `${this.productUrl}`;
 
     return this.apiService.request('put', url, updatedProduct).pipe(
 

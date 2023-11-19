@@ -77,12 +77,12 @@ export class AdminProductsComponent {
     const description = this.productForm.get('description')?.value;
     const status = this.productForm.get('status')?.value;
     const imageUrl = this.productForm.get('imageUrl')?.value;
+    // Thay đổi cách truy cập giá trị categoryId
     const categoryId = this.productForm.get('categoryId')?.value;
     console.log("Giá trị đâu :" + name);
 
     // Tạo một đối tượng Inventory và gán giá trị
     const newProduct: Product = {
-      menuItemId: 0,
       name: name,
       unitPrice: unitPrice,
       description: description,
@@ -115,6 +115,13 @@ export class AdminProductsComponent {
     this.getProducts();
     const modalRef = this.modalService.open(AdminProductDetailComponent, { size: 'lg' });
     modalRef.componentInstance.product = product;
+
+    // Subscribe to the emitted event
+    modalRef.componentInstance.productSaved.subscribe(() => {
+      this.getCategories();
+      this.getProducts(); // Refresh data in the parent component
+    });
+
   }
 
 }

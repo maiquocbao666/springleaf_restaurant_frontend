@@ -25,6 +25,7 @@ import { RestaurantService } from "./services/restaurant.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
+import { ReservationStatusSerivce } from "./services/reservation-status.service";
 
 
 interface DataService<T> {
@@ -85,7 +86,8 @@ export class AppComponent implements OnDestroy {
     private receiptsService: ReceiptService,
     private receiptDetailsService: ReceiptDetailService,
     private reservationsService: ReservationService,
-    private tableTypesService: TableTypeService
+    private tableTypesService: TableTypeService,
+    private reservationStatusesService: ReservationStatusSerivce,
   ) {
 
     window.addEventListener('storage', (event) => {

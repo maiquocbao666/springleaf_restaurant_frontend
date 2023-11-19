@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Login</h4>
+  <h4 class="modal-title">Product Detail</h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -50,7 +50,6 @@
         <label for="exampleInputPassword1" class="form-label">Category</label>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="categoryId">
-            <option [value]="">Chọn </option>
             <option *ngFor="let category of categories" [value]="category.categoryId"> {{ category.name }}
             </option>
           </select>
