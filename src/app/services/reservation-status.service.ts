@@ -15,7 +15,7 @@ export class ReservationStatusSerivce {
     constructor(private apiService: ApiService) { }
 
 
-    getStatuses(): Observable<ReservationStatus[]> {
+    getReservationStatuses(): Observable<ReservationStatus[]> {
 
         if (this.reservationStatusesCache) {
 
@@ -23,19 +23,19 @@ export class ReservationStatusSerivce {
 
         }
 
-        const StatusesObservable = this.apiService.request<ReservationStatus[]>('get', this.statusesUrl);
+        const reservationStatusesObservable = this.apiService.request<ReservationStatus[]>('get', this.statusesUrl);
 
-        StatusesObservable.subscribe(data => {
+        reservationStatusesObservable.subscribe(data => {
 
             this.reservationStatusesCache = data;
 
         });
 
-        return StatusesObservable;
+        return reservationStatusesObservable;
 
     }
 
-    getstatusById(id: number): Observable<ReservationStatus | null> {
+    getReservationStatusById(id: number): Observable<ReservationStatus | null> {
 
         if (!id) {
             return of(null);
@@ -43,7 +43,7 @@ export class ReservationStatusSerivce {
 
         if (!this.reservationStatusesCache) {
 
-            this.getStatuses();
+            this.getReservationStatuses();
 
         }
 
@@ -79,7 +79,7 @@ export class ReservationStatusSerivce {
     }
 
 
-    updatestatus(updatedReservationStatus: ReservationStatus): Observable<any> {
+    updateReservationStatus(updatedReservationStatus: ReservationStatus): Observable<any> {
 
         const url = `${this.statusUrl}`;
 
@@ -102,7 +102,7 @@ export class ReservationStatusSerivce {
 
     }
 
-    deletestatus(id: number): Observable<any> {
+    deleteReservationStatus(id: number): Observable<any> {
 
         const url = `${this.statusUrl}/${id}`;
 
@@ -124,7 +124,7 @@ export class ReservationStatusSerivce {
 
     }
 
-    searchStatusesByName(term: string): Observable<ReservationStatus[]> {
+    searchReservationStatusesByName(term: string): Observable<ReservationStatus[]> {
 
         if (!term.trim()) {
 
@@ -157,7 +157,7 @@ export class ReservationStatusSerivce {
 
     }
 
-    updatestatusCache(updatedReservationStatus: ReservationStatus): void {
+    updateReservationStatusCache(updatedReservationStatus: ReservationStatus): void {
 
         if (this.reservationStatusesCache) {
 
