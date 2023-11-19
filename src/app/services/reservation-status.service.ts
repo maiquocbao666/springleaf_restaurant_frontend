@@ -8,9 +8,9 @@ import { ReservationStatus } from '../interfaces/reservation-status';
 })
 export class ReservationStatusSerivce {
 
-    private statusesUrl = 'Statuses';
+    private statusesUrl = 'reservationStatuses';
     reservationStatusesCache!: ReservationStatus[];
-    private statusUrl = 'status';
+    private statusUrl = 'reservationStatus';
 
     constructor(private apiService: ApiService) { }
 
@@ -115,7 +115,7 @@ export class ReservationStatusSerivce {
                 if (index !== -1) {
 
                     this.reservationStatusesCache.splice(index, 1);
-                    localStorage.setItem('Statuses', JSON.stringify(this.reservationStatusesCache));
+                    localStorage.setItem('reservationStatuses', JSON.stringify(this.reservationStatusesCache));
 
                 }
 

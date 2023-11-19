@@ -36,6 +36,7 @@ addEventListener('message', async ({ data }) => {
                                 'receipts',
                                 'receiptDetails',
                                 'reservations',
+                                'reservationStatuses',
                                 'tableTypes',
                                 //'bills',
                                 //'billDetails',
