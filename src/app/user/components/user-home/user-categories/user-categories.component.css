@@ -1,169 +1,66 @@
-a {
-  text-decoration: none;
-  color: var(--p-color);
-  font-family: 'Playfair Display', serif;
-  font-size: larger;
-}
-
-a:hover {
-  color: red;
-  /* Màu khi hover vào liên kết */
-}
-
-/* Định dạng liên kết danh sách */
-.list-group a {
-  display: block;
-  padding: 3px;
-  text-decoration: none;
-  color: #333;
-  transition: transform 0.3s;
-  /* Thêm hiệu ứng chuyển động cho văn bản */
-}
-
-/* Hiệu ứng khi hover vào liên kết */
-.list-group a:hover {
-  transform: scale(1.1);
-  /* Phóng to văn bản khi di chuột vào */
-}
-
-/* Định dạng toàn bộ nav */
-nav.category {
-  background-color: #333;
-  /* Màu nền */
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-  /* Đổ bóng */
-  color: #fff;
-  /* Màu chữ */
-}
-
-.list-group {
-  text-align: center;
-}
-
-.accordion-button {
-  background-color: #333;
-  color: #fff;
-}
-
-.mobile-category-item {
-  flex-shrink: 0;
-  margin-right: 10px;
-}
-
-.mobile-category-list {
+.menu_tab {
   display: flex;
-  list-style: none;
-  padding-left: 0;
-  max-width: 100%;
+  flex-wrap: nowrap;
   overflow-x: auto;
-
+  padding: 10px 0;
+  gap: 10px;
 }
 
-.mobile-category-list::-webkit-scrollbar {
-  display: none;
+.nav-item {
+  flex: 0 0 calc(16.666% - 10px);
+  /* Phân chia 6 categories trên mỗi hàng */
+  max-width: calc(16.666% - 10px);
+  /* Phân chia 6 categories trên mỗi hàng */
 }
 
-.mobile-category-link {
-  --line-height: 2rem;
-  text-decoration: none;
-  font-size: 1.4rem;
-  line-height: var(--line-height);
-  height: var(--line-height);
-  overflow: hidden;
-  text-align: center;
-  width: 110px;
+.nav-link {
+  background: #c0392b;
   display: block;
-  border-radius: 5px;
-  border: 1px gray solid;
-  user-select: none;
-  --webkit-user-select: none;
-
+  text-align: center;
+  padding: 8px 0;
+  color: #d8cccc;
+  transition: .3s;
+  border: 1px solid transparent;
+  text-transform: capitalize;
 }
 
-
-/* input  */
-
-
-.coupon {
-  border-radius: 7px;
-  border: 5px dashed #521599;
-  padding: .5rem;
-  margin: .5rem;
+.nav-link:hover {
+  background: #e9e0df;
+  color: #000000;
+  border-color: #c0392b;
 }
 
-.coupon .coupon-wrapper {
-  border-radius: 4px;
-  padding: 1rem;
-  background: rgba(256, 256, 256, .72);
+.page_title {
+  padding: 30px 0px;
 }
 
-/* Top */
-.coupon .coupon-wrapper .top {}
-
-.coupon .coupon-wrapper .top small {
-  text-transform: uppercase;
-  color: #521599;
+.page_title h1 {
+  color: #c0392b;
+  font-weight: 700;
+  line-height: 2;
+  margin-bottom: 0;
+  position: relative;
+  text-transform: capitalize;
 }
 
-/* Center */
-.coupon .coupon-wrapper .center {
-  text-transform: uppercase;
-  padding: 1rem 0;
+.page_title h1::before {
+  background: #c0392b;
+  width: 70px;
+  height: 2px;
+  position: absolute;
+  content: '';
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.coupon .coupon-wrapper .center .big {
-  font-size: 84px;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.coupon .coupon-wrapper .center .small {
-  text-transform: uppercase;
-  font-size: 32px;
-  font-weight: 300;
-}
-
-/* Bottom */
-.coupon .coupon-wrapper .bottom {
-  text-transform: uppercase;
-}
-
-.coupon .coupon-wrapper .bottom .promo-title {
-  text-transform: uppercase;
-}
-
-.coupon .coupon-wrapper .bottom .promo-code {
-  background: #521599;
-  color: white;
-  display: inline-block;
-  padding: 3px 6px;
-  border-radius: 4px;
-}
-
-/* Gradient */
-.coupon {
-  background: -moz-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
-  /* ff3.6+ */
-  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #e3d5f2), color-stop(50%, #ffffff), color-stop(100%, #E3D5F2));
-  /* safari4+,chrome */
-  background: -webkit-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
-  /* safari5.1+,chrome10+ */
-  background: -o-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
-  /* opera 11.10+ */
-  background: -ms-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
-  /* ie10+ */
-  background: linear-gradient(140deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
-  /* w3c */
-}
-
-/* Settings */
-.flex-vertical {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.padding-1 {
-  padding: 1rem;
+.page_title h1::after {
+  position: absolute;
+  content: '';
+  background: #fbc531;
+  width: 30px;
+  height: 2px;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Observable, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Reservation } from '../interfaces/reservation';
 
@@ -14,7 +14,16 @@ export class ReservationService {
     private reservationUrl = 'reservation';
     reservationsCache!: Reservation[];
 
+    private reservationIdSubject: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+
     constructor(private apiService: ApiService) { }
+
+    setReservationId(reservationId: number): void {
+        this.reservationIdSubject.next(reservationId);
+    }
+    getReservationId(): Observable<number | null> {
+        return this.reservationIdSubject.asObservable();
+    }
 
     getReservations(): Observable<Reservation[]> {
 
@@ -37,6 +46,14 @@ export class ReservationService {
 
     }
 
+    getReservationsByUser(userId: number): Observable<Reservation[]> {
+        const url = `${this.reservationsUrl}/user/${userId}`;
+
+        return this.apiService.request<Reservation[]>('get', url);
+    }
+
+
+
     addReservation(newReservation: Reservation): Observable<Reservation> {
         // Tạo một Observable bằng cách sử dụng phương thức 'request' từ 'apiService'
         return this.apiService.request<Reservation>('post', 'reservation', newReservation).pipe(
@@ -44,7 +61,7 @@ export class ReservationService {
             tap((addedReservation: Reservation) => {
                 // Thêm đặt bàn mới vào mảng 'reservationsCache'
                 this.reservationsCache.push(addedReservation);
-    
+
                 // Lưu mảng 'reservationsCache' vào localStorage dưới dạng JSON
                 localStorage.setItem(this.reservationsUrl, JSON.stringify(this.reservationsCache));
             })
@@ -100,20 +117,20 @@ export class ReservationService {
     // Tìm kiếm tất cả reservation theo restaurantTableId
     getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
         if (this.reservationsCache) {
-          // If cache exists, filter reservations based on restaurantTableId
-          const filteredReservations = this.reservationsCache.filter(reservation => reservation.restaurantTableId === restaurantTableId);
-          return of(filteredReservations);
+            // If cache exists, filter reservations based on restaurantTableId
+            const filteredReservations = this.reservationsCache.filter(reservation => reservation.restaurantTableId === restaurantTableId);
+            return of(filteredReservations);
         }
-    
+
         const reservationsObservable = this.apiService.request<Reservation[]>('get', this.reservationsUrl);
-    
+
         return reservationsObservable.pipe(
-          // Filter reservations based on restaurantTableId
-          map(reservations => {
-            this.reservationsCache = reservations;
-            return reservations.filter(reservation => reservation.restaurantTableId === restaurantTableId);
-          })
+            // Filter reservations based on restaurantTableId
+            map(reservations => {
+                this.reservationsCache = reservations;
+                return reservations.filter(reservation => reservation.restaurantTableId === restaurantTableId);
+            })
         );
-      }
+    }
 
 }

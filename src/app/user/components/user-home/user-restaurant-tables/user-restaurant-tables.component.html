@@ -1,25 +1,30 @@
-<h1>Table</h1>
-<ul class="products container">
-    <table class="table table-light">
-        <tbody>
-            <tr>
-                <th>Mã bàn</th>
-                <th>Tên bàn</th>
-                <th>Loại bàn</th>
-                <th>Trạng thái</th>
-                <th>Chi nhánh nhà hàng</th>
-                <th>Thông tin</th>
-                <th>Đã đặt</th>
-            </tr>
-            <tr *ngFor="let restaurantTable of restaurantTables">
-                <td>{{ restaurantTable.tableId }}</td>
-                <td>{{ restaurantTable.tableName }}</td>
-                <td>{{ (getTableTypeById(restaurantTable.tableTypeId) | async)?.tableTypeName }}</td>
-                <td>{{ (getTableStatusById(restaurantTable.tableStatusId) | async)?.tableStatusName }}</td>
-                <td>{{ (getRestaurantById(restaurantTable.restaurantId) | async)?.restaurantName }}</td>
-                <td><button (click)="openRestaurantTableInfomationModal(restaurantTable)">Xem thông tin</button></td>
-                <td>True</td>
-            </tr>
-        </tbody>
-    </table>
-</ul>
+<div class="container">
+    <h1>ĐẶT BÀN</h1>
+    <div class="row">
+        <div class="col-sm-2" *ngFor="let restaurantTable of restaurantTables">
+            <div class="card  m-5">
+                <div class="card-top">
+                    <p class="card__title"><i class="fas fa-table"></i>
+
+                    </p>
+                    {{ restaurantTable.tableName }}
+                </div>
+                <div class="card__info">
+                    <p class="episode__num">{{ (getRestaurantById(restaurantTable.restaurantId) | async)?.restaurantName
+                        }}</p>
+                    <p class="episode__type">{{ (getTableTypeById(restaurantTable.tableTypeId) | async)?.tableTypeName
+                        }}</p>
+                </div>
+                <div class="card__btns">
+                    <button class="watch-btn" (click)="openRestaurantTableInfomationModal(restaurantTable)">Đặt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+</div>
+
+
+

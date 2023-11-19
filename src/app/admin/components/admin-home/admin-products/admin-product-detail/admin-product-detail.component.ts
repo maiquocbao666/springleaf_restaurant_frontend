@@ -28,7 +28,7 @@ export class AdminProductDetailComponent  implements OnInit {
       menuItemId: ['', [Validators.required]],
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      price: ['', [Validators.required]],
+      unitPrice: ['', [Validators.required]],
       imageUrl: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       status: [, [Validators.required]],
@@ -56,7 +56,7 @@ export class AdminProductDetailComponent  implements OnInit {
       this.productForm.patchValue({
         menuItemId: this.product.menuItemId,
         name: this.product.name,
-        price: this.product.price,
+        unitPrice: this.product.unitPrice,
         description: this.product.description,
         status: this.product.status,
         categoryId: this.product.categoryId,
@@ -70,7 +70,7 @@ export class AdminProductDetailComponent  implements OnInit {
       const updatedProduct: Product = {
         menuItemId: this.productForm.get('menuItemId')?.value,
         name: this.productForm.get('name')?.value,
-        price: this.productForm.get('price')?.value,
+        unitPrice: this.productForm.get('unitPrice')?.value,
         description: this.productForm.get('description')?.value,
         status: this.productForm.get('status')?.value,
         categoryId: this.productForm.get('categoryId')?.value,

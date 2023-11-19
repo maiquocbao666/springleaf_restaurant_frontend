@@ -11,7 +11,7 @@
       <div class="col-sm-3">
         <label for="exampleInputPassword1" class="form-label">Giá</label>
         <div class="mb-3">
-          <input type="number" formControlName="price" class="form-control" placeholder="Nhập giá...">
+          <input type="number" formControlName="unitPrice" class="form-control" placeholder="Nhập giá...">
         </div>
       </div>
       <div class="col-sm-3">
@@ -75,7 +75,7 @@
         <td>{{product.menuItemId}}</td>
         <td>{{product.name}}</td>
         <td>{{product.description}}</td>
-        <td>{{product.price}}</td>
+        <td>{{product.unitPrice}}</td>
         <td>{{product.imageUrl}}</td>
         <td>{{ (getCategoryById(product.categoryId) | async)?.name }}</td>
         <td>{{product.status ? 'Còn':'Hết'}}</td>

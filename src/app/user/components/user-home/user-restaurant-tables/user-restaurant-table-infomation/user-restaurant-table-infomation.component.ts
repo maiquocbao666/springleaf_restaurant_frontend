@@ -7,6 +7,7 @@ import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-user-restaurant-table-infomation',
@@ -27,11 +28,10 @@ export class UserRestaurantTableInfomationComponent {
     private reservationService: ReservationService,
     private formBuilder: FormBuilder,
     private restaurantTableService: RestaurantTableService,
+    private toastService: ToastService,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
-      //console.log(this.user);
-      // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
     this.reservationForm = this.formBuilder.group({
       selectedDate: [, [Validators.nullValidator]],
@@ -41,14 +41,19 @@ export class UserRestaurantTableInfomationComponent {
 
   ngOnInit(): void {
     this.getReservationsByTableId();
+    this.authService.cachedData$.subscribe((data) => {
+      this.user = data;
+      if (this.user && typeof this.user.userId === 'number') {
+        this.getReservationsByCurrentUser(this.user.userId);
+      }
+    });
   }
 
   bookingTable(): void {
     this.addReservation();
-    
   }
 
-  getReservationsByTableId(): void{
+  getReservationsByTableId(): void {
     if (this.restaurantTable?.tableId) {
       this.reservationService.getReservationsByTableId(this.restaurantTable.tableId).subscribe(
         {
@@ -65,6 +70,26 @@ export class UserRestaurantTableInfomationComponent {
         }
       );
     }
+  }
+  getReservationsByCurrentUser(userId: number): void {
+    this.reservationService.getReservationsByUser(userId).subscribe(
+      (reservations) => {
+        this.reservations = reservations;
+        console.log('Reservations for current user:', this.reservations);
+      },
+      (error) => {
+        console.error('Error fetching reservations:', error);
+        // Xử lý lỗi nếu cần
+      }
+    );
+  }
+
+
+  showMessage() {
+    this.toastService.showSuccess('Đây là thông báo thành công');
+    this.toastService.showError('Đây là thông báo lỗi');
+    this.toastService.showInfo('Đây là thông báo thông tin');
+    this.toastService.showWarn('Đây là thông báo cảnh báo');
   }
 
   addReservation() {
@@ -94,11 +119,20 @@ export class UserRestaurantTableInfomationComponent {
       {
         next: (addedReservation) => {
           //console.log('Reservation added successfully:', addedReservation);
-          // Thực hiện các hành động khác nếu cần
+          this.toastService.showSuccess('Đặt bàn thành công!');
+
+          const reservationId = addedReservation.reservationId; // Lấy reservationId từ response
+          this.reservationService.setReservationId(reservationId!); // Lưu reservationId vào service chia sẻ
+
+          this.authService.cachedData$.subscribe((data) => {
+            this.user = data;
+            if (this.user && typeof this.user.userId === 'number') {
+              this.getReservationsByCurrentUser(this.user.userId);
+            }
+          });
         },
         error: (error) => {
           console.error('Error adding reservation:', error);
-          // Xử lý lỗi nếu có
         },
         complete: () => {
           // Xử lý khi Observable hoàn thành (nếu cần)

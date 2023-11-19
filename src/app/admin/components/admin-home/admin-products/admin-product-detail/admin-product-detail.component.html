@@ -26,10 +26,10 @@
       <div class="col-sm-3">
         <label for="exampleInputPassword1" class="form-label">Giá</label>
         <div class="mb-3">
-          <input type="number" formControlName="price" class="form-control">
+          <input type="number" formControlName="unitPrice" class="form-control">
         </div>
         <div
-          *ngIf="productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)"
+          *ngIf="productForm.get('unitPrice')?.invalid && (productForm.get('unitPrice')?.dirty || productForm.get('unitPrice')?.touched)"
           class="alert alert-danger">Không bỏ trống!
         </div> <br>
       </div>

@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
+import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CategoryService } from 'src/app/services/category.service';
+import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
+import { ReservationService } from 'src/app/services/reservation.service';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -24,11 +27,16 @@ export class UserProductsComponent implements OnInit {
   user: User | null = null;
 
   constructor(
+    private reservationService: ReservationService,
+    private orderService: OrderService,
     private productService: ProductService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
     private authService: AuthenticationService
   ) {
+    this.authService.cachedData$.subscribe((data) => {
+      this.user = data;
+    });
   }
 
   ngOnInit(): void {
@@ -102,6 +110,49 @@ export class UserProductsComponent implements OnInit {
     } else {
       console.error("Product ID is undefined. Cannot add to cart.");
     }
+  }
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  }
+
+  addOrder(): void {
+    const orderDate = "2023-11-18";
+    const userId = this.user?.userId;
+    const staffId = userId;
+    const comboId = 1;
+    const status = false;
+    const deliveryOrderId = null;
+    const totalAmount = 50.0;
+
+
+    this.reservationService.getReservationId().subscribe(reservationId => {
+
+      const newOrder: Order = {
+        orderId: 0,
+        combo: comboId!,
+        reservationId: reservationId!,
+        deliveryOrderId: deliveryOrderId!,
+        orderDate: orderDate,
+        totalAmount: totalAmount!,
+        staffId: staffId!, // Sử dụng staffId lấy được từ user
+        status: status
+      };
+
+      this.orderService.addOrder(newOrder).subscribe(
+        {
+          next: (addedOrder) => {
+            alert("Thành công")
+          },
+          error: (error) => {
+            console.error('Error adding order:', error);
+
+          },
+          complete: () => {
+
+          }
+        }
+      );
+    });
   }
 
 

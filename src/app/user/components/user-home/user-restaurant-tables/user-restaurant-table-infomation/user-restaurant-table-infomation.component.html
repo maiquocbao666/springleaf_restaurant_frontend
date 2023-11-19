@@ -1,24 +1,59 @@
-<div class="modal-header">
-    <h4 class="modal-title">Thông tin bàn</h4>
-</div>
-<div class="modal-body">
-    <div class="scroll-container">
-        <div *ngFor="let reservation of reservations" class="reservation-item">
-            Giờ tới {{ reservation.reservationDate | date: 'EEEE, MMMM d, y, h:mm:ss a' }} <br>
-            Giờ cút {{ reservation.outTime }}
+<div id="booking" class="section">
+    <div class="section-center">
+        <div class="container">
+            <div class="row">
+                <div class="booking-form">
+                    <form [formGroup]="reservationForm">
+                        <div class="row no-margin">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <span class="form-label">Số khách</span>
+                                    <select class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row no-margin">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <span class="form-label">Select date</span>
+                                            <input class="form-control" type="date" id="selectedDate"
+                                                formControlName="selectedDate" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <span class="form-label">Select time</span>
+                                            <input class="form-control" type="time" id="selectedTime"
+                                                formControlName="selectedTime" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-btn">
+                                    <button class="submit-btn" (click)="bookingTable()">Đặt bàn</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div *ngIf="reservations.length > 0; else noReservations">
+                        <ul>
+                            <li *ngFor="let reservation of reservations">
+                                <!-- Hiển thị thông tin đặt bàn -->
+                                <p>Reservation ID: {{ reservation.reservationId }}</p>
+                                <!-- {{ reservation.reservationDate | date: 'EEEE, MMMM d, y, h:mm:ss a' }} -->
+                            </li>
+                        </ul>
+                    </div>
+                    <ng-template #noReservations>
+                        <p>Chưa có đặt bàn.</p>
+                    </ng-template>
+                </div>
+            </div>
         </div>
     </div>
-    <form [formGroup]="reservationForm">
-        <label for="selectedDate">Select date: </label>
-        <input type="date" id="selectedDate" formControlName="selectedDate" />
-        <label for="selectedTime">Select time: </label>
-        <input type="time" id="selectedTime" formControlName="selectedTime" />
-    </form>
-    <button (click)="bookingTable()">Đặt bàn ngay</button>
-</div>
-
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
-        Đóng
-    </button>
 </div>

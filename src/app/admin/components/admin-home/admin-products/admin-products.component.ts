@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { Product } from 'src/app/interfaces/product';
 import { CategoryService } from 'src/app/services/category.service';
@@ -33,7 +33,7 @@ export class AdminProductsComponent {
     this.productForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      price: ['', [Validators.required]],
+      unitPrice: ['', [Validators.required]],
       imageUrl: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
       status: [, [Validators.required]],
@@ -73,7 +73,7 @@ export class AdminProductsComponent {
   addProduct(): void {
     // Lấy giá trị từ các trường select
     const name = this.productForm.get('name')?.value;
-    const price = this.productForm.get('price')?.value;
+    const unitPrice = this.productForm.get('unitPrice')?.value;
     const description = this.productForm.get('description')?.value;
     const status = this.productForm.get('status')?.value;
     const imageUrl = this.productForm.get('imageUrl')?.value;
@@ -84,7 +84,7 @@ export class AdminProductsComponent {
     const newProduct: Product = {
       menuItemId: 0,
       name: name,
-      price: price,
+      unitPrice: unitPrice,
       description: description,
       status: status,
       imageUrl: imageUrl,
@@ -112,7 +112,7 @@ export class AdminProductsComponent {
 
   }
   openProductDetailModal(product: Product) {
-    //this.getCategory();
+    this.getProducts();
     const modalRef = this.modalService.open(AdminProductDetailComponent, { size: 'lg' });
     modalRef.componentInstance.product = product;
   }
