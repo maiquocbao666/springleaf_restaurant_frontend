@@ -58,7 +58,7 @@
                                     <i class="fa-solid fa-cart-plus" (click)="addToCart(product)"></i>
                                 </a>
                             </h5>
-                            <h6><span class="text-primary">{{ product.price | currency: 'VND' }}</span></h6>
+                            <h6><span class="text-primary">{{ product.unitPrice | currency: 'VND' }}</span></h6>
                             <small class="fst-italic">{{product.description}}</small>
                             <div class="mostpopular_rating">
                                 <a href="#"><i class="fa-solid fa-star"></i></a>

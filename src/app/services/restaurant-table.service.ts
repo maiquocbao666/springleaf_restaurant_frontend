@@ -112,7 +112,7 @@ export class RestaurantTableService {
 
     updateRestaurantTable(updatedRestaurantTable: RestaurantTable): Observable<any> {
 
-        const url = `${this.restaurantTableUrl}/${updatedRestaurantTable.tableId}`;
+        const url = `${this.restaurantTableUrl}`;
 
         return this.apiService.request('put', url, updatedRestaurantTable).pipe(
 
