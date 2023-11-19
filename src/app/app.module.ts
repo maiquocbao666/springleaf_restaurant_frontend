@@ -7,9 +7,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AppRoutingModule } from './app-routing.module';
 
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatCardModule} from '@angular/material/card';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
@@ -79,6 +79,7 @@ import { AppComponent } from './app.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
+import { AdminReservationStatusesComponent } from './admin/components/admin-home/admin-reservation-statuses/admin-reservation-statuses.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -137,6 +138,7 @@ import { UserRestaurantTableInfomationComponent } from './user/components/user-h
     AdminReservationsComponent,
     AdminComboDetailsComponent,
     AdminComboDetailsUpdateComponent,
+    AdminReservationStatusesComponent,
 
     ChatComponent,
     LoginComponent,
