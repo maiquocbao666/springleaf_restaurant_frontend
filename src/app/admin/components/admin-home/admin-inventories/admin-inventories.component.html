@@ -2,7 +2,9 @@
     <h1>Kho</h1>
     <form [formGroup]="inventoryForm" (ngSubmit)="addInventory()">
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Ingredient</label>
+            <label *ngIf="!ingredients || ingredients.length >0" for="exampleInputPassword1" class="form-label">Ingredient</label>
+            <a style="color: red;" *ngIf="!ingredients || ingredients.length === 0" class="nav-link"
+            routerLink="/admin/ingredients">Thêm nguyên liệu</a>
             <div class="mb-3">
                 <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
                     <option value="">Chọn nguyên liệu</option>
@@ -11,7 +13,9 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Supplier</label>
+            <label *ngIf="!suppliers || suppliers.length >0" for="exampleInputPassword1" class="form-label">Supplier</label>
+            <a style="color: red;" *ngIf="!suppliers || suppliers.length === 0" class="nav-link"
+            routerLink="/admin/suppliers">Thêm nhà sản xuất</a>
             <div class="mb-3">
                 <select class="form-select" aria-label="Default select example" formControlName="supplierId">
                     <option value="">Chọn nhà sản xuất</option>

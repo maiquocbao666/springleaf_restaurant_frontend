@@ -19,10 +19,18 @@ export class UserCategoriesComponent {
   constructor(
     private categoryService: CategoryService,
   ) {
-    
+
   }
 
-
+  chunkArray(array: any[], size: number): any[] {
+    const chunkedArr = [];
+    let index = 0;
+    while (index < array.length) {
+      chunkedArr.push(array.slice(index, size + index));
+      index += size;
+    }
+    return chunkedArr;
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -44,7 +52,7 @@ export class UserCategoriesComponent {
       switchMap((categoryName: string) => this.categoryService.searchCategoriesByName(categoryName)),
     );
     this.search("");
-    
+
   }
 
   search(term: string): void {

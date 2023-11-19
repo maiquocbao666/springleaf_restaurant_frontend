@@ -21,7 +21,10 @@
         </div>
       </div>
       <div class="col-sm-3">
-        <label for="exampleInputPassword1" class="form-label">Category</label>
+        <label *ngIf="!categories || categories.length >0" for="exampleInputPassword1"
+          class="form-label">Category</label>
+        <a style="color: red;" *ngIf="!categories || categories.length === 0" class="nav-link"
+          routerLink="/admin/categories">Thêm loại</a>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="categoryId">
             <option value="">Chọn loại </option>

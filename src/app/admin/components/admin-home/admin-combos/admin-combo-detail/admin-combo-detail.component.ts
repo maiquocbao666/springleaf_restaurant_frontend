@@ -1,6 +1,6 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Combo } from 'src/app/interfaces/combo';
 import { ComboService } from 'src/app/services/combo.service';
 
@@ -11,6 +11,7 @@ import { ComboService } from 'src/app/services/combo.service';
 })
 export class AdminComboDetailComponent implements OnInit {
   @Input() combo: Combo | undefined;
+  @Output() comboSaved: EventEmitter<void> = new EventEmitter<void>();
   combos: Combo[] = [];
   fieldNames: string[] = [];
   comboForm: FormGroup;
@@ -45,15 +46,16 @@ export class AdminComboDetailComponent implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.comboForm.valid) {
       const updatedCombo: Combo = {
-        comboId: this.comboForm.get('comboId')?.value,
+        comboId: +this.comboForm.get('comboId')?.value,
         comboName: this.comboForm.get('comboName')?.value,
-        comboUser: this.comboForm.get('comboUser')?.value,
-        totalAmount: this.comboForm.get('totalAmount')?.value,
+        comboUser: +this.comboForm.get('comboUser')?.value,
+        totalAmount: +this.comboForm.get('totalAmount')?.value,
       };
 
       this.comboService.updateCombo(updatedCombo).subscribe(() => {
         // Cập nhật cache
         this.comboService.updateComboCache(updatedCombo);
+        this.comboSaved.emit(); // Emit the event
       });
     }
   }

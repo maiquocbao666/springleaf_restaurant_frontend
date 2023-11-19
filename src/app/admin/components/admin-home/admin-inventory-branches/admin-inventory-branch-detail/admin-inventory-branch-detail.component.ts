@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
@@ -15,8 +15,9 @@ import { SupplierService } from 'src/app/services/supplier.service';
   templateUrl: './admin-inventory-branch-detail.component.html',
   styleUrls: ['./admin-inventory-branch-detail.component.css']
 })
-export class AdminInventoryBranchDetailComponent  implements OnInit {
+export class AdminInventoryBranchDetailComponent implements OnInit {
   @Input() inventoryBranch: InventoryBranch | undefined;
+  @Output() inventoryBranchSaved: EventEmitter<void> = new EventEmitter<void>();
   inventoryBranches: InventoryBranch[] = [];
   ingredients: Ingredient[] = [];
   restaurants: Restaurant[] = [];
@@ -79,15 +80,16 @@ export class AdminInventoryBranchDetailComponent  implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.inventoryBranchForm.valid) {
       const updateInventoryBranch: InventoryBranch = {
-        inventoryBranchId: this.inventoryBranchForm.get('inventoryBranchId')?.value,
-        ingredientId: this.inventoryBranchForm.get('ingredientId')?.value,
-        supplierId: this.inventoryBranchForm.get('supplierId')?.value,
-        restaurantId: this.inventoryBranchForm.get('restaurantId')?.value
+        inventoryBranchId: +this.inventoryBranchForm.get('inventoryBranchId')?.value,
+        ingredientId: +this.inventoryBranchForm.get('ingredientId')?.value,
+        supplierId: +this.inventoryBranchForm.get('supplierId')?.value,
+        restaurantId: +this.inventoryBranchForm.get('restaurantId')?.value
       };
 
       this.inventoryBranchService.updateInventoryBranch(updateInventoryBranch).subscribe(() => {
         // Cập nhật cache
         this.inventoryBranchService.updateInventoryBranchCache(updateInventoryBranch);
+        this.inventoryBranchSaved.emit(); // Emit the event
       });
     }
   }

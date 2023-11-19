@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Supplier } from 'src/app/interfaces/supplier';
@@ -11,6 +11,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
 })
 export class AdminSupplierDetailComponent  implements OnInit {
   @Input() supplier: Supplier | undefined;
+  @Output() supplierSaved: EventEmitter<void> = new EventEmitter<void>();
   suppliers: Supplier[] = [];
   fieldNames: string[] = [];
   supplierForm: FormGroup;
@@ -55,7 +56,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.supplierForm.valid) {
       const updatedSupplier: Supplier = {
-        supplierId: this.supplierForm.get('supplierId')?.value,
+        supplierId: +this.supplierForm.get('supplierId')?.value,
         name: this.supplierForm.get('name')?.value,
         phone: this.supplierForm.get('phone')?.value,
         email: this.supplierForm.get('email')?.value,
@@ -65,6 +66,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
       this.supplierService.updateSupplier(updatedSupplier).subscribe(() => {
         // Cập nhật cache
         this.supplierService.updateSupplierCache(updatedSupplier);
+        this.supplierSaved.emit(); // Emit the event
       });
     }
   }

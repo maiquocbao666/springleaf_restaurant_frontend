@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,7 @@ export class AdminTableTypeDetailComponent  implements OnInit {
   tableTypes: TableType[] = [];
   tableTypeForm: FormGroup;
   @Input() tableType: TableType | undefined;
+  @Output() tableTypeSaved: EventEmitter<void> = new EventEmitter<void>();
   fieldNames: string[] = [];
 
   constructor(
@@ -52,13 +53,14 @@ export class AdminTableTypeDetailComponent  implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.tableTypeForm.valid) {
       const updatedTableType: TableType = {
-        tableTypeId: this.tableTypeForm.get('tableTypeId')?.value,
+        tableTypeId: +this.tableTypeForm.get('tableTypeId')?.value,
         tableTypeName: this.tableTypeForm.get('name')?.value,
       };
 
       this.tableTypeService.updateTableType(updatedTableType).subscribe(() => {
         // Cập nhật cache
         this.tableTypeService.updateTableTypesCache(updatedTableType);
+        this.tableTypeSaved.emit(); // Emit the event
       });
     }
   }

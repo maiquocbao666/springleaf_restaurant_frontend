@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Component } from '@angular/core';
 declare var $: any;
 @Component({
   selector: 'app-admin-header',
@@ -6,11 +6,11 @@ declare var $: any;
   styleUrls: ['./admin-header.component.css']
 })
 export class AdminHeaderComponent {
-  
+
   constructor() {
   }
-  
+
   ngOnInit(): void {
   }
-  
+
 }

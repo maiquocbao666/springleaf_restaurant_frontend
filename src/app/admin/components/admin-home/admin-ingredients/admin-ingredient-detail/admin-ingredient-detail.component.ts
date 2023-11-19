@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
@@ -9,8 +9,10 @@ import { IngredientService } from 'src/app/services/ingredient.service';
   templateUrl: './admin-ingredient-detail.component.html',
   styleUrls: ['./admin-ingredient-detail.component.css']
 })
-export class AdminIngredientDetailComponent  implements OnInit {
+export class AdminIngredientDetailComponent implements OnInit {
   @Input() ingredient: Ingredient | undefined;
+  @Output() ingredientSaved: EventEmitter<void> = new EventEmitter<void>();
+
   fieldNames: string[] = [];
   ingredients: Ingredient[] = [];
   ingredientForm: FormGroup;
@@ -30,7 +32,7 @@ export class AdminIngredientDetailComponent  implements OnInit {
   ngOnInit(): void {
     this.setValue();
   }
-  
+
   setValue() {
     if (this.ingredient) {
       this.ingredientForm.patchValue({
@@ -45,15 +47,16 @@ export class AdminIngredientDetailComponent  implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.ingredientForm.valid) {
       const updatedIngredient: Ingredient = {
-        ingredientId: this.ingredientForm.get('ingredientId')?.value,
+        ingredientId: +this.ingredientForm.get('ingredientId')?.value,
         name: this.ingredientForm.get('name')?.value,
         description: this.ingredientForm.get('description')?.value,
-        orderThreshold: this.ingredientForm.get('orderThreshold')?.value
+        orderThreshold: +this.ingredientForm.get('orderThreshold')?.value
       };
 
       this.ingredientService.updateIngredient(updatedIngredient).subscribe(() => {
         // Cập nhật cache
         this.ingredientService.updateIngredientCache(updatedIngredient);
+        this.ingredientSaved.emit(); // Emit the event
       });
     }
   }

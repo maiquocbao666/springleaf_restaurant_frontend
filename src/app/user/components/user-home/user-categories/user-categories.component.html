@@ -35,9 +35,9 @@
             <router-outlet></router-outlet>
         </div>
     </div>
-</div>
+</div> -->
 
- -->
+
 <app-user-banner></app-user-banner>
 <div class="comtainer">
     <section id="our_menu" class="pt-5 pb-5">
@@ -50,16 +50,45 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <ul class="nav nav-tabs menu_tab flex-nowrap overflow-auto" id="myTab" role="tablist">
-                    <li class="nav-item" *ngFor="let category of categories$ | async">
-                        <a class="nav-link" data-toggle="tab"
-                            [routerLink]="['/user/index/category', category.categoryId, 'products']" role="tab">
-                            {{ category.name }}
-                        </a>
+            <div class="row" *ngIf="!isMobile">
+                <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <ng-container *ngIf="categories$ | async as categories">
+                            <div *ngFor="let chunk of chunkArray(categories, 4); let i = index"
+                                class="carousel-item text-center" [class.active]=" i===0">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-2" *ngFor="let category of chunk">
+                                        <a class="nav-link"
+                                            [routerLink]="['/user/index/category', category.categoryId, 'products']"
+                                            role="tab">
+                                            {{ category.name }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <nav class="mobile-category" *ngIf="isMobile">
+                <ul class="mobile-category-list">
+                    <li class="mobile-category-item" *ngFor="let category of categories$ | async">
+                        <a [routerLink]="['/user/index/category', category.categoryId, 'products']"
+                            class="mobile-category-link"> {{ category.name }}</a>
                     </li>
                 </ul>
-            </div>
+            </nav>
+            <hr>
         </div>
         <router-outlet></router-outlet>
     </section>

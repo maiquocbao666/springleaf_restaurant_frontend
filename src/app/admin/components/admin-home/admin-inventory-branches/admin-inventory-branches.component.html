@@ -2,7 +2,10 @@
   <form [formGroup]="inventoryBranchForm" (ngSubmit)="addInventoryBranch()">
     <div class="row">
       <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Nhà sản xuất</label>
+        <label *ngIf="!suppliers || suppliers.length >0" for="exampleInputPassword1" class="form-label">Nhà sản
+          xuất</label>
+        <a style="color: red;" *ngIf="!suppliers || suppliers.length === 0" class="nav-link"
+          routerLink="/admin/suppliers">Thêm nhà sản xuất</a>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="supplierId">
             <option value="">Chọn nhà sản xuất</option>
@@ -12,7 +15,10 @@
         </div>
       </div>
       <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Nhà hàng</label>
+        <label *ngIf="!restaurants || restaurants.length >0" for="exampleInputPassword1" class="form-label">Nhà
+          hàng</label>
+        <a style="color: red;" *ngIf="!restaurants || restaurants.length === 0" class="nav-link"
+          routerLink="/admin/restaurants">Thêm nhà hàng</a>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
             <option value="">Chọn nhà hàng</option>
@@ -24,7 +30,10 @@
       </div>
       <div class="col-lg-3">
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Nguyên liệu</label>
+          <label *ngIf="!ingredients || ingredients.length >0" for="exampleInputPassword1" class="form-label">Nguyên
+            liệu</label>
+          <a style="color: red;" *ngIf="!ingredients || ingredients.length === 0" class="nav-link"
+            routerLink="/admin/ingredients">Thêm nguyên liệu</a>
           <div class="mb-3">
             <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
               <option value="">Chọn nguyên liệu</option>

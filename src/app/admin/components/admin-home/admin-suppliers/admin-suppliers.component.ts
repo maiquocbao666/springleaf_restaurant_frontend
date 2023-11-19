@@ -91,6 +91,9 @@ export class AdminSuppliersComponent {
   openSupplierDetailModal(supplier: Supplier) {
     const modalRef = this.modalService.open(AdminSupplierDetailComponent, { size: 'lg' });
     modalRef.componentInstance.supplier = supplier;
+    modalRef.componentInstance.supplierSaved.subscribe(() => {
+      this.getSuppliers();
+    });
 
   }
 }

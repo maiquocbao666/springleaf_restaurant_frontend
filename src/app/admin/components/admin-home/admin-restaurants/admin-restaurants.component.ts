@@ -102,5 +102,8 @@ export class AdminRestaurantsComponent {
   openRestaurantDetailModal(restaurant: Restaurant) {
     const modalRef = this.modalService.open(AdminRestaurantDetailComponent, { size: 'lg' });
     modalRef.componentInstance.restaurant = restaurant;
+    modalRef.componentInstance.restaurantSaved.subscribe(() => {
+      this.getRestaurants();
+    });
   }
 }

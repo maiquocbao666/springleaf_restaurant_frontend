@@ -134,6 +134,11 @@ export class AdminInventoryBranchesComponent {
   openInventoryBranchDetailModal(inventoryBranch: InventoryBranch) {
     const modalRef = this.modalService.open(AdminInventoryBranchDetailComponent, { size: 'lg' });
     modalRef.componentInstance.inventoryBranch = inventoryBranch;
-
+    modalRef.componentInstance.inventoryBranchSaved.subscribe(() => {
+      this.getInventoryBranches();
+      this.getIngredients();
+      this.getSuppliers();
+      this.getRestaurants();
+    });
   }
 }

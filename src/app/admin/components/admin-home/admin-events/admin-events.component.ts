@@ -129,6 +129,11 @@ export class AdminEventsComponent {
   openEventDetailModal(event: Event) {
     const modalRef = this.modalService.open(AdminEventDetailComponent, { size: 'lg' });
     modalRef.componentInstance.event = event;
+    modalRef.componentInstance.eventSaved.subscribe(() => {
+      this.getEvents();
+      this.getCarts();
+      this.getCombos();
+    });
 
   }
 }

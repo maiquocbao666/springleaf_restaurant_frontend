@@ -1,4 +1,4 @@
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GoodsReceipt } from 'src/app/interfaces/goods-receipt';
@@ -13,6 +13,7 @@ import { InventoryBranchService } from 'src/app/services/inventory-branch.servic
 })
 export class AdminGoodsReceiptDetailComponent {
   @Input() goodsReceipt: GoodsReceipt | undefined;
+  @Output() goodsReceiptSaved: EventEmitter<void> = new EventEmitter<void>();
   goodsReceipts: GoodsReceipt[] = [];
   inventoryBranches: InventoryBranch[] = [];
   fieldNames: string[] = [];
@@ -67,16 +68,17 @@ export class AdminGoodsReceiptDetailComponent {
     this.activeModal.close('Close after saving');
     if (this.goodsReceiptForm.valid) {
       const updatedGoodsReceipt: GoodsReceipt = {
-        goodsReceiptId: this.goodsReceiptForm.get('goodsReceiptId')?.value,
-        inventoryBranch: this.goodsReceiptForm.get('inventoryBranch')?.value,
+        goodsReceiptId: +this.goodsReceiptForm.get('goodsReceiptId')?.value,
+        inventoryBranch: +this.goodsReceiptForm.get('inventoryBranch')?.value,
         date: this.goodsReceiptForm.get('date')?.value,
-        warehouseManager: this.goodsReceiptForm.get('warehouseManager')?.value,
-        user: this.goodsReceiptForm.get('user')?.value,
+        warehouseManager: +this.goodsReceiptForm.get('warehouseManager')?.value,
+        user: +this.goodsReceiptForm.get('user')?.value,
       };
 
       this.goodsReceiptService.updateGoodsReceipt(updatedGoodsReceipt).subscribe(() => {
         // Cập nhật cache
         this.goodsReceiptService.updateGoodsReceiptCache(updatedGoodsReceipt);
+        this.goodsReceiptSaved.emit(); // Emit the event
       });
     }
   }

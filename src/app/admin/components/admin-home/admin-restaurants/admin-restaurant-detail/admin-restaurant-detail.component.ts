@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Restaurant } from 'src/app/interfaces/restaurant';
@@ -11,6 +11,7 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 })
 export class AdminRestaurantDetailComponent {
   @Input() restaurant: Restaurant | undefined;
+  @Output() restaurantSaved: EventEmitter<void> = new EventEmitter<void>();
   fieldNames: string[] = [];
   restaurants: Restaurant[] = [];
   restaurantForm: FormGroup;
@@ -55,9 +56,9 @@ export class AdminRestaurantDetailComponent {
     this.activeModal.close('Close after saving');
     if (this.restaurantForm.valid) {
       const updatedRestaurant: Restaurant = {
-        restaurantId: this.restaurantForm.get('restaurantId')?.value,
+        restaurantId: +this.restaurantForm.get('restaurantId')?.value,
         restaurantName: this.restaurantForm.get('restaurantName')?.value,
-        address: this.restaurantForm.get('address')?.value,
+        address: +this.restaurantForm.get('address')?.value,
         phone: this.restaurantForm.get('phone')?.value,
         email: this.restaurantForm.get('email')?.value,
       };
@@ -65,6 +66,7 @@ export class AdminRestaurantDetailComponent {
       this.restaurantService.updateRestaurant(updatedRestaurant).subscribe(() => {
         // Cập nhật cache
         this.restaurantService.updateRestaurantCache(updatedRestaurant);
+        this.restaurantSaved.emit(); // Emit the event
       });
     }
   }

@@ -93,6 +93,8 @@ export class AdminCombosComponent {
   openComboDetailModal(combo: Combo) {
     const modalRef = this.modalService.open(AdminComboDetailComponent, { size: 'lg' });
     modalRef.componentInstance.combo = combo;
-
+    modalRef.componentInstance.comboSaved.subscribe(() => {
+      this.getCombos();
+    });
   }
 }

@@ -7,27 +7,29 @@
 }
 
 .nav-item {
-  flex: 0 0 calc(16.666% - 10px);
-  /* Phân chia 6 categories trên mỗi hàng */
-  max-width: calc(16.666% - 10px);
-  /* Phân chia 6 categories trên mỗi hàng */
+  flex: 0 0 calc(25% - 10px);
+  /* Hiển thị 4 sản phẩm trên mỗi hàng */
+  max-width: calc(25% - 10px);
+  /* Hiển thị 4 sản phẩm trên mỗi hàng */
 }
 
+
 .nav-link {
-  background: #c0392b;
+  background: #FF0072;
   display: block;
   text-align: center;
   padding: 8px 0;
-  color: #d8cccc;
+  color: #f9f9f9;
   transition: .3s;
   border: 1px solid transparent;
+  border-radius: 15px;
   text-transform: capitalize;
 }
 
 .nav-link:hover {
   background: #e9e0df;
   color: #000000;
-  border-color: #c0392b;
+  border-color: #FF0072;
 }
 
 .page_title {
@@ -35,7 +37,7 @@
 }
 
 .page_title h1 {
-  color: #c0392b;
+  color: #FF0072;
   font-weight: 700;
   line-height: 2;
   margin-bottom: 0;
@@ -44,7 +46,7 @@
 }
 
 .page_title h1::before {
-  background: #c0392b;
+  background: #FF0072;
   width: 70px;
   height: 2px;
   position: absolute;
@@ -63,4 +65,113 @@
   top: 90%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: rgb(177, 63, 63);
+  /* Thay đổi màu sắc tại đây */
+  width: 50px;
+  /* Điều chỉnh chiều rộng */
+  height: 50px;
+  /* Điều chỉnh chiều cao */
+  border-radius: 50%;
+  /* Làm tròn góc */
+  opacity: 0.8;
+  /* Điều chỉnh độ mờ */
+  transition: opacity 0.3s ease;
+  /* Hiệu ứng khi hover */
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  opacity: 1;
+  /* Điều chỉnh độ mờ khi hover */
+}
+
+
+
+
+
+a {
+  text-decoration: none;
+  color: var(--p-color);
+  font-family: 'Playfair Display', serif;
+  font-size: larger;
+}
+
+a:hover {
+  color: red;
+  /* Màu khi hover vào liên kết */
+}
+
+/* Định dạng liên kết danh sách */
+.list-group a {
+  display: block;
+  padding: 3px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.3s;
+  /* Thêm hiệu ứng chuyển động cho văn bản */
+}
+
+/* Hiệu ứng khi hover vào liên kết */
+.list-group a:hover {
+  transform: scale(1.1);
+  /* Phóng to văn bản khi di chuột vào */
+}
+
+/* Định dạng toàn bộ nav */
+nav.category {
+  background-color: #333;
+  /* Màu nền */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  /* Đổ bóng */
+  color: #fff;
+  /* Màu chữ */
+}
+
+.list-group {
+  text-align: center;
+}
+
+.accordion-button {
+  background-color: #333;
+  color: #fff;
+}
+
+.mobile-category-item {
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.mobile-category-list {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  max-width: 100%;
+  overflow-x: auto;
+
+}
+
+.mobile-category-list::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-category-link {
+  --line-height: 2rem;
+  text-decoration: none;
+  font-size: 1.4rem;
+  line-height: var(--line-height);
+  height: var(--line-height);
+  overflow: hidden;
+  text-align: center;
+  width: 110px;
+  display: block;
+  border-radius: 5px;
+  border: 1px gray solid;
+  user-select: none;
+  --webkit-user-select: none;
+
 }

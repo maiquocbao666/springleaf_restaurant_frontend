@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Restaurant } from 'src/app/interfaces/restaurant';
@@ -15,8 +15,9 @@ import { TableTypeService } from 'src/app/services/table-type.service';
   templateUrl: './admin-restaurant-table-detail.component.html',
   styleUrls: ['./admin-restaurant-table-detail.component.css']
 })
-export class AdminRestaurantTableDetailComponent  implements OnInit {
+export class AdminRestaurantTableDetailComponent implements OnInit {
   @Input() restaurantTable: RestaurantTable | undefined;
+  @Output() restaurantTableSaved: EventEmitter<void> = new EventEmitter<void>();
   tableTypes: TableType[] = [];
   tableStatuses: TableStatus[] = [];
   restaurants: Restaurant[] = [];
@@ -83,16 +84,17 @@ export class AdminRestaurantTableDetailComponent  implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.restaurantTableForm.valid) {
       const updatedRestaurantTable: RestaurantTable = {
-        tableId: this.restaurantTableForm.get('tableId')?.value,
+        tableId: +this.restaurantTableForm.get('tableId')?.value,
         tableName: this.restaurantTableForm.get('tableName')?.value,
-        tableStatusId: this.restaurantTableForm.get('tableStatusId')?.value,
-        tableTypeId: this.restaurantTableForm.get('tableTypeId')?.value,
-        restaurantId: this.restaurantTableForm.get('restaurantId')?.value
+        tableStatusId: +this.restaurantTableForm.get('tableStatusId')?.value,
+        tableTypeId: +this.restaurantTableForm.get('tableTypeId')?.value,
+        restaurantId: +this.restaurantTableForm.get('restaurantId')?.value
       };
 
       this.restaurantTablesService.updateRestaurantTable(updatedRestaurantTable).subscribe(() => {
         // Cập nhật cache
         this.restaurantTablesService.updateRestaurantTableCache(updatedRestaurantTable);
+        this.restaurantTableSaved.emit(); // Emit the event
       });
     }
   }

@@ -78,11 +78,11 @@ export class AdminComboDetailsUpdateComponent {
   updateComboDetail(): void {
     if (this.comboDetailForm.valid) {
       const updatedComboDetail: ComboDetail = {
-        comboDetailId: this.comboDetailForm.get('comboDetailId')?.value,
-        comboId: this.comboDetailForm.get('comboId')?.value,
-        menuItem: this.comboDetailForm.get('menuItem')?.value,
-        quantity: this.comboDetailForm.get('quantity')?.value,
-        comboTypeId: this.comboDetailForm.get('comboTypeId')?.value,
+        comboDetailId: +this.comboDetailForm.get('comboDetailId')?.value,
+        comboId: +this.comboDetailForm.get('comboId')?.value,
+        menuItem: +this.comboDetailForm.get('menuItem')?.value,
+        quantity: +this.comboDetailForm.get('quantity')?.value,
+        comboTypeId: +this.comboDetailForm.get('comboTypeId')?.value,
       };
 
       this.comboDetailService.updateComboDetail(updatedComboDetail).subscribe(() => {

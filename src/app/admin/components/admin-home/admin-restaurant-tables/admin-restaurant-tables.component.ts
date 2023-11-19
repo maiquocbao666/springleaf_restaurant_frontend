@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
@@ -136,6 +136,12 @@ export class AdminRestaurantTablesComponent {
   openRestaurantTableDetailModal(restaurantTable: RestaurantTable) {
     const modalRef = this.modalService.open(AdminRestaurantTableDetailComponent, { size: 'lg' });
     modalRef.componentInstance.restaurantTable = restaurantTable;
+    modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
+      this.getRestaurantTables();
+      this.getTableStatuses();
+      this.getTableTypes();
+      this.getRestaurants();
+    });
     modalRef.result.then((result) => {
       if (result === 'Close after saving') {
         this.getRestaurantTables();

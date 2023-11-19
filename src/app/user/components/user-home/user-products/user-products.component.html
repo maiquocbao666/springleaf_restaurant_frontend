@@ -84,10 +84,17 @@
                     <div class="row">
                         <div class="col-md-6" *ngFor="let product of getVisibleProducts(); let i = index">
                             <div class="single_menu">
-                                <img src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
+                                <a (click)="openProductDetailModal(product)"><img
+                                        src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
+                                        alt="burger"></a>
                                 <div class=" menu_content">
-                                    <h4>{{product.name}} <span>{{ formatAmount(product.unitPrice ) }}</span> </h4>
+                                    <a (click)="openProductDetailModal(product)">
+                                        <h4>{{product.name}} <span>{{ formatAmount(product.unitPrice ) }}</span> </h4>
+                                    </a>
                                     <p>{{product.description}}</p>
+                                    <button style="float: right;" (click)="addOrder()">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </button>
                                 </div>
 
                             </div>
@@ -103,6 +110,21 @@
                 <button class="Btn" (click)="showLess()" *ngIf="visibleProductCount > 12">Show
                     Less</button>
             </div>
+        </div>
+    </div>
+</section>
+<section class="coupon">
+    <div class="coupon-wrapper flex-vertical padding-1">
+        <div class="top">
+            <small>Valid Until Sunday 1/10/18</small>
+        </div>
+        <aside class="center flex-vertical">
+            <span class="big">20% OFF</span>
+            <span class="small">All wood stall signs</span>
+        </aside>
+        <div class="bottom">
+            <strong class="promo-title">Promo Code</strong>
+            <span class="promo-code">woodsigns20</span>
         </div>
     </div>
 </section>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
@@ -15,6 +15,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
 })
 export class AdminInventoryDetailComponent implements OnInit {
   @Input() inventory: Inventory | undefined;
+  @Output() inventorySaved: EventEmitter<void> = new EventEmitter<void>();
   inventoryForm: FormGroup;
   inventoris: Inventory[] = [];
   suppliers: Supplier[] = [];
@@ -75,14 +76,15 @@ export class AdminInventoryDetailComponent implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.inventoryForm.valid) {
       const updatedInventory: Inventory = {
-        inventoryId: this.inventoryForm.get('inventoryId')?.value,
-        ingredientId: this.inventoryForm.get('ingredientId')?.value,
-        supplierId: this.inventoryForm.get('supplierId')?.value
+        inventoryId: +this.inventoryForm.get('inventoryId')?.value,
+        ingredientId: +this.inventoryForm.get('ingredientId')?.value,
+        supplierId: +this.inventoryForm.get('supplierId')?.value
       };
 
       this.inventoryService.updateInventory(updatedInventory).subscribe(() => {
         // Cập nhật cache
         this.inventoryService.updateInventoryCache(updatedInventory);
+        this.inventorySaved.emit();
         this.getInventories();
         this.getSuppliers();
         this.getIngredients();

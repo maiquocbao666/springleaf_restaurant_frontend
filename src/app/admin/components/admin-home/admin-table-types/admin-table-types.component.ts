@@ -83,6 +83,9 @@ export class AdminTableTypesComponent {
   openTableTypeDetailModal(tableType: TableType) {
     const modalRef = this.modalService.open(AdminTableTypeDetailComponent, { size: 'lg' });
     modalRef.componentInstance.tableType = tableType;
+    modalRef.componentInstance.tableTypeSaved.subscribe(() => {
+      this.getTableTypes();
+    });
   }
 
 }

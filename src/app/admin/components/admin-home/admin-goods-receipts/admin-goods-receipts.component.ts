@@ -96,6 +96,10 @@ export class AdminGoodsReceiptsComponent {
   openGoodsReceiptDetailModal(goodsReceipt: GoodsReceipt) {
     const modalRef = this.modalService.open(AdminGoodsReceiptDetailComponent, { size: 'lg' });
     modalRef.componentInstance.goodsReceipt = goodsReceipt;
+    modalRef.componentInstance.goodsReceiptSaved.subscribe(() => {
+      this.getGoodsReceipts();
+    this.getInventoryBranches();
+    });
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Receipt } from 'src/app/interfaces/receipt';
@@ -11,6 +11,7 @@ import { ReceiptService } from 'src/app/services/receipt.service';
 })
 export class AdminReceiptDetailComponent {
   @Input() receipt: Receipt | undefined;
+  @Output() receiptSaved: EventEmitter<void> = new EventEmitter<void>();
   fieldNames: string[] = [];
   receipts: Receipt[] = [];
   receiptForm: FormGroup;
@@ -57,17 +58,18 @@ export class AdminReceiptDetailComponent {
     this.activeModal.close('Close after saving');
     if (this.receiptForm.valid) {
       const updatedReceipt: Receipt = {
-        receiptId: this.receiptForm.get('receiptId')?.value,
-        userId: this.receiptForm.get('userId')?.value,
-        supplier: this.receiptForm.get('supplier')?.value,
+        receiptId: +this.receiptForm.get('receiptId')?.value,
+        userId: +this.receiptForm.get('userId')?.value,
+        supplier: +this.receiptForm.get('supplier')?.value,
         date: this.receiptForm.get('date')?.value,
-        totalAmount: this.receiptForm.get('totalAmount')?.value,
-        inventory: this.receiptForm.get('inventory')?.value,
+        totalAmount: +this.receiptForm.get('totalAmount')?.value,
+        inventory: +this.receiptForm.get('inventory')?.value,
       };
   
       this.receiptService.updateReceipt(updatedReceipt).subscribe(() => {
         // Cập nhật cache
         this.receiptService.updateReceiptCache(updatedReceipt);
+        this.receiptSaved.emit(); // Emit the event
       });
     }
   }

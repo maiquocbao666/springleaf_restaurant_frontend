@@ -135,6 +135,9 @@ export class AdminTableStatusesComponent {
   openTableStatusDetailModal(tableStatus: TableStatus) {
     const modalRef = this.modalService.open(AdminTableStatusDetailComponent, { size: 'lg' });
     modalRef.componentInstance.tableStatus = tableStatus;
+    modalRef.componentInstance.tableStatusSaved.subscribe(() => {
+      this.getTableStatuses();
+    });
   }
 
 }

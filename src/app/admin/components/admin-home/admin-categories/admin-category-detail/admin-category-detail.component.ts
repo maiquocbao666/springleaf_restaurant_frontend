@@ -48,7 +48,7 @@ export class AdminCategoryDetailComponent implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.categoryForm.valid) {
       const updatedCategory: Category = {
-        categoryId: this.categoryForm.get('id')?.value,
+        categoryId: +this.categoryForm.get('id')?.value,
         name: this.categoryForm.get('name')?.value,
         description: this.categoryForm.get('description')?.value,
         active: this.categoryForm.get('active')?.value,

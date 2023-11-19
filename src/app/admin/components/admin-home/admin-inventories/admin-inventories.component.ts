@@ -86,7 +86,7 @@ export class AdminInventoriesComponent {
     // Lấy giá trị từ các trường select
     const ingredientId = this.inventoryForm.get('ingredientId')?.value;
     const supplierId = this.inventoryForm.get('supplierId')?.value;
-    
+
     // Kiểm tra xem người dùng đã chọn giá trị hợp lệ cho cả hai trường chưa
     if (!ingredientId && !supplierId) {
       alert('Vui lòng chọn cả nguyên liệu và nhà cung cấp.');
@@ -107,18 +107,22 @@ export class AdminInventoriesComponent {
   }
   deleteInventory(inventory: Inventory): void {
 
-    if(inventory.inventoryId){
+    if (inventory.inventoryId) {
       this.inventories = this.inventories.filter(i => i !== inventory);
-    this.inventoryService.deleteInventory(inventory.inventoryId).subscribe();
+      this.inventoryService.deleteInventory(inventory.inventoryId).subscribe();
     } else {
       console.log("Không có inventoryId");
     }
 
-    
+
   }
   openInventoryDetailModal(inventory: Inventory) {
     const modalRef = this.modalService.open(AdminInventoryDetailComponent, { size: 'lg' });
     modalRef.componentInstance.inventory = inventory;
-
+    modalRef.componentInstance.inventorySaved.subscribe(() => {
+      this.getInventories();
+      this.getIngredients();
+      this.getSuppliers();
+    });
   }
 }

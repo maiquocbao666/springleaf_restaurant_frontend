@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Cart } from 'src/app/interfaces/cart';
 import { Combo } from 'src/app/interfaces/combo';
@@ -13,10 +13,11 @@ import { EventService } from 'src/app/services/event.service';
   templateUrl: './admin-event-detail.component.html',
   styleUrls: ['./admin-event-detail.component.css']
 })
-export class AdminEventDetailComponent  implements OnInit {
-  @Input() event: Event | undefined; 
+export class AdminEventDetailComponent implements OnInit {
+  @Input() event: Event | undefined;
+  @Output() eventSaved: EventEmitter<void> = new EventEmitter<void>();
   fieldNames: string[] = [];
-  events: Event[] = []; 
+  events: Event[] = [];
   combos: Combo[] = [];
   carts: Cart[] = [];
   eventForm: FormGroup;
@@ -66,21 +67,22 @@ export class AdminEventDetailComponent  implements OnInit {
     }
   }
 
-  updateEvent(): void { 
+  updateEvent(): void {
     this.activeModal.close('Close after saving');
     if (this.eventForm.valid) {
       const updatedEvent: Event = {
-        eventId: this.eventForm.get('eventId')?.value,
+        eventId: +this.eventForm.get('eventId')?.value,
         eventName: this.eventForm.get('eventName')?.value,
         eventDate: this.eventForm.get('eventDate')?.value,
-        numberOfGuests: this.eventForm.get('numberOfGuests')?.value,
-        combo: this.eventForm.get('combo')?.value,
-        order: this.eventForm.get('order')?.value
+        numberOfGuests: +this.eventForm.get('numberOfGuests')?.value,
+        combo: +this.eventForm.get('combo')?.value,
+        order: +this.eventForm.get('order')?.value
       };
 
       this.eventService.updateEvent(updatedEvent).subscribe(() => {
         // Cập nhật cache
         this.eventService.updateEventCache(updatedEvent);
+        this.eventSaved.emit(); // Emit the event
       });
     }
   }

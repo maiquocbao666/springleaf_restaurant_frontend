@@ -21,9 +21,9 @@
 
 .btn-book-table {
 	margin-top: 50px;
-	border: 1px solid #1A76D1;
+	border: 1px solid #FF0072;
 	border-radius: 5px;
-	background-color: #1A76D1;
+	background-color: #FF0072;
 	width: 110px;
 	height: 30px;
 	padding: 0;
@@ -66,7 +66,7 @@
 }
 
 .header .top-link li:hover a {
-	color: #1A76D1;
+	color: #FF0072;
 }
 
 .header .top-contact {
@@ -91,11 +91,11 @@
 }
 
 .header .top-contact li a:hover {
-	color: #1A76D1;
+	color: #FF0072;
 }
 
 .header .top-contact li i {
-	color: #1A76D1;
+	color: #FF0072;
 	margin-right: 8px;
 }
 
@@ -111,7 +111,7 @@
 }
 
 .get-quote .btn {
-	background-color: #1A76D1;
+	background-color: #FF0072;
 	color: #fff;
 	height: 20px;
 	text-align: center;
@@ -159,7 +159,7 @@
 	bottom: 0;
 	height: 3px;
 	width: 0%;
-	background: #1A76D1;
+	background: #FF0072;
 	border-radius: 5px 5px 0 0;
 	opacity: 0;
 	visibility: hidden;
@@ -172,11 +172,11 @@
 	opacity: 1;
 	visibility: visible;
 	width: 100%;
-	color: #1A76D1;
+	color: #FF0072;
 }
 
 .header .nav li.active a {
-	color: #1A76D1;
+	color: #FF0072;
 }
 
 .header .nav li:hover a:before {
@@ -186,7 +186,7 @@
 }
 
 .header .nav li:hover a {
-	color: #1a76d1;
+	color: #FF0072;
 }
 
 .header .nav li a i {
@@ -242,7 +242,7 @@
 	width: 40px;
 	line-height: 40px;
 	color: #fff;
-	background: #1A76D1;
+	background: #FF0072;
 	border-radius: 4px;
 	text-align: center;
 	font-size: 15px;
@@ -281,7 +281,7 @@
 	opacity: 0;
 	visibility: hidden;
 	top: 74px;
-	border-left: 3px solid #2889e4;
+	border-left: 3px solid #FF0072;
 	text-decoration: none;
 }
 
@@ -322,7 +322,7 @@
 }
 
 .header .nav li .dropdown li:hover a {
-	color: #1A76D1;
+	color: #FF0072;
 }
 
 .header .nav li .dropdown li a:hover {
@@ -353,7 +353,7 @@
 	width: 35px;
 	line-height: 35px;
 	text-align: center;
-	background: #1a76d1;
+	background: #FF0072;
 	border-radius: 4px;
 	display: block;
 	font-size: 12px;
@@ -412,7 +412,7 @@
 	height: 50px;
 	top: 0;
 	width: 50px;
-	background: #1A76D1;
+	background: #FF0072;
 	border: none;
 	color: #fff;
 	border-radius: 0 4px 4px 0;
@@ -421,7 +421,7 @@
 
 .header .search-form button:hover {
 	background: #fff;
-	color: #1A76D1;
+	color: #FF0072;
 	border-color: #e6e6e6;
 }
 

@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableStatus } from 'src/app/interfaces/table-status';
@@ -11,6 +11,7 @@ import { TableStatusService } from 'src/app/services/table-status.service';
 })
 export class AdminTableStatusDetailComponent  implements OnInit {
   @Input() tableStatus: TableStatus | undefined;
+  @Output() tableStatusSaved: EventEmitter<void> = new EventEmitter<void>();
   tableStatuses: TableStatus[] = [];
   fieldNames: string[] = [];
   tableStatusForm: FormGroup;
@@ -49,13 +50,14 @@ export class AdminTableStatusDetailComponent  implements OnInit {
     this.activeModal.close('Close after saving');
     if (this.tableStatusForm.valid) {
       const updatedTableStatus: TableStatus = {
-        tableStatusId: this.tableStatusForm.get('tableStatusId')?.value,
+        tableStatusId: +this.tableStatusForm.get('tableStatusId')?.value,
         tableStatusName: this.tableStatusForm.get('name')?.value,
       };
 
       this.tableStatusService.updateTableStatus(updatedTableStatus).subscribe(() => {
         // Cập nhật cache
         this.tableStatusService.updateTableStatusesCache(updatedTableStatus);
+        this.tableStatusSaved.emit(); // Emit the event
       });
     }
   }

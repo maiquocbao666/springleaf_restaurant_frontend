@@ -9,20 +9,27 @@
         </div>
       </div>
       <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Nhà hàng</label>
-        <a class="nav-link" routerLink="/admin/restaurants">Thêm nhà hàng</a>
+        <label *ngIf="!restaurants || restaurants.length >0" for="exampleInputPassword1" class="form-label">Nhà
+          hàng</label>
+        <a style="color: red;" *ngIf="!restaurants || restaurants.length === 0" class="nav-link"
+          routerLink="/admin/restaurants">Thêm nhà
+          hàng</a>
+
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
             <option value>Chọn nhà hàng</option>
-            <option *ngFor="let restaurant of restaurants " [value]="restaurant.restaurantId">{{
-              restaurant.restaurantName
-              }}</option>
+            <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId">{{
+              restaurant.restaurantName }}</option>
           </select>
         </div>
       </div>
+
       <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Kiểu bàn</label>
-        <a class="nav-link" routerLink="/admin/tableTypes">Thêm kiểu bàn</a>
+        <label *ngIf="!tableTypes || tableTypes.length >0" for="exampleInputPassword1" class="form-label">Kiểu
+          bàn</label>
+        <a style="color: red;" *ngIf="!tableTypes || tableTypes.length ===0" class="nav-link"
+          routerLink="/admin/tableTypes">Thêm kiểu
+          bàn</a>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
             <option value>Chọn kiểu bàn</option>
@@ -32,8 +39,9 @@
         </div>
       </div>
       <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Trạng thái bàn</label>
-        <a class="nav-link" routerLink="/admin/tableStatuses">Thêm trạng thái bàn</a>
+        <label *ngIf="!tableStatuses || tableStatuses.length >0" for="exampleInputPassword1" class="form-label">Trạng
+          thái bàn</label>
+        <a style="color: red;" class="nav-link" routerLink="/admin/tableStatuses">Thêm trạng thái bàn</a>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
             <option value>Chọn trạng thái</option>

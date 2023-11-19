@@ -74,7 +74,7 @@ export class AdminProductDetailComponent implements OnInit {
       const updatedProduct: Product = {
         menuItemId: +this.productForm.get('menuItemId')?.value,
         name: this.productForm.get('name')?.value,
-        unitPrice: +this.productForm.get('price')?.value,
+        unitPrice: +this.productForm.get('unitPrice')?.value,
         description: this.productForm.get('description')?.value,
         status: this.productForm.get('status')?.value,
         categoryId: +this.productForm.get('categoryId')?.value,

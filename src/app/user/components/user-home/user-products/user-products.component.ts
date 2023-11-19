@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { Order } from 'src/app/interfaces/order';
@@ -10,6 +11,8 @@ import { CategoryService } from 'src/app/services/category.service';
 import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ReservationService } from 'src/app/services/reservation.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -32,7 +35,9 @@ export class UserProductsComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private modalService: NgbModal,
+    private toastService: ToastService,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -126,7 +131,10 @@ export class UserProductsComponent implements OnInit {
 
 
     this.reservationService.getReservationId().subscribe(reservationId => {
-
+      if (!reservationId) {
+        this.toastService.showWarn('Bạn chưa đặt bàn!!!');
+        return; 
+      }
       const newOrder: Order = {
         orderId: 0,
         combo: comboId!,
@@ -142,6 +150,7 @@ export class UserProductsComponent implements OnInit {
         {
           next: (addedOrder) => {
             alert("Thành công")
+            this.toastService.showSuccess('Tạo order thành công!');
           },
           error: (error) => {
             console.error('Error adding order:', error);
@@ -155,6 +164,10 @@ export class UserProductsComponent implements OnInit {
     });
   }
 
+  openProductDetailModal(product: Product) {
+    const modalRef = this.modalService.open(UserProductDetailComponent, { size: 'lg' });
+    modalRef.componentInstance.product = product;
 
+  }
 
 }
