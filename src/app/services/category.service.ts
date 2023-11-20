@@ -16,23 +16,17 @@ export class CategoryService {
 
 
   getCategories(): Observable<Category[]> {
-
     if (this.categoriesCache) {
-
       return of(this.categoriesCache);
-
     }
 
     const categoriesObservable = this.apiService.request<Category[]>('get', this.categoriesUrl);
 
     categoriesObservable.subscribe(data => {
-
       this.categoriesCache = data;
-
     });
 
     return categoriesObservable;
-
   }
 
   getCategoryById(id: number): Observable<Category | null> {
@@ -115,7 +109,7 @@ export class CategoryService {
         if (index !== -1) {
 
           this.categoriesCache.splice(index, 1);
-          localStorage.setItem('categories', JSON.stringify(this.categoriesCache));
+          localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
 
         }
 
@@ -125,15 +119,11 @@ export class CategoryService {
   }
 
   searchCategoriesByName(term: string): Observable<Category[]> {
-
     if (!term.trim()) {
-
       return of([]);
-
     }
 
     if (this.categoriesCache) {
-
       const filteredCategories = this.categoriesCache.filter(category => {
         return category.name.toLowerCase().includes(term.toLowerCase());
       });
@@ -141,20 +131,15 @@ export class CategoryService {
       if (filteredCategories.length > 0) {
         return of(filteredCategories);
       }
-
     }
 
     return this.apiService.request("get", this.categoriesUrl).pipe(
-
       map(response => response as Category[]),
       catchError(error => {
-
         console.error(error);
         return of([]);
-
       })
     );
-
   }
 
   updateCategoryCache(updatedCategory: Category): void {
