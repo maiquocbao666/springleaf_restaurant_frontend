@@ -40,7 +40,22 @@ export class FavoriteService {
 
     }
 
+    private isMenuItemIdInCache(name: number): boolean {
+        const isTrue = !!this.favoritesCache?.find(favorite => favorite.menuItem === name);
+        if(isTrue){
+            console.log("Món ăn này đã có trong mục yêu thích rồi");
+            return isTrue;
+        } else {
+            return isTrue;
+        }
+        
+    }
+
     addFavorite(newFavorite: Favorite): Observable<Favorite> {
+
+        if(this.isMenuItemIdInCache(newFavorite.menuItem)){
+            return of();
+        }
 
         return this.apiService.request<Favorite>('post', this.favoriteUrl, newFavorite).pipe(
 
@@ -56,6 +71,10 @@ export class FavoriteService {
     }
 
     updateFavorite(updatedFavorite: Favorite): Observable<any> {
+
+        if(this.isMenuItemIdInCache(updatedFavorite.menuItem)){
+            return of();
+        }
 
         const url = `${this.favoriteUrl}/${updatedFavorite.favoriteId}`;
 

@@ -9,8 +9,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class OrderTypeService {
 
-    private orderTypesUrl = 'ingredients';
-    private orderTypeUrl = 'ingredient';
+    private orderTypesUrl = 'orderTypes';
+    private orderTypeUrl = 'orderType';
     orderTypesCache!: OrderType[];
 
     constructor(private apiService: ApiService) { }
@@ -38,7 +38,21 @@ export class OrderTypeService {
         
     }
 
+    private isOrderTypeNameInCache(name: string): boolean {
+        const isTrue = !!this.orderTypesCache?.find(orderType => orderType.name.toLowerCase() === name.toLowerCase());
+        if(isTrue){
+            console.log('Kiểu order này đã tồn tại trong cache.');
+            return isTrue;
+        }else {
+            return isTrue
+        }
+    }
+
     addOrderType(newOrderType: OrderType): Observable<OrderType> {
+
+        if(this.isOrderTypeNameInCache(newOrderType.name)){
+            return of();
+        }
 
         return this.apiService.request<OrderType>('post', this.orderTypeUrl, newOrderType).pipe(
 
@@ -54,6 +68,10 @@ export class OrderTypeService {
     }
 
     updateOrderType(updatedOrderType: OrderType): Observable<any> {
+
+        if(this.isOrderTypeNameInCache(updatedOrderType.name)){
+            return of();
+        }
 
         const url = `${this.orderTypeUrl}/${updatedOrderType.orderTypeId}`;
 

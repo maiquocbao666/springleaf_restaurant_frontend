@@ -66,17 +66,23 @@ export class ReservationStatusSerivce {
 
     }
 
+    private isReservationStatusNameInCache(name: string): boolean {
+        const isTrue = !!this.reservationStatusesCache?.find(reservationStatus => reservationStatus.reservationStatusName === name);
+        if (isTrue) {
+            console.log('Trạng thái bàn này đã tồn tại trong cache.');
+            return isTrue;
+        } else {
+            return isTrue;
+        }
+
+    }
 
     addReservationStatus(newStatus: ReservationStatus): Observable<ReservationStatus> {
         // Kiểm tra xem danh sách reservationStatusesCache đã được tải hay chưa
         if (this.reservationStatusesCache) {
-            // Kiểm tra xem có trạng thái nào trong cache có cùng tên hay không
-            const existingStatus = this.reservationStatusesCache.find(status => status.reservationStatusName.toLowerCase() === newStatus.reservationStatusName.toLowerCase());
-
             // Nếu đã có trạng thái cùng tên, trả về Observable với giá trị hiện tại
-            if (existingStatus) {
-                console.log("Trạng thái bàn này đã tồn tại");
-                return of(existingStatus);
+            if (this.isReservationStatusNameInCache(newStatus.reservationStatusName)) {
+                return of();
             }
         }
 
@@ -91,6 +97,10 @@ export class ReservationStatusSerivce {
 
 
     updateReservationStatus(updatedReservationStatus: ReservationStatus): Observable<any> {
+
+        if (this.isReservationStatusNameInCache(updatedReservationStatus.reservationStatusName)) {
+            return of();
+        }
 
         const url = `${this.reservationStatusUrl}`;
 

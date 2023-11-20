@@ -21,7 +21,6 @@ export class OrderThresholdService {
 
         if (this.orderThresholdsCache) {
 
-            console.log("Có ingredients cache");
             return of(this.orderThresholdsCache);
 
         }

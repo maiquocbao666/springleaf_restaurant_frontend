@@ -70,21 +70,53 @@ export class RestaurantTableService {
 
     }
 
-    addRestaurantTable(newRestaurantTable: RestaurantTable): Observable<RestaurantTable> {
-        // Kiểm tra xem table đã tồn tại trong cache hay không (không phân biệt hoa thường)
-        const existingTable = this.restaurantTablesCache.find(table => table.tableName.toLowerCase() === newRestaurantTable.tableName.toLowerCase());
-    
-        if (existingTable) {
-            // Nếu đã có table có tên tương tự, trả về Observable với giá trị hiện tại
-            console.log('Bàn này đã tồn tại trong cache.');
-            return of(existingTable);
+    private isRestaurantTableNameInCache(name: string): boolean {
+        const isTrue = !!this.restaurantTablesCache?.find(restaurantTable => restaurantTable.tableName === name);
+        if (isTrue) {
+            console.log('Bàn này này đã tồn tại trong cache.');
+            return isTrue;
+        } else {
+            return isTrue;
         }
-    
+
+    }
+
+    addRestaurantTable(newRestaurantTable: RestaurantTable): Observable<RestaurantTable> {
+
+        if (this.isRestaurantTableNameInCache(newRestaurantTable.tableName)) {
+            return of();
+        }
+
         // Nếu không có table có tên tương tự trong cache, tiếp tục thêm table mới
         return this.apiService.request<RestaurantTable>('post', this.restaurantTableUrl, newRestaurantTable).pipe(
             tap((addedRestaurantTable: RestaurantTable) => {
                 this.restaurantTablesCache.push(addedRestaurantTable);
                 localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
+            })
+        );
+    }
+
+    updateRestaurantTable(updatedRestaurantTable: RestaurantTable): Observable<any> {
+
+        if (this.isRestaurantTableNameInCache(updatedRestaurantTable.tableName)) {
+            return of();
+        }
+
+        const url = `${this.restaurantTableUrl}`;
+
+        return this.apiService.request('put', url, updatedRestaurantTable).pipe(
+
+            tap(() => {
+
+                const index = this.restaurantTablesCache!.findIndex(restaurantTable => restaurantTable.tableId === updatedRestaurantTable.tableId);
+
+                if (index !== -1) {
+
+                    this.restaurantTablesCache![index] = updatedRestaurantTable;
+                    localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
+
+                }
+
             })
         );
     }
@@ -111,28 +143,6 @@ export class RestaurantTableService {
             })
         );
 
-    }
-
-
-    updateRestaurantTable(updatedRestaurantTable: RestaurantTable): Observable<any> {
-
-        const url = `${this.restaurantTableUrl}`;
-
-        return this.apiService.request('put', url, updatedRestaurantTable).pipe(
-
-            tap(() => {
-
-                const index = this.restaurantTablesCache!.findIndex(restaurantTable => restaurantTable.tableId === updatedRestaurantTable.tableId);
-
-                if (index !== -1) {
-
-                    this.restaurantTablesCache![index] = updatedRestaurantTable;
-                    localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
-
-                }
-
-            })
-        );
     }
 
 

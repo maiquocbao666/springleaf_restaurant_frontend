@@ -63,14 +63,22 @@ export class TableStatusService {
         }
     }
 
-    addTableStatus(newTableStatus: TableStatus): Observable<TableStatus> {
-        // Kiểm tra xem table status đã tồn tại trong cache hay không (không phân biệt hoa thường)
-        const existingTableStatus = this.tableStatusesCache.find(tableStatus => tableStatus.tableStatusName.toLowerCase() === newTableStatus.tableStatusName.toLowerCase());
-    
-        if (existingTableStatus) {
-            // Nếu đã có table status có tên tương tự, trả về Observable với giá trị hiện tại
+    private isTableStatusNameInCache(name: string): boolean {
+        const isTrue = !!this.tableStatusesCache?.find(tableStatus => tableStatus.tableStatusName === name);
+        if (isTrue) {
             console.log('Trạng thái bàn này đã tồn tại trong cache.');
-            return of(existingTableStatus);
+            return isTrue;
+        } else {
+            return isTrue;
+        }
+
+    }
+
+    addTableStatus(newTableStatus: TableStatus): Observable<TableStatus> {
+    
+        if (this.isTableStatusNameInCache(newTableStatus.tableStatusName)) {
+            // Nếu đã có table status có tên tương tự, trả về Observable với giá trị hiện tại  
+            return of();
         }
     
         // Nếu không có table status có tên tương tự trong cache, tiếp tục thêm table status mới
@@ -83,6 +91,11 @@ export class TableStatusService {
     }
 
     updateTableStatus(updatedtableStatus: TableStatus): Observable<any> {
+
+        if (this.isTableStatusNameInCache(updatedtableStatus.tableStatusName)) {
+            // Nếu đã có table status có tên tương tự, trả về Observable với giá trị hiện tại  
+            return of();
+        }
 
         const url = `${this.tableStatusUrl}`;
 

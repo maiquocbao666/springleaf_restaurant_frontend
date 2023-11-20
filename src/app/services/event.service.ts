@@ -33,7 +33,22 @@ export class EventService {
 
     }
 
+    private isEventNameInCache(name: string): boolean {
+        const isTrue = !!this.eventsCache?.find(event => event.eventName.toLowerCase() === name.toLowerCase());
+        if(isTrue){
+            console.log('Tiệc này đã tồn tại trong cache.');
+            return isTrue;
+        }else {
+            return isTrue
+        }
+    }
+
     addEvent(newEvent: Event): Observable<Event> {
+
+        if (this.isEventNameInCache(newEvent.eventName)) {
+            // Nếu đã có combo có tên tương tự, trả về Observable với giá trị hiện tại
+            return of();
+        }
 
         return this.apiService.request<Event>('post', this.eventUrl, newEvent).pipe(
 
@@ -49,6 +64,11 @@ export class EventService {
     }
 
     updateEvent(updatedEvent: Event): Observable<any> {
+
+        if (this.isEventNameInCache(updatedEvent.eventName)) {
+            // Nếu đã có combo có tên tương tự, trả về Observable với giá trị hiện tại
+            return of();
+        }
 
         const url = `${this.eventUrl}/${updatedEvent.eventId}`;
 

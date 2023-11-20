@@ -57,14 +57,22 @@ export class SupplierService {
 
     }
 
+    private isSupplierNameInCache(name: string): boolean {
+        const isTrue = !!this.suppliersCache?.find(supplier => supplier.supplierName === name);
+        if (isTrue) {
+            console.log('Quyền này đã tồn tại trong cache.');
+            return isTrue;
+        } else {
+            return isTrue;
+        }
+
+    }
+
     addSupplier(newSupplier: Supplier): Observable<Supplier> {
-        // Kiểm tra xem supplier đã tồn tại trong cache hay không (không phân biệt hoa thường)
-        const existingSupplier = this.suppliersCache.find(supplier => supplier.supplierName.toLowerCase() === newSupplier.supplierName.toLowerCase());
     
-        if (existingSupplier) {
+        if (this.isSupplierNameInCache(newSupplier.supplierName)) {
             // Nếu đã có supplier có tên tương tự, trả về Observable với giá trị hiện tại
-            console.log('Nhà cung cấp này đã tồn tại trong cache.');
-            return of(existingSupplier);
+            return of();
         }
     
         // Nếu không có supplier có tên tương tự trong cache, tiếp tục thêm supplier mới
@@ -77,6 +85,11 @@ export class SupplierService {
     }
 
     updateSupplier(updatedSupplier: Supplier): Observable<any> {
+
+        if (this.isSupplierNameInCache(updatedSupplier.supplierName)) {
+            // Nếu đã có supplier có tên tương tự, trả về Observable với giá trị hiện tại
+            return of();
+        }
 
         const url = `${this.supplierUrl}/${updatedSupplier.supplierId}`;
 

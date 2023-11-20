@@ -76,14 +76,22 @@ export class ProductService {
 
   }
 
-  addProduct(newProduct: Product): Observable<Product> {
-    // Kiểm tra xem tên sản phẩm đã tồn tại trong cache hay không
-    const existingProduct = this.productsCache.find(product => product.name.toLowerCase() === newProduct.name.toLowerCase());
+  private isProductNameInCache(name: string): boolean {
+    const isTrue = !!this.productsCache?.find(product => product.name === name);
+    if (isTrue) {
+      console.log('Món ăn này đã tồn tại trong cache.');
+      return isTrue;
+    } else {
+      return isTrue;
+    }
 
-    if (existingProduct) {
+  }
+
+  addProduct(newProduct: Product): Observable<Product> {
+
+    if (this.isProductNameInCache(newProduct.name)) {
       // Nếu đã có sản phẩm có cùng tên, trả về Observable với giá trị hiện tại
-      console.log('Sản phẩm này đã tồn tại trong cache.');
-      return of(existingProduct);
+      return of();
     }
 
     // Nếu không có sản phẩm cùng tên trong cache, tiếp tục thêm sản phẩm mới
@@ -97,6 +105,11 @@ export class ProductService {
 
 
   updateProduct(updatedProduct: Product): Observable<any> {
+
+    if (this.isProductNameInCache(updatedProduct.name)) {
+      // Nếu đã có sản phẩm có cùng tên, trả về Observable với giá trị hiện tại
+      return of();
+    }
 
     const url = `${this.productUrl}`;
 

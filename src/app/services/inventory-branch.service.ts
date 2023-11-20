@@ -64,7 +64,6 @@ export class InventoryBranchService {
 
     }
 
-
     addInventoryBranch(newInventoryBranch: InventoryBranch): Observable<InventoryBranch> {
 
         return this.apiService.request<InventoryBranch>('post', this.inventoryBranchUrl, newInventoryBranch).pipe(

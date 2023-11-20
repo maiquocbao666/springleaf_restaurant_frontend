@@ -65,15 +65,21 @@ export class TableTypeService {
 
   }
 
-  addTableType(newTableType: TableType): Observable<TableType> {
-    // Check if the table type already exists in the cache
-    const existingTableType = this.tableTypesCache.find(
-      (tableType) => tableType.tableTypeName === newTableType.tableTypeName
-    );
-  
-    if (existingTableType) {
+  private isTableTypeNameInCache(name: string): boolean {
+    const isTrue = !!this.tableTypesCache?.find(tableType => tableType.tableTypeName === name);
+    if (isTrue) {
       console.log("Tên bàn này đã có rồi");
-      return of(existingTableType);
+        return isTrue;
+    } else {
+        return isTrue;
+    }
+
+}
+
+  addTableType(newTableType: TableType): Observable<TableType> {
+  
+    if (this.isTableTypeNameInCache(newTableType.tableTypeName)) {  
+      return of();
     }
   
     // If not in the cache, make the API request
@@ -89,6 +95,10 @@ export class TableTypeService {
   }
 
   updateTableType(updatedtableType: TableType): Observable<any> {
+
+    if (this.isTableTypeNameInCache(updatedtableType.tableTypeName)) {  
+      return of();
+    }
 
     const url = `${this.tableTypeUrl}/${updatedtableType.tableTypeId}`;
 

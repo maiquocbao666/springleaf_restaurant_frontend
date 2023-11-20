@@ -37,7 +37,22 @@ export class RoleService {
 
     }
 
+    private isRoleNameInCache(name: string): boolean {
+        const isTrue = !!this.rolesCache?.find(role => role.roleName === name);
+        if (isTrue) {
+            console.log('Quyền này đã tồn tại trong cache.');
+            return isTrue;
+        } else {
+            return isTrue;
+        }
+
+    }
+
     addRole(newRole: Role): Observable<Role> {
+
+        if(this.isRoleNameInCache(newRole.roleName)){
+            return of();
+        }
 
         return this.apiService.request<Role>('post', this.roleUrl, newRole).pipe(
 
@@ -53,6 +68,10 @@ export class RoleService {
     }
 
     updateRole(updatedrole: Role): Observable<any> {
+
+        if(this.isRoleNameInCache(updatedrole.roleName)){
+            return of();
+        }
 
         const url = `${this.roleUrl}/${updatedrole.roleId}`;
 

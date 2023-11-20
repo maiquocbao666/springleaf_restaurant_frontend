@@ -60,14 +60,22 @@ export class IngredientService {
 
     }
 
+    private isIngredientNameInCache(name: string): boolean {
+        const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name === name);
+        if(isTrue){
+            console.log("Thành phần này đã có trong mục yêu thích rồi");
+            return isTrue;
+        } else {
+            return isTrue;
+        }
+        
+    }
+
     addIngredient(newIngredient: Ingredient): Observable<Ingredient> {
-        // Kiểm tra xem ingredient đã tồn tại trong cache hay không (không phân biệt hoa thường)
-        const existingIngredient = this.ingredientsCache.find(ingredient => ingredient.name.toLowerCase() === newIngredient.name.toLowerCase());
     
-        if (existingIngredient) {
+        if (this.isIngredientNameInCache(newIngredient.name)) {
             // Nếu đã có ingredient có tên tương tự, trả về Observable với giá trị hiện tại
-            console.log('Nguyên liệu này đã tồn tại trong cache.');
-            return of(existingIngredient);
+            return of();
         }
     
         // Nếu không có ingredient có tên tương tự trong cache, tiếp tục thêm ingredient mới
@@ -81,6 +89,11 @@ export class IngredientService {
 
 
     updateIngredient(updatedIngredient: Ingredient): Observable<any> {
+
+        if (this.isIngredientNameInCache(updatedIngredient.name)) {
+            // Nếu đã có ingredient có tên tương tự, trả về Observable với giá trị hiện tại
+            return of();
+        }
 
         const url = `${this.ingredientUrl}/${updatedIngredient.ingredientId}`;
 

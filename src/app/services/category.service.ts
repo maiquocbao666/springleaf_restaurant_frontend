@@ -56,17 +56,23 @@ export class CategoryService {
 
   }
 
+  private isCategoryNameInCache(name: string): boolean {
+    const isTrue = !!this.categoriesCache?.find(category => category.name.toLowerCase() === name.toLowerCase());
+    if (isTrue) {
+      console.log("Danh mục này đã có rồi");
+      return isTrue;
+    } else {
+      return isTrue;
+    }
+  }
 
   addCategory(newCategory: Category): Observable<Category> {
     // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
     if (this.categoriesCache) {
-      // Kiểm tra xem có danh mục nào trong cache có cùng tên hay không
-      const existingCategory = this.categoriesCache.find(category => category.name.toLowerCase() === newCategory.name.toLowerCase());
 
       // Nếu đã có danh mục cùng tên, trả về Observable với giá trị hiện tại
-      if (existingCategory) {
-        console.log("Danh mục này đã có rồi");
-        return of(existingCategory);
+      if (this.isCategoryNameInCache(newCategory.name)) {
+        return of();
       }
     }
 
@@ -81,6 +87,15 @@ export class CategoryService {
 
 
   updateCategory(updatedCategory: Category): Observable<any> {
+
+    // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
+    if (this.categoriesCache) {
+
+      // Nếu đã có danh mục cùng tên, trả về Observable với giá trị hiện tại
+      if (this.isCategoryNameInCache(updatedCategory.name)) {
+        return of();
+      }
+    }
 
     const url = `${this.categoryUrl}`;
 

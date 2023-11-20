@@ -37,6 +37,50 @@ export class ReservationService {
 
     }
 
+    // Hàm kiểm tra xem đã có đặt bàn trong khoảng giờ đã đặt hay chưa
+    private isTimeOverlapping(newReservation: Reservation): boolean {
+        // Lấy thời gian bắt đầu và kết thúc của đặt bàn mới
+        const newReservationStartTime = new Date(newReservation.reservationDate).getTime();
+        const newReservationEndTime = new Date(newReservation.outTime).getTime();
+
+        // Lặp qua danh sách các đặt bàn và kiểm tra xem có đặt bàn nào trùng lịch không
+        const overlappingReservation = this.reservationsCache.find(reservation => {
+            const existingReservationStartTime = new Date(reservation.reservationDate).getTime();
+            const existingReservationEndTime = new Date(reservation.outTime).getTime();
+
+            // Kiểm tra xem thời gian bắt đầu hoặc kết thúc của đặt bàn mới có nằm trong khoảng thời gian của đặt bàn đã có không
+            return (
+                (newReservationStartTime >= existingReservationStartTime && newReservationStartTime <= existingReservationEndTime) ||
+                (newReservationEndTime >= existingReservationStartTime && newReservationEndTime <= existingReservationEndTime)
+            );
+        });
+
+        // Trả về true nếu có trùng lịch, ngược lại trả về false
+        return !!overlappingReservation;
+    }
+
+    // addReservation(newReservation: Reservation): Observable<Reservation> {
+    //     // Tạo một Observable bằng cách sử dụng phương thức 'request' từ 'apiService'
+    //     return this.apiService.request<Reservation>('post', this.reservationUrl, newReservation).pipe(
+    //       // Sử dụng toán tử 'tap' để thực hiện các hành động không ảnh hưởng đến dữ liệu chính của Observable
+    //       tap((addedReservation: Reservation) => {
+    //         // Kiểm tra xem đã có đặt bàn trong khoảng giờ đã đặt hay chưa
+    //         const isOverlapping = this.isTimeOverlapping(newReservation);
+    
+    //         if (!isOverlapping) {
+    //           // Nếu không có trùng lịch, thêm đặt bàn mới vào mảng 'reservationsCache'
+    //           this.reservationsCache.push(addedReservation);
+    //           // Lưu mảng 'reservationsCache' vào localStorage dưới dạng JSON
+    //           localStorage.setItem(this.reservationsUrl, JSON.stringify(this.reservationsCache));
+    //         } else {
+    //           // Nếu có trùng lịch, có thể thông báo hoặc xử lý tùy thuộc vào yêu cầu của bạn
+    //           console.log('Đã có đặt bàn trong khoảng giờ đã đặt.');
+    //         }
+    //       })
+    //     );
+    //   }
+
+      //Chạy được
     addReservation(newReservation: Reservation): Observable<Reservation> {
         // Tạo một Observable bằng cách sử dụng phương thức 'request' từ 'apiService'
         return this.apiService.request<Reservation>('post', 'reservation', newReservation).pipe(

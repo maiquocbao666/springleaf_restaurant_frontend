@@ -36,6 +36,8 @@ export class PaymentService {
 
     }
 
+    
+
     addPayMent(newPayMent: Payment): Observable<Payment> {
 
         return this.apiService.request<Payment>('post', this.paymentUrl, newPayMent).pipe(
