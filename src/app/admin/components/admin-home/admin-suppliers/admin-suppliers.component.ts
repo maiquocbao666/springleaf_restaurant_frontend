@@ -63,7 +63,7 @@ export class AdminSuppliersComponent {
     const email = this.supplierForm.get('email')?.value;
 
     const newSupplier: Supplier = {
-      name: name,
+      supplierName: name,
       address: address,
       phone: phone,
       email: email

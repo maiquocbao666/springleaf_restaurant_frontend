@@ -77,18 +77,22 @@ export class ProductService {
   }
 
   addProduct(newProduct: Product): Observable<Product> {
+    // Kiểm tra xem tên sản phẩm đã tồn tại trong cache hay không
+    const existingProduct = this.productsCache.find(product => product.name.toLowerCase() === newProduct.name.toLowerCase());
 
+    if (existingProduct) {
+      // Nếu đã có sản phẩm có cùng tên, trả về Observable với giá trị hiện tại
+      console.log('Sản phẩm này đã tồn tại trong cache.');
+      return of(existingProduct);
+    }
+
+    // Nếu không có sản phẩm cùng tên trong cache, tiếp tục thêm sản phẩm mới
     return this.apiService.request<Product>('post', this.productUrl, newProduct).pipe(
-
       tap((addedProduct: Product) => {
-
         this.productsCache.push(addedProduct);
         localStorage.setItem(this.productsUrl, JSON.stringify(this.productsCache));
-
       })
-
     );
-
   }
 
 

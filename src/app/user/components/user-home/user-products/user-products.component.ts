@@ -120,49 +120,49 @@ export class UserProductsComponent implements OnInit {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
-  addOrder(): void {
-    const orderDate = "2023-11-18";
-    const userId = this.user?.userId;
-    const staffId = userId;
-    const comboId = 1;
-    const status = false;
-    const deliveryOrderId = null;
-    const totalAmount = 50.0;
+  // addOrder(): void {
+  //   const orderDate = "2023-11-18";
+  //   const userId = this.user?.userId;
+  //   const staffId = userId;
+  //   const comboId = 1;
+  //   const status = false;
+  //   const deliveryOrderId = null;
+  //   const totalAmount = 50.0;
 
 
-    this.reservationService.getReservationId().subscribe(reservationId => {
-      if (!reservationId) {
-        this.toastService.showWarn('Bạn chưa đặt bàn!!!');
-        return; 
-      }
-      const newOrder: Order = {
-        orderId: 0,
-        combo: comboId!,
-        reservationId: reservationId!,
-        deliveryOrderId: deliveryOrderId!,
-        orderDate: orderDate,
-        totalAmount: totalAmount!,
-        staffId: staffId!, // Sử dụng staffId lấy được từ user
-        status: status
-      };
+  //   this.reservationService.getReservationId().subscribe(reservationId => {
+  //     if (!reservationId) {
+  //       this.toastService.showWarn('Bạn chưa đặt bàn!!!');
+  //       return; 
+  //     }
+  //     const newOrder: Order = {
+  //       orderId: 0,
+  //       combo: comboId!,
+  //       reservationId: reservationId!,
+  //       deliveryOrderId: deliveryOrderId!,
+  //       orderDate: orderDate,
+  //       totalAmount: totalAmount!,
+  //       staffId: staffId!, // Sử dụng staffId lấy được từ user
+  //       status: status
+  //     };
 
-      this.orderService.addOrder(newOrder).subscribe(
-        {
-          next: (addedOrder) => {
-            alert("Thành công")
-            this.toastService.showSuccess('Tạo order thành công!');
-          },
-          error: (error) => {
-            console.error('Error adding order:', error);
+  //     this.orderService.addOrder(newOrder).subscribe(
+  //       {
+  //         next: (addedOrder) => {
+  //           alert("Thành công")
+  //           this.toastService.showSuccess('Tạo order thành công!');
+  //         },
+  //         error: (error) => {
+  //           console.error('Error adding order:', error);
 
-          },
-          complete: () => {
+  //         },
+  //         complete: () => {
 
-          }
-        }
-      );
-    });
-  }
+  //         }
+  //       }
+  //     );
+  //   });
+  // }
 
   openProductDetailModal(product: Product) {
     const modalRef = this.modalService.open(UserProductDetailComponent, { size: 'lg' });

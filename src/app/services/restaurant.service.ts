@@ -62,19 +62,23 @@ export class RestaurantService {
     }
 
     addRestaurant(newRestaurant: Restaurant): Observable<Restaurant> {
-
+        // Kiểm tra xem tên nhà hàng đã tồn tại trong cache hay không
+        const existingRestaurant = this.restaurantsCache.find(restaurant => restaurant.restaurantName.toLowerCase() === newRestaurant.restaurantName.toLowerCase());
+    
+        if (existingRestaurant) {
+          // Nếu đã có nhà hàng có cùng tên, trả về Observable với giá trị hiện tại
+          console.log('Nhà hàng này đã tồn tại trong cache.');
+          return of(existingRestaurant);
+        }
+    
+        // Nếu không có nhà hàng cùng tên trong cache, tiếp tục thêm nhà hàng mới
         return this.apiService.request<Restaurant>('post', this.restaurantUrl, newRestaurant).pipe(
-
-            tap((addedRestaurant: Restaurant) => {
-
-                this.restaurantsCache.push(addedRestaurant);
-                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
-
-            })
-
+          tap((addedRestaurant: Restaurant) => {
+            this.restaurantsCache.push(addedRestaurant);
+            localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
+          })
         );
-
-    }
+      }
 
     updateRestaurant(updatedrestaurant: Restaurant): Observable<any> {
 

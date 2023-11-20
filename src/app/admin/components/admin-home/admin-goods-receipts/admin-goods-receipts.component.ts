@@ -39,8 +39,8 @@ export class AdminGoodsReceiptsComponent {
   }
 
   ngOnInit(): void {
-    this.getGoodsReceipts();
     this.getInventoryBranches();
+    this.getGoodsReceipts();
   }
 
   onTableDataChange(event: any) {

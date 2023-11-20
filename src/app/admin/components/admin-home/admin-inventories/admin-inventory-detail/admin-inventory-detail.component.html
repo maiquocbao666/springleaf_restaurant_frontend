@@ -23,7 +23,7 @@
                 <select class="form-select" aria-label="Default select example" formControlName="supplierId"
                     name="supplierId" id="supplierId">
                     <option [value]="">Chọn nhà sản xuất</option>
-                    <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.name }}
+                    <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.supplierName }}
                     </option>
                 </select>
             </div>

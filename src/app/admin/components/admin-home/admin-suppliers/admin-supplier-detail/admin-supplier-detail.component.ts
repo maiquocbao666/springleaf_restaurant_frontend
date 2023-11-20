@@ -44,7 +44,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
     if (this.supplier) {
       this.supplierForm.patchValue({
         supplierId: this.supplier.supplierId,
-        name: this.supplier.name,
+        name: this.supplier.supplierName,
         phone: this.supplier.phone,
         email: this.supplier.email,
         address: this.supplier.address,
@@ -57,7 +57,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
     if (this.supplierForm.valid) {
       const updatedSupplier: Supplier = {
         supplierId: +this.supplierForm.get('supplierId')?.value,
-        name: this.supplierForm.get('name')?.value,
+        supplierName: this.supplierForm.get('name')?.value,
         phone: this.supplierForm.get('phone')?.value,
         email: this.supplierForm.get('email')?.value,
         address: this.supplierForm.get('address')?.value

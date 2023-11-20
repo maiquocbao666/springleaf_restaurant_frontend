@@ -14,16 +14,7 @@ export class ReservationService {
     private reservationUrl = 'reservation';
     reservationsCache!: Reservation[];
 
-    private reservationIdSubject: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
-
     constructor(private apiService: ApiService) { }
-
-    setReservationId(reservationId: number): void {
-        this.reservationIdSubject.next(reservationId);
-    }
-    getReservationId(): Observable<number | null> {
-        return this.reservationIdSubject.asObservable();
-    }
 
     getReservations(): Observable<Reservation[]> {
 
@@ -45,14 +36,6 @@ export class ReservationService {
         return reservationsObservable;
 
     }
-
-    getReservationsByUser(userId: number): Observable<Reservation[]> {
-        const url = `${this.reservationsUrl}/user/${userId}`;
-
-        return this.apiService.request<Reservation[]>('get', url);
-    }
-
-
 
     addReservation(newReservation: Reservation): Observable<Reservation> {
         // Tạo một Observable bằng cách sử dụng phương thức 'request' từ 'apiService'
@@ -131,6 +114,16 @@ export class ReservationService {
                 return reservations.filter(reservation => reservation.restaurantTableId === restaurantTableId);
             })
         );
+    }
+
+    // Hàm để kiểm tra xem reservationStatus có được sử dụng trong các đặt chỗ không
+    isReservationStatusUsed(reservationStatusId: number): boolean {
+        // Lặp qua danh sách các đặt chỗ và kiểm tra xem có đặt chỗ nào sử dụng trạng thái này không
+        const filteredReservation = this.reservationsCache.find(reservation => reservation.reservationStatusId === reservationStatusId);
+        if (filteredReservation) {
+            return true;
+        }
+        return false; // Trạng thái đặt chỗ không được sử dụng
     }
 
 }

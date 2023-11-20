@@ -64,18 +64,22 @@ export class TableStatusService {
     }
 
     addTableStatus(newTableStatus: TableStatus): Observable<TableStatus> {
-
+        // Kiểm tra xem table status đã tồn tại trong cache hay không (không phân biệt hoa thường)
+        const existingTableStatus = this.tableStatusesCache.find(tableStatus => tableStatus.tableStatusName.toLowerCase() === newTableStatus.tableStatusName.toLowerCase());
+    
+        if (existingTableStatus) {
+            // Nếu đã có table status có tên tương tự, trả về Observable với giá trị hiện tại
+            console.log('Trạng thái bàn này đã tồn tại trong cache.');
+            return of(existingTableStatus);
+        }
+    
+        // Nếu không có table status có tên tương tự trong cache, tiếp tục thêm table status mới
         return this.apiService.request<TableStatus>('post', this.tableStatusUrl, newTableStatus).pipe(
-
             tap((addedTableStatus: TableStatus) => {
-
                 this.tableStatusesCache.push(addedTableStatus);
                 localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
-
             })
-
         );
-
     }
 
     updateTableStatus(updatedtableStatus: TableStatus): Observable<any> {

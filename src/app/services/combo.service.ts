@@ -58,18 +58,24 @@ export class ComboService {
     }
 
     addCombo(newCombo: Combo): Observable<Combo> {
-
+        // Kiểm tra xem combo đã tồn tại trong cache hay không (không phân biệt hoa thường)
+        const existingCombo = this.combosCache.find(combo =>
+            combo.comboName.toLowerCase() === newCombo.comboName.toLowerCase()
+        );
+    
+        if (existingCombo) {
+            // Nếu đã có combo có tên tương tự, trả về Observable với giá trị hiện tại
+            console.log('Combo này đã tồn tại trong cache.');
+            return of(existingCombo);
+        }
+    
+        // Nếu không có combo có tên tương tự trong cache, tiếp tục thêm combo mới
         return this.apiService.request<Combo>('post', this.comboUrl, newCombo).pipe(
-
             tap((addedCombo: Combo) => {
-
                 this.combosCache.push(addedCombo);
                 localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
-
             })
-
         );
-
     }
 
     updateCombo(updatedCombo: Combo): Observable<any> {

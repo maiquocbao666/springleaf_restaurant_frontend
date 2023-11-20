@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationStatus } from 'src/app/interfaces/reservation-status';
 import { ReservationStatusSerivce } from 'src/app/services/reservation-status.service';
+import { ReservationService } from 'src/app/services/reservation.service';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class AdminReservationStatusesComponent {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private toastifyService: ToastService,
+    private reservationService: ReservationService,
   ) {
     this.reservationStatusForm = this.formBuilder.group({
       reservationStatusId: ['', [Validators.required]],
@@ -109,8 +111,8 @@ export class AdminReservationStatusesComponent {
 
     if (reservationStatus.reservationStatusId) {
 
-      if (this.reservationStatusService.getReservationStatusById(reservationStatus?.reservationStatusId)) {
-        console.log("Có bàn đang sử dụng status này, không thể xóa");
+      if (this.reservationService.isReservationStatusUsed(reservationStatus.reservationStatusId)) {
+        console.log("Trạng thái đặt bàn này đang được sử dụng");
         return;
       }
 

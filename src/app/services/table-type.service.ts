@@ -66,18 +66,26 @@ export class TableTypeService {
   }
 
   addTableType(newTableType: TableType): Observable<TableType> {
-
-    return this.apiService.request<TableType>('post', this.tableTypeUrl, newTableType).pipe(
-
-      tap((addedTableType: TableType) => {
-
-        this.tableTypesCache.push(addedTableType);
-        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
-
-      })
-
+    // Check if the table type already exists in the cache
+    const existingTableType = this.tableTypesCache.find(
+      (tableType) => tableType.tableTypeName === newTableType.tableTypeName
     );
-
+  
+    if (existingTableType) {
+      console.log("Tên bàn này đã có rồi");
+      return of(existingTableType);
+    }
+  
+    // If not in the cache, make the API request
+    return this.apiService
+      .request<TableType>('post', this.tableTypeUrl, newTableType)
+      .pipe(
+        tap((addedTableType: TableType) => {
+          // Add the new table type to the cache
+          this.tableTypesCache.push(addedTableType);
+          localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
+        })
+      );
   }
 
   updateTableType(updatedtableType: TableType): Observable<any> {

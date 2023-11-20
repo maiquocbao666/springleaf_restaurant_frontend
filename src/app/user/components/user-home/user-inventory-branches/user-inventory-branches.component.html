@@ -6,7 +6,7 @@
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="supplierId">
             <option value="">Chọn nhà sản xuất</option>
-            <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.name }}
+            <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.supplierName }}
             </option>
           </select>
         </div>
@@ -59,7 +59,7 @@
         <td>{{inventoryBranch.inventoryBranchId}}</td>
 
         <td>{{ (getIngredientById(inventoryBranch.ingredientId) | async)?.name }}</td>
-        <td>{{ (getSupplierById(inventoryBranch.supplierId) | async)?.name }}</td>
+        <td>{{ (getSupplierById(inventoryBranch.supplierId) | async)?.supplierName }}</td>
         <td>
           <!-- <button type="button" class="btn btn-outline-primary"
                   (click)="openInventoryDetailModal(inventory)">Edit</button>

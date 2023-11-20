@@ -19,7 +19,7 @@
             <div class="mb-3">
                 <select class="form-select" aria-label="Default select example" formControlName="supplierId">
                     <option value="">Chọn nhà sản xuất</option>
-                    <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.name }}
+                    <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.supplierName }}
                     </option>
                 </select>
             </div>
@@ -48,7 +48,7 @@
                 *ngFor="let inventory of inventories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
                 <td>{{inventory.inventoryId}}</td>
                 <td>{{ (getIngredientById(inventory.ingredientId) | async)?.name }}</td>
-                <td>{{ (getSupplierById(inventory.supplierId) | async)?.name }}</td>
+                <td>{{ (getSupplierById(inventory.supplierId) | async)?.supplierName }}</td>
                 <td><button type="button" class="btn btn-outline-primary"
                         (click)="openInventoryDetailModal(inventory)">Edit</button>
                     <button type="button" class="btn btn-outline-danger"

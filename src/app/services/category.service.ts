@@ -58,18 +58,25 @@ export class CategoryService {
 
 
   addCategory(newCategory: Category): Observable<Category> {
+    // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
+    if (this.categoriesCache) {
+      // Kiểm tra xem có danh mục nào trong cache có cùng tên hay không
+      const existingCategory = this.categoriesCache.find(category => category.name.toLowerCase() === newCategory.name.toLowerCase());
 
+      // Nếu đã có danh mục cùng tên, trả về Observable với giá trị hiện tại
+      if (existingCategory) {
+        console.log("Danh mục này đã có rồi");
+        return of(existingCategory);
+      }
+    }
+
+    // Nếu không có danh mục cùng tên trong cache, tiếp tục thêm danh mục mới
     return this.apiService.request<Category>('post', this.categoryUrl, newCategory).pipe(
-
       tap((addedCategory: Category) => {
-
         this.categoriesCache.push(addedCategory);
         localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
-
       })
-
     );
-
   }
 
 

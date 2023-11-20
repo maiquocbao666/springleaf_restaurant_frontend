@@ -58,18 +58,22 @@ export class SupplierService {
     }
 
     addSupplier(newSupplier: Supplier): Observable<Supplier> {
-
+        // Kiểm tra xem supplier đã tồn tại trong cache hay không (không phân biệt hoa thường)
+        const existingSupplier = this.suppliersCache.find(supplier => supplier.supplierName.toLowerCase() === newSupplier.supplierName.toLowerCase());
+    
+        if (existingSupplier) {
+            // Nếu đã có supplier có tên tương tự, trả về Observable với giá trị hiện tại
+            console.log('Nhà cung cấp này đã tồn tại trong cache.');
+            return of(existingSupplier);
+        }
+    
+        // Nếu không có supplier có tên tương tự trong cache, tiếp tục thêm supplier mới
         return this.apiService.request<Supplier>('post', this.supplierUrl, newSupplier).pipe(
-
             tap((addedSupplier: Supplier) => {
-
                 this.suppliersCache.push(addedSupplier);
                 localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
-
             })
-
         );
-
     }
 
     updateSupplier(updatedSupplier: Supplier): Observable<any> {

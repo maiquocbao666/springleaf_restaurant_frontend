@@ -34,7 +34,7 @@ export class RestaurantTableService {
 
         const restaurantTablesObservable = this.apiService.request<RestaurantTable[]>('get', this.restaurantTablesUrl);
 
-       
+
         restaurantTablesObservable.subscribe(data => {
             this.restaurantTablesCache = data;
         });
@@ -46,69 +46,73 @@ export class RestaurantTableService {
     getRestaurantTableById(id: number): Observable<RestaurantTable | null> {
 
         if (!id) {
-          return of(null);
+            return of(null);
         }
-    
+
         if (!this.restaurantTablesCache) {
-    
-          this.getRestaurantTables();
-    
+
+            this.getRestaurantTables();
+
         }
-    
+
         const restaurantTableFromCache = this.restaurantTablesCache.find(restaurantTable => restaurantTable.tableId === id);
-    
+
         if (restaurantTableFromCache) {
-    
-          return of(restaurantTableFromCache);
-    
+
+            return of(restaurantTableFromCache);
+
         } else {
-    
-          const url = `${this.restaurantTableUrl}/${id}`;
-          return this.apiService.request<RestaurantTable>('get', url);
-    
+
+            const url = `${this.restaurantTableUrl}/${id}`;
+            return this.apiService.request<RestaurantTable>('get', url);
+
         }
-    
-      }
+
+    }
 
     addRestaurantTable(newRestaurantTable: RestaurantTable): Observable<RestaurantTable> {
-
+        // Kiểm tra xem table đã tồn tại trong cache hay không (không phân biệt hoa thường)
+        const existingTable = this.restaurantTablesCache.find(table => table.tableName.toLowerCase() === newRestaurantTable.tableName.toLowerCase());
+    
+        if (existingTable) {
+            // Nếu đã có table có tên tương tự, trả về Observable với giá trị hiện tại
+            console.log('Bàn này đã tồn tại trong cache.');
+            return of(existingTable);
+        }
+    
+        // Nếu không có table có tên tương tự trong cache, tiếp tục thêm table mới
         return this.apiService.request<RestaurantTable>('post', this.restaurantTableUrl, newRestaurantTable).pipe(
-
             tap((addedRestaurantTable: RestaurantTable) => {
-
                 this.restaurantTablesCache.push(addedRestaurantTable);
                 localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
-
             })
-
         );
-
     }
 
     deleteRestaurantTable(id: number): Observable<any> {
 
-        
+
 
         const url = `${this.restaurantTableUrl}/${id}`;
-    
+
         return this.apiService.request('delete', url).pipe(
-    
+
             tap(() => {
-    
+
                 const index = this.restaurantTablesCache.findIndex(restaurantTable => restaurantTable.tableId === id);
-    
+
                 if (index !== -1) {
-    
+
                     this.restaurantTablesCache.splice(index, 1);
                     localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
-    
+
                 }
-    
+
             })
         );
-    
+
     }
-    
+
 
     updateRestaurantTable(updatedRestaurantTable: RestaurantTable): Observable<any> {
 
@@ -117,11 +121,11 @@ export class RestaurantTableService {
         return this.apiService.request('put', url, updatedRestaurantTable).pipe(
 
             tap(() => {
-                
+
                 const index = this.restaurantTablesCache!.findIndex(restaurantTable => restaurantTable.tableId === updatedRestaurantTable.tableId);
 
                 if (index !== -1) {
-                    
+
                     this.restaurantTablesCache![index] = updatedRestaurantTable;
                     localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
 
@@ -133,22 +137,22 @@ export class RestaurantTableService {
 
 
     updateRestaurantTableCache(updatedRestaurantTable: RestaurantTable): void {
-        
+
         if (this.restaurantTablesCache) {
 
-          const index = this.restaurantTablesCache.findIndex(cat => cat.tableId === updatedRestaurantTable.tableId);
+            const index = this.restaurantTablesCache.findIndex(cat => cat.tableId === updatedRestaurantTable.tableId);
 
-          if (index !== -1) {
+            if (index !== -1) {
 
-            this.restaurantTablesCache[index] = updatedRestaurantTable;
+                this.restaurantTablesCache[index] = updatedRestaurantTable;
 
-          }
+            }
 
         }
 
-      }
-      
-      resetAutoIncrement(): Observable<string> {
+    }
+
+    resetAutoIncrement(): Observable<string> {
 
         return this.apiService.request<string>('post', 'reset/id', {});
 
@@ -157,9 +161,9 @@ export class RestaurantTableService {
 
     // Các chức năng tìm kiếm bàn
 
-    findTableByStatusId(tableStatusId: number): boolean{
+    findTableByStatusId(tableStatusId: number): boolean {
         const restaurantTable = this.restaurantTablesCache.find(restaurantTable => restaurantTable.tableStatusId === tableStatusId);
-        if(restaurantTable){
+        if (restaurantTable) {
             return true;
         }
         return false;
@@ -169,5 +173,5 @@ export class RestaurantTableService {
 
         return true;
     }
-    
+
 }

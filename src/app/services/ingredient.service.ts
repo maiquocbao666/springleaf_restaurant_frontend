@@ -21,7 +21,6 @@ export class IngredientService {
 
         if (this.ingredientsCache) {
 
-            console.log("Có ingredients cache");
             return of(this.ingredientsCache);
 
         }
@@ -62,18 +61,22 @@ export class IngredientService {
     }
 
     addIngredient(newIngredient: Ingredient): Observable<Ingredient> {
-
+        // Kiểm tra xem ingredient đã tồn tại trong cache hay không (không phân biệt hoa thường)
+        const existingIngredient = this.ingredientsCache.find(ingredient => ingredient.name.toLowerCase() === newIngredient.name.toLowerCase());
+    
+        if (existingIngredient) {
+            // Nếu đã có ingredient có tên tương tự, trả về Observable với giá trị hiện tại
+            console.log('Nguyên liệu này đã tồn tại trong cache.');
+            return of(existingIngredient);
+        }
+    
+        // Nếu không có ingredient có tên tương tự trong cache, tiếp tục thêm ingredient mới
         return this.apiService.request<Ingredient>('post', this.ingredientUrl, newIngredient).pipe(
-
             tap((addedIngredient: Ingredient) => {
-
                 this.ingredientsCache.push(addedIngredient);
                 localStorage.setItem(this.ingredientsUrl, JSON.stringify(this.ingredientsCache));
-
             })
-
         );
-
     }
 
 

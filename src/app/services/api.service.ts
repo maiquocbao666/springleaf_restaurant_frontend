@@ -10,30 +10,30 @@ import { User } from '../interfaces/user';
 })
 export class ApiService {
   user: User | null = null;
-  roles : String[] | null = [];
+  roles: String[] | null = [];
   private baseUrl = ''; // Thay đổi base URL của API của bạn
 
-  constructor(private http: HttpClient, private authService : AuthenticationService) { 
+  constructor(private http: HttpClient, private authService: AuthenticationService) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
       console.log('API service: ' + this.user);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
     this.authService.roleCacheData$.subscribe((data) => {
-        this.roles = data;
-        console.log('API service: ' + this.roles);
+      this.roles = data;
+      console.log('API service: ' + this.roles);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
   }
 
   setUrl(uri: string) {
-    
-      this.baseUrl = 'http://localhost:8080/public/' + uri;
+
+    this.baseUrl = 'http://localhost:8080/public/' + uri;
     //this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
 
     //this.baseUrl = 'http://localhost:8080/public/' + uri;
   }
-  
+
   request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders | null = null): Observable<T> {
 
     let headers: HttpHeaders;
@@ -71,7 +71,7 @@ export class ApiService {
         return this.http.post<T>(this.baseUrl, data, { headers }).pipe(
 
           tap(response => {
-
+            console.log(response);
           }),
 
           catchError(this.handleError<T>(`POST ${this.baseUrl}`))

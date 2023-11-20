@@ -24,7 +24,6 @@ export class InventoryBranchService {
 
         if (this.inventoryBranchesCache) {
 
-            console.log("Có Inventories cache");
             return of(this.inventoryBranchesCache);
 
         }

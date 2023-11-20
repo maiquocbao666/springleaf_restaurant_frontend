@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { ReservationStatus } from '../interfaces/reservation-status';
+import { ReservationService } from './reservation.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,10 @@ export class ReservationStatusSerivce {
     reservationStatusesCache!: ReservationStatus[];
     private reservationStatusUrl = 'reservationStatus';
 
-    constructor(private apiService: ApiService) { }
+    constructor(
+        private apiService: ApiService,
+        private reservationService: ReservationService,
+    ) { }
 
 
     getReservationStatuses(): Observable<ReservationStatus[]> {
@@ -63,19 +67,26 @@ export class ReservationStatusSerivce {
     }
 
 
-    addReservationStatus(newstatus: ReservationStatus): Observable<ReservationStatus> {
+    addReservationStatus(newStatus: ReservationStatus): Observable<ReservationStatus> {
+        // Kiểm tra xem danh sách reservationStatusesCache đã được tải hay chưa
+        if (this.reservationStatusesCache) {
+            // Kiểm tra xem có trạng thái nào trong cache có cùng tên hay không
+            const existingStatus = this.reservationStatusesCache.find(status => status.reservationStatusName.toLowerCase() === newStatus.reservationStatusName.toLowerCase());
 
-        return this.apiService.request<ReservationStatus>('post', this.reservationStatusUrl, newstatus).pipe(
+            // Nếu đã có trạng thái cùng tên, trả về Observable với giá trị hiện tại
+            if (existingStatus) {
+                console.log("Trạng thái bàn này đã tồn tại");
+                return of(existingStatus);
+            }
+        }
 
-            tap((addedstatus: ReservationStatus) => {
-
-                this.reservationStatusesCache.push(addedstatus);
+        // Nếu không có trạng thái cùng tên trong cache, tiếp tục thêm trạng thái mới
+        return this.apiService.request<ReservationStatus>('post', this.reservationStatusUrl, newStatus).pipe(
+            tap((addedStatus: ReservationStatus) => {
+                this.reservationStatusesCache.push(addedStatus);
                 localStorage.setItem(this.reservationStatusesUrl, JSON.stringify(this.reservationStatusesCache));
-
             })
-
         );
-
     }
 
 
@@ -107,18 +118,13 @@ export class ReservationStatusSerivce {
         const url = `${this.reservationStatusUrl}/${id}`;
 
         return this.apiService.request('delete', url).pipe(
-
             tap(() => {
-
                 const index = this.reservationStatusesCache.findIndex(reservationStatus => reservationStatus.reservationStatusId === id);
 
                 if (index !== -1) {
-
                     this.reservationStatusesCache.splice(index, 1);
-                    localStorage.setItem('reservationStatuses', JSON.stringify(this.reservationStatusesCache));
-
+                    localStorage.setItem(this.reservationStatusesUrl, JSON.stringify(this.reservationStatusesCache));
                 }
-
             })
         );
 
@@ -162,17 +168,17 @@ export class ReservationStatusSerivce {
         if (!term.trim()) {
             return of(null); // Trả về Observable với giá trị null khi term là rỗng
         }
-    
+
         if (this.reservationStatusesCache) {
             const filteredStatus = this.reservationStatusesCache.find(reservationStatus => {
                 return reservationStatus.reservationStatusName.toLowerCase().includes(term.toLowerCase());
             });
-    
+
             if (filteredStatus) {
                 return of(filteredStatus); // Trả về Observable với giá trị đã lọc nếu tìm thấy kết quả
             }
         }
-    
+
         return this.apiService.request("get", this.reservationStatusesUrl).pipe(
             map(response => {
                 const reservations = response as ReservationStatus[];
