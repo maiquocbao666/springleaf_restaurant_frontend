@@ -2,9 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { ReservationStatus } from 'src/app/interfaces/reservation-status';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { ReservationStatusSerivce } from 'src/app/services/reservation-status.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -29,6 +31,7 @@ export class UserRestaurantTableInfomationComponent {
     private formBuilder: FormBuilder,
     private restaurantTableService: RestaurantTableService,
     private toastService: ToastService,
+    private reservationStatusService: ReservationStatusSerivce,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -41,12 +44,12 @@ export class UserRestaurantTableInfomationComponent {
 
   ngOnInit(): void {
     this.getReservationsByTableId();
-    this.authService.cachedData$.subscribe((data) => {
-      this.user = data;
-      if (this.user && typeof this.user.userId === 'number') {
-        this.getReservationsByCurrentUser(this.user.userId);
-      }
-    });
+    // this.authService.cachedData$.subscribe((data) => {
+    //   this.user = data;
+    //   if (this.user && typeof this.user.userId === 'number') {
+    //     this.getReservationsByCurrentUser(this.user.userId);
+    //   }
+    // });
   }
 
   bookingTable(): void {
@@ -71,18 +74,19 @@ export class UserRestaurantTableInfomationComponent {
       );
     }
   }
-  getReservationsByCurrentUser(userId: number): void {
-    this.reservationService.getReservationsByUser(userId).subscribe(
-      (reservations) => {
-        this.reservations = reservations;
-        console.log('Reservations for current user:', this.reservations);
-      },
-      (error) => {
-        console.error('Error fetching reservations:', error);
-        // Xử lý lỗi nếu cần
-      }
-    );
-  }
+
+  // getReservationsByCurrentUser(userId: number): void {
+  //   this.reservationService.getReservationsByUser(userId).subscribe(
+  //     (reservations) => {
+  //       this.reservations = reservations;
+  //       console.log('Reservations for current user:', this.reservations);
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching reservations:', error);
+  //       // Xử lý lỗi nếu cần
+  //     }
+  //   );
+  // }
 
 
   // showMessage() {
@@ -105,6 +109,17 @@ export class UserRestaurantTableInfomationComponent {
     const reservationDate = formattedDateTime;
     const outTime = '';
     const numberOfGuests = 1;
+    let reservationStatusId: number = 0;
+
+    this.reservationStatusService.searchReservationStatusByName("Đang rảnh").subscribe(
+      (statuses: ReservationStatus | null) => {
+        reservationStatusId = statuses?.reservationStatusId ?? 0;
+      },
+      error => {
+        console.error(error);
+        // Xử lý lỗi nếu cần thiết
+      }
+    );
 
     const newReservation: Reservation = {
       restaurantTableId: restaurantTableId!,
@@ -112,24 +127,13 @@ export class UserRestaurantTableInfomationComponent {
       reservationDate: reservationDate,
       outTime: outTime,
       numberOfGuests: numberOfGuests,
-      reservationsStatus: 0
+      reservationStatusId: reservationStatusId
     };
 
     this.reservationService.addReservation(newReservation).subscribe(
       {
         next: (addedReservation) => {
-          //console.log('Reservation added successfully:', addedReservation);
-          this.toastService.showSuccess('Đặt bàn thành công!');
-
-          const reservationId = addedReservation.reservationId; // Lấy reservationId từ response
-          this.reservationService.setReservationId(reservationId!); // Lưu reservationId vào service chia sẻ
-
-          this.authService.cachedData$.subscribe((data) => {
-            this.user = data;
-            if (this.user && typeof this.user.userId === 'number') {
-              this.getReservationsByCurrentUser(this.user.userId);
-            }
-          });
+          console.log("Đặt bàn thành công");
         },
         error: (error) => {
           console.error('Error adding reservation:', error);

@@ -40,18 +40,6 @@
                             </div>
                         </div>
                     </form>
-                    <div *ngIf="reservations.length > 0; else noReservations">
-                        <ul>
-                            <li *ngFor="let reservation of reservations">
-                                <!-- Hiển thị thông tin đặt bàn -->
-                                <p>Reservation ID: {{ reservation.reservationId }}</p>
-                                <!-- {{ reservation.reservationDate | date: 'EEEE, MMMM d, y, h:mm:ss a' }} -->
-                            </li>
-                        </ul>
-                    </div>
-                    <ng-template #noReservations>
-                        <p>Chưa có đặt bàn.</p>
-                    </ng-template>
                 </div>
             </div>
         </div>

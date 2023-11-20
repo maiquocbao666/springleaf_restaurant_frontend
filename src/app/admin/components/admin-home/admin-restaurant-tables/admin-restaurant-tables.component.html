@@ -9,11 +9,9 @@
         </div>
       </div>
       <div class="col-lg-3">
-        <label *ngIf="!restaurants || restaurants.length >0" for="exampleInputPassword1" class="form-label">Nhà
-          hàng</label>
-        <a style="color: red;" *ngIf="!restaurants || restaurants.length === 0" class="nav-link"
-          routerLink="/admin/restaurants">Thêm nhà
-          hàng</a>
+        <!-- <label *ngIf="!restaurants || restaurants.length >0" for="exampleInputPassword1" class="form-label">Nhà
+          hàng</label> -->
+        <a style="color: red;" class="nav-link" routerLink="/admin/restaurants">Thêm nhà hàng</a>
 
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
@@ -25,9 +23,9 @@
       </div>
 
       <div class="col-lg-3">
-        <label *ngIf="!tableTypes || tableTypes.length >0" for="exampleInputPassword1" class="form-label">Kiểu
-          bàn</label>
-        <a style="color: red;" *ngIf="!tableTypes || tableTypes.length ===0" class="nav-link"
+        <!-- <label *ngIf="!tableTypes || tableTypes.length >0" for="exampleInputPassword1" class="form-label">Kiểu
+          bàn</label> -->
+        <a style="color: red;" class="nav-link"
           routerLink="/admin/tableTypes">Thêm kiểu
           bàn</a>
         <div class="mb-3">
@@ -39,8 +37,8 @@
         </div>
       </div>
       <div class="col-lg-3">
-        <label *ngIf="!tableStatuses || tableStatuses.length >0" for="exampleInputPassword1" class="form-label">Trạng
-          thái bàn</label>
+        <!-- <label *ngIf="!tableStatuses || tableStatuses.length >0" for="exampleInputPassword1" class="form-label">Trạng
+          thái bàn</label> -->
         <a style="color: red;" class="nav-link" routerLink="/admin/tableStatuses">Thêm trạng thái bàn</a>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">

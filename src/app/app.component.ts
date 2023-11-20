@@ -129,7 +129,8 @@ export class AppComponent implements OnDestroy {
       receipts: { cache: this.receiptsService.receiptsCache, localStorageKey: 'receipts' },
       receiptDetails: { cache: this.receiptDetailsService.receiptDetailsCache, localStorageKey: 'receiptDetails' },
       reservations: { cache: this.reservationsService.reservationsCache, localStorageKey: 'reservations' },
-      tableTypes: { cache: this.tableTypesService.tableTypesCache, localStorageKey: 'tableTypes' }
+      tableTypes: { cache: this.tableTypesService.tableTypesCache, localStorageKey: 'tableTypes' },
+      reservationStatuses: { cache: this.reservationStatusesService.reservationStatusesCache, localStorageKey: 'reservationStatuses'},
     };
 
     this.getDatasFromLocalStorageWorker = new Worker(new URL('./workers/get-datas-from-local-storage.worker', import.meta.url));

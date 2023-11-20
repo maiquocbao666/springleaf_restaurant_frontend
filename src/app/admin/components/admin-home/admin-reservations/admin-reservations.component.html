@@ -31,7 +31,7 @@
             <td>{{ reservation.reservationDate | date: 'EEEE, MMMM d, y, h:mm:ss a' }}</td>
             <td>{{ reservation.outTime | date: 'EEEE, MMMM d, y, h:mm:ss a' }}</td>
             <td>
-                {{ (minusDateTime(currentDateTime, reservation.reservationDate)) === "Đang chờ" ? "Đang chờ" : (minusDateTime(currentDateTime, reservation.reservationDate)) }}
+                {{ reservation.reservationStatusId }}
             </td>
             <td>{{ reservation.numberOfGuests }}</td>
             <td>{{ (minusDateTime(currentDateTime, reservation.reservationDate)) }}</td>
