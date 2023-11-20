@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Category } from 'src/app/interfaces/category';
 import { CategoryService } from 'src/app/services/category.service';
 import { AdminCategoryDetailComponent } from './admin-category-detail/admin-category-detail.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-categories',
@@ -26,7 +27,8 @@ export class AdminCategoriesComponent {
     private categoryService: CategoryService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private toastr: ToastrService,
   ) {
     this.categoryForm = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -39,6 +41,7 @@ export class AdminCategoriesComponent {
     console.log("Init admin category component");
     this.getCategories();
     this.categoryForm.get('active')?.setValue(true);
+    this.toastr.success("Bruh");
   }
 
   getCategories(): void {

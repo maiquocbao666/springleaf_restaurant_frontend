@@ -11,6 +11,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
 import { UserComboDetailComponent } from './user/components/user-home/user-combos/user-combo-detail/user-combo-detail.component';
@@ -168,12 +171,14 @@ import { AdminReservationStatusesComponent } from './admin/components/admin-home
     MatCheckboxModule,
     MatCardModule,
     MatRadioModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(), // ToastrModule added
   ],
   providers: [
     WebSocketService,
     ChatService,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
