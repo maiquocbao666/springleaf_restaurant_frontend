@@ -77,7 +77,7 @@ export class ProductService {
   }
 
   private isProductNameInCache(name: string): boolean {
-    const isTrue = !!this.productsCache?.find(product => product.name === name);
+    const isTrue = !!this.productsCache?.find(product => product.name.toLowerCase() === name.toLowerCase());
     if (isTrue) {
       console.log('Món ăn này đã tồn tại trong cache.');
       return isTrue;

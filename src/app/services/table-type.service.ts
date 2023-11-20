@@ -66,9 +66,9 @@ export class TableTypeService {
   }
 
   private isTableTypeNameInCache(name: string): boolean {
-    const isTrue = !!this.tableTypesCache?.find(tableType => tableType.tableTypeName === name);
+    const isTrue = !!this.tableTypesCache?.find(tableType => tableType.tableTypeName.toLowerCase() === name.toLowerCase());
     if (isTrue) {
-      console.log("Tên bàn này đã có rồi");
+      console.log("Tên kiểu bàn này đã có rồi");
         return isTrue;
     } else {
         return isTrue;

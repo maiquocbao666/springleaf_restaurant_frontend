@@ -58,7 +58,7 @@ export class SupplierService {
     }
 
     private isSupplierNameInCache(name: string): boolean {
-        const isTrue = !!this.suppliersCache?.find(supplier => supplier.supplierName === name);
+        const isTrue = !!this.suppliersCache?.find(supplier => supplier.supplierName.toLowerCase() === name.toLowerCase());
         if (isTrue) {
             console.log('Quyền này đã tồn tại trong cache.');
             return isTrue;

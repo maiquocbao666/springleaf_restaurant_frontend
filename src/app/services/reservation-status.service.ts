@@ -67,7 +67,7 @@ export class ReservationStatusSerivce {
     }
 
     private isReservationStatusNameInCache(name: string): boolean {
-        const isTrue = !!this.reservationStatusesCache?.find(reservationStatus => reservationStatus.reservationStatusName === name);
+        const isTrue = !!this.reservationStatusesCache?.find(reservationStatus => reservationStatus.reservationStatusName.toLowerCase() === name.toLowerCase());
         if (isTrue) {
             console.log('Trạng thái bàn này đã tồn tại trong cache.');
             return isTrue;

@@ -61,7 +61,7 @@ export class IngredientService {
     }
 
     private isIngredientNameInCache(name: string): boolean {
-        const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name === name);
+        const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name.toLowerCase() === name.toLowerCase());
         if(isTrue){
             console.log("Thành phần này đã có trong mục yêu thích rồi");
             return isTrue;

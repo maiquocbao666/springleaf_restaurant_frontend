@@ -64,7 +64,7 @@ export class TableStatusService {
     }
 
     private isTableStatusNameInCache(name: string): boolean {
-        const isTrue = !!this.tableStatusesCache?.find(tableStatus => tableStatus.tableStatusName === name);
+        const isTrue = !!this.tableStatusesCache?.find(tableStatus => tableStatus.tableStatusName.toLowerCase() === name.toLowerCase());
         if (isTrue) {
             console.log('Trạng thái bàn này đã tồn tại trong cache.');
             return isTrue;

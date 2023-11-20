@@ -38,7 +38,7 @@ export class RoleService {
     }
 
     private isRoleNameInCache(name: string): boolean {
-        const isTrue = !!this.rolesCache?.find(role => role.roleName === name);
+        const isTrue = !!this.rolesCache?.find(role => role.roleName.toLowerCase() === name.toLowerCase());
         if (isTrue) {
             console.log('Quyền này đã tồn tại trong cache.');
             return isTrue;

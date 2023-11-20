@@ -71,7 +71,7 @@ export class RestaurantTableService {
     }
 
     private isRestaurantTableNameInCache(name: string): boolean {
-        const isTrue = !!this.restaurantTablesCache?.find(restaurantTable => restaurantTable.tableName === name);
+        const isTrue = !!this.restaurantTablesCache?.find(restaurantTable => restaurantTable.tableName.toLowerCase() === name.toLowerCase());
         if (isTrue) {
             console.log('Bàn này này đã tồn tại trong cache.');
             return isTrue;
