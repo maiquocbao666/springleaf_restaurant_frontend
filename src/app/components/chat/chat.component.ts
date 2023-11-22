@@ -4,6 +4,8 @@ import { RxStompService } from 'src/app/rx-stomp.service';
 // import { ChatService, Message } from 'src/app/services/chat.service';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { Message } from '@stomp/stompjs';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-chat',
@@ -14,25 +16,43 @@ export class ChatComponent {
   receivedMessages: string[] = [];
   // @ts-ignore, to suppress warning related to being undefined
   private topicSubscription: Subscription;
+  channel = 'topic';
+  user: User | null = null;
 
-  constructor(private rxStompService: RxStompService) {
-
+  constructor(
+    private rxStompService: RxStompService,
+    private authService: AuthenticationService
+  ) {
   }
 
   ngOnInit(): void {
 
-    this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
-      console.log('WebSocket Connection State:', state);
+    this.authService.cachedData$.subscribe((data) => {
+      this.user = data;
+
+      console.log("Kết tối web socket")
+      this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
+        console.log('WebSocket Connection State:', state);
+      });
+  
+      if (this.channel === "queu") {
+        this.topicSubscription = this.rxStompService
+          .watch(`/${this.channel}/greetings`)
+          .subscribe((message: Message) => {
+            console.log(message);
+            this.receivedMessages.push(message.body);
+          });
+      } else
+        if (this.channel === "topic") {
+          this.topicSubscription = this.rxStompService
+            .watch(`/${this.channel}/greetings/${this.user?.userId}`)
+            .subscribe((message: Message) => {
+              console.log(message);
+              this.receivedMessages.push(message.body);
+            });
+        }
     });
 
-    this.topicSubscription.add(
-      this.rxStompService
-        .watch('/topic/greetings')
-        .subscribe((message: Message) => {
-          console.log(message);
-          this.receivedMessages.push(message.body);
-        })
-    );
   }
 
   ngOnDestroy() {
@@ -40,8 +60,21 @@ export class ChatComponent {
   }
 
   onSendMessage() {
-    const message = `Message generated at ${new Date()}`;
-    this.rxStompService.publish({ destination: '/app/hello', body: JSON.stringify({'name': "bruh"}) });
+
+    if(!this.user){
+      return;
+    }
+
+
+    if (this.channel === "queu") {
+      const message = `Message generated at ${new Date()}`;
+      this.rxStompService.publish({ destination: `/app/${this.channel}`, body: JSON.stringify({ 'name': this.user?.fullName, 'userId': this.user?.userId }) });
+    } else
+      if (this.channel === "topic") {
+        const message = `Message generated at ${new Date()}`;
+        this.rxStompService.publish({ destination: `/app/${this.channel}/${this.user.userId}`, body: JSON.stringify({ 'name': "bruh", 'userId': 2 }) });
+    }
+
   }
 
   // messages: Message[] = []; // Khai báo thuộc tính messages kiểu Message[]
