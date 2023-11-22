@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
-import { MediaObserver } from '@angular/flex-layout';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { ProfileComponent } from 'src/app/components/profile/profile.component';
@@ -24,7 +23,7 @@ export class UserHeaderComponent {
     private authService: AuthenticationService,
     private renderer: Renderer2,
     private el: ElementRef,
-    private http : HttpClient,
+    private http: HttpClient,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -34,7 +33,7 @@ export class UserHeaderComponent {
   }
 
   openLoginModal() {
-    const modalRef = this.modalService.open(LoginComponent);
+    const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
   }
 
   logOut() {
@@ -83,17 +82,17 @@ export class UserHeaderComponent {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + token,
     });
-  
+
     this.http.get('http://localhost:8080/admin/checks', { headers, responseType: 'text' })
-  .subscribe({
-    next: (response) => {
-      console.log('Response', response); // This should print the text response
-    },
-    error: (error) => {
-      console.error('Error', error);
-    }
-  });
+      .subscribe({
+        next: (response) => {
+          console.log('Response', response); // This should print the text response
+        },
+        error: (error) => {
+          console.error('Error', error);
+        }
+      });
 
   }
-  
+
 }

@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ApiService } from 'src/app/services/api.service';
-import { User } from 'src/app/interfaces/user';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { catchError, throwError } from 'rxjs';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { User } from 'src/app/interfaces/user';
+import { ApiService } from 'src/app/services/api.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -25,14 +25,16 @@ export class LoginComponent {
   restaurantBranchId: number | null = null;
   roleId: number | null = null;
   user: User | null = null;
-  loginForm : FormGroup;
-  registerForm : FormGroup;
+  loginForm: FormGroup;
+  registerForm: FormGroup;
 
   getDatasOfThisUserWorker: Worker;
   errorMessage: string | undefined;
 
   constructor(private authService: AuthenticationService,
-    public activeModal: NgbActiveModal, private apiService: ApiService, private formBuilder: FormBuilder) {
+    public activeModal: NgbActiveModal, private apiService: ApiService,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService) {
     this.loginForm = this.formBuilder.group({
       username: [null, [Validators.nullValidator]],
       password: [null, [Validators.nullValidator]],
@@ -65,11 +67,12 @@ export class LoginComponent {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
       if (await this.authService.login(username, password) === true) {
+        this.toastr.success('Đăng nhập thành công');
         this.activeModal.close('Login Successful');
       }
     }
   }
-  
+
   loginWithGoogle() {
 
   }
@@ -81,7 +84,7 @@ export class LoginComponent {
       const password = this.registerForm.get('password')?.value;
       const email = this.registerForm.get('email')?.value;
       const phone = this.registerForm.get('phone')?.value;
-  
+
       this.authService.register(fullName, username, password, phone, email)
         .subscribe(
           (response) => {
@@ -97,13 +100,31 @@ export class LoginComponent {
               // Xử lý trường hợp đăng ký thành công
               console.log(response);
               console.log('Registration successful');
-              this.active = 'login';
+
+              const container = document.getElementById('container');
+              if (container) {
+                container.classList.remove('right-panel-active');
+              }
             }
           }
         );
     } else {
       console.error('Vui lòng nhập tên đăng nhập, mật khẩu và tên.');
+
     }
   }
-  
+
+  @ViewChild('container') container!: ElementRef;
+  @ViewChild('signIn') signInButton!: ElementRef;
+  @ViewChild('signUp') signUpButton!: ElementRef;
+
+  ngAfterViewInit() {
+    this.signUpButton.nativeElement.addEventListener('click', () => {
+      this.container.nativeElement.classList.add('right-panel-active');
+    });
+
+    this.signInButton.nativeElement.addEventListener('click', () => {
+      this.container.nativeElement.classList.remove('right-panel-active');
+    });
+  }
 }
