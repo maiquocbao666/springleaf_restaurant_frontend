@@ -132,7 +132,7 @@
 }
 
 .booking-form .form-label {
-    color: #ff0063;
+    color: #75a418;
     display: block;
     font-weight: 400;
     height: 25px;
@@ -145,7 +145,7 @@
 }
 
 .booking-form .submit-btn {
-    background: #ff0063;
+    background: #75a418;
     border: none;
     text-transform: capitalize;
     display: block;

@@ -15,7 +15,7 @@
 
 
 .nav-link {
-  background: #FF0072;
+  background: #75a418;
   display: block;
   text-align: center;
   padding: 8px 0;
@@ -29,7 +29,7 @@
 .nav-link:hover {
   background: #e9e0df;
   color: #000000;
-  border-color: #FF0072;
+  border-color: #75a418;
 }
 
 .page_title {
@@ -37,7 +37,7 @@
 }
 
 .page_title h1 {
-  color: #FF0072;
+  color: #75a418;
   font-weight: 700;
   line-height: 2;
   margin-bottom: 0;
@@ -46,7 +46,7 @@
 }
 
 .page_title h1::before {
-  background: #FF0072;
+  background: #75a418;
   width: 70px;
   height: 2px;
   position: absolute;
