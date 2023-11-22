@@ -83,6 +83,8 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { AdminReservationStatusesComponent } from './admin/components/admin-home/admin-reservation-statuses/admin-reservation-statuses.component';
+import { RxStompService } from './rx-stomp.service';
+import { rxStompServiceFactory } from './rx-stomp-service-factory';
 @NgModule({
   declarations: [
     AppComponent,
@@ -178,6 +180,10 @@ import { AdminReservationStatusesComponent } from './admin/components/admin-home
     WebSocketService,
     ChatService,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+    },
   ],
   bootstrap: [AppComponent],
 })

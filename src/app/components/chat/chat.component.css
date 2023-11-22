@@ -1,5 +1,5 @@
-.chat {
-    margin-top: 5rem;
+#messages {
+    margin-top: 200px;
 }
 
 div.chat-content {
