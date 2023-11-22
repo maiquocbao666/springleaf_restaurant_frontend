@@ -1,25 +1,54 @@
-<h1>Restauran</h1>
-<ul class="products container">
-    <table class="table table-light">
-        <tbody>
-            <tr>
-                <td>ID</td>
-                <td>Name</td>
-                <td>Address</td>
-                <td>Phone</td>
-                <td>Email</td>
+<!-- <div id="booking" class="section">
+    <div class="section-center">
+        <div class="container">
+            <div class="row">
+                <div class="booking-form">
+                    <form>
+                        <div class="row no-margin">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <span class="form-label">Số khách</span>
+                                    <select class="form-control" *ngFor="let restaurant of restaurants"
+                                        [value]="restaurant.restaurantId">
+                                        <option value="">Chọn nhà hàng</option>
+                                        <option>{{restaurant.restaurantName }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
 
-            </tr>
-            <tr *ngFor="let res of restaurants">
-                <th>
-                    {{ res.restaurantId }}
-                </th>
-                <th>{{ res.restaurantName }}</th>
-                <th>{{ res.address }}</th>
-                <th>{{ res.phone }}</th>
-                <th>{{ res.email }}</th>
-            </tr>
-        </tbody>
-    </table>
-</ul>
-<router-outlet></router-outlet>
+<div id="booking" class="section">
+    <div class="section-center">
+        <div class="container">
+            <div class="row">
+                <div class="booking-cta">
+                    <h1>Make Your Restaurant</h1>
+                </div>
+                <div class="booking-form">
+                    <form>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <span class="form-label">Restaurant</span>
+                                <select class="form-control">
+                                    <option value>Chọn nhà hàng</option>
+                                    <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId">{{
+                                        restaurant.restaurantName }}</option>
+                                </select>
+                                <span class="select-arrow"></span>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

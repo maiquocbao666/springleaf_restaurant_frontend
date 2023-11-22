@@ -13,9 +13,10 @@
 	padding: 0;
 }
 
-a{
+a {
 	color: #75a418;
 }
+
 .top-header {
 	border-bottom: 1px solid #eee;
 	margin-top: 0px;
@@ -501,3 +502,51 @@ button:active {
 }
 
 
+
+.small-round-image {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.topnav {
+	height: 40px;
+	background: #75a418;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ccc;
+	padding: 0 20px;
+	font-family: "Amazon Ember", Arial, sans-serif;
+}
+
+.header {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+.left-content {
+	display: flex;
+	align-items: center;
+}
+
+.right-content {
+	display: flex;
+	align-items: center;
+}
+
+.location-icon,
+.support-icon {
+	margin-right: 10px;
+}
+
+.location-icon i,
+.support-icon i {
+	font-size: 18px;
+	color: #f4f4f4;
+}
+
+.topnav a {
+	color: #FFFF;
+}

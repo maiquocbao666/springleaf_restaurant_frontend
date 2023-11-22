@@ -70,7 +70,7 @@
 
 .carousel-control-prev,
 .carousel-control-next {
-  background-color: rgb(177, 63, 63);
+  background-color:#75a418;
   /* Thay đổi màu sắc tại đây */
   width: 50px;
   /* Điều chỉnh chiều rộng */
@@ -102,7 +102,7 @@ a {
 }
 
 a:hover {
-  color: red;
+  color: #75a418;
   /* Màu khi hover vào liên kết */
 }
 

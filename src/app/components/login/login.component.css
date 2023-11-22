@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
 * {
@@ -46,8 +45,8 @@ a {
 
 button {
   border-radius: 20px;
-  border: 1px solid #FF4B2B;
-  background-color: #FF4B2B;
+  border: 1px solid #75a418;
+  background-color: #75a418;
   color: #FFFFFF;
   font-size: 12px;
   font-weight: bold;
@@ -98,7 +97,7 @@ input {
   overflow: hidden;
   width: 100%;
   max-width: 100%;
-  min-height: 550px;
+  min-height: 600px;
 }
 
 .form-container {
@@ -163,9 +162,9 @@ input {
 }
 
 .overlay {
-  background: #FF416C;
-  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-  background: linear-gradient(to right, #FF4B2B, #FF416C);
+  background: #c1db8f;
+  background: -webkit-linear-gradient(to right, #75a418, #c1db8f);
+  background: linear-gradient(to right, #c1db8f, #75a418);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
@@ -260,4 +259,25 @@ footer a {
   /* Cân chỉnh khoảng cách từ đỉnh trang */
   right: 10px;
   /* Cân chỉnh khoảng cách từ phải trang */
+}
+
+.custom {
+  width: 230px;
+  margin-right: 5px;
+}
+
+.row {
+  padding-right: 10px;
+}
+
+.btn {
+  border-radius: 15px;
+  border: 1px solid #75a418;
+  background-color: #75a418;
+  color: #FFFFFF;
+  /* font-size: 12px; */
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
 }

@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { ProfileComponent } from 'src/app/components/profile/profile.component';
@@ -17,7 +17,6 @@ export class UserHeaderComponent {
   scrollCounter: number = 0;
   previousScrollY = 0;
   user: User | null = null;
-
   constructor(
     private modalService: NgbModal,
     private authService: AuthenticationService,
