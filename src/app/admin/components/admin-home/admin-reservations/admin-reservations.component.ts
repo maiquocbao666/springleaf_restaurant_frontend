@@ -104,24 +104,21 @@ export class AdminReservationsComponent {
   }
 
   getReservations(): void {
-    this.reservationService.getReservations()
+    this.reservationService.reservationsCache$
       .subscribe(reservations => this.reservations = reservations);
   }
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getReservations();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getReservations();
   }
 
   deletereservation(reservation: Reservation): void {
     if (reservation.reservationId) {
-      this.reservations = this.reservations.filter(c => c !== reservation);
       this.reservationService.deleteReservation(reservation.reservationId).subscribe();
     } else {
       console.error("Cannot delete reservation with undefined reservationId.");

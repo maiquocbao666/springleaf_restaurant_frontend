@@ -1,37 +1,40 @@
-import { OrderThreshold } from './../interfaces/order-threshold';
-
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-
+import { OrderThreshold } from './../interfaces/order-threshold';
 
 @Injectable({
     providedIn: 'root'
 })
 export class OrderThresholdService {
 
-    private orderThresholdsUrl = 'ingredients';
-    private orderThresholdUrl = 'ingredient';
-    orderThresholdsCache!: OrderThreshold[];
+    private orderThresholdsUrl = 'orderThresholds';
+    private orderThresholdUrl = 'orderThreshold';
+    
+    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
+    private orderThresholdsCacheSubject = new BehaviorSubject<OrderThreshold[]>([]);
+    orderThresholdsCache$ = this.orderThresholdsCacheSubject.asObservable();
 
     constructor(private apiService: ApiService) { }
 
+    get orderThresholdsCache(): OrderThreshold[] {
+        return this.orderThresholdsCacheSubject.value;
+    }
+
+    set orderThresholdsCache(value: OrderThreshold[]) {
+        this.orderThresholdsCacheSubject.next(value);
+    }
 
     getOrderThresholds(): Observable<OrderThreshold[]> {
 
-        if (this.orderThresholdsCache) {
-
+        if (this.orderThresholdsCache.length > 0) {
             return of(this.orderThresholdsCache);
-
         }
 
         const orderThresholdsObservable = this.apiService.request<OrderThreshold[]>('get', this.orderThresholdsUrl);
 
-
         orderThresholdsObservable.subscribe(data => {
-
             this.orderThresholdsCache = data;
-
         });
 
         return orderThresholdsObservable;
@@ -44,7 +47,7 @@ export class OrderThresholdService {
 
             tap((addedOrderThreshold: OrderThreshold) => {
 
-                this.orderThresholdsCache.push(addedOrderThreshold);
+                this.orderThresholdsCache = [...this.orderThresholdsCache, addedOrderThreshold];
                 localStorage.setItem(this.orderThresholdsUrl, JSON.stringify(this.orderThresholdsCache));
 
             })
@@ -61,7 +64,9 @@ export class OrderThresholdService {
 
             tap(() => {
 
-                const index = this.orderThresholdsCache!.findIndex(orderThreshold => orderThreshold.orderThresholdId === updatedOrderThreshold.orderThresholdId);
+                this.updateOrderThresholdCache(updatedOrderThreshold);
+
+                const index = this.orderThresholdsCache!.findIndex(threshold => threshold.orderThresholdId === updatedOrderThreshold.orderThresholdId);
 
                 if (index !== -1) {
 
@@ -76,6 +81,21 @@ export class OrderThresholdService {
 
     }
 
+    updateOrderThresholdCache(updatedOrderThreshold: OrderThreshold): void {
+
+        if (this.orderThresholdsCache) {
+
+            const index = this.orderThresholdsCache.findIndex(threshold => threshold.orderThresholdId === updatedOrderThreshold.orderThresholdId);
+
+            if (index !== -1) {
+
+                this.orderThresholdsCache[index] = updatedOrderThreshold;
+
+            }
+
+        }
+
+    }
 
     deleteOrderThreshold(id: number): Observable<any> {
 
@@ -85,7 +105,7 @@ export class OrderThresholdService {
 
             tap(() => {
 
-                const index = this.orderThresholdsCache.findIndex(orderThreshold => orderThreshold.orderThresholdId === id);
+                const index = this.orderThresholdsCache.findIndex(threshold => threshold.orderThresholdId === id);
 
                 if (index !== -1) {
 
@@ -98,5 +118,4 @@ export class OrderThresholdService {
         );
 
     }
-
 }

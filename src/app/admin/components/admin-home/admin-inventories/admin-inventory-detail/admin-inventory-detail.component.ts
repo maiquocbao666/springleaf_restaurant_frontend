@@ -54,21 +54,21 @@ export class AdminInventoryDetailComponent implements OnInit {
     }
   }
   getInventoris(): void {
-    this.inventoryService.getInventories()
+    this.inventoryService.inventoriesCache$
       .subscribe(inventories => this.inventoris = inventories);
   }
 
   getSuppliers(): void {
-    this.supplierService.getSuppliers()
+    this.supplierService.suppliersCache$
       .subscribe(supplier => this.suppliers = supplier);
   }
 
   getIngredients(): void {
-    this.ingredientService.getIngredients()
+    this.ingredientService.ingredientsCache$
       .subscribe(ingredient => this.ingredients = ingredient);
   }
   getInventories(): void {
-    this.inventoryService.getInventories()
+    this.inventoryService.inventoriesCache$
       .subscribe(inventory => this.inventories = inventory);
   }
 
@@ -84,10 +84,6 @@ export class AdminInventoryDetailComponent implements OnInit {
       this.inventoryService.updateInventory(updatedInventory).subscribe(() => {
         // Cập nhật cache
         this.inventoryService.updateInventoryCache(updatedInventory);
-        this.inventorySaved.emit();
-        this.getInventories();
-        this.getSuppliers();
-        this.getIngredients();
       });
     }
   }

@@ -48,17 +48,15 @@ export class AdminRestaurantsComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getRestaurants();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getRestaurants();
   }
 
   getRestaurants(): void {
-    this.restaurantService.getRestaurants()
+    this.restaurantService.restaurantsCache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 
@@ -79,7 +77,6 @@ export class AdminRestaurantsComponent {
 
       this.restaurantService.addRestaurant(newRestaurant)
         .subscribe(restaurant => {
-          this.getRestaurants();
           this.restaurantForm.reset();
         });
     } catch (error) {
@@ -90,7 +87,6 @@ export class AdminRestaurantsComponent {
   deleteRestaurant(restaurant: Restaurant): void {
 
     if (restaurant.restaurantId) {
-      this.restaurants = this.restaurants.filter(r => r !== restaurant);
       this.restaurantService.deleteRestaurant(restaurant.restaurantId).subscribe();
     } else {
       console.log("Không có restaurantId");
@@ -103,7 +99,6 @@ export class AdminRestaurantsComponent {
     const modalRef = this.modalService.open(AdminRestaurantDetailComponent, { size: 'lg' });
     modalRef.componentInstance.restaurant = restaurant;
     modalRef.componentInstance.restaurantSaved.subscribe(() => {
-      this.getRestaurants();
     });
   }
 }

@@ -59,21 +59,19 @@ export class AdminComboDetailsUpdateComponent {
   }
 
   getComboDetails(): void {
-    this.comboDetailService.getComboDetails()
+    this.comboDetailService.comboDetailsCache$
       .subscribe(comboDetails => this.comboDetails = comboDetails);
   }
 
   getCombos(): void {
-    this.comboService.getCombos()
+    this.comboService.combosCache$
       .subscribe(combos => this.combos = combos);
   }
 
   getProducts(): void {
-    this.productService.getProducts()
+    this.productService.productsCache$
       .subscribe(products => this.products = products);
   }
-
-
 
   updateComboDetail(): void {
     if (this.comboDetailForm.valid) {
@@ -86,10 +84,6 @@ export class AdminComboDetailsUpdateComponent {
       };
 
       this.comboDetailService.updateComboDetail(updatedComboDetail).subscribe(() => {
-
-        // Cập nhật cache nếu cần
-        this.comboDetailService.updateComboDetailCache(updatedComboDetail);
-        this.comboDetailupdate.emit();
       });
     }
   }

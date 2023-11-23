@@ -52,17 +52,17 @@ export class AdminComboDetailsComponent {
   }
 
   getComboDetails(): void {
-    this.comboDetailService.getComboDetails()
+    this.comboDetailService.comboDetailsCache$
       .subscribe(comboDetails => this.comboDetails = comboDetails);
   }
 
   getCombos(): void {
-    this.comboService.getCombos()
+    this.comboService.combosCache$
       .subscribe(combos => this.combos = combos);
   }
 
   getProducts(): void {
-    this.productService.getProducts()
+    this.productService.productsCache$
       .subscribe(products => this.products = products);
   }
 
@@ -76,21 +76,16 @@ export class AdminComboDetailsComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getComboDetails();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getComboDetails();
   }
 
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
-
-  
-
 
   addComboDetail(): void {
 
@@ -110,7 +105,6 @@ export class AdminComboDetailsComponent {
 
     this.comboDetailService.addComboDetail(newComboDetail)
       .subscribe(comboDetail => {
-        this.getComboDetails();
         this.comboDetailForm.reset();
       });
   }
@@ -119,7 +113,6 @@ export class AdminComboDetailsComponent {
   deleteComboDetail(comboDetail: ComboDetail): void {
 
     if (comboDetail.comboDetailId) {
-      this.comboDetails = this.comboDetails.filter(i => i !== comboDetail);
       this.comboDetailService.deleteComboDetail(comboDetail.comboDetailId).subscribe();
     } else {
       console.log("Không có comboDetailId");
@@ -132,7 +125,6 @@ export class AdminComboDetailsComponent {
 
     // Subscribe to the emitted event
     modalRef.componentInstance.comboDetailupdate.subscribe(() => {
-      this.getComboDetails(); // Refresh data in the parent component
     });
 
   }

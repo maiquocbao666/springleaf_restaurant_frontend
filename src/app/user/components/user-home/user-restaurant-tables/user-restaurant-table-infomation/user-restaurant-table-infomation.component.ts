@@ -6,7 +6,7 @@ import { ReservationStatus } from 'src/app/interfaces/reservation-status';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ReservationStatusSerivce } from 'src/app/services/reservation-status.service';
+import { ReservationStatusService } from 'src/app/services/reservation-status.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -31,7 +31,7 @@ export class UserRestaurantTableInfomationComponent {
     private formBuilder: FormBuilder,
     private restaurantTableService: RestaurantTableService,
     private toastService: ToastService,
-    private reservationStatusService: ReservationStatusSerivce,
+    private reservationStatusService: ReservationStatusService,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;

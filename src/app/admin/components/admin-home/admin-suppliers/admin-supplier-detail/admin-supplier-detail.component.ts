@@ -64,9 +64,6 @@ export class AdminSupplierDetailComponent  implements OnInit {
       };
 
       this.supplierService.updateSupplier(updatedSupplier).subscribe(() => {
-        // Cập nhật cache
-        this.supplierService.updateSupplierCache(updatedSupplier);
-        this.supplierSaved.emit(); // Emit the event
       });
     }
   }

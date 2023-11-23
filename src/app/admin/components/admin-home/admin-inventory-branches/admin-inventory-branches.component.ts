@@ -68,30 +68,30 @@ export class AdminInventoryBranchesComponent {
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.getInventoryBranches()
+    this.inventoryBranchService.inventoryBranchesCache$
       .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
   }
 
   getSuppliers(): void {
-    this.supplierService.getSuppliers()
+    this.supplierService.suppliersCache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
   getIngredients(): void {
-    this.ingredientService.getIngredients()
+    this.ingredientService.ingredientsCache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
   getRestaurants(): void {
-    this.restaurantService.getRestaurants()
+    this.restaurantService.restaurantsCache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 
-  getIngredientById(ingredientId: number): Observable<Ingredient> {
+  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
     return this.ingredientService.getIngredientById(ingredientId);
   }
 
-  getSupplierById(supplierId: number): Observable<Supplier> {
+  getSupplierById(supplierId: number): Observable<Supplier | null> {
     return this.supplierService.getSupplierById(supplierId);
   }
 
@@ -114,7 +114,6 @@ export class AdminInventoryBranchesComponent {
 
     this.inventoryBranchService.addInventoryBranch(newInventoryBranch)
       .subscribe(inventoryBranch => {
-        this.getInventoryBranches();
         this.inventoryBranchForm.reset();
       });
   }
@@ -135,10 +134,6 @@ export class AdminInventoryBranchesComponent {
     const modalRef = this.modalService.open(AdminInventoryBranchDetailComponent, { size: 'lg' });
     modalRef.componentInstance.inventoryBranch = inventoryBranch;
     modalRef.componentInstance.inventoryBranchSaved.subscribe(() => {
-      this.getInventoryBranches();
-      this.getIngredients();
-      this.getSuppliers();
-      this.getRestaurants();
     });
   }
 }

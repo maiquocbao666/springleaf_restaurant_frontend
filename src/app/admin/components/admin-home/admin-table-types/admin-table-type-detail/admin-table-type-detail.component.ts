@@ -58,9 +58,6 @@ export class AdminTableTypeDetailComponent  implements OnInit {
       };
 
       this.tableTypeService.updateTableType(updatedTableType).subscribe(() => {
-        // Cập nhật cache
-        this.tableTypeService.updateTableTypesCache(updatedTableType);
-        this.tableTypeSaved.emit(); // Emit the event
       });
     }
   }

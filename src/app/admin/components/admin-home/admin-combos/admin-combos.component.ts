@@ -39,19 +39,17 @@ export class AdminCombosComponent {
   }
 
   getCombos(): void {
-    this.comboService.getCombos()
+    this.comboService.combosCache$
       .subscribe(combos => this.combos = combos);
   }
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getCombos();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getCombos();
   }
 
   formatAmount(amount: number): string {
@@ -73,7 +71,6 @@ export class AdminCombosComponent {
 
     this.comboService.addCombo(newCombo)
       .subscribe(combo => {
-        this.getCombos();
         this.comboForm.reset();
       });
   }
@@ -81,7 +78,6 @@ export class AdminCombosComponent {
   deleteCombo(combo: Combo): void {
 
     if (combo.comboId) {
-      this.combos = this.combos.filter(i => i !== combo);
       this.comboService.deleteCombo(combo.comboId).subscribe();
     } else {
       console.log("Không có comboId");
@@ -94,7 +90,6 @@ export class AdminCombosComponent {
     const modalRef = this.modalService.open(AdminComboDetailComponent, { size: 'lg' });
     modalRef.componentInstance.combo = combo;
     modalRef.componentInstance.comboSaved.subscribe(() => {
-      this.getCombos();
     });
   }
 }

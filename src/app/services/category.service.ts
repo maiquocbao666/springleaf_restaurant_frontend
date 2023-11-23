@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Category } from '../interfaces/category';
 
@@ -9,14 +9,24 @@ import { Category } from '../interfaces/category';
 export class CategoryService {
 
   private categoriesUrl = 'categories';
-  categoriesCache!: Category[];
   private categoryUrl = 'category';
+
+  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
+  private categoriesCacheSubject = new BehaviorSubject<Category[]>([]);
+  categoriesCache$ = this.categoriesCacheSubject.asObservable();
 
   constructor(private apiService: ApiService) { }
 
+  get categoriesCache(): Category[] {
+    return this.categoriesCacheSubject.value;
+  }
+
+  set categoriesCache(value: Category[]) {
+    this.categoriesCacheSubject.next(value);
+  }
 
   getCategories(): Observable<Category[]> {
-    if (this.categoriesCache) {
+    if (this.categoriesCache.length > 0) {
       return of(this.categoriesCache);
     }
 
@@ -35,7 +45,7 @@ export class CategoryService {
       return of(null);
     }
 
-    if (!this.categoriesCache) {
+    if (!this.categoriesCache.length) {
 
       this.getCategories();
 
@@ -68,7 +78,7 @@ export class CategoryService {
 
   addCategory(newCategory: Category): Observable<Category> {
     // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
-    if (this.categoriesCache) {
+    if (this.categoriesCache.length > 0) {
 
       // Nếu đã có danh mục cùng tên, trả về Observable với giá trị hiện tại
       if (this.isCategoryNameInCache(newCategory.name)) {
@@ -79,19 +89,15 @@ export class CategoryService {
     // Nếu không có danh mục cùng tên trong cache, tiếp tục thêm danh mục mới
     return this.apiService.request<Category>('post', this.categoryUrl, newCategory).pipe(
       tap((addedCategory: Category) => {
-        this.categoriesCache.push(addedCategory);
+        this.categoriesCache = [...this.categoriesCache, addedCategory];
         localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
       })
     );
   }
 
-
   updateCategory(updatedCategory: Category): Observable<any> {
-
-    // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
-    if (this.categoriesCache) {
-
-      // Nếu đã có danh mục cùng tên, trả về Observable với giá trị hiện tại
+    if (this.categoriesCache.length > 0) {
+      // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
       if (this.isCategoryNameInCache(updatedCategory.name)) {
         return of();
       }
@@ -100,83 +106,59 @@ export class CategoryService {
     const url = `${this.categoryUrl}`;
 
     return this.apiService.request('put', url, updatedCategory).pipe(
-
       tap(() => {
-
-        const index = this.categoriesCache!.findIndex(category => category.categoryId === updatedCategory.categoryId);
-
-        if (index !== -1) {
-
-          this.categoriesCache![index] = updatedCategory;
-          localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
-
-        }
-
+        const updatedCategories = this.categoriesCache.map(category =>
+          category.categoryId === updatedCategory.categoryId ? updatedCategory : category
+        );
+        this.categoriesCache = updatedCategories;
+        localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
       })
-
     );
-
   }
 
   deleteCategory(id: number): Observable<any> {
-
     const url = `${this.categoryUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(
-
       tap(() => {
-
-        const index = this.categoriesCache.findIndex(category => category.categoryId === id);
-
-        if (index !== -1) {
-
-          this.categoriesCache.splice(index, 1);
-          localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
-
-        }
-
+        const updatedCategories = this.categoriesCache.filter(category => category.categoryId !== id);
+        this.categoriesCache = updatedCategories;
+        localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
       })
     );
-
   }
 
   searchCategoriesByName(term: string): Observable<Category[]> {
     if (!term.trim()) {
       return of([]);
     }
-
-    if (this.categoriesCache) {
+  
+    if (this.categoriesCache.length > 0) {
       const filteredCategories = this.categoriesCache.filter(category => {
         return category.name.toLowerCase().includes(term.toLowerCase());
       });
-
+  
       if (filteredCategories.length > 0) {
         return of(filteredCategories);
       }
     }
-
+  
     return this.apiService.request("get", this.categoriesUrl).pipe(
-      map(response => response as Category[]),
-      catchError(error => {
+      tap({
+        next: (response: any) => {
+          // Assuming the response here is an array of Category
+          this.categoriesCache = response as Category[];
+        },
+        error: (error: any) => {
+          console.error(error);
+        }
+      }),
+      catchError((error: any) => {
         console.error(error);
         return of([]);
-      })
+      }),
+      map((response: any) => response as Category[])
     );
-  }
-
-  updateCategoryCache(updatedCategory: Category): void {
-
-    if (this.categoriesCache) {
-
-      const index = this.categoriesCache.findIndex(cat => cat.categoryId === updatedCategory.categoryId);
-
-      if (index !== -1) {
-
-        this.categoriesCache[index] = updatedCategory;
-
-      }
-    }
-
   }
 
 }

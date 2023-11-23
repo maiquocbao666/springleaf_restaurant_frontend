@@ -43,16 +43,19 @@ export class AdminProductDetailComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.getCategories()
-      .subscribe(categories => this.categories = categories);
-  }
-  getProducts(): void {
-    this.productService.getProducts()
-      .subscribe(product => this.products = product);
+    this.categoryService.categoriesCache$.subscribe(categories => {
+      this.categories = categories;
+    });
   }
 
+  getProducts(): void {
+    this.productService.productsCache$.subscribe(product => {
+      this.products = product
+    });
+  }
 
   setValue() {
+
     if (this.product) {
 
       this.productForm.patchValue({
@@ -66,6 +69,7 @@ export class AdminProductDetailComponent implements OnInit {
       });
 
     }
+
   }
 
   updateProduct(): void {
@@ -82,9 +86,7 @@ export class AdminProductDetailComponent implements OnInit {
       };
 
       this.productService.updateProduct(updatedProduct).subscribe(() => {
-        // Cập nhật cache
-        this.productService.updateProductCache(updatedProduct);
-        this.productSaved.emit(); // Emit the event
+
       });
     }
   }

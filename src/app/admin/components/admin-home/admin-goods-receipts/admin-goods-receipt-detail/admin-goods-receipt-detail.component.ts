@@ -47,7 +47,7 @@ export class AdminGoodsReceiptDetailComponent {
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.getInventoryBranches()
+    this.inventoryBranchService.inventoryBranchesCache$
       .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
   }
 
@@ -76,9 +76,6 @@ export class AdminGoodsReceiptDetailComponent {
       };
 
       this.goodsReceiptService.updateGoodsReceipt(updatedGoodsReceipt).subscribe(() => {
-        // Cập nhật cache
-        this.goodsReceiptService.updateGoodsReceiptCache(updatedGoodsReceipt);
-        this.goodsReceiptSaved.emit(); // Emit the event
       });
     }
   }

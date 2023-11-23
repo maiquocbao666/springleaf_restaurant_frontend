@@ -25,7 +25,7 @@ import { RestaurantService } from "./services/restaurant.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
-import { ReservationStatusSerivce } from "./services/reservation-status.service";
+import { ReservationStatusService } from "./services/reservation-status.service";
 
 
 interface DataService<T> {
@@ -87,7 +87,7 @@ export class AppComponent implements OnDestroy {
     private receiptDetailsService: ReceiptDetailService,
     private reservationsService: ReservationService,
     private tableTypesService: TableTypeService,
-    private reservationStatusesService: ReservationStatusSerivce,
+    private reservationStatusesService: ReservationStatusService,
   ) {
 
     window.addEventListener('storage', (event) => {
@@ -130,7 +130,7 @@ export class AppComponent implements OnDestroy {
       receiptDetails: { cache: this.receiptDetailsService.receiptDetailsCache, localStorageKey: 'receiptDetails' },
       reservations: { cache: this.reservationsService.reservationsCache, localStorageKey: 'reservations' },
       tableTypes: { cache: this.tableTypesService.tableTypesCache, localStorageKey: 'tableTypes' },
-      reservationStatuses: { cache: this.reservationStatusesService.reservationStatusesCache, localStorageKey: 'reservationStatuses'},
+      reservationStatuses: { cache: this.reservationStatusesService.reservationStatusesCache, localStorageKey: 'reservationStatuses' },
     };
 
     this.getDatasFromLocalStorageWorker = new Worker(new URL('./workers/get-datas-from-local-storage.worker', import.meta.url));

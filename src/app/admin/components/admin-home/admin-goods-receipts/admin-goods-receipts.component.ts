@@ -45,22 +45,20 @@ export class AdminGoodsReceiptsComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getGoodsReceipts();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getGoodsReceipts();
   }
 
   getGoodsReceipts(): void {
-    this.goodsReceiptService.getGoodsReceipts()
+    this.goodsReceiptService.goodsReceiptsCache$
       .subscribe(goodsReceipts => this.goodsReceipts = goodsReceipts);
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.getInventoryBranches()
+    this.inventoryBranchService.inventoryBranchesCache$
       .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
   }
 
@@ -76,7 +74,6 @@ export class AdminGoodsReceiptsComponent {
 
     this.goodsReceiptService.addGoodsReceipt({ inventoryBranch, date, warehouseManager, user } as GoodsReceipt)
       .subscribe(goodsReceipt => {
-        this.getGoodsReceipts();
         this.goodsReceiptForm.reset();
       });
   }
@@ -84,7 +81,6 @@ export class AdminGoodsReceiptsComponent {
   deleteGoodsReceipt(goodsReceipt: GoodsReceipt): void {
 
     if(goodsReceipt.goodsReceiptId){
-      this.goodsReceipts = this.goodsReceipts.filter(g => g !== goodsReceipt);
       this.goodsReceiptService.deleteGoodsReceipt(goodsReceipt.goodsReceiptId).subscribe();
     } else {
       console.log("Không có goodsReceiptId");
@@ -97,8 +93,6 @@ export class AdminGoodsReceiptsComponent {
     const modalRef = this.modalService.open(AdminGoodsReceiptDetailComponent, { size: 'lg' });
     modalRef.componentInstance.goodsReceipt = goodsReceipt;
     modalRef.componentInstance.goodsReceiptSaved.subscribe(() => {
-      this.getGoodsReceipts();
-    this.getInventoryBranches();
     });
   }
 

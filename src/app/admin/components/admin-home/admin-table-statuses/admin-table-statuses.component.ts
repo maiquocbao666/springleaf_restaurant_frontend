@@ -70,17 +70,15 @@ export class AdminTableStatusesComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getTableStatuses();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getTableStatuses();
   }
 
   getTableStatuses(): void {
-    this.tableStatusService.getTableStatuses()
+    this.tableStatusService.tableStatusesCache$
       .subscribe(tableStatuses => this.tableStatuses = tableStatuses);
   }
 
@@ -109,7 +107,6 @@ export class AdminTableStatusesComponent {
 
     this.tableStatusService.addTableStatus(newTableStatus)
       .subscribe(tableStatus => {
-        this.getTableStatuses();
         this.tableStatusForm.reset();
       });
 
@@ -137,7 +134,6 @@ export class AdminTableStatusesComponent {
     const modalRef = this.modalService.open(AdminTableStatusDetailComponent, { size: 'lg' });
     modalRef.componentInstance.tableStatus = tableStatus;
     modalRef.componentInstance.tableStatusSaved.subscribe(() => {
-      this.getTableStatuses();
     });
   }
 

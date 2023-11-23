@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationStatus } from 'src/app/interfaces/reservation-status';
-import { ReservationStatusSerivce } from 'src/app/services/reservation-status.service';
+import { ReservationStatusService } from 'src/app/services/reservation-status.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -26,7 +26,7 @@ export class AdminReservationStatusesComponent {
   isCustomChecked = false;
 
   constructor(
-    private reservationStatusService: ReservationStatusSerivce,
+    private reservationStatusService: ReservationStatusService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private sweetAlertService: ToastService,

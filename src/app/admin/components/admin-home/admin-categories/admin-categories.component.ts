@@ -45,19 +45,20 @@ export class AdminCategoriesComponent {
   }
 
   getCategories(): void {
-    this.categoryService.getCategories()
-      .subscribe(categories => this.categories = categories);
+    this.categoryService.categoriesCache$.subscribe(categories => {
+      this.categories = categories;
+    });
   }
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getCategories();
+    //this.getCategories();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getCategories();
+    //this.getCategories();
   }
 
   addCategory(): void {
@@ -78,7 +79,7 @@ export class AdminCategoriesComponent {
 
     this.categoryService.addCategory(newCategory)
       .subscribe(() => {
-        this.getCategories();
+        //this.getCategories();
         this.categoryForm.reset();
         this.categoryForm.get('active')?.setValue(true);
       });
@@ -86,32 +87,26 @@ export class AdminCategoriesComponent {
 
   deleteCategory(category: Category): void {
     if (category.categoryId) {
-      this.categories = this.categories.filter(c => c !== category);
+      //this.categories = this.categories.filter(c => c !== category);
       this.categoryService.deleteCategory(category.categoryId).subscribe();
     } else {
       console.error("Cannot delete category with undefined categoryId.");
     }
   }
 
-  getCategoryById(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
-    this.categoryService.getCategoryById(id).subscribe(category => {
-      this.category = category;
-      if (category) {
-        this.categoryForm.get('name')?.setValue(category.name);
-      }
-    });
-  }
+  // getCategoryById(): void {
+  //   const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
+  //   this.categoryService.getCategoryById(id).subscribe(category => {
+  //     this.category = category;
+  //     if (category) {
+  //       this.categoryForm.get('name')?.setValue(category.name);
+  //     }
+  //   });
+  // }
 
   openCategoryDetailModal(category: Category) {
     const modalRef = this.modalService.open(AdminCategoryDetailComponent, { size: 'lg' });
     modalRef.componentInstance.category = category;
-
-    // Subscribe to the emitted event
-    modalRef.componentInstance.categorySaved.subscribe(() => {
-      this.getCategories(); // Refresh data in the parent component
-    });
-
   }
 
 }

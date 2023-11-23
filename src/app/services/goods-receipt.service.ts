@@ -1,9 +1,8 @@
-
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { GoodsReceipt } from '../interfaces/goods-receipt';
-
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -12,35 +11,36 @@ export class GoodsReceiptService {
 
     private goodsReceiptsUrl = 'goodsReceipts';
     private goodsReceiptUrl = 'goodsReceipt';
-    goodsReceiptsCache!: GoodsReceipt[];
+
+    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
+    private goodsReceiptsCacheSubject = new BehaviorSubject<GoodsReceipt[]>([]);
+    goodsReceiptsCache$ = this.goodsReceiptsCacheSubject.asObservable();
 
     constructor(private apiService: ApiService) { }
 
+    get goodsReceiptsCache(): GoodsReceipt[] {
+        return this.goodsReceiptsCacheSubject.value;
+    }
+
+    set goodsReceiptsCache(value: GoodsReceipt[]) {
+        this.goodsReceiptsCacheSubject.next(value);
+    }
 
     getGoodsReceipts(): Observable<GoodsReceipt[]> {
 
-        if (this.goodsReceiptsCache) {
-
+        if (this.goodsReceiptsCache.length > 0) {
             return of(this.goodsReceiptsCache);
-
         }
 
         const goodsReceiptsObservable = this.apiService.request<GoodsReceipt[]>('get', this.goodsReceiptsUrl);
 
-
         goodsReceiptsObservable.subscribe(data => {
-
             this.goodsReceiptsCache = data;
-
         });
 
         return goodsReceiptsObservable;
 
     }
-
-
-
-
 
     addGoodsReceipt(newGoodsReceipt: GoodsReceipt): Observable<GoodsReceipt> {
 
@@ -48,7 +48,7 @@ export class GoodsReceiptService {
 
             tap((addedGoodsReceipt: GoodsReceipt) => {
 
-                this.goodsReceiptsCache.push(addedGoodsReceipt);
+                this.goodsReceiptsCache = [...this.goodsReceiptsCache, addedGoodsReceipt];
                 localStorage.setItem(this.goodsReceiptsUrl, JSON.stringify(this.goodsReceiptsCache));
 
             })
@@ -57,19 +57,19 @@ export class GoodsReceiptService {
 
     }
 
-    updateGoodsReceipt(updatedgoodsReceipt: GoodsReceipt): Observable<any> {
+    updateGoodsReceipt(updatedGoodsReceipt: GoodsReceipt): Observable<any> {
 
-        const url = `${this.goodsReceiptUrl}/${updatedgoodsReceipt.goodsReceiptId}`;
+        const url = `${this.goodsReceiptUrl}/${updatedGoodsReceipt.goodsReceiptId}`;
 
-        return this.apiService.request('put', url, updatedgoodsReceipt).pipe(
+        return this.apiService.request('put', url, updatedGoodsReceipt).pipe(
 
             tap(() => {
 
-                const index = this.goodsReceiptsCache!.findIndex(goodsReceipt => goodsReceipt.goodsReceiptId === updatedgoodsReceipt.goodsReceiptId);
+                const index = this.goodsReceiptsCache!.findIndex(goodsReceipt => goodsReceipt.goodsReceiptId === updatedGoodsReceipt.goodsReceiptId);
 
                 if (index !== -1) {
 
-                    this.goodsReceiptsCache![index] = updatedgoodsReceipt;
+                    this.goodsReceiptsCache![index] = updatedGoodsReceipt;
                     localStorage.setItem(this.goodsReceiptsUrl, JSON.stringify(this.goodsReceiptsCache));
 
                 }
@@ -79,6 +79,7 @@ export class GoodsReceiptService {
         );
 
     }
+
     deleteGoodsReceipt(id: number): Observable<any> {
 
         const url = `${this.goodsReceiptUrl}/${id}`;
@@ -115,4 +116,5 @@ export class GoodsReceiptService {
         }
 
     }
+
 }

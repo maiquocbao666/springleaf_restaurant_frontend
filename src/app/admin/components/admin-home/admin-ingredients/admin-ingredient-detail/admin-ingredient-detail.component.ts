@@ -54,9 +54,6 @@ export class AdminIngredientDetailComponent implements OnInit {
       };
 
       this.ingredientService.updateIngredient(updatedIngredient).subscribe(() => {
-        // Cập nhật cache
-        this.ingredientService.updateIngredientCache(updatedIngredient);
-        this.ingredientSaved.emit(); // Emit the event
       });
     }
   }

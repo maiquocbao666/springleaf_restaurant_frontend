@@ -47,13 +47,11 @@ export class UserInventoryBranchesComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getInventoryBranches();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getInventoryBranches();
   }
 
   ngOnInit(): void {
@@ -64,20 +62,20 @@ export class UserInventoryBranchesComponent {
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.getInventoryBranches()
+    this.inventoryBranchService.inventoryBranchesCache$
       .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
   }
   getRestaurants(): void {
-    this.restaurantService.getRestaurants()
+    this.restaurantService.restaurantsCache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
   getSuppliers(): void {
-    this.supplierService.getSuppliers()
+    this.supplierService.suppliersCache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
   getIngredients(): void {
-    this.ingredientService.getIngredients()
+    this.ingredientService.ingredientsCache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 

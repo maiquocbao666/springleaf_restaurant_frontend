@@ -68,15 +68,15 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
     }
   }
   getTableStatus(): void {
-    this.tableStatusService.getTableStatuses()
+    this.tableStatusService.tableStatusesCache$
       .subscribe(tableStatus => this.tableStatuses = tableStatus);
   }
   getTableType(): void {
-    this.tableTypeService.getTableTypes()
+    this.tableTypeService.tableTypesCache$
       .subscribe(tableTypes => this.tableTypes = tableTypes);
   }
   getRestaurant(): void {
-    this.restaurantService.getRestaurants()
+    this.restaurantService.restaurantsCache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 
@@ -92,9 +92,6 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       };
 
       this.restaurantTablesService.updateRestaurantTable(updatedRestaurantTable).subscribe(() => {
-        // Cập nhật cache
-        this.restaurantTablesService.updateRestaurantTableCache(updatedRestaurantTable);
-        this.restaurantTableSaved.emit(); // Emit the event
       });
     }
   }

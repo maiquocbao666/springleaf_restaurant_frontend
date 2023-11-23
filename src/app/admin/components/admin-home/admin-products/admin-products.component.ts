@@ -57,12 +57,12 @@ export class AdminProductsComponent {
   }
 
   getCategories(): void {
-    this.categoryService.getCategories()
+    this.categoryService.categoriesCache$
       .subscribe(categories => this.categories = categories);
   }
 
   getProducts(): void {
-    this.productService.getProducts()
+    this.productService.productsCache$
       .subscribe(products => this.products = products);
   }
 
@@ -93,7 +93,6 @@ export class AdminProductsComponent {
 
     this.productService.addProduct(newProduct)
       .subscribe(product => {
-        this.getProducts();
         this.productForm.get('status')?.setValue(true);
         this.productForm.reset();
       });
@@ -103,7 +102,6 @@ export class AdminProductsComponent {
   deleteProduct(product: Product): void {
 
     if (product.menuItemId) {
-      this.products = this.products.filter(c => c !== product);
       this.productService.deleteProduct(product.menuItemId).subscribe();
     } else {
       console.log("Không có menuItemId");
@@ -112,14 +110,11 @@ export class AdminProductsComponent {
 
   }
   openProductDetailModal(product: Product) {
-    this.getProducts();
     const modalRef = this.modalService.open(AdminProductDetailComponent, { size: 'lg' });
     modalRef.componentInstance.product = product;
 
     // Subscribe to the emitted event
     modalRef.componentInstance.productSaved.subscribe(() => {
-      this.getCategories();
-      this.getProducts(); // Refresh data in the parent component
     });
 
   }

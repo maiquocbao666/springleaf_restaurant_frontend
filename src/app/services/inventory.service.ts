@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Inventory } from 'src/app/interfaces/inventory';
 import { ApiService } from 'src/app/services/api.service';
@@ -12,32 +11,34 @@ export class InventoryService {
 
     private inventoriesUrl = 'inventories';
     private inventoryUrl = 'inventory';
-    inventoriesCache!: Inventory[];
 
-    constructor(private apiService: ApiService, private httpClient: HttpClient) { }
+    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
+    private inventoriesCacheSubject = new BehaviorSubject<Inventory[]>([]);
+    inventoriesCache$ = this.inventoriesCacheSubject.asObservable();
 
+    constructor(private apiService: ApiService) { }
+
+    get inventoriesCache(): Inventory[] {
+        return this.inventoriesCacheSubject.value;
+    }
+
+    set inventoriesCache(value: Inventory[]) {
+        this.inventoriesCacheSubject.next(value);
+    }
 
     getInventories(): Observable<Inventory[]> {
 
-        if (this.inventoriesCache) {
-
-            console.log("Có categories cache");
+        if (this.inventoriesCache.length > 0) {
             return of(this.inventoriesCache);
-
         }
 
-        console.log("Không có categories cache")
+        const inventoriesObservable = this.apiService.request<Inventory[]>('get', this.inventoriesUrl);
 
-        const categoriesObservable = this.apiService.request<Inventory[]>('get', this.inventoriesUrl);
-
-        categoriesObservable.subscribe(data => {
-
+        inventoriesObservable.subscribe(data => {
             this.inventoriesCache = data;
-
         });
 
-        return categoriesObservable;
-
+        return inventoriesObservable;
     }
 
     addInventory(newInventory: Inventory): Observable<Inventory> {
@@ -46,7 +47,7 @@ export class InventoryService {
 
             tap((addedInventory: Inventory) => {
 
-                this.inventoriesCache.push(addedInventory);
+                this.inventoriesCache = [...this.inventoriesCache, addedInventory];
                 localStorage.setItem(this.inventoriesUrl, JSON.stringify(this.inventoriesCache));
 
             })
@@ -84,7 +85,7 @@ export class InventoryService {
 
         if (this.inventoriesCache) {
 
-            const index = this.inventoriesCache.findIndex(cat => cat.inventoryId === updatedInventory.inventoryId);
+            const index = this.inventoriesCache.findIndex(inv => inv.inventoryId === updatedInventory.inventoryId);
 
             if (index !== -1) {
 
@@ -117,8 +118,4 @@ export class InventoryService {
         );
 
     }
-
-
-
-
 }

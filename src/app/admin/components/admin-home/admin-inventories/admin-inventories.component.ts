@@ -56,11 +56,10 @@ export class AdminInventoriesComponent {
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getInventories();
   }
 
   getIngredients(): void {
-    this.ingredientService.getIngredients()
+    this.ingredientService.ingredientsCache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
@@ -68,17 +67,17 @@ export class AdminInventoriesComponent {
     return this.ingredientService.getIngredientById(ingredientId);
   }
 
-  getSupplierById(supplierId: number): Observable<Supplier> {
+  getSupplierById(supplierId: number): Observable<Supplier | null> {
     return this.supplierService.getSupplierById(supplierId);
   }
 
   getInventories(): void {
-    this.inventoryService.getInventories()
+    this.inventoryService.inventoriesCache$
       .subscribe(inventories => this.inventories = inventories);
   }
 
   getSuppliers(): void {
-    this.supplierService.getSuppliers()
+    this.supplierService.suppliersCache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
@@ -100,7 +99,6 @@ export class AdminInventoriesComponent {
 
     this.inventoryService.addInventory(newInventory)
       .subscribe(inventory => {
-        this.getInventories();
         this.inventoryForm.reset();
       });
 
@@ -120,9 +118,6 @@ export class AdminInventoriesComponent {
     const modalRef = this.modalService.open(AdminInventoryDetailComponent, { size: 'lg' });
     modalRef.componentInstance.inventory = inventory;
     modalRef.componentInstance.inventorySaved.subscribe(() => {
-      this.getInventories();
-      this.getIngredients();
-      this.getSuppliers();
     });
   }
 }

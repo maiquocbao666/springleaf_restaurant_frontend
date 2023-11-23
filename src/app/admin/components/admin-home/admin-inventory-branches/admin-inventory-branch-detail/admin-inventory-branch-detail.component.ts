@@ -51,17 +51,17 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
 
 
   getSuppliers(): void {
-    this.supplierService.getSuppliers()
+    this.supplierService.suppliersCache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
   getIngredients(): void {
-    this.ingredientService.getIngredients()
+    this.ingredientService.ingredientsCache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
   getRestaurants(): void {
-    this.restaurantService.getRestaurants()
+    this.restaurantService.restaurantsCache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 
@@ -87,9 +87,7 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
       };
 
       this.inventoryBranchService.updateInventoryBranch(updateInventoryBranch).subscribe(() => {
-        // Cập nhật cache
-        this.inventoryBranchService.updateInventoryBranchCache(updateInventoryBranch);
-        this.inventoryBranchSaved.emit(); // Emit the event
+        //this.inventoryBranchSaved.emit(); // Emit the event
       });
     }
   }

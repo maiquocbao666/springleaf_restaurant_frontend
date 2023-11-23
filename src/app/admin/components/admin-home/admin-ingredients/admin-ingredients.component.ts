@@ -40,17 +40,15 @@ export class AdminIngredientsComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getIngredients();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getIngredients();
   }
 
   getIngredients(): void {
-    this.ingredientService.getIngredients()
+    this.ingredientService.ingredientsCache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
@@ -68,7 +66,6 @@ export class AdminIngredientsComponent {
 
     this.ingredientService.addIngredient(newIngredient)
       .subscribe(ingredient => {
-        this.getIngredients();
         this.ingredientForm.reset();
       });
   }
@@ -76,7 +73,6 @@ export class AdminIngredientsComponent {
   deleteIngredient(ingredient: Ingredient): void {
 
     if (ingredient.ingredientId) {
-      this.ingredients = this.ingredients.filter(i => i !== ingredient);
       this.ingredientService.deleteIngredient(ingredient.ingredientId).subscribe();
     } else {
       console.log("Không có ingredientId");
@@ -89,7 +85,6 @@ export class AdminIngredientsComponent {
     const modalRef = this.modalService.open(AdminIngredientDetailComponent, { size: 'lg' });
     modalRef.componentInstance.ingredient = ingredient;
     modalRef.componentInstance.ingredientSaved.subscribe(() => {
-      this.getIngredients();
     });
 
   }

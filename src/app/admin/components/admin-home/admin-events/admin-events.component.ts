@@ -48,7 +48,6 @@ export class AdminEventsComponent {
     });
   }
 
-
   ngOnInit(): void {
     this.getEvents();
     this.getCarts();
@@ -57,17 +56,15 @@ export class AdminEventsComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getEvents();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getEvents();
   }
 
   getEvents(): void {
-    this.eventService.getEvents()
+    this.eventService.eventsCache$
       .subscribe(events => this.events = events);
   }
 
@@ -85,7 +82,7 @@ export class AdminEventsComponent {
   }
 
   getCombos(): void {
-    this.comboService.getCombos()
+    this.comboService.combosCache$
       .subscribe(combos => this.combos = combos);
   }
 
@@ -108,7 +105,6 @@ export class AdminEventsComponent {
 
     this.eventService.addEvent(newEvent)
       .subscribe(event => {
-        this.getEvents();
         this.eventForm.reset();
       });
 
@@ -117,7 +113,6 @@ export class AdminEventsComponent {
   deleteEvent(event: Event): void {
 
     if (event.eventId) {
-      this.events = this.events.filter(i => i !== event);
       this.eventService.deleteEvent(event.eventId).subscribe();
     } else {
       console.log("Không có eventId");
@@ -130,9 +125,6 @@ export class AdminEventsComponent {
     const modalRef = this.modalService.open(AdminEventDetailComponent, { size: 'lg' });
     modalRef.componentInstance.event = event;
     modalRef.componentInstance.eventSaved.subscribe(() => {
-      this.getEvents();
-      this.getCarts();
-      this.getCombos();
     });
 
   }

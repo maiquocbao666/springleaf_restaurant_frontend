@@ -54,8 +54,6 @@ export class UserComboDetailComponent {
       };
 
       this.comboService.updateCombo(updatedCombo).subscribe(() => {
-        // Cập nhật cache
-        this.comboService.updateComboCache(updatedCombo);
       });
     }
   }

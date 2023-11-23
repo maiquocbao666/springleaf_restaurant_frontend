@@ -64,9 +64,6 @@ export class AdminRestaurantDetailComponent {
       };
   
       this.restaurantService.updateRestaurant(updatedRestaurant).subscribe(() => {
-        // Cập nhật cache
-        this.restaurantService.updateRestaurantCache(updatedRestaurant);
-        this.restaurantSaved.emit(); // Emit the event
       });
     }
   }

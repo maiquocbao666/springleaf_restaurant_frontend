@@ -24,13 +24,11 @@ export class AdminTableTypesComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getTableTypes();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
-    this.page = 1;
-    this.getTableTypes();
+    this.page = 1; 
   }
 
   constructor(
@@ -50,7 +48,7 @@ export class AdminTableTypesComponent {
   }
 
   getTableTypes(): void {
-    this.tableTypeService.getTableTypes()
+    this.tableTypeService.tableTypesCache$
       .subscribe(tableTypes => this.tableTypes = tableTypes);
   }
 
@@ -63,7 +61,6 @@ export class AdminTableTypesComponent {
 
     this.tableTypeService.addTableType(newTableType)
       .subscribe(tableType => {
-        this.getTableTypes();
         this.tableTypeForm.reset();
       });
   }
@@ -71,7 +68,6 @@ export class AdminTableTypesComponent {
   deleteTableType(tableType: TableType): void {
 
     if (tableType.tableTypeId) {
-      this.tableTypes = this.tableTypes.filter(i => i !== tableType);
       this.tableTypeService.deleteTableType(tableType.tableTypeId).subscribe();
     } else {
       console.log("Không có tableTypeId");
@@ -84,7 +80,6 @@ export class AdminTableTypesComponent {
     const modalRef = this.modalService.open(AdminTableTypeDetailComponent, { size: 'lg' });
     modalRef.componentInstance.tableType = tableType;
     modalRef.componentInstance.tableTypeSaved.subscribe(() => {
-      this.getTableTypes();
     });
   }
 

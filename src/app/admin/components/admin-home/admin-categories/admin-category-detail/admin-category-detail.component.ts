@@ -56,8 +56,6 @@ export class AdminCategoryDetailComponent implements OnInit {
 
       this.categoryService.updateCategory(updatedCategory).subscribe(() => {
         console.log("Cập nhật cache category");
-        this.categoryService.updateCategoryCache(updatedCategory);
-        this.categorySaved.emit(); // Emit the event
       });
     }
   }

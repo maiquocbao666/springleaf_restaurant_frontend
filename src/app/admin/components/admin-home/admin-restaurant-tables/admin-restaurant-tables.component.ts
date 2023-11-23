@@ -59,32 +59,30 @@ export class AdminRestaurantTablesComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getRestaurantTables();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getRestaurantTables();
   }
 
   getRestaurantTables(): void {
-    this.restaurantTablesService.getRestaurantTables()
+    this.restaurantTablesService.restaurantTablesCache$
       .subscribe(restaurantTables => this.restaurantTables = restaurantTables);
   }
 
   getTableStatuses(): void {
-    this.tableStatusesService.getTableStatuses()
+    this.tableStatusesService.tableStatusesCache$
       .subscribe(tableStatus => this.tableStatuses = tableStatus);
   }
 
   getTableTypes(): void {
-    this.tableTypesService.getTableTypes()
+    this.tableTypesService.tableTypesCache$
       .subscribe(tableTypes => this.tableTypes = tableTypes);
   }
 
   getRestaurants(): void {
-    this.restaurantService.getRestaurants()
+    this.restaurantService.restaurantsCache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 
@@ -116,7 +114,6 @@ export class AdminRestaurantTablesComponent {
 
     this.restaurantTablesService.addRestaurantTable(newRestaurantTable)
       .subscribe(restaurantTable => {
-        this.getRestaurantTables();
         this.restaurantTableForm.reset();
       });
   }
@@ -130,21 +127,17 @@ export class AdminRestaurantTablesComponent {
       console.log("Không có restaurantTableId");
     }
 
-
   }
 
   openRestaurantTableDetailModal(restaurantTable: RestaurantTable) {
     const modalRef = this.modalService.open(AdminRestaurantTableDetailComponent, { size: 'lg' });
     modalRef.componentInstance.restaurantTable = restaurantTable;
     modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
-      this.getRestaurantTables();
-      this.getTableStatuses();
-      this.getTableTypes();
-      this.getRestaurants();
+    
     });
     modalRef.result.then((result) => {
       if (result === 'Close after saving') {
-        this.getRestaurantTables();
+    
       }
     });
   }

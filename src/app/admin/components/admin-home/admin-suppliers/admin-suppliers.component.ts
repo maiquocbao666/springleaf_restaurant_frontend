@@ -40,7 +40,7 @@ export class AdminSuppliersComponent {
   }
 
   getSuppliers(): void {
-    this.supplierService.getSuppliers()
+    this.supplierService.suppliersCache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
@@ -52,7 +52,6 @@ export class AdminSuppliersComponent {
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getSuppliers();
   }
 
   addSupplier(): void {
@@ -71,7 +70,6 @@ export class AdminSuppliersComponent {
 
     this.supplierService.addSupplier(newSupplier)
       .subscribe(supplier => {
-        this.getSuppliers();
         this.supplierForm.reset();
       });
   }
@@ -79,7 +77,6 @@ export class AdminSuppliersComponent {
   deleteSupplier(supplier: Supplier): void {
 
     if (supplier.supplierId) {
-      this.suppliers = this.suppliers.filter(i => i !== supplier);
       this.supplierService.deleteSupplier(supplier.supplierId).subscribe();
     } else {
       console.log("Không có supplierId");
@@ -92,7 +89,6 @@ export class AdminSuppliersComponent {
     const modalRef = this.modalService.open(AdminSupplierDetailComponent, { size: 'lg' });
     modalRef.componentInstance.supplier = supplier;
     modalRef.componentInstance.supplierSaved.subscribe(() => {
-      this.getSuppliers();
     });
 
   }

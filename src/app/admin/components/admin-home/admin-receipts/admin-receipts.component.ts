@@ -60,29 +60,27 @@ export class AdminReceiptsComponent {
   }
 
   getReceipts(): void {
-    this.receiptService.getReceipts()
+    this.receiptService.receiptsCache$
       .subscribe(receipts => this.receipts = receipts);
   }
 
   getInventories(): void {
-    this.inventoryService.getInventories()
+    this.inventoryService.inventoriesCache$
       .subscribe(inventories => this.inventories = inventories);
   }
 
   getSuppliers(): void {
-    this.supplierService.getSuppliers()
+    this.supplierService.suppliersCache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getReceipts();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getReceipts();
   }
 
   addReceipt(): void {
@@ -104,7 +102,6 @@ export class AdminReceiptsComponent {
 
     this.receiptService.addReceipt(newReceipt)
       .subscribe(() => {
-        this.getReceipts();
         this.receiptForm.reset();
       });
   }
@@ -112,12 +109,10 @@ export class AdminReceiptsComponent {
   deleteReceipt(receipt: Receipt): void {
 
     if (receipt.receiptId) {
-      this.receipts = this.receipts.filter(r => r !== receipt);
       this.receiptService.deleteReceipt(receipt.receiptId).subscribe();
     } else {
       console.log("Không có receiptId");
     }
-
 
   }
 
@@ -126,9 +121,6 @@ export class AdminReceiptsComponent {
     const modalRef = this.modalService.open(AdminReceiptDetailComponent, { size: 'lg' });
     modalRef.componentInstance.receipt = receipt;
     modalRef.componentInstance.receiptSaved.subscribe(() => {
-      this.getReceipts();
-      this.getInventories();
-      this.getSuppliers();
     });
   }
 

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { TableType } from '../interfaces/table-type';
-
 
 @Injectable({
   providedIn: 'root'
@@ -11,114 +10,73 @@ export class TableTypeService {
 
   private tableTypesUrl = 'tableTypes';
   private tableTypeUrl = 'tableType';
-  tableTypesCache!: TableType[];
+  private tableTypesCacheSubject = new BehaviorSubject<TableType[]>([]);
+  tableTypesCache$ = this.tableTypesCacheSubject.asObservable();
 
   constructor(private apiService: ApiService) { }
 
+  get tableTypesCache(): TableType[] {
+    return this.tableTypesCacheSubject.value;
+  }
+
+  set tableTypesCache(value: TableType[]) {
+    this.tableTypesCacheSubject.next(value);
+  }
+
+  private updateCache(updatedTableType: TableType): void {
+    const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === updatedTableType.tableTypeId);
+    if (index !== -1) {
+      const updatedCache = [...this.tableTypesCache];
+      updatedCache[index] = updatedTableType;
+      this.tableTypesCache = updatedCache;
+    }
+  }
+
   getTableTypes(): Observable<TableType[]> {
 
-    if (this.tableTypesCache) {
-
+    if (this.tableTypesCache.length > 0) {
       return of(this.tableTypesCache);
-
     }
 
     const tableTypesObservable = this.apiService.request<TableType[]>('get', this.tableTypesUrl);
 
-
     tableTypesObservable.subscribe(data => {
-
       this.tableTypesCache = data;
-
     });
 
     return tableTypesObservable;
-
-  }
-
-
-  getTableTypeById(id: number): Observable<TableType | null> {
-
-    if(!id){
-      return of(null);
-    }
-
-    if (!this.tableTypesCache) {
-
-      this.getTableTypes();
-
-    }
-
-    const TableTypeFromCache = this.tableTypesCache.find(TableType => TableType.tableTypeId === id);
-
-    if (TableTypeFromCache) {
-
-      return of(TableTypeFromCache);
-
-    } else {
-
-      const url = `${this.tableTypeUrl}/${id}`;
-
-      return this.apiService.request<TableType>('get', url);
-
-    }
-
   }
 
   private isTableTypeNameInCache(name: string): boolean {
-    const isTrue = !!this.tableTypesCache?.find(tableType => tableType.tableTypeName.toLowerCase() === name.toLowerCase());
-    if (isTrue) {
-      console.log("Tên kiểu bàn này đã có rồi");
-        return isTrue;
-    } else {
-        return isTrue;
-    }
-
-}
-
-  addTableType(newTableType: TableType): Observable<TableType> {
-  
-    if (this.isTableTypeNameInCache(newTableType.tableTypeName)) {  
-      return of();
-    }
-  
-    // If not in the cache, make the API request
-    return this.apiService
-      .request<TableType>('post', this.tableTypeUrl, newTableType)
-      .pipe(
-        tap((addedTableType: TableType) => {
-          // Add the new table type to the cache
-          this.tableTypesCache.push(addedTableType);
-          localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
-        })
-      );
+    return !!this.tableTypesCache?.find(tableType => tableType.tableTypeName.toLowerCase() === name.toLowerCase());
   }
 
-  updateTableType(updatedtableType: TableType): Observable<any> {
+  addTableType(newTableType: TableType): Observable<TableType> {
 
-    if (this.isTableTypeNameInCache(updatedtableType.tableTypeName)) {  
+    if (this.isTableTypeNameInCache(newTableType.tableTypeName)) {
       return of();
     }
 
-    const url = `${this.tableTypeUrl}/${updatedtableType.tableTypeId}`;
-
-    return this.apiService.request('put', url, updatedtableType).pipe(
-
-      tap(() => {
-
-        const index = this.tableTypesCache!.findIndex(tableType => tableType.tableTypeId === updatedtableType.tableTypeId);
-
-        if (index !== -1) {
-
-          this.tableTypesCache![index] = updatedtableType;
-          localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
-
-        }
-
+    return this.apiService.request<TableType>('post', this.tableTypeUrl, newTableType).pipe(
+      tap((addedTableType: TableType) => {
+        this.tableTypesCache = [...this.tableTypesCache, addedTableType];
       })
-
     );
+  }
 
+  updateTableType(updatedTableType: TableType): Observable<any> {
+
+    if (this.isTableTypeNameInCache(updatedTableType.tableTypeName)) {
+      return of();
+    }
+
+    const url = `${this.tableTypeUrl}/${updatedTableType.tableTypeId}`;
+
+    return this.apiService.request('put', url, updatedTableType).pipe(
+      tap(() => {
+        this.updateCache(updatedTableType);
+      })
+    );
   }
 
   deleteTableType(id: number): Observable<any> {
@@ -126,34 +84,36 @@ export class TableTypeService {
     const url = `${this.tableTypeUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(
-
       tap(() => {
-
-        const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === id);
-
-        if (index !== -1) {
-
-          this.tableTypesCache.splice(index, 1);
-          localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
-
-        }
-
+        const updatedCache = this.tableTypesCache.filter(tableType => tableType.tableTypeId !== id);
+        this.tableTypesCache = updatedCache;
       })
     );
-
   }
 
-  updateTableTypesCache(updatedTableType: TableType): void {
+  getTableTypeById(id: number): Observable<TableType | null> {
 
-    if (this.tableTypesCache) {
-
-        const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === updatedTableType.tableTypeId);
-
-        if (index !== -1) {
-
-            this.tableTypesCache[index] = updatedTableType;
-
-        }
+    if (!id) {
+      return of(null);
     }
-}
+
+    if (this.tableTypesCache.length > 0) {
+      const tableTypeFromCache = this.tableTypesCache.find(tableType => tableType.tableTypeId === id);
+      if (tableTypeFromCache) {
+        return of(tableTypeFromCache);
+      }
+    }
+
+    const url = `${this.tableTypeUrl}/${id}`;
+
+    return this.apiService.request<TableType>('get', url).pipe(
+      tap((tableType: TableType) => {
+        // Update cache with the fetched table type
+        this.tableTypesCache = [...this.tableTypesCache, tableType];
+      }),
+      // Handle error or return null if the table type is not found
+      catchError(() => of(null))
+    );
+  }
+
 }

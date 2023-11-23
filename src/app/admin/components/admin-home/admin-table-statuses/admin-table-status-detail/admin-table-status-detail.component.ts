@@ -55,9 +55,6 @@ export class AdminTableStatusDetailComponent  implements OnInit {
       };
 
       this.tableStatusService.updateTableStatus(updatedTableStatus).subscribe(() => {
-        // Cập nhật cache
-        this.tableStatusService.updateTableStatusesCache(updatedTableStatus);
-        this.tableStatusSaved.emit(); // Emit the event
       });
     }
   }

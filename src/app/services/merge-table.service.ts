@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api.service';
 import { MergeTable } from './../interfaces/merge-table';
-
-
-
 
 @Injectable({
     providedIn: 'root'
@@ -13,27 +11,31 @@ export class MergeTableService {
 
     private mergeTablesUrl = 'mergeTables';
     private mergeTableUrl = 'mergeTable';
-    mergeTablesCache!: MergeTable[];
+
+    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
+    private mergeTablesCacheSubject = new BehaviorSubject<MergeTable[]>([]);
+    mergeTablesCache$ = this.mergeTablesCacheSubject.asObservable();
 
     constructor(private apiService: ApiService) { }
 
+    get mergeTablesCache(): MergeTable[] {
+        return this.mergeTablesCacheSubject.value;
+    }
 
-    getMergeTablesUrls(): Observable<MergeTable[]> {
+    set mergeTablesCache(value: MergeTable[]) {
+        this.mergeTablesCacheSubject.next(value);
+    }
 
-        if (this.mergeTablesCache) {
+    getMergeTables(): Observable<MergeTable[]> {
 
-            console.log("Có Inventorys cache");
+        if (this.mergeTablesCache.length > 0) {
             return of(this.mergeTablesCache);
-
         }
 
         const mergeTablesObservable = this.apiService.request<MergeTable[]>('get', this.mergeTablesUrl);
 
-
         mergeTablesObservable.subscribe(data => {
-
             this.mergeTablesCache = data;
-
         });
 
         return mergeTablesObservable;
@@ -46,7 +48,7 @@ export class MergeTableService {
 
             tap((addedMergeTable: MergeTable) => {
 
-                this.mergeTablesCache.push(addedMergeTable);
+                this.mergeTablesCache = [...this.mergeTablesCache, addedMergeTable];
                 localStorage.setItem(this.mergeTablesUrl, JSON.stringify(this.mergeTablesCache));
 
             })
@@ -63,7 +65,9 @@ export class MergeTableService {
 
             tap(() => {
 
-                const index = this.mergeTablesCache!.findIndex(mergeTable => mergeTable.mergeTableId === updatedMergeTable.mergeTableId);
+                this.updateMergeTableCache(updatedMergeTable);
+
+                const index = this.mergeTablesCache!.findIndex(table => table.mergeTableId === updatedMergeTable.mergeTableId);
 
                 if (index !== -1) {
 
@@ -78,8 +82,23 @@ export class MergeTableService {
 
     }
 
+    updateMergeTableCache(updatedMergeTable: MergeTable): void {
 
-    deleteMergeTable(id: number): Observable<any> {
+        if (this.mergeTablesCache) {
+
+            const index = this.mergeTablesCache.findIndex(table => table.mergeTableId === updatedMergeTable.mergeTableId);
+
+            if (index !== -1) {
+
+                this.mergeTablesCache[index] = updatedMergeTable;
+
+            }
+
+        }
+
+    }
+
+    deleteMergeTable(id: string): Observable<any> {
 
         const url = `${this.mergeTableUrl}/${id}`;
 
@@ -87,7 +106,7 @@ export class MergeTableService {
 
             tap(() => {
 
-                const index = this.mergeTablesCache.findIndex(mergeTable => mergeTable.id === id);
+                const index = this.mergeTablesCache.findIndex(table => table.mergeTableId === id);
 
                 if (index !== -1) {
 
@@ -100,5 +119,4 @@ export class MergeTableService {
         );
 
     }
-
 }
