@@ -261,10 +261,7 @@ footer a {
   /* Cân chỉnh khoảng cách từ phải trang */
 }
 
-.custom {
-  width: 230px;
-  margin-right: 5px;
-}
+.custom {}
 
 .row {
   padding-right: 10px;
@@ -280,4 +277,27 @@ footer a {
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: transform 80ms ease-in;
+}
+
+
+.custom .input {
+  max-width: 190px;
+  width: 28px;
+  height: 28px;
+  outline: none;
+  margin: 5px;
+  transition: .5s;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transform: rotate(90deg);
+}
+
+.custom input:focus {
+  width: 30px;
+  transform: rotate(0);
 }
