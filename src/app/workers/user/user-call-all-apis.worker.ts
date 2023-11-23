@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 addEventListener('message', async (event) => {
-    const { type, loginData, token, tokenUser } = event.data;
+    const { type, loginData, token, tokenUser, email } = event.data;
     console.log("Call all this User Apis Worker Works", type);
     //const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
     const domain = 'http://localhost:8080/auth';
@@ -37,7 +37,6 @@ addEventListener('message', async (event) => {
     };
     if (type === 'login') {
         const { userName, password } = loginData;
-        console.log(userName + ", " + password);
         try {
             const responses = await Promise.all([
                 fetch(`${domain}/authenticate`, {
@@ -49,7 +48,7 @@ addEventListener('message', async (event) => {
                 }),
 
             ]);
-
+            
             const responseData = await Promise.all(responses.map(async (response) => {
                 if (response.ok) {
                     return await response.json();
@@ -67,7 +66,37 @@ addEventListener('message', async (event) => {
 
         }
     };
-
+    if (type === 'get-access-code') {
+        try {
+            const emailRequest = email;
+            const responses = await Promise.all([
+                fetch(`${domain}/access-code?email=${emailRequest}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    
+                }),
+            ]);
+            console.log(emailRequest);
+            const responseData = await Promise.all(responses.map(async (response) => {
+                if (response.ok) {
+                    return await response.json();
+                } else {
+                    return null;
+                }
+            }));
+    
+            const dataMap = {
+                accessCodeRespone: responseData[0],
+            };
+            postMessage(dataMap);
+            console.log(dataMap);
+        } catch {
+            // Xử lý lỗi nếu có
+        }
+    }
+    
     if (type === 'cart') {
         const token = "d6f64767-329b-11ee-af43-6ead57e9219a";
         try {

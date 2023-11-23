@@ -54,6 +54,7 @@ button {
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: transform 80ms ease-in;
+  margin-bottom: 10px;
 }
 
 button:active {
@@ -187,7 +188,7 @@ input {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 0 40px;
+  padding: 0 30px;
   text-align: center;
   top: 0;
   height: 100%;
@@ -228,34 +229,9 @@ input {
   width: 40px;
 }
 
-footer {
-  background-color: #222;
-  color: #fff;
-  font-size: 14px;
-  bottom: 0;
-  position: fixed;
-  left: 0;
-  right: 0;
-  text-align: center;
-  z-index: 999;
-}
-
-footer p {
-  margin: 10px 0;
-}
-
-footer i {
-  color: red;
-}
-
-footer a {
-  color: #3c97bf;
-  text-decoration: none;
-}
-
 .close {
   position: absolute;
-  top: 10px;
+  top: 0px;
   /* Cân chỉnh khoảng cách từ đỉnh trang */
   right: 10px;
   /* Cân chỉnh khoảng cách từ phải trang */
@@ -281,3 +257,17 @@ footer a {
   text-transform: uppercase;
   transition: transform 80ms ease-in;
 }
+
+.google-a-button {
+  border-radius: 20px;
+  border: 1px solid #75a418;
+  background-color: #75a418;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+}
+
+

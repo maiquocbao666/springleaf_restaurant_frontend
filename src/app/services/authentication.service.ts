@@ -31,8 +31,28 @@ export class AuthenticationService {
     this.cachedDataSubject.next(user);
   }
 
-  register(fullName: string, username: string, password: string, phone: string, email: string): Observable<any> {
+  getAccessCode(email: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      
+      this.getDatasOfThisUserWorker.postMessage({
+        type: 'get-access-code',
+        email
+      });
+      this.getDatasOfThisUserWorker.onmessage = ({ data }) => {
+        if (data.accessCodeRespone === null) {
+          console.log("Get Access Code Faile");
+          resolve(false);
+        } else {
+          localStorage.setItem('access_code', data.accessCodeRespone);
+          console.log('Authentication service : ' + data.accessCodeRespone);
+          console.log("Get Access Code  success");
+          resolve(true);
+        }
+      };
+    });
+  }
 
+  register(fullName: string, username: string, password: string, phone: string, email: string): Observable<any> {
     const registerData = {
       fullName: fullName,
       username: username,
@@ -40,38 +60,24 @@ export class AuthenticationService {
       phone: phone,
       email: email,
     };
-
     return this.http.post(`${this.apiUrl}/register`, registerData);
-
   }
 
   login(username: string, password: string): Promise<boolean> {
-
     return new Promise<boolean>((resolve, reject) => {
-      console.log("auth service" + username);
       const loginData = {
-
         userName: username,
         password: password
-
       };
-
       this.getDatasOfThisUserWorker.postMessage({
-
         type: 'login',
         loginData
-
       });
-
       this.getDatasOfThisUserWorker.onmessage = ({ data }) => {
-
         if (data.loginResponse === null) {
-
           console.log("Login failed");
           resolve(false);
-
         } else {
-
           localStorage.setItem('access_token', data.loginResponse.access_token);
           localStorage.setItem('refresh_token', data.loginResponse.refresh_token);
           localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
@@ -80,13 +86,9 @@ export class AuthenticationService {
           this.listRoleDataSubject.next(data.loginResponse.user.roleName);
           console.log("Login success");
           resolve(true);
-
         }
-
       };
-
     });
-
   }
 
   checkUserByAccessToken(accessToken: string): Promise<boolean> {
@@ -136,7 +138,10 @@ export class AuthenticationService {
 
 
   loginWithGoogle() {
-
+    this.getDatasOfThisUserWorker.postMessage({
+      type: 'login-with-google'
+    });
+    console.log("Vô tới auth");
   }
 
 
