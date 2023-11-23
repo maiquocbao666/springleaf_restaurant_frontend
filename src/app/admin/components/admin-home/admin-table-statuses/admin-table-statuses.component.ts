@@ -32,7 +32,7 @@ export class AdminTableStatusesComponent {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private restaurantTableService: RestaurantTableService,
-    private toastifyService: ToastService,
+    private sweetAlertService: ToastService,
   ) {
     window.addEventListener('storage', (event) => {
       if (event.key && event.oldValue !== null) {
@@ -91,13 +91,14 @@ export class AdminTableStatusesComponent {
     if (this.isCustomChecked) {
       name = this.tableStatusForm.get('name')?.value?.trim() ?? '';
       if (name === '') {
-        this.toastifyService.showWarn("Mời nhập trạng thái bàn");
+        this.sweetAlertService.showAlert('Mời nhập tên bàn', 'Bạn chưa nhập tên bàn', 'info')
+        
         return
       }
     } else {
       name = this.tableStatusForm.get('statusName')?.value?.trim() ?? '';
       if (name === 'Chọn trạng thái bàn') {
-        this.toastifyService.showWarn("Mời chọn trạng thái bàn");
+        this.sweetAlertService.showAlert('Mời chọn trạng thái bàn', 'Bạn chưa chọn trạng thái', 'info')
         return
       }
     }

@@ -29,7 +29,7 @@ export class AdminReservationStatusesComponent {
     private reservationStatusService: ReservationStatusSerivce,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private toastifyService: ToastService,
+    private sweetAlertService: ToastService,
     private reservationService: ReservationService,
   ) {
     this.reservationStatusForm = this.formBuilder.group({
@@ -84,13 +84,13 @@ export class AdminReservationStatusesComponent {
     if (this.isCustomChecked) {
       name = this.reservationStatusForm.get('name')?.value?.trim() ?? '';
       if (name === '') {
-        this.toastifyService.showWarn("Mời nhập trạng thái đặt bàn");
+        this.sweetAlertService.showAlert('Mời nhập trạng thái đặt bàn', 'Bạn chưa nhập trạng thái', 'info')
         return
       }
     } else {
       name = this.reservationStatusForm.get('reservationStatusName')?.value?.trim() ?? '';
       if (name === 'Chọn trạng thái đặt bàn') {
-        this.toastifyService.showWarn("Mời chọn trạng thái đặt bàn");
+        this.sweetAlertService.showAlert('Mời chọn trạng thái đặt bàn', 'Bạn chưa chọn trạng thái', 'info')
         return
       }
     }

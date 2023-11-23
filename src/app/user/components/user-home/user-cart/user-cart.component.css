@@ -115,7 +115,7 @@ table {
 }
 
 .container input:checked~svg {
-    fill: #E3474F;
+    fill: #75a418;
 }
 
 /* checkbox  */
@@ -198,7 +198,7 @@ td img {
     border: none;
     color: #fff;
     cursor: pointer;
-    background-color: #e8932a;
+    background-color: #75a418;
     transition: all 0.2s ease;
 }
 
@@ -220,15 +220,15 @@ td img {
 
 .button:hover:before {
     top: -70%;
-    background-image: radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, transparent 20%, #e8932a 20%, transparent 30%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, transparent 10%, #e8932a 15%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%);
+    background-image: radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, transparent 20%, #75a418 20%, transparent 30%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, transparent 10%, #75a418 15%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%);
     background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
         10% 10%, 18% 18%;
     background-position: 50% 120%;
@@ -255,13 +255,13 @@ td img {
 
 .button:hover::after {
     bottom: -70%;
-    background-image: radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, transparent 10%, #e8932a 15%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%),
-        radial-gradient(circle, #e8932a 20%, transparent 20%);
+    background-image: radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, transparent 10%, #75a418 15%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%),
+        radial-gradient(circle, #75a418 20%, transparent 20%);
     background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
     background-position: 50% 0%;
     animation: greenbottomBubbles 0.6s ease;

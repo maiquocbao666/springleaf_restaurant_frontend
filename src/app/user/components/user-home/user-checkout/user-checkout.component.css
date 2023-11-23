@@ -164,7 +164,7 @@ body {
 
 .address-card .card-title {
   font-size: 1.5rem;
-  color: #fa2b2b;
+  color: #75a418;
   margin-bottom: 10px;
 }
 
@@ -186,7 +186,7 @@ body {
   text-align: center;
   text-decoration: none;
   color: #fff;
-  background-color: #ff5252;
+  background-color: #75a418;
   border: 2px solid #000;
   border-radius: 10px;
   box-shadow: 5px 5px 0px #000;
@@ -195,9 +195,9 @@ body {
 
 .comic-button:hover {
   background-color: #fff;
-  color: #ff5252;
-  border: 2px solid #ff5252;
-  box-shadow: 5px 5px 0px #ff5252;
+  color: #75a418;
+  border: 2px solid #75a418;
+  box-shadow: 5px 5px 0px #75a418;
 }
 
 .comic-button:active {
@@ -303,7 +303,7 @@ li {
 }
 
 .input-container input:focus {
-  border: 1px solid rgb(236 72 153);
+  border: 1px solid #75a418;
 }
 
 .invite-btn {
@@ -314,7 +314,7 @@ li {
   bottom: 4px;
   z-index: 10;
   border-radius: 4px;
-  background-color: rgb(236 72 153);
+  background-color: #75a418;
   color: #fff;
   padding-top: .25rem;
   padding-bottom: .25rem;

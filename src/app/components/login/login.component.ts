@@ -1,10 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/user';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +34,7 @@ export class LoginComponent {
   constructor(private authService: AuthenticationService,
     public activeModal: NgbActiveModal, private apiService: ApiService,
     private formBuilder: FormBuilder,
-    private toastr: ToastrService) {
+    private sweetAlertService: ToastService) {
     this.loginForm = this.formBuilder.group({
       username: [null, [Validators.nullValidator]],
       password: [null, [Validators.nullValidator]],
@@ -67,7 +67,7 @@ export class LoginComponent {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
       if (await this.authService.login(username, password) === true) {
-        this.toastr.success('Đăng nhập thành công');
+        this.sweetAlertService.showTimedAlert('Đăng nhập thành công!', 'Chào mừng đăng nhập.', 'success', 2000)
         this.activeModal.close('Login Successful');
       }
     }
