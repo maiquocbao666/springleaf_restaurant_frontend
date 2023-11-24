@@ -30,38 +30,50 @@
                 </div>
             </div>
             <span style="color: red;" *ngIf="errorMessage"> {{ errorMessage }}</span>
+            <input type="text" id="email" placeholder="Enter your email" formControlName="email" name="email"
+            [(ngModel)]="userEmail" />
+            <div class="row">
+                <div class="col-lg-12 d-flex ">
+                    <input class="col-9 custom" type="text" id="code" placeholder="Enter Code" formControlName="code"
+                        name="code" />
+                    <a class="col-3" (click)="getAccessCode()">Get</a>
+                </div>
+            </div>
             <input type="text" id="fullName" placeholder="Enter your full name" formControlName="fullName"
-                name="fullName" />
+                name="fullName" [attr.disabled]="!areEmailAndCodeEntered" />
             <input type="text" id="username" placeholder="Enter your username" formControlName="username"
-                name="username" />
+                name="username" [attr.disabled]="!areEmailAndCodeEntered" />
             <input type="text" id="phone" placeholder="Enter your phone number" formControlName="phone" name="phone" />
             <input type="password" id="password" placeholder="Enter Password" formControlName="password"
-                name="password" />
-            <button type="submit" #signUp>Sign Up</button>
+                name="password" [attr.disabled]="!areEmailAndCodeEntered" />
+            <input type="password" id="repassword" placeholder="Enter Re-Password" formControlName="repassword"
+                name="repassword" [attr.disabled]="!areEmailAndCodeEntered" />
+            <button type="submit" #signUp [disabled]="!areEmailAndCodeEntered || registerForm.invalid">Sign Up</button>
         </form>
     </div>
 
     <div class="form-container sign-in-container">
         <form (submit)="login()" [formGroup]="loginForm">
-            <h1>Sign in</h1>
-            <div class="social-container">
+            <h1>Đăng nhập</h1>
+            <!-- <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                 <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your account</span>
+            </div> -->
+            <!-- <span>or use your account</span> -->
             <input type="text" id="usernameLogin" placeholder="Enter Username" formControlName="username" />
             <input type="password" id="passwordLogin" placeholder="Enter Password" formControlName="password" />
             <a href="#">Forgot your password?</a>
             <button type="submit" #signIn>Sign In</button>
+            <a class="google-a-button" (click)="loginWithGoogle()">LOGIN WITH GOOGLE <i class="fab fa-google-plus-g"></i></a>
         </form>
     </div>
 
     <div class="overlay-container">
         <div class="overlay">
             <div class="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
-                <p>To keep connected with us please login with your personal info</p>
+                <h1>Đăng ký tài khoản</h1>
+                <p>Bạn đã có 1 tài khoản?</p>
                 <button class="ghost" (click)="container.classList.remove('right-panel-active')">Sign In</button>
             </div>
             <div class="overlay-panel overlay-right">
@@ -72,7 +84,7 @@
         </div>
     </div>
 </div>
-
+<!-- 
 <footer>
     <p>
         Created with <i class="fa fa-heart"></i> by
@@ -80,4 +92,4 @@
         - Read how I created this and how you can join the challenge
         <a target="_blank" href="">here</a>.
     </p>
-</footer>
+</footer> -->

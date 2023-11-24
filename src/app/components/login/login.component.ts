@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
 import { ApiService } from 'src/app/services/api.service';
@@ -18,7 +18,7 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   phone: string = '';
-  email: string = '';
+  userEmail: string = '';
   address: number | null = null;
   image: string = '';
   managerId: number | null = null;
@@ -27,12 +27,13 @@ export class LoginComponent {
   user: User | null = null;
   loginForm: FormGroup;
   registerForm: FormGroup;
-
+  areEmailAndCodeEntered: boolean = false;
+  code : string = '';
   getDatasOfThisUserWorker: Worker;
   errorMessage: string | undefined;
 
   constructor(private authService: AuthenticationService,
-    public activeModal: NgbActiveModal, private apiService: ApiService,
+    public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private sweetAlertService: ToastService) {
     this.loginForm = this.formBuilder.group({
@@ -43,16 +44,52 @@ export class LoginComponent {
       fullName: [null, [Validators.nullValidator]],
       username: [null, [Validators.nullValidator]],
       password: [null, [Validators.nullValidator]],
+      repassword: [null, [Validators.nullValidator, this.passwordMatchValidator()]],
       phone: [null, [Validators.nullValidator]],
       email: [null, [Validators.nullValidator]],
+      code: [null, [Validators.nullValidator]],
     })
     // Đăng ký để theo dõi sự thay đổi trong userCache từ AuthenticationService
     this.authService.cachedData$.subscribe((user) => {
       this.user = user;
     });
     this.getDatasOfThisUserWorker = new Worker(new URL('../../workers/user/user-call-all-apis.worker.ts', import.meta.url));
+    this.updateAreEmailAndCodeEntered();
   }
 
+  ngOnInit() {
+    this.registerForm.get('code')?.valueChanges.subscribe(() => this.updateAreEmailAndCodeEntered());
+    this.registerForm.get('email')?.valueChanges.subscribe(() => this.updateAreEmailAndCodeEntered());
+    
+  }
+
+  passwordMatchValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const password = control.get('password')?.value;
+      const repassword = control.get('repassword')?.value;
+  
+      return password === repassword ? null : { 'passwordMismatch': true };
+    };
+  }
+  updateAreEmailAndCodeEntered() {
+    const code = this.registerForm.get('code')?.value;
+    const email = this.registerForm.get('email')?.value;
+    this.areEmailAndCodeEntered = !!code && !!email;
+
+    // Enable/disable other fields based on code and email presence
+    if (this.areEmailAndCodeEntered) {
+      this.registerForm.get('fullName')?.enable();
+      this.registerForm.get('username')?.enable();
+      this.registerForm.get('password')?.enable();
+      this.registerForm.get('repassword')?.enable();
+    } else {
+      this.registerForm.get('fullName')?.disable();
+      this.registerForm.get('username')?.disable();
+      this.registerForm.get('password')?.disable();
+      this.registerForm.get('repassword')?.disable();
+    }
+  }
+  
   // modal open form 
   onLoginTab(): void {
     this.active = "login";
@@ -74,7 +111,14 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
+    this.authService.loginWithGoogle();
+  }
 
+  async getAccessCode() {
+      const email = this.userEmail;
+      if (await this.authService.getAccessCode(email) === true) {
+        this.toastr.success('Lấy mã thành công');
+      }
   }
 
   register() {
@@ -89,15 +133,12 @@ export class LoginComponent {
         .subscribe(
           (response) => {
             if (response.error === 'User with this email already exists') {
-              // Xử lý trường hợp email đã tồn tại
               console.log(response.error);
               this.errorMessage = response.error;
             } else if (response.error === 'User with this username already exists') {
-              // Xử lý trường hợp username đã tồn tại
               console.log(response.error);
               this.errorMessage = response.error;
             } else {
-              // Xử lý trường hợp đăng ký thành công
               console.log(response);
               console.log('Registration successful');
 
