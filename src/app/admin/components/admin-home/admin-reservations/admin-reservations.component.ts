@@ -21,15 +21,15 @@ export class AdminReservationsComponent {
   reservation!: Reservation | null;
   reservations: Reservation[] = [];
 
-  currentDateTime: string = '';
+  currentDateTime$: string = '';
 
   constructor(
     private reservationService: ReservationService,
     private dateTimeService: DateTimeService,
   ) {
-    this.dateTimeService.getCurrentTime().subscribe((dateObject: Date) => {
+    this.dateTimeService.currentDateTimeCache$.subscribe((dateObject: Date) => {
       // Assuming the service emits Date objects
-      this.currentDateTime = dateObject.toISOString();
+      this.currentDateTime$ = dateObject.toISOString();
     });
   }
 

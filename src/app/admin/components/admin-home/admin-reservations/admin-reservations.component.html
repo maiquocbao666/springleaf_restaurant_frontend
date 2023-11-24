@@ -1,5 +1,5 @@
 <h1>Biểu mẫu đặt bàn</h1>
-
+<div>{{currentDateTime$}}</div>
 <div>
     <select (change)="onTableSizeChange($event)">
         <option *ngFor="let size of tableSizes">
@@ -34,9 +34,9 @@
                 {{ reservation.reservationStatusId }}
             </td>
             <td>{{ reservation.numberOfGuests }}</td>
-            <td>{{ (minusDateTime(currentDateTime, reservation.reservationDate)) }}</td>
+            <!-- <td>{{ (minusDateTime(currentDateTime, reservation.reservationDate)) }}</td>
             <td>{{ (reservationHoldTime(currentDateTime, reservation.reservationDate)) }}</td>
-            <td>{{ (hoursUse(currentDateTime, reservation.reservationDate)) }}</td>
+            <td>{{ (hoursUse(currentDateTime, reservation.reservationDate)) }}</td> -->
             <td><button (click)="deletereservation(reservation)">Delete</button></td>
             <!-- <th> <a routerLink="/admin/reservation/{{reservation.reservationId}}" type="button">Edit
                 </a></th> -->

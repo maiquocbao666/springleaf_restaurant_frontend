@@ -84,7 +84,8 @@ import { UserCheckoutComponent } from './user/components/user-home/user-checkout
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { AdminReservationStatusesComponent } from './admin/components/admin-home/admin-reservation-statuses/admin-reservation-statuses.component';
 import { RxStompService } from './rx-stomp.service';
-import { rxStompServiceFactory } from './rx-stomp-service-factory';
+import { rxStompServiceFactory, rxStompServiceFactory2 } from './rx-stomp-service-factory';
+import { RxStompService2 } from './rx-stomp.service2';
 @NgModule({
   declarations: [
     AppComponent,
@@ -183,6 +184,10 @@ import { rxStompServiceFactory } from './rx-stomp-service-factory';
     {
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
+    },
+    {
+      provide: RxStompService2,
+      useFactory: rxStompServiceFactory2,
     },
   ],
   bootstrap: [AppComponent],

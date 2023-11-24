@@ -14,7 +14,7 @@ export class CategoryService {
   private topicSubscription: Subscription | undefined;  // Use Subscription or undefined
   private categoriesUrl = 'categories';
   private categoryUrl = 'category';
-  private channel = 'queu'
+  private channel = 'public'
 
   // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
   private categoriesCacheSubject = new BehaviorSubject<Category[]>([]);
@@ -24,14 +24,14 @@ export class CategoryService {
     private apiService: ApiService,
     private rxStompService: RxStompService,
   ) {
-    this.rxStompService.connectionState$.subscribe(state => {
+    this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
       console.log('WebSocket Connection State:', state);
 
       if (state === 0) {
-        if (this.channel === "queu") {
+        if (this.channel === "public") {
           this.subscribeToQueue();
-        } else if (this.channel === "topic") {
-
+        } else if (this.channel === "private") {
+          //console.log("Subscribe to socket private");
         }
       }
     });
@@ -42,20 +42,20 @@ export class CategoryService {
   }
 
   private subscribeToQueue() {
-    this.rxStompService
+    this.topicSubscription = this.rxStompService
       .watch(`/${this.channel}/greetings`)
       .subscribe((message: Message) => {
         console.log("Raw message body:", message.body);
-        
+
         try {
           const messageData = JSON.parse(message.body);
-  
+
           if (messageData.name === this.categoriesUrl && Array.isArray(messageData.objects)) {
-    
+
             this.categoriesCache = messageData.objects;
             this.getCategories();
             localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
-  
+
           } else {
             console.error("Invalid message format. Unexpected 'name' or 'objects' format.");
           }
@@ -70,7 +70,7 @@ export class CategoryService {
     //   return;
     // }
 
-    if (this.channel === "queu") {
+    if (this.channel === "public") {
       const messageBody = {
         name: name,
         objects: this.categoriesCache  // Thêm categoriesCache vào message body
