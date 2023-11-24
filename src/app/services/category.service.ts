@@ -38,7 +38,7 @@ export class CategoryService {
   }
 
   ngOnInit(): void {
-
+    this.getCategories();
   }
 
   private subscribeToQueue() {
@@ -89,6 +89,7 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
+
     if (this.categoriesCache.length > 0) {
       return of(this.categoriesCache);
     }
