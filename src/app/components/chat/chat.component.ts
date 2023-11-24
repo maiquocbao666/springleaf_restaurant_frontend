@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';  // Import Subscription
-import { RxStompService } from 'src/app/rx-stomp.service';
 import { Message } from '@stomp/stompjs';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Subscription } from 'rxjs'; // Import Subscription
 import { User } from 'src/app/interfaces/user';
+import { RxStompService } from 'src/app/rx-stomp.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-chat',
@@ -24,7 +24,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
-
       console.log("Kết tối web socket");
       this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
         console.log('WebSocket Connection State:', state);
@@ -77,4 +76,5 @@ export class ChatComponent implements OnInit, OnDestroy {
         });
     }
   }
+
 }
