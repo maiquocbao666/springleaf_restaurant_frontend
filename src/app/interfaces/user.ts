@@ -5,8 +5,9 @@ export interface User {
   password: string;
   phone: string;
   email: string;
-  address: number; // Kiểu dữ liệu này phụ thuộc vào kiểu dữ liệu bạn sử dụng trong Spring Boot
+  address: number; 
   image: string;
   managerId: number;
-  restaurantBranchId: number; // Sử dụng tên trường giống với entity Spring Boot
+  restaurantBranchId: number; 
+  //status: boolean;
 }

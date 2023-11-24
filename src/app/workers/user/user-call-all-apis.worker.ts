@@ -78,12 +78,12 @@ addEventListener('message', async (event) => {
                     
                 }),
             ]);
-            console.log(emailRequest);
             const responseData = await Promise.all(responses.map(async (response) => {
                 if (response.ok) {
-                    return await response.json();
+                    return await response.text();
                 } else {
-                    return null;
+                    console.error('Error getting access code:', response.status, response.statusText);
+                    throw new Error('Error getting access code');
                 }
             }));
     
@@ -91,9 +91,9 @@ addEventListener('message', async (event) => {
                 accessCodeRespone: responseData[0],
             };
             postMessage(dataMap);
-            console.log(dataMap);
-        } catch {
-            // Xử lý lỗi nếu có
+            console.log('AccessCode: ' + responseData[0]);
+        } catch(error) {
+            console.error('Error during fetch:', error);
         }
     }
     

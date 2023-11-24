@@ -17,8 +17,9 @@
             <div class="row">
                 <div class="col-lg-12 d-flex ">
                     <input class="col-9 custom" type="text" id="code" placeholder="Enter Code" formControlName="code"
-                        name="code" />
-                    <a class="col-3" (click)="getAccessCode()">Get</a>
+                        name="code" [(ngModel)]="code" />
+                    <a class="col-3" (click)="getAccessCode()" *ngIf="codeCache === null">Get</a>
+                    <a class="col-3" (click)="compareInputWithCodeCache()" *ngIf="codeCache !== null">Config</a>
                 </div>
             </div>
             <input type="text" id="fullName" placeholder="Enter your full name" formControlName="fullName"
