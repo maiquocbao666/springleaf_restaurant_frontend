@@ -50,10 +50,11 @@ export class CategoryService {
         try {
           const messageData = JSON.parse(message.body);
   
-          if (messageData.name === 'categories' && Array.isArray(messageData.objects)) {
+          if (messageData.name === this.categoriesUrl && Array.isArray(messageData.objects)) {
     
             this.categoriesCache = messageData.objects;
             this.getCategories();
+            localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
   
           } else {
             console.error("Invalid message format. Unexpected 'name' or 'objects' format.");
