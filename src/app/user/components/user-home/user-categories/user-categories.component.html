@@ -50,11 +50,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="!isMobile">
+            <div class="row">
                 <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        <ng-container *ngIf="categories$ | async as categories">
-                            <div *ngFor="let chunk of chunkArray(categories, 4); let i = index"
+                        <ng-container *ngIf="categories$ | async as categoriesCache$">
+                            <div *ngFor="let chunk of chunkArray(categoriesCache$, 4); let i = index"
                                 class="carousel-item text-center" [class.active]=" i===0">
                                 <div class="row justify-content-center">
                                     <div class="col-md-2" *ngFor="let category of chunk">

@@ -1,21 +1,66 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, map, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Category } from '../interfaces/category';
+import { RxStompService } from '../rx-stomp.service';
+import { Message } from '@stomp/stompjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
+  private receivedMessages: string[] = [];
+  private topicSubscription: Subscription | undefined;  // Use Subscription or undefined
   private categoriesUrl = 'categories';
   private categoryUrl = 'category';
+  private channel = 'queu'
 
   // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
   private categoriesCacheSubject = new BehaviorSubject<Category[]>([]);
   categoriesCache$ = this.categoriesCacheSubject.asObservable();
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private rxStompService: RxStompService,
+  ) {
+    this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
+      console.log('WebSocket Connection State:', state);
+
+      if (state === 0) {
+        if (this.channel === "queu") {
+          this.subscribeToQueu();
+        } else if (this.channel === "topic") {
+
+        }
+      }
+    });
+  }
+
+  ngOnInit(): void {
+
+  }
+
+  private subscribeToQueu() {
+    this.topicSubscription = this.rxStompService
+      .watch(`/${this.channel}/greetings`)
+      .subscribe((message: Message) => {
+        console.log(message);
+        this.receivedMessages.push(message.body);
+        this.getCategories();
+      });
+  }
+
+  private onSendMessage() {
+    // if (!this.user) {
+    //   return;
+    // }
+
+    if (this.channel === "queu") {
+      this.rxStompService.publish({ destination: `/app/${this.channel}`, body: JSON.stringify({ 'name': "Mai Quốc Bảo", 'userId': 1 }) });
+    }
+
+  }
 
   get categoriesCache(): Category[] {
     return this.categoriesCacheSubject.value;
@@ -26,14 +71,21 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
-    if (this.categoriesCache.length > 0) {
-      return of(this.categoriesCache);
-    }
+    // if (this.categoriesCache.length > 0) {
+    //    return of(this.categoriesCache);
+    // }
 
     const categoriesObservable = this.apiService.request<Category[]>('get', this.categoriesUrl);
 
     categoriesObservable.subscribe(data => {
-      this.categoriesCache = data;
+
+      if (this.categoriesCache !== data) {
+        this.categoriesCache = data;
+        return categoriesObservable;
+      } else {
+        return of(this.categoriesCache);
+      }
+
     });
 
     return categoriesObservable;
@@ -67,7 +119,7 @@ export class CategoryService {
   }
 
   private isCategoryNameInCache(name: string): boolean {
-    const isTrue = !!this.categoriesCache?.find(category => category.name.toLowerCase() === name.toLowerCase());
+    const isTrue = this.categoriesCache?.some(category => category.name.toLowerCase() === name.toLowerCase()) || false;
     if (isTrue) {
       console.log("Danh mục này đã có rồi");
       return isTrue;
@@ -91,6 +143,7 @@ export class CategoryService {
       tap((addedCategory: Category) => {
         this.categoriesCache = [...this.categoriesCache, addedCategory];
         localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
+        this.onSendMessage();
       })
     );
   }
@@ -112,6 +165,7 @@ export class CategoryService {
         );
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
+        this.onSendMessage();
       })
     );
   }
@@ -124,6 +178,7 @@ export class CategoryService {
         const updatedCategories = this.categoriesCache.filter(category => category.categoryId !== id);
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
+        this.onSendMessage();
       })
     );
   }
@@ -132,17 +187,17 @@ export class CategoryService {
     if (!term.trim()) {
       return of([]);
     }
-  
+
     if (this.categoriesCache.length > 0) {
       const filteredCategories = this.categoriesCache.filter(category => {
         return category.name.toLowerCase().includes(term.toLowerCase());
       });
-  
+
       if (filteredCategories.length > 0) {
         return of(filteredCategories);
       }
     }
-  
+
     return this.apiService.request("get", this.categoriesUrl).pipe(
       tap({
         next: (response: any) => {

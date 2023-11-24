@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { Observable, Subject, distinctUntilChanged, map, switchMap } from 'rxjs';
+import { Observable, Subject, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -10,7 +10,7 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class UserCategoriesComponent {
 
-  categories: Category[] = [];
+  categoriesCache$!: Observable<Category[]>;
   categories$!: Observable<Category[]>;
   searchTerms = new Subject<string>();
   showMore: boolean = false;
@@ -19,7 +19,7 @@ export class UserCategoriesComponent {
   constructor(
     private categoryService: CategoryService,
   ) {
-
+    this.getCategories();
   }
 
   chunkArray(array: any[], size: number): any[] {
@@ -43,7 +43,6 @@ export class UserCategoriesComponent {
 
   ngOnInit(): void {
     console.log("Init User Categories Component");
-    this.getCategories();
     this.categories$ = this.searchTerms.pipe(
       // ignore new term if same as previous term
       distinctUntilChanged(),
@@ -52,7 +51,6 @@ export class UserCategoriesComponent {
       switchMap((categoryName: string) => this.categoryService.searchCategoriesByName(categoryName)),
     );
     this.search("");
-
   }
 
   search(term: string): void {
@@ -75,7 +73,7 @@ export class UserCategoriesComponent {
 
   getCategories(): void {
     this.categoryService.categoriesCache$.subscribe(categories => {
-      this.categories = categories;
+      this.categories$ = of(categories);
     });
   }
 
