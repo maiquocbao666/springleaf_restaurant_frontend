@@ -24,12 +24,12 @@ export class CategoryService {
     private apiService: ApiService,
     private rxStompService: RxStompService,
   ) {
-    this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
+    this.rxStompService.connectionState$.subscribe(state => {
       console.log('WebSocket Connection State:', state);
 
       if (state === 0) {
         if (this.channel === "queu") {
-          this.subscribeToQueu();
+          this.subscribeToQueue();
         } else if (this.channel === "topic") {
 
         }
@@ -41,23 +41,40 @@ export class CategoryService {
 
   }
 
-  private subscribeToQueu() {
-    this.topicSubscription = this.rxStompService
+  private subscribeToQueue() {
+    this.rxStompService
       .watch(`/${this.channel}/greetings`)
       .subscribe((message: Message) => {
-        console.log(message);
-        this.receivedMessages.push(message.body);
-        this.getCategories();
+        console.log("Raw message body:", message.body);
+        
+        try {
+          const messageData = JSON.parse(message.body);
+  
+          if (messageData.name === 'categories' && Array.isArray(messageData.objects)) {
+    
+            this.categoriesCache = messageData.objects;
+            this.getCategories();
+  
+          } else {
+            console.error("Invalid message format. Unexpected 'name' or 'objects' format.");
+          }
+        } catch (error) {
+          console.error("Error parsing JSON from message body:", error);
+        }
       });
   }
 
-  private onSendMessage() {
+  private onSendMessage(name: string) {
     // if (!this.user) {
     //   return;
     // }
 
     if (this.channel === "queu") {
-      this.rxStompService.publish({ destination: `/app/${this.channel}`, body: JSON.stringify({ 'name': "Mai Quốc Bảo", 'userId': 1 }) });
+      const messageBody = {
+        name: name,
+        objects: this.categoriesCache  // Thêm categoriesCache vào message body
+      };
+      this.rxStompService.publish({ destination: `/app/${this.channel}`, body: JSON.stringify(messageBody) });
     }
 
   }
@@ -71,9 +88,9 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
-    // if (this.categoriesCache.length > 0) {
-    //    return of(this.categoriesCache);
-    // }
+    if (this.categoriesCache.length > 0) {
+      return of(this.categoriesCache);
+    }
 
     const categoriesObservable = this.apiService.request<Category[]>('get', this.categoriesUrl);
 
@@ -143,7 +160,7 @@ export class CategoryService {
       tap((addedCategory: Category) => {
         this.categoriesCache = [...this.categoriesCache, addedCategory];
         localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
-        this.onSendMessage();
+        this.onSendMessage(this.categoriesUrl);
       })
     );
   }
@@ -165,7 +182,7 @@ export class CategoryService {
         );
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
-        this.onSendMessage();
+        this.onSendMessage(this.categoriesUrl);
       })
     );
   }
@@ -178,7 +195,7 @@ export class CategoryService {
         const updatedCategories = this.categoriesCache.filter(category => category.categoryId !== id);
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
-        this.onSendMessage();
+        this.onSendMessage(this.categoriesUrl);
       })
     );
   }
