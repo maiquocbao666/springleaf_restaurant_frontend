@@ -117,7 +117,7 @@ export class LoginComponent {
   async getAccessCode() {
       const email = this.userEmail;
       if (await this.authService.getAccessCode(email) === true) {
-        this.toastr.success('Lấy mã thành công');
+
       }
   }
 
