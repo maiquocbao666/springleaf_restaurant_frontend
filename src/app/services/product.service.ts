@@ -42,7 +42,7 @@ export class ProductService {
 
   getProduct(id: number): Observable<Product> {
 
-    if(!id){
+    if (!id) {
       return of();
     }
 
