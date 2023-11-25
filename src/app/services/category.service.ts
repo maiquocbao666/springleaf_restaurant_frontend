@@ -104,7 +104,6 @@ export class CategoryService {
 
       if (this.categoriesCache !== data) {
         this.categoriesCache = data;
-        localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
         return categoriesObservable;
       } else {
         return of(this.categoriesCache);
@@ -199,20 +198,14 @@ export class CategoryService {
 
   deleteCategory(id: number): Observable<any> {
     const url = `${this.categoryUrl}/${id}`;
-  
-    // Kiểm tra xem có sản phẩm trong productsCache thuộc category cần xóa hay không
-    const productsInCategory = this.productService.productsCache.filter(product => product.categoryId === id);
-    if (productsInCategory) {
-      this.sweetAlertService.showTimedAlert('Category này đang được dùng bởi product!', '', 'error', 2000);
-      return of(); // Trả về Observable không có dữ liệu nếu có lỗi
-    }
-  
+
     return this.apiService.request('delete', url).pipe(
       tap(() => {
         // Xóa category khỏi categoriesCache
         const updatedCategories = this.categoriesCache.filter(category => category.categoryId !== id);
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
+        this.onSendMessage(this.categoriesUrl);
       })
     );
   }
