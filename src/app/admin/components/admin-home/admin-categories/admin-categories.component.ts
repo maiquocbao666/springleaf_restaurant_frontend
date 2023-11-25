@@ -77,7 +77,7 @@ export class AdminCategoriesComponent {
       description: description,
     };
 
-    this.categoryService.addCategory(newCategory)
+    this.categoryService.add(newCategory)
       .subscribe(() => {
         //this.getCategories();
         this.categoryForm.reset();
@@ -88,7 +88,7 @@ export class AdminCategoriesComponent {
   deleteCategory(category: Category): void {
     if (category.categoryId) {
       //this.categories = this.categories.filter(c => c !== category);
-      this.categoryService.deleteCategory(category.categoryId).subscribe();
+      this.categoryService.delete(category.categoryId).subscribe();
     } else {
       console.error("Cannot delete category with undefined categoryId.");
     }

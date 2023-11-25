@@ -42,7 +42,7 @@ export class CategoryService {
   }
 
   ngOnInit(): void {
-    this.getCategories();
+    this.gets();
   }
 
   private subscribeToQueue() {
@@ -57,7 +57,7 @@ export class CategoryService {
           if (messageData.name === this.categoriesUrl && Array.isArray(messageData.objects)) {
 
             this.categoriesCache = messageData.objects;
-            this.getCategories();
+            this.gets();
             localStorage.setItem(this.categoriesUrl, JSON.stringify(this.categoriesCache));
 
           } else {
@@ -92,7 +92,7 @@ export class CategoryService {
     this.categoriesCacheSubject.next(value);
   }
 
-  getCategories(): Observable<Category[]> {
+  gets(): Observable<Category[]> {
 
     if (this.categoriesCache) {
       return of(this.categoriesCache);
@@ -114,7 +114,7 @@ export class CategoryService {
     return categoriesObservable;
   }
 
-  getCategoryById(id: number): Observable<Category | null> {
+  getById(id: number): Observable<Category | null> {
 
     if (!id) {
       return of(null);
@@ -122,15 +122,15 @@ export class CategoryService {
 
     if (!this.categoriesCache.length) {
 
-      this.getCategories();
+      this.gets();
 
     }
 
-    const categoryFromCache = this.categoriesCache.find(category => category.categoryId === id);
+    const cache = this.categoriesCache.find(category => category.categoryId === id);
 
-    if (categoryFromCache) {
+    if (cache) {
 
-      return of(categoryFromCache);
+      return of(cache);
 
     } else {
 
@@ -141,7 +141,7 @@ export class CategoryService {
 
   }
 
-  private isCategoryNameInCache(name: string, categoryIdToExclude: number | null = null): boolean {
+  private isInCache(name: string, categoryIdToExclude: number | null = null): boolean {
     const isCategoryInCache = this.categoriesCache?.some(
       (cache) =>
         cache.name.toLowerCase() === name.toLowerCase() && cache.categoryId !== categoryIdToExclude
@@ -154,12 +154,12 @@ export class CategoryService {
     return isCategoryInCache || false;
   }
 
-  addCategory(newCategory: Category): Observable<Category> {
+  add(newCategory: Category): Observable<Category> {
     // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
     if (this.categoriesCache) {
 
       // Nếu đã có danh mục cùng tên, trả về Observable với giá trị hiện tại
-      if (this.isCategoryNameInCache(newCategory.name)) {
+      if (this.isInCache(newCategory.name)) {
         return of();
       }
     }
@@ -174,20 +174,20 @@ export class CategoryService {
     );
   }
 
-  updateCategory(updatedCategory: Category): Observable<any> {
+  update(updated: Category): Observable<any> {
     if (this.categoriesCache) {
       // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
-      if (this.isCategoryNameInCache(updatedCategory.name, updatedCategory.categoryId)) {
+      if (this.isInCache(updated.name, updated.categoryId)) {
         return of();
       }
     }
 
     const url = `${this.categoryUrl}`;
 
-    return this.apiService.request('put', url, updatedCategory).pipe(
+    return this.apiService.request('put', url, updated).pipe(
       tap(() => {
         const updatedCategories = this.categoriesCache.map((category) =>
-          category.categoryId === updatedCategory.categoryId ? updatedCategory : category
+          category.categoryId === updated.categoryId ? updated : category
         );
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
@@ -196,13 +196,13 @@ export class CategoryService {
     );
   }
 
-  deleteCategory(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.categoryUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(
       tap(() => {
         // Xóa category khỏi categoriesCache
-        const updatedCategories = this.categoriesCache.filter(category => category.categoryId !== id);
+        const updatedCategories = this.categoriesCache.filter(cache => cache.categoryId !== id);
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
         this.onSendMessage(this.categoriesUrl);
@@ -210,18 +210,18 @@ export class CategoryService {
     );
   }
 
-  searchCategoriesByName(term: string): Observable<Category[]> {
+  searchByName(term: string): Observable<Category[]> {
     if (!term.trim()) {
       return of([]);
     }
 
     if (this.categoriesCache) {
-      const filteredCategories = this.categoriesCache.filter(category => {
-        return category.name.toLowerCase().includes(term.toLowerCase());
+      const filtered = this.categoriesCache.filter(cache => {
+        return cache.name.toLowerCase().includes(term.toLowerCase());
       });
 
-      if (filteredCategories) {
-        return of(filteredCategories);
+      if (filtered) {
+        return of(filtered);
       }
     }
 

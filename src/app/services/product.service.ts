@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { Product } from '../interfaces/product';
 import { ApiService } from './api.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,10 @@ export class ProductService {
   private productsCacheSubject = new BehaviorSubject<Product[]>([]);
   productsCache$ = this.productsCacheSubject.asObservable();
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private sweetAlertService: ToastService,
+  ) { }
 
   get productsCache(): Product[] {
     return this.productsCacheSubject.value;
@@ -27,6 +31,7 @@ export class ProductService {
   }
 
   gets(): Observable<Product[]> {
+
     if (this.productsCache) {
       return of(this.productsCache);
     }
@@ -34,35 +39,49 @@ export class ProductService {
     const productsObservable = this.apiService.request<Product[]>('get', this.productsUrl);
 
     productsObservable.subscribe(data => {
-      this.productsCache = data;
+
+      if (this.productsCache !== data) {
+        this.productsCache = data;
+        return productsObservable;
+      } else {
+        return of(this.productsCache);
+      }
+
     });
 
     return productsObservable;
   }
 
-  getById(id: number): Observable<Product> {
+  getById(id: number): Observable<Product | null> {
 
     if (!id) {
-      return of();
+      return of(null);
     }
 
-    if (!this.productsCache) {
+    if (!this.productsCache.length) {
+
       this.gets();
+
     }
 
-    const productFromCache = this.productsCache.find(product => product.menuItemId === id);
+    const cache = this.productsCache.find(cache => cache.menuItemId === id);
 
-    if (productFromCache) {
-      return of(productFromCache);
+    if (cache) {
+
+      return of(cache);
+
     } else {
-      const url = `${this.productsUrl}/${id}`;
+
+      const url = `${this.categoryUrl}/${id}`;
       return this.apiService.request<Product>('get', url);
+
     }
+
   }
 
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {
-    if (this.productsCache.length > 0) {
-      const products = this.productsCache.filter(product => product.categoryId === categoryId);
+    if (this.productsCache) {
+      const products = this.productsCache.filter(cache => cache.categoryId === categoryId);
       return of(products);
     }
 
@@ -70,19 +89,22 @@ export class ProductService {
     return this.apiService.request<Product[]>('get', url);
   }
 
-  private isProductNameInCache(name: string): boolean {
-    const isTrue = !!this.productsCache?.find(product => product.name.toLowerCase() === name.toLowerCase());
-    if (isTrue) {
-      console.log('Món ăn này đã tồn tại trong cache.');
-      return isTrue;
-    } else {
-      return isTrue;
+  private isInCache(name: string, IdToExclude: number | null = null): boolean {
+    const isInCache = this.productsCache?.some(
+      (cache) =>
+        cache.name.toLowerCase() === name.toLowerCase() && cache.menuItemId !== IdToExclude
+    );
+
+    if (isInCache) {
+      this.sweetAlertService.showTimedAlert('Product này đã có rồi!', '', 'error', 2000);
     }
+
+    return isInCache || false;
   }
 
   add(newProduct: Product): Observable<Product> {
     if (this.productsCache.length > 0) {
-      if (this.isProductNameInCache(newProduct.name)) {
+      if (this.isInCache(newProduct.name)) {
         return of();
       }
     }
@@ -95,19 +117,19 @@ export class ProductService {
     );
   }
 
-  update(updatedProduct: Product): Observable<any> {
-    if (this.productsCache.length > 0) {
-      if (this.isProductNameInCache(updatedProduct.name)) {
+  update(updated: Product): Observable<any> {
+    if (this.productsCache) {
+      if (this.isInCache(updated.name)) {
         return of();
       }
     }
 
     const url = `${this.productUrl}`;
 
-    return this.apiService.request('put', url, updatedProduct).pipe(
+    return this.apiService.request('put', url, updated).pipe(
       tap(() => {
         const updatedProducts = this.productsCache.map(product =>
-          product.menuItemId === updatedProduct.menuItemId ? updatedProduct : product
+          product.menuItemId === updated.menuItemId ? updated : product
         );
         this.productsCache = updatedProducts;
         localStorage.setItem(this.productsUrl, JSON.stringify(updatedProducts));

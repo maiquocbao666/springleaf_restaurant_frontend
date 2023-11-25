@@ -67,7 +67,7 @@ export class AdminProductsComponent {
   }
 
   getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getCategoryById(categoryId);
+    return this.categoryService.getById(categoryId);
   }
 
   addProduct(): void {
