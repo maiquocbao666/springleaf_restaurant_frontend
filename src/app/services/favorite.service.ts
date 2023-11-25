@@ -27,7 +27,7 @@ export class FavoriteService {
   }
 
   getFavorites(): Observable<Favorite[]> {
-    if (this.favoritesCache.length > 0) {
+    if (this.favoritesCache) {
       console.log("Có favorites cache");
       return of(this.favoritesCache);
     }

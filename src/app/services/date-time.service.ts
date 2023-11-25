@@ -95,7 +95,7 @@ export class DateTimeService {
             this.rxStompService2
                 .watch(`/${this.channel}/greetings/${this.user?.userId}`)
                 .subscribe((message: Message) => {
-                    console.log("Raw message body:", message.body);
+                    //console.log("Raw message body:", message.body);
                     try {
                         this.currentDateTimeCache = new Date(message.body);
                     } catch (error) {

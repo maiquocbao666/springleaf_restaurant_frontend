@@ -27,7 +27,7 @@ export class ProductService {
   }
 
   getProducts(): Observable<Product[]> {
-    if (this.productsCache.length > 0) {
+    if (this.productsCache) {
       return of(this.productsCache);
     }
 
@@ -41,7 +41,12 @@ export class ProductService {
   }
 
   getProduct(id: number): Observable<Product> {
-    if (!this.productsCache.length) {
+
+    if(!id){
+      return of();
+    }
+
+    if (!this.productsCache) {
       this.getProducts();
     }
 

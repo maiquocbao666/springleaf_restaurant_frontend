@@ -27,7 +27,7 @@ export class ComboDetailService {
   }
 
   getComboDetails(): Observable<ComboDetail[]> {
-    if (this.comboDetailsCache.length > 0) {
+    if (this.comboDetailsCache) {
       return of(this.comboDetailsCache);
     }
 

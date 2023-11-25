@@ -1,5 +1,5 @@
 <h1>Biểu mẫu đặt bàn</h1>
-<div>{{currentDateTime$}}</div>
+<td>Ngày giờ hiện tại: {{currentDateTime$ | date: 'EEEE, MMMM d, y, HH:mm:ss a'}}</td>
 <div>
     <select (change)="onTableSizeChange($event)">
         <option *ngFor="let size of tableSizes">
@@ -14,8 +14,9 @@
             <th>Reservation id</th>
             <th>Resturant table</th>
             <th>User</th>
-            <th>Ngày giờ tới</th>
-            <th>Ngày giờ đi</th>
+            <th>Ngày đặt</th>
+            <th>Giờ tới</th>
+            <th>Giờ đi</th>
             <th>Trạng thái</th>
             <th>Số lượng khách hàng</th>
             <th>Thời gian vào trạng thái chờ</th>
@@ -28,15 +29,16 @@
             <td>{{ reservation.reservationId }}</td>
             <td>{{ reservation.restaurantTableId }}</td>
             <td>{{ reservation.userId }}</td>
-            <td>{{ reservation.reservationDate | date: 'EEEE, MMMM d, y, h:mm:ss a' }}</td>
-            <td>{{ reservation.outTime | date: 'EEEE, MMMM d, y, h:mm:ss a' }}</td>
+            <td>{{ reservation.reservationDate | date: 'EEEE, MMMM d, y' }}</td>
+            <td>{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
+            <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
             <td>
                 {{ reservation.reservationStatusId }}
             </td>
             <td>{{ reservation.numberOfGuests }}</td>
-            <!-- <td>{{ (minusDateTime(currentDateTime, reservation.reservationDate)) }}</td>
-            <td>{{ (reservationHoldTime(currentDateTime, reservation.reservationDate)) }}</td>
-            <td>{{ (hoursUse(currentDateTime, reservation.reservationDate)) }}</td> -->
+            <td>{{ (minusDateTime(currentDateTime$, reservation.reservationDate)) }}</td>
+            <td>{{ (reservationHoldTime(currentDateTime$, reservation.reservationDate)) }}</td>
+            <td>{{ (hoursUse(currentDateTime$, reservation.reservationDate)) }}</td>
             <td><button (click)="deletereservation(reservation)">Delete</button></td>
             <!-- <th> <a routerLink="/admin/reservation/{{reservation.reservationId}}" type="button">Edit
                 </a></th> -->

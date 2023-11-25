@@ -27,7 +27,7 @@ export class InventoryBranchService {
     }
 
     getInventoryBranches(): Observable<InventoryBranch[]> {
-        if (this.inventoryBranchesCache.length > 0) {
+        if (this.inventoryBranchesCache) {
             return of(this.inventoryBranchesCache);
         }
 
@@ -41,7 +41,12 @@ export class InventoryBranchService {
     }
 
     getInventoryBranchById(id: number): Observable<InventoryBranch> {
-        if (this.inventoryBranchesCache.length === 0) {
+
+        if(!id){
+            return of();
+        }
+
+        if (!this.inventoryBranchesCache) {
             this.getInventoryBranches();
         }
 

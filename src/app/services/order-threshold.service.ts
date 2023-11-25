@@ -27,7 +27,7 @@ export class OrderThresholdService {
 
     getOrderThresholds(): Observable<OrderThreshold[]> {
 
-        if (this.orderThresholdsCache.length > 0) {
+        if (this.orderThresholdsCache) {
             return of(this.orderThresholdsCache);
         }
 

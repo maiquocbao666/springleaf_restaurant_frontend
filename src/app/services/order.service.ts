@@ -27,7 +27,7 @@ export class OrderService {
   }
 
   getOrders(): Observable<Order[]> {
-    if (this.ordersCache.length > 0) {
+    if (this.ordersCache) {
       return of(this.ordersCache);
     }
 
@@ -45,7 +45,7 @@ export class OrderService {
       return of(null);
     }
 
-    if (this.ordersCache.length === 0) {
+    if (!this.ordersCache) {
       this.getOrders();
     }
 

@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
 import { ApiService } from 'src/app/services/api.service';
@@ -28,7 +28,9 @@ export class LoginComponent {
   loginForm: FormGroup;
   registerForm: FormGroup;
   areEmailAndCodeEntered: boolean = false;
-  code : string = '';
+  codeCache : string | null = null ;
+  code: string = '';
+  token: string = '';
   getDatasOfThisUserWorker: Worker;
   errorMessage: string | undefined;
 
@@ -53,6 +55,15 @@ export class LoginComponent {
     this.authService.cachedData$.subscribe((user) => {
       this.user = user;
     });
+    this.authService.accessCodeCacheData$.subscribe((code) => {
+      if(code != null){
+        console.log(code)
+        this.codeCache = code.slice(-6);
+        this.token = code.slice(0, -6);
+        console.log(this.codeCache + 'token:  ' + this.token);
+      }
+      
+    })
     this.getDatasOfThisUserWorker = new Worker(new URL('../../workers/user/user-call-all-apis.worker.ts', import.meta.url));
     this.updateAreEmailAndCodeEntered();
   }
@@ -60,8 +71,19 @@ export class LoginComponent {
   ngOnInit() {
     this.registerForm.get('code')?.valueChanges.subscribe(() => this.updateAreEmailAndCodeEntered());
     this.registerForm.get('email')?.valueChanges.subscribe(() => this.updateAreEmailAndCodeEntered());
-    
   }
+
+  compareInputWithCodeCache(): boolean {
+    if(this.code === this.codeCache){
+      console.log(this.code === this.codeCache);
+      this.sweetAlertService.showTimedAlert('Xác nhận thành công!', '', 'success', 2000);
+      return true;
+    }else{
+      this.sweetAlertService.showTimedAlert('Xác nhận thất bại!', '', 'error', 2000);
+      return false;
+    }
+  }
+  
 
   passwordMatchValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -103,9 +125,19 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
-      if (await this.authService.login(username, password) === true) {
-        this.sweetAlertService.showTimedAlert('Đăng nhập thành công!', 'Chào mừng đăng nhập.', 'success', 2000)
-        this.activeModal.close('Login Successful');
+  
+      try {
+        const loginResult = await this.authService.login(username, password);
+  
+        if (loginResult === true) {
+          
+          this.sweetAlertService.showTimedAlert('Đăng nhập thành công!', 'Chào mừng đăng nhập.', 'success', 2000);
+          this.activeModal.close('Login Successful');
+        } else {
+          console.error('Login failed');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
       }
     }
   }
@@ -116,7 +148,12 @@ export class LoginComponent {
 
   async getAccessCode() {
       const email = this.userEmail;
-      if (await this.authService.getAccessCode(email) === true) {
+      try{
+        const codeResult = await this.authService.getAccessCode(email);
+        if(codeResult === true){
+          this.sweetAlertService.showTimedAlert('Gửi mã xác nhận!', 'Vui lòng kiểm tra email.', 'success', 2000);
+        }
+      }catch{
 
       }
   }
@@ -128,20 +165,33 @@ export class LoginComponent {
       const password = this.registerForm.get('password')?.value;
       const email = this.registerForm.get('email')?.value;
       const phone = this.registerForm.get('phone')?.value;
+      const code = this.token;
 
-      this.authService.register(fullName, username, password, phone, email)
+      this.authService.register(fullName, username, password, phone, email,code)
         .subscribe(
           (response) => {
-            if (response.error === 'User with this email already exists') {
+            if (response.error === 'JWT is valid') {
               console.log(response.error);
               this.errorMessage = response.error;
+              this.sweetAlertService.showTimedAlert('Mã xác nhận quá hạn', 'Vui lòng lấy mã mới', 'error', 2000);
+            }
+            else if (response.error === 'Role not found') {
+              console.log(response.error);
+              this.errorMessage = response.error;
+              this.sweetAlertService.showTimedAlert('Lỗi quyền hạn', '', 'error', 2000);
+            }
+            else if (response.error === 'User with this email already exists') {
+              console.log(response.error);
+              this.errorMessage = response.error;
+              this.sweetAlertService.showTimedAlert('Đăng ký thất bại', 'Email đã được sử dụng', 'error', 2000);
             } else if (response.error === 'User with this username already exists') {
               console.log(response.error);
               this.errorMessage = response.error;
+              this.sweetAlertService.showTimedAlert('Đăng ký thất bại', 'Username đã được sử dụng', 'error', 2000);
             } else {
               console.log(response);
               console.log('Registration successful');
-
+              this.sweetAlertService.showTimedAlert('Đăng ký thành công', '', 'success', 2000);
               const container = document.getElementById('container');
               if (container) {
                 container.classList.remove('right-panel-active');

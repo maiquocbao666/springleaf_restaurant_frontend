@@ -15,6 +15,8 @@ export class AuthenticationService {
   private cachedDataSubject = new BehaviorSubject<User | null>(null);
   private listRole  : String[] | null = null;
   private listRoleDataSubject = new BehaviorSubject<String[] | null>(null);
+  private accessCode  : string | null = null;
+  private accessCodeDataSubject = new BehaviorSubject<string | null>(null);
   getDatasOfThisUserWorker: Worker;
 
   constructor(private http: HttpClient) {
@@ -26,6 +28,7 @@ export class AuthenticationService {
   // Đây là một observable để theo dõi sự thay đổi trong userCache
   cachedData$: Observable<User | null> = this.cachedDataSubject.asObservable();
   roleCacheData$: Observable<String[] | null> = this.listRoleDataSubject.asObservable();
+  accessCodeCacheData$: Observable<string | null> = this.accessCodeDataSubject.asObservable();
   setUserCache(user: User | null) {
     this.userCache = user;
     this.cachedDataSubject.next(user);
@@ -45,6 +48,8 @@ export class AuthenticationService {
         } else {
           localStorage.setItem('access_code', data.accessCodeRespone);
           console.log('Authentication service : ' + data.accessCodeRespone);
+          this.accessCode = data.accessCodeRespone;
+          this.accessCodeDataSubject.next(data.accessCodeRespone);
           console.log("Get Access Code  success");
           resolve(true);
         }
@@ -52,13 +57,14 @@ export class AuthenticationService {
     });
   }
 
-  register(fullName: string, username: string, password: string, phone: string, email: string): Observable<any> {
+  register(fullName: string, username: string, password: string, phone: string, email: string, code: string): Observable<any> {
     const registerData = {
       fullName: fullName,
       username: username,
       password: password,
       phone: phone,
       email: email,
+      jwtToken: code,
     };
     return this.http.post(`${this.apiUrl}/register`, registerData);
   }

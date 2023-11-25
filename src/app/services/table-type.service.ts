@@ -34,7 +34,7 @@ export class TableTypeService {
 
   getTableTypes(): Observable<TableType[]> {
 
-    if (this.tableTypesCache.length > 0) {
+    if (this.tableTypesCache) {
       return of(this.tableTypesCache);
     }
 
@@ -47,8 +47,17 @@ export class TableTypeService {
     return tableTypesObservable;
   }
 
-  private isTableTypeNameInCache(name: string): boolean {
-    return !!this.tableTypesCache?.find(tableType => tableType.tableTypeName.toLowerCase() === name.toLowerCase());
+  private isTableTypeNameInCache(name: string, tableTypeIdToExclude: number | null = null): boolean {
+    const isTableTypeInCache = this.tableTypesCache?.some(
+      (cache) =>
+        cache.tableTypeName.toLowerCase() === name.toLowerCase() && cache.tableTypeId !== tableTypeIdToExclude
+    );
+
+    if (isTableTypeInCache) {
+      console.log("Danh mục này đã có rồi");
+    }
+
+    return isTableTypeInCache || false;
   }
 
   addTableType(newTableType: TableType): Observable<TableType> {

@@ -27,7 +27,7 @@ export class RatingService {
   }
 
   getRatings(): Observable<Rating[]> {
-    if (this.ratingsCache.length > 0) {
+    if (this.ratingsCache) {
       return of(this.ratingsCache);
     }
 
