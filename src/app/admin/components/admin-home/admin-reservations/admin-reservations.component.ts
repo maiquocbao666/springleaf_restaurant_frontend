@@ -119,7 +119,7 @@ export class AdminReservationsComponent {
 
   deletereservation(reservation: Reservation): void {
     if (reservation.reservationId) {
-      this.reservationService.deleteReservation(reservation.reservationId).subscribe();
+      this.reservationService.delete(reservation.reservationId).subscribe();
     } else {
       console.error("Cannot delete reservation with undefined reservationId.");
     }

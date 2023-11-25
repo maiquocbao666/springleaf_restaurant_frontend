@@ -73,7 +73,7 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProducts(): void {
-    this.productService.getProducts()
+    this.productService.gets()
       .subscribe(products => {
         this.products = products;
         this.remainingProducts = this.products.length - this.visibleProductCount;
@@ -81,11 +81,11 @@ export class UserProductsComponent implements OnInit {
   }
 
   getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getCategoryById(categoryId);
+    return this.categoryService.getById(categoryId);
   }
 
   getCategories(): void {
-    this.categoryService.getCategories()
+    this.categoryService.gets()
       .subscribe(categories => this.categories = categories);
   }
 

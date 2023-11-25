@@ -54,7 +54,7 @@ export class AdminCategoryDetailComponent implements OnInit {
         active: this.categoryForm.get('active')?.value,
       };
 
-      this.categoryService.updateCategory(updatedCategory).subscribe(() => {
+      this.categoryService.update(updatedCategory).subscribe(() => {
         console.log("Cập nhật cache category");
       });
     }

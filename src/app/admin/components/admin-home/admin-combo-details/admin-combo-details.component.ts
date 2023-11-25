@@ -67,7 +67,7 @@ export class AdminComboDetailsComponent {
   }
 
   getProductById(menuItemId: number): Observable<Product | null> {
-    return this.productService.getProduct(menuItemId);
+    return this.productService.getById(menuItemId);
   }
 
   getComboById(comboId: number): Observable<Combo | null> {
