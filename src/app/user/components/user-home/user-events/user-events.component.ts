@@ -17,7 +17,7 @@ export class UserEventsComponent {
   }
 
   getEvents(): void {
-    this.eventService.eventsCache$
+    this.eventService.cache$
       .subscribe(events => this.events = events);
   }
 }

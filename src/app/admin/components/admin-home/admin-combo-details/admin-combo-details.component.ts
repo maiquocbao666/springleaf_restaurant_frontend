@@ -57,12 +57,12 @@ export class AdminComboDetailsComponent {
   }
 
   getCombos(): void {
-    this.comboService.combosCache$
+    this.comboService.cache$
       .subscribe(combos => this.combos = combos);
   }
 
   getProducts(): void {
-    this.productService.productsCache$
+    this.productService.cache$
       .subscribe(products => this.products = products);
   }
 

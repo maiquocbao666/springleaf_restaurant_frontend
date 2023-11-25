@@ -3,135 +3,59 @@ import { Observable, of, tap } from 'rxjs';
 import { Combo } from '../interfaces/combo';
 import { ApiService } from 'src/app/services/api.service';
 import { BehaviorSubject } from 'rxjs';
+import { BaseService } from './base-service';
+import { RxStompService } from '../rx-stomp.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ComboService {
+export class ComboService extends BaseService<Combo> {
 
-  private combosUrl = 'combos';
-  private comboUrl = 'combo';
-
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private combosCacheSubject = new BehaviorSubject<Combo[]>([]);
-  combosCache$ = this.combosCacheSubject.asObservable();
-
-  constructor(private apiService: ApiService) { }
-
-  get combosCache(): Combo[] {
-    return this.combosCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set combosCache(value: Combo[]) {
-    this.combosCacheSubject.next(value);
+  apisUrl = 'combos';
+  cacheKey = 'combos';
+  apiUrl = 'combo';
+
+  override getItemId(item: Combo): number {
+    return item.comboId!;
+  }
+  override getItemName(item: Combo): string {
+    return item.comboName;
+  }
+  override getObjectName(): string {
+    return "Combo";
   }
 
-  gets(): Observable<Combo[]> {
-    if (this.combosCache) {
-      return of(this.combosCache);
-    }
-
-    const combosObservable = this.apiService.request<Combo[]>('get', this.combosUrl);
-
-    combosObservable.subscribe(data => {
-      this.combosCache = data;
-    });
-
-    return combosObservable;
+  override gets(): Observable<Combo[]> {
+    return super.gets();
   }
 
-  getById(id: number): Observable<Combo> {
-
-    if(!id){
-      return of();
-    }
-
-    if (!this.combosCache.length) {
-      this.gets();
-    }
-
-    const comboFromCache = this.combosCache.find(combo => combo.comboId === id);
-
-    if (comboFromCache) {
-      return of(comboFromCache);
-    } else {
-      const url = `${this.comboUrl}/${id}`;
-      return this.apiService.request<Combo>('get', url);
-    }
+  override getById(id: number): Observable<Combo | null> {
+    return super.getById(id);
   }
 
-  private isComboNameInCache(name: string, categoryIdToExclude: number | null = null): boolean {
-    const isComboInCache = this.combosCache?.some(
-      (cache) =>
-        cache.comboName.toLowerCase() === name.toLowerCase() && cache.comboId !== categoryIdToExclude
-    );
-
-    if (isComboInCache) {
-      console.log("Combo này đã có rồi");
-    }
-
-    return isComboInCache || false;
+  override add(newCombo: Combo): Observable<Combo> {
+    return super.add(newCombo);
   }
 
-  add(newCombo: Combo): Observable<Combo> {
-    if (this.combosCache) {
-      if (this.isComboNameInCache(newCombo.comboName)) {
-        return of();
-      }
-    }
-
-    return this.apiService.request<Combo>('post', this.comboUrl, newCombo).pipe(
-      tap((addedCombo: Combo) => {
-        this.combosCache = [...this.combosCache, addedCombo];
-        localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
-      })
-    );
+  override update(updatedCombo: Combo): Observable<Combo> {
+    return super.update(updatedCombo);
   }
 
-  update(updatedCombo: Combo): Observable<any> {
-    if (this.combosCache) {
-      if (this.isComboNameInCache(updatedCombo.comboName)) {
-        return of();
-      }
-    }
-
-    const url = `${this.comboUrl}/${updatedCombo.comboId}`;
-
-    return this.apiService.request('put', url, updatedCombo).pipe(
-      tap(() => {
-        const index = this.combosCache!.findIndex(combo => combo.comboId === updatedCombo.comboId);
-
-        if (index !== -1) {
-          this.combosCache![index] = updatedCombo;
-          localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
-        }
-      })
-    );
+  override delete(id: number): Observable<Combo> {
+    return super.delete(id);
   }
 
-  updateComboCache(updatedCombo: Combo): void {
-    if (this.combosCache) {
-      const index = this.combosCache.findIndex(cat => cat.comboId === updatedCombo.comboId);
-
-      if (index !== -1) {
-        this.combosCache[index] = updatedCombo;
-      }
-    }
-  }
-
-  delete(id: number): Observable<any> {
-    const url = `${this.comboUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const index = this.combosCache.findIndex(combo => combo.comboId === id);
-
-        if (index !== -1) {
-          this.combosCache.splice(index, 1);
-          localStorage.setItem(this.combosUrl, JSON.stringify(this.combosCache));
-        }
-      })
-    );
+  override searchByName(term: string): Observable<Combo[]> {
+    return super.searchByName(term);
   }
 
 }

@@ -39,7 +39,7 @@ export class UserCombosComponent {
   }
 
   getCombos(): void {
-    this.comboService.combosCache$
+    this.comboService.cache$
       .subscribe(combos => this.combos = combos);
   }
 

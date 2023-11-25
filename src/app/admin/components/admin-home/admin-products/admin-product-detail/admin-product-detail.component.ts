@@ -43,13 +43,13 @@ export class AdminProductDetailComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.categoriesCache$.subscribe(categories => {
+    this.categoryService.cache$.subscribe(categories => {
       this.categories = categories;
     });
   }
 
   getProducts(): void {
-    this.productService.productsCache$.subscribe(product => {
+    this.productService.cache$.subscribe(product => {
       this.products = product
     });
   }

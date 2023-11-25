@@ -91,7 +91,7 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
         restaurantId: +this.restaurantTableForm.get('restaurantId')?.value
       };
 
-      this.restaurantTablesService.updateRestaurantTable(updatedRestaurantTable).subscribe(() => {
+      this.restaurantTablesService.update(updatedRestaurantTable).subscribe(() => {
       });
     }
   }

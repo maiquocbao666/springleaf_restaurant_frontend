@@ -72,7 +72,7 @@ export class UserCategoriesComponent {
   }
 
   getCategories(): void {
-    this.categoryService.categoriesCache$.subscribe(categories => {
+    this.categoryService.cache$.subscribe(categories => {
       this.categories$ = of(categories);
     });
   }

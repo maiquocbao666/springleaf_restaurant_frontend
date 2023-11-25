@@ -45,8 +45,8 @@ export class AdminCategoriesComponent {
   }
 
   getCategories(): void {
-    this.categoryService.categoriesCache$.subscribe(categories => {
-      this.categories = categories;
+    this.categoryService.cache$.subscribe(categories => {
+      this.categories = JSON.parse(localStorage.getItem("categories") || 'null');
     });
   }
 

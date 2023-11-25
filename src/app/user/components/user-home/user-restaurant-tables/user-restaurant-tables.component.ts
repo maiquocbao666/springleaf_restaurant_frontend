@@ -37,7 +37,7 @@ export class UserRestaurantTablesComponent {
   }
 
   getRestaurantTables(): void {
-    this.restaurantTableService.getRestaurantTables()
+    this.restaurantTableService.gets()
       .subscribe(restaurantTables => this.restaurantTables = restaurantTables);
   }
 
