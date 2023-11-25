@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { AuthenticationService } from './authentication.service';
+import { catchError, tap } from 'rxjs/operators';
 import { User } from '../interfaces/user';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,7 @@ export class ApiService {
   setUrl(uri: string) {
 
     this.baseUrl = 'http://localhost:8080/public/' + uri;
+    console.log('API Endpoint:', this.baseUrl);
     //this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
 
     //this.baseUrl = 'http://localhost:8080/public/' + uri;
