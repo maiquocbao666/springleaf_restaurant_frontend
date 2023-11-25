@@ -27,7 +27,7 @@ export class ReservationStatusService {
     }
 
     getReservationStatuses(): Observable<ReservationStatus[]> {
-        if (this.reservationStatusesCache.length > 0) {
+        if (this.reservationStatusesCache) {
             return of(this.reservationStatusesCache);
         }
 
@@ -63,11 +63,18 @@ export class ReservationStatusService {
         return of(reservationStatusFromCache || null);
     }
 
-    private isReservationStatusNameInCache(name: string): boolean {
-        return !!this.reservationStatusesCache?.find(
-            reservationStatus => reservationStatus.reservationStatusName.toLowerCase() === name.toLowerCase()
+    private isReservationStatusNameInCache(name: string, reservationStatusIdToExclude: number | null = null): boolean {
+        const isReservationStatusInCache = this.reservationStatusesCache?.some(
+          (cache) =>
+            cache.reservationStatusName.toLowerCase() === name.toLowerCase() && cache.reservationStatusId !== reservationStatusIdToExclude
         );
-    }
+    
+        if (isReservationStatusInCache) {
+          console.log("Danh mục này đã có rồi");
+        }
+    
+        return isReservationStatusInCache || false;
+      }
 
     addReservationStatus(newStatus: ReservationStatus): Observable<ReservationStatus> {
         if (this.reservationStatusesCache.length > 0) {

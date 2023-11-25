@@ -27,7 +27,7 @@ export class ReceiptDetailService {
     }
 
     getReceiptDetails(): Observable<ReceiptDetail[]> {
-        if (this.receiptDetailsCache.length > 0) {
+        if (this.receiptDetailsCache) {
             return of(this.receiptDetailsCache);
         }
 

@@ -27,7 +27,7 @@ export class CartDetailService {
   }
 
   getCartDetails(): Observable<CartDetail[]> {
-    if (this.cartDetailsCache.length > 0) {
+    if (this.cartDetailsCache) {
       return of(this.cartDetailsCache);
     }
 

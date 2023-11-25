@@ -28,7 +28,7 @@ export class IngredientService {
 
     getIngredients(): Observable<Ingredient[]> {
 
-        if (this.ingredientsCache.length > 0) {
+        if (this.ingredientsCache) {
             return of(this.ingredientsCache);
         }
 
@@ -44,7 +44,11 @@ export class IngredientService {
 
     getIngredientById(id: number): Observable<Ingredient> {
 
-        if (this.ingredientsCache.length === 0) {
+        if(!id){
+            return of();
+        }
+
+        if (!this.ingredientsCache) {
             this.getIngredients();
         }
 

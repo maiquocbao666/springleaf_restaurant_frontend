@@ -28,7 +28,7 @@ export class MenuItemIngredientService {
 
     getMenuItemIngredients(): Observable<MenuItemIngredient[]> {
 
-        if (this.menuItemIngredientsCache.length > 0) {
+        if (this.menuItemIngredientsCache) {
             return of(this.menuItemIngredientsCache);
         }
 

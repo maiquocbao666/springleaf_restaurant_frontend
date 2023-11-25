@@ -34,7 +34,7 @@ export class TableStatusService {
 
     getTableStatuses(): Observable<TableStatus[]> {
 
-        if (this.tableStatusesCache.length > 0) {
+        if (this.tableStatusesCache) {
             return of(this.tableStatusesCache);
         }
 
@@ -47,9 +47,18 @@ export class TableStatusService {
         return tableStatusesObservable;
     }
 
-    private isTableStatusNameInCache(name: string): boolean {
-        return !!this.tableStatusesCache?.find(tableStatus => tableStatus.tableStatusName.toLowerCase() === name.toLowerCase());
-    }
+    private isTableStatusNameInCache(name: string, tableStatusIdToExclude: number | null = null): boolean {
+        const isTableStautsInCache = this.tableStatusesCache?.some(
+          (cache) =>
+            cache.tableStatusName.toLowerCase() === name.toLowerCase() && cache.tableStatusId !== tableStatusIdToExclude
+        );
+    
+        if (isTableStautsInCache) {
+          console.log("Danh mục này đã có rồi");
+        }
+    
+        return isTableStautsInCache || false;
+      }
 
     addTableStatus(newTableStatus: TableStatus): Observable<TableStatus> {
 
@@ -60,6 +69,7 @@ export class TableStatusService {
         return this.apiService.request<TableStatus>('post', this.tableStatusUrl, newTableStatus).pipe(
             tap((addedTableStatus: TableStatus) => {
                 this.tableStatusesCache = [...this.tableStatusesCache, addedTableStatus];
+                localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
             })
         );
     }
@@ -75,6 +85,7 @@ export class TableStatusService {
         return this.apiService.request('put', url, updatedTableStatus).pipe(
             tap(() => {
                 this.updateCache(updatedTableStatus);
+                localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
             })
         );
     }
@@ -87,6 +98,7 @@ export class TableStatusService {
             tap(() => {
                 const updatedCache = this.tableStatusesCache.filter(tableStatus => tableStatus.tableStatusId !== id);
                 this.tableStatusesCache = updatedCache;
+                localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
             })
         );
     }

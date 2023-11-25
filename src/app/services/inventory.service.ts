@@ -28,7 +28,7 @@ export class InventoryService {
 
     getInventories(): Observable<Inventory[]> {
 
-        if (this.inventoriesCache.length > 0) {
+        if (this.inventoriesCache) {
             return of(this.inventoriesCache);
         }
 

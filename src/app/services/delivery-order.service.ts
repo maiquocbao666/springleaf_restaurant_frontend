@@ -27,7 +27,7 @@ export class DeliveryOrderService {
   }
 
   getDeliveryOrders(): Observable<DeliveryOrder[]> {
-    if (this.deliveryOrdersCache.length > 0) {
+    if (this.deliveryOrdersCache) {
       return of(this.deliveryOrdersCache);
     }
 

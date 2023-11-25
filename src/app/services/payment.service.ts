@@ -27,7 +27,7 @@ export class PaymentService {
   }
 
   getPayments(): Observable<Payment[]> {
-    if (this.paymentsCache.length > 0) {
+    if (this.paymentsCache) {
       return of(this.paymentsCache);
     }
 

@@ -34,7 +34,7 @@ export class RestaurantService {
 
     getRestaurants(): Observable<Restaurant[]> {
 
-        if (this.restaurantsCache.length > 0) {
+        if (this.restaurantsCache) {
             return of(this.restaurantsCache);
         }
 
@@ -72,9 +72,18 @@ export class RestaurantService {
         }
     }
 
-    private isRestaurantNameInCache(name: string): boolean {
-        return !!this.restaurantsCache?.find(restaurant => restaurant.restaurantName.toLowerCase() === name.toLowerCase());
-    }
+    private isRestaurantNameInCache(name: string, restaurantIdToExclude: number | null = null): boolean {
+        const isRestaurantInCache = this.restaurantsCache?.some(
+          (cache) =>
+            cache.restaurantName.toLowerCase() === name.toLowerCase() && cache.restaurantId !== restaurantIdToExclude
+        );
+    
+        if (isRestaurantInCache) {
+          console.log("Danh mục này đã có rồi");
+        }
+    
+        return isRestaurantInCache || false;
+      }
 
     addRestaurant(newRestaurant: Restaurant): Observable<Restaurant> {
 

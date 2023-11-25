@@ -33,7 +33,7 @@ export class ReservationService {
     }
 
     getReservations(): Observable<Reservation[]> {
-        if (this.reservationsCache.length > 0) {
+        if (this.reservationsCache) {
             return of(this.reservationsCache);
         }
 

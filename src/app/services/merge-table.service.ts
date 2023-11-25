@@ -28,7 +28,7 @@ export class MergeTableService {
 
     getMergeTables(): Observable<MergeTable[]> {
 
-        if (this.mergeTablesCache.length > 0) {
+        if (this.mergeTablesCache) {
             return of(this.mergeTablesCache);
         }
 

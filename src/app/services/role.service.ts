@@ -34,7 +34,7 @@ export class RoleService {
 
     getRoles(): Observable<Role[]> {
 
-        if (this.rolesCache.length > 0) {
+        if (this.rolesCache) {
             return of(this.rolesCache);
         }
 

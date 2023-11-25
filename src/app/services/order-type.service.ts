@@ -28,7 +28,7 @@ export class OrderTypeService {
 
     getOrderTypes(): Observable<OrderType[]> {
 
-        if (this.orderTypesCache.length > 0) {
+        if (this.orderTypesCache) {
             return of(this.orderTypesCache);
         }
 

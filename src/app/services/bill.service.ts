@@ -27,7 +27,7 @@ export class BillService {
   }
 
   getBills(): Observable<Bill[]> {
-    if (this.billsCache.length > 0) {
+    if (this.billsCache) {
       return of(this.billsCache);
     }
 
