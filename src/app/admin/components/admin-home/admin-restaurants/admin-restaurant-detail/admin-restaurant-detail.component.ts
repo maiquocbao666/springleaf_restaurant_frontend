@@ -63,7 +63,7 @@ export class AdminRestaurantDetailComponent {
         email: this.restaurantForm.get('email')?.value,
       };
   
-      this.restaurantService.updateRestaurant(updatedRestaurant).subscribe(() => {
+      this.restaurantService.update(updatedRestaurant).subscribe(() => {
       });
     }
   }

@@ -26,7 +26,7 @@ export class ReservationStatusService {
         this.reservationStatusesCacheSubject.next(value);
     }
 
-    getReservationStatuses(): Observable<ReservationStatus[]> {
+    gets(): Observable<ReservationStatus[]> {
         if (this.reservationStatusesCache) {
             return of(this.reservationStatusesCache);
         }
@@ -46,7 +46,7 @@ export class ReservationStatusService {
         }
 
         if (this.reservationStatusesCache.length === 0) {
-            return this.getReservationStatuses().pipe(
+            return this.gets().pipe(
                 map(reservationStatuses => {
                     const reservationStatusFromCache = reservationStatuses.find(
                         reservationStatus => reservationStatus.reservationStatusId === id
@@ -76,7 +76,7 @@ export class ReservationStatusService {
         return isReservationStatusInCache || false;
       }
 
-    addReservationStatus(newStatus: ReservationStatus): Observable<ReservationStatus> {
+    add(newStatus: ReservationStatus): Observable<ReservationStatus> {
         if (this.reservationStatusesCache.length > 0) {
             if (this.isReservationStatusNameInCache(newStatus.reservationStatusName)) {
                 return of();
@@ -90,7 +90,7 @@ export class ReservationStatusService {
         );
     }
 
-    updateReservationStatus(updatedReservationStatus: ReservationStatus): Observable<any> {
+    update(updatedReservationStatus: ReservationStatus): Observable<any> {
         if (this.reservationStatusesCache.length > 0) {
             if (this.isReservationStatusNameInCache(updatedReservationStatus.reservationStatusName)) {
                 return of();
@@ -109,7 +109,7 @@ export class ReservationStatusService {
         );
     }
 
-    deleteReservationStatus(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
         const url = `${this.reservationStatusUrl}/${id}`;
 
         return this.apiService.request('delete', url).pipe(

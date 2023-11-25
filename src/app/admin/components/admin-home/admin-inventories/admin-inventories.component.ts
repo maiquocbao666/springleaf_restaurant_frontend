@@ -64,7 +64,7 @@ export class AdminInventoriesComponent {
   }
 
   getIngredientById(ingredientId: number): Observable<Ingredient> {
-    return this.ingredientService.getIngredientById(ingredientId);
+    return this.ingredientService.getById(ingredientId);
   }
 
   getSupplierById(supplierId: number): Observable<Supplier | null> {
@@ -97,7 +97,7 @@ export class AdminInventoriesComponent {
       supplierId: supplierId
     };
 
-    this.inventoryService.addInventory(newInventory)
+    this.inventoryService.add(newInventory)
       .subscribe(inventory => {
         this.inventoryForm.reset();
       });
@@ -107,7 +107,7 @@ export class AdminInventoriesComponent {
 
     if (inventory.inventoryId) {
       this.inventories = this.inventories.filter(i => i !== inventory);
-      this.inventoryService.deleteInventory(inventory.inventoryId).subscribe();
+      this.inventoryService.delete(inventory.inventoryId).subscribe();
     } else {
       console.log("Không có inventoryId");
     }

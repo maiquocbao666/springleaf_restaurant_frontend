@@ -58,7 +58,7 @@ export class UserCombosComponent {
     const comboUser = this.comboForm.get('comboUser')?.value;
     const totalAmount = this.comboForm.get('totalAmount')?.value;
 
-    this.comboService.addCombo({ comboName, comboUser, totalAmount } as Combo)
+    this.comboService.add({ comboName, comboUser, totalAmount } as Combo)
       .subscribe(combo => {
         this.comboForm.reset();
       });
@@ -66,7 +66,7 @@ export class UserCombosComponent {
 
   deleteCombo(combo: Combo): void {
     if (combo.comboId) {
-        this.comboService.deleteCombo(combo.comboId).subscribe();
+        this.comboService.delete(combo.comboId).subscribe();
     } else {
         console.error("Combo ID is undefined. Cannot delete combo.");
     }

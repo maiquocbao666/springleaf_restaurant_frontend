@@ -69,15 +69,15 @@ export class AdminEventsComponent {
   }
 
   getCartById(orderId: number): Observable<Cart> {
-    return this.cartService.getCartById(orderId);
+    return this.cartService.getById(orderId);
   }
 
   getComboById(comboId: number): Observable<Combo> {
-    return this.comboService.getComboById(comboId);
+    return this.comboService.getById(comboId);
   }
 
   getCarts(): void {
-    this.cartService.getCarts()
+    this.cartService.gets()
       .subscribe(carts => this.carts = carts);
   }
 
@@ -103,7 +103,7 @@ export class AdminEventsComponent {
       order: order,
     };
 
-    this.eventService.addEvent(newEvent)
+    this.eventService.add(newEvent)
       .subscribe(event => {
         this.eventForm.reset();
       });
@@ -113,7 +113,7 @@ export class AdminEventsComponent {
   deleteEvent(event: Event): void {
 
     if (event.eventId) {
-      this.eventService.deleteEvent(event.eventId).subscribe();
+      this.eventService.delete(event.eventId).subscribe();
     } else {
       console.log("Không có eventId");
     }

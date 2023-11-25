@@ -26,7 +26,7 @@ export class BillDetailService {
     this.billDetailsCacheSubject.next(value);
   }
 
-  getBillDetails(): Observable<BillDetail[]> {
+  gets(): Observable<BillDetail[]> {
     if (this.billDetailsCache) {
       return of(this.billDetailsCache);
     }
@@ -40,7 +40,7 @@ export class BillDetailService {
     return billDetailsObservable;
   }
 
-  addBillDetail(newBillDetail: BillDetail): Observable<BillDetail> {
+  add(newBillDetail: BillDetail): Observable<BillDetail> {
     return this.apiService.request<BillDetail>('post', this.billDetailUrl, newBillDetail).pipe(
       tap((addedBillDetail: BillDetail) => {
         this.billDetailsCache = [...this.billDetailsCache, addedBillDetail];
@@ -49,7 +49,7 @@ export class BillDetailService {
     );
   }
 
-  updateBillDetail(updatedBillDetail: BillDetail): Observable<any> {
+  update(updatedBillDetail: BillDetail): Observable<any> {
     const url = `${this.billDetailUrl}/${updatedBillDetail.billDetailId}`;
 
     return this.apiService.request('put', url, updatedBillDetail).pipe(
@@ -66,7 +66,7 @@ export class BillDetailService {
     );
   }
 
-  deleteBillDetail(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     if (!id) {
       return of(null);
     }

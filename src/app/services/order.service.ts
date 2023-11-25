@@ -26,7 +26,7 @@ export class OrderService {
     this.ordersCacheSubject.next(value);
   }
 
-  getOrders(): Observable<Order[]> {
+  gets(): Observable<Order[]> {
     if (this.ordersCache) {
       return of(this.ordersCache);
     }
@@ -40,13 +40,13 @@ export class OrderService {
     return ordersObservable;
   }
 
-  getOrderById(id: number): Observable<Order | null> {
+  getById(id: number): Observable<Order | null> {
     if (!id) {
       return of(null);
     }
 
     if (!this.ordersCache) {
-      this.getOrders();
+      this.gets();
     }
 
     const orderFromCache = this.ordersCache.find(order => order.orderId === id);
@@ -59,7 +59,7 @@ export class OrderService {
     }
   }
 
-  addOrder(newOrder: Order): Observable<Order> {
+  add(newOrder: Order): Observable<Order> {
     return this.apiService.request<Order>('post', this.orderUrl, newOrder).pipe(
       tap((addedOrder: Order) => {
         this.ordersCache = [...this.ordersCache, addedOrder];
@@ -68,17 +68,17 @@ export class OrderService {
     );
   }
 
-  updateOrder(updatedOrder: Order): Observable<Order> {
+  update(updatedOrder: Order): Observable<Order> {
     const url = `${this.orderUrl}/${updatedOrder.orderId}`;
 
     return this.apiService.request<Order>('put', url, updatedOrder).pipe(
       tap((response: Order) => {
-        this.updateOrderCache(response);
+        this.updateCache(response);
       })
     );
   }
 
-  deleteOrder(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.orderUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(
@@ -89,7 +89,7 @@ export class OrderService {
     );
   }
 
-  updateOrderCache(updatedOrder: Order): void {
+  updateCache(updatedOrder: Order): void {
     if (this.ordersCache) {
       const index = this.ordersCache.findIndex(ord => ord.orderId === updatedOrder.orderId);
 

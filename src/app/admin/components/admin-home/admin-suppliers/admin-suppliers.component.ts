@@ -68,7 +68,7 @@ export class AdminSuppliersComponent {
       email: email
     };
 
-    this.supplierService.addSupplier(newSupplier)
+    this.supplierService.add(newSupplier)
       .subscribe(supplier => {
         this.supplierForm.reset();
       });
@@ -77,7 +77,7 @@ export class AdminSuppliersComponent {
   deleteSupplier(supplier: Supplier): void {
 
     if (supplier.supplierId) {
-      this.supplierService.deleteSupplier(supplier.supplierId).subscribe();
+      this.supplierService.delete(supplier.supplierId).subscribe();
     } else {
       console.log("Không có supplierId");
     }

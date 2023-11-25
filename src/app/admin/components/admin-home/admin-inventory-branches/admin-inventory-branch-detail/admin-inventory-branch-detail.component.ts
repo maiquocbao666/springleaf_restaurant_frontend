@@ -86,7 +86,7 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
         restaurantId: +this.inventoryBranchForm.get('restaurantId')?.value
       };
 
-      this.inventoryBranchService.updateInventoryBranch(updateInventoryBranch).subscribe(() => {
+      this.inventoryBranchService.update(updateInventoryBranch).subscribe(() => {
         //this.inventoryBranchSaved.emit(); // Emit the event
       });
     }

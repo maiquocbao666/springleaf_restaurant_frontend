@@ -26,7 +26,7 @@ export class EventService {
     this.eventsCacheSubject.next(value);
   }
 
-  getEvents(): Observable<Event[]> {
+  gets(): Observable<Event[]> {
     if (this.eventsCache) {
       return of(this.eventsCache);
     }
@@ -53,7 +53,7 @@ export class EventService {
     return isEventInCache || false;
   }
 
-  addEvent(newEvent: Event): Observable<Event> {
+  add(newEvent: Event): Observable<Event> {
     if (this.isEventNameInCache(newEvent.eventName)) {
       // Nếu đã có sự kiện có tên tương tự, trả về Observable với giá trị hiện tại
       return of();
@@ -67,7 +67,7 @@ export class EventService {
     );
   }
 
-  updateEvent(updatedEvent: Event): Observable<any> {
+  update(updatedEvent: Event): Observable<any> {
     if (this.isEventNameInCache(updatedEvent.eventName, updatedEvent.eventId)) {
       // Nếu đã có sự kiện có tên tương tự, trả về Observable với giá trị hiện tại
       return of();
@@ -87,7 +87,7 @@ export class EventService {
     );
   }
 
-  deleteEvent(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     if (!id) {
       return of(null);
     }

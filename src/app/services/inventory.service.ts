@@ -26,7 +26,7 @@ export class InventoryService {
         this.inventoriesCacheSubject.next(value);
     }
 
-    getInventories(): Observable<Inventory[]> {
+    gets(): Observable<Inventory[]> {
 
         if (this.inventoriesCache) {
             return of(this.inventoriesCache);
@@ -41,7 +41,9 @@ export class InventoryService {
         return inventoriesObservable;
     }
 
-    addInventory(newInventory: Inventory): Observable<Inventory> {
+    
+
+    add(newInventory: Inventory): Observable<Inventory> {
 
         return this.apiService.request<Inventory>('post', this.inventoryUrl, newInventory).pipe(
 
@@ -56,7 +58,7 @@ export class InventoryService {
 
     }
 
-    updateInventory(updatedInventory: Inventory): Observable<any> {
+    update(updatedInventory: Inventory): Observable<any> {
 
         const url = `${this.inventoryUrl}/${updatedInventory.inventoryId}`;
 
@@ -64,7 +66,7 @@ export class InventoryService {
 
             tap(() => {
 
-                this.updateInventoryCache(updatedInventory);
+                this.updateCache(updatedInventory);
 
                 const index = this.inventoriesCache!.findIndex(inventory => inventory.inventoryId === updatedInventory.inventoryId);
 
@@ -81,7 +83,7 @@ export class InventoryService {
 
     }
 
-    updateInventoryCache(updatedInventory: Inventory): void {
+    updateCache(updatedInventory: Inventory): void {
 
         if (this.inventoriesCache) {
 
@@ -97,7 +99,7 @@ export class InventoryService {
 
     }
 
-    deleteInventory(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.inventoryUrl}/${id}`;
 

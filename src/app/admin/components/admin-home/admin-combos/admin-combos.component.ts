@@ -69,7 +69,7 @@ export class AdminCombosComponent {
       totalAmount: totalAmount
     };
 
-    this.comboService.addCombo(newCombo)
+    this.comboService.add(newCombo)
       .subscribe(combo => {
         this.comboForm.reset();
       });
@@ -78,7 +78,7 @@ export class AdminCombosComponent {
   deleteCombo(combo: Combo): void {
 
     if (combo.comboId) {
-      this.comboService.deleteCombo(combo.comboId).subscribe();
+      this.comboService.delete(combo.comboId).subscribe();
     } else {
       console.log("Không có comboId");
     }

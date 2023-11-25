@@ -53,7 +53,7 @@ export class UserComboDetailComponent {
         totalAmount: this.comboForm.get('totalAmount')?.value,
       };
 
-      this.comboService.updateCombo(updatedCombo).subscribe(() => {
+      this.comboService.update(updatedCombo).subscribe(() => {
       });
     }
   }

@@ -75,7 +75,7 @@ export class AdminRestaurantsComponent {
         email: email,
       }
 
-      this.restaurantService.addRestaurant(newRestaurant)
+      this.restaurantService.add(newRestaurant)
         .subscribe(restaurant => {
           this.restaurantForm.reset();
         });
@@ -87,7 +87,7 @@ export class AdminRestaurantsComponent {
   deleteRestaurant(restaurant: Restaurant): void {
 
     if (restaurant.restaurantId) {
-      this.restaurantService.deleteRestaurant(restaurant.restaurantId).subscribe();
+      this.restaurantService.delete(restaurant.restaurantId).subscribe();
     } else {
       console.log("Không có restaurantId");
     }

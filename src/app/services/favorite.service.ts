@@ -26,7 +26,7 @@ export class FavoriteService {
     this.favoritesCacheSubject.next(value);
   }
 
-  getFavorites(): Observable<Favorite[]> {
+  gets(): Observable<Favorite[]> {
     if (this.favoritesCache) {
       console.log("Có favorites cache");
       return of(this.favoritesCache);
@@ -45,7 +45,7 @@ export class FavoriteService {
     return !!this.favoritesCache?.find(favorite => favorite.menuItem === menuItemId);
   }
 
-  addFavorite(newFavorite: Favorite): Observable<Favorite> {
+  add(newFavorite: Favorite): Observable<Favorite> {
     if (this.isMenuItemIdInCache(newFavorite.menuItem)) {
       return of();
     }
@@ -58,7 +58,7 @@ export class FavoriteService {
     );
   }
 
-  updateFavorite(updatedFavorite: Favorite): Observable<any> {
+  update(updatedFavorite: Favorite): Observable<any> {
     if (this.isMenuItemIdInCache(updatedFavorite.menuItem)) {
       return of();
     }
@@ -77,7 +77,7 @@ export class FavoriteService {
     );
   }
 
-  deleteFavorite(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.favoriteUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(

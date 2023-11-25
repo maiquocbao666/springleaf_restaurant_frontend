@@ -105,7 +105,7 @@ export class AdminTableStatusesComponent {
       tableStatusName: name,
     }
 
-    this.tableStatusService.addTableStatus(newTableStatus)
+    this.tableStatusService.add(newTableStatus)
       .subscribe(tableStatus => {
         this.tableStatusForm.reset();
       });
@@ -122,7 +122,7 @@ export class AdminTableStatusesComponent {
       }
 
       this.tableStatuses = this.tableStatuses.filter(i => i !== tableStatus);
-      this.tableStatusService.deleteTableStatus(tableStatus.tableStatusId).subscribe();
+      this.tableStatusService.delete(tableStatus.tableStatusId).subscribe();
 
     } else {
       console.log("Không có tableStautsId");

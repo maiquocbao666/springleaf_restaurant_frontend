@@ -32,7 +32,7 @@ export class SupplierService {
         }
     }
 
-    getSuppliers(): Observable<Supplier[]> {
+    gets(): Observable<Supplier[]> {
 
         if (this.suppliersCache) {
             return of(this.suppliersCache);
@@ -60,7 +60,7 @@ export class SupplierService {
         return isSupplierInCache || false;
       }
 
-    addSupplier(newSupplier: Supplier): Observable<Supplier> {
+    add(newSupplier: Supplier): Observable<Supplier> {
 
         if (this.isSupplierNameInCache(newSupplier.supplierName)) {
             return of();
@@ -74,7 +74,7 @@ export class SupplierService {
         );
     }
 
-    updateSupplier(updatedSupplier: Supplier): Observable<any> {
+    update(updatedSupplier: Supplier): Observable<any> {
 
         if (this.isSupplierNameInCache(updatedSupplier.supplierName)) {
             return of();
@@ -90,7 +90,7 @@ export class SupplierService {
         );
     }
 
-    deleteSupplier(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.supplierUrl}/${id}`;
 

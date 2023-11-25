@@ -26,7 +26,7 @@ export class ComboService {
     this.combosCacheSubject.next(value);
   }
 
-  getCombos(): Observable<Combo[]> {
+  gets(): Observable<Combo[]> {
     if (this.combosCache) {
       return of(this.combosCache);
     }
@@ -40,14 +40,14 @@ export class ComboService {
     return combosObservable;
   }
 
-  getComboById(id: number): Observable<Combo> {
+  getById(id: number): Observable<Combo> {
 
     if(!id){
       return of();
     }
 
     if (!this.combosCache.length) {
-      this.getCombos();
+      this.gets();
     }
 
     const comboFromCache = this.combosCache.find(combo => combo.comboId === id);
@@ -73,7 +73,7 @@ export class ComboService {
     return isComboInCache || false;
   }
 
-  addCombo(newCombo: Combo): Observable<Combo> {
+  add(newCombo: Combo): Observable<Combo> {
     if (this.combosCache) {
       if (this.isComboNameInCache(newCombo.comboName)) {
         return of();
@@ -88,7 +88,7 @@ export class ComboService {
     );
   }
 
-  updateCombo(updatedCombo: Combo): Observable<any> {
+  update(updatedCombo: Combo): Observable<any> {
     if (this.combosCache) {
       if (this.isComboNameInCache(updatedCombo.comboName)) {
         return of();
@@ -119,7 +119,7 @@ export class ComboService {
     }
   }
 
-  deleteCombo(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.comboUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(

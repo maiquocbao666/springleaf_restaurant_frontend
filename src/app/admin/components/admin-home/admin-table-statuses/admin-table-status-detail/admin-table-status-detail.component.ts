@@ -54,7 +54,7 @@ export class AdminTableStatusDetailComponent  implements OnInit {
         tableStatusName: this.tableStatusForm.get('name')?.value,
       };
 
-      this.tableStatusService.updateTableStatus(updatedTableStatus).subscribe(() => {
+      this.tableStatusService.update(updatedTableStatus).subscribe(() => {
       });
     }
   }

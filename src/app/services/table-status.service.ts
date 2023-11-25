@@ -32,7 +32,7 @@ export class TableStatusService {
         }
     }
 
-    getTableStatuses(): Observable<TableStatus[]> {
+    gets(): Observable<TableStatus[]> {
 
         if (this.tableStatusesCache) {
             return of(this.tableStatusesCache);
@@ -60,7 +60,7 @@ export class TableStatusService {
         return isTableStautsInCache || false;
       }
 
-    addTableStatus(newTableStatus: TableStatus): Observable<TableStatus> {
+    add(newTableStatus: TableStatus): Observable<TableStatus> {
 
         if (this.isTableStatusNameInCache(newTableStatus.tableStatusName)) {
             return of();
@@ -74,7 +74,7 @@ export class TableStatusService {
         );
     }
 
-    updateTableStatus(updatedTableStatus: TableStatus): Observable<any> {
+    update(updatedTableStatus: TableStatus): Observable<any> {
 
         if (this.isTableStatusNameInCache(updatedTableStatus.tableStatusName)) {
             return of();
@@ -90,7 +90,7 @@ export class TableStatusService {
         );
     }
 
-    deleteTableStatus(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.tableStatusUrl}/${id}`;
 

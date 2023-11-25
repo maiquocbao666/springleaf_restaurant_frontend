@@ -26,7 +26,7 @@ export class OrderTypeService {
         this.orderTypesCacheSubject.next(value);
     }
 
-    getOrderTypes(): Observable<OrderType[]> {
+    gets(): Observable<OrderType[]> {
 
         if (this.orderTypesCache) {
             return of(this.orderTypesCache);
@@ -52,7 +52,7 @@ export class OrderTypeService {
         }
     }
 
-    addOrderType(newOrderType: OrderType): Observable<OrderType> {
+    add(newOrderType: OrderType): Observable<OrderType> {
 
         if (this.isOrderTypeNameInCache(newOrderType.name)) {
             return of();
@@ -71,7 +71,7 @@ export class OrderTypeService {
 
     }
 
-    updateOrderType(updatedOrderType: OrderType): Observable<any> {
+    update(updatedOrderType: OrderType): Observable<any> {
 
         if (this.isOrderTypeNameInCache(updatedOrderType.name)) {
             return of();
@@ -83,7 +83,7 @@ export class OrderTypeService {
 
             tap(() => {
 
-                this.updateOrderTypeCache(updatedOrderType);
+                this.updateCache(updatedOrderType);
 
                 const index = this.orderTypesCache!.findIndex(orderType => orderType.orderTypeId === updatedOrderType.orderTypeId);
 
@@ -100,7 +100,7 @@ export class OrderTypeService {
 
     }
 
-    updateOrderTypeCache(updatedOrderType: OrderType): void {
+    updateCache(updatedOrderType: OrderType): void {
 
         if (this.orderTypesCache) {
 
@@ -116,7 +116,7 @@ export class OrderTypeService {
 
     }
 
-    deleteOrderType(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.orderTypeUrl}/${id}`;
 

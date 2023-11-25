@@ -72,7 +72,7 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProducts(): void {
-    this.productService.getProducts()
+    this.productService.gets()
       .subscribe(products => {
         this.products = products;
         this.remainingProducts = this.products.length - this.visibleProductCount;

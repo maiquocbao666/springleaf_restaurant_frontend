@@ -48,7 +48,7 @@ export class UserProductDetailComponent {
       .subscribe(categories => this.categories = categories);
   }
   getProducts(): void {
-    this.productService.getProducts()
+    this.productService.gets()
       .subscribe(product => this.products = product);
   }
 

@@ -32,7 +32,7 @@ export class TableTypeService {
     }
   }
 
-  getTableTypes(): Observable<TableType[]> {
+  gets(): Observable<TableType[]> {
 
     if (this.tableTypesCache) {
       return of(this.tableTypesCache);
@@ -60,7 +60,7 @@ export class TableTypeService {
     return isTableTypeInCache || false;
   }
 
-  addTableType(newTableType: TableType): Observable<TableType> {
+  add(newTableType: TableType): Observable<TableType> {
 
     if (this.isTableTypeNameInCache(newTableType.tableTypeName)) {
       return of();
@@ -73,7 +73,7 @@ export class TableTypeService {
     );
   }
 
-  updateTableType(updatedTableType: TableType): Observable<any> {
+  update(updatedTableType: TableType): Observable<any> {
 
     if (this.isTableTypeNameInCache(updatedTableType.tableTypeName)) {
       return of();
@@ -88,7 +88,7 @@ export class TableTypeService {
     );
   }
 
-  deleteTableType(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
 
     const url = `${this.tableTypeUrl}/${id}`;
 

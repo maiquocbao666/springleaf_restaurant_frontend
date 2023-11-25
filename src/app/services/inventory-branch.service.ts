@@ -26,7 +26,7 @@ export class InventoryBranchService {
         this.inventoryBranchesCacheSubject.next(value);
     }
 
-    getInventoryBranches(): Observable<InventoryBranch[]> {
+    gets(): Observable<InventoryBranch[]> {
         if (this.inventoryBranchesCache) {
             return of(this.inventoryBranchesCache);
         }
@@ -40,14 +40,14 @@ export class InventoryBranchService {
         return inventoryBranchesObservable;
     }
 
-    getInventoryBranchById(id: number): Observable<InventoryBranch> {
+    getById(id: number): Observable<InventoryBranch> {
 
         if(!id){
             return of();
         }
 
         if (!this.inventoryBranchesCache) {
-            this.getInventoryBranches();
+            this.gets();
         }
 
         const inventoryBranchFromCache = this.inventoryBranchesCache.find(branch => branch.inventoryBranchId === id);
@@ -70,7 +70,7 @@ export class InventoryBranchService {
     //     }
     // }
 
-    addInventoryBranch(newInventoryBranch: InventoryBranch): Observable<InventoryBranch> {
+    add(newInventoryBranch: InventoryBranch): Observable<InventoryBranch> {
         // if (this.isInventoryBranchNameInCache(newInventoryBranch.)) {
         //     // Nếu đã có chi nhánh có tên tương tự, trả về Observable với giá trị hiện tại
         //     return of();
@@ -84,7 +84,7 @@ export class InventoryBranchService {
         );
     }
 
-    updateInventoryBranch(updatedInventoryBranch: InventoryBranch): Observable<any> {
+    update(updatedInventoryBranch: InventoryBranch): Observable<any> {
         // if (this.isInventoryBranchNameInCache(updatedInventoryBranch.name)) {
         //     // Nếu đã có chi nhánh có tên tương tự, trả về Observable với giá trị hiện tại
         //     return of();
@@ -103,7 +103,7 @@ export class InventoryBranchService {
         );
     }
 
-    updateInventoryBranchCache(updatedInventoryBranch: InventoryBranch): void {
+    updateCache(updatedInventoryBranch: InventoryBranch): void {
         if (this.inventoryBranchesCache) {
             const index = this.inventoryBranchesCache.findIndex(branch => branch.inventoryBranchId === updatedInventoryBranch.inventoryBranchId);
             if (index !== -1) {
@@ -112,7 +112,7 @@ export class InventoryBranchService {
         }
     }
 
-    deleteInventoryBranch(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
         const url = `${this.inventoryBranchUrl}/${id}`;
         return this.apiService.request('delete', url).pipe(
             tap(() => {

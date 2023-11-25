@@ -52,7 +52,7 @@ export class AdminComboDetailComponent implements OnInit {
         totalAmount: +this.comboForm.get('totalAmount')?.value,
       };
 
-      this.comboService.updateCombo(updatedCombo).subscribe(() => {
+      this.comboService.update(updatedCombo).subscribe(() => {
         // Cập nhật cache
         this.comboService.updateComboCache(updatedCombo);
         this.comboSaved.emit(); // Emit the event

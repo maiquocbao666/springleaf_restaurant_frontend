@@ -130,7 +130,7 @@ export class UserRestaurantTableInfomationComponent {
       reservationStatusId: reservationStatusId
     };
 
-    this.reservationService.addReservation(newReservation).subscribe(
+    this.reservationService.add(newReservation).subscribe(
       {
         next: (addedReservation) => {
           console.log("Đặt bàn thành công");

@@ -66,9 +66,9 @@ export class AdminReceiptDetailComponent {
         inventory: +this.receiptForm.get('inventory')?.value,
       };
   
-      this.receiptService.updateReceipt(updatedReceipt).subscribe(() => {
+      this.receiptService.update(updatedReceipt).subscribe(() => {
         // Cập nhật cache
-        this.receiptService.updateReceiptCache(updatedReceipt);
+        this.receiptService.updateCache(updatedReceipt);
         this.receiptSaved.emit(); // Emit the event
       });
     }

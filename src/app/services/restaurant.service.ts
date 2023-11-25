@@ -23,7 +23,7 @@ export class RestaurantService {
         this.restaurantsCacheSubject.next(value);
     }
 
-    getRestaurants(): Observable<Restaurant[]> {
+    gets(): Observable<Restaurant[]> {
 
         if (this.restaurantsCache) {
             return of(this.restaurantsCache);
@@ -46,7 +46,7 @@ export class RestaurantService {
 
         if (!this.restaurantsCache.length) {
 
-            this.getRestaurants();
+            this.gets();
         }
 
         const restaurantFromCache = this.restaurantsCache.find(restaurant => restaurant.restaurantId === id);
@@ -76,7 +76,7 @@ export class RestaurantService {
         return isRestaurantInCache || false;
     }
 
-    addRestaurant(newRestaurant: Restaurant): Observable<Restaurant> {
+    add(newRestaurant: Restaurant): Observable<Restaurant> {
 
         if (this.isRestaurantNameInCache(newRestaurant.restaurantName)) {
             return of();
@@ -90,7 +90,7 @@ export class RestaurantService {
         );
     }
 
-    updateRestaurant(updatedRestaurant: Restaurant): Observable<any> {
+    update(updatedRestaurant: Restaurant): Observable<any> {
 
         if (this.isRestaurantNameInCache(updatedRestaurant.restaurantName, updatedRestaurant.restaurantId)) {
             return of();
@@ -109,7 +109,7 @@ export class RestaurantService {
         );
     }
 
-    deleteRestaurant(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.restaurantUrl}/${id}`;
 

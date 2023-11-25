@@ -64,7 +64,7 @@ export class AdminIngredientsComponent {
       orderThreshold: orderThreshold
     }
 
-    this.ingredientService.addIngredient(newIngredient)
+    this.ingredientService.add(newIngredient)
       .subscribe(ingredient => {
         this.ingredientForm.reset();
       });
@@ -73,7 +73,7 @@ export class AdminIngredientsComponent {
   deleteIngredient(ingredient: Ingredient): void {
 
     if (ingredient.ingredientId) {
-      this.ingredientService.deleteIngredient(ingredient.ingredientId).subscribe();
+      this.ingredientService.delete(ingredient.ingredientId).subscribe();
     } else {
       console.log("Không có ingredientId");
     }

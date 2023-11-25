@@ -26,7 +26,7 @@ export class DeliveryOrderService {
     this.deliveryOrdersCacheSubject.next(value);
   }
 
-  getDeliveryOrders(): Observable<DeliveryOrder[]> {
+  gets(): Observable<DeliveryOrder[]> {
     if (this.deliveryOrdersCache) {
       return of(this.deliveryOrdersCache);
     }
@@ -40,7 +40,7 @@ export class DeliveryOrderService {
     return deliveryOrdersObservable;
   }
 
-  addDeliveryOrder(newDeliveryOrder: DeliveryOrder): Observable<DeliveryOrder> {
+  add(newDeliveryOrder: DeliveryOrder): Observable<DeliveryOrder> {
     return this.apiService.request<DeliveryOrder>('post', this.deliveryOrderUrl, newDeliveryOrder).pipe(
       tap((addedDeliveryOrder: DeliveryOrder) => {
         this.deliveryOrdersCache = [...this.deliveryOrdersCache, addedDeliveryOrder];
@@ -49,7 +49,7 @@ export class DeliveryOrderService {
     );
   }
 
-  updateDeliveryOrder(updatedDeliveryOrder: DeliveryOrder): Observable<any> {
+  update(updatedDeliveryOrder: DeliveryOrder): Observable<any> {
     const url = `${this.deliveryOrderUrl}/${updatedDeliveryOrder.deliveryOrderId}`;
 
     return this.apiService.request('put', url, updatedDeliveryOrder).pipe(
@@ -66,7 +66,7 @@ export class DeliveryOrderService {
     );
   }
 
-  deleteDeliveryOrder(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     if (!id) {
       return of(null);
     }

@@ -26,7 +26,7 @@ export class ReceiptService {
         this.receiptsCacheSubject.next(value);
     }
 
-    getReceipts(): Observable<Receipt[]> {
+    gets(): Observable<Receipt[]> {
         if (this.receiptsCache) {
             return of(this.receiptsCache);
         }
@@ -40,7 +40,7 @@ export class ReceiptService {
         return receiptsObservable;
     }
 
-    addReceipt(newReceipt: Receipt): Observable<Receipt> {
+    add(newReceipt: Receipt): Observable<Receipt> {
         return this.apiService.request<Receipt>('post', this.receiptUrl, newReceipt).pipe(
             tap((addedReceipt: Receipt) => {
                 this.receiptsCache = [...this.receiptsCache, addedReceipt];
@@ -49,17 +49,17 @@ export class ReceiptService {
         );
     }
 
-    updateReceipt(updatedReceipt: Receipt): Observable<any> {
+    update(updatedReceipt: Receipt): Observable<any> {
         const url = `${this.receiptUrl}/${updatedReceipt.receiptId}`;
 
         return this.apiService.request('put', url, updatedReceipt).pipe(
             tap(() => {
-                this.updateReceiptCache(updatedReceipt);
+                this.updateCache(updatedReceipt);
             })
         );
     }
 
-    deleteReceipt(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
         const url = `${this.receiptUrl}/${id}`;
 
         return this.apiService.request('delete', url).pipe(
@@ -70,7 +70,7 @@ export class ReceiptService {
         );
     }
 
-    updateReceiptCache(updatedReceipt: Receipt): void {
+    updateCache(updatedReceipt: Receipt): void {
         if (this.receiptsCache) {
             const index = this.receiptsCache.findIndex(receipt => receipt.receiptId === updatedReceipt.receiptId);
 

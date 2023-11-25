@@ -26,7 +26,7 @@ export class MenuItemIngredientService {
         this.menuItemIngredientsCacheSubject.next(value);
     }
 
-    getMenuItemIngredients(): Observable<MenuItemIngredient[]> {
+    gets(): Observable<MenuItemIngredient[]> {
 
         if (this.menuItemIngredientsCache) {
             return of(this.menuItemIngredientsCache);
@@ -42,7 +42,7 @@ export class MenuItemIngredientService {
 
     }
 
-    addMenuItemIngredient(newMenuItemIngredient: MenuItemIngredient): Observable<MenuItemIngredient> {
+    add(newMenuItemIngredient: MenuItemIngredient): Observable<MenuItemIngredient> {
 
         return this.apiService.request<MenuItemIngredient>('post', this.menuItemIngredientUrl, newMenuItemIngredient).pipe(
 
@@ -57,7 +57,7 @@ export class MenuItemIngredientService {
 
     }
 
-    updateMenuItemIngredient(updatedMenuItemIngredient: MenuItemIngredient): Observable<any> {
+    update(updatedMenuItemIngredient: MenuItemIngredient): Observable<any> {
 
         const url = `${this.menuItemIngredientUrl}/${updatedMenuItemIngredient.menuItemIngredientId}`;
 
@@ -65,7 +65,7 @@ export class MenuItemIngredientService {
 
             tap(() => {
 
-                this.updateMenuItemIngredientCache(updatedMenuItemIngredient);
+                this.updateCache(updatedMenuItemIngredient);
 
                 const index = this.menuItemIngredientsCache!.findIndex(itemIngredient => itemIngredient.menuItemIngredientId === updatedMenuItemIngredient.menuItemIngredientId);
 
@@ -82,7 +82,7 @@ export class MenuItemIngredientService {
 
     }
 
-    updateMenuItemIngredientCache(updatedMenuItemIngredient: MenuItemIngredient): void {
+    updateCache(updatedMenuItemIngredient: MenuItemIngredient): void {
 
         if (this.menuItemIngredientsCache) {
 
@@ -98,7 +98,7 @@ export class MenuItemIngredientService {
 
     }
 
-    deleteMenuItemIngredient(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.menuItemIngredientUrl}/${id}`;
 

@@ -63,7 +63,7 @@ export class AdminGoodsReceiptsComponent {
   }
 
   getInventoryBranchById(inventoryBranchId: number): Observable<InventoryBranch> {
-    return this.inventoryBranchService.getInventoryBranchById(inventoryBranchId);
+    return this.inventoryBranchService.getById(inventoryBranchId);
   }
 
   addGoodsReceipt(): void {
@@ -72,7 +72,7 @@ export class AdminGoodsReceiptsComponent {
     const warehouseManager = this.goodsReceiptForm.get('warehouseManager')?.value;
     const user = this.goodsReceiptForm.get('user')?.value;
 
-    this.goodsReceiptService.addGoodsReceipt({ inventoryBranch, date, warehouseManager, user } as GoodsReceipt)
+    this.goodsReceiptService.add({ inventoryBranch, date, warehouseManager, user } as GoodsReceipt)
       .subscribe(goodsReceipt => {
         this.goodsReceiptForm.reset();
       });
@@ -81,7 +81,7 @@ export class AdminGoodsReceiptsComponent {
   deleteGoodsReceipt(goodsReceipt: GoodsReceipt): void {
 
     if(goodsReceipt.goodsReceiptId){
-      this.goodsReceiptService.deleteGoodsReceipt(goodsReceipt.goodsReceiptId).subscribe();
+      this.goodsReceiptService.delete(goodsReceipt.goodsReceiptId).subscribe();
     } else {
       console.log("Không có goodsReceiptId");
     }
