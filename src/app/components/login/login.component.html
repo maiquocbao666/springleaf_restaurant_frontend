@@ -46,7 +46,7 @@
             <!-- <span>or use your account</span> -->
             <input type="text" id="usernameLogin" placeholder="Enter Username" formControlName="username" />
             <input type="password" id="passwordLogin" placeholder="Enter Password" formControlName="password" />
-            <a href="#">Forgot your password?</a>
+            <a (click)="openUserPasswordModel()">Forgot your password?</a>
             <button type="submit" #signIn>Sign In</button>
             <a class="google-a-button" (click)="loginWithGoogle()">LOGIN WITH GOOGLE <i class="fab fa-google-plus-g"></i></a>
         </form>

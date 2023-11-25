@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 addEventListener('message', async (event) => {
-    const { type, loginData, token, tokenUser, email } = event.data;
+    const { type, loginData, token, tokenUser, email, password } = event.data;
     console.log("Call all this User Apis Worker Works", type);
     //const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
     const domain = 'http://localhost:8080/auth';
@@ -45,6 +45,101 @@ addEventListener('message', async (event) => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(loginData),
+                }),
+
+            ]);
+            
+            const responseData = await Promise.all(responses.map(async (response) => {
+                if (response.ok) {
+                    return await response.json();
+                } else {
+                    return null;
+                }
+            }));
+
+            const dataMap = {
+                loginResponse: responseData[0],
+            }
+            postMessage(dataMap);
+
+        } catch {
+
+        }
+    };
+    if (type === 'config-password') {
+        const accessToken = token;
+        try {
+            const responses = await Promise.all([
+                fetch(`${domain}/config-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: password,
+                }),
+
+            ]);
+            
+            const responseData = await Promise.all(responses.map(async (response) => {
+                if (response.ok) {
+                    return await response.text();
+                } else {
+                    return null;
+                }
+            }));
+
+            const dataMap = {
+                configPasswordResponse: responseData[0],
+            }
+            postMessage(dataMap);
+            console.log(dataMap.configPasswordResponse)
+        } catch {
+
+        }
+    };
+    if (type === 'change-password') {
+        const accessToken = token;
+        try {
+            const responses = await Promise.all([
+                fetch(`${domain}/change-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: password,
+                }),
+
+            ]);
+            
+            const responseData = await Promise.all(responses.map(async (response) => {
+                if (response.ok) {
+                    return await response.text();
+                } else {
+                    return null;
+                }
+            }));
+
+            const dataMap = {
+                changePasswordResponse: responseData[0],
+            }
+            postMessage(dataMap);
+            console.log(dataMap.changePasswordResponse)
+        } catch {
+
+        }
+    };
+    if (type === 'login-with-google') {
+        
+        try {
+            const responses = await Promise.all([
+                fetch(`http://localhost:8080/abc`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    
                 }),
 
             ]);

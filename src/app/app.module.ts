@@ -86,6 +86,7 @@ import { AdminReservationStatusesComponent } from './admin/components/admin-home
 import { RxStompService } from './rx-stomp.service';
 import { rxStompServiceFactory, rxStompServiceFactory2 } from './rx-stomp-service-factory';
 import { RxStompService2 } from './rx-stomp.service2';
+import { UserPasswordComponent } from './components/user-password/user-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -151,6 +152,7 @@ import { RxStompService2 } from './rx-stomp.service2';
     LoginComponent,
     DateTimeComponent,
     ProfileComponent,
+    UserPasswordComponent,
     UploadFileComponent,
 
   ],
