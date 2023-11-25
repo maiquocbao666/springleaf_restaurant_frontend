@@ -91,7 +91,7 @@ export class AdminProductsComponent {
       categoryId: categoryId,
     };
 
-    this.productService.addProduct(newProduct)
+    this.productService.add(newProduct)
       .subscribe(product => {
         this.productForm.get('status')?.setValue(true);
         this.productForm.reset();
@@ -102,7 +102,7 @@ export class AdminProductsComponent {
   deleteProduct(product: Product): void {
 
     if (product.menuItemId) {
-      this.productService.deleteProduct(product.menuItemId).subscribe();
+      this.productService.delete(product.menuItemId).subscribe();
     } else {
       console.log("Không có menuItemId");
     }

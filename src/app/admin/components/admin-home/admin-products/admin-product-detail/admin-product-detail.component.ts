@@ -85,7 +85,7 @@ export class AdminProductDetailComponent implements OnInit {
         imageUrl: this.productForm.get('imageUrl')?.value,
       };
 
-      this.productService.updateProduct(updatedProduct).subscribe(() => {
+      this.productService.update(updatedProduct).subscribe(() => {
 
       });
     }

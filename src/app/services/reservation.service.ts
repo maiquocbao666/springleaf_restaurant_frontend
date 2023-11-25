@@ -32,8 +32,8 @@ export class ReservationService {
         }
     }
 
-    getReservations(): Observable<Reservation[]> {
-        if (this.reservationsCache.length > 0) {
+    gets(): Observable<Reservation[]> {
+        if (this.reservationsCache) {
             return of(this.reservationsCache);
         }
 
@@ -46,7 +46,7 @@ export class ReservationService {
         return reservationsObservable;
     }
 
-    addReservation(newReservation: Reservation): Observable<Reservation> {
+    add(newReservation: Reservation): Observable<Reservation> {
         return this.apiService.request<Reservation>('post', 'reservation', newReservation).pipe(
             tap((addedReservation: Reservation) => {
                 this.reservationsCache = [...this.reservationsCache, addedReservation];
@@ -54,7 +54,7 @@ export class ReservationService {
         );
     }
 
-    updateReservation(updatedReservation: Reservation): Observable<any> {
+    update(updatedReservation: Reservation): Observable<any> {
         const url = `${this.reservationUrl}/${updatedReservation.reservationId}`;
         return this.apiService.request('put', url, updatedReservation).pipe(
             tap(() => {
@@ -63,7 +63,7 @@ export class ReservationService {
         );
     }
 
-    deleteReservation(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
         const url = `${this.reservationUrl}/${id}`;
         return this.apiService.request('delete', url).pipe(
             tap(() => {

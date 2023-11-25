@@ -25,9 +25,9 @@ export class OrderThresholdService {
         this.orderThresholdsCacheSubject.next(value);
     }
 
-    getOrderThresholds(): Observable<OrderThreshold[]> {
+    gets(): Observable<OrderThreshold[]> {
 
-        if (this.orderThresholdsCache.length > 0) {
+        if (this.orderThresholdsCache) {
             return of(this.orderThresholdsCache);
         }
 
@@ -41,7 +41,7 @@ export class OrderThresholdService {
 
     }
 
-    addOrderThreshold(newOrderThreshold: OrderThreshold): Observable<OrderThreshold> {
+    add(newOrderThreshold: OrderThreshold): Observable<OrderThreshold> {
 
         return this.apiService.request<OrderThreshold>('post', this.orderThresholdUrl, newOrderThreshold).pipe(
 
@@ -56,7 +56,7 @@ export class OrderThresholdService {
 
     }
 
-    updateOrderThreshold(updatedOrderThreshold: OrderThreshold): Observable<any> {
+    update(updatedOrderThreshold: OrderThreshold): Observable<any> {
 
         const url = `${this.orderThresholdUrl}/${updatedOrderThreshold.orderThresholdId}`;
 
@@ -64,7 +64,7 @@ export class OrderThresholdService {
 
             tap(() => {
 
-                this.updateOrderThresholdCache(updatedOrderThreshold);
+                this.updateCache(updatedOrderThreshold);
 
                 const index = this.orderThresholdsCache!.findIndex(threshold => threshold.orderThresholdId === updatedOrderThreshold.orderThresholdId);
 
@@ -81,7 +81,7 @@ export class OrderThresholdService {
 
     }
 
-    updateOrderThresholdCache(updatedOrderThreshold: OrderThreshold): void {
+    updateCache(updatedOrderThreshold: OrderThreshold): void {
 
         if (this.orderThresholdsCache) {
 
@@ -97,7 +97,7 @@ export class OrderThresholdService {
 
     }
 
-    deleteOrderThreshold(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.orderThresholdUrl}/${id}`;
 

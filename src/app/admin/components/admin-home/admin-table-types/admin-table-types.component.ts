@@ -59,7 +59,7 @@ export class AdminTableTypesComponent {
       tableTypeName: name,
     };
 
-    this.tableTypeService.addTableType(newTableType)
+    this.tableTypeService.add(newTableType)
       .subscribe(tableType => {
         this.tableTypeForm.reset();
       });
@@ -68,7 +68,7 @@ export class AdminTableTypesComponent {
   deleteTableType(tableType: TableType): void {
 
     if (tableType.tableTypeId) {
-      this.tableTypeService.deleteTableType(tableType.tableTypeId).subscribe();
+      this.tableTypeService.delete(tableType.tableTypeId).subscribe();
     } else {
       console.log("Không có tableTypeId");
     }

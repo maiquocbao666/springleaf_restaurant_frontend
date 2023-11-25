@@ -26,8 +26,8 @@ export class RatingService {
     this.ratingsCacheSubject.next(value);
   }
 
-  getRatings(): Observable<Rating[]> {
-    if (this.ratingsCache.length > 0) {
+  gets(): Observable<Rating[]> {
+    if (this.ratingsCache) {
       return of(this.ratingsCache);
     }
 
@@ -40,7 +40,7 @@ export class RatingService {
     return ratingsObservable;
   }
 
-  addRating(newRating: Rating): Observable<Rating> {
+  add(newRating: Rating): Observable<Rating> {
     return this.apiService.request<Rating>('post', this.ratingUrl, newRating).pipe(
       tap((addedRating: Rating) => {
         this.ratingsCache = [...this.ratingsCache, addedRating];
@@ -49,17 +49,17 @@ export class RatingService {
     );
   }
 
-  updateRating(updatedRating: Rating): Observable<any> {
+  update(updatedRating: Rating): Observable<any> {
     const url = `${this.ratingUrl}/${updatedRating.ratingId}`;
 
     return this.apiService.request('put', url, updatedRating).pipe(
       tap(() => {
-        this.updateRatingCache(updatedRating);
+        this.updateCache(updatedRating);
       })
     );
   }
 
-  deleteRating(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.ratingUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(
@@ -70,7 +70,7 @@ export class RatingService {
     );
   }
 
-  updateRatingCache(updatedRating: Rating): void {
+  updateCache(updatedRating: Rating): void {
     if (this.ratingsCache) {
       const index = this.ratingsCache.findIndex(rating => rating.ratingId === updatedRating.ratingId);
 

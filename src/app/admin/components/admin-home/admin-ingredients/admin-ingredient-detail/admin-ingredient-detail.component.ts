@@ -53,7 +53,7 @@ export class AdminIngredientDetailComponent implements OnInit {
         orderThreshold: +this.ingredientForm.get('orderThreshold')?.value
       };
 
-      this.ingredientService.updateIngredient(updatedIngredient).subscribe(() => {
+      this.ingredientService.update(updatedIngredient).subscribe(() => {
       });
     }
   }

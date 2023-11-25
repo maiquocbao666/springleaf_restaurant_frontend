@@ -26,8 +26,8 @@ export class ProductService {
     this.productsCacheSubject.next(value);
   }
 
-  getProducts(): Observable<Product[]> {
-    if (this.productsCache.length > 0) {
+  gets(): Observable<Product[]> {
+    if (this.productsCache) {
       return of(this.productsCache);
     }
 
@@ -40,9 +40,14 @@ export class ProductService {
     return productsObservable;
   }
 
-  getProduct(id: number): Observable<Product> {
-    if (!this.productsCache.length) {
-      this.getProducts();
+  getById(id: number): Observable<Product> {
+
+    if (!id) {
+      return of();
+    }
+
+    if (!this.productsCache) {
+      this.gets();
     }
 
     const productFromCache = this.productsCache.find(product => product.menuItemId === id);
@@ -75,7 +80,7 @@ export class ProductService {
     }
   }
 
-  addProduct(newProduct: Product): Observable<Product> {
+  add(newProduct: Product): Observable<Product> {
     if (this.productsCache.length > 0) {
       if (this.isProductNameInCache(newProduct.name)) {
         return of();
@@ -90,7 +95,7 @@ export class ProductService {
     );
   }
 
-  updateProduct(updatedProduct: Product): Observable<any> {
+  update(updatedProduct: Product): Observable<any> {
     if (this.productsCache.length > 0) {
       if (this.isProductNameInCache(updatedProduct.name)) {
         return of();
@@ -110,7 +115,7 @@ export class ProductService {
     );
   }
 
-  deleteProduct(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.productUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(

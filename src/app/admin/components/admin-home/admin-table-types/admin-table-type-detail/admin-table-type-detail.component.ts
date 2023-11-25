@@ -57,7 +57,7 @@ export class AdminTableTypeDetailComponent  implements OnInit {
         tableTypeName: this.tableTypeForm.get('name')?.value,
       };
 
-      this.tableTypeService.updateTableType(updatedTableType).subscribe(() => {
+      this.tableTypeService.update(updatedTableType).subscribe(() => {
       });
     }
   }

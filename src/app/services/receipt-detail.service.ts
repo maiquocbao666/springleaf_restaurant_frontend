@@ -26,8 +26,8 @@ export class ReceiptDetailService {
         this.receiptDetailsCacheSubject.next(value);
     }
 
-    getReceiptDetails(): Observable<ReceiptDetail[]> {
-        if (this.receiptDetailsCache.length > 0) {
+    gets(): Observable<ReceiptDetail[]> {
+        if (this.receiptDetailsCache) {
             return of(this.receiptDetailsCache);
         }
 
@@ -40,7 +40,7 @@ export class ReceiptDetailService {
         return receiptDetailsObservable;
     }
 
-    addReceiptDetail(newReceiptDetail: ReceiptDetail): Observable<ReceiptDetail> {
+    add(newReceiptDetail: ReceiptDetail): Observable<ReceiptDetail> {
         return this.apiService.request<ReceiptDetail>('post', this.receiptDetailUrl, newReceiptDetail).pipe(
             tap((addedReceiptDetail: ReceiptDetail) => {
                 this.receiptDetailsCache = [...this.receiptDetailsCache, addedReceiptDetail];
@@ -49,17 +49,17 @@ export class ReceiptDetailService {
         );
     }
 
-    updateReceiptDetail(updatedReceiptDetail: ReceiptDetail): Observable<any> {
+    update(updatedReceiptDetail: ReceiptDetail): Observable<any> {
         const url = `${this.receiptDetailUrl}/${updatedReceiptDetail.receiptDetailId}`;
 
         return this.apiService.request('put', url, updatedReceiptDetail).pipe(
             tap(() => {
-                this.updateReceiptDetailCache(updatedReceiptDetail);
+                this.updateCache(updatedReceiptDetail);
             })
         );
     }
 
-    deleteReceiptDetail(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
         const url = `${this.receiptDetailUrl}/${id}`;
 
         return this.apiService.request('delete', url).pipe(
@@ -70,7 +70,7 @@ export class ReceiptDetailService {
         );
     }
 
-    updateReceiptDetailCache(updatedReceiptDetail: ReceiptDetail): void {
+    updateCache(updatedReceiptDetail: ReceiptDetail): void {
         if (this.receiptDetailsCache) {
             const index = this.receiptDetailsCache.findIndex(receiptDetail => receiptDetail.receiptDetailId === updatedReceiptDetail.receiptDetailId);
 

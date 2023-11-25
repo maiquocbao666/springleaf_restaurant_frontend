@@ -26,9 +26,9 @@ export class GoodsReceiptService {
         this.goodsReceiptsCacheSubject.next(value);
     }
 
-    getGoodsReceipts(): Observable<GoodsReceipt[]> {
+    gets(): Observable<GoodsReceipt[]> {
 
-        if (this.goodsReceiptsCache.length > 0) {
+        if (this.goodsReceiptsCache) {
             return of(this.goodsReceiptsCache);
         }
 
@@ -42,7 +42,7 @@ export class GoodsReceiptService {
 
     }
 
-    addGoodsReceipt(newGoodsReceipt: GoodsReceipt): Observable<GoodsReceipt> {
+    add(newGoodsReceipt: GoodsReceipt): Observable<GoodsReceipt> {
 
         return this.apiService.request<GoodsReceipt>('post', this.goodsReceiptUrl, newGoodsReceipt).pipe(
 
@@ -57,7 +57,7 @@ export class GoodsReceiptService {
 
     }
 
-    updateGoodsReceipt(updatedGoodsReceipt: GoodsReceipt): Observable<any> {
+    update(updatedGoodsReceipt: GoodsReceipt): Observable<any> {
 
         const url = `${this.goodsReceiptUrl}/${updatedGoodsReceipt.goodsReceiptId}`;
 
@@ -80,7 +80,7 @@ export class GoodsReceiptService {
 
     }
 
-    deleteGoodsReceipt(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.goodsReceiptUrl}/${id}`;
 
@@ -102,7 +102,7 @@ export class GoodsReceiptService {
 
     }
 
-    updateGoodsReceiptCache(updatedGoodsReceipt: GoodsReceipt): void {
+    updateCache(updatedGoodsReceipt: GoodsReceipt): void {
 
         if (this.goodsReceiptsCache) {
 

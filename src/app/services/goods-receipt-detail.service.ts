@@ -26,8 +26,8 @@ export class GoodsReceiptDetailService {
     this.goodsReceiptDetailsCacheSubject.next(value);
   }
 
-  getGoodsReceiptDetails(): Observable<GoodsReceiptDetail[]> {
-    if (this.goodsReceiptDetailsCache.length > 0) {
+  gets(): Observable<GoodsReceiptDetail[]> {
+    if (this.goodsReceiptDetailsCache) {
       return of(this.goodsReceiptDetailsCache);
     }
 
@@ -40,7 +40,7 @@ export class GoodsReceiptDetailService {
     return goodsReceiptDetailsObservable;
   }
 
-  addGoodsReceiptDetail(newGoodsReceiptDetail: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
+  add(newGoodsReceiptDetail: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
     return this.apiService.request<GoodsReceiptDetail>('post', this.goodsReceiptDetailUrl, newGoodsReceiptDetail).pipe(
       tap((addedGoodsReceiptDetail: GoodsReceiptDetail) => {
         this.goodsReceiptDetailsCache = [...this.goodsReceiptDetailsCache, addedGoodsReceiptDetail];
@@ -49,7 +49,7 @@ export class GoodsReceiptDetailService {
     );
   }
 
-  updateGoodsReceiptDetail(updatedGoodsReceiptDetail: GoodsReceiptDetail): Observable<any> {
+  update(updatedGoodsReceiptDetail: GoodsReceiptDetail): Observable<any> {
     const url = `${this.goodsReceiptDetailUrl}/${updatedGoodsReceiptDetail.goodsReceiptDetailId}`;
 
     return this.apiService.request('put', url, updatedGoodsReceiptDetail).pipe(
@@ -64,7 +64,7 @@ export class GoodsReceiptDetailService {
     );
   }
 
-  deleteGoodsReceiptDetail(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.goodsReceiptDetailUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(

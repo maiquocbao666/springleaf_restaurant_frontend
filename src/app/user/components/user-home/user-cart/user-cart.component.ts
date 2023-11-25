@@ -87,7 +87,7 @@ export class UserCartComponent implements OnInit {
   }
 
   getCarts(): void {
-    this.cartDetailsService.getCartDetails()
+    this.cartDetailsService.gets()
       .subscribe(cartDetails => this.cartDetails = cartDetails);
   }
 

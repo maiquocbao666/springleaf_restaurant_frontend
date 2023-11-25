@@ -26,9 +26,9 @@ export class IngredientService {
         this.ingredientsCacheSubject.next(value);
     }
 
-    getIngredients(): Observable<Ingredient[]> {
+    gets(): Observable<Ingredient[]> {
 
-        if (this.ingredientsCache.length > 0) {
+        if (this.ingredientsCache) {
             return of(this.ingredientsCache);
         }
 
@@ -42,10 +42,14 @@ export class IngredientService {
 
     }
 
-    getIngredientById(id: number): Observable<Ingredient> {
+    getById(id: number): Observable<Ingredient> {
 
-        if (this.ingredientsCache.length === 0) {
-            this.getIngredients();
+        if(!id){
+            return of();
+        }
+
+        if (!this.ingredientsCache) {
+            this.gets();
         }
 
         const ingredientFromCache = this.ingredientsCache.find(ingredient => ingredient.ingredientId === id);
@@ -68,7 +72,7 @@ export class IngredientService {
         }
     }
 
-    addIngredient(newIngredient: Ingredient): Observable<Ingredient> {
+    add(newIngredient: Ingredient): Observable<Ingredient> {
         if (this.isIngredientNameInCache(newIngredient.name)) {
             // Nếu đã có ingredient có tên tương tự, trả về Observable với giá trị hiện tại
             return of();
@@ -82,7 +86,7 @@ export class IngredientService {
         );
     }
 
-    updateIngredient(updatedIngredient: Ingredient): Observable<any> {
+    update(updatedIngredient: Ingredient): Observable<any> {
         if (this.isIngredientNameInCache(updatedIngredient.name)) {
             // Nếu đã có ingredient có tên tương tự, trả về Observable với giá trị hiện tại
             return of();
@@ -101,7 +105,7 @@ export class IngredientService {
         );
     }
 
-    updateIngredientCache(updatedIngredient: Ingredient): void {
+    updateCache(updatedIngredient: Ingredient): void {
         if (this.ingredientsCache) {
             const index = this.ingredientsCache.findIndex(ingredient => ingredient.ingredientId === updatedIngredient.ingredientId);
             if (index !== -1) {
@@ -110,7 +114,7 @@ export class IngredientService {
         }
     }
 
-    deleteIngredient(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
         const url = `${this.ingredientUrl}/${id}`;
         return this.apiService.request('delete', url).pipe(
             tap(() => {

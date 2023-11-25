@@ -23,18 +23,9 @@ export class RestaurantService {
         this.restaurantsCacheSubject.next(value);
     }
 
-    private updateCache(updatedRestaurant: Restaurant): void {
-        const index = this.restaurantsCache.findIndex(restaurant => restaurant.restaurantId === updatedRestaurant.restaurantId);
-        if (index !== -1) {
-            const updatedCache = [...this.restaurantsCache];
-            updatedCache[index] = updatedRestaurant;
-            this.restaurantsCache = updatedCache;
-        }
-    }
+    gets(): Observable<Restaurant[]> {
 
-    getRestaurants(): Observable<Restaurant[]> {
-
-        if (this.restaurantsCache.length > 0) {
+        if (this.restaurantsCache) {
             return of(this.restaurantsCache);
         }
 
@@ -55,7 +46,7 @@ export class RestaurantService {
 
         if (!this.restaurantsCache.length) {
 
-            this.getRestaurants();
+            this.gets();
         }
 
         const restaurantFromCache = this.restaurantsCache.find(restaurant => restaurant.restaurantId === id);
@@ -72,11 +63,20 @@ export class RestaurantService {
         }
     }
 
-    private isRestaurantNameInCache(name: string): boolean {
-        return !!this.restaurantsCache?.find(restaurant => restaurant.restaurantName.toLowerCase() === name.toLowerCase());
+    private isRestaurantNameInCache(name: string, restaurantIdToExclude: number | null = null): boolean {
+        const isRestaurantInCache = this.restaurantsCache?.some(
+            (cache) =>
+                cache.restaurantName.toLowerCase() === name.toLowerCase() && cache.restaurantId !== restaurantIdToExclude
+        );
+
+        if (isRestaurantInCache) {
+            console.log("Restaurant này đã có rồi");
+        }
+
+        return isRestaurantInCache || false;
     }
 
-    addRestaurant(newRestaurant: Restaurant): Observable<Restaurant> {
+    add(newRestaurant: Restaurant): Observable<Restaurant> {
 
         if (this.isRestaurantNameInCache(newRestaurant.restaurantName)) {
             return of();
@@ -85,13 +85,14 @@ export class RestaurantService {
         return this.apiService.request<Restaurant>('post', this.restaurantUrl, newRestaurant).pipe(
             tap((addedRestaurant: Restaurant) => {
                 this.restaurantsCache = [...this.restaurantsCache, addedRestaurant];
+                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
             })
         );
     }
 
-    updateRestaurant(updatedRestaurant: Restaurant): Observable<any> {
+    update(updatedRestaurant: Restaurant): Observable<any> {
 
-        if (this.isRestaurantNameInCache(updatedRestaurant.restaurantName)) {
+        if (this.isRestaurantNameInCache(updatedRestaurant.restaurantName, updatedRestaurant.restaurantId)) {
             return of();
         }
 
@@ -99,12 +100,16 @@ export class RestaurantService {
 
         return this.apiService.request('put', url, updatedRestaurant).pipe(
             tap(() => {
-                this.updateCache(updatedRestaurant);
+                const updatedRestaurants = this.restaurantsCache.map((restaurant) =>
+                restaurant.restaurantId === updatedRestaurant.restaurantId ? updatedRestaurant : restaurant
+              );
+              this.restaurantsCache = updatedRestaurants;
+              localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
             })
         );
     }
 
-    deleteRestaurant(id: number): Observable<any> {
+    delete(id: number): Observable<any> {
 
         const url = `${this.restaurantUrl}/${id}`;
 
@@ -112,16 +117,10 @@ export class RestaurantService {
             tap(() => {
                 const updatedCache = this.restaurantsCache.filter(restaurant => restaurant.restaurantId !== id);
                 this.restaurantsCache = updatedCache;
+                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
             })
         );
 
     }
 
-    updateRestaurantCache(updatedRestaurant: Restaurant): void {
-        const index = this.restaurantsCache.findIndex(restaurant => restaurant.restaurantId === updatedRestaurant.restaurantId);
-
-        if (index !== -1) {
-            this.restaurantsCache[index] = updatedRestaurant;
-        }
-    }
 }

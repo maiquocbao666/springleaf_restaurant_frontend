@@ -36,7 +36,7 @@ export class RestaurantTableService {
 
     getRestaurantTables(): Observable<RestaurantTable[]> {
 
-        if (this.restaurantTablesCache.length > 0) {
+        if (this.restaurantTablesCache) {
             return of(this.restaurantTablesCache);
         }
 

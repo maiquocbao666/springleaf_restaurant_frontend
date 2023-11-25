@@ -88,7 +88,7 @@ export class AdminInventoryBranchesComponent {
   }
 
   getIngredientById(ingredientId: number): Observable<Ingredient | null> {
-    return this.ingredientService.getIngredientById(ingredientId);
+    return this.ingredientService.getById(ingredientId);
   }
 
   getSupplierById(supplierId: number): Observable<Supplier | null> {
@@ -112,7 +112,7 @@ export class AdminInventoryBranchesComponent {
       restaurantId: restaurantId,
     };
 
-    this.inventoryBranchService.addInventoryBranch(newInventoryBranch)
+    this.inventoryBranchService.add(newInventoryBranch)
       .subscribe(inventoryBranch => {
         this.inventoryBranchForm.reset();
       });
@@ -122,7 +122,7 @@ export class AdminInventoryBranchesComponent {
 
     if (inventoryBranch.inventoryBranchId) {
       this.inventoryBranches = this.inventoryBranches.filter(c => c !== inventoryBranch);
-      this.inventoryBranchService.deleteInventoryBranch(inventoryBranch.inventoryBranchId).subscribe();
+      this.inventoryBranchService.delete(inventoryBranch.inventoryBranchId).subscribe();
     } else {
       console.log("Không có inventoryBranchId");
     }

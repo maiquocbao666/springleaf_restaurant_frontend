@@ -26,8 +26,8 @@ export class EventService {
     this.eventsCacheSubject.next(value);
   }
 
-  getEvents(): Observable<Event[]> {
-    if (this.eventsCache.length > 0) {
+  gets(): Observable<Event[]> {
+    if (this.eventsCache) {
       return of(this.eventsCache);
     }
 
@@ -40,11 +40,20 @@ export class EventService {
     return eventsObservable;
   }
 
-  private isEventNameInCache(name: string): boolean {
-    return !!this.eventsCache?.find(event => event.eventName.toLowerCase() === name.toLowerCase());
+  private isEventNameInCache(name: string, eventIdToExclude: number | null = null): boolean {
+    const isEventInCache = this.eventsCache?.some(
+      (cache) =>
+        cache.eventName.toLowerCase() === name.toLowerCase() && cache.eventId !== eventIdToExclude
+    );
+
+    if (isEventInCache) {
+      console.log("Danh mục này đã có rồi");
+    }
+
+    return isEventInCache || false;
   }
 
-  addEvent(newEvent: Event): Observable<Event> {
+  add(newEvent: Event): Observable<Event> {
     if (this.isEventNameInCache(newEvent.eventName)) {
       // Nếu đã có sự kiện có tên tương tự, trả về Observable với giá trị hiện tại
       return of();
@@ -58,8 +67,8 @@ export class EventService {
     );
   }
 
-  updateEvent(updatedEvent: Event): Observable<any> {
-    if (this.isEventNameInCache(updatedEvent.eventName)) {
+  update(updatedEvent: Event): Observable<any> {
+    if (this.isEventNameInCache(updatedEvent.eventName, updatedEvent.eventId)) {
       // Nếu đã có sự kiện có tên tương tự, trả về Observable với giá trị hiện tại
       return of();
     }
@@ -78,7 +87,7 @@ export class EventService {
     );
   }
 
-  deleteEvent(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     if (!id) {
       return of(null);
     }

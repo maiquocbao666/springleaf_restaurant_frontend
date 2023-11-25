@@ -84,7 +84,7 @@ export class UserInventoryBranchesComponent {
   }
 
   getIngredientById(ingredientId: number): Observable<Ingredient | null> {
-    return this.ingredientService.getIngredientById(ingredientId);
+    return this.ingredientService.getById(ingredientId);
   }
 
   getSupplierById(supplierId: number): Observable<Supplier | null> {

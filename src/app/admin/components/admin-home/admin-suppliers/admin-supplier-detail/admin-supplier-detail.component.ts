@@ -63,7 +63,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
         address: this.supplierForm.get('address')?.value
       };
 
-      this.supplierService.updateSupplier(updatedSupplier).subscribe(() => {
+      this.supplierService.update(updatedSupplier).subscribe(() => {
       });
     }
   }

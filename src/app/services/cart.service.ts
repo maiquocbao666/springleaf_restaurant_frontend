@@ -34,7 +34,7 @@ export class CartService {
 
   }
 
-  getCarts(): Observable<Cart[]> {
+  gets(): Observable<Cart[]> {
 
     if (this.cartsCache) {
 
@@ -54,11 +54,11 @@ export class CartService {
     return cartsObservable;
   }
 
-  getCartById(id: number): Observable<Cart> {
+  getById(id: number): Observable<Cart> {
 
     if (!this.cartsCache) {
 
-      this.getCarts();
+      this.gets();
 
     }
 
@@ -160,7 +160,7 @@ export class CartService {
 
   }
 
-  deleteCart(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
 
     const url = `${this.cartUrl}/${id}`;
 

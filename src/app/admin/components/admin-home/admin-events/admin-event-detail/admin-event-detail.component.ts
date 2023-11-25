@@ -45,12 +45,12 @@ export class AdminEventDetailComponent implements OnInit {
 
 
   getCarts(): void {
-    this.cartService.getCarts()
+    this.cartService.gets()
       .subscribe(carts => this.carts = carts);
   }
 
   getCombos(): void {
-    this.comboService.getCombos()
+    this.comboService.gets()
       .subscribe(combos => this.combos = combos);
   }
 
@@ -79,7 +79,7 @@ export class AdminEventDetailComponent implements OnInit {
         order: +this.eventForm.get('order')?.value
       };
 
-      this.eventService.updateEvent(updatedEvent).subscribe(() => {
+      this.eventService.update(updatedEvent).subscribe(() => {
         // Cập nhật cache
         this.eventService.updateEventCache(updatedEvent);
         this.eventSaved.emit(); // Emit the event

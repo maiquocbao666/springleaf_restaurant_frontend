@@ -26,8 +26,8 @@ export class ComboService {
     this.combosCacheSubject.next(value);
   }
 
-  getCombos(): Observable<Combo[]> {
-    if (this.combosCache.length > 0) {
+  gets(): Observable<Combo[]> {
+    if (this.combosCache) {
       return of(this.combosCache);
     }
 
@@ -40,9 +40,14 @@ export class ComboService {
     return combosObservable;
   }
 
-  getComboById(id: number): Observable<Combo> {
+  getById(id: number): Observable<Combo> {
+
+    if(!id){
+      return of();
+    }
+
     if (!this.combosCache.length) {
-      this.getCombos();
+      this.gets();
     }
 
     const comboFromCache = this.combosCache.find(combo => combo.comboId === id);
@@ -55,18 +60,21 @@ export class ComboService {
     }
   }
 
-  private isComboNameInCache(name: string): boolean {
-    const isTrue = !!this.combosCache?.find(combo => combo.comboName.toLowerCase() === name.toLowerCase());
-    if (isTrue) {
-      console.log('Combo này đã tồn tại trong cache.');
-      return isTrue;
-    } else {
-      return isTrue;
+  private isComboNameInCache(name: string, categoryIdToExclude: number | null = null): boolean {
+    const isComboInCache = this.combosCache?.some(
+      (cache) =>
+        cache.comboName.toLowerCase() === name.toLowerCase() && cache.comboId !== categoryIdToExclude
+    );
+
+    if (isComboInCache) {
+      console.log("Combo này đã có rồi");
     }
+
+    return isComboInCache || false;
   }
 
-  addCombo(newCombo: Combo): Observable<Combo> {
-    if (this.combosCache.length > 0) {
+  add(newCombo: Combo): Observable<Combo> {
+    if (this.combosCache) {
       if (this.isComboNameInCache(newCombo.comboName)) {
         return of();
       }
@@ -80,8 +88,8 @@ export class ComboService {
     );
   }
 
-  updateCombo(updatedCombo: Combo): Observable<any> {
-    if (this.combosCache.length > 0) {
+  update(updatedCombo: Combo): Observable<any> {
+    if (this.combosCache) {
       if (this.isComboNameInCache(updatedCombo.comboName)) {
         return of();
       }
@@ -111,7 +119,7 @@ export class ComboService {
     }
   }
 
-  deleteCombo(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.comboUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(

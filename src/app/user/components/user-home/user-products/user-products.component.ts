@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
-import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -73,7 +72,7 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProducts(): void {
-    this.productService.getProducts()
+    this.productService.gets()
       .subscribe(products => {
         this.products = products;
         this.remainingProducts = this.products.length - this.visibleProductCount;

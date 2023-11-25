@@ -75,7 +75,7 @@ export class AdminGoodsReceiptDetailComponent {
         user: +this.goodsReceiptForm.get('user')?.value,
       };
 
-      this.goodsReceiptService.updateGoodsReceipt(updatedGoodsReceipt).subscribe(() => {
+      this.goodsReceiptService.update(updatedGoodsReceipt).subscribe(() => {
       });
     }
   }

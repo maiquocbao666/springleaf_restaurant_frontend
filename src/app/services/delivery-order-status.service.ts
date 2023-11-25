@@ -26,8 +26,8 @@ export class DeliveryOrderStatusService {
     this.deliveryOrderStatusesCacheSubject.next(value);
   }
 
-  getDeliveryOrderStatuss(): Observable<DeliveryOrderStatus[]> {
-    if (this.deliveryOrderStatusesCache.length > 0) {
+  gets(): Observable<DeliveryOrderStatus[]> {
+    if (this.deliveryOrderStatusesCache) {
       return of(this.deliveryOrderStatusesCache);
     }
 
@@ -40,7 +40,7 @@ export class DeliveryOrderStatusService {
     return deliveryOrderStatusesObservable;
   }
 
-  addDeliveryOrderStatus(newDeliveryOrderStatus: DeliveryOrderStatus): Observable<DeliveryOrderStatus> {
+  add(newDeliveryOrderStatus: DeliveryOrderStatus): Observable<DeliveryOrderStatus> {
     return this.apiService.request<DeliveryOrderStatus>('post', this.deliveryOrderStatusUrl, newDeliveryOrderStatus).pipe(
       tap((addedDeliveryOrderStatus: DeliveryOrderStatus) => {
         this.deliveryOrderStatusesCache = [...this.deliveryOrderStatusesCache, addedDeliveryOrderStatus];
@@ -49,7 +49,7 @@ export class DeliveryOrderStatusService {
     );
   }
 
-  updateDeliveryOrderStatus(updatedDeliveryOrderStatus: DeliveryOrderStatus): Observable<any> {
+  update(updatedDeliveryOrderStatus: DeliveryOrderStatus): Observable<any> {
     const url = `${this.deliveryOrderStatusUrl}/${updatedDeliveryOrderStatus.deliveryOrderStatusId}`;
 
     return this.apiService.request('put', url, updatedDeliveryOrderStatus).pipe(
@@ -66,7 +66,7 @@ export class DeliveryOrderStatusService {
     );
   }
 
-  deleteDeliveryOrderStatus(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     if (!id) {
       return of(null);
     }

@@ -100,7 +100,7 @@ export class AdminReceiptsComponent {
       inventory: inventory,
     }
 
-    this.receiptService.addReceipt(newReceipt)
+    this.receiptService.add(newReceipt)
       .subscribe(() => {
         this.receiptForm.reset();
       });
@@ -109,7 +109,7 @@ export class AdminReceiptsComponent {
   deleteReceipt(receipt: Receipt): void {
 
     if (receipt.receiptId) {
-      this.receiptService.deleteReceipt(receipt.receiptId).subscribe();
+      this.receiptService.delete(receipt.receiptId).subscribe();
     } else {
       console.log("Không có receiptId");
     }

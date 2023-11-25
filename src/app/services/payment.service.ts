@@ -26,8 +26,8 @@ export class PaymentService {
     this.paymentsCacheSubject.next(value);
   }
 
-  getPayments(): Observable<Payment[]> {
-    if (this.paymentsCache.length > 0) {
+  gets(): Observable<Payment[]> {
+    if (this.paymentsCache) {
       return of(this.paymentsCache);
     }
 
@@ -40,7 +40,7 @@ export class PaymentService {
     return paymentsObservable;
   }
 
-  addPayment(newPayment: Payment): Observable<Payment> {
+  add(newPayment: Payment): Observable<Payment> {
     return this.apiService.request<Payment>('post', this.paymentUrl, newPayment).pipe(
       tap((addedPayment: Payment) => {
         this.paymentsCache = [...this.paymentsCache, addedPayment];
@@ -49,17 +49,17 @@ export class PaymentService {
     );
   }
 
-  updatePayment(updatedPayment: Payment): Observable<any> {
+  update(updatedPayment: Payment): Observable<any> {
     const url = `${this.paymentUrl}/${updatedPayment.paymentId}`;
 
     return this.apiService.request('put', url, updatedPayment).pipe(
       tap(() => {
-        this.updatePaymentCache(updatedPayment);
+        this.updateCache(updatedPayment);
       })
     );
   }
 
-  deletePayment(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.paymentUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(
@@ -70,7 +70,7 @@ export class PaymentService {
     );
   }
 
-  updatePaymentCache(updatedPayment: Payment): void {
+  updateCache(updatedPayment: Payment): void {
     if (this.paymentsCache) {
       const index = this.paymentsCache.findIndex(payment => payment.paymentId === updatedPayment.paymentId);
 

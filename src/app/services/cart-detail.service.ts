@@ -26,8 +26,8 @@ export class CartDetailService {
     this.cartDetailsCacheSubject.next(value);
   }
 
-  getCartDetails(): Observable<CartDetail[]> {
-    if (this.cartDetailsCache.length > 0) {
+  gets(): Observable<CartDetail[]> {
+    if (this.cartDetailsCache) {
       return of(this.cartDetailsCache);
     }
 
@@ -40,7 +40,7 @@ export class CartDetailService {
     return cartDetailsObservable;
   }
 
-  addCartDetail(newCartDetail: CartDetail): Observable<CartDetail> {
+  add(newCartDetail: CartDetail): Observable<CartDetail> {
     return this.apiService.request<CartDetail>('post', this.cartDetailUrl, newCartDetail).pipe(
       tap((addedCartDetail: CartDetail) => {
         this.cartDetailsCache = [...this.cartDetailsCache, addedCartDetail];
@@ -49,7 +49,7 @@ export class CartDetailService {
     );
   }
 
-  updateCartDetail(updatedCartDetail: CartDetail): Observable<any> {
+  update(updatedCartDetail: CartDetail): Observable<any> {
     const url = `${this.cartDetailUrl}/${updatedCartDetail.orderDetailId}`;
 
     return this.apiService.request('put', url, updatedCartDetail).pipe(
@@ -64,7 +64,7 @@ export class CartDetailService {
     );
   }
 
-  deleteCartDetail(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     if (!id) {
       return of(null);
     }

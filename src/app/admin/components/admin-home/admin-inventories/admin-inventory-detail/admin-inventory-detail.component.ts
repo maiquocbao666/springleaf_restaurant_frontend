@@ -81,9 +81,9 @@ export class AdminInventoryDetailComponent implements OnInit {
         supplierId: +this.inventoryForm.get('supplierId')?.value
       };
 
-      this.inventoryService.updateInventory(updatedInventory).subscribe(() => {
+      this.inventoryService.update(updatedInventory).subscribe(() => {
         // Cập nhật cache
-        this.inventoryService.updateInventoryCache(updatedInventory);
+        this.inventoryService.updateCache(updatedInventory);
       });
     }
   }

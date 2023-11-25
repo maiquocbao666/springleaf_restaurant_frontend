@@ -67,11 +67,11 @@ export class AdminComboDetailsComponent {
   }
 
   getProductById(menuItemId: number): Observable<Product | null> {
-    return this.productService.getProduct(menuItemId);
+    return this.productService.getById(menuItemId);
   }
 
   getComboById(comboId: number): Observable<Combo | null> {
-    return this.comboService.getComboById(comboId);
+    return this.comboService.getById(comboId);
   }
 
   onTableDataChange(event: any) {
@@ -103,7 +103,7 @@ export class AdminComboDetailsComponent {
       comboTypeId: comboTypeId
     };
 
-    this.comboDetailService.addComboDetail(newComboDetail)
+    this.comboDetailService.add(newComboDetail)
       .subscribe(comboDetail => {
         this.comboDetailForm.reset();
       });
@@ -113,7 +113,7 @@ export class AdminComboDetailsComponent {
   deleteComboDetail(comboDetail: ComboDetail): void {
 
     if (comboDetail.comboDetailId) {
-      this.comboDetailService.deleteComboDetail(comboDetail.comboDetailId).subscribe();
+      this.comboDetailService.delete(comboDetail.comboDetailId).subscribe();
     } else {
       console.log("Không có comboDetailId");
     }

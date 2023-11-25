@@ -73,7 +73,7 @@ export class AdminReservationStatusesComponent {
   }
 
   getReservationStatuses(): void {
-    this.reservationStatusService.getReservationStatuses()
+    this.reservationStatusService.gets()
       .subscribe(reservationStatuses => this.reservationStatuses = reservationStatuses);
   }
 
@@ -99,7 +99,7 @@ export class AdminReservationStatusesComponent {
       reservationStatusName: name,
     }
 
-    this.reservationStatusService.addReservationStatus(newReservationStatus)
+    this.reservationStatusService.add(newReservationStatus)
       .subscribe(reservationStatus => {
         this.getReservationStatuses();
         this.reservationStatusForm.reset();
@@ -117,7 +117,7 @@ export class AdminReservationStatusesComponent {
       }
 
       this.reservationStatuses = this.reservationStatuses.filter(i => i !== reservationStatus);
-      this.reservationStatusService.deleteReservationStatus(reservationStatus.reservationStatusId).subscribe();
+      this.reservationStatusService.delete(reservationStatus.reservationStatusId).subscribe();
 
     } else {
       console.log("Không có reservationStatusId");

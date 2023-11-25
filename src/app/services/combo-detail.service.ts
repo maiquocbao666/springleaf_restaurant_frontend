@@ -26,8 +26,8 @@ export class ComboDetailService {
     this.comboDetailsCacheSubject.next(value);
   }
 
-  getComboDetails(): Observable<ComboDetail[]> {
-    if (this.comboDetailsCache.length > 0) {
+  gets(): Observable<ComboDetail[]> {
+    if (this.comboDetailsCache) {
       return of(this.comboDetailsCache);
     }
 
@@ -40,7 +40,7 @@ export class ComboDetailService {
     return comboDetailsObservable;
   }
 
-  addComboDetail(newComboDetail: ComboDetail): Observable<ComboDetail> {
+  add(newComboDetail: ComboDetail): Observable<ComboDetail> {
     return this.apiService.request<ComboDetail>('post', this.comboDetailUrl, newComboDetail).pipe(
       tap((addedComboDetail: ComboDetail) => {
         this.comboDetailsCache = [...this.comboDetailsCache, addedComboDetail];
@@ -49,7 +49,7 @@ export class ComboDetailService {
     );
   }
 
-  updateComboDetail(updatedComboDetail: ComboDetail): Observable<any> {
+  update(updatedComboDetail: ComboDetail): Observable<any> {
     const url = `${this.comboDetailUrl}`;
 
     return this.apiService.request('put', url, updatedComboDetail).pipe(
@@ -64,7 +64,7 @@ export class ComboDetailService {
     );
   }
 
-  updateComboDetailCache(updatedComboDetail: ComboDetail): void {
+  updateCache(updatedComboDetail: ComboDetail): void {
     if (this.comboDetailsCache) {
       const index = this.comboDetailsCache.findIndex(detail => detail.comboDetailId === updatedComboDetail.comboDetailId);
 
@@ -74,7 +74,7 @@ export class ComboDetailService {
     }
   }
 
-  deleteComboDetail(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     const url = `${this.comboDetailUrl}/${id}`;
 
     return this.apiService.request('delete', url).pipe(

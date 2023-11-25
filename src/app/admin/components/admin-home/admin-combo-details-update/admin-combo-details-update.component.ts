@@ -83,7 +83,7 @@ export class AdminComboDetailsUpdateComponent {
         comboTypeId: +this.comboDetailForm.get('comboTypeId')?.value,
       };
 
-      this.comboDetailService.updateComboDetail(updatedComboDetail).subscribe(() => {
+      this.comboDetailService.update(updatedComboDetail).subscribe(() => {
       });
     }
   }

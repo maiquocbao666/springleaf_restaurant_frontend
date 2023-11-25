@@ -4,6 +4,8 @@ import { ApiService } from 'src/app/services/api.service';
 import { Category } from '../interfaces/category';
 import { RxStompService } from '../rx-stomp.service';
 import { Message } from '@stomp/stompjs';
+import { ProductService } from './product.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,8 @@ export class CategoryService {
   constructor(
     private apiService: ApiService,
     private rxStompService: RxStompService,
+    private productService: ProductService,
+    private sweetAlertService: ToastService,
   ) {
     this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
       console.log('WebSocket Connection State:', state);
@@ -90,7 +94,7 @@ export class CategoryService {
 
   getCategories(): Observable<Category[]> {
 
-    if (this.categoriesCache.length > 0) {
+    if (this.categoriesCache) {
       return of(this.categoriesCache);
     }
 
@@ -137,19 +141,22 @@ export class CategoryService {
 
   }
 
-  private isCategoryNameInCache(name: string): boolean {
-    const isTrue = this.categoriesCache?.some(category => category.name.toLowerCase() === name.toLowerCase()) || false;
-    if (isTrue) {
-      console.log("Danh mục này đã có rồi");
-      return isTrue;
-    } else {
-      return isTrue;
+  private isCategoryNameInCache(name: string, categoryIdToExclude: number | null = null): boolean {
+    const isCategoryInCache = this.categoriesCache?.some(
+      (cache) =>
+        cache.name.toLowerCase() === name.toLowerCase() && cache.categoryId !== categoryIdToExclude
+    );
+
+    if (isCategoryInCache) {
+      this.sweetAlertService.showTimedAlert('Category này đã có rồi!', '', 'error', 2000);
     }
+
+    return isCategoryInCache || false;
   }
 
   addCategory(newCategory: Category): Observable<Category> {
     // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
-    if (this.categoriesCache.length > 0) {
+    if (this.categoriesCache) {
 
       // Nếu đã có danh mục cùng tên, trả về Observable với giá trị hiện tại
       if (this.isCategoryNameInCache(newCategory.name)) {
@@ -168,9 +175,9 @@ export class CategoryService {
   }
 
   updateCategory(updatedCategory: Category): Observable<any> {
-    if (this.categoriesCache.length > 0) {
+    if (this.categoriesCache) {
       // Kiểm tra xem danh sách categoriesCache đã được tải hay chưa
-      if (this.isCategoryNameInCache(updatedCategory.name)) {
+      if (this.isCategoryNameInCache(updatedCategory.name, updatedCategory.categoryId)) {
         return of();
       }
     }
@@ -179,7 +186,7 @@ export class CategoryService {
 
     return this.apiService.request('put', url, updatedCategory).pipe(
       tap(() => {
-        const updatedCategories = this.categoriesCache.map(category =>
+        const updatedCategories = this.categoriesCache.map((category) =>
           category.categoryId === updatedCategory.categoryId ? updatedCategory : category
         );
         this.categoriesCache = updatedCategories;
@@ -194,6 +201,7 @@ export class CategoryService {
 
     return this.apiService.request('delete', url).pipe(
       tap(() => {
+        // Xóa category khỏi categoriesCache
         const updatedCategories = this.categoriesCache.filter(category => category.categoryId !== id);
         this.categoriesCache = updatedCategories;
         localStorage.setItem(this.categoriesUrl, JSON.stringify(updatedCategories));
@@ -207,12 +215,12 @@ export class CategoryService {
       return of([]);
     }
 
-    if (this.categoriesCache.length > 0) {
+    if (this.categoriesCache) {
       const filteredCategories = this.categoriesCache.filter(category => {
         return category.name.toLowerCase().includes(term.toLowerCase());
       });
 
-      if (filteredCategories.length > 0) {
+      if (filteredCategories) {
         return of(filteredCategories);
       }
     }
