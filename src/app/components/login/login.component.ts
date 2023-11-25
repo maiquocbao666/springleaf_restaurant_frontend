@@ -175,6 +175,11 @@ export class LoginComponent {
               this.errorMessage = response.error;
               this.sweetAlertService.showTimedAlert('Mã xác nhận quá hạn', 'Vui lòng lấy mã mới', 'error', 2000);
             }
+            else if (response.error === 'Role not found') {
+              console.log(response.error);
+              this.errorMessage = response.error;
+              this.sweetAlertService.showTimedAlert('Lỗi quyền hạn', '', 'error', 2000);
+            }
             else if (response.error === 'User with this email already exists') {
               console.log(response.error);
               this.errorMessage = response.error;
