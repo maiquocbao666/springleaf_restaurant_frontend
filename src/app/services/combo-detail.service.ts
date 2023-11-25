@@ -63,17 +63,7 @@ export class ComboDetailService {
       })
     );
   }
-
-  updateCache(updatedComboDetail: ComboDetail): void {
-    if (this.comboDetailsCache) {
-      const index = this.comboDetailsCache.findIndex(detail => detail.comboDetailId === updatedComboDetail.comboDetailId);
-
-      if (index !== -1) {
-        this.comboDetailsCache[index] = updatedComboDetail;
-      }
-    }
-  }
-
+  
   delete(id: number): Observable<any> {
     const url = `${this.comboDetailUrl}/${id}`;
 

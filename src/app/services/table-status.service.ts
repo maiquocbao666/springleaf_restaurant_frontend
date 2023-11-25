@@ -23,15 +23,6 @@ export class TableStatusService {
         this.tableStatusesCacheSubject.next(value);
     }
 
-    private updateCache(updatedTableStatus: TableStatus): void {
-        const index = this.tableStatusesCache.findIndex(tableStatus => tableStatus.tableStatusId === updatedTableStatus.tableStatusId);
-        if (index !== -1) {
-            const updatedCache = [...this.tableStatusesCache];
-            updatedCache[index] = updatedTableStatus;
-            this.tableStatusesCache = updatedCache;
-        }
-    }
-
     gets(): Observable<TableStatus[]> {
 
         if (this.tableStatusesCache) {
@@ -47,57 +38,62 @@ export class TableStatusService {
         return tableStatusesObservable;
     }
 
-    private isTableStatusNameInCache(name: string, tableStatusIdToExclude: number | null = null): boolean {
+    private isInCache(name: string, idToExclude: number | null = null): boolean {
         const isTableStautsInCache = this.tableStatusesCache?.some(
-          (cache) =>
-            cache.tableStatusName.toLowerCase() === name.toLowerCase() && cache.tableStatusId !== tableStatusIdToExclude
+            (cache) =>
+                cache.tableStatusName.toLowerCase() === name.toLowerCase() && cache.tableStatusId !== idToExclude
         );
-    
+
         if (isTableStautsInCache) {
-          console.log("Danh mục này đã có rồi");
+            console.log("Table Status này đã có rồi");
         }
-    
+
         return isTableStautsInCache || false;
-      }
+    }
 
-    add(newTableStatus: TableStatus): Observable<TableStatus> {
-
-        if (this.isTableStatusNameInCache(newTableStatus.tableStatusName)) {
-            return of();
+    add(newObject: TableStatus): Observable<TableStatus> {
+        if (this.tableStatusesCache) {
+            if (this.isInCache(newObject.tableStatusName)) {
+                return of();
+            }
         }
-
-        return this.apiService.request<TableStatus>('post', this.tableStatusUrl, newTableStatus).pipe(
-            tap((addedTableStatus: TableStatus) => {
-                this.tableStatusesCache = [...this.tableStatusesCache, addedTableStatus];
+        return this.apiService.request<TableStatus>('post', this.tableStatusUrl, newObject).pipe(
+            tap((added: TableStatus) => {
+                this.tableStatusesCache = [...this.tableStatusesCache, added];
                 localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
             })
         );
     }
 
-    update(updatedTableStatus: TableStatus): Observable<any> {
-
-        if (this.isTableStatusNameInCache(updatedTableStatus.tableStatusName)) {
-            return of();
+    update(updatedObject: TableStatus): Observable<any> {
+        if (this.tableStatusesCache) {
+            // Kiểm tra xem danh sách tableStatusesCache đã được tải hay chưa
+            if (this.isInCache(updatedObject.tableStatusName, updatedObject.tableStatusId)) {
+                return of();
+            }
         }
 
-        const url = `${this.tableStatusUrl}/${updatedTableStatus.tableStatusId}`;
+        const url = `${this.tableStatusUrl}`;
 
-        return this.apiService.request('put', url, updatedTableStatus).pipe(
+        return this.apiService.request('put', url, updatedObject).pipe(
             tap(() => {
-                this.updateCache(updatedTableStatus);
+                const updatedObjects = this.tableStatusesCache.map((cache) =>
+                    cache.tableStatusId === updatedObject.tableStatusId ? updatedObject : cache
+                );
+                this.tableStatusesCache = updatedObjects;
                 localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
             })
         );
     }
 
     delete(id: number): Observable<any> {
-
         const url = `${this.tableStatusUrl}/${id}`;
 
         return this.apiService.request('delete', url).pipe(
             tap(() => {
-                const updatedCache = this.tableStatusesCache.filter(tableStatus => tableStatus.tableStatusId !== id);
-                this.tableStatusesCache = updatedCache;
+                // Xóa tableStatus khỏi tableStatusesCache
+                const updatedtableStatuses = this.tableStatusesCache.filter(cache => cache.tableStatusId !== id);
+                this.tableStatusesCache = updatedtableStatuses;
                 localStorage.setItem(this.tableStatusesUrl, JSON.stringify(this.tableStatusesCache));
             })
         );
@@ -106,26 +102,26 @@ export class TableStatusService {
     getTableStatusById(id: number): Observable<TableStatus | null> {
 
         if (!id) {
-          return of(null);
+            return of(null);
         }
-    
+
         if (this.tableStatusesCache.length > 0) {
-          const tableStatusFromCache = this.tableStatusesCache.find(tableStatus => tableStatus.tableStatusId === id);
-          if (tableStatusFromCache) {
-            return of(tableStatusFromCache);
-          }
+            const tableStatusFromCache = this.tableStatusesCache.find(tableStatus => tableStatus.tableStatusId === id);
+            if (tableStatusFromCache) {
+                return of(tableStatusFromCache);
+            }
         }
-    
+
         const url = `${this.tableStatusUrl}/${id}`;
-    
+
         return this.apiService.request<TableStatus>('get', url).pipe(
-          tap((tableStatus: TableStatus) => {
-            // Update cache with the fetched table status
-            this.tableStatusesCache = [...this.tableStatusesCache, tableStatus];
-          }),
-          // Handle error or return null if the table status is not found
-          catchError(() => of(null))
+            tap((tableStatus: TableStatus) => {
+                // Update cache with the fetched table status
+                this.tableStatusesCache = [...this.tableStatusesCache, tableStatus];
+            }),
+            // Handle error or return null if the table status is not found
+            catchError(() => of(null))
         );
-      }
+    }
 
 }

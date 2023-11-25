@@ -47,10 +47,10 @@ export class TableTypeService {
     return tableTypesObservable;
   }
 
-  private isTableTypeNameInCache(name: string, tableTypeIdToExclude: number | null = null): boolean {
+  private isInCache(name: string, idToExclude: number | null = null): boolean {
     const isTableTypeInCache = this.tableTypesCache?.some(
       (cache) =>
-        cache.tableTypeName.toLowerCase() === name.toLowerCase() && cache.tableTypeId !== tableTypeIdToExclude
+        cache.tableTypeName.toLowerCase() === name.toLowerCase() && cache.tableTypeId !== idToExclude
     );
 
     if (isTableTypeInCache) {
@@ -60,42 +60,45 @@ export class TableTypeService {
     return isTableTypeInCache || false;
   }
 
-  add(newTableType: TableType): Observable<TableType> {
-
-    if (this.isTableTypeNameInCache(newTableType.tableTypeName)) {
-      return of();
+  add(newObject: TableType): Observable<TableType> {
+    if (this.tableTypesCache) {
+      if (this.isInCache(newObject.tableTypeName)) {
+        return of();
+      }
     }
-
-    return this.apiService.request<TableType>('post', this.tableTypeUrl, newTableType).pipe(
-      tap((addedTableType: TableType) => {
-        this.tableTypesCache = [...this.tableTypesCache, addedTableType];
+    return this.apiService.request<TableType>('post', this.tableTypeUrl, newObject).pipe(
+      tap((added: TableType) => {
+        this.tableTypesCache = [...this.tableTypesCache, added];
+        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
       })
     );
   }
 
-  update(updatedTableType: TableType): Observable<any> {
-
-    if (this.isTableTypeNameInCache(updatedTableType.tableTypeName)) {
-      return of();
+  update(updatedObject: TableType): Observable<any> {
+    if (this.tableTypesCache) {
+      if (this.isInCache(updatedObject.tableTypeName, updatedObject.tableTypeId)) {
+        return of();
+      }
     }
-
-    const url = `${this.tableTypeUrl}/${updatedTableType.tableTypeId}`;
-
-    return this.apiService.request('put', url, updatedTableType).pipe(
+    const url = `${this.tableTypeUrl}`;
+    return this.apiService.request('put', url, updatedObject).pipe(
       tap(() => {
-        this.updateCache(updatedTableType);
+        const updatedCategories = this.tableTypesCache.map((cache) =>
+          cache.tableTypeId === updatedObject.tableTypeId ? updatedObject : cache
+        );
+        this.tableTypesCache = updatedCategories;
+        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
       })
     );
   }
 
   delete(id: number): Observable<any> {
-
     const url = `${this.tableTypeUrl}/${id}`;
-
     return this.apiService.request('delete', url).pipe(
       tap(() => {
-        const updatedCache = this.tableTypesCache.filter(tableType => tableType.tableTypeId !== id);
-        this.tableTypesCache = updatedCache;
+        const updated = this.tableTypesCache.filter(cache => cache.tableTypeId !== id);
+        this.tableTypesCache = updated;
+        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
       })
     );
   }

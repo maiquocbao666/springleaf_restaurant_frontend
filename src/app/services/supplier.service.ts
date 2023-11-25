@@ -47,58 +47,61 @@ export class SupplierService {
         return suppliersObservable;
     }
 
-    private isSupplierNameInCache(name: string, supplierIdToExclude: number | null = null): boolean {
+    private isInCache(name: string, idToExclude: number | null = null): boolean {
         const isSupplierInCache = this.suppliersCache?.some(
-          (cache) =>
-            cache.supplierName.toLowerCase() === name.toLowerCase() && cache.supplierId !== supplierIdToExclude
+            (cache) =>
+                cache.supplierName.toLowerCase() === name.toLowerCase() && cache.supplierId !== idToExclude
         );
-    
+
         if (isSupplierInCache) {
-          console.log("Supplier này đã có rồi");
+            console.log("Supplier này đã có rồi");
         }
-    
+
         return isSupplierInCache || false;
-      }
+    }
 
-    add(newSupplier: Supplier): Observable<Supplier> {
-
-        if (this.isSupplierNameInCache(newSupplier.supplierName)) {
-            return of();
+    add(newObject: Supplier): Observable<Supplier> {
+        if (this.suppliersCache) {
+            if (this.isInCache(newObject.supplierName)) {
+                return of();
+            }
         }
-
-        return this.apiService.request<Supplier>('post', this.supplierUrl, newSupplier).pipe(
-            tap((addedSupplier: Supplier) => {
-                this.suppliersCache = [...this.suppliersCache, addedSupplier];
+        return this.apiService.request<Supplier>('post', this.supplierUrl, newObject).pipe(
+            tap((added: Supplier) => {
+                this.suppliersCache = [...this.suppliersCache, added];
                 localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
+                //this.onSendMessage(this.suppliersUrl);
             })
         );
     }
 
-    update(updatedSupplier: Supplier): Observable<any> {
-
-        if (this.isSupplierNameInCache(updatedSupplier.supplierName)) {
-            return of();
+    update(updatedObject: Supplier): Observable<any> {
+        if (this.suppliersCache) {
+            if (this.isInCache(updatedObject.supplierName, updatedObject.supplierId)) {
+                return of();
+            }
         }
-
-        const url = `${this.supplierUrl}/${updatedSupplier.supplierId}`;
-
-        return this.apiService.request('put', url, updatedSupplier).pipe(
+        const url = `${this.supplierUrl}`;
+        return this.apiService.request('put', url, updatedObject).pipe(
             tap(() => {
-                this.updateCache(updatedSupplier);
+                const updatedObjects = this.suppliersCache.map((cache) =>
+                    cache.supplierId === updatedObject.supplierId ? updatedObject : cache
+                );
+                this.suppliersCache = updatedObjects;
                 localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
+                //this.onSendMessage(this.suppliersUrl);
             })
         );
     }
 
     delete(id: number): Observable<any> {
-
         const url = `${this.supplierUrl}/${id}`;
-
         return this.apiService.request('delete', url).pipe(
             tap(() => {
-                const updatedCache = this.suppliersCache.filter(supplier => supplier.supplierId !== id);
-                this.suppliersCache = updatedCache;
+                const updated = this.suppliersCache.filter(cache => cache.supplierId !== id);
+                this.suppliersCache = updated;
                 localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
+                //this.onSendMessage(this.suppliersUrl);
             })
         );
     }
@@ -106,26 +109,26 @@ export class SupplierService {
     getSupplierById(id: number): Observable<Supplier | null> {
 
         if (!id) {
-          return of(null);
+            return of(null);
         }
-    
+
         if (this.suppliersCache.length > 0) {
-          const supplierFromCache = this.suppliersCache.find(supplier => supplier.supplierId === id);
-          if (supplierFromCache) {
-            return of(supplierFromCache);
-          }
+            const supplierFromCache = this.suppliersCache.find(supplier => supplier.supplierId === id);
+            if (supplierFromCache) {
+                return of(supplierFromCache);
+            }
         }
-    
+
         const url = `${this.supplierUrl}/${id}`;
-    
+
         return this.apiService.request<Supplier>('get', url).pipe(
-          tap((supplier: Supplier) => {
-            // Update cache with the fetched supplier
-            this.suppliersCache = [...this.suppliersCache, supplier];
-          }),
-          // Handle error or return null if the supplier is not found
-          catchError(() => of(null))
+            tap((supplier: Supplier) => {
+                // Update cache with the fetched supplier
+                this.suppliersCache = [...this.suppliersCache, supplier];
+            }),
+            // Handle error or return null if the supplier is not found
+            catchError(() => of(null))
         );
-      }
+    }
 
 }

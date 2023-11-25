@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { RestaurantTable } from '../interfaces/restaurant-table';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +16,7 @@ export class RestaurantTableService {
 
     constructor(
         private apiService: ApiService,
+        private sweetAlertService: ToastService,
     ) { }
 
     get restaurantTablesCache(): RestaurantTable[] {
@@ -25,117 +27,89 @@ export class RestaurantTableService {
         this.restaurantTablesCacheSubject.next(value);
     }
 
-    private updateCache(updatedRestaurantTable: RestaurantTable): void {
-        const index = this.restaurantTablesCache.findIndex(table => table.tableId === updatedRestaurantTable.tableId);
-        if (index !== -1) {
-            const updatedCache = [...this.restaurantTablesCache];
-            updatedCache[index] = updatedRestaurantTable;
-            this.restaurantTablesCache = updatedCache;
-        }
-    }
-
-    getRestaurantTables(): Observable<RestaurantTable[]> {
-
+    gets(): Observable<RestaurantTable[]> {
         if (this.restaurantTablesCache) {
             return of(this.restaurantTablesCache);
         }
-
-        const restaurantTablesObservable = this.apiService.request<RestaurantTable[]>('get', this.restaurantTablesUrl);
-
-        restaurantTablesObservable.subscribe(data => {
+        const observable = this.apiService.request<RestaurantTable[]>('get', this.restaurantTablesUrl);
+        observable.subscribe(data => {
             this.restaurantTablesCache = data;
         });
-
-        return restaurantTablesObservable;
+        return observable;
     }
 
-    getRestaurantTableById(id: number): Observable<RestaurantTable | null> {
-
+    getById(id: number): Observable<RestaurantTable | null> {
         if (!id) {
             return of(null);
         }
-
         if (!this.restaurantTablesCache.length) {
-
-            this.getRestaurantTables();
-
+            this.gets();
         }
-
         const restaurantTableFromCache = this.restaurantTablesCache.find(restaurantTable => restaurantTable.tableId === id);
-
         if (restaurantTableFromCache) {
-
             return of(restaurantTableFromCache);
-
         } else {
-
             const url = `${this.restaurantTableUrl}/${id}`;
             return this.apiService.request<RestaurantTable>('get', url);
-
         }
-
     }
 
-    private isRestaurantTableNameInCache(name: string): boolean {
-        return !!this.restaurantTablesCache?.find(restaurantTable => restaurantTable.tableName.toLowerCase() === name.toLowerCase());
+    private isInCache(name: string, idToExclude: number | null = null): boolean {
+        const isInCache = this.restaurantTablesCache?.some(
+            (cache) =>
+                cache.tableName.toLowerCase() === name.toLowerCase() && cache.tableId !== idToExclude
+        );
+        if (isInCache) {
+            this.sweetAlertService.showTimedAlert('Nhà hàng này đã có rồi!', '', 'error', 2000);
+        }
+        return isInCache || false;
     }
 
-    addRestaurantTable(newRestaurantTable: RestaurantTable): Observable<RestaurantTable> {
-
-        if (this.isRestaurantTableNameInCache(newRestaurantTable.tableName)) {
-            return of();
+    add(newRestaurantTable: RestaurantTable): Observable<RestaurantTable> {
+        if (this.restaurantTablesCache) {
+            if (this.isInCache(newRestaurantTable.tableName)) {
+                return of();
+            }
         }
-
         return this.apiService.request<RestaurantTable>('post', this.restaurantTableUrl, newRestaurantTable).pipe(
-            tap((addedRestaurantTable: RestaurantTable) => {
-                this.restaurantTablesCache = [...this.restaurantTablesCache, addedRestaurantTable];
+            tap((added: RestaurantTable) => {
+                this.restaurantTablesCache = [...this.restaurantTablesCache, added];
+                localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
             })
         );
     }
 
-    updateRestaurantTable(updatedRestaurantTable: RestaurantTable): Observable<any> {
-
-        if (this.isRestaurantTableNameInCache(updatedRestaurantTable.tableName)) {
-            return of();
+    update(updated: RestaurantTable): Observable<any> {
+        if (this.restaurantTablesCache) {
+            if (this.isInCache(updated.tableName, updated.restaurantId)) {
+                return of();
+            }
         }
-
-        const url = `${this.restaurantTableUrl}`;
-
-        return this.apiService.request('put', url, updatedRestaurantTable).pipe(
+        const url = `${this.restaurantTablesUrl}`;
+        return this.apiService.request('put', url, updated).pipe(
             tap(() => {
-                this.updateCache(updatedRestaurantTable);
+                const updatedrestaurantTables = this.restaurantTablesCache.map((cache) =>
+                    cache.tableId === updated.tableId ? updated : cache
+                );
+                this.restaurantTablesCache = updatedrestaurantTables;
+                localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
             })
         );
     }
 
-    deleteRestaurantTable(id: number): Observable<any> {
-
+    delete(id: number): Observable<any> {
         const url = `${this.restaurantTableUrl}/${id}`;
-
         return this.apiService.request('delete', url).pipe(
             tap(() => {
-                const updatedCache = this.restaurantTablesCache.filter(restaurantTable => restaurantTable.tableId !== id);
-                this.restaurantTablesCache = updatedCache;
+                const updated = this.restaurantTablesCache.filter(cache => cache.tableId !== id);
+                this.restaurantTablesCache = updated;
+                localStorage.setItem(this.restaurantTablesUrl, JSON.stringify(this.restaurantTablesCache));
             })
         );
-
-    }
-
-    updateRestaurantTableCache(updatedRestaurantTable: RestaurantTable): void {
-
-        const index = this.restaurantTablesCache.findIndex(table => table.tableId === updatedRestaurantTable.tableId);
-
-        if (index !== -1) {
-
-            this.restaurantTablesCache[index] = updatedRestaurantTable;
-
-        }
     }
 
     resetAutoIncrement(): Observable<string> {
-
         return this.apiService.request<string>('post', 'reset/id', {});
-
     }
 
     findTableByStatusId(tableStatusId: number): boolean {
