@@ -25,7 +25,7 @@ export class AdminInventoryDetailComponent implements OnInit {
 
   inventoriesUrl = 'inventories';
   ingredientsUrl = 'ingredients';
-  suppliersUrl = ' suppliers';
+  suppliersUrl = 'suppliers';
 
   constructor(
     private inventoryService: InventoryService,
@@ -60,13 +60,13 @@ export class AdminInventoryDetailComponent implements OnInit {
   getIngredients(): void {
     this.ingredientService.gets();
     this.ingredientService.cache$
-    .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
   }
 
   getSuppliers(): void {
     this.supplierService.gets();
     this.supplierService.cache$
-    .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
   }
 
 
