@@ -42,15 +42,15 @@ export class UserRestaurantTablesComponent {
   }
 
   getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
-    return this.tableStatusService.getTableStatusById(tableStatusId);
+    return this.tableStatusService.getById(tableStatusId);
   }
 
   getTableTypeById(tableTypeId: number) {
-    return this.tableTypeService.getTableTypeById(tableTypeId);
+    return this.tableTypeService.getById(tableTypeId);
   }
 
   getRestaurantById(restaurantId: number) {
-    return this.restaurantService.getRestaurantById(restaurantId);
+    return this.restaurantService.getById(restaurantId);
   }
 
   openRestaurantTableInfomationModal(restaurantTable: RestaurantTable) {

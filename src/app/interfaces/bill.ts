@@ -1,8 +1,8 @@
 export interface Bill {
     billId?: number;
-    userName: number;
+    userId: number;
     orderId: number;
-    billTime: Date;
+    billTime: string;
     totalAmount: number;
     paymentMethod: number;
     address: number;

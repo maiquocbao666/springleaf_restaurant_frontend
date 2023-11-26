@@ -3,86 +3,54 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { BillDetail } from '../interfaces/bill-detail';
 import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
-})
-export class BillDetailService {
+})export class BillDetailService extends BaseService<BillDetail>  {
 
-  private billDetailsUrl = 'billDetails';
-  private billDetailUrl = 'billDetail';
-
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private billDetailsCacheSubject = new BehaviorSubject<BillDetail[]>([]);
-  billDetailsCache$ = this.billDetailsCacheSubject.asObservable();
-
-  constructor(private apiService: ApiService) { }
-
-  get billDetailsCache(): BillDetail[] {
-    return this.billDetailsCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set billDetailsCache(value: BillDetail[]) {
-    this.billDetailsCacheSubject.next(value);
+  apisUrl = 'billDetails';
+  cacheKey = 'billDetails';
+  apiUrl = 'billDetail';
+
+
+  override gets(): Observable<BillDetail[]> {
+    return super.gets();
   }
 
-  gets(): Observable<BillDetail[]> {
-    if (this.billDetailsCache) {
-      return of(this.billDetailsCache);
-    }
-
-    const billDetailsObservable = this.apiService.request<BillDetail[]>('get', this.billDetailsUrl);
-
-    billDetailsObservable.subscribe(data => {
-      this.billDetailsCache = data;
-    });
-
-    return billDetailsObservable;
+  override getById(id: number): Observable<BillDetail | null> {
+    return super.getById(id);
   }
 
-  add(newBillDetail: BillDetail): Observable<BillDetail> {
-    return this.apiService.request<BillDetail>('post', this.billDetailUrl, newBillDetail).pipe(
-      tap((addedBillDetail: BillDetail) => {
-        this.billDetailsCache = [...this.billDetailsCache, addedBillDetail];
-        localStorage.setItem(this.billDetailsUrl, JSON.stringify(this.billDetailsCache));
-      })
-    );
+  override add(newBillDetail: BillDetail): Observable<BillDetail> {
+    return super.add(newBillDetail);
   }
 
-  update(updatedBillDetail: BillDetail): Observable<any> {
-    const url = `${this.billDetailUrl}/${updatedBillDetail.billDetailId}`;
-
-    return this.apiService.request('put', url, updatedBillDetail).pipe(
-      tap(() => {
-        const index = this.billDetailsCache!.findIndex(
-          billDetail => billDetail.billDetailId === updatedBillDetail.billDetailId
-        );
-
-        if (index !== -1) {
-          this.billDetailsCache![index] = updatedBillDetail;
-          localStorage.setItem(this.billDetailsUrl, JSON.stringify(this.billDetailsCache));
-        }
-      })
-    );
+  override update(updated: BillDetail): Observable<any> {
+    return super.update(updated);
   }
 
-  delete(id: number): Observable<any> {
-    if (!id) {
-      return of(null);
-    }
-
-    const url = `${this.billDetailUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const index = this.billDetailsCache.findIndex(billDetail => billDetail.billDetailId === id);
-
-        if (index !== -1) {
-          this.billDetailsCache.splice(index, 1);
-          localStorage.setItem(this.billDetailsUrl, JSON.stringify(this.billDetailsCache));
-        }
-      })
-    );
+  override delete(id: number): Observable<any> {
+    return super.delete(id);
   }
 
+  override getItemId(item: BillDetail): number {
+    throw new Error('Method not implemented.');
+  }
+  override getItemName(item: BillDetail): string {
+    throw new Error('Method not implemented.');
+  }
+  override getObjectName(): string {
+    throw new Error('Method not implemented.');
+  }
 }

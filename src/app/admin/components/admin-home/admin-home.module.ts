@@ -11,8 +11,6 @@ import { AdminMenuItemIngredientDetailComponent } from './admin-menu-item-ingred
     AdminHomeRoutingModule
   ],
   declarations: [
-  
-    AdminMenuItemIngredientDetailComponent
   ],
 
 })

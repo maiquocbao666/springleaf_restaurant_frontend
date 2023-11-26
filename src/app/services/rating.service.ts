@@ -3,80 +3,61 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Rating } from '../interfaces/rating';
 import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RatingService {
+export class RatingService extends BaseService<Rating> {
 
-  private ratingsUrl = 'ratings';
-  private ratingUrl = 'rating';
+  apisUrl = 'ratings';
+  cacheKey = 'ratings';
+  apiUrl = 'rating';
 
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private ratingsCacheSubject = new BehaviorSubject<Rating[]>([]);
-  ratingsCache$ = this.ratingsCacheSubject.asObservable();
-
-  constructor(private apiService: ApiService) { }
-
-  get ratingsCache(): Rating[] {
-    return this.ratingsCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set ratingsCache(value: Rating[]) {
-    this.ratingsCacheSubject.next(value);
+
+  override gets(): Observable<Rating[]> {
+    return super.gets();
   }
 
-  gets(): Observable<Rating[]> {
-    if (this.ratingsCache) {
-      return of(this.ratingsCache);
-    }
-
-    const ratingsObservable = this.apiService.request<Rating[]>('get', this.ratingsUrl);
-
-    ratingsObservable.subscribe(data => {
-      this.ratingsCache = data;
-    });
-
-    return ratingsObservable;
+  override getById(id: number): Observable<Rating | null> {
+    return super.getById(id);
   }
 
-  add(newRating: Rating): Observable<Rating> {
-    return this.apiService.request<Rating>('post', this.ratingUrl, newRating).pipe(
-      tap((addedRating: Rating) => {
-        this.ratingsCache = [...this.ratingsCache, addedRating];
-        localStorage.setItem(this.ratingsUrl, JSON.stringify(this.ratingsCache));
-      })
-    );
+  override add(newObject: Rating): Observable<Rating> {
+    return super.add(newObject);
   }
 
-  update(updatedRating: Rating): Observable<any> {
-    const url = `${this.ratingUrl}/${updatedRating.ratingId}`;
-
-    return this.apiService.request('put', url, updatedRating).pipe(
-      tap(() => {
-        this.updateCache(updatedRating);
-      })
-    );
+  override update(updatedObject: Rating): Observable<Rating> {
+    return super.update(updatedObject);
   }
 
-  delete(id: number): Observable<any> {
-    const url = `${this.ratingUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        this.ratingsCache = this.ratingsCache.filter(rating => rating.ratingId !== id);
-        localStorage.setItem(this.ratingsUrl, JSON.stringify(this.ratingsCache));
-      })
-    );
+  override delete(id: number): Observable<Rating> {
+    return super.delete(id);
   }
 
-  updateCache(updatedRating: Rating): void {
-    if (this.ratingsCache) {
-      const index = this.ratingsCache.findIndex(rating => rating.ratingId === updatedRating.ratingId);
+  override searchByName(term: string): Observable<Rating[]> {
+    return super.searchByName(term);
+  }
 
-      if (index !== -1) {
-        this.ratingsCache[index] = updatedRating;
-      }
-    }
+  override getItemId(item: Rating): number {
+    return item.ratingId!;
+  }
+
+  override getItemName(item: Rating): string {
+    throw new Error('Method not implemented.');
+  }
+
+  override getObjectName(): string {
+    return "Rating";
   }
 }

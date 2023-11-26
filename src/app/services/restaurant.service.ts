@@ -2,127 +2,75 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Restaurant } from '../interfaces/restaurant';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class RestaurantService {
+export class RestaurantService extends BaseService<Restaurant> {
 
-    private restaurantsUrl = 'restaurants';
-    private restaurantUrl = 'restaurant';
-    private restaurantsCacheSubject = new BehaviorSubject<Restaurant[]>([]);
-    restaurantsCache$ = this.restaurantsCacheSubject.asObservable();
+    apisUrl = 'restaurants';
+    cacheKey = 'restaurants';
+    apiUrl = 'restaurant';
 
-    constructor(private apiService: ApiService) { }
-
-    get restaurantsCache(): Restaurant[] {
-        return this.restaurantsCacheSubject.value;
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    set restaurantsCache(value: Restaurant[]) {
-        this.restaurantsCacheSubject.next(value);
+
+
+    override gets(): Observable<Restaurant[]> {
+        return super.gets();
     }
 
-    gets(): Observable<Restaurant[]> {
-
-        if (this.restaurantsCache) {
-            return of(this.restaurantsCache);
-        }
-
-        const restaurantsObservable = this.apiService.request<Restaurant[]>('get', this.restaurantsUrl);
-
-        restaurantsObservable.subscribe(data => {
-            this.restaurantsCache = data;
-        });
-
-        return restaurantsObservable;
+    override getById(id: number): Observable<Restaurant | null> {
+        return super.getById(id);
     }
 
-    getRestaurantById(id: number): Observable<Restaurant | null> {
-
-        if (!id) {
-            return of(null);
-        }
-
-        if (!this.restaurantsCache.length) {
-
-            this.gets();
-        }
-
-        const restaurantFromCache = this.restaurantsCache.find(restaurant => restaurant.restaurantId === id);
-
-        if (restaurantFromCache) {
-
-            return of(restaurantFromCache);
-
-        } else {
-
-            const url = `${this.restaurantUrl}/${id}`;
-            return this.apiService.request<Restaurant>('get', url);
-
-        }
+    override add(newObject: Restaurant): Observable<Restaurant> {
+        return super.add(newObject);
     }
 
-    private isInCache(name: string, idToExclude: number | null = null): boolean {
-        const isInCache = this.restaurantsCache?.some(
-            (cache) =>
-                cache.restaurantName.toLowerCase() === name.toLowerCase() && cache.restaurantId !== idToExclude
-        );
-
-        if (isInCache) {
-            console.log("Restaurant này đã có rồi");
-        }
-
-        return isInCache || false;
+    override update(updatedObject: Restaurant): Observable<Restaurant> {
+        return super.update(updatedObject);
     }
 
-    add(newRestaurant: Restaurant): Observable<Restaurant> {
-
-        if (this.restaurantsCache) {
-            if (this.isInCache(newRestaurant.restaurantName)) {
-                return of();
-            }
-        }
-
-        return this.apiService.request<Restaurant>('post', this.restaurantUrl, newRestaurant).pipe(
-            tap((addedrestaurant: Restaurant) => {
-                this.restaurantsCache = [...this.restaurantsCache, addedrestaurant];
-                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
-            })
-        );
+    override delete(id: number): Observable<Restaurant> {
+        return super.delete(id);
     }
 
-    update(updated: Restaurant): Observable<any> {
-
-        if (this.isInCache(updated.restaurantName, updated.restaurantId)) {
-            return of();
-        }
-
-        const url = `${this.restaurantUrl}/${updated.restaurantId}`;
-
-        return this.apiService.request('put', url, updated).pipe(
-            tap(() => {
-                const updatedRestaurants = this.restaurantsCache.map((restaurant) =>
-                    restaurant.restaurantId === updated.restaurantId ? updated : restaurant
-                );
-                this.restaurantsCache = updatedRestaurants;
-                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
-            })
-        );
+    override searchByName(term: string): Observable<Restaurant[]> {
+        return super.searchByName(term);
     }
 
-    delete(id: number): Observable<any> {
-
-        const url = `${this.restaurantUrl}/${id}`;
-
-        return this.apiService.request('delete', url).pipe(
-            tap(() => {
-                const updatedCache = this.restaurantsCache.filter(restaurant => restaurant.restaurantId !== id);
-                this.restaurantsCache = updatedCache;
-                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
-            })
-        );
-
+    override getItemId(item: Restaurant): number {
+        return item.restaurantId!;
     }
 
+    override getItemName(item: Restaurant): string {
+        return item.restaurantName;
+    }
+
+    override getObjectName(): string {
+        return "Restaurant";
+    }
+
+    // private isInCache(name: string, idToExclude: number | null = null): boolean {
+    //     const isInCache = this.restaurantsCache?.some(
+    //         (cache) =>
+    //             cache.restaurantName.toLowerCase() === name.toLowerCase() && cache.restaurantId !== idToExclude
+    //     );
+
+    //     if (isInCache) {
+    //         console.log("Restaurant này đã có rồi");
+    //     }
+
+    //     return isInCache || false;
+    // }
 }

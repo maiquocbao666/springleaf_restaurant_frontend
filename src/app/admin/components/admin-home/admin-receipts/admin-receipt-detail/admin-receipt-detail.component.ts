@@ -68,7 +68,6 @@ export class AdminReceiptDetailComponent {
   
       this.receiptService.update(updatedReceipt).subscribe(() => {
         // Cập nhật cache
-        this.receiptService.updateCache(updatedReceipt);
         this.receiptSaved.emit(); // Emit the event
       });
     }

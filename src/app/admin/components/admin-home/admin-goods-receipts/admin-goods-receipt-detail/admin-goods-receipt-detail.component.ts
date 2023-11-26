@@ -47,7 +47,7 @@ export class AdminGoodsReceiptDetailComponent {
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.inventoryBranchesCache$
+    this.inventoryBranchService.cache$
       .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
   }
 

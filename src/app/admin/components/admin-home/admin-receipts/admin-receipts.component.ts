@@ -60,17 +60,17 @@ export class AdminReceiptsComponent {
   }
 
   getReceipts(): void {
-    this.receiptService.receiptsCache$
+    this.receiptService.cache$
       .subscribe(receipts => this.receipts = receipts);
   }
 
   getInventories(): void {
-    this.inventoryService.inventoriesCache$
+    this.inventoryService.cache$
       .subscribe(inventories => this.inventories = inventories);
   }
 
   getSuppliers(): void {
-    this.supplierService.suppliersCache$
+    this.supplierService.cache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 

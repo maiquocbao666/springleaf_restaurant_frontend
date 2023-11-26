@@ -1,134 +1,87 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Supplier } from '../interfaces/supplier';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class SupplierService {
+export class SupplierService extends BaseService<Supplier>  {
 
-    private suppliersUrl = 'suppliers';
-    private supplierUrl = 'supplier';
-    private suppliersCacheSubject = new BehaviorSubject<Supplier[]>([]);
-    suppliersCache$ = this.suppliersCacheSubject.asObservable();
+    apisUrl = 'suppliers';
+    cacheKey = 'suppliers';
+    apiUrl = 'supplier';
 
-    constructor(private apiService: ApiService) { }
 
-    get suppliersCache(): Supplier[] {
-        return this.suppliersCacheSubject.value;
+
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    set suppliersCache(value: Supplier[]) {
-        this.suppliersCacheSubject.next(value);
+
+    override gets(): Observable<Supplier[]> {
+        return super.gets();
     }
 
-    private updateCache(updatedSupplier: Supplier): void {
-        const index = this.suppliersCache.findIndex(supplier => supplier.supplierId === updatedSupplier.supplierId);
-        if (index !== -1) {
-            const updatedCache = [...this.suppliersCache];
-            updatedCache[index] = updatedSupplier;
-            this.suppliersCache = updatedCache;
-        }
+    override getById(id: number): Observable<Supplier | null> {
+        return super.getById(id);
     }
 
-    gets(): Observable<Supplier[]> {
-
-        if (this.suppliersCache) {
-            return of(this.suppliersCache);
-        }
-
-        const suppliersObservable = this.apiService.request<Supplier[]>('get', this.suppliersUrl);
-
-        suppliersObservable.subscribe(data => {
-            this.suppliersCache = data;
-        });
-
-        return suppliersObservable;
+    override add(newObject: Supplier): Observable<Supplier> {
+        return super.add(newObject);
     }
 
-    private isInCache(name: string, idToExclude: number | null = null): boolean {
-        const isSupplierInCache = this.suppliersCache?.some(
-            (cache) =>
-                cache.supplierName.toLowerCase() === name.toLowerCase() && cache.supplierId !== idToExclude
-        );
-
-        if (isSupplierInCache) {
-            console.log("Supplier này đã có rồi");
-        }
-
-        return isSupplierInCache || false;
+    override update(updatedObject: Supplier): Observable<Supplier> {
+        return super.update(updatedObject);
     }
 
-    add(newObject: Supplier): Observable<Supplier> {
-        if (this.suppliersCache) {
-            if (this.isInCache(newObject.supplierName)) {
-                return of();
-            }
-        }
-        return this.apiService.request<Supplier>('post', this.supplierUrl, newObject).pipe(
-            tap((added: Supplier) => {
-                this.suppliersCache = [...this.suppliersCache, added];
-                localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
-                //this.onSendMessage(this.suppliersUrl);
-            })
-        );
+    override delete(id: number): Observable<Supplier> {
+        return super.delete(id);
     }
 
-    update(updatedObject: Supplier): Observable<any> {
-        if (this.suppliersCache) {
-            if (this.isInCache(updatedObject.supplierName, updatedObject.supplierId)) {
-                return of();
-            }
-        }
-        const url = `${this.supplierUrl}`;
-        return this.apiService.request('put', url, updatedObject).pipe(
-            tap(() => {
-                const updatedObjects = this.suppliersCache.map((cache) =>
-                    cache.supplierId === updatedObject.supplierId ? updatedObject : cache
-                );
-                this.suppliersCache = updatedObjects;
-                localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
-                //this.onSendMessage(this.suppliersUrl);
-            })
-        );
+    override searchByName(term: string): Observable<Supplier[]> {
+        return super.searchByName(term);
     }
 
-    delete(id: number): Observable<any> {
-        const url = `${this.supplierUrl}/${id}`;
-        return this.apiService.request('delete', url).pipe(
-            tap(() => {
-                const updated = this.suppliersCache.filter(cache => cache.supplierId !== id);
-                this.suppliersCache = updated;
-                localStorage.setItem(this.suppliersUrl, JSON.stringify(this.suppliersCache));
-                //this.onSendMessage(this.suppliersUrl);
-            })
-        );
+    override getItemId(item: Supplier): number {
+        return item.supplierId!;
     }
 
-    getSupplierById(id: number): Observable<Supplier | null> {
-
-        if (!id) {
-            return of(null);
-        }
-
-        if (this.suppliersCache.length > 0) {
-            const supplierFromCache = this.suppliersCache.find(supplier => supplier.supplierId === id);
-            if (supplierFromCache) {
-                return of(supplierFromCache);
-            }
-        }
-
-        const url = `${this.supplierUrl}/${id}`;
-
-        return this.apiService.request<Supplier>('get', url).pipe(
-            tap((supplier: Supplier) => {
-                // Update cache with the fetched supplier
-                this.suppliersCache = [...this.suppliersCache, supplier];
-            }),
-            // Handle error or return null if the supplier is not found
-            catchError(() => of(null))
-        );
+    override getItemName(item: Supplier): string {
+        return item.supplierName;
     }
+
+    override getObjectName(): string {
+        return "Supplier";
+    }
+
+    // private updateCache(updatedSupplier: Supplier): void {
+    //     const index = this.suppliersCache.findIndex(supplier => supplier.supplierId === updatedSupplier.supplierId);
+    //     if (index !== -1) {
+    //         const updatedCache = [...this.suppliersCache];
+    //         updatedCache[index] = updatedSupplier;
+    //         this.suppliersCache = updatedCache;
+    //     }
+    // }
+
+    // private isInCache(name: string, idToExclude: number | null = null): boolean {
+    //     const isSupplierInCache = this.suppliersCache?.some(
+    //         (cache) =>
+    //             cache.supplierName.toLowerCase() === name.toLowerCase() && cache.supplierId !== idToExclude
+    //     );
+
+    //     if (isSupplierInCache) {
+    //         console.log("Supplier này đã có rồi");
+    //     }
+
+    //     return isSupplierInCache || false;
+    // }
 
 }

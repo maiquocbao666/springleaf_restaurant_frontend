@@ -2,93 +2,78 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Role } from '../interfaces/role';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class RoleService {
+export class RoleService extends BaseService<Role> {
 
-    private rolesUrl = 'roles';
-    private roleUrl = 'role';
-    private rolesCacheSubject = new BehaviorSubject<Role[]>([]);
-    rolesCache$ = this.rolesCacheSubject.asObservable();
+    apisUrl = 'roles';
+    cacheKey = 'roles';
+    apiUrl = 'role';
 
-    constructor(private apiService: ApiService) { }
 
-    get rolesCache(): Role[] {
-        return this.rolesCacheSubject.value;
+
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    set rolesCache(value: Role[]) {
-        this.rolesCacheSubject.next(value);
+   
+
+    override gets(): Observable<Role[]> {
+        return super.gets();
     }
 
-    private updateCache(updatedRole: Role): void {
-        const index = this.rolesCache.findIndex(role => role.roleId === updatedRole.roleId);
-        if (index !== -1) {
-            const updatedCache = [...this.rolesCache];
-            updatedCache[index] = updatedRole;
-            this.rolesCache = updatedCache;
-        }
+    override getById(id: number): Observable<Role | null> {
+        return super.getById(id);
     }
 
-    getRoles(): Observable<Role[]> {
-
-        if (this.rolesCache) {
-            return of(this.rolesCache);
-        }
-
-        const rolesObservable = this.apiService.request<Role[]>('get', this.rolesUrl);
-
-        rolesObservable.subscribe(data => {
-            this.rolesCache = data;
-        });
-
-        return rolesObservable;
+    override add(newObject: Role): Observable<Role> {
+        return super.add(newObject);
     }
 
-    private isRoleNameInCache(name: string): boolean {
-        return !!this.rolesCache?.find(role => role.roleName.toLowerCase() === name.toLowerCase());
+    override update(updatedObject: Role): Observable<Role> {
+        return super.update(updatedObject);
     }
 
-    addRole(newRole: Role): Observable<Role> {
-
-        if (this.isRoleNameInCache(newRole.roleName)) {
-            return of();
-        }
-
-        return this.apiService.request<Role>('post', this.roleUrl, newRole).pipe(
-            tap((addedRole: Role) => {
-                this.rolesCache = [...this.rolesCache, addedRole];
-            })
-        );
+    override delete(id: number): Observable<Role> {
+        return super.delete(id);
     }
 
-    updateRole(updatedRole: Role): Observable<any> {
-
-        if (this.isRoleNameInCache(updatedRole.roleName)) {
-            return of();
-        }
-
-        const url = `${this.roleUrl}/${updatedRole.roleId}`;
-
-        return this.apiService.request('put', url, updatedRole).pipe(
-            tap(() => {
-                this.updateCache(updatedRole);
-            })
-        );
+    override searchByName(term: string): Observable<Role[]> {
+        return super.searchByName(term);
     }
 
-    deleteRole(id: number): Observable<any> {
-
-        const url = `${this.roleUrl}/${id}`;
-
-        return this.apiService.request('delete', url).pipe(
-            tap(() => {
-                const updatedCache = this.rolesCache.filter(role => role.roleId !== id);
-                this.rolesCache = updatedCache;
-            })
-        );
-
+    override getItemId(item: Role): number {
+        return item.roleId!;
     }
+
+    override getItemName(item: Role): string {
+        return item.roleName;
+    }
+
+    override getObjectName(): string {
+        return "Role";
+    }
+
+    // private updateCache(updatedRole: Role): void {
+    //     const index = this.rolesCache.findIndex(role => role.roleId === updatedRole.roleId);
+    //     if (index !== -1) {
+    //         const updatedCache = [...this.rolesCache];
+    //         updatedCache[index] = updatedRole;
+    //         this.rolesCache = updatedCache;
+    //     }
+    // }
+
+    // private isRoleNameInCache(name: string): boolean {
+    //     return !!this.rolesCache?.find(role => role.roleName.toLowerCase() === name.toLowerCase());
+    // }
+
 }

@@ -1,19 +1,34 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { CartDetail } from '../interfaces/cart-detail';
+import { BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Cart } from '../interfaces/cart';
-
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CartService {
+export class CartService extends BaseService<Cart> {
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService,
+    private http: HttpClient,
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
+    this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url))
+  }
 
-  private cartsUrl = 'carts';
-  private cartUrl = 'cart';
+  apisUrl = 'carts';
+  cacheKey = 'carts';
+  apiUrl = 'cart';
   cartsCache!: Cart[];
   getDatasOfThisUserWorker: Worker;
+
 
   // Province
   public provinceDataSubject = new BehaviorSubject<Province[]>([]);
@@ -28,53 +43,32 @@ export class CartService {
   selectedProvinceId: number | null = null;
   selectedDistrictId: number | null = null;
 
-  constructor(private apiService: ApiService, private http: HttpClient, private ngZone: NgZone) {
 
-    this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url));
 
+  override gets(): Observable<Cart[]> {
+    return super.gets();
   }
 
-  gets(): Observable<Cart[]> {
-
-    if (this.cartsCache) {
-
-      return of(this.cartsCache);
-
-    }
-
-    const cartsObservable = this.apiService.request<Cart[]>('get', this.cartsUrl);
-
-
-    cartsObservable.subscribe(data => {
-
-      this.cartsCache = data;
-
-    });
-
-    return cartsObservable;
+  override getById(id: number): Observable<Cart | null> {
+    return super.getById(id);
   }
 
-  getById(id: number): Observable<Cart> {
+  override add(newCart: Cart): Observable<Cart> {
+    return super.add(newCart);
+  }
 
-    if (!this.cartsCache) {
+  override update(updated: Cart): Observable<any> {
+    return super.update(updated);
+  }
 
-      this.gets();
-
-    }
-
-    const cartFromCache = this.cartsCache.find(cart => cart.orderId === id);
-
-    if (cartFromCache) {
-
-      return of(cartFromCache);
-
-    } else {
-
-      const url = `${this.cartUrl}/${id}`;
-      return this.apiService.request<Cart>('get', url);
-
-    }
-
+  override getItemId(item: Cart): number {
+    throw new Error('Method not implemented.');
+  }
+  override getItemName(item: Cart): string {
+    throw new Error('Method not implemented.');
+  }
+  override getObjectName(): string {
+    return "Cart";
   }
 
 
@@ -160,27 +154,6 @@ export class CartService {
 
   }
 
-  delete(id: number): Observable<any> {
-
-    const url = `${this.cartUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-
-      tap(() => {
-
-        const index = this.cartsCache.findIndex(cart => cart.orderId === id);
-
-        if (index !== -1) {
-
-          this.cartsCache.splice(index, 1);
-          localStorage.setItem(this.cartsUrl, JSON.stringify(this.cartsCache));
-
-        }
-
-      })
-    );
-
-  }
 
 
 }

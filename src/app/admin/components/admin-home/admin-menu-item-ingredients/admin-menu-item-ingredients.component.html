@@ -2,8 +2,7 @@
   <h1>Kho</h1>
   <form [formGroup]="menuItemIngredientForm" (ngSubmit)="addMenuItemIngredient()">
     <div class="mb-3">
-      <a class="nav-link"
-        routerLink="/admin/ingredients">Thêm nguyên liệu</a>
+      <a class="nav-link" routerLink="/admin/ingredients">Thêm nguyên liệu</a>
       <div class="mb-3">
         <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
           <option value="">Chọn nguyên liệu</option>
@@ -54,7 +53,8 @@
         <td>{{ (getProductById(menuItemIngredient.menuItemId) | async)?.name }}</td>
         <td><button type="button" class="btn btn-outline-primary"
             (click)="openMenuItemIngredientDetailModal(menuItemIngredient)">Edit</button>
-          <button type="button" class="btn btn-outline-danger" (click)="deleteMenuItemIngredient(menuItemIngredient)">Delete</button>
+          <button type="button" class="btn btn-outline-danger"
+            (click)="deleteMenuItemIngredient(menuItemIngredient)">Delete</button>
         </td>
       </tr>
     </tbody>

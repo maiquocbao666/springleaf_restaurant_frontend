@@ -48,7 +48,7 @@ export class AdminTableTypesComponent {
   }
 
   getTableTypes(): void {
-    this.tableTypeService.tableTypesCache$
+    this.tableTypeService.cache$
       .subscribe(tableTypes => this.tableTypes = tableTypes);
   }
 

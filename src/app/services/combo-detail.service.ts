@@ -3,80 +3,53 @@ import { Observable, of, tap } from 'rxjs';
 import { ComboDetail } from '../interfaces/combo-detail';
 import { ApiService } from 'src/app/services/api.service';
 import { BehaviorSubject } from 'rxjs';
+import { BaseService } from './base-service';
+import { RxStompService } from '../rx-stomp.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ComboDetailService {
+export class ComboDetailService extends BaseService<ComboDetail> {
 
-  private comboDetailsUrl = 'comboDetails';
-  private comboDetailUrl = 'comboDetail';
-
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private comboDetailsCacheSubject = new BehaviorSubject<ComboDetail[]>([]);
-  comboDetailsCache$ = this.comboDetailsCacheSubject.asObservable();
-
-  constructor(private apiService: ApiService) { }
-
-  get comboDetailsCache(): ComboDetail[] {
-    return this.comboDetailsCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set comboDetailsCache(value: ComboDetail[]) {
-    this.comboDetailsCacheSubject.next(value);
+  apiUrl = 'comboDetail';
+  apisUrl = 'comboDetails';
+  cacheKey = 'comboDetails';
+
+  getItemId(item: ComboDetail): number {
+    return item.comboDetailId!;
   }
 
-  gets(): Observable<ComboDetail[]> {
-    if (this.comboDetailsCache) {
-      return of(this.comboDetailsCache);
-    }
-
-    const comboDetailsObservable = this.apiService.request<ComboDetail[]>('get', this.comboDetailsUrl);
-
-    comboDetailsObservable.subscribe(data => {
-      this.comboDetailsCache = data;
-    });
-
-    return comboDetailsObservable;
+  override getItemName(item: ComboDetail): string {
+    throw new Error('Method not implemented.');
   }
 
-  add(newComboDetail: ComboDetail): Observable<ComboDetail> {
-    return this.apiService.request<ComboDetail>('post', this.comboDetailUrl, newComboDetail).pipe(
-      tap((addedComboDetail: ComboDetail) => {
-        this.comboDetailsCache = [...this.comboDetailsCache, addedComboDetail];
-        localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
-      })
-    );
+  override getObjectName(): string {
+    return "ComboDetail";
   }
 
-  update(updatedComboDetail: ComboDetail): Observable<any> {
-    const url = `${this.comboDetailUrl}`;
-
-    return this.apiService.request('put', url, updatedComboDetail).pipe(
-      tap(() => {
-        const index = this.comboDetailsCache!.findIndex(detail => detail.comboDetailId === updatedComboDetail.comboDetailId);
-
-        if (index !== -1) {
-          this.comboDetailsCache![index] = updatedComboDetail;
-          localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
-        }
-      })
-    );
+  override gets(): Observable<ComboDetail[]> {
+    return super.gets();
   }
-  
-  delete(id: number): Observable<any> {
-    const url = `${this.comboDetailUrl}/${id}`;
 
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const index = this.comboDetailsCache.findIndex(comboDetail => comboDetail.comboDetailId === id);
+  override add(newComboDetail: ComboDetail): Observable<ComboDetail> {
+    return super.add(newComboDetail);
+  }
 
-        if (index !== -1) {
-          this.comboDetailsCache.splice(index, 1);
-          localStorage.setItem(this.comboDetailsUrl, JSON.stringify(this.comboDetailsCache));
-        }
-      })
-    );
+  override update(updatedComboDetail: ComboDetail): Observable<ComboDetail> {
+    return super.update(updatedComboDetail);
+  }
+
+  override delete(id: number): Observable<ComboDetail> {
+    return super.delete(id);
   }
 
 }

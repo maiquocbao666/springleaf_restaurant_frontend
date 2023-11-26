@@ -68,22 +68,22 @@ export class AdminInventoryBranchesComponent {
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.inventoryBranchesCache$
+    this.inventoryBranchService.cache$
       .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
   }
 
   getSuppliers(): void {
-    this.supplierService.suppliersCache$
+    this.supplierService.cache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
   getIngredients(): void {
-    this.ingredientService.ingredientsCache$
+    this.ingredientService.cache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
   getRestaurants(): void {
-    this.restaurantService.restaurantsCache$
+    this.restaurantService.cache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 
@@ -92,12 +92,12 @@ export class AdminInventoryBranchesComponent {
   }
 
   getSupplierById(supplierId: number): Observable<Supplier | null> {
-    return this.supplierService.getSupplierById(supplierId);
+    return this.supplierService.getById(supplierId);
   }
 
 
   getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
-    return this.restaurantService.getRestaurantById(restaurantId);
+    return this.restaurantService.getById(restaurantId);
   }
 
   addInventoryBranch(): void {

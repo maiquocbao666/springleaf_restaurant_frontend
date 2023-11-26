@@ -3,120 +3,60 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api.service';
 import { MenuItemIngredient } from '../interfaces/menu-item-ingredient';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class MenuItemIngredientService {
+export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
 
-    private menuItemIngredientsUrl = 'menuItemIngredients';
-    private menuItemIngredientUrl = 'menuItemIngredient';
+    apisUrl = 'menuItemIngredients';
+    cacheKey = 'menuItemIngredients';
+    apiUrl = 'menuItemIngredient';
 
-    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-    private menuItemIngredientsCacheSubject = new BehaviorSubject<MenuItemIngredient[]>([]);
-    menuItemIngredientsCache$ = this.menuItemIngredientsCacheSubject.asObservable();
-
-    constructor(private apiService: ApiService) { }
-
-    get menuItemIngredientsCache(): MenuItemIngredient[] {
-        return this.menuItemIngredientsCacheSubject.value;
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    set menuItemIngredientsCache(value: MenuItemIngredient[]) {
-        this.menuItemIngredientsCacheSubject.next(value);
+    override gets(): Observable<MenuItemIngredient[]> {
+        return super.gets();
     }
 
-    gets(): Observable<MenuItemIngredient[]> {
-
-        if (this.menuItemIngredientsCache) {
-            return of(this.menuItemIngredientsCache);
-        }
-
-        const menuItemIngredientsObservable = this.apiService.request<MenuItemIngredient[]>('get', this.menuItemIngredientsUrl);
-
-        menuItemIngredientsObservable.subscribe(data => {
-            this.menuItemIngredientsCache = data;
-        });
-
-        return menuItemIngredientsObservable;
-
+    override getById(id: number): Observable<MenuItemIngredient | null> {
+        return super.getById(id);
     }
 
-    add(newMenuItemIngredient: MenuItemIngredient): Observable<MenuItemIngredient> {
-
-        return this.apiService.request<MenuItemIngredient>('post', this.menuItemIngredientUrl, newMenuItemIngredient).pipe(
-
-            tap((addedMenuItemIngredient: MenuItemIngredient) => {
-
-                this.menuItemIngredientsCache = [...this.menuItemIngredientsCache, addedMenuItemIngredient];
-                localStorage.setItem(this.menuItemIngredientsUrl, JSON.stringify(this.menuItemIngredientsCache));
-
-            })
-
-        );
-
+    override add(newObject: MenuItemIngredient): Observable<MenuItemIngredient> {
+        return super.add(newObject);
     }
 
-    update(updatedMenuItemIngredient: MenuItemIngredient): Observable<any> {
-
-        const url = `${this.menuItemIngredientUrl}/${updatedMenuItemIngredient.menuItemIngredientId}`;
-
-        return this.apiService.request('put', url, updatedMenuItemIngredient).pipe(
-
-            tap(() => {
-
-                this.updateCache(updatedMenuItemIngredient);
-
-                const index = this.menuItemIngredientsCache!.findIndex(itemIngredient => itemIngredient.menuItemIngredientId === updatedMenuItemIngredient.menuItemIngredientId);
-
-                if (index !== -1) {
-
-                    this.menuItemIngredientsCache![index] = updatedMenuItemIngredient;
-                    localStorage.setItem(this.menuItemIngredientsUrl, JSON.stringify(this.menuItemIngredientsCache));
-
-                }
-
-            })
-
-        );
-
+    override update(updatedObject: MenuItemIngredient): Observable<MenuItemIngredient> {
+        return super.update(updatedObject);
     }
 
-    updateCache(updatedMenuItemIngredient: MenuItemIngredient): void {
-
-        if (this.menuItemIngredientsCache) {
-
-            const index = this.menuItemIngredientsCache.findIndex(itemIngredient => itemIngredient.menuItemIngredientId === updatedMenuItemIngredient.menuItemIngredientId);
-
-            if (index !== -1) {
-
-                this.menuItemIngredientsCache[index] = updatedMenuItemIngredient;
-
-            }
-
-        }
-
+    override delete(id: number): Observable<MenuItemIngredient> {
+        return super.delete(id);
     }
 
-    delete(id: number): Observable<any> {
+    override searchByName(term: string): Observable<MenuItemIngredient[]> {
+        return super.searchByName(term);
+    }
 
-        const url = `${this.menuItemIngredientUrl}/${id}`;
+    override getItemId(item: MenuItemIngredient): number {
+        return item.menuItemIngredientId!;
+    }
 
-        return this.apiService.request('delete', url).pipe(
+    override getItemName(item: MenuItemIngredient): string {
+        throw new Error('Method not implemented.');
+    }
 
-            tap(() => {
-
-                const index = this.menuItemIngredientsCache.findIndex(itemIngredient => itemIngredient.menuItemIngredientId === id);
-
-                if (index !== -1) {
-
-                    this.menuItemIngredientsCache.splice(index, 1);
-                    localStorage.setItem(this.menuItemIngredientsUrl, JSON.stringify(this.menuItemIngredientsCache));
-
-                }
-
-            })
-        );
-
+    override getObjectName(): string {
+        return "MenuItemIngredient";
     }
 }

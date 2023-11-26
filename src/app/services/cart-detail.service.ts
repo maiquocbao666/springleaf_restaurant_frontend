@@ -3,84 +3,59 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { CartDetail } from '../interfaces/cart-detail';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Cart } from '../interfaces/cart';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CartDetailService {
 
-  private cartDetailsUrl = 'cartDetails';
-  private cartDetailUrl = 'cartDetail';
+export class CartDetailService extends BaseService<CartDetail> {
 
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private cartDetailsCacheSubject = new BehaviorSubject<CartDetail[]>([]);
-  cartDetailsCache$ = this.cartDetailsCacheSubject.asObservable();
-
-  constructor(private apiService: ApiService) { }
-
-  get cartDetailsCache(): CartDetail[] {
-    return this.cartDetailsCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set cartDetailsCache(value: CartDetail[]) {
-    this.cartDetailsCacheSubject.next(value);
+  apisUrl = 'cartDetails';
+  cacheKey = 'cartDetails';
+  apiUrl = 'cartDetail';
+
+
+  override gets(): Observable<CartDetail[]> {
+    return super.gets();
   }
 
-  gets(): Observable<CartDetail[]> {
-    if (this.cartDetailsCache) {
-      return of(this.cartDetailsCache);
-    }
-
-    const cartDetailsObservable = this.apiService.request<CartDetail[]>('get', this.cartDetailsUrl);
-
-    cartDetailsObservable.subscribe(data => {
-      this.cartDetailsCache = data;
-    });
-
-    return cartDetailsObservable;
+  override getById(id: number): Observable<CartDetail | null> {
+    return super.getById(id);
   }
 
-  add(newCartDetail: CartDetail): Observable<CartDetail> {
-    return this.apiService.request<CartDetail>('post', this.cartDetailUrl, newCartDetail).pipe(
-      tap((addedCartDetail: CartDetail) => {
-        this.cartDetailsCache = [...this.cartDetailsCache, addedCartDetail];
-        localStorage.setItem(this.cartDetailsUrl, JSON.stringify(this.cartDetailsCache));
-      })
-    );
+  override add(newProduct: CartDetail): Observable<CartDetail> {
+    return super.add(newProduct);
   }
 
-  update(updatedCartDetail: CartDetail): Observable<any> {
-    const url = `${this.cartDetailUrl}/${updatedCartDetail.orderDetailId}`;
-
-    return this.apiService.request('put', url, updatedCartDetail).pipe(
-      tap(() => {
-        const index = this.cartDetailsCache!.findIndex(cartDetail => cartDetail.orderDetailId === updatedCartDetail.orderDetailId);
-
-        if (index !== -1) {
-          this.cartDetailsCache![index] = updatedCartDetail;
-          localStorage.setItem(this.cartDetailsUrl, JSON.stringify(this.cartDetailsCache));
-        }
-      })
-    );
+  override update(updated: CartDetail): Observable<any> {
+    return super.update(updated);
   }
 
-  delete(id: number): Observable<any> {
-    if (!id) {
-      return of(null);
-    }
+  override delete(id: number): Observable<any> {
+    return super.delete(id);
+  }
 
-    const url = `${this.cartDetailUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const index = this.cartDetailsCache.findIndex(cartDetail => cartDetail.orderDetailId === id);
-
-        if (index !== -1) {
-          this.cartDetailsCache.splice(index, 1);
-          localStorage.setItem(this.cartDetailsUrl, JSON.stringify(this.cartDetailsCache));
-        }
-      })
-    );
+  override getItemId(item: CartDetail): number {
+    throw new Error('Method not implemented.');
+  }
+  override getItemName(item: CartDetail): string {
+    throw new Error('Method not implemented.');
+  }
+  override getObjectName(): string {
+    throw new Error('Method not implemented.');
   }
 
 }

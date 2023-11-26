@@ -1,17 +1,25 @@
+
 import { Component, OnDestroy } from "@angular/core";
 import { AuthenticationService } from "./services/authentication.service";
 import { CategoryService } from "./services/category.service";
 import { ComboDetailService } from "./services/combo-detail.service";
 import { ComboService } from "./services/combo.service";
 // import { DeliveryDetailService } from "./services/delivery-detail.service";
+import { BillDetailService } from "./services/bill-detail.service";
+import { BillService } from "./services/bill.service";
+import { CartDetailService } from "./services/cart-detail.service";
 import { CartService } from "./services/cart.service";
 import { DeliveryOrderDetailService } from "./services/delivery-order-detail.service";
 import { DeliveryOrderStatusService } from "./services/delivery-order-status.service";
 import { DeliveryOrderService } from "./services/delivery-order.service";
 import { EventService } from "./services/event.service";
 import { FavoriteService } from "./services/favorite.service";
+import { GoodsReceiptDetailService } from "./services/goods-receipt-detail.service";
+import { GoodsReceiptService } from "./services/goods-receipt.service";
+import { IngredientService } from "./services/ingredient.service";
 import { InventoryBranchService } from "./services/inventory-branch.service";
 import { InventoryService } from "./services/inventory.service";
+import { MenuItemIngredientService } from "./services/menu-Item-ingredient.service";
 import { MergeTableService } from "./services/merge-table.service";
 import { OrderService } from "./services/order.service";
 import { PaymentService } from "./services/payment.service";
@@ -19,14 +27,14 @@ import { ProductService } from "./services/product.service";
 import { RatingService } from "./services/rating.service";
 import { ReceiptDetailService } from "./services/receipt-detail.service";
 import { ReceiptService } from "./services/receipt.service";
+import { ReservationStatusService } from "./services/reservation-status.service";
 import { ReservationService } from "./services/reservation.service";
 import { RestaurantTableService } from "./services/restaurant-table.service";
 import { RestaurantService } from "./services/restaurant.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
-import { ReservationStatusService } from "./services/reservation-status.service";
-import { Observable } from "rxjs";
+import { OrderThresholdService } from "./services/order-threshold.service";
 
 
 interface DataService<T> {
@@ -56,30 +64,30 @@ export class AppComponent implements OnDestroy {
     private categoriesService: CategoryService,
     private productsService: ProductService,
     private cartsService: CartService,
-    //private cartDetailsService: CartDetailService,
+    private cartDetailsService: CartDetailService,
     private ordersService: OrderService,
 
     private combosService: ComboService,
+    private comboDetailService: ComboDetailService,
     private eventsService: EventService,
     private restaurantTablesService: RestaurantTableService,
     private restaurantsService: RestaurantService,
     private suppliersService: SupplierService,
     private tableStatusesService: TableStatusService,
-    // private ingredientsService: IngredientService,
-    //private billsService: BillService,
-    //private billDetailsService: BillDetailService,
-    //private cartsService: CartService,
+    private ingredientsService: IngredientService,
+    private billsService: BillService,
+    private billDetailsService: BillDetailService,
     private comboDetailsService: ComboDetailService,
-    //private goodsReceiptsService: GoodsReceiptService,
-    //private goodsReceiptDetailsService: GoodsReceiptDetailService,
+    private goodsReceiptsService: GoodsReceiptService,
+    private goodsReceiptDetailsService: GoodsReceiptDetailService,
     private deliveryOrdersService: DeliveryOrderService,
     private deliveryOrderStatusesService: DeliveryOrderStatusService,
     private deliveryOrderDetailsService: DeliveryOrderDetailService,
     private favoritesService: FavoriteService,
     private inventoriesService: InventoryService,
     private inventoryBranchesService: InventoryBranchService,
-    //private menuItemIngredientsService: MenuItemIngredientService,
-    //private orderThresholdsService: OrderThresholdService,
+    private menuItemIngredientsService: MenuItemIngredientService,
+    private orderThresholdsService: OrderThresholdService,
     private mergeTablesService: MergeTableService,
     //private orderTypesService: OrderTypeService,
     private paymentsService: PaymentService,
@@ -102,52 +110,50 @@ export class AppComponent implements OnDestroy {
 
       products: { cache: this.productsService.cache, localStorageKey: 'products' },
 
-      //cartDetails: { cache: this.cartDetailsService.cartDetailsCache, localStorageKey: 'cartDetails' },
-      // carts: { cache: this.cartsService.cartsCache, localStorageKey: 'carts' },
+      cartDetails: { cache: this.cartDetailsService.cache, localStorageKey: 'cartDetails' },
+      carts: { cache: this.cartsService.cache, localStorageKey: 'carts' },
 
       combos: { cache: this.combosService.cache, localStorageKey: 'combos' },
       events: { cache: this.eventsService.cache, localStorageKey: 'events' },
+
+      restaurantTables: { cache: this.restaurantTablesService.cache, localStorageKey: 'restaurantTables' },
+      restaurants: { cache: this.restaurantsService.cache, localStorageKey: 'restaurants' },
+
+      suppliers: { cache: this.suppliersService.cache, localStorageKey: 'suppliers' },
+
+      tableStatuses: { cache: this.tableStatusesService.cache, localStorageKey: 'tableStatuses' },
+
+      ingredients: { cache: this.ingredientsService.cache, localStorageKey: 'ingredients' },
+      bills: { cache: this.billsService.cache, localStorageKey: 'bills' },
+      billDetails: { cache: this.billDetailsService.cache, localStorageKey: 'billDetails' },
+      comboDetails: { cache: this.comboDetailsService.cache, localStorageKey: 'comboDetails' },
+
+      goodsReceipts: { cache: this.goodsReceiptsService.cache, localStorageKey: ' goodsReceipts' },
+      // goodsReceiptDetailss: { cache: this.goodsReceiptDetailsService.cache, localStorageKey: 'goodsReceiptDetailss' },
+
+      deliveryOrders: { cache: this.deliveryOrdersService.cache, localStorageKey: 'deliveryOrders' },
+      deliveryOrderStatuses: { cache: this.deliveryOrderStatusesService.cache, localStorageKey: 'deliveryOrderStatuses' },
+
       
-      /*restaurantTables: { cache: this.restaurantTablesService.restaurantTablesCache, localStorageKey: 'restaurantTables' },
-      restaurants: { cache: this.restaurantsService.restaurantsCache, localStorageKey: 'restaurants' },*/
 
-      // suppliers: { cache: this.suppliersService.suppliersCache, localStorageKey: 'suppliers' },
+      favorites: { cache: this.favoritesService.cache, localStorageKey: 'favorites' },
+      inventories: { cache: this.inventoriesService.cache, localStorageKey: 'inventories' },
+      inventoryBranches: { cache: this.inventoryBranchesService.cache, localStorageKey: 'inventoryBranches' },
 
-      /*tableStatuses: { cache: this.tableStatusesService.tableStatusesCache, localStorageKey: 'tableStatuses' },*/
+      menuItemIngredients: { cache: this.menuItemIngredientsService.cache, localStorageKey: 'menuItemIngredients' },
+      orderThresholds: { cache: this.orderThresholdsService.cache, localStorageKey: 'orderThresholds' },
 
-      // ingredients: { cache: this.ingredientsService.ingredientsCache, localStorageKey: 'ingredients' },
-      //bills: { cache: this.billsService.billsCache, localStorageKey: 'bills' },
-      //billDetails: { cache: this.billDetailsService.billDetailsCache, localStorageKey: 'billDetails' },
-
-      /*carts: { cache: this.ordersService.ordersCache, localStorageKey: 'carts' },
-      comboDetails: { cache: this.comboDetailsService.comboDetailsCache, localStorageKey: 'comboDetails' },*/
-
-      //goodsReceipts: { cache: this.goodsReceiptsService.goodsReceiptsCache, localStorageKey: ' goodsReceipts' },
-      //goodsReceiptDetails: { cache: this.goodsReceiptDetailsService.goodsReceiptDetailsCache, localStorageKey: 'goodsReceiptDetails' },
-
-      /*deliveryOrders: { cache: this.deliveryOrdersService.deliveryOrdersCache, localStorageKey: 'deliveryOrders' },
-      deliveryOrderStatuses: { cache: this.deliveryOrderStatusesService.deliveryOrderStatusesCache, localStorageKey: 'deliveryOrderStatuses' },*/
-
-      //deliveryOrderDetails: { cache: this.deliveryOrderDetailsService.deliveryOrderDetailsCache, localStorageKey: 'deliveryOrderDetails' },
-
-      /*favorites: { cache: this.favoritesService.favoritesCache, localStorageKey: 'favorites' },
-      inventories: { cache: this.inventoriesService.inventoriesCache, localStorageKey: 'inventories' },
-      inventoryBranches: { cache: this.inventoryBranchesService.inventoryBranchesCache, localStorageKey: 'inventoryBranches' },*/
-
-      //menuItemIngredients: { cache: this.menuItemIngredientsService.menuItemIngredientsCache, localStorageKey: 'menuItemIngredients' },
-      //orderThresholds: { cache: this.orderThresholdsService.orderThresholdsCache, localStorageKey: 'orderThresholds' },
-
-      /*mergeTables: { cache: this.mergeTablesService.mergeTablesCache, localStorageKey: 'mergeTables' },*/
+      mergeTables: { cache: this.mergeTablesService.cache, localStorageKey: 'mergeTables' },
 
       // orderTypes: { cache: this.orderTypesService.orderTypesCache, localStorageKey: 'orderTypes' },
 
-      /*payments: { cache: this.paymentsService.paymentsCache, localStorageKey: 'payments' },
-      ratings: { cache: this.ratingsService.ratingsCache, localStorageKey: 'ratings' },
-      receipts: { cache: this.receiptsService.receiptsCache, localStorageKey: 'receipts' },
-      receiptDetails: { cache: this.receiptDetailsService.receiptDetailsCache, localStorageKey: 'receiptDetails' },
-      reservations: { cache: this.reservationsService.reservationsCache, localStorageKey: 'reservations' },
-      tableTypes: { cache: this.tableTypesService.tableTypesCache, localStorageKey: 'tableTypes' },
-      reservationStatuses: { cache: this.reservationStatusesService.reservationStatusesCache, localStorageKey: 'reservationStatuses' },*/
+      payments: { cache: this.paymentsService.cache, localStorageKey: 'payments' },
+      ratings: { cache: this.ratingsService.cache, localStorageKey: 'ratings' },
+      receipts: { cache: this.receiptsService.cache, localStorageKey: 'receipts' },
+      receiptDetails: { cache: this.receiptDetailsService.cache, localStorageKey: 'receiptDetails' },
+      // reservations: { cache: this.reservationsService.reservationsCache, localStorageKey: 'reservations' },
+      tableTypes: { cache: this.tableTypesService.cache, localStorageKey: 'tableTypes' },
+      // reservationStatuses: { cache: this.reservationStatusesService.reservationStatusesCache, localStorageKey: 'reservationStatuses' },
 
     };
 

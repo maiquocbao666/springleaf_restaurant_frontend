@@ -1,82 +1,47 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { GoodsReceiptDetail } from '../interfaces/goods-receipt-detail';
-import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GoodsReceiptDetailService {
+export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  {
 
-  private goodsReceiptDetailsUrl = 'goodsReceiptDetails';
-  private goodsReceiptDetailUrl = 'goodsReceiptDetail';
+  apisUrl = 'goodsReceiptDetailss';
+  cacheKey = 'goodsReceiptDetailss';
+  apiUrl = 'goodsReceiptDetails';
 
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private goodsReceiptDetailsCacheSubject = new BehaviorSubject<GoodsReceiptDetail[]>([]);
-  goodsReceiptDetailsCache$ = this.goodsReceiptDetailsCacheSubject.asObservable();
-
-  constructor(private apiService: ApiService) { }
-
-  get goodsReceiptDetailsCache(): GoodsReceiptDetail[] {
-    return this.goodsReceiptDetailsCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set goodsReceiptDetailsCache(value: GoodsReceiptDetail[]) {
-    this.goodsReceiptDetailsCacheSubject.next(value);
+  override gets(): Observable<GoodsReceiptDetail[]> {
+    return super.gets();
   }
-
-  gets(): Observable<GoodsReceiptDetail[]> {
-    if (this.goodsReceiptDetailsCache) {
-      return of(this.goodsReceiptDetailsCache);
-    }
-
-    const goodsReceiptDetailsObservable = this.apiService.request<GoodsReceiptDetail[]>('get', this.goodsReceiptDetailsUrl);
-
-    goodsReceiptDetailsObservable.subscribe(data => {
-      this.goodsReceiptDetailsCache = data;
-    });
-
-    return goodsReceiptDetailsObservable;
+  override add(newGoodsReceiptDetail: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
+    return super.add(newGoodsReceiptDetail);
   }
-
-  add(newGoodsReceiptDetail: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
-    return this.apiService.request<GoodsReceiptDetail>('post', this.goodsReceiptDetailUrl, newGoodsReceiptDetail).pipe(
-      tap((addedGoodsReceiptDetail: GoodsReceiptDetail) => {
-        this.goodsReceiptDetailsCache = [...this.goodsReceiptDetailsCache, addedGoodsReceiptDetail];
-        localStorage.setItem(this.goodsReceiptDetailsUrl, JSON.stringify(this.goodsReceiptDetailsCache));
-      })
-    );
+  override update(updated: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
+    return super.update(updated);
   }
-
-  update(updatedGoodsReceiptDetail: GoodsReceiptDetail): Observable<any> {
-    const url = `${this.goodsReceiptDetailUrl}/${updatedGoodsReceiptDetail.goodsReceiptDetailId}`;
-
-    return this.apiService.request('put', url, updatedGoodsReceiptDetail).pipe(
-      tap(() => {
-        const index = this.goodsReceiptDetailsCache!.findIndex(detail => detail.goodsReceiptDetailId === updatedGoodsReceiptDetail.goodsReceiptDetailId);
-
-        if (index !== -1) {
-          this.goodsReceiptDetailsCache![index] = updatedGoodsReceiptDetail;
-          localStorage.setItem(this.goodsReceiptDetailsUrl, JSON.stringify(this.goodsReceiptDetailsCache));
-        }
-      })
-    );
+  override delete(id: number): Observable<GoodsReceiptDetail> {
+    return super.delete(id);
   }
-
-  delete(id: number): Observable<any> {
-    const url = `${this.goodsReceiptDetailUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const index = this.goodsReceiptDetailsCache.findIndex(detail => detail.goodsReceiptDetailId === id);
-
-        if (index !== -1) {
-          this.goodsReceiptDetailsCache.splice(index, 1);
-          localStorage.setItem(this.goodsReceiptDetailsUrl, JSON.stringify(this.goodsReceiptDetailsCache));
-        }
-      })
-    );
+  override getItemId(item: GoodsReceiptDetail): number {
+    return item.goodsReceiptDetailId!;
   }
-
+  override getItemName(item: GoodsReceiptDetail): string {
+    throw new Error('Method not implemented.');
+  }
+  override getObjectName(): string {
+    return "GoodsReceiptDetail";
+  }
 }

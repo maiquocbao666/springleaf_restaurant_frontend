@@ -59,7 +59,7 @@ export class AdminComboDetailsUpdateComponent {
   }
 
   getComboDetails(): void {
-    this.comboDetailService.comboDetailsCache$
+    this.comboDetailService.cache$
       .subscribe(comboDetails => this.comboDetails = comboDetails);
   }
 

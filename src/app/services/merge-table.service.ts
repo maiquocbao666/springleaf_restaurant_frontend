@@ -3,120 +3,61 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api.service';
 import { MergeTable } from './../interfaces/merge-table';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class MergeTableService {
+export class MergeTableService extends BaseService<MergeTable> {
 
-    private mergeTablesUrl = 'mergeTables';
-    private mergeTableUrl = 'mergeTable';
+    apisUrl = 'mergeTables';
+    cacheKey = 'mergeTables';
+    apiUrl = 'mergeTable';
 
-    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-    private mergeTablesCacheSubject = new BehaviorSubject<MergeTable[]>([]);
-    mergeTablesCache$ = this.mergeTablesCacheSubject.asObservable();
-
-    constructor(private apiService: ApiService) { }
-
-    get mergeTablesCache(): MergeTable[] {
-        return this.mergeTablesCacheSubject.value;
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    set mergeTablesCache(value: MergeTable[]) {
-        this.mergeTablesCacheSubject.next(value);
+
+    override gets(): Observable<MergeTable[]> {
+        return super.gets();
     }
 
-    getMergeTables(): Observable<MergeTable[]> {
-
-        if (this.mergeTablesCache) {
-            return of(this.mergeTablesCache);
-        }
-
-        const mergeTablesObservable = this.apiService.request<MergeTable[]>('get', this.mergeTablesUrl);
-
-        mergeTablesObservable.subscribe(data => {
-            this.mergeTablesCache = data;
-        });
-
-        return mergeTablesObservable;
-
+    override getById(id: number): Observable<MergeTable | null> {
+        return super.getById(id);
     }
 
-    addMergeTable(newMergeTable: MergeTable): Observable<MergeTable> {
-
-        return this.apiService.request<MergeTable>('post', this.mergeTableUrl, newMergeTable).pipe(
-
-            tap((addedMergeTable: MergeTable) => {
-
-                this.mergeTablesCache = [...this.mergeTablesCache, addedMergeTable];
-                localStorage.setItem(this.mergeTablesUrl, JSON.stringify(this.mergeTablesCache));
-
-            })
-
-        );
-
+    override add(newObject: MergeTable): Observable<MergeTable> {
+        return super.add(newObject);
     }
 
-    updateMergeTable(updatedMergeTable: MergeTable): Observable<any> {
-
-        const url = `${this.mergeTableUrl}/${updatedMergeTable.mergeTableId}`;
-
-        return this.apiService.request('put', url, updatedMergeTable).pipe(
-
-            tap(() => {
-
-                this.updateMergeTableCache(updatedMergeTable);
-
-                const index = this.mergeTablesCache!.findIndex(table => table.mergeTableId === updatedMergeTable.mergeTableId);
-
-                if (index !== -1) {
-
-                    this.mergeTablesCache![index] = updatedMergeTable;
-                    localStorage.setItem(this.mergeTablesUrl, JSON.stringify(this.mergeTablesCache));
-
-                }
-
-            })
-
-        );
-
+    override update(updatedObject: MergeTable): Observable<MergeTable> {
+        return super.update(updatedObject);
     }
 
-    updateMergeTableCache(updatedMergeTable: MergeTable): void {
-
-        if (this.mergeTablesCache) {
-
-            const index = this.mergeTablesCache.findIndex(table => table.mergeTableId === updatedMergeTable.mergeTableId);
-
-            if (index !== -1) {
-
-                this.mergeTablesCache[index] = updatedMergeTable;
-
-            }
-
-        }
-
+    override delete(id: number): Observable<MergeTable> {
+        return super.delete(id);
     }
 
-    deleteMergeTable(id: string): Observable<any> {
+    override searchByName(term: string): Observable<MergeTable[]> {
+        return super.searchByName(term);
+    }
 
-        const url = `${this.mergeTableUrl}/${id}`;
+    override getItemId(item: MergeTable): number {
+        return item.id!;
+    }
 
-        return this.apiService.request('delete', url).pipe(
+    override getItemName(item: MergeTable): string {
+        throw new Error('Method not implemented.');
+    }
 
-            tap(() => {
-
-                const index = this.mergeTablesCache.findIndex(table => table.mergeTableId === id);
-
-                if (index !== -1) {
-
-                    this.mergeTablesCache.splice(index, 1);
-                    localStorage.setItem(this.mergeTablesUrl, JSON.stringify(this.mergeTablesCache));
-
-                }
-
-            })
-        );
-
+    override getObjectName(): string {
+        return "MergeTable";
     }
 }

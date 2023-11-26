@@ -3,127 +3,76 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Ingredient } from '../interfaces/ingredient';
 import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class IngredientService {
 
-    private ingredientsUrl = 'ingredients';
-    private ingredientUrl = 'ingredient';
+export class IngredientService extends BaseService<Ingredient>  {
 
-    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-    private ingredientsCacheSubject = new BehaviorSubject<Ingredient[]>([]);
-    ingredientsCache$ = this.ingredientsCacheSubject.asObservable();
-
-    constructor(private apiService: ApiService) { }
-
-    get ingredientsCache(): Ingredient[] {
-        return this.ingredientsCacheSubject.value;
+    apisUrl = 'ingredients';
+    cacheKey = 'ingredients';
+    apiUrl = 'ingredient';
+  
+  
+  
+    constructor(
+      apiService: ApiService,
+      rxStompService: RxStompService,
+      sweetAlertService: ToastService
+    ) {
+      super(apiService, rxStompService, sweetAlertService);
     }
-
-    set ingredientsCache(value: Ingredient[]) {
-        this.ingredientsCacheSubject.next(value);
+  
+    override gets(): Observable<Ingredient[]> {
+      return super.gets();
     }
-
-    gets(): Observable<Ingredient[]> {
-
-        if (this.ingredientsCache) {
-            return of(this.ingredientsCache);
-        }
-
-        const ingredientsObservable = this.apiService.request<Ingredient[]>('get', this.ingredientsUrl);
-
-        ingredientsObservable.subscribe(data => {
-            this.ingredientsCache = data;
-        });
-
-        return ingredientsObservable;
-
+  
+    override getById(id: number): Observable<Ingredient | null> {
+      return super.getById(id);
     }
-
-    getById(id: number): Observable<Ingredient> {
-
-        if(!id){
-            return of();
-        }
-
-        if (!this.ingredientsCache) {
-            this.gets();
-        }
-
-        const ingredientFromCache = this.ingredientsCache.find(ingredient => ingredient.ingredientId === id);
-
-        if (ingredientFromCache) {
-            return of(ingredientFromCache);
-        } else {
-            const url = `${this.ingredientUrl}/${id}`;
-            return this.apiService.request<Ingredient>('get', url);
-        }
+  
+    override add(newObject: Ingredient): Observable<Ingredient> {
+      return super.add(newObject);
     }
-
-    private isIngredientNameInCache(name: string): boolean {
-        const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name.toLowerCase() === name.toLowerCase());
-        if(isTrue){
-            console.log("Thành phần này đã có trong mục yêu thích rồi");
-            return isTrue;
-        } else {
-            return isTrue;
-        }
+  
+    override update(updatedObject: Ingredient): Observable<Ingredient> {
+      return super.update(updatedObject);
     }
-
-    add(newIngredient: Ingredient): Observable<Ingredient> {
-        if (this.isIngredientNameInCache(newIngredient.name)) {
-            // Nếu đã có ingredient có tên tương tự, trả về Observable với giá trị hiện tại
-            return of();
-        }
-
-        return this.apiService.request<Ingredient>('post', this.ingredientUrl, newIngredient).pipe(
-            tap((addedIngredient: Ingredient) => {
-                this.ingredientsCache = [...this.ingredientsCache, addedIngredient];
-                localStorage.setItem(this.ingredientsUrl, JSON.stringify(this.ingredientsCache));
-            })
-        );
+  
+    override delete(id: number): Observable<Ingredient> {
+      return super.delete(id);
     }
-
-    update(updatedIngredient: Ingredient): Observable<any> {
-        if (this.isIngredientNameInCache(updatedIngredient.name)) {
-            // Nếu đã có ingredient có tên tương tự, trả về Observable với giá trị hiện tại
-            return of();
-        }
-
-        const url = `${this.ingredientUrl}/${updatedIngredient.ingredientId}`;
-
-        return this.apiService.request('put', url, updatedIngredient).pipe(
-            tap(() => {
-                const index = this.ingredientsCache!.findIndex(ingredient => ingredient.ingredientId === updatedIngredient.ingredientId);
-                if (index !== -1) {
-                    this.ingredientsCache![index] = updatedIngredient;
-                    localStorage.setItem(this.ingredientsUrl, JSON.stringify(this.ingredientsCache));
-                }
-            })
-        );
+  
+    override searchByName(term: string): Observable<Ingredient[]> {
+      return super.searchByName(term);
     }
-
-    updateCache(updatedIngredient: Ingredient): void {
-        if (this.ingredientsCache) {
-            const index = this.ingredientsCache.findIndex(ingredient => ingredient.ingredientId === updatedIngredient.ingredientId);
-            if (index !== -1) {
-                this.ingredientsCache[index] = updatedIngredient;
-            }
-        }
+  
+    override getItemId(item: Ingredient): number {
+      return item.ingredientId!;
     }
-
-    delete(id: number): Observable<any> {
-        const url = `${this.ingredientUrl}/${id}`;
-        return this.apiService.request('delete', url).pipe(
-            tap(() => {
-                const index = this.ingredientsCache.findIndex(ingredient => ingredient.ingredientId === id);
-                if (index !== -1) {
-                    this.ingredientsCache.splice(index, 1);
-                    localStorage.setItem(this.ingredientsUrl, JSON.stringify(this.ingredientsCache));
-                }
-            })
-        );
+  
+    override getItemName(item: Ingredient): string {
+      return item.name;
     }
+  
+    override getObjectName(): string {
+      return "Ingredient";
+    }
+  
+    // private isIngredientNameInCache(name: string): boolean {
+    //   const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name.toLowerCase() === name.toLowerCase());
+    //   if (isTrue) {
+    //     console.log("Thành phần này đã có trong mục yêu thích rồi");
+    //     return isTrue;
+    //   } else {
+    //     return isTrue;
+    //   }
+    // }
+  
+  
+  
 }

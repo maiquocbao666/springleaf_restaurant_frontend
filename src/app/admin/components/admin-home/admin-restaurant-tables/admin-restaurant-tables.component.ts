@@ -67,36 +67,36 @@ export class AdminRestaurantTablesComponent {
   }
 
   getRestaurantTables(): void {
-    this.restaurantTablesService.restaurantTablesCache$
+    this.restaurantTablesService.cache$
       .subscribe(restaurantTables => this.restaurantTables = restaurantTables);
   }
 
   getTableStatuses(): void {
-    this.tableStatusesService.tableStatusesCache$
+    this.tableStatusesService.cache$
       .subscribe(tableStatus => this.tableStatuses = tableStatus);
   }
 
   getTableTypes(): void {
-    this.tableTypesService.tableTypesCache$
+    this.tableTypesService.cache$
       .subscribe(tableTypes => this.tableTypes = tableTypes);
   }
 
   getRestaurants(): void {
-    this.restaurantService.restaurantsCache$
+    this.restaurantService.cache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 
   //Lấy name theo id
   getTableTypeById(tableTypeId: number): Observable<TableType | null> {
-    return this.tableTypesService.getTableTypeById(tableTypeId);
+    return this.tableTypesService.getById(tableTypeId);
   }
 
   getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
-    return this.restaurantService.getRestaurantById(restaurantId);
+    return this.restaurantService.getById(restaurantId);
   }
 
   getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
-    return this.tableStatusesService.getTableStatusById(tableStatusId);
+    return this.tableStatusesService.getById(tableStatusId);
   }
 
   addRestaurantTable(): void {

@@ -23,6 +23,7 @@ export class AdminMenuItemIngredientsComponent {
   products: Product[] = [];
   ingredients: Ingredient[] = [];
   fieldNames: string[] = [];
+
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -62,25 +63,25 @@ export class AdminMenuItemIngredientsComponent {
 
 
   getMenuItemIngredients(): void {
-    this.menuItemIngredientService.menuItemIngredientsCache$
+    this.menuItemIngredientService.cache$
       .subscribe(menuItemIngredients => this.menuItemIngredients = menuItemIngredients);
   }
 
   getProducts(): void {
-    this.productService.productsCache$
+    this.productService.cache$
       .subscribe(products => this.products = products);
   }
 
   getIngredients(): void {
-    this.ingredientService.ingredientsCache$
+    this.ingredientService.cache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
-  getIngredientById(ingredientId: number): Observable<Ingredient> {
+  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
     return this.ingredientService.getById(ingredientId);
   }
 
-  getProductById(menuItemId: number): Observable<Product> {
+  getProductById(menuItemId: number): Observable<Product | null> {
     return this.productService.getById(menuItemId);
   }
 

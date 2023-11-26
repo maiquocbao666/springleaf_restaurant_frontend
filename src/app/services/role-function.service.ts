@@ -3,99 +3,63 @@ import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { RoleFunction } from '../interfaces/role-function';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class RoleFunctionService {
+export class RoleFunctionService extends BaseService<RoleFunction> {
 
-    private roleFunctionsUrl = 'roleFunctions';
-    private roleFunctionUrl = 'roleFunction';
-    roleFunctionsCache!: RoleFunction[];
+    apisUrl = 'roleFunctions';
+    cacheKey = 'roleFunctions';
+    apiUrl = 'roleFunction';
 
-    constructor(private apiService: ApiService) { }
-
-
-    getRoleFunctions(): Observable<RoleFunction[]> {
-
-        if (this.roleFunctionsCache) {
-
-            return of(this.roleFunctionsCache);
-
-        }
-
-        const RoleFunctionsObservable = this.apiService.request<RoleFunction[]>('get', this.roleFunctionsUrl);
-
-
-        RoleFunctionsObservable.subscribe(data => {
-
-            this.roleFunctionsCache = data;
-
-        });
-
-        return RoleFunctionsObservable;
-
+   
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    addRoleFunction(newRoleFunction: RoleFunction): Observable<RoleFunction> {
 
-        return this.apiService.request<RoleFunction>('post', this.roleFunctionUrl, newRoleFunction).pipe(
-
-            tap((addedRoleFunction: RoleFunction) => {
-
-                this.roleFunctionsCache.push(addedRoleFunction);
-                localStorage.setItem(this.roleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
-
-            })
-
-        );
-
+    override gets(): Observable<RoleFunction[]> {
+        return super.gets();
     }
 
-    updateRoleFunction(updatedroleFunction: RoleFunction): Observable<any> {
-
-        const url = `${this.roleFunctionUrl}/${updatedroleFunction.roleFunctionId}`;
-
-        return this.apiService.request('put', url, updatedroleFunction).pipe(
-
-            tap(() => {
-
-                const index = this.roleFunctionsCache!.findIndex(roleFunction => roleFunction.roleFunctionId === updatedroleFunction.roleFunctionId);
-
-                if (index !== -1) {
-
-                    this.roleFunctionsCache![index] = updatedroleFunction;
-                    localStorage.setItem(this.roleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
-
-                }
-
-            })
-
-        );
-
+    override getById(id: number): Observable<RoleFunction | null> {
+        return super.getById(id);
     }
 
-    deleteRoleFunction(id: number): Observable<any> {
-
-        const url = `${this.roleFunctionUrl}/${id}`;
-
-        return this.apiService.request('delete', url).pipe(
-
-            tap(() => {
-
-                const index = this.roleFunctionsCache.findIndex(roleFunction => roleFunction.roleFunctionId === id);
-
-                if (index !== -1) {
-
-                    this.roleFunctionsCache.splice(index, 1);
-                    localStorage.setItem(this.roleFunctionsUrl, JSON.stringify(this.roleFunctionsCache));
-
-                }
-
-            })
-        );
-
+    override add(newObject: RoleFunction): Observable<RoleFunction> {
+        return super.add(newObject);
     }
 
+    override update(updatedObject: RoleFunction): Observable<RoleFunction> {
+        return super.update(updatedObject);
+    }
+
+    override delete(id: number): Observable<RoleFunction> {
+        return super.delete(id);
+    }
+
+    override searchByName(term: string): Observable<RoleFunction[]> {
+        return super.searchByName(term);
+    }
+
+    override getItemId(item: RoleFunction): number {
+        return item.roleFunctionId!;
+    }
+
+    override getItemName(item: RoleFunction): string {
+        throw new Error('Method not implemented.');
+    }
+
+    override getObjectName(): string {
+        return "RoleFunction";
+    }
 }

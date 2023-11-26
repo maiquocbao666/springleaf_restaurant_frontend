@@ -28,7 +28,7 @@ export class AdminSuppliersComponent {
   ) {
     this.supplierForm = this.formBuilder.group({
       // supplierId: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      supplierName: ['', [Validators.required]],
       phone: ['', [Validators.required]],
       email: ['', [Validators.required]],
       address: ['', [Validators.required]]
@@ -40,7 +40,7 @@ export class AdminSuppliersComponent {
   }
 
   getSuppliers(): void {
-    this.supplierService.suppliersCache$
+    this.supplierService.cache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
@@ -56,13 +56,13 @@ export class AdminSuppliersComponent {
 
   addSupplier(): void {
 
-    const name = this.supplierForm.get('name')?.value;
+    const supplierName = this.supplierForm.get('supplierName')?.value;
     const phone = this.supplierForm.get('phone')?.value;
     const address = this.supplierForm.get('address')?.value;
     const email = this.supplierForm.get('email')?.value;
 
     const newSupplier: Supplier = {
-      supplierName: name,
+      supplierName: supplierName,
       address: address,
       phone: phone,
       email: email

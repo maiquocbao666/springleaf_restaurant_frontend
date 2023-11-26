@@ -29,7 +29,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
     });
     this.supplierForm = this.formBuilder.group({
       supplierId: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      supplierName: ['', [Validators.required]],
       phone: ['', [Validators.required]],
       email: ['', [Validators.required]],
       address: ['', [Validators.required]],
@@ -44,7 +44,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
     if (this.supplier) {
       this.supplierForm.patchValue({
         supplierId: this.supplier.supplierId,
-        name: this.supplier.supplierName,
+        supplierName: this.supplier.supplierName,
         phone: this.supplier.phone,
         email: this.supplier.email,
         address: this.supplier.address,
@@ -57,7 +57,7 @@ export class AdminSupplierDetailComponent  implements OnInit {
     if (this.supplierForm.valid) {
       const updatedSupplier: Supplier = {
         supplierId: +this.supplierForm.get('supplierId')?.value,
-        supplierName: this.supplierForm.get('name')?.value,
+        supplierName: this.supplierForm.get('supplierName')?.value,
         phone: this.supplierForm.get('phone')?.value,
         email: this.supplierForm.get('email')?.value,
         address: this.supplierForm.get('address')?.value

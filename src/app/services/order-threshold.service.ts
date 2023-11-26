@@ -2,120 +2,61 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { OrderThreshold } from './../interfaces/order-threshold';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class OrderThresholdService {
+export class OrderThresholdService extends BaseService<OrderThreshold> {
 
-    private orderThresholdsUrl = 'orderThresholds';
-    private orderThresholdUrl = 'orderThreshold';
-    
-    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-    private orderThresholdsCacheSubject = new BehaviorSubject<OrderThreshold[]>([]);
-    orderThresholdsCache$ = this.orderThresholdsCacheSubject.asObservable();
+    apisUrl = 'orderThresholds';
+    cacheKey = 'orderThresholds';
+    apiUrl = 'orderThreshold';
 
-    constructor(private apiService: ApiService) { }
 
-    get orderThresholdsCache(): OrderThreshold[] {
-        return this.orderThresholdsCacheSubject.value;
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    set orderThresholdsCache(value: OrderThreshold[]) {
-        this.orderThresholdsCacheSubject.next(value);
+    override gets(): Observable<OrderThreshold[]> {
+        return super.gets();
     }
 
-    gets(): Observable<OrderThreshold[]> {
-
-        if (this.orderThresholdsCache) {
-            return of(this.orderThresholdsCache);
-        }
-
-        const orderThresholdsObservable = this.apiService.request<OrderThreshold[]>('get', this.orderThresholdsUrl);
-
-        orderThresholdsObservable.subscribe(data => {
-            this.orderThresholdsCache = data;
-        });
-
-        return orderThresholdsObservable;
-
+    override getById(id: number): Observable<OrderThreshold | null> {
+        return super.getById(id);
     }
 
-    add(newOrderThreshold: OrderThreshold): Observable<OrderThreshold> {
-
-        return this.apiService.request<OrderThreshold>('post', this.orderThresholdUrl, newOrderThreshold).pipe(
-
-            tap((addedOrderThreshold: OrderThreshold) => {
-
-                this.orderThresholdsCache = [...this.orderThresholdsCache, addedOrderThreshold];
-                localStorage.setItem(this.orderThresholdsUrl, JSON.stringify(this.orderThresholdsCache));
-
-            })
-
-        );
-
+    override add(newObject: OrderThreshold): Observable<OrderThreshold> {
+        return super.add(newObject);
     }
 
-    update(updatedOrderThreshold: OrderThreshold): Observable<any> {
-
-        const url = `${this.orderThresholdUrl}/${updatedOrderThreshold.orderThresholdId}`;
-
-        return this.apiService.request('put', url, updatedOrderThreshold).pipe(
-
-            tap(() => {
-
-                this.updateCache(updatedOrderThreshold);
-
-                const index = this.orderThresholdsCache!.findIndex(threshold => threshold.orderThresholdId === updatedOrderThreshold.orderThresholdId);
-
-                if (index !== -1) {
-
-                    this.orderThresholdsCache![index] = updatedOrderThreshold;
-                    localStorage.setItem(this.orderThresholdsUrl, JSON.stringify(this.orderThresholdsCache));
-
-                }
-
-            })
-
-        );
-
+    override update(updatedObject: OrderThreshold): Observable<OrderThreshold> {
+        return super.update(updatedObject);
     }
 
-    updateCache(updatedOrderThreshold: OrderThreshold): void {
-
-        if (this.orderThresholdsCache) {
-
-            const index = this.orderThresholdsCache.findIndex(threshold => threshold.orderThresholdId === updatedOrderThreshold.orderThresholdId);
-
-            if (index !== -1) {
-
-                this.orderThresholdsCache[index] = updatedOrderThreshold;
-
-            }
-
-        }
-
+    override delete(id: number): Observable<OrderThreshold> {
+        return super.delete(id);
     }
 
-    delete(id: number): Observable<any> {
+    override searchByName(term: string): Observable<OrderThreshold[]> {
+        return super.searchByName(term);
+    }
 
-        const url = `${this.orderThresholdUrl}/${id}`;
+    override getItemId(item: OrderThreshold): number {
+        return item.orderThresholdId!;
+    }
 
-        return this.apiService.request('delete', url).pipe(
+    override getItemName(item: OrderThreshold): string {
+        throw new Error('Method not implemented.');
+    }
 
-            tap(() => {
-
-                const index = this.orderThresholdsCache.findIndex(threshold => threshold.orderThresholdId === id);
-
-                if (index !== -1) {
-
-                    this.orderThresholdsCache.splice(index, 1);
-                    localStorage.setItem(this.orderThresholdsUrl, JSON.stringify(this.orderThresholdsCache));
-
-                }
-
-            })
-        );
-
+    override getObjectName(): string {
+        return "OrderThreshold";
     }
 }

@@ -51,17 +51,17 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
 
 
   getSuppliers(): void {
-    this.supplierService.suppliersCache$
+    this.supplierService.cache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 
   getIngredients(): void {
-    this.ingredientService.ingredientsCache$
+    this.ingredientService.cache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
   getRestaurants(): void {
-    this.restaurantService.restaurantsCache$
+    this.restaurantService.cache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 

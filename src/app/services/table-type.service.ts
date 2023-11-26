@@ -2,130 +2,61 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { TableType } from '../interfaces/table-type';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TableTypeService {
+export class TableTypeService extends BaseService<TableType> {
 
-  private tableTypesUrl = 'tableTypes';
-  private tableTypeUrl = 'tableType';
-  private tableTypesCacheSubject = new BehaviorSubject<TableType[]>([]);
-  tableTypesCache$ = this.tableTypesCacheSubject.asObservable();
+  apisUrl = 'tableTypes';
+  cacheKey = 'tableTypes';
+  apiUrl = 'tableType';
 
-  constructor(private apiService: ApiService) { }
-
-  get tableTypesCache(): TableType[] {
-    return this.tableTypesCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set tableTypesCache(value: TableType[]) {
-    this.tableTypesCacheSubject.next(value);
+
+  override gets(): Observable<TableType[]> {
+    return super.gets();
   }
 
-  private updateCache(updatedTableType: TableType): void {
-    const index = this.tableTypesCache.findIndex(tableType => tableType.tableTypeId === updatedTableType.tableTypeId);
-    if (index !== -1) {
-      const updatedCache = [...this.tableTypesCache];
-      updatedCache[index] = updatedTableType;
-      this.tableTypesCache = updatedCache;
-    }
+  override getById(id: number): Observable<TableType | null> {
+    return super.getById(id);
   }
 
-  gets(): Observable<TableType[]> {
-
-    if (this.tableTypesCache) {
-      return of(this.tableTypesCache);
-    }
-
-    const tableTypesObservable = this.apiService.request<TableType[]>('get', this.tableTypesUrl);
-
-    tableTypesObservable.subscribe(data => {
-      this.tableTypesCache = data;
-    });
-
-    return tableTypesObservable;
+  override add(newObject: TableType): Observable<TableType> {
+    return super.add(newObject);
   }
 
-  private isInCache(name: string, idToExclude: number | null = null): boolean {
-    const isTableTypeInCache = this.tableTypesCache?.some(
-      (cache) =>
-        cache.tableTypeName.toLowerCase() === name.toLowerCase() && cache.tableTypeId !== idToExclude
-    );
-
-    if (isTableTypeInCache) {
-      console.log("Danh mục này đã có rồi");
-    }
-
-    return isTableTypeInCache || false;
+  override update(updatedObject: TableType): Observable<TableType> {
+    return super.update(updatedObject);
   }
 
-  add(newObject: TableType): Observable<TableType> {
-    if (this.tableTypesCache) {
-      if (this.isInCache(newObject.tableTypeName)) {
-        return of();
-      }
-    }
-    return this.apiService.request<TableType>('post', this.tableTypeUrl, newObject).pipe(
-      tap((added: TableType) => {
-        this.tableTypesCache = [...this.tableTypesCache, added];
-        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
-      })
-    );
+  override delete(id: number): Observable<TableType> {
+    return super.delete(id);
   }
 
-  update(updatedObject: TableType): Observable<any> {
-    if (this.tableTypesCache) {
-      if (this.isInCache(updatedObject.tableTypeName, updatedObject.tableTypeId)) {
-        return of();
-      }
-    }
-    const url = `${this.tableTypeUrl}`;
-    return this.apiService.request('put', url, updatedObject).pipe(
-      tap(() => {
-        const updatedCategories = this.tableTypesCache.map((cache) =>
-          cache.tableTypeId === updatedObject.tableTypeId ? updatedObject : cache
-        );
-        this.tableTypesCache = updatedCategories;
-        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
-      })
-    );
+  override searchByName(term: string): Observable<TableType[]> {
+    return super.searchByName(term);
   }
 
-  delete(id: number): Observable<any> {
-    const url = `${this.tableTypeUrl}/${id}`;
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const updated = this.tableTypesCache.filter(cache => cache.tableTypeId !== id);
-        this.tableTypesCache = updated;
-        localStorage.setItem(this.tableTypesUrl, JSON.stringify(this.tableTypesCache));
-      })
-    );
+  override getItemId(item: TableType): number {
+    return item.tableTypeId!;
   }
 
-  getTableTypeById(id: number): Observable<TableType | null> {
-
-    if (!id) {
-      return of(null);
-    }
-
-    if (this.tableTypesCache.length > 0) {
-      const tableTypeFromCache = this.tableTypesCache.find(tableType => tableType.tableTypeId === id);
-      if (tableTypeFromCache) {
-        return of(tableTypeFromCache);
-      }
-    }
-
-    const url = `${this.tableTypeUrl}/${id}`;
-
-    return this.apiService.request<TableType>('get', url).pipe(
-      tap((tableType: TableType) => {
-        // Update cache with the fetched table type
-        this.tableTypesCache = [...this.tableTypesCache, tableType];
-      }),
-      // Handle error or return null if the table type is not found
-      catchError(() => of(null))
-    );
+  override getItemName(item: TableType): string {
+    return item.tableTypeName;
   }
 
+  override getObjectName(): string {
+    return "TableType";
+  }
 }

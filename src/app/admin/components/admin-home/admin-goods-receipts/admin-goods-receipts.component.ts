@@ -53,16 +53,16 @@ export class AdminGoodsReceiptsComponent {
   }
 
   getGoodsReceipts(): void {
-    this.goodsReceiptService.goodsReceiptsCache$
+    this.goodsReceiptService.cache$
       .subscribe(goodsReceipts => this.goodsReceipts = goodsReceipts);
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.inventoryBranchesCache$
+    this.inventoryBranchService.cache$
       .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
   }
 
-  getInventoryBranchById(inventoryBranchId: number): Observable<InventoryBranch> {
+  getInventoryBranchById(inventoryBranchId: number): Observable<InventoryBranch | null> {
     return this.inventoryBranchService.getById(inventoryBranchId);
   }
 

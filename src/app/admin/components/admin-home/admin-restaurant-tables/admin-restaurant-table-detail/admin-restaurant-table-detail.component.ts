@@ -68,15 +68,15 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
     }
   }
   getTableStatus(): void {
-    this.tableStatusService.tableStatusesCache$
+    this.tableStatusService.cache$
       .subscribe(tableStatus => this.tableStatuses = tableStatus);
   }
   getTableType(): void {
-    this.tableTypeService.tableTypesCache$
+    this.tableTypeService.cache$
       .subscribe(tableTypes => this.tableTypes = tableTypes);
   }
   getRestaurant(): void {
-    this.restaurantService.restaurantsCache$
+    this.restaurantService.cache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 

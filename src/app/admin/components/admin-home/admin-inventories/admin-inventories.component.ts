@@ -59,25 +59,25 @@ export class AdminInventoriesComponent {
   }
 
   getIngredients(): void {
-    this.ingredientService.ingredientsCache$
+    this.ingredientService.cache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 
-  getIngredientById(ingredientId: number): Observable<Ingredient> {
+  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
     return this.ingredientService.getById(ingredientId);
   }
 
   getSupplierById(supplierId: number): Observable<Supplier | null> {
-    return this.supplierService.getSupplierById(supplierId);
+    return this.supplierService.getById(supplierId);
   }
 
   getInventories(): void {
-    this.inventoryService.inventoriesCache$
+    this.inventoryService.cache$
       .subscribe(inventories => this.inventories = inventories);
   }
 
   getSuppliers(): void {
-    this.supplierService.suppliersCache$
+    this.supplierService.cache$
       .subscribe(suppliers => this.suppliers = suppliers);
   }
 

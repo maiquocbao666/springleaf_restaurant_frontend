@@ -3,81 +3,61 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Receipt } from '../interfaces/receipt';
 import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ReceiptService {
+export class ReceiptService extends BaseService<Receipt> {
 
-    private receiptsUrl = 'receipts';
-    private receiptUrl = 'receipt';
+    apisUrl = 'receipts';
+    cacheKey = 'receipts';
+    apiUrl = 'receipt';
 
-    // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-    private receiptsCacheSubject = new BehaviorSubject<Receipt[]>([]);
-    receiptsCache$ = this.receiptsCacheSubject.asObservable();
 
-    constructor(private apiService: ApiService) { }
-
-    get receiptsCache(): Receipt[] {
-        return this.receiptsCacheSubject.value;
+    constructor(
+        apiService: ApiService,
+        rxStompService: RxStompService,
+        sweetAlertService: ToastService
+    ) {
+        super(apiService, rxStompService, sweetAlertService);
     }
 
-    set receiptsCache(value: Receipt[]) {
-        this.receiptsCacheSubject.next(value);
+    override gets(): Observable<Receipt[]> {
+        return super.gets();
     }
 
-    gets(): Observable<Receipt[]> {
-        if (this.receiptsCache) {
-            return of(this.receiptsCache);
-        }
-
-        const receiptsObservable = this.apiService.request<Receipt[]>('get', this.receiptsUrl);
-
-        receiptsObservable.subscribe(data => {
-            this.receiptsCache = data;
-        });
-
-        return receiptsObservable;
+    override getById(id: number): Observable<Receipt | null> {
+        return super.getById(id);
     }
 
-    add(newReceipt: Receipt): Observable<Receipt> {
-        return this.apiService.request<Receipt>('post', this.receiptUrl, newReceipt).pipe(
-            tap((addedReceipt: Receipt) => {
-                this.receiptsCache = [...this.receiptsCache, addedReceipt];
-                localStorage.setItem(this.receiptsUrl, JSON.stringify(this.receiptsCache));
-            })
-        );
+    override add(newObject: Receipt): Observable<Receipt> {
+        return super.add(newObject);
     }
 
-    update(updatedReceipt: Receipt): Observable<any> {
-        const url = `${this.receiptUrl}/${updatedReceipt.receiptId}`;
-
-        return this.apiService.request('put', url, updatedReceipt).pipe(
-            tap(() => {
-                this.updateCache(updatedReceipt);
-            })
-        );
+    override update(updatedObject: Receipt): Observable<Receipt> {
+        return super.update(updatedObject);
     }
 
-    delete(id: number): Observable<any> {
-        const url = `${this.receiptUrl}/${id}`;
-
-        return this.apiService.request('delete', url).pipe(
-            tap(() => {
-                this.receiptsCache = this.receiptsCache.filter(receipt => receipt.receiptId !== id);
-                localStorage.setItem(this.receiptsUrl, JSON.stringify(this.receiptsCache));
-            })
-        );
+    override delete(id: number): Observable<Receipt> {
+        return super.delete(id);
     }
 
-    updateCache(updatedReceipt: Receipt): void {
-        if (this.receiptsCache) {
-            const index = this.receiptsCache.findIndex(receipt => receipt.receiptId === updatedReceipt.receiptId);
-
-            if (index !== -1) {
-                this.receiptsCache[index] = updatedReceipt;
-            }
-        }
+    override searchByName(term: string): Observable<Receipt[]> {
+        return super.searchByName(term);
     }
 
+    override getItemId(item: Receipt): number {
+        return item.receiptId!;
+    }
+
+    override getItemName(item: Receipt): string {
+        throw new Error('Method not implemented.');
+    }
+
+    override getObjectName(): string {
+        return "Receipt";
+    }
 }

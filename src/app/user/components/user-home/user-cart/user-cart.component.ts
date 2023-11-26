@@ -72,7 +72,7 @@ export class UserCartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCarts();
+    // this.getCarts();
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.Provinces = Object.values(data);
@@ -86,10 +86,10 @@ export class UserCartComponent implements OnInit {
     });
   }
 
-  getCarts(): void {
-    this.cartDetailsService.gets()
-      .subscribe(cartDetails => this.cartDetails = cartDetails);
-  }
+  // getCarts(): void {
+  //   this.cartDetailsService.gets()
+  //     .subscribe(cartDetails => this.cartDetails = cartDetails);
+  // }
 
   onProvinceChange() {
     console.log('onProvinceChange called');

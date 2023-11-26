@@ -20,7 +20,7 @@ export class UserRestaurantsComponent {
   }
 
   getrestaurants(): void {
-    this.restaurantsService.restaurantsCache$
+    this.restaurantsService.cache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 }

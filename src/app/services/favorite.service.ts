@@ -3,93 +3,47 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Favorite } from './../interfaces/favorite';
 import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FavoriteService {
+export class FavoriteService extends BaseService<Favorite> {
 
-  private favoritesUrl = 'favorites';
-  private favoriteUrl = 'favorite';
 
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private favoritesCacheSubject = new BehaviorSubject<Favorite[]>([]);
-  favoritesCache$ = this.favoritesCacheSubject.asObservable();
+  apisUrl = 'favorites';
+  cacheKey = 'favorites';
+  apiUrl = 'favorite';
 
-  constructor(private apiService: ApiService) { }
-
-  get favoritesCache(): Favorite[] {
-    return this.favoritesCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set favoritesCache(value: Favorite[]) {
-    this.favoritesCacheSubject.next(value);
+  override gets(): Observable<Favorite[]> {
+    return super.gets();
   }
-
-  gets(): Observable<Favorite[]> {
-    if (this.favoritesCache) {
-      console.log("Có favorites cache");
-      return of(this.favoritesCache);
-    }
-
-    const favoritesObservable = this.apiService.request<Favorite[]>('get', this.favoritesUrl);
-
-    favoritesObservable.subscribe(data => {
-      this.favoritesCache = data;
-    });
-
-    return favoritesObservable;
+  override add(newFavorite: Favorite): Observable<Favorite> {
+    return super.add(newFavorite);
   }
-
-  private isMenuItemIdInCache(menuItemId: number): boolean {
-    return !!this.favoritesCache?.find(favorite => favorite.menuItem === menuItemId);
+  override update(updated: Favorite): Observable<Favorite> {
+    return super.update(updated);
   }
-
-  add(newFavorite: Favorite): Observable<Favorite> {
-    if (this.isMenuItemIdInCache(newFavorite.menuItem)) {
-      return of();
-    }
-
-    return this.apiService.request<Favorite>('post', this.favoriteUrl, newFavorite).pipe(
-      tap((addedFavorite: Favorite) => {
-        this.favoritesCache = [...this.favoritesCache, addedFavorite];
-        localStorage.setItem(this.favoritesUrl, JSON.stringify(this.favoritesCache));
-      })
-    );
+  override delete(id: number): Observable<Favorite> {
+    return super.delete(id);
   }
-
-  update(updatedFavorite: Favorite): Observable<any> {
-    if (this.isMenuItemIdInCache(updatedFavorite.menuItem)) {
-      return of();
-    }
-
-    const url = `${this.favoriteUrl}/${updatedFavorite.favoriteId}`;
-
-    return this.apiService.request('put', url, updatedFavorite).pipe(
-      tap(() => {
-        const index = this.favoritesCache!.findIndex(favorite => favorite.favoriteId === updatedFavorite.favoriteId);
-
-        if (index !== -1) {
-          this.favoritesCache![index] = updatedFavorite;
-          localStorage.setItem(this.favoritesUrl, JSON.stringify(this.favoritesCache));
-        }
-      })
-    );
+  override getItemId(item: Favorite): number {
+    return item.favoriteId!;
   }
-
-  delete(id: number): Observable<any> {
-    const url = `${this.favoriteUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const index = this.favoritesCache.findIndex(favorite => favorite.favoriteId === id);
-
-        if (index !== -1) {
-          this.favoritesCache.splice(index, 1);
-          localStorage.setItem(this.favoritesUrl, JSON.stringify(this.favoritesCache));
-        }
-      })
-    );
+  override getItemName(item: Favorite): string {
+    throw new Error('Method not implemented.');
   }
-
+  override getObjectName(): string {
+    return "Favorite";
+  }
 }

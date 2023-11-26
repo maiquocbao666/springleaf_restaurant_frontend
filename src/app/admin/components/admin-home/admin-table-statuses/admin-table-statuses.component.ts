@@ -78,7 +78,7 @@ export class AdminTableStatusesComponent {
   }
 
   getTableStatuses(): void {
-    this.tableStatusService.tableStatusesCache$
+    this.tableStatusService.cache$
       .subscribe(tableStatuses => this.tableStatuses = tableStatuses);
   }
 

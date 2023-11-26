@@ -48,7 +48,7 @@ export class AdminIngredientsComponent {
   }
 
   getIngredients(): void {
-    this.ingredientService.ingredientsCache$
+    this.ingredientService.cache$
       .subscribe(ingredients => this.ingredients = ingredients);
   }
 

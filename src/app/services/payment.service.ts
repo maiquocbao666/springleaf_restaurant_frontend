@@ -3,80 +3,63 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Payment } from '../interfaces/payment';
 import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PaymentService {
+export class PaymentService extends BaseService<Payment> {
 
-  private paymentsUrl = 'payments';
-  private paymentUrl = 'payment';
+  apisUrl = 'payments'; 
+  cacheKey = 'payments'; 
+  apiUrl = 'payment'; 
 
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private paymentsCacheSubject = new BehaviorSubject<Payment[]>([]);
-  paymentsCache$ = this.paymentsCacheSubject.asObservable();
 
-  constructor(private apiService: ApiService) { }
-
-  get paymentsCache(): Payment[] {
-    return this.paymentsCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set paymentsCache(value: Payment[]) {
-    this.paymentsCacheSubject.next(value);
+
+
+  override gets(): Observable<Payment[]> {
+    return super.gets();
   }
 
-  gets(): Observable<Payment[]> {
-    if (this.paymentsCache) {
-      return of(this.paymentsCache);
-    }
-
-    const paymentsObservable = this.apiService.request<Payment[]>('get', this.paymentsUrl);
-
-    paymentsObservable.subscribe(data => {
-      this.paymentsCache = data;
-    });
-
-    return paymentsObservable;
+  override getById(id: number): Observable<Payment | null> {
+    return super.getById(id);
   }
 
-  add(newPayment: Payment): Observable<Payment> {
-    return this.apiService.request<Payment>('post', this.paymentUrl, newPayment).pipe(
-      tap((addedPayment: Payment) => {
-        this.paymentsCache = [...this.paymentsCache, addedPayment];
-        localStorage.setItem(this.paymentsUrl, JSON.stringify(this.paymentsCache));
-      })
-    );
+  override add(newObject: Payment): Observable<Payment> {
+    return super.add(newObject);
   }
 
-  update(updatedPayment: Payment): Observable<any> {
-    const url = `${this.paymentUrl}/${updatedPayment.paymentId}`;
-
-    return this.apiService.request('put', url, updatedPayment).pipe(
-      tap(() => {
-        this.updateCache(updatedPayment);
-      })
-    );
+  override update(updatedObject: Payment): Observable<Payment> {
+    return super.update(updatedObject);
   }
 
-  delete(id: number): Observable<any> {
-    const url = `${this.paymentUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        this.paymentsCache = this.paymentsCache.filter(payment => payment.paymentId !== id);
-        localStorage.setItem(this.paymentsUrl, JSON.stringify(this.paymentsCache));
-      })
-    );
+  override delete(id: number): Observable<Payment> {
+    return super.delete(id);
   }
 
-  updateCache(updatedPayment: Payment): void {
-    if (this.paymentsCache) {
-      const index = this.paymentsCache.findIndex(payment => payment.paymentId === updatedPayment.paymentId);
+  override searchByName(term: string): Observable<Payment[]> {
+    return super.searchByName(term);
+  }
 
-      if (index !== -1) {
-        this.paymentsCache[index] = updatedPayment;
-      }
-    }
+  override getItemId(item: Payment): number {
+    return item.paymentId!;
+  }
+
+  override getItemName(item: Payment): string {
+    throw new Error('Method not implemented.');
+  }
+
+  override getObjectName(): string {
+    return "Payment";
   }
 }

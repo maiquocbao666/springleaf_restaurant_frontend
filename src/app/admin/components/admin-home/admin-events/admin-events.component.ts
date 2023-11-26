@@ -68,7 +68,7 @@ export class AdminEventsComponent {
       .subscribe(events => this.events = events);
   }
 
-  getCartById(orderId: number): Observable<Cart> {
+  getCartById(orderId: number): Observable<Cart | null> {
     return this.cartService.getById(orderId);
   }
 

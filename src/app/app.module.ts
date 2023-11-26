@@ -92,7 +92,7 @@ import { UserPasswordComponent } from './components/user-password/user-password.
 @NgModule({
   declarations: [
     AppComponent,
-
+    
     UserHomeComponent,
     UserCartComponent,
     UserHeaderComponent,

@@ -56,7 +56,7 @@ export class AdminRestaurantsComponent {
   }
 
   getRestaurants(): void {
-    this.restaurantService.restaurantsCache$
+    this.restaurantService.cache$
       .subscribe(restaurants => this.restaurants = restaurants);
   }
 

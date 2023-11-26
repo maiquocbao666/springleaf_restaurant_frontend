@@ -3,82 +3,55 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DeliveryOrderDetail } from '../interfaces/delivery-order-detail';
 import { BehaviorSubject } from 'rxjs';
+import { RxStompService } from '../rx-stomp.service';
+import { BaseService } from './base-service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DeliveryOrderDetailService {
+export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail> {
 
-  private deliveryOrderDetailsUrl = 'deliveryOrderDetails';
-  private deliveryOrderDetailUrl = 'deliveryOrderDetail';
+  apisUrl = 'deliveryOrderDetails';
+  cacheKey = 'deliveryOrderDetails';
+  apiUrl = 'deliveryOrderDetail';
 
-  // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
-  private deliveryOrderDetailsCacheSubject = new BehaviorSubject<DeliveryOrderDetail[]>([]);
-  deliveryOrderDetailsCache$ = this.deliveryOrderDetailsCacheSubject.asObservable();
-
-  constructor(private apiService: ApiService) { }
-
-  get deliveryOrderDetailsCache(): DeliveryOrderDetail[] {
-    return this.deliveryOrderDetailsCacheSubject.value;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
   }
 
-  set deliveryOrderDetailsCache(value: DeliveryOrderDetail[]) {
-    this.deliveryOrderDetailsCacheSubject.next(value);
+  getObjectName(): string {
+    return 'DeliveryOrderDetail';
   }
 
-  gets(): Observable<DeliveryOrderDetail[]> {
-    if (this.deliveryOrderDetailsCache) {
-      return of(this.deliveryOrderDetailsCache);
-    }
-
-    const deliveryOrderDetailsObservable = this.apiService.request<DeliveryOrderDetail[]>('get', this.deliveryOrderDetailsUrl);
-
-    deliveryOrderDetailsObservable.subscribe(data => {
-      this.deliveryOrderDetailsCache = data;
-    });
-
-    return deliveryOrderDetailsObservable;
+  override gets(): Observable<DeliveryOrderDetail[]> {
+    return super.gets();
   }
 
-  add(newDeliveryOrderDetail: DeliveryOrderDetail): Observable<DeliveryOrderDetail> {
-    return this.apiService.request<DeliveryOrderDetail>('post', this.deliveryOrderDetailUrl, newDeliveryOrderDetail).pipe(
-      tap((addedDeliveryOrderDetail: DeliveryOrderDetail) => {
-        this.deliveryOrderDetailsCache = [...this.deliveryOrderDetailsCache, addedDeliveryOrderDetail];
-        localStorage.setItem(this.deliveryOrderDetailsUrl, JSON.stringify(this.deliveryOrderDetailsCache));
-      })
-    );
+  override getById(id: number): Observable<DeliveryOrderDetail | null> {
+    return super.getById(id);
   }
 
-  update(updatedDeliveryOrderDetail: DeliveryOrderDetail): Observable<any> {
-    const url = `${this.deliveryOrderDetailUrl}/${updatedDeliveryOrderDetail.deliveryOrderDetailId}`;
-
-    return this.apiService.request('put', url, updatedDeliveryOrderDetail).pipe(
-      tap(() => {
-        const index = this.deliveryOrderDetailsCache!.findIndex(
-          deliveryOrderDetail => deliveryOrderDetail.deliveryOrderDetailId === updatedDeliveryOrderDetail.deliveryOrderDetailId
-        );
-
-        if (index !== -1) {
-          this.deliveryOrderDetailsCache![index] = updatedDeliveryOrderDetail;
-          localStorage.setItem(this.deliveryOrderDetailsUrl, JSON.stringify(this.deliveryOrderDetailsCache));
-        }
-      })
-    );
+  override add(newDeliveryOrderDetail: DeliveryOrderDetail): Observable<DeliveryOrderDetail> {
+    return super.add(newDeliveryOrderDetail);
   }
 
-  delete(id: number): Observable<any> {
-    const url = `${this.deliveryOrderDetailUrl}/${id}`;
-
-    return this.apiService.request('delete', url).pipe(
-      tap(() => {
-        const index = this.deliveryOrderDetailsCache.findIndex(detail => detail.deliveryOrderDetailId === id);
-
-        if (index !== -1) {
-          this.deliveryOrderDetailsCache.splice(index, 1);
-          localStorage.setItem(this.deliveryOrderDetailsUrl, JSON.stringify(this.deliveryOrderDetailsCache));
-        }
-      })
-    );
+  override update(updated: DeliveryOrderDetail): Observable<any> {
+    return super.update(updated);
   }
 
+  override delete(id: number): Observable<any> {
+    return super.delete(id);
+  }
+
+  override getItemId(item: DeliveryOrderDetail): number {
+    throw new Error('Method not implemented.');
+  }
+  override getItemName(item: DeliveryOrderDetail): string {
+    throw new Error('Method not implemented.');
+  }
 }
