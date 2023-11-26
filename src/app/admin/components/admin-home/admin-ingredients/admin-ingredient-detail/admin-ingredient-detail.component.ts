@@ -16,6 +16,7 @@ export class AdminIngredientDetailComponent implements OnInit {
   fieldNames: string[] = [];
   ingredients: Ingredient[] = [];
   ingredientForm: FormGroup;
+  
 
   constructor(
     private ingredientService: IngredientService,

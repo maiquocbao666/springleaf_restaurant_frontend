@@ -24,6 +24,11 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
   fieldNames: string[] = [];
   restaurantTableForm: FormGroup;
 
+  restaurantTablesUrl = 'restaurantTables';
+  tableTypesUrl = 'tableTypes';
+  tableStatusesUrl = 'tableStatuses';
+  restaurantsUrl = 'restaurants';
+
   constructor(
     private restaurantTablesService: RestaurantTableService,
     private tableTypeService: TableTypeService,
@@ -50,9 +55,9 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.setValue();
-    this.getTableStatus();
-    this.getTableType();
-    this.getRestaurant();
+    this.getTableStatuses();
+    this.getTableTypes();
+    this.getRestaurants();
 
   }
 
@@ -67,17 +72,28 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       });
     }
   }
-  getTableStatus(): void {
+  // getRestaurantTables(): void {
+  //   this.restaurantTablesService.gets();
+  //   this.restaurantTablesService.cache$
+  //     .subscribe(restaurantTables => this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null'));
+  // }
+
+  getTableStatuses(): void {
+    this.tableStatusService.gets();
     this.tableStatusService.cache$
-      .subscribe(tableStatus => this.tableStatuses = tableStatus);
+      .subscribe(tableStatuses => this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null'));
   }
-  getTableType(): void {
+
+  getTableTypes(): void {
+    this.tableTypeService.gets();
     this.tableTypeService.cache$
-      .subscribe(tableTypes => this.tableTypes = tableTypes);
+      .subscribe(tableTypes => this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null'));
   }
-  getRestaurant(): void {
+
+  getRestaurants(): void {
+    this.restaurantService.gets();
     this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = restaurants);
+      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
   }
 
   updateRestaurantTable(): void {

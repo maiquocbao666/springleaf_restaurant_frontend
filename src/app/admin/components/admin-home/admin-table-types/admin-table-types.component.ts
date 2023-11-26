@@ -22,6 +22,8 @@ export class AdminTableTypesComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
+  tableTypesUrl = 'tableTypes';
+  
   onTableDataChange(event: any) {
     this.page = event;
   }
@@ -48,8 +50,9 @@ export class AdminTableTypesComponent {
   }
 
   getTableTypes(): void {
+    this.tableTypeService.gets();
     this.tableTypeService.cache$
-      .subscribe(tableTypes => this.tableTypes = tableTypes);
+      .subscribe(tableTypes => this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null'));
   }
 
   addTableType(): void {

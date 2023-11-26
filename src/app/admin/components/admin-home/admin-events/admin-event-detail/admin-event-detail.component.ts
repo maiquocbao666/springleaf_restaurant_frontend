@@ -22,6 +22,8 @@ export class AdminEventDetailComponent implements OnInit {
   carts: Cart[] = [];
   eventForm: FormGroup;
 
+  cartsUrl = 'carts';
+  combosUrl = 'combos';
   constructor(
     private eventService: EventService,
     private cartService: CartService,
@@ -41,17 +43,22 @@ export class AdminEventDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.setValue();
+    this.getCarts();
+    this.getCombos();
   }
 
 
   getCarts(): void {
-    this.cartService.gets()
-      .subscribe(carts => this.carts = carts);
+    this.cartService.gets();
+    this.cartService.cache$
+      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
   }
 
+
   getCombos(): void {
-    this.comboService.gets()
-      .subscribe(combos => this.combos = combos);
+    this.comboService.gets();
+    this.comboService.cache$
+      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
   }
 
   setValue() {

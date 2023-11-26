@@ -25,11 +25,15 @@ export class AdminComboDetailsComponent {
   fieldNames: string[] = [];
   selectedComboDetail: ComboDetail | undefined;
 
+  comboDetailsUrl = 'comboDetails';
+  combosUrl = 'combos';
+  productsUrl = 'products';
+
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
-
+ 
   constructor(
     private comboDetailService: ComboDetailService,
     private comboService: ComboService,
@@ -52,18 +56,21 @@ export class AdminComboDetailsComponent {
   }
 
   getComboDetails(): void {
+    this.comboDetailService.gets();
     this.comboDetailService.cache$
-      .subscribe(comboDetails => this.comboDetails = comboDetails);
+      .subscribe(comboDetails => this.comboDetails = JSON.parse(localStorage.getItem(this.comboDetailsUrl) || 'null'));
   }
 
   getCombos(): void {
+    this.comboService.gets();
     this.comboService.cache$
-      .subscribe(combos => this.combos = combos);
+      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
   }
 
   getProducts(): void {
+    this.productService.gets();
     this.productService.cache$
-      .subscribe(products => this.products = products);
+      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
   }
 
   getProductById(menuItemId: number): Observable<Product | null> {

@@ -23,6 +23,8 @@ export class AdminProductsComponent {
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
+  productsUrl = 'products';
+  categoriesurl = 'categories';
 
   constructor(
     private productService: ProductService,
@@ -55,13 +57,15 @@ export class AdminProductsComponent {
   }
 
   getCategories(): void {
+    this.categoryService.gets();
     this.categoryService.cache$
-      .subscribe(categories => this.categories = JSON.parse(localStorage.getItem("categories") || 'null'));
+      .subscribe(categories => this.categories = JSON.parse(localStorage.getItem(this.categoriesurl) || 'null'));
   }
 
   getProducts(): void {
+    this.productService.gets();
     this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem("products") || 'null'));
+      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
   }
 
   getCategoryById(categoryId: number): Observable<Category | null> {
@@ -88,13 +92,11 @@ export class AdminProductsComponent {
       imageUrl: imageUrl,
       categoryId: categoryId,
     };
-
     this.productService.add(newProduct)
       .subscribe(product => {
         this.productForm.get('status')?.setValue(true);
         this.productForm.reset();
       });
-
   }
 
   deleteProduct(product: Product): void {
@@ -104,7 +106,6 @@ export class AdminProductsComponent {
     } else {
       console.log("Không có menuItemId");
     }
-
 
   }
   openProductDetailModal(product: Product) {

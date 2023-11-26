@@ -3,10 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableStatus } from 'src/app/interfaces/table-status';
-import { TableStatusService } from 'src/app/services/table-status.service';
-import { AdminTableStatusDetailComponent } from './admin-table-status-detail/admin-table-status-detail.component';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
+import { TableStatusService } from 'src/app/services/table-status.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { AdminTableStatusDetailComponent } from './admin-table-status-detail/admin-table-status-detail.component';
 
 @Component({
   selector: 'app-admin-table-statuses',
@@ -25,6 +25,8 @@ export class AdminTableStatusesComponent {
   tableSizes: any = [5, 10, 15, 20];
 
   isCustomChecked = false;
+
+  tableStatusesUrl = 'tableStatuses';
 
   constructor(
     private tableStatusService: TableStatusService,
@@ -78,8 +80,10 @@ export class AdminTableStatusesComponent {
   }
 
   getTableStatuses(): void {
+    this.tableStatusService.gets();
     this.tableStatusService.cache$
-      .subscribe(tableStatuses => this.tableStatuses = tableStatuses);
+      .subscribe(tableStatuses => this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null'));
+
   }
 
   addTableStatus(): void {
@@ -90,7 +94,7 @@ export class AdminTableStatusesComponent {
       name = this.tableStatusForm.get('name')?.value?.trim() ?? '';
       if (name === '') {
         this.sweetAlertService.showAlert('Mời nhập tên bàn', 'Bạn chưa nhập tên bàn', 'info')
-        
+
         return
       }
     } else {

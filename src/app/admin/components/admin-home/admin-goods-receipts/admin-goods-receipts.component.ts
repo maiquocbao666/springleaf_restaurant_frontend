@@ -7,6 +7,8 @@ import { InventoryBranch } from 'src/app/interfaces/inventory-branch';
 import { GoodsReceiptService } from 'src/app/services/goods-receipt.service';
 import { InventoryBranchService } from 'src/app/services/inventory-branch.service';
 import { AdminGoodsReceiptDetailComponent } from './admin-goods-receipt-detail/admin-goods-receipt-detail.component';
+import { CartService } from 'src/app/services/cart.service';
+import { Cart } from 'src/app/interfaces/cart';
 
 @Component({
   selector: 'app-admin-goods-receipts',
@@ -15,6 +17,7 @@ import { AdminGoodsReceiptDetailComponent } from './admin-goods-receipt-detail/a
 })
 export class AdminGoodsReceiptsComponent {
   goodsReceipts: GoodsReceipt[] = [];
+  carts: Cart[] = [];
   goodsReceiptForm: FormGroup;
   goodsReceipt: GoodsReceipt | undefined;
   inventoryBranches: InventoryBranch[] = [];
@@ -23,9 +26,14 @@ export class AdminGoodsReceiptsComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
+  cartsUrl = 'Carts';
+  goodsReceiptsUrl = 'GoodsReceipts';
+  inventoryBranchesUrl = 'InventoryBranches';
+
   constructor(
     private goodsReceiptService: GoodsReceiptService,
     private inventoryBranchService: InventoryBranchService,
+    private cartService: CartService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal
   ) {
@@ -53,13 +61,21 @@ export class AdminGoodsReceiptsComponent {
   }
 
   getGoodsReceipts(): void {
+    this.goodsReceiptService.gets();
     this.goodsReceiptService.cache$
-      .subscribe(goodsReceipts => this.goodsReceipts = goodsReceipts);
+      .subscribe(goodsReceipts => this.goodsReceipts = JSON.parse(localStorage.getItem(this.goodsReceiptsUrl) || 'null'));
+  }
+
+  getCarts(): void {
+    this.cartService.gets();
+    this.cartService.cache$
+      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
   }
 
   getInventoryBranches(): void {
+    this.inventoryBranchService.gets();
     this.inventoryBranchService.cache$
-      .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
+      .subscribe(inventoryBranches => this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null'));
   }
 
   getInventoryBranchById(inventoryBranchId: number): Observable<InventoryBranch | null> {
@@ -80,13 +96,13 @@ export class AdminGoodsReceiptsComponent {
 
   deleteGoodsReceipt(goodsReceipt: GoodsReceipt): void {
 
-    if(goodsReceipt.goodsReceiptId){
+    if (goodsReceipt.goodsReceiptId) {
       this.goodsReceiptService.delete(goodsReceipt.goodsReceiptId).subscribe();
     } else {
       console.log("Không có goodsReceiptId");
     }
 
-   
+
   }
 
   openGoodsReceiptDetailModal(goodsReceipt: GoodsReceipt) {

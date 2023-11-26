@@ -22,6 +22,8 @@ export class AdminRestaurantsComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
+  restaurantsUrl = 'restaurants';
+
   constructor(
     private restaurantService: RestaurantService, // Đổi tên service nếu cần
     private route: ActivatedRoute,
@@ -56,8 +58,9 @@ export class AdminRestaurantsComponent {
   }
 
   getRestaurants(): void {
+    this.restaurantService.gets();
     this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = restaurants);
+      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
   }
 
   addRestaurant(): void {

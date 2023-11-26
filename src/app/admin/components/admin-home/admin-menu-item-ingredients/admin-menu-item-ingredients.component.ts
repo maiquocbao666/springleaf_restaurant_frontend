@@ -8,6 +8,7 @@ import { IngredientService } from 'src/app/services/ingredient.service';
 import { MenuItemIngredientService } from 'src/app/services/menu-Item-ingredient.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 import { AdminMenuItemIngredientDetailComponent } from '../admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
 import { MenuItemIngredient } from './../../../../interfaces/menu-item-ingredient';
 
@@ -28,6 +29,10 @@ export class AdminMenuItemIngredientsComponent {
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
+
+  menuItemIngredientsUrl = 'menuItemIngredients';
+  ingredientsUrl = 'ingredients';
+  productsUrl = 'products';
 
   constructor(
     private menuItemIngredientService: MenuItemIngredientService,
@@ -63,19 +68,25 @@ export class AdminMenuItemIngredientsComponent {
 
 
   getMenuItemIngredients(): void {
+    this.menuItemIngredientService.gets();
     this.menuItemIngredientService.cache$
-      .subscribe(menuItemIngredients => this.menuItemIngredients = menuItemIngredients);
+      .subscribe(menuItemIngredients => this.menuItemIngredients = JSON.parse(localStorage.getItem(this.menuItemIngredientsUrl) || 'null'));
   }
 
   getProducts(): void {
+    this.productService.gets();
     this.productService.cache$
-      .subscribe(products => this.products = products);
+      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
   }
 
+
   getIngredients(): void {
+    this.ingredientService.gets();
     this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = ingredients);
+      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+
   }
+
 
   getIngredientById(ingredientId: number): Observable<Ingredient | null> {
     return this.ingredientService.getById(ingredientId);
@@ -109,9 +120,15 @@ export class AdminMenuItemIngredientsComponent {
 
   deleteMenuItemIngredient(menuItemIngredient: MenuItemIngredient): void {
     if (menuItemIngredient.menuItemIngredientId) {
-      this.menuItemIngredientService.delete(menuItemIngredient.menuItemIngredientId)
-        .subscribe(() => {
-          this.getMenuItemIngredients(); // Sau khi xóa, cập nhật lại danh sách
+      this.sweetAlertService.showConfirmAlert('Bạn có muốn xóa?', 'Không thể tải lại!', 'warning')
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.menuItemIngredientService.delete(menuItemIngredient.menuItemIngredientId!)
+              .subscribe(() => {
+                this.getMenuItemIngredients(); // Sau khi xóa, cập nhật lại danh sách
+              });
+            Swal.fire('Đã xóa!', 'Bạn đã xóa.', 'success');
+          }
         });
     } else {
       console.log("Không có menuItemIngredientId");

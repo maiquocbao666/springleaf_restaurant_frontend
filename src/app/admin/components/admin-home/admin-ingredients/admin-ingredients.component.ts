@@ -15,6 +15,8 @@ export class AdminIngredientsComponent {
   ingredientForm: FormGroup;
   ingredient: Ingredient | undefined;
   fieldNames: string[] = [];
+  ingredientsUrl = 'ingredients';
+
 
   page: number = 1;
   count: number = 0;
@@ -48,8 +50,9 @@ export class AdminIngredientsComponent {
   }
 
   getIngredients(): void {
+    this.ingredientService.gets();
     this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = ingredients);
+      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
   }
 
   addIngredient(): void {

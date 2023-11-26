@@ -23,6 +23,8 @@ export class AdminReservationsComponent {
 
   currentDateTime$: string = '';
 
+  reservationsUrl = 'reservations';
+
   constructor(
     private reservationService: ReservationService,
     private dateTimeService: DateTimeService,
@@ -104,8 +106,9 @@ export class AdminReservationsComponent {
   }
 
   getReservations(): void {
+    this.reservationService.gets();
     this.reservationService.reservationsCache$
-      .subscribe(reservations => this.reservations = reservations);
+    .subscribe(reservations => this.reservations = JSON.parse(localStorage.getItem(this.reservationsUrl) || 'null'));
   }
 
   onTableDataChange(event: any) {

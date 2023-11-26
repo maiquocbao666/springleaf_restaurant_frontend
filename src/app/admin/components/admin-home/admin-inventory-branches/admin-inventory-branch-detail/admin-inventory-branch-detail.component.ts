@@ -25,6 +25,9 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
   inventoryBranchForm: FormGroup;
   fieldNames: string[] = [];
 
+  restaurantsUrl = 'restaurants';
+  ingredientsUrl = 'ingredients';
+  suppliersUrl = 'suppliers';
 
   constructor(
     private inventoryBranchService: InventoryBranchService,
@@ -49,20 +52,23 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
     this.getSuppliers();
   }
 
-
-  getSuppliers(): void {
-    this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = suppliers);
+  getIngredients(): void {
+    this.ingredientService.gets();
+    this.ingredientService.cache$
+      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
   }
 
-  getIngredients(): void {
-    this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = ingredients);
+
+  getSuppliers(): void {
+    this.supplierService.gets();
+    this.supplierService.cache$
+      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
   }
 
   getRestaurants(): void {
+    this.restaurantService.gets();
     this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = restaurants);
+      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
   }
 
   setValue() {

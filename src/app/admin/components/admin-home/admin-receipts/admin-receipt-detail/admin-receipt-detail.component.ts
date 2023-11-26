@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Inventory } from 'src/app/interfaces/inventory';
 import { Receipt } from 'src/app/interfaces/receipt';
+import { Supplier } from 'src/app/interfaces/supplier';
+import { InventoryService } from 'src/app/services/inventory.service';
 import { ReceiptService } from 'src/app/services/receipt.service';
+import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
   selector: 'app-admin-receipt-detail',
@@ -15,9 +19,16 @@ export class AdminReceiptDetailComponent {
   fieldNames: string[] = [];
   receipts: Receipt[] = [];
   receiptForm: FormGroup;
-  
+  suppliers: Supplier[] = [];
+  inventories: Inventory[] = [];
+  receiptsUrl = 'receipts';
+  suppliersUrl = 'suppliers';
+  inventoriesUrl = 'inventories';
+
   constructor(
-    private receiptService: ReceiptService, // Đổi tên service nếu cần
+    private receiptService: ReceiptService,
+    private inventoryService: InventoryService,
+    private supplierService: SupplierService,
     private formBuilder: FormBuilder,
     public activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -39,7 +50,31 @@ export class AdminReceiptDetailComponent {
   
   ngOnInit(): void {
     this.setValue();
+    this.getReceipts();
+    this.getInventories();
+    this.getSuppliers();
   }
+  
+  getReceipts(): void {
+    this.receiptService.gets();
+    this.receiptService.cache$
+      .subscribe(receipts => this.receipts = JSON.parse(localStorage.getItem(this.receiptsUrl) || 'null'));
+
+  }
+
+  getInventories(): void {
+    this.inventoryService.gets();
+    this.inventoryService.cache$
+      .subscribe(inventories => this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null'));
+
+  }
+
+  getSuppliers(): void {
+    this.supplierService.gets();
+    this.supplierService.cache$
+      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+  }
+
   
   setValue() {
     if (this.receipt) {

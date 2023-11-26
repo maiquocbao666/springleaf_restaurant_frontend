@@ -10,17 +10,19 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 })
 export class UserRestaurantsComponent {
   restaurants: Restaurant[] = [];
+  restaurantsUrl = 'restaurants';
 
-  constructor(private restaurantsService: RestaurantService, private route: ActivatedRoute) {
+  constructor(private restaurantService: RestaurantService, private route: ActivatedRoute) {
 
   }
 
   ngOnInit(): void {
-    this.getrestaurants();
+    this.getRestaurants();
   }
 
-  getrestaurants(): void {
-    this.restaurantsService.cache$
-      .subscribe(restaurants => this.restaurants = restaurants);
+  getRestaurants(): void {
+    this.restaurantService.gets();
+    this.restaurantService.cache$
+      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
   }
 }

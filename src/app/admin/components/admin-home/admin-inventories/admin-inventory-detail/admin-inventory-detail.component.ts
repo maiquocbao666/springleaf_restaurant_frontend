@@ -23,6 +23,10 @@ export class AdminInventoryDetailComponent implements OnInit {
   fieldNames: string[] = [];
   inventories: Inventory[] = [];
 
+  inventoriesUrl = 'inventories';
+  ingredientsUrl = 'ingredients';
+  suppliersUrl = ' suppliers';
+
   constructor(
     private inventoryService: InventoryService,
     private supplierService: SupplierService,
@@ -53,24 +57,19 @@ export class AdminInventoryDetailComponent implements OnInit {
       });
     }
   }
-  getInventoris(): void {
-    this.inventoryService.cache$
-      .subscribe(inventories => this.inventoris = inventories);
+  getIngredients(): void {
+    this.ingredientService.gets();
+    this.ingredientService.cache$
+    .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
   }
 
   getSuppliers(): void {
+    this.supplierService.gets();
     this.supplierService.cache$
-      .subscribe(supplier => this.suppliers = supplier);
+    .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
   }
 
-  getIngredients(): void {
-    this.ingredientService.cache$
-      .subscribe(ingredient => this.ingredients = ingredient);
-  }
-  getInventories(): void {
-    this.inventoryService.cache$
-      .subscribe(inventory => this.inventories = inventory);
-  }
+
 
   saveInventory(): void {
     this.activeModal.close('Close after saving');

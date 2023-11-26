@@ -27,6 +27,10 @@ export class AdminRestaurantTablesComponent {
   fieldNames: string[] = [];
   restaurantTableForm: FormGroup;
 
+  restaurantTablesUrl = 'restaurantTables';
+  tableTypesUrl = 'tableTypes';
+  tableStatusesUrl = 'tableStatuses';
+  restaurantsUrl = 'restaurants';
 
   page: number = 1;
   count: number = 0;
@@ -34,9 +38,9 @@ export class AdminRestaurantTablesComponent {
   tableSizes: any = [5, 10, 15, 20];
 
   constructor(
-    private restaurantTablesService: RestaurantTableService,
-    private tableTypesService: TableTypeService,
-    private tableStatusesService: TableStatusService,
+    private restaurantTableService: RestaurantTableService,
+    private tableTypeService: TableTypeService,
+    private tableStatusService: TableStatusService,
     private restaurantService: RestaurantService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -67,28 +71,32 @@ export class AdminRestaurantTablesComponent {
   }
 
   getRestaurantTables(): void {
-    this.restaurantTablesService.cache$
-      .subscribe(restaurantTables => this.restaurantTables = restaurantTables);
+    this.restaurantTableService.gets();
+    this.restaurantTableService.cache$
+      .subscribe(restaurantTables => this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null'));
   }
 
   getTableStatuses(): void {
-    this.tableStatusesService.cache$
-      .subscribe(tableStatus => this.tableStatuses = tableStatus);
+    this.tableStatusService.gets();
+    this.tableStatusService.cache$
+      .subscribe(tableStatuses => this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null'));
   }
 
   getTableTypes(): void {
-    this.tableTypesService.cache$
-      .subscribe(tableTypes => this.tableTypes = tableTypes);
+    this.tableTypeService.gets();
+    this.tableTypeService.cache$
+      .subscribe(tableTypes => this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null'));
   }
 
   getRestaurants(): void {
+    this.restaurantService.gets();
     this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = restaurants);
+      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
   }
 
   //Lấy name theo id
   getTableTypeById(tableTypeId: number): Observable<TableType | null> {
-    return this.tableTypesService.getById(tableTypeId);
+    return this.tableTypeService.getById(tableTypeId);
   }
 
   getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
@@ -96,7 +104,7 @@ export class AdminRestaurantTablesComponent {
   }
 
   getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
-    return this.tableStatusesService.getById(tableStatusId);
+    return this.tableStatusService.getById(tableStatusId);
   }
 
   addRestaurantTable(): void {
@@ -112,7 +120,7 @@ export class AdminRestaurantTablesComponent {
       restaurantId: restaurantId,
     };
 
-    this.restaurantTablesService.add(newRestaurantTable)
+    this.restaurantTableService.add(newRestaurantTable)
       .subscribe(restaurantTable => {
         this.restaurantTableForm.reset();
       });
@@ -122,7 +130,7 @@ export class AdminRestaurantTablesComponent {
 
     if (restaurantTable.tableId) {
       this.restaurantTables = this.restaurantTables.filter(i => i !== restaurantTable);
-      this.restaurantTablesService.delete(restaurantTable.tableId).subscribe();
+      this.restaurantTableService.delete(restaurantTable.tableId).subscribe();
     } {
       console.log("Không có restaurantTableId");
     }
@@ -133,11 +141,11 @@ export class AdminRestaurantTablesComponent {
     const modalRef = this.modalService.open(AdminRestaurantTableDetailComponent, { size: 'lg' });
     modalRef.componentInstance.restaurantTable = restaurantTable;
     modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
-    
+
     });
     modalRef.result.then((result) => {
       if (result === 'Close after saving') {
-    
+
       }
     });
   }

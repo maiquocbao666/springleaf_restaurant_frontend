@@ -21,6 +21,8 @@ export class AdminSuppliersComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
+  suppliersUrl = 'suppliers';
+
   constructor(
     private supplierService: SupplierService,
     private formBuilder: FormBuilder,
@@ -40,8 +42,10 @@ export class AdminSuppliersComponent {
   }
 
   getSuppliers(): void {
+    this.supplierService.gets();
     this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = suppliers);
+      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+
   }
 
   onTableDataChange(event: any) {

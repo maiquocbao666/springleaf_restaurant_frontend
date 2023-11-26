@@ -17,6 +17,9 @@ export class AdminCombosComponent {
   combo: Combo | undefined;
   fieldNames: string[] = [];
 
+  combosUrl = 'combos';
+
+
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -39,9 +42,11 @@ export class AdminCombosComponent {
   }
 
   getCombos(): void {
+    this.comboService.gets();
     this.comboService.cache$
-      .subscribe(combos => this.combos = combos);
+      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
   }
+
 
   onTableDataChange(event: any) {
     this.page = event;

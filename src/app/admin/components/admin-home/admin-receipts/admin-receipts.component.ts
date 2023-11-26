@@ -30,6 +30,10 @@ export class AdminReceiptsComponent {
   suppliers: Supplier[] = [];
   inventories: Inventory[] = [];
 
+  receiptsUrl = 'receipts';
+  suppliersUrl = 'suppliers';
+  inventoriesUrl = 'inventories';
+  usersUrl = 'users';
 
   constructor(
     private receiptService: ReceiptService,
@@ -60,18 +64,23 @@ export class AdminReceiptsComponent {
   }
 
   getReceipts(): void {
+    this.receiptService.gets();
     this.receiptService.cache$
-      .subscribe(receipts => this.receipts = receipts);
+      .subscribe(receipts => this.receipts = JSON.parse(localStorage.getItem(this.receiptsUrl) || 'null'));
+
   }
 
   getInventories(): void {
+    this.inventoryService.gets();
     this.inventoryService.cache$
-      .subscribe(inventories => this.inventories = inventories);
+      .subscribe(inventories => this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null'));
+
   }
 
   getSuppliers(): void {
+    this.supplierService.gets();
     this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = suppliers);
+      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
   }
 
   onTableDataChange(event: any) {

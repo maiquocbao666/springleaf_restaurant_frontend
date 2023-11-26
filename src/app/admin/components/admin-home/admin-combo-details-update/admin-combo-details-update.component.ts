@@ -23,6 +23,10 @@ export class AdminComboDetailsUpdateComponent {
   @Output() comboDetailupdate: EventEmitter<void> = new EventEmitter<void>();
   fieldNames: string[] = [];
 
+  comboDetailsUrl = 'comboDetails';
+  combosUrl = 'combos';
+  productsUrl = 'products';
+
   constructor(
     private comboDetailService: ComboDetailService,
     private comboService: ComboService,
@@ -59,19 +63,23 @@ export class AdminComboDetailsUpdateComponent {
   }
 
   getComboDetails(): void {
+    this.comboDetailService.gets();
     this.comboDetailService.cache$
-      .subscribe(comboDetails => this.comboDetails = comboDetails);
+      .subscribe(comboDetails => this.comboDetails = JSON.parse(localStorage.getItem(this.comboDetailsUrl) || 'null'));
   }
 
   getCombos(): void {
+    this.comboService.gets();
     this.comboService.cache$
-      .subscribe(combos => this.combos = combos);
+      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
   }
 
   getProducts(): void {
+    this.productService.gets();
     this.productService.cache$
-      .subscribe(products => this.products = products);
+      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
   }
+
 
   updateComboDetail(): void {
     if (this.comboDetailForm.valid) {

@@ -18,6 +18,8 @@ export class AdminReservationStatusesComponent {
   ReservationStatus: ReservationStatus | undefined;
   fieldNames: string[] = [];
 
+  reservationStatusesUrl = 'reservationStatuses';
+
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -74,7 +76,8 @@ export class AdminReservationStatusesComponent {
 
   getReservationStatuses(): void {
     this.reservationStatusService.gets()
-      .subscribe(reservationStatuses => this.reservationStatuses = reservationStatuses);
+      .subscribe(reservationStatuses => this.reservationStatuses = JSON.parse(localStorage.getItem(this.reservationStatusesUrl) || 'null'));
+
   }
 
   addReservationStatus(): void {

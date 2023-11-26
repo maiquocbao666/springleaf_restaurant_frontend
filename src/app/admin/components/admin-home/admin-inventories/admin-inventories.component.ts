@@ -28,6 +28,10 @@ export class AdminInventoriesComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
+  inventoriesUrl = 'inventories';
+  ingredientsUrl = 'ingredients';
+  suppliersUrl = ' suppliers';
+
   constructor(
     private inventoryService: InventoryService,
     private ingredientService: IngredientService,
@@ -58,27 +62,31 @@ export class AdminInventoriesComponent {
     this.page = 1;
   }
 
-  getIngredients(): void {
-    this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = ingredients);
-  }
-
+  
   getIngredientById(ingredientId: number): Observable<Ingredient | null> {
     return this.ingredientService.getById(ingredientId);
   }
-
+  
   getSupplierById(supplierId: number): Observable<Supplier | null> {
     return this.supplierService.getById(supplierId);
   }
-
+  
+  getIngredients(): void {
+    this.ingredientService.gets();
+    this.ingredientService.cache$
+    .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+  }
+  
   getInventories(): void {
+    this.inventoryService.gets();
     this.inventoryService.cache$
-      .subscribe(inventories => this.inventories = inventories);
+    .subscribe(inventories => this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null'));
   }
 
   getSuppliers(): void {
+    this.supplierService.gets();
     this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = suppliers);
+    .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
   }
 
   addInventory(): void {

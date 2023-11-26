@@ -29,6 +29,11 @@ export class AdminEventsComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
+  eventsUrl = 'events';
+  cartsUrl = "carts";
+  combosUrl = "combos";
+
+
   constructor(
     private eventService: EventService,
     private cartService: CartService,
@@ -64,8 +69,9 @@ export class AdminEventsComponent {
   }
 
   getEvents(): void {
+    this.eventService.gets();
     this.eventService.cache$
-      .subscribe(events => this.events = events);
+      .subscribe(events => this.events = JSON.parse(localStorage.getItem(this.eventsUrl) || 'null'));
   }
 
   getCartById(orderId: number): Observable<Cart | null> {
@@ -77,13 +83,15 @@ export class AdminEventsComponent {
   }
 
   getCarts(): void {
-    this.cartService.gets()
-      .subscribe(carts => this.carts = carts);
+    this.cartService.gets();
+    this.cartService.cache$
+      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
   }
 
   getCombos(): void {
+    this.comboService.gets();
     this.comboService.cache$
-      .subscribe(combos => this.combos = combos);
+      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
   }
 
   addEvent(): void {

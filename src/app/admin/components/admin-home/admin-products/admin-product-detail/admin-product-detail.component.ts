@@ -19,6 +19,10 @@ export class AdminProductDetailComponent implements OnInit {
   productForm: FormGroup;
   fieldNames: string[] = [];
 
+  categoriesUrl = 'categories';
+  productsUrl = 'products';
+
+
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
@@ -43,15 +47,15 @@ export class AdminProductDetailComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.cache$.subscribe(categories => {
-      this.categories = categories;
-    });
+    this.categoryService.gets();
+    this.categoryService.cache$
+      .subscribe(categories => this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null'));
   }
 
   getProducts(): void {
-    this.productService.cache$.subscribe(product => {
-      this.products = product
-    });
+    this.productService.gets();
+    this.productService.cache$
+      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
   }
 
   setValue() {

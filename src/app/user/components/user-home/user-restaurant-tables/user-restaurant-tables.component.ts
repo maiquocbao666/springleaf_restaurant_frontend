@@ -19,6 +19,7 @@ import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-
 })
 export class UserRestaurantTablesComponent {
   restaurantTables: RestaurantTable[] = [];
+  restaurantTablesUrl = 'restaurantTables';
 
   constructor(
     private toastService: ToastService,
@@ -37,9 +38,11 @@ export class UserRestaurantTablesComponent {
   }
 
   getRestaurantTables(): void {
-    this.restaurantTableService.gets()
-      .subscribe(restaurantTables => this.restaurantTables = restaurantTables);
+    this.restaurantTableService.gets();
+    this.restaurantTableService.cache$
+      .subscribe(restaurantTables => this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null'));
   }
+
 
   getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
     return this.tableStatusService.getById(tableStatusId);
