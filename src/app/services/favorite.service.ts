@@ -34,14 +34,14 @@ export class FavoriteService extends BaseService<Favorite> {
   override update(updated: Favorite): Observable<Favorite> {
     return super.update(updated);
   }
-  override delete(id: number): Observable<Favorite> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
   override getItemId(item: Favorite): number {
     return item.favoriteId!;
   }
   override getItemName(item: Favorite): string {
-    throw new Error('Method not implemented.');
+    return '';
   }
   override getObjectName(): string {
     return "Favorite";

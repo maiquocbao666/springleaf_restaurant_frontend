@@ -41,9 +41,9 @@ export class RestaurantService extends BaseService<Restaurant> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<Restaurant> {
+    override delete(id : number): Observable<any> {
         return super.delete(id);
-    }
+      }
 
     override searchByName(term: string): Observable<Restaurant[]> {
         return super.searchByName(term);

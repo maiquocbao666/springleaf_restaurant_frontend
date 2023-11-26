@@ -41,7 +41,7 @@ export class MergeTableService extends BaseService<MergeTable> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<MergeTable> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
     }
 

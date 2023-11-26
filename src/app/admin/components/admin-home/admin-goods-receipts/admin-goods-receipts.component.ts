@@ -96,7 +96,7 @@ export class AdminGoodsReceiptsComponent {
 
   deleteGoodsReceipt(goodsReceipt: GoodsReceipt): void {
 
-    if (goodsReceipt.goodsReceiptId) {
+    if(goodsReceipt){
       this.goodsReceiptService.delete(goodsReceipt.goodsReceiptId).subscribe();
     } else {
       console.log("Không có goodsReceiptId");

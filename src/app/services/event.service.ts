@@ -18,10 +18,10 @@ export class EventService extends BaseService<Event> {
     return item.eventId!;
   }
   override getItemName(item: Event): string {
-    throw new Error('Method not implemented.');
+    return item.eventName;
   }
   override getObjectName(): string {
-    throw new Error('Method not implemented.');
+    return "Event";
   }
 
   override gets(): Observable<Event[]> {
@@ -33,8 +33,8 @@ export class EventService extends BaseService<Event> {
   override update(updatedEvent: Event): Observable<Event> {
     return super.update(updatedEvent);
   }
-  override delete(id: number): Observable<Event> {
-   return super.delete(id);
+  override delete(id : number): Observable<any> {
+    return super.delete(id);
   }
 
  

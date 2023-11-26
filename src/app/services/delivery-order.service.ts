@@ -50,7 +50,7 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
     return super.update(updated);
   }
 
-  override delete(id: number): Observable<any> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 

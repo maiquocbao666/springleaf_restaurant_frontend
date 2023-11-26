@@ -41,9 +41,9 @@ export class ReceiptDetailService extends BaseService<ReceiptDetail> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<ReceiptDetail> {
+    override delete(id : number): Observable<any> {
         return super.delete(id);
-    }
+      }
 
     override searchByName(term: string): Observable<ReceiptDetail[]> {
         return super.searchByName(term);

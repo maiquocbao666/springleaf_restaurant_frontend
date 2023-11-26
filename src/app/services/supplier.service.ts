@@ -42,9 +42,9 @@ export class SupplierService extends BaseService<Supplier>  {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<Supplier> {
+    override delete(id : number): Observable<any> {
         return super.delete(id);
-    }
+      }
 
     override searchByName(term: string): Observable<Supplier[]> {
         return super.searchByName(term);

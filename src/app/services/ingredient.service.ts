@@ -43,7 +43,7 @@ export class IngredientService extends BaseService<Ingredient>  {
       return super.update(updatedObject);
     }
   
-    override delete(id: number): Observable<Ingredient> {
+    override delete(id : number): Observable<any> {
       return super.delete(id);
     }
   

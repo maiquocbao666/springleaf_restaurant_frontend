@@ -43,7 +43,7 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     return super.update(updatedObject);
   }
 
-  override delete(id: number): Observable<InventoryBranch> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 

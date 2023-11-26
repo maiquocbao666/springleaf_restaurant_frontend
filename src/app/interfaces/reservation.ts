@@ -5,5 +5,5 @@ export interface Reservation {
     reservationDate: string;
     outTime: string;
     numberOfGuests: number;
-    reservationStatusId: number;
+    reservationStatusName: string;
 }

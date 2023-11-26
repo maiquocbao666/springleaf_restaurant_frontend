@@ -48,7 +48,7 @@ export class ComboDetailService extends BaseService<ComboDetail> {
     return super.update(updatedComboDetail);
   }
 
-  override delete(id: number): Observable<ComboDetail> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 

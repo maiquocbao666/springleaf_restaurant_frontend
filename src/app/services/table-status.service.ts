@@ -41,9 +41,9 @@ export class TableStatusService extends BaseService<TableStatus> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<TableStatus> {
+    override delete(id : number): Observable<any> {
         return super.delete(id);
-    }
+      }
 
     override searchByName(term: string): Observable<TableStatus[]> {
         return super.searchByName(term);

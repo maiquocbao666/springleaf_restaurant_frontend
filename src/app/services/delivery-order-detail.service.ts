@@ -44,7 +44,7 @@ export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail>
     return super.update(updated);
   }
 
-  override delete(id: number): Observable<any> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 
