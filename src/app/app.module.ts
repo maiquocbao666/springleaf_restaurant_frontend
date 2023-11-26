@@ -88,6 +88,7 @@ import { rxStompServiceFactory, rxStompServiceFactory2 } from './rx-stomp-servic
 import { RxStompService2 } from './rx-stomp.service2';
 import { AdminMenuItemIngredientsComponent } from './admin/components/admin-home/admin-menu-item-ingredients/admin-menu-item-ingredients.component';
 import { AdminMenuItemIngredientDetailComponent } from './admin/components/admin-home/admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
+import { UserPasswordComponent } from './components/user-password/user-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -155,6 +156,7 @@ import { AdminMenuItemIngredientDetailComponent } from './admin/components/admin
     LoginComponent,
     DateTimeComponent,
     ProfileComponent,
+    UserPasswordComponent,
     UploadFileComponent,
 
   ],

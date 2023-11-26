@@ -3,6 +3,7 @@ import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { ProfileComponent } from 'src/app/components/profile/profile.component';
+import { UserPasswordComponent } from 'src/app/components/user-password/user-password.component';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
@@ -60,6 +61,11 @@ export class UserHeaderComponent {
 
   openProfileModel() {
     const modalRef = this.modalService.open(ProfileComponent);
+  }
+
+  openUserPasswordModel(){
+    const modalRef = this.modalService.open(UserPasswordComponent);
+    modalRef.componentInstance.selected = 'password';
   }
 
   truncateString(inputString: string): string {

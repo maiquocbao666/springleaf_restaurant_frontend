@@ -81,7 +81,7 @@ export class AdminEventDetailComponent implements OnInit {
 
       this.eventService.update(updatedEvent).subscribe(() => {
         // Cập nhật cache
-        this.eventService.updateEventCache(updatedEvent);
+        this.eventService.update(updatedEvent);
         this.eventSaved.emit(); // Emit the event
       });
     }

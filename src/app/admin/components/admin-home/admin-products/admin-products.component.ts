@@ -47,27 +47,25 @@ export class AdminProductsComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getProducts();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getProducts();
   }
 
   getCategories(): void {
-    this.categoryService.categoriesCache$
-      .subscribe(categories => this.categories = categories);
+    this.categoryService.cache$
+      .subscribe(categories => this.categories = JSON.parse(localStorage.getItem("categories") || 'null'));
   }
 
   getProducts(): void {
-    this.productService.productsCache$
-      .subscribe(products => this.products = products);
+    this.productService.cache$
+      .subscribe(products => this.products = JSON.parse(localStorage.getItem("products") || 'null'));
   }
 
   getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getCategoryById(categoryId);
+    return this.categoryService.getById(categoryId);
   }
 
   addProduct(): void {

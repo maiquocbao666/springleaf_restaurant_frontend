@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserPasswordComponent } from '../user-password/user-password.component';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +38,8 @@ export class LoginComponent {
   constructor(private authService: AuthenticationService,
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private sweetAlertService: ToastService) {
+    private sweetAlertService: ToastService,
+    private modalService: NgbModal) {
     this.loginForm = this.formBuilder.group({
       username: [null, [Validators.nullValidator]],
       password: [null, [Validators.nullValidator]],
@@ -217,5 +219,10 @@ export class LoginComponent {
     this.signInButton.nativeElement.addEventListener('click', () => {
       this.container.nativeElement.classList.remove('right-panel-active');
     });
+  }
+
+  openUserPasswordModel(){
+    const modalRef = this.modalService.open(UserPasswordComponent);
+    modalRef.componentInstance.selected = 'forgot-password';
   }
 }

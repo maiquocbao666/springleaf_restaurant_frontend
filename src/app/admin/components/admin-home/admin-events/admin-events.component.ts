@@ -64,7 +64,7 @@ export class AdminEventsComponent {
   }
 
   getEvents(): void {
-    this.eventService.eventsCache$
+    this.eventService.cache$
       .subscribe(events => this.events = events);
   }
 
@@ -72,7 +72,7 @@ export class AdminEventsComponent {
     return this.cartService.getById(orderId);
   }
 
-  getComboById(comboId: number): Observable<Combo> {
+  getComboById(comboId: number): Observable<Combo | null> {
     return this.comboService.getById(comboId);
   }
 
@@ -82,7 +82,7 @@ export class AdminEventsComponent {
   }
 
   getCombos(): void {
-    this.comboService.combosCache$
+    this.comboService.cache$
       .subscribe(combos => this.combos = combos);
   }
 

@@ -63,48 +63,50 @@ export class RestaurantService {
         }
     }
 
-    private isRestaurantNameInCache(name: string, restaurantIdToExclude: number | null = null): boolean {
-        const isRestaurantInCache = this.restaurantsCache?.some(
+    private isInCache(name: string, idToExclude: number | null = null): boolean {
+        const isInCache = this.restaurantsCache?.some(
             (cache) =>
-                cache.restaurantName.toLowerCase() === name.toLowerCase() && cache.restaurantId !== restaurantIdToExclude
+                cache.restaurantName.toLowerCase() === name.toLowerCase() && cache.restaurantId !== idToExclude
         );
 
-        if (isRestaurantInCache) {
+        if (isInCache) {
             console.log("Restaurant này đã có rồi");
         }
 
-        return isRestaurantInCache || false;
+        return isInCache || false;
     }
 
     add(newRestaurant: Restaurant): Observable<Restaurant> {
 
-        if (this.isRestaurantNameInCache(newRestaurant.restaurantName)) {
-            return of();
+        if (this.restaurantsCache) {
+            if (this.isInCache(newRestaurant.restaurantName)) {
+                return of();
+            }
         }
 
         return this.apiService.request<Restaurant>('post', this.restaurantUrl, newRestaurant).pipe(
-            tap((addedRestaurant: Restaurant) => {
-                this.restaurantsCache = [...this.restaurantsCache, addedRestaurant];
+            tap((addedrestaurant: Restaurant) => {
+                this.restaurantsCache = [...this.restaurantsCache, addedrestaurant];
                 localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
             })
         );
     }
 
-    update(updatedRestaurant: Restaurant): Observable<any> {
+    update(updated: Restaurant): Observable<any> {
 
-        if (this.isRestaurantNameInCache(updatedRestaurant.restaurantName, updatedRestaurant.restaurantId)) {
+        if (this.isInCache(updated.restaurantName, updated.restaurantId)) {
             return of();
         }
 
-        const url = `${this.restaurantUrl}/${updatedRestaurant.restaurantId}`;
+        const url = `${this.restaurantUrl}/${updated.restaurantId}`;
 
-        return this.apiService.request('put', url, updatedRestaurant).pipe(
+        return this.apiService.request('put', url, updated).pipe(
             tap(() => {
                 const updatedRestaurants = this.restaurantsCache.map((restaurant) =>
-                restaurant.restaurantId === updatedRestaurant.restaurantId ? updatedRestaurant : restaurant
-              );
-              this.restaurantsCache = updatedRestaurants;
-              localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
+                    restaurant.restaurantId === updated.restaurantId ? updated : restaurant
+                );
+                this.restaurantsCache = updatedRestaurants;
+                localStorage.setItem(this.restaurantsUrl, JSON.stringify(this.restaurantsCache));
             })
         );
     }

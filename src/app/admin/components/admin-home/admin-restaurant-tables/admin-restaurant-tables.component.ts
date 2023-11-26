@@ -112,7 +112,7 @@ export class AdminRestaurantTablesComponent {
       restaurantId: restaurantId,
     };
 
-    this.restaurantTablesService.addRestaurantTable(newRestaurantTable)
+    this.restaurantTablesService.add(newRestaurantTable)
       .subscribe(restaurantTable => {
         this.restaurantTableForm.reset();
       });
@@ -122,7 +122,7 @@ export class AdminRestaurantTablesComponent {
 
     if (restaurantTable.tableId) {
       this.restaurantTables = this.restaurantTables.filter(i => i !== restaurantTable);
-      this.restaurantTablesService.deleteRestaurantTable(restaurantTable.tableId).subscribe();
+      this.restaurantTablesService.delete(restaurantTable.tableId).subscribe();
     } {
       console.log("Không có restaurantTableId");
     }

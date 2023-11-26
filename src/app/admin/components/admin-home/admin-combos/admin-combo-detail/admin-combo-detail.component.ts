@@ -54,7 +54,7 @@ export class AdminComboDetailComponent implements OnInit {
 
       this.comboService.update(updatedCombo).subscribe(() => {
         // Cập nhật cache
-        this.comboService.updateComboCache(updatedCombo);
+        this.comboService.update(updatedCombo);
         this.comboSaved.emit(); // Emit the event
       });
     }

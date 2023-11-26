@@ -77,8 +77,11 @@
                                     {{truncateString(user.fullName)
                                     }}<i class="icofont-rounded-down"></i></a>
                                 <ul class="dropdown">
+                                    <li routerLinkActive="active"><a class="nav-link" (click)="openUserPasswordModel()">Đổi mật khẩu
+                                    </a></li>
                                     <li routerLinkActive="active"><a class="nav-link" (click)="openProfileModel()">Hồ sơ
                                             cá nhân</a></li>
+                                    
                                     <li routerLinkActive="active"><a class="nav-link" (click)="logOut()">Đăng xuất</a>
                                     </li>
                                     <div class="nav-item" *ngIf="!user">

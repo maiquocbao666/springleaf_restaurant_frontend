@@ -97,6 +97,62 @@ export class AuthenticationService {
     });
   }
 
+  configPassword(password: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      const token = localStorage.getItem('access_token');
+      this.getDatasOfThisUserWorker.postMessage({
+        type: 'config-password',
+        password, token
+      });
+      this.getDatasOfThisUserWorker.onmessage = ({ data }) => {
+        if (data.configPasswordResponse === null) {
+          console.log("Call Config Password Faile");
+          resolve(false);
+        }
+        else if(data.configPasswordResponse === "User not found"){
+          console.log("User not found");
+          resolve(false);
+        }
+        else if(data.configPasswordResponse === "Config password faile"){
+          console.log("Password is not correct");
+          resolve(false);
+        }
+        else {
+          console.log("Config Password success");
+          resolve(true);
+        }
+      };
+    });
+  }
+
+  changePassword(password: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      const token = localStorage.getItem('access_token');
+      this.getDatasOfThisUserWorker.postMessage({
+        type: 'change-password',
+        password, token
+      });
+      this.getDatasOfThisUserWorker.onmessage = ({ data }) => {
+        if (data.configPasswordResponse === null) {
+          console.log("Call Change Password Faile");
+          resolve(false);
+        }
+        else if(data.configPasswordResponse === "User not found"){
+          console.log("User not found");
+          resolve(false);
+        }
+        else if(data.configPasswordResponse === "Change password faile"){
+          console.log("Password is not correct");
+          resolve(false);
+        }
+        else {
+          console.log("Change Password success");
+          resolve(true);
+        }
+      };
+    });
+  }
+
   checkUserByAccessToken(accessToken: string): Promise<boolean> {
 
     return new Promise<boolean>((resolve, reject) => {

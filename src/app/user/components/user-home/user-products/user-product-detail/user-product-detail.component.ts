@@ -44,7 +44,7 @@ export class UserProductDetailComponent {
   }
 
   getCategories(): void {
-    this.categoryService.getCategories()
+    this.categoryService.gets()
       .subscribe(categories => this.categories = categories);
   }
   getProducts(): void {
@@ -57,7 +57,7 @@ export class UserProductDetailComponent {
   }
 
   getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getCategoryById(categoryId);
+    return this.categoryService.getById(categoryId);
   }
   setValue() {
     if (this.product) {
