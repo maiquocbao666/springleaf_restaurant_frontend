@@ -8,8 +8,8 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 })
 export class ToastService {
 
-  constructor(private ngToastService: NgToastService,
-    private toastr: ToastrService,) { }
+  constructor(
+  ) { }
 
 
   showAlert(title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') {
@@ -30,7 +30,7 @@ export class ToastService {
       }
     });
   }
-// gọi ở component 
+  // gọi ở component 
   // showCustomAnimationAlert() {
   //   this.sweetAlertService.showCustomAnimatedAlert('Custom animation message', 'success', 'animated tada')
   //     .then((result) => {

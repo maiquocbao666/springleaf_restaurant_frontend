@@ -14,7 +14,7 @@ export abstract class BaseService<T> {
     abstract cacheKey: string;
     abstract apiUrl: string;
 
-    abstract getItemId(item: T): number;
+    abstract getItemId(item: T): number | string;
     abstract getItemName(item: T): string;
     abstract getObjectName(): string;
 
@@ -85,18 +85,21 @@ export abstract class BaseService<T> {
     }
 
     gets(): Observable<T[]> {
+        // If cache is not empty, return it directly
         if (this.cache) {
+            localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
             return of(this.cache);
         }
+
+        // Otherwise, fetch data from the API
         const objectsObservable = this.apiService.request<T[]>('get', this.apisUrl);
+
+        // Subscribe to the API request to update the cache
         objectsObservable.subscribe(data => {
-            if (this.cache !== data) {
-                this.cache = data;
-                return objectsObservable;
-            } else {
-                return of(this.cache);
-            }
+            this.cache = data;
+            localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
         });
+
         return objectsObservable;
     }
 
@@ -116,7 +119,13 @@ export abstract class BaseService<T> {
         }
     }
 
+    private resetCache() {
+        this.cache = [];
+        this.cache = JSON.parse(localStorage.getItem(this.cacheKey) || '[]');
+    }
+
     add(newObject: T): Observable<T> {
+        this.resetCache();
         return this.apiService.request<T>('post', this.apiUrl, newObject).pipe(
             tap((added: T) => {
                 this.cache = [...this.cache, added];
@@ -127,6 +136,7 @@ export abstract class BaseService<T> {
     }
 
     update(updatedObject: T): Observable<any> {
+        this.resetCache();
         const url = `${this.apiUrl}`;
         return this.apiService.request('put', url, updatedObject).pipe(
             tap(() => {
@@ -140,7 +150,8 @@ export abstract class BaseService<T> {
         );
     }
 
-    delete(id: number): Observable<any> {
+    delete(id: number | string): Observable<any> {
+        this.resetCache();
         const url = `${this.apiUrl}/${id}`;
         return this.apiService.request('delete', url).pipe(
             tap(() => {

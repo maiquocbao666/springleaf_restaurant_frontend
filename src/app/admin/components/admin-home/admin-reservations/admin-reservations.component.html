@@ -33,7 +33,7 @@
             <td>{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
             <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
             <td>
-                {{ reservation.reservationStatusId }}
+                {{ reservation.reservationStatusName }}
             </td>
             <td>{{ reservation.numberOfGuests }}</td>
             <td>{{ (minusDateTime(currentDateTime$, reservation.reservationDate)) }}</td>

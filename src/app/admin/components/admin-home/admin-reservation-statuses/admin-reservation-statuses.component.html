@@ -55,7 +55,6 @@
         <tbody>
             <tr
                 *ngFor="let reservationStatus of reservationStatuses | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                <td>{{reservationStatus.reservationStatusId}}</td>
                 <td>{{reservationStatus.reservationStatusName}}</td>
                 <td>
                     <!-- <button type="button" class="btn btn-outline-primary"

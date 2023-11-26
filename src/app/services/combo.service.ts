@@ -50,7 +50,7 @@ export class ComboService extends BaseService<Combo> {
     return super.update(updatedCombo);
   }
 
-  override delete(id: number): Observable<Combo> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 

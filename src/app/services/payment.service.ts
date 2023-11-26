@@ -43,7 +43,7 @@ export class PaymentService extends BaseService<Payment> {
     return super.update(updatedObject);
   }
 
-  override delete(id: number): Observable<Payment> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 

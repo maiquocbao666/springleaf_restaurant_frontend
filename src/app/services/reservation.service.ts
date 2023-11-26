@@ -123,8 +123,8 @@ export class ReservationService {
         );
     }
 
-    isReservationStatusUsed(reservationStatusId: number): boolean {
-        return this.reservationsCache.some(reservation => reservation.reservationStatusId === reservationStatusId);
+    isReservationStatusUsed(reservationStatusName: string): boolean {
+        return this.reservationsCache.some(reservation => reservation.reservationStatusName === reservationStatusName);
     }
 
 }

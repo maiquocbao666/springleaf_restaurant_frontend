@@ -43,9 +43,9 @@ export class RoleFunctionService extends BaseService<RoleFunction> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<RoleFunction> {
+    override delete(id : number): Observable<any> {
         return super.delete(id);
-    }
+      }
 
     override searchByName(term: string): Observable<RoleFunction[]> {
         return super.searchByName(term);

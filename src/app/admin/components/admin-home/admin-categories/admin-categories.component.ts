@@ -23,6 +23,8 @@ export class AdminCategoriesComponent {
   categories: Category[] = [];
   categoryForm: FormGroup;
 
+  categoriesUrl = 'categories';
+
   constructor(
     private categoryService: CategoryService,
     private formBuilder: FormBuilder,
@@ -46,7 +48,8 @@ export class AdminCategoriesComponent {
 
   getCategories(): void {
     this.categoryService.cache$.subscribe(categories => {
-      this.categories = JSON.parse(localStorage.getItem("categories") || 'null');
+      this.categoryService.gets();
+      this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
     });
   }
 

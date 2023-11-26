@@ -40,7 +40,7 @@ export class TableTypeService extends BaseService<TableType> {
     return super.update(updatedObject);
   }
 
-  override delete(id: number): Observable<TableType> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 

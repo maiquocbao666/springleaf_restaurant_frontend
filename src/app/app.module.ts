@@ -53,8 +53,6 @@ import { ChatComponent } from './components/chat/chat.component';
 import { DateTimeComponent } from './components/date-time/date-time.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { ChatService } from './services/chat.service';
-import { WebSocketService } from './services/web-socket.service';
 import { UserBannerComponent } from './user/components/user-home/user-banner/user-banner.component';
 
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
@@ -184,8 +182,6 @@ import { UserPasswordComponent } from './components/user-password/user-password.
     ToastrModule.forRoot(), // ToastrModule added
   ],
   providers: [
-    WebSocketService,
-    ChatService,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {
       provide: RxStompService,

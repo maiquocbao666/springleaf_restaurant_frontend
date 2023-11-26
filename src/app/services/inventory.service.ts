@@ -42,7 +42,7 @@ export class InventoryService extends BaseService<Inventory> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<Inventory> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
     }
 

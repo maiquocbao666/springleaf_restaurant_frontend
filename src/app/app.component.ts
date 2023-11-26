@@ -151,9 +151,9 @@ export class AppComponent implements OnDestroy {
       ratings: { cache: this.ratingsService.cache, localStorageKey: 'ratings' },
       receipts: { cache: this.receiptsService.cache, localStorageKey: 'receipts' },
       receiptDetails: { cache: this.receiptDetailsService.cache, localStorageKey: 'receiptDetails' },
-      // reservations: { cache: this.reservationsService.reservationsCache, localStorageKey: 'reservations' },
+      reservations: { cache: this.reservationsService.reservationsCache, localStorageKey: 'reservations' },
       tableTypes: { cache: this.tableTypesService.cache, localStorageKey: 'tableTypes' },
-      // reservationStatuses: { cache: this.reservationStatusesService.reservationStatusesCache, localStorageKey: 'reservationStatuses' },
+      reservationStatuses: { cache: this.reservationStatusesService.cache, localStorageKey: 'reservationStatuses' },
 
     };
 

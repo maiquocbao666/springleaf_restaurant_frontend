@@ -14,7 +14,7 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
     cacheKey = 'restaurantTables';
     apiUrl = 'restaurantTable';
 
- 
+
 
     constructor(
         apiService: ApiService,
@@ -40,12 +40,8 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<RestaurantTable> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-    }
-
-    override searchByName(term: string): Observable<RestaurantTable[]> {
-        return super.searchByName(term);
     }
 
     override getItemId(item: RestaurantTable): number {

@@ -40,9 +40,9 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<MenuItemIngredient> {
+    override delete(id : number): Observable<any> {
         return super.delete(id);
-    }
+      }
 
     override searchByName(term: string): Observable<MenuItemIngredient[]> {
         return super.searchByName(term);

@@ -43,10 +43,10 @@ export class CategoryService extends BaseService<Category> {
   override add(newObject: Category): Observable<Category> {
     return super.add(newObject);
   }
-  override update(updatedObject: Category): Observable<Category> {
-    return super.update(updatedObject);
+  override update(updateObject: Category): Observable<Category> {
+    return super.update(updateObject);
   }
-  override delete(id: number): Observable<Category> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
   override searchByName(term: string): Observable<Category[]> {

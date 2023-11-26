@@ -36,9 +36,9 @@ export class GoodsReceiptService extends BaseService<GoodsReceipt> {
     override update(updatedObject: GoodsReceipt): Observable<GoodsReceipt> {
         return super.update(updatedObject);
     }
-    override delete(id: number): Observable<GoodsReceipt> {
+    override delete(id : number): Observable<any> {
         return super.delete(id);
-    }
+      }
     override searchByName(term: string): Observable<GoodsReceipt[]> {
         return super.searchByName(term);
     }

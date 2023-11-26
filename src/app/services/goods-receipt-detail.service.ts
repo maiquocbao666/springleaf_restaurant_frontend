@@ -32,7 +32,7 @@ export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  
   override update(updated: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
     return super.update(updated);
   }
-  override delete(id: number): Observable<GoodsReceiptDetail> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
   override getItemId(item: GoodsReceiptDetail): number {

@@ -33,7 +33,6 @@ export class AdminReservationStatusesComponent {
     private reservationService: ReservationService,
   ) {
     this.reservationStatusForm = this.formBuilder.group({
-      reservationStatusId: ['', [Validators.required]],
       reservationStatusName: new FormControl({ value: 'Chọn trạng thái đặt bàn', disabled: false }),
       name: new FormControl({ value: '', disabled: true }),
     });
@@ -63,18 +62,17 @@ export class AdminReservationStatusesComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getReservationStatuses();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getReservationStatuses();
   }
 
   getReservationStatuses(): void {
-    this.reservationStatusService.gets()
-      .subscribe(reservationStatuses => this.reservationStatuses = reservationStatuses);
+    this.reservationStatusService.cache$.subscribe(reservationStatuses => {
+      this.reservationStatuses = reservationStatuses;
+    });
   }
 
   addReservationStatus(): void {
@@ -101,7 +99,6 @@ export class AdminReservationStatusesComponent {
 
     this.reservationStatusService.add(newReservationStatus)
       .subscribe(reservationStatus => {
-        this.getReservationStatuses();
         this.reservationStatusForm.reset();
       });
 
@@ -109,15 +106,15 @@ export class AdminReservationStatusesComponent {
 
   deleteReservationStatus(reservationStatus: ReservationStatus): void {
 
-    if (reservationStatus.reservationStatusId) {
+    if (reservationStatus.reservationStatusName) {
 
-      if (this.reservationService.isReservationStatusUsed(reservationStatus.reservationStatusId)) {
+      if (this.reservationService.isReservationStatusUsed(reservationStatus.reservationStatusName)) {
         console.log("Trạng thái đặt bàn này đang được sử dụng");
         return;
       }
 
       this.reservationStatuses = this.reservationStatuses.filter(i => i !== reservationStatus);
-      this.reservationStatusService.delete(reservationStatus.reservationStatusId).subscribe();
+      this.reservationStatusService.delete(reservationStatus.reservationStatusName).subscribe();
 
     } else {
       console.log("Không có reservationStatusId");

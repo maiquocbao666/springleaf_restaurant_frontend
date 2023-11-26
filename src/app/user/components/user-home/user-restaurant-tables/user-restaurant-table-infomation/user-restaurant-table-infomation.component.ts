@@ -109,17 +109,17 @@ export class UserRestaurantTableInfomationComponent {
     const reservationDate = formattedDateTime;
     const outTime = '';
     const numberOfGuests = 1;
-    let reservationStatusId: number = 0;
+    let reservationStatusId: string = '';
 
-    this.reservationStatusService.searchReservationStatusByName("Đang rảnh").subscribe(
-      (statuses: ReservationStatus | null) => {
-        reservationStatusId = statuses?.reservationStatusId ?? 0;
-      },
-      error => {
-        console.error(error);
-        // Xử lý lỗi nếu cần thiết
-      }
-    );
+    // this.reservationStatusService.getById("Đang rảnh").subscribe(
+    //   (statuses: ReservationStatus | null) => {
+    //     reservationStatusId = statuses?.reservationStatusName ?? '';
+    //   },
+    //   error => {
+    //     console.error(error);
+    //     // Xử lý lỗi nếu cần thiết
+    //   }
+    // );
 
     const newReservation: Reservation = {
       restaurantTableId: restaurantTableId!,
@@ -127,7 +127,7 @@ export class UserRestaurantTableInfomationComponent {
       reservationDate: reservationDate,
       outTime: outTime,
       numberOfGuests: numberOfGuests,
-      reservationStatusId: reservationStatusId
+      reservationStatusName: reservationStatusId
     };
 
     this.reservationService.add(newReservation).subscribe(

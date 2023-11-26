@@ -40,7 +40,7 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
         return super.update(updatedObject);
     }
 
-    override delete(id: number): Observable<OrderThreshold> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
     }
 

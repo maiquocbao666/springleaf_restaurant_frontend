@@ -41,7 +41,7 @@ export class RatingService extends BaseService<Rating> {
     return super.update(updatedObject);
   }
 
-  override delete(id: number): Observable<Rating> {
+  override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 
