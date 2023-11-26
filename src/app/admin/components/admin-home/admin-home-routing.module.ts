@@ -142,6 +142,12 @@ const routes: Routes = [
         loadChildren: () => import('./admin-reservation-statuses/admin-reservation-statuses.module').then(
           (m) => m.AdminReservationStatusesModule
         )
+      },
+      {
+        path: 'menuItemIngredients',
+        loadChildren: () => import('./admin-menu-item-ingredients/admin-menu-item-ingredients.module').then(
+          (m) => m.AdminMenuItemIngredientsModule
+        )
       }
     ]
   },

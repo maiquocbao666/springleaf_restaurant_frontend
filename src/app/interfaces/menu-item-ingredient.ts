@@ -1,6 +1,6 @@
 export interface MenuItemIngredient {
     menuItemIngredientId?: number;
-    menuItem: number;
-    ingredient: number;
+    menuItemId: number;
+    ingredientId: number;
     quantity: number;
 }
