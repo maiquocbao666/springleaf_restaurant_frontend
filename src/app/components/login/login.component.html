@@ -4,13 +4,6 @@
             <span aria-hidden="true">&times;</span>
         </a>
         <form (submit)="register()" [formGroup]="registerForm">
-            <!-- <h1>Create Account</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" (click)="loginWithGoogle()" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div> -->
-            
             <span style="color: red;" *ngIf="errorMessage"> {{ errorMessage }}</span>
             <input type="text" id="email" placeholder="Enter your email" formControlName="email" name="email"
             [(ngModel)]="userEmail" />
@@ -18,32 +11,38 @@
                 <div class="col-lg-12 d-flex ">
                     <input class="col-9 custom" type="text" id="code" placeholder="Enter Code" formControlName="code"
                         name="code" [(ngModel)]="code" />
-                    <a class="col-3" (click)="getAccessCode()" *ngIf="codeCache === null">Get</a>
-                    <a class="col-3" (click)="compareInputWithCodeCache()" *ngIf="codeCache !== null">Config</a>
+                    <a class="col-3 btn-email" (click)="getAccessCode()" *ngIf="codeCache === null">Get</a>
+                    <a class="col-3 btn-email" (click)="compareInputWithCodeCache()" *ngIf="codeCache !== null"><i class="fa fa-check" aria-hidden="true" style="color: white;"></i></a>
                 </div>
             </div>
             <input type="text" id="fullName" placeholder="Enter your full name" formControlName="fullName"
-                name="fullName" [attr.disabled]="!areEmailAndCodeEntered" />
+                name="fullName" [attr.disabled]="compareInputWithCodeCache" />
+                <i *ngIf="registerForm.get('fullName')?.getError('message')" style="color: red;">
+                    {{ registerForm.get('fullName')?.getError('message') }}
+                </i>
             <input type="text" id="username" placeholder="Enter your username" formControlName="username"
-                name="username" [attr.disabled]="!areEmailAndCodeEntered" />
+                name="username" [attr.disabled]="compareInputWithCodeCache" />
+                <i *ngIf="registerForm.get('username')?.getError('message')" style="color: red;">
+                    {{ registerForm.get('username')?.getError('message') }}
+                </i>
             <input type="text" id="phone" placeholder="Enter your phone number" formControlName="phone" name="phone" />
+                <i *ngIf="registerForm.get('phone')?.getError('message')" style="color: red;">
+                    {{ registerForm.get('phone')?.getError('message') }}
+                </i>
             <input type="password" id="password" placeholder="Enter Password" formControlName="password"
-                name="password" [attr.disabled]="!areEmailAndCodeEntered" />
+                name="password" [attr.disabled]="compareInputWithCodeCache" />
+                <i *ngIf="registerForm.get('password')?.getError('message')" style="color: red;">
+                    {{ registerForm.get('password')?.getError('message') }}
+                </i>
             <input type="password" id="repassword" placeholder="Enter Re-Password" formControlName="repassword"
-                name="repassword" [attr.disabled]="!areEmailAndCodeEntered" />
-            <button type="submit" #signUp [disabled]="!areEmailAndCodeEntered || registerForm.invalid">Sign Up</button>
+                name="repassword" [attr.disabled]="compareInputWithCodeCache" />
+                
+            <button type="submit" #signUp [disabled]="!compareInputWithCodeCache || registerForm.invalid">Sign Up</button>
         </form>
     </div>
 
     <div class="form-container sign-in-container">
         <form (submit)="login()" [formGroup]="loginForm">
-            <!-- <h1>Đăng nhập</h1> -->
-            <!-- <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div> -->
-            <!-- <span>or use your account</span> -->
             <input type="text" id="usernameLogin" placeholder="Enter Username" formControlName="username" />
             <input type="password" id="passwordLogin" placeholder="Enter Password" formControlName="password" />
             <a (click)="openUserPasswordModel()">Forgot your password?</a>
@@ -67,12 +66,3 @@
         </div>
     </div>
 </div>
-<!-- 
-<footer>
-    <p>
-        Created with <i class="fa fa-heart"></i> by
-        <a target="_blank" href="">SpringLeaf Restaurant</a>
-        - Read how I created this and how you can join the challenge
-        <a target="_blank" href="">here</a>.
-    </p>
-</footer> -->

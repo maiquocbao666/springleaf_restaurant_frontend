@@ -9,5 +9,5 @@ export interface User {
   image: string;
   managerId: number;
   restaurantBranchId: number; 
-  //status: boolean;
+  status: boolean;
 }

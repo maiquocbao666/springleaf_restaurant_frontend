@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 addEventListener('message', async (event) => {
-    const { type, loginData, token, tokenUser, email, password } = event.data;
+    const { type, loginData, token, tokenUser, email, password, typeCode } = event.data;
     console.log("Call all this User Apis Worker Works", type);
     //const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
     const domain = 'http://localhost:8080/auth';
@@ -28,6 +28,37 @@ addEventListener('message', async (event) => {
     
             const dataMap = {
                 checkTokenRespone: responseData[0],
+            }
+            postMessage(dataMap);
+            console.log('Data Map: ' + JSON.stringify(dataMap));
+        } catch {
+            // Xử lý lỗi nếu cần
+        }
+    };
+    if (type === 'logout') {
+        const  accessToken  = token;
+        console.log(token);
+        try {
+            const responses = await Promise.all([
+                fetch(`http://localhost:8080/auth2/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}` 
+                    }
+                }),
+            ]);
+    
+            const responseData = await Promise.all(responses.map(async (response) => {
+                if (response.ok) {
+                    return await response.json();
+                } else {
+                    return null;
+                }
+            }));
+    
+            const dataMap = {
+                logoutRespone: responseData[0],
             }
             postMessage(dataMap);
             console.log('Data Map: ' + JSON.stringify(dataMap));
@@ -68,6 +99,7 @@ addEventListener('message', async (event) => {
     };
     if (type === 'config-password') {
         const accessToken = token;
+        console.log(token)
         try {
             const responses = await Promise.all([
                 fetch(`${domain}/config-password`, {
@@ -130,6 +162,38 @@ addEventListener('message', async (event) => {
 
         }
     };
+    if (type === 'forgot-password') {
+        const accessToken = token;
+        try {
+            const responses = await Promise.all([
+                fetch(`${domain}/forgot-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: password,
+                }),
+
+            ]);
+            
+            const responseData = await Promise.all(responses.map(async (response) => {
+                if (response.ok) {
+                    return await response.text();
+                } else {
+                    return null;
+                }
+            }));
+
+            const dataMap = {
+                forgotPasswordResponse: responseData[0],
+            }
+            postMessage(dataMap);
+            console.log(dataMap.forgotPasswordResponse)
+        } catch {
+
+        }
+    };
     if (type === 'login-with-google') {
         
         try {
@@ -165,7 +229,7 @@ addEventListener('message', async (event) => {
         try {
             const emailRequest = email;
             const responses = await Promise.all([
-                fetch(`${domain}/access-code?email=${emailRequest}`, {
+                fetch(`${domain}/access-code?email=${emailRequest}&typeCode=${typeCode}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
