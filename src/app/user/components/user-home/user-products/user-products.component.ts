@@ -100,11 +100,11 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProductsByCategoryId(): void {
+    this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
     if (this.categoryId) {
-      this.productService.getProductsByCategoryId(this.categoryId)
-        .subscribe(products => {
-          this.products = products;
-        });
+      console.log(this.categoryId);
+      this.products = this.products.filter(data => data.categoryId === this.categoryId);
+      console.log(this.products);
     }
   }
 
