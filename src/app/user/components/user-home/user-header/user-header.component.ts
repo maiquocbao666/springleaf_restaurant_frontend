@@ -38,7 +38,7 @@ export class UserHeaderComponent {
 
   logOut() {
     // Cập nhật userCache trước khi đăng xuất
-    this.authService.setUserCache(null);
+    //this.authService.setUserCache(null);
     this.authService.logout();
   }
 

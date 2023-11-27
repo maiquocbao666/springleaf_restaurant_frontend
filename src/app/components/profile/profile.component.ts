@@ -69,7 +69,7 @@ export class ProfileComponent {
         restaurantBranchId: this.userData.restaurantBranchId,
         image: this.userData.image,
         managerId: this.userData.managerId,
-        //status: this.userData.status,
+        status: this.userData.status,
       };
   
       this.userService.updateProfile(userUpdate).subscribe(

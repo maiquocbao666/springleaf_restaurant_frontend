@@ -15,16 +15,7 @@ import { UserPasswordComponent } from '../user-password/user-password.component'
 export class LoginComponent {
 
   active: string = "login";
-  fullName: string = '';
-  username: string = '';
-  password: string = '';
-  phone: string = '';
   userEmail: string = '';
-  address: number | null = null;
-  image: string = '';
-  managerId: number | null = null;
-  restaurantBranchId: number | null = null;
-  roleId: number | null = null;
   user: User | null = null;
   loginForm: FormGroup;
   registerForm: FormGroup;
@@ -47,18 +38,20 @@ export class LoginComponent {
     this.registerForm = this.formBuilder.group({
       fullName: [null, [Validators.nullValidator]],
       username: [null, [Validators.nullValidator]],
-      password: [null, [Validators.nullValidator]],
+      password: [null, [this.customPasswordValidator]],
       repassword: [null, [Validators.nullValidator, this.passwordMatchValidator()]],
       phone: [null, [Validators.nullValidator]],
       email: [null, [Validators.nullValidator]],
       code: [null, [Validators.nullValidator]],
     })
+    this.authService.setAccessCodeCacheData('');
     // Đăng ký để theo dõi sự thay đổi trong userCache từ AuthenticationService
     this.authService.cachedData$.subscribe((user) => {
       this.user = user;
     });
+    
     this.authService.accessCodeCacheData$.subscribe((code) => {
-      if(code != null){
+      if(code != '' && code !=null){
         console.log(code)
         this.codeCache = code.slice(-6);
         this.token = code.slice(0, -6);
@@ -67,18 +60,24 @@ export class LoginComponent {
       
     })
     this.getDatasOfThisUserWorker = new Worker(new URL('../../workers/user/user-call-all-apis.worker.ts', import.meta.url));
-    this.updateAreEmailAndCodeEntered();
   }
 
   ngOnInit() {
-    this.registerForm.get('code')?.valueChanges.subscribe(() => this.updateAreEmailAndCodeEntered());
-    this.registerForm.get('email')?.valueChanges.subscribe(() => this.updateAreEmailAndCodeEntered());
+    this.registerForm.get('fullName')?.disable();
+    this.registerForm.get('username')?.disable();
+    this.registerForm.get('phone')?.disable();
+    this.registerForm.get('password')?.disable();
+    this.registerForm.get('repassword')?.disable();
   }
 
   compareInputWithCodeCache(): boolean {
     if(this.code === this.codeCache){
-      console.log(this.code === this.codeCache);
       this.sweetAlertService.showTimedAlert('Xác nhận thành công!', '', 'success', 2000);
+      this.registerForm.get('fullName')?.enable();
+      this.registerForm.get('username')?.enable();
+      this.registerForm.get('phone')?.enable();
+      this.registerForm.get('password')?.enable();
+      this.registerForm.get('repassword')?.enable();
       return true;
     }else{
       this.sweetAlertService.showTimedAlert('Xác nhận thất bại!', '', 'error', 2000);
@@ -91,29 +90,9 @@ export class LoginComponent {
     return (control: AbstractControl): ValidationErrors | null => {
       const password = control.get('password')?.value;
       const repassword = control.get('repassword')?.value;
-  
-      return password === repassword ? null : { 'passwordMismatch': true };
+      return password === repassword ? null : { 'Xác nhận mật khẩu sai': true };
     };
   }
-  updateAreEmailAndCodeEntered() {
-    const code = this.registerForm.get('code')?.value;
-    const email = this.registerForm.get('email')?.value;
-    this.areEmailAndCodeEntered = !!code && !!email;
-
-    // Enable/disable other fields based on code and email presence
-    if (this.areEmailAndCodeEntered) {
-      this.registerForm.get('fullName')?.enable();
-      this.registerForm.get('username')?.enable();
-      this.registerForm.get('password')?.enable();
-      this.registerForm.get('repassword')?.enable();
-    } else {
-      this.registerForm.get('fullName')?.disable();
-      this.registerForm.get('username')?.disable();
-      this.registerForm.get('password')?.disable();
-      this.registerForm.get('repassword')?.disable();
-    }
-  }
-  
   // modal open form 
   onLoginTab(): void {
     this.active = "login";
@@ -132,7 +111,6 @@ export class LoginComponent {
         const loginResult = await this.authService.login(username, password);
   
         if (loginResult === true) {
-          
           this.sweetAlertService.showTimedAlert('Đăng nhập thành công!', 'Chào mừng đăng nhập.', 'success', 2000);
           this.activeModal.close('Login Successful');
         } else {
@@ -150,24 +128,19 @@ export class LoginComponent {
 
   async getAccessCode() {
       const email = this.userEmail;
-      try{
-        const codeResult = await this.authService.getAccessCode(email);
-        if(codeResult === true){
-          this.sweetAlertService.showTimedAlert('Gửi mã xác nhận!', 'Vui lòng kiểm tra email.', 'success', 2000);
-        }
-      }catch{
-
-      }
+      const typeCode = 'register'
+      await this.authService.getAccessCode(email, typeCode);
   }
 
   register() {
     if (this.registerForm.valid) {
-      const fullName = this.registerForm.get('fullName')?.value;
+      const fullname = this.registerForm.get('fullName')?.value;
       const username = this.registerForm.get('username')?.value;
       const password = this.registerForm.get('password')?.value;
       const email = this.registerForm.get('email')?.value;
       const phone = this.registerForm.get('phone')?.value;
       const code = this.token;
+      const fullName = this.upperCase(fullname);
 
       this.authService.register(fullName, username, password, phone, email,code)
         .subscribe(
@@ -224,5 +197,50 @@ export class LoginComponent {
   openUserPasswordModel(){
     const modalRef = this.modalService.open(UserPasswordComponent);
     modalRef.componentInstance.selected = 'forgot-password';
+  }
+
+  // Validator
+  upperCase(str: string): string {
+    return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+  customFullNameValidator(control: AbstractControl){
+    const fullName = control.value;
+    if (!fullName) {
+      return { 'required': true, 'message': 'Họ tên không được để trống' };
+    }
+    if(fullName.length > 50){
+      return { 'required': true, 'message': 'Họ tên quá dài' };
+    }
+    if (/[^a-zA-Z ]/.test(fullName)) {
+      return { 'required': true, 'message': 'Không được chứa ký tự đặc biệt' };
+    }
+    if (/\d/.test(fullName)) {
+      return { 'required': true, 'message': 'Không được chứa số' };
+    }
+  
+    return true;
+  }
+  customPasswordValidator(control: AbstractControl) {
+    const password = control.value;
+    if (!password) {
+      return { 'required': true, 'message': 'Mật khẩu không được để trống' };
+    }
+
+    if (password.length < 6) {
+      return { 'minLength': true, 'message': 'Mật khẩu phải ít nhất 6 ký tự' };
+    }
+
+    if (password.length > 12) {
+      return { 'maxLength': true, 'message': 'Mật khẩu tối đa 12 ký tự' };
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      return { 'uppercase': true, 'message': 'Mật khẩu phải có ký tự viết hoa' };
+    }
+
+    if (!/\d/.test(password)) {
+      return { 'digit': true, 'message': 'Mật khẩu phải ít nhất 1 ký tự số' };
+    }
+    return null;
   }
 }
