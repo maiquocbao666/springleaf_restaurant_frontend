@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
@@ -23,7 +23,7 @@ export class AdminRestaurantTablesComponent {
   tableTypes: TableType[] = [];
   tableStatuses: TableStatus[] = [];
   restaurants: Restaurant[] = [];
-  restaurantTable: RestaurantTable | undefined;
+  //restaurantTable: RestaurantTable | undefined;
   fieldNames: string[] = [];
   restaurantTableForm: FormGroup;
 
@@ -75,7 +75,7 @@ export class AdminRestaurantTablesComponent {
     this.restaurantTableService.cache$
       .subscribe(restaurantTables => {
         this.restaurantTableService.gets();
-        this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null')
+        this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null');
       });
   }
 
@@ -84,7 +84,7 @@ export class AdminRestaurantTablesComponent {
     this.tableStatusService.cache$
       .subscribe(tableStatuses => {
         this.tableStatusService.gets();
-        this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null')
+        this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null');
       });
   }
 
@@ -93,7 +93,7 @@ export class AdminRestaurantTablesComponent {
     this.tableTypeService.cache$
       .subscribe(tableTypes => {
         this.tableTypeService.gets();
-        this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null')
+        this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null');
       });
   }
 
@@ -102,21 +102,36 @@ export class AdminRestaurantTablesComponent {
     this.restaurantService.cache$
       .subscribe(restaurants => {
         this.restaurantService.gets();
-        this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null')
+        this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null');
       });
   }
 
   //Lấy name theo id
-  getTableTypeById(tableTypeId: number): Observable<TableType | null> {
-    return this.tableTypeService.getById(tableTypeId);
+  getTableTypeById(tableTypeId: number): TableType | null {
+    const foundTableType = this.tableTypes.find(type => type.tableTypeId === tableTypeId);
+    if (foundTableType) {
+      return foundTableType;
+    } else {
+      return null;
+    }
   }
 
-  getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
-    return this.restaurantService.getById(restaurantId);
+  getRestaurantById(restaurantId: number): Restaurant | null {
+    const found = this.restaurants.find(object => object.restaurantId === restaurantId);
+    if (found) {
+      return found;
+    } else {
+      return null;
+    }
   }
 
-  getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
-    return this.tableStatusService.getById(tableStatusId);
+  getTableStatusById(tableStatusId: number): TableStatus | null {
+    const foundTableStatus = this.tableStatuses.find(status => status.tableStatusId === tableStatusId);
+    if (foundTableStatus) {
+      return foundTableStatus;
+    } else {
+      return null;
+    }
   }
 
   addRestaurantTable(): void {
@@ -127,9 +142,9 @@ export class AdminRestaurantTablesComponent {
 
     const newRestaurantTable: RestaurantTable = {
       tableName: tableName,
-      tableTypeId: tableTypeId,
-      tableStatusId: tableStatusId,
-      restaurantId: restaurantId,
+      tableTypeId: +tableTypeId,
+      tableStatusId: +tableStatusId,
+      restaurantId: +restaurantId,
     };
 
     this.restaurantTableService.add(newRestaurantTable)
@@ -141,7 +156,6 @@ export class AdminRestaurantTablesComponent {
   deleteTable(restaurantTable: RestaurantTable): void {
 
     if (restaurantTable.tableId) {
-      this.restaurantTables = this.restaurantTables.filter(i => i !== restaurantTable);
       this.restaurantTableService.delete(restaurantTable.tableId).subscribe();
     } {
       console.log("Không có restaurantTableId");

@@ -24,7 +24,7 @@ export class AdminProductsComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
   productsUrl = 'products';
-  categoriesurl = 'categories';
+  categoriesUrl = 'categories';
 
   constructor(
     private productService: ProductService,
@@ -61,7 +61,7 @@ export class AdminProductsComponent {
     this.categoryService.cache$
       .subscribe(categories => {
         this.categoryService.gets();
-        this.categories = JSON.parse(localStorage.getItem(this.categoriesurl) || 'null');
+        this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
       });
   }
 

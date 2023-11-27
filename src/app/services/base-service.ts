@@ -113,7 +113,7 @@ export abstract class BaseService<T> {
         if (!id) {
             return of(null);
         }
-        if (!this.cache.length) {
+        if (!this.cache) {
             this.gets();
         }
         const cacheItem = this.cache.find(item => this.getItemId(item) === id);
