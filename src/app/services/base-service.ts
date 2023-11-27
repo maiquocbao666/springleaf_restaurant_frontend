@@ -52,13 +52,16 @@ export abstract class BaseService<T> {
             .subscribe((message: Message) => {
                 console.log('Raw message body:', message.body);
                 try {
-                    const messageData = JSON.parse(message.body);
-                    if (Array.isArray(messageData.objects)) {
-                        this.cache = messageData.objects;
-                        this.gets();
-                        localStorage.setItem(messageData.name, JSON.stringify(this.cache));
+                    if (message.body) {
+                        const messageData = JSON.parse(message.body);
+                        if (Array.isArray(messageData.objects)) {
+                            this.cache = messageData.objects;
+                            localStorage.setItem(messageData.name, JSON.stringify(this.cache));
+                        } else {
+                            console.error("Invalid message format. Unexpected 'name' or 'objects' format.");
+                        }
                     } else {
-                        console.error("Invalid message format. Unexpected 'name' or 'objects' format.");
+                        console.error('Message body is undefined.');
                     }
                 } catch (error) {
                     console.error('Error parsing JSON from message body:', error);
@@ -85,10 +88,13 @@ export abstract class BaseService<T> {
     }
 
     gets(): Observable<T[]> {
+        // Try to retrieve cache from local storage
+        const cachedData = localStorage.getItem(this.cacheKey);
+
         // If cache is not empty, return it directly
-        if (this.cache) {
-            localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
-            return of(this.cache);
+        if (cachedData) {
+            const cachedArray = JSON.parse(cachedData) as T[];
+            return of(cachedArray);
         }
 
         // Otherwise, fetch data from the API

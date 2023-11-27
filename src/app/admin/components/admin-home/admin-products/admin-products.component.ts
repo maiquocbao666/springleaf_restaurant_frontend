@@ -56,16 +56,22 @@ export class AdminProductsComponent {
     this.page = 1;
   }
 
-  getCategories(): void {
+  getCategories(): void { 
     this.categoryService.gets();
     this.categoryService.cache$
-      .subscribe(categories => this.categories = JSON.parse(localStorage.getItem(this.categoriesurl) || 'null'));
+      .subscribe(categories => {
+        this.categoryService.gets();
+        this.categories = JSON.parse(localStorage.getItem(this.categoriesurl) || 'null');
+      });
   }
 
   getProducts(): void {
     this.productService.gets();
     this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
+      .subscribe(products => {
+        this.productService.gets();
+        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
+      });
   }
 
   getCategoryById(categoryId: number): Observable<Category | null> {

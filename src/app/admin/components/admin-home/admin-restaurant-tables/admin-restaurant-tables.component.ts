@@ -70,28 +70,40 @@ export class AdminRestaurantTablesComponent {
     this.page = 1;
   }
 
-  getRestaurantTables(): void {
+  getRestaurantTables(): void {    
     this.restaurantTableService.gets();
     this.restaurantTableService.cache$
-      .subscribe(restaurantTables => this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null'));
+      .subscribe(restaurantTables => {
+        this.restaurantTableService.gets();
+        this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null')
+      });
   }
 
   getTableStatuses(): void {
-    this.tableStatusService.gets();
+    this.tableStatusService.gets();   
     this.tableStatusService.cache$
-      .subscribe(tableStatuses => this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null'));
+      .subscribe(tableStatuses => {
+        this.tableStatusService.gets();
+        this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null')
+      });
   }
 
   getTableTypes(): void {
     this.tableTypeService.gets();
     this.tableTypeService.cache$
-      .subscribe(tableTypes => this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null'));
+      .subscribe(tableTypes => {
+        this.tableTypeService.gets();
+        this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null')
+      });
   }
 
-  getRestaurants(): void {
-    this.restaurantService.gets();
+  getRestaurants(): void { 
+    this.restaurantService.gets(); 
     this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
+      .subscribe(restaurants => {
+        this.restaurantService.gets();
+        this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null')
+      });
   }
 
   //Lấy name theo id

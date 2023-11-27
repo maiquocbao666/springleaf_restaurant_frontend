@@ -82,7 +82,10 @@ export class AdminTableStatusesComponent {
   getTableStatuses(): void {
     this.tableStatusService.gets();
     this.tableStatusService.cache$
-      .subscribe(tableStatuses => this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null'));
+      .subscribe(tableStatuses => {
+        this.tableStatusService.gets();
+        this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null')
+      });
 
   }
 

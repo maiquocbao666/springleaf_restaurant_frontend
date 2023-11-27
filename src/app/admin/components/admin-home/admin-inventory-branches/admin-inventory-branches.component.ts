@@ -75,27 +75,39 @@ export class AdminInventoryBranchesComponent {
   getInventoryBranches(): void {
     this.inventoryBranchService.gets();
     this.inventoryBranchService.cache$
-      .subscribe(inventoryBranches => this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null'));
+      .subscribe(inventoryBranches => {
+        this.inventoryBranchService.gets();
+        this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null')
+      });
   }
 
   getIngredients(): void {
     this.ingredientService.gets();
     this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+      .subscribe(ingredients => {
+        this.ingredientService.gets();
+        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
+      });
   }
 
 
   getSuppliers(): void {
     this.supplierService.gets();
     this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+      .subscribe(suppliers => {
+        this.supplierService.gets();
+        this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null')
+      });
   }
 
 
   getRestaurants(): void {
     this.restaurantService.gets();
     this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
+      .subscribe(restaurants => {
+        this.restaurantService.gets();
+        this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null')
+      });
   }
 
   getIngredientById(ingredientId: number): Observable<Ingredient | null> {

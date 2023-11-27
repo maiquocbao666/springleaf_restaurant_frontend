@@ -70,21 +70,29 @@ export class AdminMenuItemIngredientsComponent {
   getMenuItemIngredients(): void {
     this.menuItemIngredientService.gets();
     this.menuItemIngredientService.cache$
-      .subscribe(menuItemIngredients => this.menuItemIngredients = JSON.parse(localStorage.getItem(this.menuItemIngredientsUrl) || 'null'));
+      .subscribe(menuItemIngredients => {
+        this.menuItemIngredientService.gets();
+        this.menuItemIngredients = JSON.parse(localStorage.getItem(this.menuItemIngredientsUrl) || 'null')
+      });
   }
 
   getProducts(): void {
     this.productService.gets();
     this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
+      .subscribe(products => {
+        this.productService.gets();
+        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null')
+      });
   }
 
 
   getIngredients(): void {
     this.ingredientService.gets();
     this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
-
+      .subscribe(ingredients => {
+        this.ingredientService.gets();
+        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
+      });
   }
 
 

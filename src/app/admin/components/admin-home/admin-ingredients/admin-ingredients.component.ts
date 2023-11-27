@@ -52,7 +52,10 @@ export class AdminIngredientsComponent {
   getIngredients(): void {
     this.ingredientService.gets();
     this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+      .subscribe(ingredients => {
+        this.ingredientService.gets();
+        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
+      });
   }
 
   addIngredient(): void {

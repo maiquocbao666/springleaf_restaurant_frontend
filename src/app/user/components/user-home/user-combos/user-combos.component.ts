@@ -17,6 +17,8 @@ export class UserCombosComponent {
   combo!: Combo;
   fieldNames: string[] = [];
 
+  combosUrl = 'combos';
+
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -39,8 +41,12 @@ export class UserCombosComponent {
   }
 
   getCombos(): void {
+    this.comboService.gets();
     this.comboService.cache$
-      .subscribe(combos => this.combos = combos);
+      .subscribe(combos => {
+        this.comboService.gets();
+        this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null');
+      });
   }
 
   onTableDataChange(event: any) {
@@ -66,11 +72,11 @@ export class UserCombosComponent {
 
   deleteCombo(combo: Combo): void {
     if (combo.comboId) {
-        this.comboService.delete(combo.comboId).subscribe();
+      this.comboService.delete(combo.comboId).subscribe();
     } else {
-        console.error("Combo ID is undefined. Cannot delete combo.");
+      console.error("Combo ID is undefined. Cannot delete combo.");
     }
-}
+  }
 
   openComboDetailModal(combo: Combo) {
     const modalRef = this.modalService.open(UserComboDetailComponent, { size: 'lg' });

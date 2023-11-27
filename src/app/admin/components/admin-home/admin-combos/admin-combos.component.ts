@@ -44,7 +44,10 @@ export class AdminCombosComponent {
   getCombos(): void {
     this.comboService.gets();
     this.comboService.cache$
-      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
+      .subscribe(combos => {
+        this.comboService.gets();
+        this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null')
+      });
   }
 
 

@@ -40,7 +40,10 @@ export class UserRestaurantTablesComponent {
   getRestaurantTables(): void {
     this.restaurantTableService.gets();
     this.restaurantTableService.cache$
-      .subscribe(restaurantTables => this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null'));
+      .subscribe(restaurantTables => {
+        this.restaurantTableService.gets();
+        this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null')
+      });
   }
 
 

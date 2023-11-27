@@ -74,19 +74,28 @@ export class AdminInventoriesComponent {
   getIngredients(): void {
     this.ingredientService.gets();
     this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+      .subscribe(ingredients => {
+        this.ingredientService.gets();
+        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
+      });
   }
 
   getInventories(): void {
     this.inventoryService.gets();
     this.inventoryService.cache$
-      .subscribe(inventories => this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null'));
+      .subscribe(inventories => {
+        this.inventoryService.gets();
+        this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null')
+      });
   }
 
-  getSuppliers(): void {
+  getSuppliers(): void { 
     this.supplierService.gets();
     this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+      .subscribe(suppliers => {
+        this.supplierService.gets();
+        this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null')
+      });
   }
 
   addInventory(): void {

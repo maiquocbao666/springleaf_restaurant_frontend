@@ -81,19 +81,28 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
   getTableStatuses(): void {
     this.tableStatusService.gets();
     this.tableStatusService.cache$
-      .subscribe(tableStatuses => this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null'));
+      .subscribe(tableStatuses => {
+        this.tableStatusService.gets();
+        this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null')
+      });
   }
 
   getTableTypes(): void {
     this.tableTypeService.gets();
     this.tableTypeService.cache$
-      .subscribe(tableTypes => this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null'));
+      .subscribe(tableTypes => {
+        this.tableTypeService.gets();
+        this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null')
+      });
   }
 
   getRestaurants(): void {
     this.restaurantService.gets();
     this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
+      .subscribe(restaurants => {
+        this.restaurantService.gets();
+        this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null')
+      });
   }
 
   updateRestaurantTable(): void {

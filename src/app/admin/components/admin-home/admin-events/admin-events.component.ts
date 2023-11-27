@@ -68,12 +68,6 @@ export class AdminEventsComponent {
     this.page = 1;
   }
 
-  getEvents(): void {
-    this.eventService.gets();
-    this.eventService.cache$
-      .subscribe(events => this.events = JSON.parse(localStorage.getItem(this.eventsUrl) || 'null'));
-  }
-
   getCartById(orderId: number): Observable<Cart | null> {
     return this.cartService.getById(orderId);
   }
@@ -82,16 +76,31 @@ export class AdminEventsComponent {
     return this.comboService.getById(comboId);
   }
 
+  getEvents(): void {
+    this.eventService.gets();
+    this.eventService.cache$
+      .subscribe(events => {
+        this.eventService.gets();
+        this.events = JSON.parse(localStorage.getItem(this.eventsUrl) || 'null')
+      });
+  }
+
   getCarts(): void {
-    this.cartService.gets();
+    this.comboService.gets();
     this.cartService.cache$
-      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
+      .subscribe(carts => {
+        this.cartService.gets();
+        this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null')
+      });
   }
 
   getCombos(): void {
     this.comboService.gets();
     this.comboService.cache$
-      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
+      .subscribe(combos => {
+        this.comboService.gets();
+        this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null')
+      });
   }
 
   addEvent(): void {

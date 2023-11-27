@@ -42,9 +42,12 @@ export class AdminSuppliersComponent {
   }
 
   getSuppliers(): void {
-    this.supplierService.gets();
+    this.supplierService.gets();  
     this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+      .subscribe(suppliers => {
+        this.supplierService.gets();
+        this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null')
+      });
 
   }
 

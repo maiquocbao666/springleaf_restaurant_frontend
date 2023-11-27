@@ -9,15 +9,20 @@ import { Event } from 'src/app/interfaces/event';
 })
 export class UserEventsComponent {
   events: Event[] = [];
+  eventsUrl = 'events';
 
-  constructor(private eventService: EventService) {}
+  constructor(private eventService: EventService) { }
 
   ngOnInit(): void {
     this.getEvents();
   }
 
   getEvents(): void {
+    this.eventService.gets();
     this.eventService.cache$
-      .subscribe(events => this.events = events);
+      .subscribe(events => {
+        this.eventService.gets();
+        this.events = JSON.parse(localStorage.getItem(this.eventsUrl) || 'null');
+      });
   }
 }

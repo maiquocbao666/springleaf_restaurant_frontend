@@ -94,7 +94,7 @@ export class AdminReservationsComponent {
     const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
 
-    if(stautus === "Khách hàng đã rời đi"){
+    if (stautus === "Khách hàng đã rời đi") {
       return "Đã sử dụng xong";
     }
 
@@ -108,7 +108,10 @@ export class AdminReservationsComponent {
   getReservations(): void {
     this.reservationService.gets();
     this.reservationService.reservationsCache$
-    .subscribe(reservations => this.reservations = JSON.parse(localStorage.getItem(this.reservationsUrl) || 'null'));
+      .subscribe(reservations => {
+        this.reservationService.gets();
+        this.reservations = JSON.parse(localStorage.getItem(this.reservationsUrl) || 'null')
+      });
   }
 
   onTableDataChange(event: any) {

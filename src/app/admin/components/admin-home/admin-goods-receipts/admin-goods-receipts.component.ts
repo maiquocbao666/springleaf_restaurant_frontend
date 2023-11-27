@@ -63,19 +63,28 @@ export class AdminGoodsReceiptsComponent {
   getGoodsReceipts(): void {
     this.goodsReceiptService.gets();
     this.goodsReceiptService.cache$
-      .subscribe(goodsReceipts => this.goodsReceipts = JSON.parse(localStorage.getItem(this.goodsReceiptsUrl) || 'null'));
+      .subscribe(goodsReceipts => {
+        this.goodsReceiptService.gets();
+        this.goodsReceipts = JSON.parse(localStorage.getItem(this.goodsReceiptsUrl) || 'null')
+      });
   }
 
   getCarts(): void {
     this.cartService.gets();
     this.cartService.cache$
-      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
+      .subscribe(carts => {
+        this.cartService.gets();
+        this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null')
+      });
   }
 
   getInventoryBranches(): void {
     this.inventoryBranchService.gets();
     this.inventoryBranchService.cache$
-      .subscribe(inventoryBranches => this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null'));
+      .subscribe(inventoryBranches => {
+        this.inventoryBranchService.gets();
+        this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null')
+      });
   }
 
   getInventoryBranchById(inventoryBranchId: number): Observable<InventoryBranch | null> {
@@ -96,7 +105,7 @@ export class AdminGoodsReceiptsComponent {
 
   deleteGoodsReceipt(goodsReceipt: GoodsReceipt): void {
 
-    if(goodsReceipt){
+    if (goodsReceipt) {
       this.goodsReceiptService.delete(goodsReceipt.goodsReceiptId).subscribe();
     } else {
       console.log("Không có goodsReceiptId");

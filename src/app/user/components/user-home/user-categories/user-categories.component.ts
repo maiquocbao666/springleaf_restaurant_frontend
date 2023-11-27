@@ -16,6 +16,8 @@ export class UserCategoriesComponent {
   showMore: boolean = false;
   isMobile: boolean = false;
 
+  categoriesUrl = 'categories';
+
   constructor(
     private categoryService: CategoryService,
   ) {
@@ -72,11 +74,11 @@ export class UserCategoriesComponent {
   }
 
   getCategories(): void {
+    this.categoryService.gets();
     this.categoryService.cache$.subscribe(categories => {
-      this.categories$ = of(categories);
+      this.categoryService.gets();
+      this.categories$ = of(JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null'));
     });
   }
-
-
 
 }

@@ -23,14 +23,14 @@ export class AdminTableTypesComponent {
   tableSizes: any = [5, 10, 15, 20];
 
   tableTypesUrl = 'tableTypes';
-  
+
   onTableDataChange(event: any) {
     this.page = event;
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
-    this.page = 1; 
+    this.page = 1;
   }
 
   constructor(
@@ -49,10 +49,13 @@ export class AdminTableTypesComponent {
     this.getTableTypes();
   }
 
-  getTableTypes(): void {
+  getTableTypes(): void {    
     this.tableTypeService.gets();
     this.tableTypeService.cache$
-      .subscribe(tableTypes => this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null'));
+      .subscribe(tableTypes => {
+        this.tableTypeService.gets();
+        this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null')
+      });
   }
 
   addTableType(): void {
