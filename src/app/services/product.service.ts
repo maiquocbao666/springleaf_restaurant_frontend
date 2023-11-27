@@ -39,10 +39,6 @@ export class ProductService extends BaseService<Product> {
     return super.gets();
   }
 
-  override getById(id: number): Observable<Product | null> {
-    return super.getById(id);
-  }
-
   override add(newProduct: Product): Observable<Product> {
     return super.add(newProduct);
   }
@@ -51,7 +47,7 @@ export class ProductService extends BaseService<Product> {
     return super.update(updated);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 

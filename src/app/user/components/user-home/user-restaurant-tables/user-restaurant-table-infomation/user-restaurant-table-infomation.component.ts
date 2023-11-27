@@ -43,7 +43,7 @@ export class UserRestaurantTableInfomationComponent {
   }
 
   ngOnInit(): void {
-    this.getReservationsByTableId();
+    //this.getReservationsByTableId();
     // this.authService.cachedData$.subscribe((data) => {
     //   this.user = data;
     //   if (this.user && typeof this.user.userId === 'number') {
@@ -56,24 +56,24 @@ export class UserRestaurantTableInfomationComponent {
     this.addReservation();
   }
 
-  getReservationsByTableId(): void {
-    if (this.restaurantTable?.tableId) {
-      this.reservationService.getReservationsByTableId(this.restaurantTable.tableId).subscribe(
-        {
-          next: (reservations) => {
-            this.reservations = reservations;
-            console.log(this.reservations);
-          },
-          error: (error) => {
+  // getReservationsByTableId(): void {
+  //   if (this.restaurantTable?.tableId) {
+  //     this.reservationService.getReservationsByTableId(this.restaurantTable.tableId).subscribe(
+  //       {
+  //         next: (reservations) => {
+  //           this.reservations = reservations;
+  //           console.log(this.reservations);
+  //         },
+  //         error: (error) => {
 
-          },
-          complete: () => {
+  //         },
+  //         complete: () => {
 
-          }
-        }
-      );
-    }
-  }
+  //         }
+  //       }
+  //     );
+  //   }
+  // }
 
   // getReservationsByCurrentUser(userId: number): void {
   //   this.reservationService.getReservationsByUser(userId).subscribe(
@@ -109,17 +109,13 @@ export class UserRestaurantTableInfomationComponent {
     const reservationDate = formattedDateTime;
     const outTime = '';
     const numberOfGuests = 1;
-    let reservationStatusId: string = '';
+    let reservationStatusName: string = 'Đang rảnh';
 
-    // this.reservationStatusService.getById("Đang rảnh").subscribe(
-    //   (statuses: ReservationStatus | null) => {
-    //     reservationStatusId = statuses?.reservationStatusName ?? '';
-    //   },
-    //   error => {
-    //     console.error(error);
-    //     // Xử lý lỗi nếu cần thiết
-    //   }
-    // );
+    if (this.reservationStatusService.isNameInCache(reservationStatusName)) {
+      console.log(`ID "${reservationStatusName}" có trong cache.`);
+    } else {
+      console.log(`ID "${reservationStatusName}" không có trong cache.`);
+    }
 
     const newReservation: Reservation = {
       restaurantTableId: restaurantTableId!,
@@ -127,7 +123,7 @@ export class UserRestaurantTableInfomationComponent {
       reservationDate: reservationDate,
       outTime: outTime,
       numberOfGuests: numberOfGuests,
-      reservationStatusName: reservationStatusId
+      reservationStatusName: reservationStatusName
     };
 
     this.reservationService.add(newReservation).subscribe(

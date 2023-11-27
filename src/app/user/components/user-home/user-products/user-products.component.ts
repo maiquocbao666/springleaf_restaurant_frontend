@@ -85,8 +85,9 @@ export class UserProductsComponent implements OnInit {
     )
   }
 
-  getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getById(categoryId);
+  getCategoryById(id: number): Category | null {
+    const found = this.categories.find(data => data.categoryId === id);
+    return found || null;
   }
 
   getCategories(): void {

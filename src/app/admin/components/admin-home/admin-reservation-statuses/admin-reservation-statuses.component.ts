@@ -113,12 +113,6 @@ export class AdminReservationStatusesComponent {
 
     if (reservationStatus.reservationStatusName) {
 
-      if (this.reservationService.isReservationStatusUsed(reservationStatus.reservationStatusName)) {
-        console.log("Trạng thái đặt bàn này đang được sử dụng");
-        return;
-      }
-
-      this.reservationStatuses = this.reservationStatuses.filter(i => i !== reservationStatus);
       this.reservationStatusService.delete(reservationStatus.reservationStatusName).subscribe();
 
     } else {

@@ -29,10 +29,6 @@ export class ReceiptService extends BaseService<Receipt> {
         return super.gets();
     }
 
-    override getById(id: number): Observable<Receipt | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: Receipt): Observable<Receipt> {
         return super.add(newObject);
     }
@@ -60,4 +56,5 @@ export class ReceiptService extends BaseService<Receipt> {
     override getObjectName(): string {
         return "Receipt";
     }
+
 }

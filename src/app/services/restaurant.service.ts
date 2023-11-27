@@ -29,9 +29,9 @@ export class RestaurantService extends BaseService<Restaurant> {
         return super.gets();
     }
 
-    override getById(id: number): Observable<Restaurant | null> {
-        return super.getById(id);
-    }
+    // override getById(id: number): Observable<Restaurant | null> {
+    //     return super.getById(id);
+    // }
 
     override add(newObject: Restaurant): Observable<Restaurant> {
         return super.add(newObject);
@@ -73,4 +73,5 @@ export class RestaurantService extends BaseService<Restaurant> {
 
     //     return isInCache || false;
     // }
+
 }

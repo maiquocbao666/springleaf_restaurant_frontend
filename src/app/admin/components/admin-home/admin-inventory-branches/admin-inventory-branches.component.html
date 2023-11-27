@@ -66,9 +66,9 @@
     <tbody>
       <tr *ngFor="let inventoryBranch of inventoryBranches">
         <td>{{inventoryBranch.inventoryBranchId}}</td>
-        <td>{{ (getIngredientById(inventoryBranch.ingredientId) | async)?.name }}</td>
-        <td>{{ (getSupplierById(inventoryBranch.supplierId) | async)?.supplierName }}</td>
-        <td>{{ (getRestaurantById(inventoryBranch.restaurantId) | async)?.restaurantName }}</td>
+        <td>{{ getIngredientById(inventoryBranch.ingredientId)?.name }}</td>
+        <td>{{ getSupplierById(inventoryBranch.supplierId)?.supplierName }}</td>
+        <td>{{ getRestaurantById(inventoryBranch.restaurantId)?.restaurantName }}</td>
         <td><button type="button" class="btn btn-outline-primary"
             (click)="openInventoryBranchDetailModal(inventoryBranch)">Edit</button>
           <button type="button" class="btn btn-outline-danger"

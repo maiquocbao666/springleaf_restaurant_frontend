@@ -30,23 +30,15 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
   override gets(): Observable<InventoryBranch[]> {
     return super.gets();
   }
-
-  override getById(id: number): Observable<InventoryBranch | null> {
-    return super.getById(id);
-  }
-
   override add(newObject: InventoryBranch): Observable<InventoryBranch> {
     return super.add(newObject);
   }
-
   override update(updatedObject: InventoryBranch): Observable<InventoryBranch> {
     return super.update(updatedObject);
   }
-
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
-
   override searchByName(term: string): Observable<InventoryBranch[]> {
     return super.searchByName(term);
   }
@@ -62,4 +54,5 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
   override getObjectName(): string {
     return "InventoryBranch";
   }
+
 }

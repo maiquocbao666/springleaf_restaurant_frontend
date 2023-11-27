@@ -44,4 +44,5 @@ export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  
   override getObjectName(): string {
     return "GoodsReceiptDetail";
   }
+
 }

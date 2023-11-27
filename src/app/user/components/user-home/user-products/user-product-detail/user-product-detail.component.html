@@ -30,8 +30,7 @@
             <div class="cable-config">
                 <span>Loại</span>
                 <div class="cable-choose">
-                    <button>{{ (getCategoryById(product!.categoryId) |
-                        async)?.name}}</button>
+                    <button>{{ getCategoryById(product!.categoryId)?.name}}</button>
                 </div>
 
                 <a href="#">How to configurate your food</a>

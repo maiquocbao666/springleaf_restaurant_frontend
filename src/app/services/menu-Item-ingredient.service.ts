@@ -27,31 +27,21 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
     override gets(): Observable<MenuItemIngredient[]> {
         return super.gets();
     }
-
-    override getById(id: number): Observable<MenuItemIngredient | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: MenuItemIngredient): Observable<MenuItemIngredient> {
         return super.add(newObject);
     }
-
     override update(updatedObject: MenuItemIngredient): Observable<MenuItemIngredient> {
         return super.update(updatedObject);
     }
-
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
-
+    }
     override searchByName(term: string): Observable<MenuItemIngredient[]> {
         return super.searchByName(term);
     }
-
     override getItemId(item: MenuItemIngredient): number {
         return item.menuItemIngredientId!;
     }
-
     override getItemName(item: MenuItemIngredient): string {
         throw new Error('Method not implemented.');
     }
@@ -59,4 +49,5 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
     override getObjectName(): string {
         return "MenuItemIngredient";
     }
+
 }

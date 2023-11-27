@@ -12,9 +12,9 @@ import { ToastService } from './toast.service';
 })
 export class PaymentService extends BaseService<Payment> {
 
-  apisUrl = 'payments'; 
-  cacheKey = 'payments'; 
-  apiUrl = 'payment'; 
+  apisUrl = 'payments';
+  cacheKey = 'payments';
+  apiUrl = 'payment';
 
 
   constructor(
@@ -31,10 +31,6 @@ export class PaymentService extends BaseService<Payment> {
     return super.gets();
   }
 
-  override getById(id: number): Observable<Payment | null> {
-    return super.getById(id);
-  }
-
   override add(newObject: Payment): Observable<Payment> {
     return super.add(newObject);
   }
@@ -43,7 +39,7 @@ export class PaymentService extends BaseService<Payment> {
     return super.update(updatedObject);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
@@ -62,4 +58,5 @@ export class PaymentService extends BaseService<Payment> {
   override getObjectName(): string {
     return "Payment";
   }
+
 }

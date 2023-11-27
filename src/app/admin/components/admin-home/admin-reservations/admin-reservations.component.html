@@ -36,9 +36,9 @@
                 {{ reservation.reservationStatusName }}
             </td>
             <td>{{ reservation.numberOfGuests }}</td>
-            <td>{{ (minusDateTime(currentDateTime$, reservation.reservationDate)) }}</td>
+            <!-- <td>{{ (minusDateTime(currentDateTime$, reservation.reservationDate)) }}</td>
             <td>{{ (reservationHoldTime(currentDateTime$, reservation.reservationDate)) }}</td>
-            <td>{{ (hoursUse(currentDateTime$, reservation.reservationDate)) }}</td>
+            <td>{{ (hoursUse(currentDateTime$, reservation.reservationDate)) }}</td> -->
             <td><button (click)="deletereservation(reservation)">Delete</button></td>
             <!-- <th> <a routerLink="/admin/reservation/{{reservation.reservationId}}" type="button">Edit
                 </a></th> -->

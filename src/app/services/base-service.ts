@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, map, of, switchMap, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { RxStompService } from '../rx-stomp.service';
 import { Message } from '@stomp/stompjs';
@@ -50,7 +50,7 @@ export abstract class BaseService<T> {
         this.topicSubscription = this.rxStompService
             .watch(`/${this.channel}/greetings`)
             .subscribe((message: Message) => {
-                console.log('Raw message body:', message.body);
+                //console.log('Raw message body:', message.body);
                 try {
                     if (message.body) {
                         const messageData = JSON.parse(message.body);
@@ -109,21 +109,15 @@ export abstract class BaseService<T> {
         return objectsObservable;
     }
 
-    getById(id: number): Observable<T | null> {
-        if (!id) {
-            return of(null);
-        }
-        if (!this.cache) {
-            this.gets();
-        }
-        const cacheItem = this.cache.find(item => this.getItemId(item) === id);
-        if (cacheItem) {
-            return of(cacheItem);
-        } else {
-            const url = `${this.apiUrl}/${id}`;
-            return this.apiService.request<T>('get', url);
-        }
-    }
+    // getById(id: number): T | null {
+    //     this.cache = JSON.parse(localStorage.getItem(this.apisUrl) || 'null');
+    //     const cached = this.cache.find(cache => this.getItemId(cache) === id);
+    //     if (cached) {
+    //         return cached;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
     private resetCache() {
         this.cache = [];
@@ -200,4 +194,5 @@ export abstract class BaseService<T> {
             map((response: any) => response as T[])
         );
     }
+
 }

@@ -49,10 +49,6 @@ export class CartService extends BaseService<Cart> {
     return super.gets();
   }
 
-  override getById(id: number): Observable<Cart | null> {
-    return super.getById(id);
-  }
-
   override add(newCart: Cart): Observable<Cart> {
     return super.add(newCart);
   }
@@ -70,7 +66,6 @@ export class CartService extends BaseService<Cart> {
   override getObjectName(): string {
     return "Cart";
   }
-
 
   setProvinceData(provinceData: Province[]): void {
 

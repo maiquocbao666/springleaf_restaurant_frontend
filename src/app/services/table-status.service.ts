@@ -29,10 +29,6 @@ export class TableStatusService extends BaseService<TableStatus> {
         return super.gets();
     }
 
-    override getById(id: number): Observable<TableStatus | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: TableStatus): Observable<TableStatus> {
         return super.add(newObject);
     }
@@ -60,4 +56,5 @@ export class TableStatusService extends BaseService<TableStatus> {
     override getObjectName(): string {
         return "TableStatus";
     }
+
 }

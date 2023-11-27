@@ -80,12 +80,14 @@ export class AdminComboDetailsComponent {
       });
   }
 
-  getProductById(menuItemId: number): Observable<Product | null> {
-    return this.productService.getById(menuItemId);
+  getProductById(id: number): Product | null {
+    const found = this.products.find(data => data.menuItemId === id);
+    return found || null;
   }
 
-  getComboById(comboId: number): Observable<Combo | null> {
-    return this.comboService.getById(comboId);
+  getComboById(id: number): Combo | null {
+    const found = this.combos.find(data => data.comboId === id);
+    return found || null;
   }
 
   onTableDataChange(event: any) {

@@ -56,8 +56,9 @@ export class UserProductDetailComponent {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
-  getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getById(categoryId);
+  getCategoryById(id: number): Category | null {
+    const found = this.categories.find(data => data.categoryId === id);
+    return found || null;
   }
   setValue() {
     if (this.product) {

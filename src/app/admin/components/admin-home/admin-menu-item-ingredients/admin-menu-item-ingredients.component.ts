@@ -96,12 +96,14 @@ export class AdminMenuItemIngredientsComponent {
   }
 
 
-  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
-    return this.ingredientService.getById(ingredientId);
+  getIngredientById(id: number): Ingredient | null {
+    const found = this.ingredients.find(data => data.ingredientId === id);
+    return found || null;
   }
 
-  getProductById(menuItemId: number): Observable<Product | null> {
-    return this.productService.getById(menuItemId);
+  getProductById(id: number): Product | null {
+    const found = this.products.find(data => data.menuItemId === id);
+    return found || null;
   }
 
   addMenuItemIngredient(): void {

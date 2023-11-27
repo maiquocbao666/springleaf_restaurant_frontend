@@ -27,18 +27,15 @@ export class GoodsReceiptService extends BaseService<GoodsReceipt> {
     override gets(): Observable<any[]> {
         return super.gets();
     }
-    override getById(id: number): Observable<GoodsReceipt | null> {
-        return super.getById(id);
-    }
     override add(newObject: GoodsReceipt): Observable<GoodsReceipt> {
         return super.add(newObject);
     }
     override update(updatedObject: GoodsReceipt): Observable<GoodsReceipt> {
         return super.update(updatedObject);
     }
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
     override searchByName(term: string): Observable<GoodsReceipt[]> {
         return super.searchByName(term);
     }
@@ -51,6 +48,5 @@ export class GoodsReceiptService extends BaseService<GoodsReceipt> {
     override getObjectName(): string {
         return "GoodsReceipt";
     }
-
 
 }

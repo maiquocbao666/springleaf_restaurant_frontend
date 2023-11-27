@@ -30,11 +30,6 @@ export class IngredientService extends BaseService<Ingredient>  {
     override gets(): Observable<Ingredient[]> {
       return super.gets();
     }
-  
-    override getById(id: number): Observable<Ingredient | null> {
-      return super.getById(id);
-    }
-  
     override add(newObject: Ingredient): Observable<Ingredient> {
       return super.add(newObject);
     }
@@ -72,7 +67,5 @@ export class IngredientService extends BaseService<Ingredient>  {
     //     return isTrue;
     //   }
     // }
-  
-  
   
 }

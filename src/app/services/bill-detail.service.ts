@@ -28,10 +28,6 @@ import { ToastService } from './toast.service';
     return super.gets();
   }
 
-  override getById(id: number): Observable<BillDetail | null> {
-    return super.getById(id);
-  }
-
   override add(newBillDetail: BillDetail): Observable<BillDetail> {
     return super.add(newBillDetail);
   }
@@ -53,4 +49,5 @@ import { ToastService } from './toast.service';
   override getObjectName(): string {
     throw new Error('Method not implemented.');
   }
+
 }

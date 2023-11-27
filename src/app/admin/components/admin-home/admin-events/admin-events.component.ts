@@ -68,12 +68,14 @@ export class AdminEventsComponent {
     this.page = 1;
   }
 
-  getCartById(orderId: number): Observable<Cart | null> {
-    return this.cartService.getById(orderId);
+  getCartById(id: number): Cart | null {
+    const found = this.carts.find(data => data.orderId === id);
+    return found || null;
   }
 
-  getComboById(comboId: number): Observable<Combo | null> {
-    return this.comboService.getById(comboId);
+  getComboById(id: number): Combo | null {
+    const found = this.combos.find(data => data.comboId === id);
+    return found || null;
   }
 
   getEvents(): void {

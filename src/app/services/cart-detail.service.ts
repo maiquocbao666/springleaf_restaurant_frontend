@@ -32,10 +32,6 @@ export class CartDetailService extends BaseService<CartDetail> {
     return super.gets();
   }
 
-  override getById(id: number): Observable<CartDetail | null> {
-    return super.getById(id);
-  }
-
   override add(newProduct: CartDetail): Observable<CartDetail> {
     return super.add(newProduct);
   }

@@ -28,9 +28,9 @@ export class TableTypeService extends BaseService<TableType> {
     return super.gets();
   }
 
-  override getById(id: number): Observable<TableType | null> {
-    return super.getById(id);
-  }
+  // override getById(id: number): Observable<TableType | null> {
+  //   return super.getById(id);
+  // }
 
   override add(newObject: TableType): Observable<TableType> {
     return super.add(newObject);
@@ -40,7 +40,7 @@ export class TableTypeService extends BaseService<TableType> {
     return super.update(updatedObject);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
@@ -59,4 +59,5 @@ export class TableTypeService extends BaseService<TableType> {
   override getObjectName(): string {
     return "TableType";
   }
+
 }

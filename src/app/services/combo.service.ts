@@ -38,10 +38,6 @@ export class ComboService extends BaseService<Combo> {
     return super.gets();
   }
 
-  override getById(id: number): Observable<Combo | null> {
-    return super.getById(id);
-  }
-
   override add(newCombo: Combo): Observable<Combo> {
     return super.add(newCombo);
   }

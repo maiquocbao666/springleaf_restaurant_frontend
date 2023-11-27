@@ -28,10 +28,6 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
         return super.gets();
     }
 
-    override getById(id: number): Observable<OrderThreshold | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: OrderThreshold): Observable<OrderThreshold> {
         return super.add(newObject);
     }
@@ -59,4 +55,5 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
     override getObjectName(): string {
         return "OrderThreshold";
     }
+
 }

@@ -40,74 +40,74 @@ export class AdminReservationsComponent {
     this.getReservations();
   }
 
-  minusDateTime(currentDateTime: string, reservationDate: string): string {
-    let currentDateTime1 = new Date(currentDateTime).getTime();
-    let reservationDate1 = new Date(reservationDate).getTime();
+  // minusDateTime(currentDateTime: string, reservationDate: string): string {
+  //   let currentDateTime1 = new Date(currentDateTime).getTime();
+  //   let reservationDate1 = new Date(reservationDate).getTime();
 
-    let differenceTime = reservationDate1 - currentDateTime1;
+  //   let differenceTime = reservationDate1 - currentDateTime1;
 
-    if (currentDateTime1 > reservationDate1) {
-      return "Đang chờ";
-    }
+  //   if (currentDateTime1 > reservationDate1) {
+  //     return "Đang chờ";
+  //   }
 
-    // Chuyển đổi thành giờ, phút, giây
-    const hours = Math.floor(differenceTime / (1000 * 60 * 60));
-    const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
+  //   // Chuyển đổi thành giờ, phút, giây
+  //   const hours = Math.floor(differenceTime / (1000 * 60 * 60));
+  //   const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
+  //   const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
 
-    return `${hours}:${minutes}:${seconds}`;
-  }
+  //   return `${hours}:${minutes}:${seconds}`;
+  // }
 
-  reservationHoldTime(currentDateTime: string, reservationDate: string) {
-    let reservationDate1 = new Date(reservationDate);
-    reservationDate1.setMinutes(reservationDate1.getMinutes() + 1);
+  // reservationHoldTime(currentDateTime: string, reservationDate: string) {
+  //   let reservationDate1 = new Date(reservationDate);
+  //   reservationDate1.setMinutes(reservationDate1.getMinutes() + 1);
 
-    let currentDateTime1 = new Date(currentDateTime);
+  //   let currentDateTime1 = new Date(currentDateTime);
 
-    if (currentDateTime1.getTime() >= reservationDate1.getTime()) {
-      return "Hết thời gian chờ";
-    }
+  //   if (currentDateTime1.getTime() >= reservationDate1.getTime()) {
+  //     return "Hết thời gian chờ";
+  //   }
 
-    let differenceTime = reservationDate1.getTime() - currentDateTime1.getTime();
+  //   let differenceTime = reservationDate1.getTime() - currentDateTime1.getTime();
 
-    // Chuyển đổi thành giờ, phút, giây
-    const hours = Math.floor(differenceTime / (1000 * 60 * 60));
-    const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
+  //   // Chuyển đổi thành giờ, phút, giây
+  //   const hours = Math.floor(differenceTime / (1000 * 60 * 60));
+  //   const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
+  //   const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
 
-    return `${hours}:${minutes}:${seconds}`;
-  }
+  //   return `${hours}:${minutes}:${seconds}`;
+  // }
 
-  hoursUse(currentDateTime: string, reservationDate: string) {
+  // hoursUse(currentDateTime: string, reservationDate: string) {
 
-    const stautus: string = "Khách hàng đã rời đi";
+  //   const stautus: string = "Khách hàng đã rời đi";
 
-    let reservationDate1 = new Date(reservationDate);
-    reservationDate1.setHours(reservationDate1.getHours() + 0);
+  //   let reservationDate1 = new Date(reservationDate);
+  //   reservationDate1.setHours(reservationDate1.getHours() + 0);
 
-    let currentDateTime1 = new Date(currentDateTime);
+  //   let currentDateTime1 = new Date(currentDateTime);
 
-    let differenceTime = reservationDate1.getTime() - currentDateTime1.getTime();
+  //   let differenceTime = reservationDate1.getTime() - currentDateTime1.getTime();
 
-    // Chuyển đổi thành giờ, phút, giây
-    const hours = Math.floor(differenceTime / (1000 * 60 * 60));
-    const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
+  //   // Chuyển đổi thành giờ, phút, giây
+  //   const hours = Math.floor(differenceTime / (1000 * 60 * 60));
+  //   const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
+  //   const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
 
-    if (stautus === "Khách hàng đã rời đi") {
-      return "Đã sử dụng xong";
-    }
+  //   if (stautus === "Khách hàng đã rời đi") {
+  //     return "Đã sử dụng xong";
+  //   }
 
-    if (currentDateTime1.getTime() >= reservationDate1.getTime()) {
-      return "Hết giờ sử dụng bàn\n" + `Lố ${currentDateTime1.getHours() - reservationDate1.getHours()}:${currentDateTime1.getMinutes() - reservationDate1.getMinutes()}:${currentDateTime1.getSeconds() - reservationDate1.getSeconds()}`;
-    }
+  //   if (currentDateTime1.getTime() >= reservationDate1.getTime()) {
+  //     return "Hết giờ sử dụng bàn\n" + `Lố ${currentDateTime1.getHours() - reservationDate1.getHours()}:${currentDateTime1.getMinutes() - reservationDate1.getMinutes()}:${currentDateTime1.getSeconds() - reservationDate1.getSeconds()}`;
+  //   }
 
-    return `${hours}:${minutes}:${seconds}`;
-  }
+  //   return `${hours}:${minutes}:${seconds}`;
+  // }
 
   getReservations(): void {
     this.reservationService.gets();
-    this.reservationService.reservationsCache$
+    this.reservationService.cache$
       .subscribe(reservations => {
         this.reservationService.gets();
         this.reservations = JSON.parse(localStorage.getItem(this.reservationsUrl) || 'null')

@@ -87,8 +87,9 @@ export class AdminGoodsReceiptsComponent {
       });
   }
 
-  getInventoryBranchById(inventoryBranchId: number): Observable<InventoryBranch | null> {
-    return this.inventoryBranchService.getById(inventoryBranchId);
+  getInventoryBranchById(id: number): InventoryBranch | null {
+    const found = this.inventoryBranches.find(data => data.inventoryBranchId === id);
+    return found || null;
   }
 
   addGoodsReceipt(): void {

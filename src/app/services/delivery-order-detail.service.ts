@@ -32,10 +32,6 @@ export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail>
     return super.gets();
   }
 
-  override getById(id: number): Observable<DeliveryOrderDetail | null> {
-    return super.getById(id);
-  }
-
   override add(newDeliveryOrderDetail: DeliveryOrderDetail): Observable<DeliveryOrderDetail> {
     return super.add(newDeliveryOrderDetail);
   }
@@ -49,9 +45,10 @@ export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail>
   }
 
   override getItemId(item: DeliveryOrderDetail): number {
-    throw new Error('Method not implemented.');
+    return item.deliveryOrderDetailId!;
   }
   override getItemName(item: DeliveryOrderDetail): string {
     throw new Error('Method not implemented.');
   }
+
 }

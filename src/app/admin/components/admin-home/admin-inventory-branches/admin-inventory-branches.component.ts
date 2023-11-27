@@ -110,17 +110,20 @@ export class AdminInventoryBranchesComponent {
       });
   }
 
-  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
-    return this.ingredientService.getById(ingredientId);
+  getIngredientById(id: number): Ingredient | null {
+    const found = this.ingredients.find(data => data.ingredientId === id);
+    return found || null;
   }
 
-  getSupplierById(supplierId: number): Observable<Supplier | null> {
-    return this.supplierService.getById(supplierId);
+  getSupplierById(id: number): Supplier | null {
+    const found = this.suppliers.find(data => data.supplierId === id);
+    return found || null;
   }
 
 
-  getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
-    return this.restaurantService.getById(restaurantId);
+  getRestaurantById(id: number): Restaurant | null {
+    const found = this.restaurants.find(data => data.restaurantId === id);
+    return found || null;
   }
 
   addInventoryBranch(): void {

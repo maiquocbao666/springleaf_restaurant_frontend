@@ -56,10 +56,10 @@ export class AdminProductsComponent {
     this.page = 1;
   }
 
-  getCategories(): void { 
+  getCategories(): void {
     this.categoryService.gets();
     this.categoryService.cache$
-      .subscribe(categories => {
+      .subscribe(() => {
         this.categoryService.gets();
         this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
       });
@@ -68,14 +68,15 @@ export class AdminProductsComponent {
   getProducts(): void {
     this.productService.gets();
     this.productService.cache$
-      .subscribe(products => {
-        this.productService.gets();
+      .subscribe(() => {
+        this.categoryService.gets();
         this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
       });
   }
 
-  getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getById(categoryId);
+  getCategoryById(id: number): Category | null {
+    const found = this.categories.find(data => data.categoryId === id);
+    return found || null;
   }
 
   addProduct(): void {

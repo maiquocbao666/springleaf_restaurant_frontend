@@ -31,10 +31,6 @@ export class RoleFunctionService extends BaseService<RoleFunction> {
         return super.gets();
     }
 
-    override getById(id: number): Observable<RoleFunction | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: RoleFunction): Observable<RoleFunction> {
         return super.add(newObject);
     }

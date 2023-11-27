@@ -46,4 +46,5 @@ export class FavoriteService extends BaseService<Favorite> {
   override getObjectName(): string {
     return "Favorite";
   }
+
 }

@@ -37,7 +37,7 @@ export class BillService extends BaseService<Bill> {
     return super.update(updatedBill);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
@@ -48,6 +48,5 @@ export class BillService extends BaseService<Bill> {
   override getObjectName(): string {
     return "Bill";
   }
-
 
 }

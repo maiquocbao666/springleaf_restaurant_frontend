@@ -29,10 +29,6 @@ export class RatingService extends BaseService<Rating> {
     return super.gets();
   }
 
-  override getById(id: number): Observable<Rating | null> {
-    return super.getById(id);
-  }
-
   override add(newObject: Rating): Observable<Rating> {
     return super.add(newObject);
   }
@@ -41,7 +37,7 @@ export class RatingService extends BaseService<Rating> {
     return super.update(updatedObject);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
@@ -60,4 +56,5 @@ export class RatingService extends BaseService<Rating> {
   override getObjectName(): string {
     return "Rating";
   }
+
 }

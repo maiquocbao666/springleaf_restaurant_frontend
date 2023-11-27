@@ -30,10 +30,6 @@ export class SupplierService extends BaseService<Supplier>  {
         return super.gets();
     }
 
-    override getById(id: number): Observable<Supplier | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: Supplier): Observable<Supplier> {
         return super.add(newObject);
     }

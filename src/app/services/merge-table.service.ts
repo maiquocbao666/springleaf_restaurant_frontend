@@ -29,10 +29,6 @@ export class MergeTableService extends BaseService<MergeTable> {
         return super.gets();
     }
 
-    override getById(id: number): Observable<MergeTable | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: MergeTable): Observable<MergeTable> {
         return super.add(newObject);
     }
@@ -60,4 +56,5 @@ export class MergeTableService extends BaseService<MergeTable> {
     override getObjectName(): string {
         return "MergeTable";
     }
+
 }

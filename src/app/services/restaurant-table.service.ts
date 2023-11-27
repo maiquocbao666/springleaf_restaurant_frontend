@@ -28,10 +28,6 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         return super.gets();
     }
 
-    override getById(id: number): Observable<RestaurantTable | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: RestaurantTable): Observable<RestaurantTable> {
         return super.add(newObject);
     }
@@ -78,4 +74,5 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
     checkStatus(restaurantTableId: number): boolean {
         return true;
     }
+
 }

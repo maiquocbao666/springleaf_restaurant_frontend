@@ -29,11 +29,6 @@ export class InventoryService extends BaseService<Inventory> {
     override gets(): Observable<Inventory[]> {
         return super.gets();
     }
-
-    override getById(id: number): Observable<Inventory | null> {
-        return super.getById(id);
-    }
-
     override add(newObject: Inventory): Observable<Inventory> {
         return super.add(newObject);
     }
@@ -61,4 +56,5 @@ export class InventoryService extends BaseService<Inventory> {
     override getObjectName(): string {
         return "Inventory";
     }
+
 }

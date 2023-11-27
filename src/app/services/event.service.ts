@@ -37,6 +37,4 @@ export class EventService extends BaseService<Event> {
     return super.delete(id);
   }
 
- 
-
 }

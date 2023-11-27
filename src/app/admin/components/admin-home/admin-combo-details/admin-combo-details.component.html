@@ -62,10 +62,8 @@
       <tr
         *ngFor="let comboDetail of comboDetails | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
         <td>{{comboDetail.comboDetailId}}</td>
-        <td>{{ (getComboById(comboDetail.comboId) |
-          async)?.comboName }}</td>
-        <td>{{ (getProductById(comboDetail.menuItem) |
-          async)?.name }}</td>
+        <td>{{ getComboById(comboDetail.comboId)?.comboName }}</td>
+        <td>{{ getProductById(comboDetail.menuItem)?.name }}</td>
         <td>{{comboDetail.quantity}}</td>
         <td>{{comboDetail.comboTypeId}}</td>
         <td>

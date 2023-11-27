@@ -38,10 +38,6 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
     return super.gets();
   }
 
-  override getById(id: number): Observable<DeliveryOrder | null> {
-    return super.getById(id);
-  }
-
   override add(newDeliveryOrder: DeliveryOrder): Observable<DeliveryOrder> {
     return super.add(newDeliveryOrder);
   }
@@ -53,6 +49,5 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
-
 
 }
