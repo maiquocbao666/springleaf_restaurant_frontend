@@ -1,16 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { UserEventsComponent } from './user-events.component';
 
-import { UserEventComponent } from './UserEventComponent';
+
 
 describe('UserEventComponent', () => {
-  let component: UserEventComponent;
-  let fixture: ComponentFixture<UserEventComponent>;
+  let component: UserEventsComponent;
+  let fixture: ComponentFixture<UserEventsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [UserEventComponent]
+      declarations: [UserEventsComponent]
     });
-    fixture = TestBed.createComponent(UserEventComponent);
+    fixture = TestBed.createComponent(UserEventsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
