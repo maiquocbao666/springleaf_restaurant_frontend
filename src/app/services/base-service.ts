@@ -18,9 +18,9 @@ export abstract class BaseService<T> {
     abstract getItemName(item: T): string;
     abstract getObjectName(): string;
 
-    private receivedMessages: string[] = [];
-    private topicSubscription: Subscription | undefined;
-    private channel = 'public';
+    receivedMessages: string[] = [];
+    topicSubscription: Subscription | undefined;
+    channel = 'public';
 
     private cacheSubject = new BehaviorSubject<T[]>([]);
     cache$ = this.cacheSubject.asObservable();
