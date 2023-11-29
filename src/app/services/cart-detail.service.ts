@@ -14,6 +14,8 @@ import { ToastService } from './toast.service';
 })
 
 export class CartDetailService extends BaseService<CartDetail> {
+  private orderDetailsSubject = new BehaviorSubject<CartDetail[] | null>(null);
+  orderDetails$ = this.orderDetailsSubject.asObservable();
 
   //----------------------------------------------------------------
 
@@ -64,5 +66,27 @@ export class CartDetailService extends BaseService<CartDetail> {
   }
 
   //----------------------------------------------------------------------
+
+  getUserOrder(orderId: number): Observable<CartDetail[] | null> {
+    const jwtToken = localStorage.getItem('access_token');
+    if (!jwtToken) {
+      return of(null);
+    }
+    
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+
+    const orderDetailsObservable = this.apiService.request<CartDetail[]>('post', 'user/getOrderDetailByUser', orderId, customHeader)
+      .pipe(
+        tap(orderDetails => {
+          this.orderDetailsSubject.next(orderDetails); // Thông báo cho subscribers khi có sự thay đổi
+        })
+      );
+
+    return orderDetailsObservable;
+  }
+
+  
 
 }

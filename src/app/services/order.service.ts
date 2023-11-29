@@ -3,6 +3,7 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Order } from '../interfaces/order';
 import { BehaviorSubject } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class OrderService {
 
   private ordersUrl = 'carts';
   private orderUrl = 'cart';
-
+  private userOrderCacheSubject = new BehaviorSubject<Order | null>(null);
+  userOrderCache$ = this.userOrderCacheSubject.asObservable();
   // Sử dụng BehaviorSubject để giữ giá trị và thông báo thay đổi
   private ordersCacheSubject = new BehaviorSubject<Order[]>([]);
   ordersCache$ = this.ordersCacheSubject.asObservable();
@@ -98,4 +100,24 @@ export class OrderService {
       }
     }
   }
+
+  getUserOrder(deliveryOrder: number): Observable<Order | null> {
+    const jwtToken = localStorage.getItem('access_token');
+    const deliveryOrderId = deliveryOrder;
+
+    if (!jwtToken) {
+      return of(null);
+    }
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+
+    return this.apiService.request<Order>('post', 'user/getOrderByUser', deliveryOrderId, customHeader)
+      .pipe(
+        tap(order => {
+          this.userOrderCacheSubject.next(order); // Cập nhật cache khi có dữ liệu mới
+        })
+      );
+  }
+
 }

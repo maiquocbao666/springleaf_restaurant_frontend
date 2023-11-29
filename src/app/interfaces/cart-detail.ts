@@ -1,7 +1,6 @@
 export interface CartDetail {
     orderDetailId?: number;
     order: number;
-    menuItem: number;
+    menuItemId: number;
     quantity: number;
-    subtotal: number;
 }

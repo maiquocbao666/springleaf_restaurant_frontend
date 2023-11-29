@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserPasswordComponent } from '../user-password/user-password.component';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-login',
@@ -25,12 +26,14 @@ export class LoginComponent {
   token: string = '';
   getDatasOfThisUserWorker: Worker;
   errorMessage: string | undefined;
+  browserInformation: any;
 
   constructor(private authService: AuthenticationService,
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private sweetAlertService: ToastService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private deviceService: DeviceDetectorService) {
     this.loginForm = this.formBuilder.group({
       username: [null, [Validators.nullValidator]],
       password: [null, [Validators.nullValidator]],
@@ -59,6 +62,7 @@ export class LoginComponent {
       }
       
     })
+    this.getBrowserInformation();
     this.getDatasOfThisUserWorker = new Worker(new URL('../../workers/user/user-call-all-apis.worker.ts', import.meta.url));
   }
 
@@ -68,6 +72,15 @@ export class LoginComponent {
     this.registerForm.get('phone')?.disable();
     this.registerForm.get('password')?.disable();
     this.registerForm.get('repassword')?.disable();
+  }
+
+  getBrowserInformation() {
+    const deviceInfo = this.deviceService.getDeviceInfo();
+
+  console.log(deviceInfo.browser);   // Tên trình duyệt
+  console.log(deviceInfo.browser_version);  // Phiên bản trình duyệt
+  console.log(deviceInfo.os);  // Hệ điều hành
+  console.log(deviceInfo);
   }
 
   compareInputWithCodeCache(): boolean {
