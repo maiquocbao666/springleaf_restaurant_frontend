@@ -67,20 +67,36 @@ export class ReservationService extends BaseService<Reservation> {
 
     //--------------------------------------------------------------------------------------------------------------------
 
-    // getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
-    //     if (this.cache) {
-    //         const filteredReservations = this.cache.filter(reservation => reservation.restaurantTableId === restaurantTableId);
-    //         return of(filteredReservations);
-    //     }
+    getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
+        if (this.cache) {
+            const filteredReservations = this.cache.filter(reservation => reservation.restaurantTableId === restaurantTableId);
+            return of(filteredReservations);
+        }
 
-    //     const reservationsObservable = this.apiService.request<Reservation[]>('get', this.apisUrl);
+        const reservationsObservable = this.apiService.request<Reservation[]>('get', this.apisUrl);
 
-    //     return reservationsObservable.pipe(
-    //         tap(reservations => {
-    //             this.cache = reservations;
-    //         }),
-    //         map(reservations => reservations.filter(reservation => reservation.restaurantTableId === restaurantTableId))
-    //     );
-    // }
+        return reservationsObservable.pipe(
+            tap(reservations => {
+                this.cache = reservations;
+            }),
+            map(reservations => reservations.filter(reservation => reservation.restaurantTableId === restaurantTableId))
+        );
+    }
+
+    getReservationsByUserId(userId: number): Observable<Reservation[]> {
+        if (this.cache) {
+            const filteredReservations = this.cache.filter(reservation => reservation.userId === userId);
+            return of(filteredReservations);
+        }
+
+        const reservationsObservable = this.apiService.request<Reservation[]>('get', this.apisUrl);
+
+        return reservationsObservable.pipe(
+            tap(reservations => {
+                this.cache = reservations;
+            }),
+            map(reservations => reservations.filter(reservation => reservation.userId === userId))
+        );
+    }
 
 }

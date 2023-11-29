@@ -92,6 +92,7 @@ import { UserCheckoutComponent } from './user/components/user-home/user-checkout
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 
 import { DatePipe } from '@angular/common';
+import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { DatePipe } from '@angular/common';
     UserBannerComponent,
     UserCheckoutComponent,
     UserRestaurantTableInfomationComponent,
+    UserReservationHistoriesComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
