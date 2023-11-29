@@ -6,4 +6,5 @@ export interface DeliveryOrder {
     totalAmount: number;
     order: number;
     status: number;
+    active: boolean;
 }

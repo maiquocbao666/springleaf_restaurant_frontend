@@ -12,6 +12,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
+import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -34,6 +35,7 @@ export class UserProductsComponent implements OnInit {
   constructor(
     private reservationService: ReservationService,
     private orderService: OrderService,
+    private deliveryOrderService : DeliveryOrderService,
     private productService: ProductService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
@@ -125,6 +127,9 @@ export class UserProductsComponent implements OnInit {
       console.error("Product ID is undefined. Cannot add to cart.");
     }
   }
+
+  
+
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }

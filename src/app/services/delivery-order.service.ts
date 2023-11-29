@@ -6,11 +6,15 @@ import { BehaviorSubject } from 'rxjs';
 import { RxStompService } from '../rx-stomp.service';
 import { BaseService } from './base-service';
 import { ToastService } from './toast.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
+  private userCartSubject = new BehaviorSubject<DeliveryOrder | null>(null);
+  userCart$ = this.userCartSubject.asObservable();
+
   override getItemId(item: DeliveryOrder): number {
     throw new Error('Method not implemented.');
   }
@@ -52,6 +56,24 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
 
   override delete(id : number): Observable<any> {
     return super.delete(id);
+  }
+
+  getUserCart(): Observable<DeliveryOrder | null> {
+    const jwtToken = localStorage.getItem('access_token');
+    if (!jwtToken) {
+      return of(null);
+    }
+  
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+  
+    return this.apiService.request<DeliveryOrder>('get', 'user/getCartByUser', null, customHeader)
+      .pipe(
+        tap(cart => {
+          this.userCartSubject.next(cart);
+        })
+      );
   }
 
 
