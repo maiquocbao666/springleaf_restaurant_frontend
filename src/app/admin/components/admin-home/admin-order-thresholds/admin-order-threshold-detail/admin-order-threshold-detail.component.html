@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>Cập nhật</h1>
+  <form [formGroup]="orderThresholdForm" (ngSubmit)="updateOrderThreshold()">
+    <div class="mb-3">
+      <a class="nav-link" routerLink="/admin/ingredients">Thêm nguyên liệu</a>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
+          <option value="">Chọn nguyên liệu</option>
+          <option *ngFor="let ingredient of ingredients" [value]="ingredient.ingredientId">{{ ingredient.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <a class="nav-link" routerLink="/admin/products">Thêm kho</a>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryId">
+          <option value="">Chọn kho</option>
+          <option *ngFor="let inventory of inventories" [value]="inventory.inventoryId">
+            {{ inventory.inventoryId }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <a class="nav-link" routerLink="/admin/products">Chi nhánh kho</a>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranchId">
+          <option value="">Chọn kho</option>
+          <option *ngFor="let inventoryBranch of inventoryBranches" [value]="inventoryBranch.inventoryBranchId">
+            {{ inventoryBranch.inventoryBranchId }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Số lượng</label>
+      <div class="mb-3">
+        <input type="number" class="form-control" formControlName="reorderPoint" placeholder="Nhập số lượng ...">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+  </form>

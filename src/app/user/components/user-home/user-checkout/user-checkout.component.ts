@@ -1,67 +1,100 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { VNPayService } from 'src/app/services/VNpay.service';
 import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-user-checkout',
   templateUrl: './user-checkout.component.html',
   styleUrls: ['./user-checkout.component.css']
 
-})
-export class UserCheckoutComponent {
+}) export class UserCheckoutComponent {
+  orderTotal: number | undefined;
+  orderInfo: string | undefined;
+  submitted = false;
+  paymentStatus: string | undefined;
+  redirectUrl: string | undefined;
+  selectedPaymentMethod: string | undefined;
+
   constructor(
     private sweetAlertService: ToastService,
     private vnpayService: VNPayService,
+    private router: Router
+  ) { }
 
-  ) {
 
+  ngOnInit(): void {
+    this.onGetPaymentStatus();
   }
 
-
-
-  onSubmit(form: any) {
-    if (form.valid) {
-      const orderTotal = form.value.orderTotal;
-      const orderInfo = form.value.orderInfo;
-      alert("Xin chào" + orderTotal);
-      this.vnpayService.submitOrder(orderTotal, orderInfo).subscribe({
-
-        next: (response: any) => {
-          if (response && response.vnpayUrl) {
-            window.location.href = response.vnpayUrl;
-            alert(response.vnpayUrl)
-          } else {
-            // Xử lý khi có lỗi từ phản hồi
-          }
-        },
-        error: (error: any) => {
-          // Xử lý khi gọi API gặp lỗi
-        }
-      });
-
+  processPayment(): void {
+    // Kiểm tra xem phương thức thanh toán nào được chọn
+    if (this.selectedPaymentMethod === 'vnpay') {
+      this.payWithVNPay();
+    } else if (this.selectedPaymentMethod === 'momo') {
+      this.payWithMoMo();
+    } else if (this.selectedPaymentMethod === 'cod') {
+      this.payWithCOD();
     } else {
-      alert("Lôizzz");
+      // Xử lý nếu không chọn phương thức thanh toán
+      Swal.fire('Bạn chưa chọn phương thức thanh toán', 'vui lòng chọn!', 'info');
+      console.error('Vui lòng chọn phương thức thanh toán.');
     }
   }
 
-  // Phương thức để kiểm tra trạng thái thanh toán
-  checkPaymentStatus(request: any) {
-    this.vnpayService.getPaymentStatus(request).subscribe(
-      response => {
-        // Xử lý response từ backend sau khi gọi API getPaymentStatus
-        // Dựa vào response để hiển thị thông tin thanh toán cho người dùng
+  payWithVNPay(): void {
+   
+      if (this.orderTotal && this.orderInfo) {
+        this.vnpayService.submitOrder(this.orderTotal, this.orderInfo).subscribe({
+          next: (data: any) => {
+            if (data.redirectUrl) {
+              window.location.href = data.redirectUrl; // Chuyển hướng đến URL được trả về từ backend
+              this.onGetPaymentStatus();
+            } else {
+              // Xử lý các trường hợp khác nếu cần
+            }
+          },
+          error: (error: any) => {
+            console.error('Failed to submit order. Please try again.', error);
+          }
+        });
+      console.log('Thanh toán bằng VNPAY');
+    }
+  }
+
+  // Sử dụng Router để điều hướng tới URL trả về từ backend
+  redirectToPayment(): void {
+    if (this.redirectUrl) {
+      this.router.navigateByUrl(this.redirectUrl);
+    }
+  }
+
+  onGetPaymentStatus(): void {
+    this.vnpayService.getPaymentStatus().subscribe(
+      (data: any) => {
+        if (data.paymentStatus === 1) {
+          this.paymentStatus = 'Order success';
+          // Hiển thị thông tin thanh toán nếu cần
+          console.log('Order Info:', data.orderInfo);
+          console.log('Payment Time:', data.paymentTime);
+          console.log('Transaction ID:', data.transactionId);
+          console.log('Total Price:', data.totalPrice);
+        } else {
+          this.paymentStatus = 'Order failed';
+        }
       },
-      error => {
-        // Xử lý khi gọi API gặp lỗi
+      (error: any) => {
+        console.error('Failed to get payment status. Please try again.', error);
       }
     );
   }
 
-
-  showCustomAnimationAlert() {
-    this.sweetAlertService.showCustomAnimatedAlert('Custom animation message', 'success', 'animated tada')
-      .then((result) => {
-      });
+  payWithMoMo(): void {
+    console.log('Thanh toán bằng MoMo');
   }
 
+  payWithCOD(): void {
+    console.log('Thanh toán bằng COD');
+  }
 
 }

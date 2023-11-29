@@ -30,6 +30,8 @@ export class IngredientService extends BaseService<Ingredient>  {
     override gets(): Observable<Ingredient[]> {
       return super.gets();
     }
+
+
     override add(newObject: Ingredient): Observable<Ingredient> {
       return super.add(newObject);
     }
@@ -67,5 +69,28 @@ export class IngredientService extends BaseService<Ingredient>  {
     //     return isTrue;
     //   }
     // }
+
+    
+    getsQuantity(): Observable<Ingredient[]> {
+      // Try to retrieve cache from local storage
+      const cachedData = localStorage.getItem(this.cacheKey);
+
+      // If cache is not empty, return it directly
+      if (cachedData) {
+          const cachedArray = JSON.parse(cachedData) as Ingredient[];
+          return of(cachedArray);
+      }
+
+      // Otherwise, fetch data from the API
+      const objectsObservable = this.apiService.request<Ingredient[]>('get', this.apisUrl);
+
+      // Subscribe to the API request to update the cache
+      objectsObservable.subscribe(data => {
+          this.cache = data;
+          localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
+      });
+
+      return objectsObservable;
+  }
   
 }

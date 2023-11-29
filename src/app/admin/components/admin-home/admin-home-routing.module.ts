@@ -148,6 +148,18 @@ const routes: Routes = [
         loadChildren: () => import('./admin-menu-item-ingredients/admin-menu-item-ingredients.module').then(
           (m) => m.AdminMenuItemIngredientsModule
         )
+      },
+      {
+        path: 'orderThresholds',
+        loadChildren: () => import('./admin-order-thresholds/admin-order-thresholds.module').then(
+          (m) => m.AdminOrderThresholdsModule
+        )
+      },
+      {
+        path: 'statistical',
+        loadChildren: () => import('./admin-statistical/admin-statistical.module').then(
+          (m) => m.AdminStatisticalModule
+        )
       }
     ]
   },

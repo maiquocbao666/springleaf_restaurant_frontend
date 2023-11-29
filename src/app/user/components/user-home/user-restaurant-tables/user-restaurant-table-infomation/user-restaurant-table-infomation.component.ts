@@ -89,12 +89,6 @@ export class UserRestaurantTableInfomationComponent {
   // }
 
 
-  // showMessage() {
-  //   this.toastService.showSuccess('Đây là thông báo thành công');
-  //   this.toastService.showError('Đây là thông báo lỗi');
-  //   this.toastService.showInfo('Đây là thông báo thông tin');
-  //   this.toastService.showWarn('Đây là thông báo cảnh báo');
-  // }
 
   addReservation() {
 

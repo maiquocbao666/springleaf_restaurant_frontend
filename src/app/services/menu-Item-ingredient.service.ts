@@ -50,4 +50,5 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
         return "MenuItemIngredient";
     }
 
+  
 }

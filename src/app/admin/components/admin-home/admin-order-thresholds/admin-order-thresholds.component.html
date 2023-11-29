@@ -1,0 +1,77 @@
+<div class="container">
+  <h1>Ngưỡng Đơn Hàng</h1>
+  <form [formGroup]="orderThresholdForm" (ngSubmit)="addOrderThreshold()">
+    <div class="mb-3">
+      <a class="nav-link" routerLink="/admin/ingredients">Thêm nguyên liệu</a>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
+          <option value="">Chọn nguyên liệu</option>
+          <option *ngFor="let ingredient of ingredients" [value]="ingredient.ingredientId">{{ ingredient.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <a class="nav-link" routerLink="/admin/products">Thêm kho</a>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryId">
+          <option value="">Chọn kho</option>
+          <option *ngFor="let inventory of inventories" [value]="inventory.inventoryId">
+            {{ inventory.inventoryId }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <a class="nav-link" routerLink="/admin/products">Chi nhánh kho</a>
+      <div class="mb-3">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranchId">
+          <option value="">Chọn kho</option>
+          <option *ngFor="let inventoryBranch of inventoryBranches" [value]="inventoryBranch.inventoryBranchId">
+            {{ inventoryBranch.inventoryBranchId }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Số lượng</label>
+      <div class="mb-3">
+        <input type="number" class="form-control" formControlName="reorderPoint" placeholder="Nhập số lượng ...">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+  </form>
+  <!-- Table for displaying orderThresholds -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nguyên liệu</th>
+        <th scope="col">Kho</th>
+        <th scope="col">Chi nhánh Kho</th>
+        <th scope="col">Số lượng</th>
+        <th scope="col">Chức năng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let orderThreshold of orderThresholds | paginate: { itemsPerPage: tableSize, currentPage: page, totalItems: count }; let i = index">
+        <td>{{ orderThreshold.orderThresholdId }}</td>
+        <td>{{ getIngredientById(orderThreshold.ingredientId)?.name }}</td>
+        <td>{{orderThreshold.inventoryId }}</td>
+        <td>{{orderThreshold.inventoryBranchId }}</td>
+        <td>{{ orderThreshold.reorderPoint }}</td>
+        <td>
+          <button type="button" class="btn btn-outline-primary"
+            (click)="openOrderThresholdDetailModal(orderThreshold)">Chỉnh sửa</button>
+          <button type="button" class="btn btn-outline-danger"
+            (click)="deleteOrderThreshold(orderThreshold)">Xóa</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Trước" nextLabel="Tiếp theo"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 
 
@@ -13,21 +13,17 @@ export class VNPayService {
 
   constructor(private apiService: ApiService) { }
 
-  // Trong hàm submitOrder hoặc các hàm gửi request tương tự trong service của bạn:
   submitOrder(orderTotal: number, orderInfo: string): Observable<any> {
-    const formData = new FormData();
-    formData.append('orderTotal', orderTotal.toString());
-    formData.append('orderInfo', orderInfo);
+    const body = {
+      orderTotal: orderTotal,
+      orderInfo: orderInfo
+    };
 
-    return this.apiService.request<any>('post', this.submitOrderUrl, formData).pipe(
-      catchError((error) => {
-        console.error('Error occurred:', error); // In ra lỗi chi tiết
-        return throwError(error); // Chuyển tiếp lỗi để xử lý ở các tầng gọi service
-      })
-    );
+    return this.apiService.request<any>('post', this.submitOrderUrl, body);
   }
 
-  getPaymentStatus(request: any): Observable<any> {
-    return this.apiService.request<any>('get', this.getPaymentStatusUrl, { params: request });
+  getPaymentStatus(): Observable<any> {
+    return this.apiService.request<any>('get', this.getPaymentStatusUrl);
   }
+
 }

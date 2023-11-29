@@ -27,6 +27,7 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
     override gets(): Observable<RestaurantTable[]> {
         return super.gets();
     }
+    
 
     override add(newObject: RestaurantTable): Observable<RestaurantTable> {
         return super.add(newObject);

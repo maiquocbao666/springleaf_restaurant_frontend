@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { IngredientService } from 'src/app/services/ingredient.service';
+import { StatisticsService } from 'src/app/services/statistical.service';
 import { AdminIngredientDetailComponent } from './admin-ingredient-detail/admin-ingredient-detail.component';
 
 @Component({
@@ -94,4 +95,6 @@ export class AdminIngredientsComponent {
     });
 
   }
+
+
 }

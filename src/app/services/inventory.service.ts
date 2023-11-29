@@ -26,9 +26,12 @@ export class InventoryService extends BaseService<Inventory> {
     }
 
 
+    
+
     override gets(): Observable<Inventory[]> {
         return super.gets();
     }
+
     override add(newObject: Inventory): Observable<Inventory> {
         return super.add(newObject);
     }

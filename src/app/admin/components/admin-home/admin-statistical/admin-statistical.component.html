@@ -1,0 +1,34 @@
+<!-- <div style="display: block">
+  <canvas baseChart [data]="chartData" [labels]="chartLabels" [options]="chartOptions" [plugins]="chartPlugins"
+    [legend]="chartLegend" [chartType]="chartType">
+  </canvas>
+</div> -->
+<div class="statistics-container">
+  <button (click)="fetchStatistics()">Fetch Statistics</button>
+  <div *ngIf="statisticsData">
+    <h2>Statistics</h2>
+    <p>Total Ingredient: {{ statisticsData }}</p>
+    <!-- Hiển thị các thông tin thống kê khác tương tự -->
+  </div>
+  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="error">{{ error }}</div>
+</div>
+
+
+<div class="menu-item-container">
+  <select [(ngModel)]="selectedMenuItemId" (change)="onMenuItemChange()">
+    <option *ngFor="let product of products" [value]="product.menuItemId">{{ product.name }}</option>
+  </select>
+
+  <div *ngIf="ingredients">
+    <h2>Ingredients for selected item</h2>
+    <ul>
+      <li *ngFor="let menuItemIngredient of menuItemIngredients">{{
+        getIngredientById(menuItemIngredient.ingredientId)?.name }}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="error">{{ error }}</div>
+</div>
