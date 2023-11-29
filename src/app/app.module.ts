@@ -90,7 +90,15 @@ import { RxStompService } from './rx-stomp.service';
 import { RxStompService2 } from './rx-stomp.service2';
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
-import { ChartsModule } from 'ng2-charts';
+import { AdminReservationStatusesComponent } from './admin/components/admin-home/admin-reservation-statuses/admin-reservation-statuses.component';
+import { RxStompService } from './rx-stomp.service';
+import { rxStompServiceFactory, rxStompServiceFactory2 } from './rx-stomp-service-factory';
+import { RxStompService2 } from './rx-stomp.service2';
+import { AdminMenuItemIngredientsComponent } from './admin/components/admin-home/admin-menu-item-ingredients/admin-menu-item-ingredients.component';
+import { AdminMenuItemIngredientDetailComponent } from './admin/components/admin-home/admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
+import { UserPasswordComponent } from './components/user-password/user-password.component';
+
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -190,6 +198,7 @@ import { ChartsModule } from 'ng2-charts';
     ToastrModule.forRoot(), // ToastrModule added
   ],
   providers: [
+    DatePipe,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     {
       provide: RxStompService,

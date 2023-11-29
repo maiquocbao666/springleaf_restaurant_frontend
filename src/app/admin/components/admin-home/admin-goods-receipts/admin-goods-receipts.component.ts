@@ -61,30 +61,27 @@ export class AdminGoodsReceiptsComponent {
   }
 
   getGoodsReceipts(): void {
-    this.goodsReceiptService.gets();
-    this.goodsReceiptService.cache$
-      .subscribe(goodsReceipts => {
-        this.goodsReceiptService.gets();
-        this.goodsReceipts = JSON.parse(localStorage.getItem(this.goodsReceiptsUrl) || 'null')
-      });
+    this.goodsReceiptService.getCache().subscribe(
+      (cached: any[]) => {
+        this.goodsReceipts = cached;
+      }
+    );
   }
 
   getCarts(): void {
-    this.cartService.gets();
-    this.cartService.cache$
-      .subscribe(carts => {
-        this.cartService.gets();
-        this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null')
-      });
+    this.cartService.getCache().subscribe(
+      (cached: any[]) => {
+        this.carts = cached;
+      }
+    );
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.gets();
-    this.inventoryBranchService.cache$
-      .subscribe(inventoryBranches => {
-        this.inventoryBranchService.gets();
-        this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null')
-      });
+    this.inventoryBranchService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventoryBranches = cached;
+      }
+    );
   }
 
   getInventoryBranchById(id: number): InventoryBranch | null {

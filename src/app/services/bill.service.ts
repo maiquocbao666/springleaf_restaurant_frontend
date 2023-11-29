@@ -10,23 +10,45 @@ import { ToastService } from './toast.service';
   providedIn: 'root'
 })
 export class BillService extends BaseService<Bill> {
+
+  //------------------------------------------------------------
+
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
     sweetAlertService: ToastService) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
+
+  //-------------------------------------------------------------
 
   apiUrl = 'bill';
   apisUrl = 'bills';
   cacheKey = 'bills';
 
+  //------------------------------------------------------
+
   getItemId(item: Bill): number {
     return item.billId!;
   }
 
-  override gets(): Observable<Bill[]> {
-    return super.gets();
+  getItemName(item: Bill): string {
+    throw new Error('Method not implemented.');
+  }
+
+  getObjectName(): string {
+    return "Bill";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //---------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
   }
 
   override add(newBill: Bill): Observable<Bill> {
@@ -41,12 +63,6 @@ export class BillService extends BaseService<Bill> {
     return super.delete(id);
   }
 
-  override getItemName(item: Bill): string {
-    throw new Error('Method not implemented.');
-  }
-
-  override getObjectName(): string {
-    return "Bill";
-  }
+  //---------------------------------------------------------
 
 }

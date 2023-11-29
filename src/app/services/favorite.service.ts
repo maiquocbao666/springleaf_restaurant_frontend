@@ -12,10 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class FavoriteService extends BaseService<Favorite> {
 
+  //----------------------------------------------------------------------------------------------------------------------
 
   apisUrl = 'favorites';
   cacheKey = 'favorites';
   apiUrl = 'favorite';
+
+  //----------------------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -23,28 +26,48 @@ export class FavoriteService extends BaseService<Favorite> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
-  override gets(): Observable<Favorite[]> {
-    return super.gets();
+  //----------------------------------------------------------------------------------------------------------------------
+
+  getItemId(item: Favorite): number {
+    return item.favoriteId!;
   }
+
+  getItemName(item: Favorite): string {
+    return '';
+  }
+
+  getObjectName(): string {
+    return "Favorite";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newFavorite: Favorite): Observable<Favorite> {
     return super.add(newFavorite);
   }
+
   override update(updated: Favorite): Observable<Favorite> {
     return super.update(updated);
   }
+  
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
-  override getItemId(item: Favorite): number {
-    return item.favoriteId!;
-  }
-  override getItemName(item: Favorite): string {
-    return '';
-  }
-  override getObjectName(): string {
-    return "Favorite";
-  }
+  
+  //----------------------------------------------------------------------------------------------------------------------
+
+
+  //----------------------------------------------------------------------------------------------------------------------
 
 }

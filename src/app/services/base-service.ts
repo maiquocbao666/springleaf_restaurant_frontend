@@ -18,9 +18,9 @@ export abstract class BaseService<T> {
     abstract getItemName(item: T): string;
     abstract getObjectName(): string;
 
-    private receivedMessages: string[] = [];
-    private topicSubscription: Subscription | undefined;
-    private channel = 'public';
+    receivedMessages: string[] = [];
+    topicSubscription: Subscription | undefined;
+    channel = 'public';
 
     private cacheSubject = new BehaviorSubject<T[]>([]);
     cache$ = this.cacheSubject.asObservable();
@@ -30,6 +30,9 @@ export abstract class BaseService<T> {
         public rxStompService: RxStompService,
         public sweetAlertService: ToastService,
     ) {
+
+        this.initializeCache();
+
         this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
             console.log('WebSocket Connection State:', state);
             if (state === 0) {
@@ -42,23 +45,28 @@ export abstract class BaseService<T> {
         });
     }
 
-    ngOnInit(): void {
-        this.gets();
+    private initializeCache() {
+        const cachedData = localStorage.getItem(this.cacheKey);
+        if (cachedData) {
+            const cachedArray = JSON.parse(cachedData) as T[];
+            this.cache = cachedArray;
+        }
     }
 
-    private subscribeToQueue() {
+    subscribeToQueue() {
         this.topicSubscription = this.rxStompService
-            .watch(`/${this.channel}/greetings`)
+            .watch(`/${this.channel}/${this.cacheKey}`)
             .subscribe((message: Message) => {
-                //console.log('Raw message body:', message.body);
+                console.log(this.cacheKey);
+                console.log(message.body);
                 try {
                     if (message.body) {
                         const messageData = JSON.parse(message.body);
                         if (Array.isArray(messageData.objects)) {
                             this.cache = messageData.objects;
-                            localStorage.setItem(messageData.name, JSON.stringify(this.cache));
+                            localStorage.setItem(this.cacheKey, JSON.stringify(messageData.objects));
                         } else {
-                            console.error("Invalid message format. Unexpected 'name' or 'objects' format.");
+                            console.error("Invalid message format. Unexpected 'objects' format.");
                         }
                     } else {
                         console.error('Message body is undefined.');
@@ -85,28 +93,7 @@ export abstract class BaseService<T> {
 
     set cache(value: T[]) {
         this.cacheSubject.next(value);
-    }
-
-    gets(): Observable<T[]> {
-        // Try to retrieve cache from local storage
-        const cachedData = localStorage.getItem(this.cacheKey);
-
-        // If cache is not empty, return it directly
-        if (cachedData) {
-            const cachedArray = JSON.parse(cachedData) as T[];
-            return of(cachedArray);
-        }
-
-        // Otherwise, fetch data from the API
-        const objectsObservable = this.apiService.request<T[]>('get', this.apisUrl);
-
-        // Subscribe to the API request to update the cache
-        objectsObservable.subscribe(data => {
-            this.cache = data;
-            localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
-        });
-
-        return objectsObservable;
+        localStorage.setItem(this.cacheKey, JSON.stringify(value));
     }
 
     // getById(id: number): T | null {
@@ -125,7 +112,7 @@ export abstract class BaseService<T> {
     }
 
     add(newObject: T): Observable<T> {
-        this.resetCache();
+        //this.resetCache();
         return this.apiService.request<T>('post', this.apiUrl, newObject).pipe(
             tap((added: T) => {
                 this.cache = [...this.cache, added];
@@ -136,7 +123,7 @@ export abstract class BaseService<T> {
     }
 
     update(updatedObject: T): Observable<any> {
-        this.resetCache();
+
         const url = `${this.apiUrl}`;
         return this.apiService.request('put', url, updatedObject).pipe(
             tap(() => {
@@ -151,7 +138,7 @@ export abstract class BaseService<T> {
     }
 
     delete(id: number | string): Observable<any> {
-        this.resetCache();
+        //this.resetCache();
         const url = `${this.apiUrl}/${id}`;
         return this.apiService.request('delete', url).pipe(
             tap(() => {

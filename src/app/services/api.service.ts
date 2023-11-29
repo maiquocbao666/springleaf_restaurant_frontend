@@ -58,7 +58,7 @@ export class ApiService {
       case 'get':
 
         this.setUrl('' + endpoint);
-
+        console.log("API Service: " + this.baseUrl);
         return this.http.get<T>(this.baseUrl, { headers }).pipe(
 
           tap(response => {

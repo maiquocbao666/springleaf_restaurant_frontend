@@ -72,12 +72,11 @@ export class AdminReservationStatusesComponent {
   }
 
   getReservationStatuses(): void {
-    this.reservationStatusService.gets();
-    this.reservationStatusService.cache$
-      .subscribe(reservationStatuses => {
-        this.reservationStatusService.gets();
-        this.reservationStatuses = JSON.parse(localStorage.getItem(this.reservationStatusesUrl) || 'null')
-      });
+    this.reservationStatusService.getCache().subscribe(
+      (cached: any[]) => {
+        this.reservationStatuses = cached;
+      }
+    );
   }
 
   addReservationStatus(): void {

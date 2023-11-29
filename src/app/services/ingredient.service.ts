@@ -8,89 +8,78 @@ import { BaseService } from './base-service';
 import { ToastService } from './toast.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class IngredientService extends BaseService<Ingredient>  {
 
-    apisUrl = 'ingredients';
-    cacheKey = 'ingredients';
-    apiUrl = 'ingredient';
-  
-  
-  
-    constructor(
-      apiService: ApiService,
-      rxStompService: RxStompService,
-      sweetAlertService: ToastService
-    ) {
-      super(apiService, rxStompService, sweetAlertService);
-    }
-  
-    override gets(): Observable<Ingredient[]> {
-      return super.gets();
-    }
+  //------------------------------------------------------------------------------------------------------
 
+  apisUrl = 'ingredients';
+  cacheKey = 'ingredients';
+  apiUrl = 'ingredient';
 
-    override add(newObject: Ingredient): Observable<Ingredient> {
-      return super.add(newObject);
-    }
-  
-    override update(updatedObject: Ingredient): Observable<Ingredient> {
-      return super.update(updatedObject);
-    }
-  
-    override delete(id : number): Observable<any> {
-      return super.delete(id);
-    }
-  
-    override searchByName(term: string): Observable<Ingredient[]> {
-      return super.searchByName(term);
-    }
-  
-    override getItemId(item: Ingredient): number {
-      return item.ingredientId!;
-    }
-  
-    override getItemName(item: Ingredient): string {
-      return item.name;
-    }
-  
-    override getObjectName(): string {
-      return "Ingredient";
-    }
-  
-    // private isIngredientNameInCache(name: string): boolean {
-    //   const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name.toLowerCase() === name.toLowerCase());
-    //   if (isTrue) {
-    //     console.log("Thành phần này đã có trong mục yêu thích rồi");
-    //     return isTrue;
-    //   } else {
-    //     return isTrue;
-    //   }
-    // }
+  //------------------------------------------------------------------------------------------------------
 
-    
-    getsQuantity(): Observable<Ingredient[]> {
-      // Try to retrieve cache from local storage
-      const cachedData = localStorage.getItem(this.cacheKey);
-
-      // If cache is not empty, return it directly
-      if (cachedData) {
-          const cachedArray = JSON.parse(cachedData) as Ingredient[];
-          return of(cachedArray);
-      }
-
-      // Otherwise, fetch data from the API
-      const objectsObservable = this.apiService.request<Ingredient[]>('get', this.apisUrl);
-
-      // Subscribe to the API request to update the cache
-      objectsObservable.subscribe(data => {
-          this.cache = data;
-          localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
-      });
-
-      return objectsObservable;
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
-  
+
+  //------------------------------------------------------------------------------------------------------
+
+  override getItemId(item: Ingredient): number {
+    return item.ingredientId!;
+  }
+
+  override getItemName(item: Ingredient): string {
+    return item.name;
+  }
+
+  override getObjectName(): string {
+    return "Ingredient";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
+  override add(newObject: Ingredient): Observable<Ingredient> {
+    return super.add(newObject);
+  }
+
+  override update(updatedObject: Ingredient): Observable<Ingredient> {
+    return super.update(updatedObject);
+  }
+
+  override delete(id: number): Observable<any> {
+    return super.delete(id);
+  }
+
+  override searchByName(term: string): Observable<Ingredient[]> {
+    return super.searchByName(term);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------------
+
+  // private isIngredientNameInCache(name: string): boolean {
+  //   const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name.toLowerCase() === name.toLowerCase());
+  //   if (isTrue) {
+  //     console.log("Thành phần này đã có trong mục yêu thích rồi");
+  //     return isTrue;
+  //   } else {
+  //     return isTrue;
+  //   }
+  // }
+
 }

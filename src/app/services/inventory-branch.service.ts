@@ -12,11 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class InventoryBranchService extends BaseService<InventoryBranch> {
 
+  //-------------------------------------------------------------------------------------------------------
+
   apisUrl = 'inventoryBranches';
   cacheKey = 'inventoryBranches';
   apiUrl = 'inventoryBranch';
 
-
+  //-------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -24,21 +26,41 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
+  //-------------------------------------------------------------------------------------------------------
 
-  override gets(): Observable<InventoryBranch[]> {
-    return super.gets();
+  getItemName(item: InventoryBranch): string {
+    throw new Error('Method not implemented.');
   }
+
+  getObjectName(): string {
+    return "InventoryBranch";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //-------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newObject: InventoryBranch): Observable<InventoryBranch> {
     return super.add(newObject);
   }
+
   override update(updatedObject: InventoryBranch): Observable<InventoryBranch> {
     return super.update(updatedObject);
   }
+
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
+
   override searchByName(term: string): Observable<InventoryBranch[]> {
     return super.searchByName(term);
   }
@@ -47,12 +69,6 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     return item.inventoryBranchId!;
   }
 
-  override getItemName(item: InventoryBranch): string {
-    throw new Error('Method not implemented.');
-  }
-
-  override getObjectName(): string {
-    return "InventoryBranch";
-  }
+  //-------------------------------------------------------------------------------------------------------
 
 }

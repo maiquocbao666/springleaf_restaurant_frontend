@@ -11,10 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class TableStatusService extends BaseService<TableStatus> {
 
+    //----------------------------------------------------------------------------------------------------------------
+
     apisUrl = 'tableStatuses';
     cacheKey = 'tableStatuses';
     apiUrl = 'tableStatus';
 
+    //----------------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -22,11 +25,31 @@ export class TableStatusService extends BaseService<TableStatus> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
+    //----------------------------------------------------------------------------------------------------------------
 
-    override gets(): Observable<TableStatus[]> {
-        return super.gets();
+    getItemId(item: TableStatus): number {
+        return item.tableStatusId!;
+    }
+
+    getItemName(item: TableStatus): string {
+        return item.tableStatusName;
+    }
+
+    getObjectName(): string {
+        return "TableStatus";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------
+
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
     }
 
     override add(newObject: TableStatus): Observable<TableStatus> {
@@ -37,24 +60,14 @@ export class TableStatusService extends BaseService<TableStatus> {
         return super.update(updatedObject);
     }
 
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
 
     override searchByName(term: string): Observable<TableStatus[]> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: TableStatus): number {
-        return item.tableStatusId!;
-    }
-
-    override getItemName(item: TableStatus): string {
-        return item.tableStatusName;
-    }
-
-    override getObjectName(): string {
-        return "TableStatus";
-    }
+    //----------------------------------------------------------------------------------------------------------------
 
 }

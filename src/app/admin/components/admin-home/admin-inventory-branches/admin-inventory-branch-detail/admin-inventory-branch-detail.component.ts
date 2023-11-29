@@ -53,22 +53,28 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
   }
 
   getIngredients(): void {
-    this.ingredientService.gets();
-    this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
 
 
   getSuppliers(): void {
-    this.supplierService.gets();
-    this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+    this.supplierService.getCache().subscribe(
+      (cached: any[]) => {
+        this.suppliers = cached;
+      }
+    );
   }
 
   getRestaurants(): void {
-    this.restaurantService.gets();
-    this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
+    this.restaurantService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
   }
 
   setValue() {

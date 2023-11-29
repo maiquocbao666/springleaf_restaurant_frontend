@@ -12,9 +12,7 @@ import { ToastService } from './toast.service';
 })
 export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail> {
 
-  apisUrl = 'deliveryOrderDetails';
-  cacheKey = 'deliveryOrderDetails';
-  apiUrl = 'deliveryOrderDetail';
+  //----------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -22,14 +20,37 @@ export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail>
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
+  }
+
+  //----------------------------------------------------------------------------
+
+  apisUrl = 'deliveryOrderDetails';
+  cacheKey = 'deliveryOrderDetails';
+  apiUrl = 'deliveryOrderDetail';
+
+  //----------------------------------------------------------------------------
+
+  getItemId(item: DeliveryOrderDetail): number {
+    return item.deliveryOrderDetailId!;
+  }
+
+  getItemName(item: DeliveryOrderDetail): string {
+    throw new Error('Method not implemented.');
   }
 
   getObjectName(): string {
     return 'DeliveryOrderDetail';
   }
 
-  override gets(): Observable<DeliveryOrderDetail[]> {
-    return super.gets();
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //----------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
   }
 
   override add(newDeliveryOrderDetail: DeliveryOrderDetail): Observable<DeliveryOrderDetail> {
@@ -39,16 +60,11 @@ export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail>
   override update(updated: DeliveryOrderDetail): Observable<any> {
     return super.update(updated);
   }
-
-  override delete(id : number): Observable<any> {
+  
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
-  override getItemId(item: DeliveryOrderDetail): number {
-    return item.deliveryOrderDetailId!;
-  }
-  override getItemName(item: DeliveryOrderDetail): string {
-    throw new Error('Method not implemented.');
-  }
+  //----------------------------------------------------------------------------
 
 }

@@ -11,32 +11,47 @@ import { RxStompService } from '../rx-stomp.service';
 })
 export class ProductService extends BaseService<Product> {
 
+  apisUrl = 'products';
+
+  cacheKey = 'products';
+
+  apiUrl = 'product';
+
+  categoryUrl = "category";
+
+  //-------------------------------------------------------------------------------------------------
+
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
-  apisUrl = 'products';
-  cacheKey = 'products';
-  apiUrl = 'product';
-
-  categoryUrl = "category";
+  //-------------------------------------------------------------------------------------------------
 
   getItemId(item: Product): number {
     return item.menuItemId!;
   }
+
   getItemName(item: Product): string {
     return item.name;
   }
+
   getObjectName(): string {
     return "Product";
   }
 
-  override gets(): Observable<Product[]> {
-    return super.gets();
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //-------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
   }
 
   override add(newProduct: Product): Observable<Product> {
@@ -51,6 +66,8 @@ export class ProductService extends BaseService<Product> {
     return super.delete(id);
   }
 
+  //-------------------------------------------------------------------------------------------------
+
   addToCart(productId: number): Observable<any> {
     const jwtToken = localStorage.getItem('access_token');
     console.log(jwtToken);
@@ -64,7 +81,6 @@ export class ProductService extends BaseService<Product> {
         map(cache => cache.filter(item => item.categoryId === categoryId))
       );
     }
-
     const url = `${this.categoryUrl}/${categoryId}/products`;
     return this.apiService.request<Product[]>('get', url);
   }

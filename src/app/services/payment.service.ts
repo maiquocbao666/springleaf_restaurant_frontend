@@ -12,10 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class PaymentService extends BaseService<Payment> {
 
+  //-----------------------------------------------------------------------------------------------------------
+
   apisUrl = 'payments';
   cacheKey = 'payments';
   apiUrl = 'payment';
 
+  //-----------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -23,12 +26,31 @@ export class PaymentService extends BaseService<Payment> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
+  //-----------------------------------------------------------------------------------------------------------
 
+  getItemId(item: Payment): number {
+    return item.paymentId!;
+  }
 
-  override gets(): Observable<Payment[]> {
-    return super.gets();
+  getItemName(item: Payment): string {
+    throw new Error('Method not implemented.');
+  }
+
+  getObjectName(): string {
+    return "Payment";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //-----------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
   }
 
   override add(newObject: Payment): Observable<Payment> {
@@ -47,16 +69,6 @@ export class PaymentService extends BaseService<Payment> {
     return super.searchByName(term);
   }
 
-  override getItemId(item: Payment): number {
-    return item.paymentId!;
-  }
-
-  override getItemName(item: Payment): string {
-    throw new Error('Method not implemented.');
-  }
-
-  override getObjectName(): string {
-    return "Payment";
-  }
+  //-----------------------------------------------------------------------------------------------------------
 
 }

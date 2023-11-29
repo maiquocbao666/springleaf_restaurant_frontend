@@ -11,9 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  {
 
+  //-------------------------------------------------------------------------------------------------------------
+
   apisUrl = 'goodsReceiptDetailss';
   cacheKey = 'goodsReceiptDetailss';
   apiUrl = 'goodsReceiptDetails';
+
+  //-------------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -21,28 +25,45 @@ export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
-  override gets(): Observable<GoodsReceiptDetail[]> {
-    return super.gets();
+  //-------------------------------------------------------------------------------------------------------------
+
+  getItemId(item: GoodsReceiptDetail): number {
+    return item.goodsReceiptDetailId!;
   }
+  
+  getItemName(item: GoodsReceiptDetail): string {
+    throw new Error('Method not implemented.');
+  }
+
+  getObjectName(): string {
+    return "GoodsReceiptDetail";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //-------------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newGoodsReceiptDetail: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
     return super.add(newGoodsReceiptDetail);
   }
+
   override update(updated: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
     return super.update(updated);
   }
+
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
-  override getItemId(item: GoodsReceiptDetail): number {
-    return item.goodsReceiptDetailId!;
-  }
-  override getItemName(item: GoodsReceiptDetail): string {
-    throw new Error('Method not implemented.');
-  }
-  override getObjectName(): string {
-    return "GoodsReceiptDetail";
-  }
+  
+  //-------------------------------------------------------------------------------------------------------------
 
 }

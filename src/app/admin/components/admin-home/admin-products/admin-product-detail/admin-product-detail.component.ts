@@ -47,15 +47,19 @@ export class AdminProductDetailComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.gets();
-    this.categoryService.cache$
-      .subscribe(categories => this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null'));
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
+      }
+    );
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
   setValue() {

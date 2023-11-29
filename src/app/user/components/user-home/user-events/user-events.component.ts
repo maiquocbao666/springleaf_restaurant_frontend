@@ -18,11 +18,10 @@ export class UserEventsComponent {
   }
 
   getEvents(): void {
-    this.eventService.gets();
-    this.eventService.cache$
-      .subscribe(events => {
-        this.eventService.gets();
-        this.events = JSON.parse(localStorage.getItem(this.eventsUrl) || 'null');
-      });
+    this.eventService.getCache().subscribe(
+      (cached: any[]) => {
+        this.events = cached;
+      }
+    );
   }
 }

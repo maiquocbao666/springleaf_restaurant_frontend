@@ -11,9 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class TableTypeService extends BaseService<TableType> {
 
+  //----------------------------------------------------------------------------------------------------------------
+
   apisUrl = 'tableTypes';
   cacheKey = 'tableTypes';
   apiUrl = 'tableType';
+
+  //----------------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -21,16 +25,32 @@ export class TableTypeService extends BaseService<TableType> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
+  //----------------------------------------------------------------------------------------------------------------
 
-  override gets(): Observable<TableType[]> {
-    return super.gets();
+  getItemId(item: TableType): number {
+    return item.tableTypeId!;
   }
 
-  // override getById(id: number): Observable<TableType | null> {
-  //   return super.getById(id);
-  // }
+  getItemName(item: TableType): string {
+    return item.tableTypeName;
+  }
+
+  getObjectName(): string {
+    return "TableType";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //----------------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newObject: TableType): Observable<TableType> {
     return super.add(newObject);
@@ -48,16 +68,6 @@ export class TableTypeService extends BaseService<TableType> {
     return super.searchByName(term);
   }
 
-  override getItemId(item: TableType): number {
-    return item.tableTypeId!;
-  }
-
-  override getItemName(item: TableType): string {
-    return item.tableTypeName;
-  }
-
-  override getObjectName(): string {
-    return "TableType";
-  }
+  //----------------------------------------------------------------------------------------------------------------
 
 }

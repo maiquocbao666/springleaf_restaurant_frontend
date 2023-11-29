@@ -12,6 +12,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
+import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -34,6 +35,7 @@ export class UserProductsComponent implements OnInit {
   constructor(
     private reservationService: ReservationService,
     private orderService: OrderService,
+    private deliveryOrderService : DeliveryOrderService,
     private productService: ProductService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
@@ -75,14 +77,11 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$.subscribe(
-      products => {
-        this.productService.gets();
-        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
-        this.remainingProducts = this.products.length - this.visibleProductCount;
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
       }
-    )
+    );
   }
 
   getCategoryById(id: number): Category | null {
@@ -91,12 +90,12 @@ export class UserProductsComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.gets();
-    this.categoryService.cache$
-      .subscribe(categories => {
-        this.categoryService.gets();
-        this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
-      });
+    // this.categoryService.gets();
+    // this.categoryService.cache$
+    //   .subscribe(categories => {
+    //     this.categoryService.gets();
+    //     this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
+    //   });
   }
 
   getProductsByCategoryId(): void {
@@ -126,6 +125,9 @@ export class UserProductsComponent implements OnInit {
       console.error("Product ID is undefined. Cannot add to cart.");
     }
   }
+
+  
+
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }

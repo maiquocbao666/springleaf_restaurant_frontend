@@ -1,5 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Reservation } from 'src/app/interfaces/reservation';
 import { ReservationStatus } from 'src/app/interfaces/reservation-status';
@@ -23,6 +24,8 @@ export class UserRestaurantTableInfomationComponent {
   user: User | null = null;
   reservationForm: FormGroup;
   reservations: Reservation[] = [];
+  minDate!: string;
+  maxDate!: string;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -32,6 +35,7 @@ export class UserRestaurantTableInfomationComponent {
     private restaurantTableService: RestaurantTableService,
     private toastService: ToastService,
     private reservationStatusService: ReservationStatusService,
+    private datePipe: DatePipe,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -50,6 +54,14 @@ export class UserRestaurantTableInfomationComponent {
     //     this.getReservationsByCurrentUser(this.user.userId);
     //   }
     // });
+    this.minDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')!;
+    this.maxDate = this.datePipe.transform(this.addDays(new Date(), 5), 'yyyy-MM-dd')!;
+  }
+
+  private addDays(date: Date, days: number): Date {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
   }
 
   bookingTable(): void {
@@ -88,42 +100,87 @@ export class UserRestaurantTableInfomationComponent {
   //   );
   // }
 
+  updateMinMaxDate() {
+    const currentDate = new Date();
+    this.minDate = currentDate.toISOString().split('T')[0]; // Format as 'yyyy-MM-dd'
+    console.log(this.minDate);
 
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 5);
+    this.maxDate = maxDate.toISOString().split('T')[0]; // Format as 'yyyy-MM-dd'
+    console.log(this.maxDate);
+  }
+
+  checkDate(selectedDate: string, minDate: string, maxDate: string): boolean {
+    const date1 = new Date(selectedDate);
+    const date2 = new Date(minDate);
+    const date3 = new Date(maxDate);
+
+    if (date1 > date2 && date1 < date3) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   addReservation() {
 
-    const selectedDate = this.reservationForm.get('selectedDate')?.value;
-    const selectedTime = this.reservationForm.get('selectedTime')?.value;
-    const dateTimeString = selectedDate + 'T' + selectedTime;
-    const dateTime = new Date(dateTimeString);
-    const formattedDateTime = dateTime.toISOString();
+    // Cập nhật ngày min max
+    this.updateMinMaxDate();
 
-    const restaurantTableId = this.restaurantTable?.tableId;
-    const userId = this.user?.userId;
-    const reservationDate = formattedDateTime;
-    const outTime = '';
-    const numberOfGuests = 1;
-    let reservationStatusName: string = 'Đang rảnh';
+    // Ngày mà khách hàng chọn
+    const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
+    let selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
 
-    if (this.reservationStatusService.isNameInCache(reservationStatusName)) {
-      console.log(`ID "${reservationStatusName}" có trong cache.`);
-    } else {
-      console.log(`ID "${reservationStatusName}" không có trong cache.`);
+    if (!this.checkDate(selectedDate, this.minDate, this.maxDate)) {
+      selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
+      const currentDateStr = new Date().toLocaleDateString(); // Get the current date in a suitable format
+
+      const selectedDateTimeStr = `${currentDateStr} ${selectedTimeStr}`;
+      const selectedTime = new Date(selectedDateTimeStr).getTime();
+
+      // Add 1 hour to the current time
+      // const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000).getTime();
+
+      // if (selectedTime <= oneHourLater) {
+      //   console.log(selectedTime);
+      //   console.log(oneHourLater);
+      //   console.log("Giờ đặt phải lớn hơn giờ hiện tại 1 tiếng");
+      //   return;
+      // }
+
+      // Add 1 minute to the current time
+      const oneMinuteLater = new Date(new Date().getTime() + 60 * 1000).getTime(); // Thêm 1 phút
+
+      if (selectedTime <= oneMinuteLater) {
+        console.log(selectedTime);
+        console.log(oneMinuteLater);
+        console.log("Giờ đặt phải lớn hơn giờ hiện tại 1 phút");
+        return;
+      }
+
     }
 
+    // let reservations: Reservation[] = JSON.parse(localStorage.getItem('reservations') || '[]');
+
+    // Tổng hợp ngày giờ lại
+    const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'dd-MM-yyyy')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
+
     const newReservation: Reservation = {
-      restaurantTableId: restaurantTableId!,
-      userId: userId!,
-      reservationDate: reservationDate,
-      outTime: outTime,
-      numberOfGuests: numberOfGuests,
-      reservationStatusName: reservationStatusName
+      restaurantTableId: this.restaurantTable?.tableId!,
+      userId: this.user?.userId!,
+      reservationDate: dateTimeString,
+      outTime: '',
+      numberOfGuests: 1,
+      reservationStatusName: 'Đang chờ',
     };
 
     this.reservationService.add(newReservation).subscribe(
       {
         next: (addedReservation) => {
           console.log("Đặt bàn thành công");
+          // reservations.push(addedReservation);
+          // localStorage.setItem('reservations', JSON.stringify(reservations));
         },
         error: (error) => {
           console.error('Error adding reservation:', error);
@@ -133,7 +190,25 @@ export class UserRestaurantTableInfomationComponent {
         }
       }
     );
-
   }
+
+  // getYear(dateString: string): number {
+  //   const dateParts = dateString.split('-');
+  //   const year = parseInt(dateParts[0], 10);
+  //   // 
+  //   return year;
+  // }
+
+  // getMonth(dateString: string): number {
+  //   const dateParts = dateString.split('-');
+  //   const month = parseInt(dateParts[1], 10) - 1;
+  //   return month;
+  // }
+
+  // getDay(dateString: string): number {
+  //   const dateParts = dateString.split('-');
+  //   const day = parseInt(dateParts[2], 10);
+  //   return day;
+  // }
 
 }

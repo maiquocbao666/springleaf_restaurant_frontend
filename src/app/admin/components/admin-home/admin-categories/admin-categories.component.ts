@@ -47,22 +47,20 @@ export class AdminCategoriesComponent {
   }
 
   getCategories(): void {
-    this.categoryService.gets();
-    this.categoryService.cache$.subscribe(() => {
-      this.categoryService.gets();
-      this.categories = this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
-    });
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
+      }
+    );
   }
 
   onTableDataChange(event: any) {
     this.page = event;
-    //this.getCategories();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    //this.getCategories();
   }
 
   addCategory(): void {
@@ -83,7 +81,6 @@ export class AdminCategoriesComponent {
 
     this.categoryService.add(newCategory)
       .subscribe(() => {
-        //this.getCategories();
         this.categoryForm.reset();
         this.categoryForm.get('active')?.setValue(true);
       });
@@ -91,7 +88,6 @@ export class AdminCategoriesComponent {
 
   deleteCategory(category: Category): void {
     if (category.categoryId) {
-      //this.categories = this.categories.filter(c => c !== category);
       this.categoryService.delete(category.categoryId).subscribe();
     } else {
       console.error("Cannot delete category with undefined categoryId.");
