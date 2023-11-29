@@ -16,12 +16,13 @@
 
 
 <div class="menu-item-container">
+  <h2>Tổng nguyên liệu</h2>
   <select [(ngModel)]="selectedMenuItemId" (change)="onMenuItemChange()">
     <option *ngFor="let product of products" [value]="product.menuItemId">{{ product.name }}</option>
   </select>
 
   <div *ngIf="ingredients">
-    <h2>Ingredients for selected item</h2>
+    <h2>Nguyên liệu trong món</h2>
     <ul>
       <li *ngFor="let menuItemIngredient of menuItemIngredients">{{
         getIngredientById(menuItemIngredient.ingredientId)?.name }}
@@ -29,6 +30,68 @@
     </ul>
   </div>
 
+  <div>
+    <label for="dateInput">Enter Date:</label>
+    <input type="date" id="dateInput" [(ngModel)]="selectedDate">
+
+    <button (click)="getReservations()">Get Reservations</button>
+  </div>
+
+  <div *ngIf="reservations.length > 0">
+    <h2>Các bàn được đặt trong ngày {{ selectedDate }}</h2>
+    <ul>
+
+      <table class="table table-light container-fluid">
+        <tbody>
+          <tr>
+            <th>Reservation id</th>
+            <th>Mã bàn</th>
+            <th>User</th>
+            <th>Ngày tới</th>
+            <th>Giờ tới</th>
+            <th>Giờ đi</th>
+            <th>Trạng thái</th>
+            <th>Số lượng khách hàng</th>
+            <th>Thời gian vào trạng thái chờ</th>
+            <th>Thời gian chờ còn lại</th>
+            <th>Thời gian sử dụng còn lại</th>
+            <th></th>
+          </tr>
+          <tr *ngFor="let reservation of reservations">
+            <td>{{ reservation.reservationId }}</td>
+            <td>{{ reservation.restaurantTableId }}</td>
+            <td>{{ reservation.userId }}</td>
+            <!-- <td>{{ (formatDate(reservation.reservationDate)) }}</td>
+                <td>{{ (formatTime(reservation.reservationDate)) }}</td> -->
+            <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
+            <td>
+              {{ reservation.reservationStatusName }}
+            </td>
+            <td>{{ reservation.numberOfGuests }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </ul>
+  </div>
+  <div *ngIf="reservations.length < 0">Không có bàn được đặt trong ngày.</div>
+  <div *ngIf="topItems.length > 0">
+    <h2>Top 5 món được mua nhiều</h2>
+    <ul>
+      <li *ngFor="let item of topItems; let i = index">
+        {{ i + 1 }}. {{ getProductById(item[0])?.name }} - mua {{ item[1] }} lần
+      </li>
+
+    </ul>
+  </div>
+
+  <div *ngIf="topItems.length === 0">
+    <p>Không có </p>
+  </div>
+
   <div *ngIf="loading">Loading...</div>
   <div *ngIf="error">{{ error }}</div>
+
 </div>

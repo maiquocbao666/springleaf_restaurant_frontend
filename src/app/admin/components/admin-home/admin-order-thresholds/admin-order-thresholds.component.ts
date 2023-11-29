@@ -71,41 +71,40 @@ export class AdminOrderThresholdsComponent {
     this.getOrderThresholds();
   }
 
-
   getOrderThresholds(): void {
-    this.orderThresholdService.gets();
-    this.orderThresholdService.cache$
-      .subscribe(() => {
-        this.orderThresholdService.gets();
-        this.orderThresholds = JSON.parse(localStorage.getItem(this.orderThresholdsUrl) || 'null')
-      });
+    this.orderThresholdService.getCache().subscribe(
+      (cached: any[]) => {
+        this.orderThresholds = cached;
+      }
+    );
   }
 
   getIngredients(): void {
-    this.ingredientService.gets();
-    this.ingredientService.cache$
-      .subscribe(() => {
-        this.ingredientService.gets();
-        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
-      });
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.gets();
-    this.inventoryBranchService.cache$
-      .subscribe(() => {
-        this.inventoryBranchService.gets();
-        this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null')
-      });
+    this.inventoryBranchService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventoryBranches = cached;
+      }
+    );
   }
+
   getInventories(): void {
-    this.inventoryService.gets();
-    this.inventoryService.cache$
-      .subscribe(() => {
-        this.inventoryService.gets();
-        this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null')
-      });
+    this.inventoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventories = cached;
+      }
+    );
   }
+
+
+
 
   getInventoryById(id: number): Inventory | null {
     const found = this.inventories.find(data => data.inventoryId === id);

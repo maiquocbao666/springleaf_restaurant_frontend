@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { MenuItemIngredient } from 'src/app/interfaces/menu-item-ingredient';
@@ -22,15 +23,20 @@ export class AdminStatisticalComponent {
   productsUrl = 'products';
   ingredientsUrl = 'ingredients';
 
+  reservations: any[] = [];
+  selectedDate: string = '';
+  topItems: any[] = [];
 
   constructor(
     private statisticsService: StatisticsService,
     private productService: ProductService,
-    private ingredientService: IngredientService,) { }
+    private ingredientService: IngredientService,
+    private http: HttpClient) { }
 
   ngOnInit(): void {
     this.getProducts();
     this.getIngredients();
+    this.getTop5OrderedItems();
   }
 
   fetchStatistics(): void {
@@ -49,22 +55,27 @@ export class AdminStatisticalComponent {
     );
   }
 
+  getProductById(id: number): Product | null {
+    const found = this.products.find(data => data.menuItemId === id);
+    return found || null;
+  }
+
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(() => {
-        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
-      });
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
   getIngredients(): void {
-    this.ingredientService.gets();
-    this.ingredientService.cache$
-      .subscribe(ingredients => {
-        this.ingredientService.gets();
-        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
-      });
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
+
   getIngredientById(id: number): Ingredient | null {
     const found = this.ingredients.find(data => data.ingredientId === id);
     return found || null;
@@ -86,5 +97,32 @@ export class AdminStatisticalComponent {
         }
       );
     }
+  }
+
+  getReservations(): void {
+    if (this.selectedDate) {
+      this.statisticsService.getReservationsByDate(this.selectedDate).subscribe(
+        (data: any[]) => {
+          this.reservations = data;
+          // Xử lý dữ liệu nhận được từ API ở đây
+        },
+        (error: any) => {
+          console.error('Failed to get reservations.', error);
+        }
+      );
+    }
+  }
+
+  getTop5OrderedItems() {
+    this.statisticsService.getTop5MostOrderedItems().subscribe(
+      (data: any) => {
+        this.topItems = data;
+        console.log(data); // Hiển thị dữ liệu nhận được từ API trong console log
+      },
+      (error) => {
+        // Xử lý lỗi nếu có
+        console.error(error);
+      }
+    );
   }
 }
