@@ -18,6 +18,7 @@ export class BillService extends BaseService<Bill> {
     rxStompService: RxStompService,
     sweetAlertService: ToastService) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-------------------------------------------------------------

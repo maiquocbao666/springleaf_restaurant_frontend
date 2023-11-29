@@ -25,6 +25,7 @@ export class RestaurantService extends BaseService<Restaurant> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //--------------------------------------------------------------------------------------------------------------------------

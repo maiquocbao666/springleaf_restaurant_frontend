@@ -26,6 +26,7 @@ export class MergeTableService extends BaseService<MergeTable> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //----------------------------------------------------------------------------------------------------

@@ -26,6 +26,7 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-------------------------------------------------------------------------------------------------------

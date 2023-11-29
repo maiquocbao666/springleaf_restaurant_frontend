@@ -64,7 +64,7 @@ export abstract class BaseService<T> {
                         const messageData = JSON.parse(message.body);
                         if (Array.isArray(messageData.objects)) {
                             this.cache = messageData.objects;
-                            localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
+                            localStorage.setItem(this.cacheKey, JSON.stringify(messageData.objects));
                         } else {
                             console.error("Invalid message format. Unexpected 'objects' format.");
                         }

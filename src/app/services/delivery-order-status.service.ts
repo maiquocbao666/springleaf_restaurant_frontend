@@ -20,6 +20,7 @@ export class DeliveryOrderStatusService extends BaseService<DeliveryOrderStatus>
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //------------------------------------------------------------------------------------------------------------------

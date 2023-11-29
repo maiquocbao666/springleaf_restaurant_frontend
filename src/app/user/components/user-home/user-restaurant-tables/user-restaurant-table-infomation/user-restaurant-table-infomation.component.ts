@@ -161,7 +161,7 @@ export class UserRestaurantTableInfomationComponent {
 
     }
 
-    let reservations: Reservation[] = JSON.parse(localStorage.getItem('reservations') || '[]');
+    // let reservations: Reservation[] = JSON.parse(localStorage.getItem('reservations') || '[]');
 
     // Tổng hợp ngày giờ lại
     const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'dd-MM-yyyy')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
@@ -179,8 +179,8 @@ export class UserRestaurantTableInfomationComponent {
       {
         next: (addedReservation) => {
           console.log("Đặt bàn thành công");
-          reservations.push(addedReservation);
-          localStorage.setItem('reservations', JSON.stringify(reservations));
+          // reservations.push(addedReservation);
+          // localStorage.setItem('reservations', JSON.stringify(reservations));
         },
         error: (error) => {
           console.error('Error adding reservation:', error);

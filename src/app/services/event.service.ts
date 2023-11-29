@@ -24,6 +24,7 @@ export class EventService extends BaseService<Event> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-----------------------------------------------------------------

@@ -25,6 +25,7 @@ import { ToastService } from './toast.service';
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------

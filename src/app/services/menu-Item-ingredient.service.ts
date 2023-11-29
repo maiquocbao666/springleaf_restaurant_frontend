@@ -26,6 +26,7 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //------------------------------------------------------------------------------------------------

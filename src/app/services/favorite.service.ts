@@ -26,6 +26,7 @@ export class FavoriteService extends BaseService<Favorite> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------------------------------------------------------------

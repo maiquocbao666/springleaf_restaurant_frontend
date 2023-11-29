@@ -26,6 +26,7 @@ export class PaymentService extends BaseService<Payment> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-----------------------------------------------------------------------------------------------------------

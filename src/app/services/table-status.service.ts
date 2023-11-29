@@ -25,6 +25,7 @@ export class TableStatusService extends BaseService<TableStatus> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //----------------------------------------------------------------------------------------------------------------

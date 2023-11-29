@@ -20,6 +20,7 @@ export class ComboDetailService extends BaseService<ComboDetail> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------------

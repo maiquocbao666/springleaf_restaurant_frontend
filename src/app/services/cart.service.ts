@@ -24,6 +24,7 @@ export class CartService extends BaseService<Cart> {
   ) {
     super(apiService, rxStompService, sweetAlertService);
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url))
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------------------------------------

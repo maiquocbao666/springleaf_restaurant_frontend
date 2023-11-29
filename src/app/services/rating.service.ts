@@ -26,6 +26,7 @@ export class RatingService extends BaseService<Rating> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //--------------------------------------------------------------------------------------------------

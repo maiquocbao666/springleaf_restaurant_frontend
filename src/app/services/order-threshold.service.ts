@@ -25,6 +25,7 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //------------------------------------------------------------------------------------------------------

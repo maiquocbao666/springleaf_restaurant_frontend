@@ -29,6 +29,7 @@ export class ReservationStatusService extends BaseService<ReservationStatus> {
         private reservationService: ReservationService,
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------
