@@ -46,6 +46,10 @@ export class BillService extends BaseService<Bill> {
 
   //---------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newBill: Bill): Observable<Bill> {
     return super.add(newBill);
   }

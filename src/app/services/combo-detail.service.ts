@@ -48,6 +48,10 @@ export class ComboDetailService extends BaseService<ComboDetail> {
 
   //---------------------------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newComboDetail: ComboDetail): Observable<ComboDetail> {
     return super.add(newComboDetail);
   }

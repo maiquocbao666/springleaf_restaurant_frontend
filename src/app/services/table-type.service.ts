@@ -47,6 +47,10 @@ export class TableTypeService extends BaseService<TableType> {
 
   //----------------------------------------------------------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newObject: TableType): Observable<TableType> {
     return super.add(newObject);
   }

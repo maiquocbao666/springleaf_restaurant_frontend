@@ -49,6 +49,10 @@ export class IngredientService extends BaseService<Ingredient>  {
 
   //------------------------------------------------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newObject: Ingredient): Observable<Ingredient> {
     return super.add(newObject);
   }

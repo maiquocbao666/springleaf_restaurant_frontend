@@ -47,6 +47,10 @@ export class RestaurantService extends BaseService<Restaurant> {
 
     //--------------------------------------------------------------------------------------------------------------------------
 
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
+
     override add(newObject: Restaurant): Observable<Restaurant> {
         return super.add(newObject);
     }

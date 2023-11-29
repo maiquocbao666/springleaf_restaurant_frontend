@@ -12,7 +12,7 @@ import { RxStompService } from '../rx-stomp.service';
 export class ProductService extends BaseService<Product> {
 
   apisUrl = 'products';
-  
+
   cacheKey = 'products';
 
   apiUrl = 'product';
@@ -48,6 +48,10 @@ export class ProductService extends BaseService<Product> {
   }
 
   //-------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newProduct: Product): Observable<Product> {
     return super.add(newProduct);

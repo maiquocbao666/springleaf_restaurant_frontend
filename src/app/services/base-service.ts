@@ -53,10 +53,12 @@ export abstract class BaseService<T> {
         }
     }
 
-    private subscribeToQueue() {
+    subscribeToQueue() {
         this.topicSubscription = this.rxStompService
             .watch(`/${this.channel}/${this.cacheKey}`)
             .subscribe((message: Message) => {
+                console.log(this.cacheKey);
+                console.log(message.body);
                 try {
                     if (message.body) {
                         const messageData = JSON.parse(message.body);
@@ -92,7 +94,6 @@ export abstract class BaseService<T> {
     set cache(value: T[]) {
         this.cacheSubject.next(value);
         localStorage.setItem(this.cacheKey, JSON.stringify(value));
-        this.onSendMessage(this.cacheKey);
     }
 
     // getById(id: number): T | null {

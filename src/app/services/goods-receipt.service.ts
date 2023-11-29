@@ -48,6 +48,10 @@ export class GoodsReceiptService extends BaseService<GoodsReceipt> {
 
     //-------------------------------------------------------------------------------------------------
 
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
+
     override add(newObject: GoodsReceipt): Observable<GoodsReceipt> {
         return super.add(newObject);
     }

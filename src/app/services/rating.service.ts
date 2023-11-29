@@ -48,6 +48,10 @@ export class RatingService extends BaseService<Rating> {
 
   //--------------------------------------------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newObject: Rating): Observable<Rating> {
     return super.add(newObject);
   }

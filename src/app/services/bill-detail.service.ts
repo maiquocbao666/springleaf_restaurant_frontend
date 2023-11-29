@@ -47,6 +47,10 @@ import { ToastService } from './toast.service';
 
   //------------------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newBillDetail: BillDetail): Observable<BillDetail> {
     return super.add(newBillDetail);
   }

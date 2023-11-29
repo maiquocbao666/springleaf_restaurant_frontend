@@ -47,6 +47,10 @@ export class TableStatusService extends BaseService<TableStatus> {
 
     //----------------------------------------------------------------------------------------------------------------
 
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
+
     override add(newObject: TableStatus): Observable<TableStatus> {
         return super.add(newObject);
     }

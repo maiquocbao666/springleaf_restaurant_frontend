@@ -48,6 +48,10 @@ export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail>
 
   //----------------------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newDeliveryOrderDetail: DeliveryOrderDetail): Observable<DeliveryOrderDetail> {
     return super.add(newDeliveryOrderDetail);
   }

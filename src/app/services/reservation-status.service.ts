@@ -13,7 +13,7 @@ import { Reservation } from '../interfaces/reservation';
     providedIn: 'root'
 })
 export class ReservationStatusService extends BaseService<ReservationStatus> {
-    
+
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     apisUrl: string = 'reservationStatuses';
@@ -50,6 +50,10 @@ export class ReservationStatusService extends BaseService<ReservationStatus> {
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
 
     override add(object: ReservationStatus): Observable<ReservationStatus> {
         if (this.isNameInCache(object.reservationStatusName)) {

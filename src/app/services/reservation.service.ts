@@ -48,6 +48,10 @@ export class ReservationService extends BaseService<Reservation> {
 
     //--------------------------------------------------------------------------------------------------------------------
 
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
+
     override add(newReservation: Reservation): Observable<Reservation> {
         return super.add(newReservation);
     }
@@ -55,7 +59,7 @@ export class ReservationService extends BaseService<Reservation> {
     override update(updated: Reservation): Observable<any> {
         return super.update(updated);
     }
-    
+
     override delete(id: number): Observable<any> {
         return super.delete(id);
     }

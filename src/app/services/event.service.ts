@@ -28,6 +28,10 @@ export class EventService extends BaseService<Event> {
 
   //-----------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   getItemId(item: Event): number {
     return item.eventId!;
   }

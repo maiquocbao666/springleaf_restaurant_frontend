@@ -47,6 +47,10 @@ export class SupplierService extends BaseService<Supplier>  {
 
     //--------------------------------------------------------------------------------------------------------
 
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
+
     override add(newObject: Supplier): Observable<Supplier> {
         return super.add(newObject);
     }
@@ -65,7 +69,7 @@ export class SupplierService extends BaseService<Supplier>  {
 
     //--------------------------------------------------------------------------------------------------------
 
-    
+
     // private updateCache(updatedSupplier: Supplier): void {
     //     const index = this.suppliersCache.findIndex(supplier => supplier.supplierId === updatedSupplier.supplierId);
     //     if (index !== -1) {

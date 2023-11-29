@@ -20,6 +20,7 @@ export class CategoryService extends BaseService<Category> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------------
@@ -47,6 +48,10 @@ export class CategoryService extends BaseService<Category> {
   }
 
   //--------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+      super.subscribeToQueue();
+  }
 
   override add(newObject: Category): Observable<Category> {
     if (this.isNameInCache(newObject.name, newObject.categoryId)) {

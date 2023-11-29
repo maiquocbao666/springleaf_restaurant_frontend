@@ -33,6 +33,10 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
 
   //-----------------------------------------------------------------------------------------
 
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   getItemId(item: DeliveryOrder): number {
     throw new Error('Method not implemented.');
   }

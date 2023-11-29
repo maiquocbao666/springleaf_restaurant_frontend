@@ -47,6 +47,10 @@ export class RoleService extends BaseService<Role> {
 
     //--------------------------------------------------------------------------------------------------------
 
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
+
     override add(newObject: Role): Observable<Role> {
         return super.add(newObject);
     }

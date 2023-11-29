@@ -48,6 +48,10 @@ export class MergeTableService extends BaseService<MergeTable> {
 
     //----------------------------------------------------------------------------------------------------
 
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
+
     override add(newObject: MergeTable): Observable<MergeTable> {
         return super.add(newObject);
     }

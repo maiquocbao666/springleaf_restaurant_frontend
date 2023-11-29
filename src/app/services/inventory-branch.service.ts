@@ -42,6 +42,12 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     return this.cache$;
   }
 
+  //-------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
+
   override add(newObject: InventoryBranch): Observable<InventoryBranch> {
     return super.add(newObject);
   }
