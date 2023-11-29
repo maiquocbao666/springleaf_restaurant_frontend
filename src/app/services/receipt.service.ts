@@ -12,10 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class ReceiptService extends BaseService<Receipt> {
 
+    //-------------------------------------------------------------------------------------------------------
+
     apisUrl = 'receipts';
     cacheKey = 'receipts';
     apiUrl = 'receipt';
 
+    //-------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -25,9 +28,25 @@ export class ReceiptService extends BaseService<Receipt> {
         super(apiService, rxStompService, sweetAlertService);
     }
 
-    override gets(): Observable<Receipt[]> {
-        return super.gets();
+    //-------------------------------------------------------------------------------------------------------
+
+    getItemId(item: Receipt): number {
+        return item.receiptId!;
     }
+
+    getItemName(item: Receipt): string {
+        throw new Error('Method not implemented.');
+    }
+
+    getObjectName(): string {
+        return "Receipt";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //-------------------------------------------------------------------------------------------------------
 
     override add(newObject: Receipt): Observable<Receipt> {
         return super.add(newObject);
@@ -37,24 +56,14 @@ export class ReceiptService extends BaseService<Receipt> {
         return super.update(updatedObject);
     }
 
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
 
     override searchByName(term: string): Observable<Receipt[]> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: Receipt): number {
-        return item.receiptId!;
-    }
-
-    override getItemName(item: Receipt): string {
-        throw new Error('Method not implemented.');
-    }
-
-    override getObjectName(): string {
-        return "Receipt";
-    }
+    //-------------------------------------------------------------------------------------------------------
 
 }

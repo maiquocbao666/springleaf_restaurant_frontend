@@ -57,21 +57,19 @@ export class AdminProductsComponent {
   }
 
   getCategories(): void {
-    this.categoryService.gets();
-    this.categoryService.cache$
-      .subscribe(() => {
-        this.categoryService.gets();
-        this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
-      });
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
+      }
+    );
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(() => {
-        this.categoryService.gets();
-        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
-      });
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
   getCategoryById(id: number): Category | null {

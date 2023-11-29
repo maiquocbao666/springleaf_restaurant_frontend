@@ -11,16 +11,14 @@ import { ToastService } from './toast.service';
   providedIn: 'root'
 })
 export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
-  override getItemId(item: DeliveryOrder): number {
-    throw new Error('Method not implemented.');
-  }
-  override getItemName(item: DeliveryOrder): string {
-    throw new Error('Method not implemented.');
-  }
+
+  //-----------------------------------------------------------------------------------------
 
   apisUrl = 'deliveryOrders';
   cacheKey = 'deliveryOrders';
   apiUrl = 'deliveryOrder';
+
+  //-----------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -30,13 +28,25 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //-----------------------------------------------------------------------------------------
+
+  getItemId(item: DeliveryOrder): number {
+    throw new Error('Method not implemented.');
+  }
+
+  getItemName(item: DeliveryOrder): string {
+    throw new Error('Method not implemented.');
+  }
+
   getObjectName(): string {
     return 'DeliveryOrder';
   }
 
-  override gets(): Observable<DeliveryOrder[]> {
-    return super.gets();
+  getCache(): Observable<any[]> {
+    return this.cache$;
   }
+
+  //-----------------------------------------------------------------------------------------
 
   override add(newDeliveryOrder: DeliveryOrder): Observable<DeliveryOrder> {
     return super.add(newDeliveryOrder);

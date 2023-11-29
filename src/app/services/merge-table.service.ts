@@ -12,9 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class MergeTableService extends BaseService<MergeTable> {
 
+    //----------------------------------------------------------------------------------------------------
+
     apisUrl = 'mergeTables';
     cacheKey = 'mergeTables';
     apiUrl = 'mergeTable';
+
+    //----------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -24,10 +28,25 @@ export class MergeTableService extends BaseService<MergeTable> {
         super(apiService, rxStompService, sweetAlertService);
     }
 
+    //----------------------------------------------------------------------------------------------------
 
-    override gets(): Observable<MergeTable[]> {
-        return super.gets();
+    getItemId(item: MergeTable): number {
+        return item.id!;
     }
+
+    getItemName(item: MergeTable): string {
+        throw new Error('Method not implemented.');
+    }
+
+    getObjectName(): string {
+        return "MergeTable";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //----------------------------------------------------------------------------------------------------
 
     override add(newObject: MergeTable): Observable<MergeTable> {
         return super.add(newObject);
@@ -45,16 +64,6 @@ export class MergeTableService extends BaseService<MergeTable> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: MergeTable): number {
-        return item.id!;
-    }
-
-    override getItemName(item: MergeTable): string {
-        throw new Error('Method not implemented.');
-    }
-
-    override getObjectName(): string {
-        return "MergeTable";
-    }
+    
 
 }

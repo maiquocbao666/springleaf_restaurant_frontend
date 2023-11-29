@@ -43,11 +43,6 @@ export class AdminReceiptsComponent {
     private route: ActivatedRoute,
     private modalService: NgbModal
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.receiptForm = this.formBuilder.group({
       userId: ['', [Validators.required]],
       supplier: ['', [Validators.required]],
@@ -64,32 +59,27 @@ export class AdminReceiptsComponent {
   }
 
   getReceipts(): void {
-    this.receiptService.gets();
-    this.receiptService.cache$
-      .subscribe(receipts => {
-        this.receiptService.gets();
-        this.receipts = JSON.parse(localStorage.getItem(this.receiptsUrl) || 'null')
-      });
-
+    this.receiptService.getCache().subscribe(
+      (cached: any[]) => {
+        this.receipts = cached;
+      }
+    );
   }
 
   getInventories(): void {
-    this.inventoryService.gets();
-    this.inventoryService.cache$
-      .subscribe(inventories => {
-        this.inventoryService.gets();
-        this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null')
-      });
-
+    this.inventoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventories = cached;
+      }
+    );
   }
 
   getSuppliers(): void {
-    this.supplierService.gets();
-    this.supplierService.cache$
-      .subscribe(suppliers => {
-        this.supplierService.gets();
-        this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null')
-      });
+    this.supplierService.getCache().subscribe(
+      (cached: any[]) => {
+        this.suppliers = cached;
+      }
+    );
   }
 
   onTableDataChange(event: any) {

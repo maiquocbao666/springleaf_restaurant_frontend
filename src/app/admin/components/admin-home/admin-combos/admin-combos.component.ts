@@ -42,14 +42,12 @@ export class AdminCombosComponent {
   }
 
   getCombos(): void {
-    this.comboService.gets();
-    this.comboService.cache$
-      .subscribe(combos => {
-        this.comboService.gets();
-        this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null')
-      });
+    this.comboService.getCache().subscribe(
+      (cached: any[]) => {
+        this.combos = cached;
+      }
+    );
   }
-
 
   onTableDataChange(event: any) {
     this.page = event;

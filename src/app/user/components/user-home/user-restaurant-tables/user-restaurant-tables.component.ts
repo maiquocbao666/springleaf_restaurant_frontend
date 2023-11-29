@@ -44,17 +44,12 @@ export class UserRestaurantTablesComponent {
   }
 
   getRestaurantTables(): void {
-    this.restaurantTableService.gets();
-    this.restaurantTableService.cache$
-      .subscribe(restaurantTables => {
-        this.restaurantTableService.gets();
-        this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null');
-        this.tableStatuses = JSON.parse(localStorage.getItem('tableStatuses') || 'null');
-        this.tableTypes = JSON.parse(localStorage.getItem('tableTypes') || 'null');
-        this.restaurants = JSON.parse(localStorage.getItem('restaurants') || 'null');
-      });
+    this.restaurantTableService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurantTables = cached;
+      }
+    );
   }
-
 
   getTableStatusById(id: number): TableStatus | null {
     const found = this.tableStatuses.find(data => data.tableStatusId === id);

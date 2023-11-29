@@ -56,28 +56,27 @@ export class AdminComboDetailsComponent {
   }
 
   getComboDetails(): void {
-    this.comboDetailService.cache$
-      .subscribe(comboDetails => {
-        this.comboDetailService.gets();
-        this.comboDetails = JSON.parse(localStorage.getItem(this.comboDetailsUrl) || 'null')
-      });
+    this.comboDetailService.getCache().subscribe(
+      (cached: any[]) => {
+        this.comboDetails = cached;
+      }
+    );
   }
 
   getCombos(): void {
-    this.comboService.cache$
-      .subscribe(combos => {
-        this.comboService.gets();
-        this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null')
-      });
+    this.comboService.getCache().subscribe(
+      (cached: any[]) => {
+        this.combos = cached;
+      }
+    );
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(products => {
-        this.productService.gets();
-        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null')
-      });
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
   getProductById(id: number): Product | null {

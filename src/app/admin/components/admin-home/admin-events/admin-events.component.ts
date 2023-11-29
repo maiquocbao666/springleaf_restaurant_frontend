@@ -79,30 +79,27 @@ export class AdminEventsComponent {
   }
 
   getEvents(): void {
-    this.eventService.gets();
-    this.eventService.cache$
-      .subscribe(events => {
-        this.eventService.gets();
-        this.events = JSON.parse(localStorage.getItem(this.eventsUrl) || 'null')
-      });
+    this.eventService.getCache().subscribe(
+      (cached: any[]) => {
+        this.events = cached;
+      }
+    );
   }
 
   getCarts(): void {
-    this.comboService.gets();
-    this.cartService.cache$
-      .subscribe(carts => {
-        this.cartService.gets();
-        this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null')
-      });
+    this.cartService.getCache().subscribe(
+      (cached: any[]) => {
+        this.carts = cached;
+      }
+    );
   }
 
   getCombos(): void {
-    this.comboService.gets();
-    this.comboService.cache$
-      .subscribe(combos => {
-        this.comboService.gets();
-        this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null')
-      });
+    this.comboService.getCache().subscribe(
+      (cached: any[]) => {
+        this.combos = cached;
+      }
+    );
   }
 
   addEvent(): void {

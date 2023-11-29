@@ -75,14 +75,11 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$.subscribe(
-      products => {
-        this.productService.gets();
-        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
-        this.remainingProducts = this.products.length - this.visibleProductCount;
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
       }
-    )
+    );
   }
 
   getCategoryById(id: number): Category | null {
@@ -91,12 +88,12 @@ export class UserProductsComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.categoryService.gets();
-    this.categoryService.cache$
-      .subscribe(categories => {
-        this.categoryService.gets();
-        this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
-      });
+    // this.categoryService.gets();
+    // this.categoryService.cache$
+    //   .subscribe(categories => {
+    //     this.categoryService.gets();
+    //     this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
+    //   });
   }
 
   getProductsByCategoryId(): void {

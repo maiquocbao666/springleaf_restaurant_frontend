@@ -4,6 +4,8 @@ import { ApiService } from 'src/app/services/api.service';
 import { Event } from '../interfaces/event';
 import { BehaviorSubject } from 'rxjs';
 import { BaseService } from './base-service';
+import { RxStompService } from '../rx-stomp.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,27 +16,52 @@ export class EventService extends BaseService<Event> {
   cacheKey = 'events';
   apiUrl = 'event';
 
-  override getItemId(item: Event): number {
+  //-----------------------------------------------------------------
+
+  constructor(
+    apiService: ApiService,
+    rxStompService: RxStompService,
+    sweetAlertService: ToastService
+  ) {
+    super(apiService, rxStompService, sweetAlertService);
+  }
+
+  //-----------------------------------------------------------------
+
+  getItemId(item: Event): number {
     return item.eventId!;
   }
-  override getItemName(item: Event): string {
+
+  getItemName(item: Event): string {
     return item.eventName;
   }
-  override getObjectName(): string {
+
+  getObjectName(): string {
     return "Event";
   }
 
-  override gets(): Observable<Event[]> {
-    return super.gets();
+  getCache(): Observable<any[]> {
+    return this.cache$;
   }
+
+  //-----------------------------------------------------------------
+
   override add(newEvent: Event): Observable<Event> {
     return super.add(newEvent);
   }
+
   override update(updatedEvent: Event): Observable<Event> {
     return super.update(updatedEvent);
   }
+
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
+
+  //-----------------------------------------------------------------
+
+  
+
+  //-----------------------------------------------------------------
 
 }

@@ -12,10 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class ReceiptDetailService extends BaseService<ReceiptDetail> {
 
+    //--------------------------------------------------------------------------------------------------------------
+
     apisUrl = 'receiptDetails';
     cacheKey = 'receiptDetails';
     apiUrl = 'receiptDetail';
 
+    //--------------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -25,9 +28,25 @@ export class ReceiptDetailService extends BaseService<ReceiptDetail> {
         super(apiService, rxStompService, sweetAlertService);
     }
 
-    override gets(): Observable<ReceiptDetail[]> {
-        return super.gets();
+    //--------------------------------------------------------------------------------------------------------------
+
+    getItemId(item: ReceiptDetail): number {
+        return item.receiptDetailId!;
     }
+
+    getItemName(item: ReceiptDetail): string {
+        throw new Error('Method not implemented.');
+    }
+
+    getObjectName(): string {
+        return "ReceiptDetail";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------
 
     override add(newObject: ReceiptDetail): Observable<ReceiptDetail> {
         return super.add(newObject);
@@ -37,24 +56,14 @@ export class ReceiptDetailService extends BaseService<ReceiptDetail> {
         return super.update(updatedObject);
     }
 
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
 
     override searchByName(term: string): Observable<ReceiptDetail[]> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: ReceiptDetail): number {
-        return item.receiptDetailId!;
-    }
-
-    override getItemName(item: ReceiptDetail): string {
-        throw new Error('Method not implemented.');
-    }
-
-    override getObjectName(): string {
-        return "ReceiptDetail";
-    }
+    //--------------------------------------------------------------------------------------------------------------
 
 }

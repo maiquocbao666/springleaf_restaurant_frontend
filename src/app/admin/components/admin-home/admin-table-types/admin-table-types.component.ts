@@ -50,12 +50,11 @@ export class AdminTableTypesComponent {
   }
 
   getTableTypes(): void {    
-    this.tableTypeService.gets();
-    this.tableTypeService.cache$
-      .subscribe(tableTypes => {
-        this.tableTypeService.gets();
-        this.tableTypes = JSON.parse(localStorage.getItem(this.tableTypesUrl) || 'null')
-      });
+    this.tableTypeService.getCache().subscribe(
+      (cached: any[]) => {
+        this.tableTypes = cached;
+      }
+    );
   }
 
   addTableType(): void {

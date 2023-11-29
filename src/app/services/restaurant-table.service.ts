@@ -10,11 +10,14 @@ import { BaseService } from './base-service';
     providedIn: 'root'
 })
 export class RestaurantTableService extends BaseService<RestaurantTable>  {
+
+    //-------------------------------------------------------------------------------------------------------------------
+
     apisUrl = 'restaurantTables';
     cacheKey = 'restaurantTables';
     apiUrl = 'restaurantTable';
 
-
+    //-------------------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -24,9 +27,25 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         super(apiService, rxStompService, sweetAlertService);
     }
 
-    override gets(): Observable<RestaurantTable[]> {
-        return super.gets();
+    //-------------------------------------------------------------------------------------------------------------------
+
+    getItemId(item: RestaurantTable): number {
+        return item.tableId!;
     }
+
+    getItemName(item: RestaurantTable): string {
+        return item.tableName;
+    }
+
+    getObjectName(): string {
+        return "RestaurantTable";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
 
     override add(newObject: RestaurantTable): Observable<RestaurantTable> {
         return super.add(newObject);
@@ -40,17 +59,7 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         return super.delete(id);
     }
 
-    override getItemId(item: RestaurantTable): number {
-        return item.tableId!;
-    }
-
-    override getItemName(item: RestaurantTable): string {
-        return item.tableName;
-    }
-
-    override getObjectName(): string {
-        return "RestaurantTable";
-    }
+    //-------------------------------------------------------------------------------------------------------------------
 
     // private isInCache(name: string, idToExclude: number | null = null): boolean {
     //     const isInCache = this.restaurantTablesCache?.some(

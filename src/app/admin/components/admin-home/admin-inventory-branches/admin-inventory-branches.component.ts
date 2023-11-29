@@ -73,41 +73,37 @@ export class AdminInventoryBranchesComponent {
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.gets();
-    this.inventoryBranchService.cache$
-      .subscribe(inventoryBranches => {
-        this.inventoryBranchService.gets();
-        this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null')
-      });
+    this.inventoryBranchService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventoryBranches = cached;
+      }
+    );
   }
 
   getIngredients(): void {
-    this.ingredientService.gets();
-    this.ingredientService.cache$
-      .subscribe(ingredients => {
-        this.ingredientService.gets();
-        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
-      });
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
 
 
   getSuppliers(): void {
-    this.supplierService.gets();
-    this.supplierService.cache$
-      .subscribe(suppliers => {
-        this.supplierService.gets();
-        this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null')
-      });
+    this.supplierService.getCache().subscribe(
+      (cached: any[]) => {
+        this.suppliers = cached;
+      }
+    );
   }
 
 
   getRestaurants(): void {
-    this.restaurantService.gets();
-    this.restaurantService.cache$
-      .subscribe(restaurants => {
-        this.restaurantService.gets();
-        this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null')
-      });
+    this.restaurantService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
   }
 
   getIngredientById(id: number): Ingredient | null {

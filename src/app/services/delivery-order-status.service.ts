@@ -12,11 +12,7 @@ import { ToastService } from './toast.service';
 })
 export class DeliveryOrderStatusService extends BaseService<DeliveryOrderStatus> {
 
-
-  apisUrl = 'deliveryOrderStatuses';
-  cacheKey = 'deliveryOrderStatuses';
-  apiUrl = 'deliveryOrderStatus';
-
+  //------------------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -26,14 +22,31 @@ export class DeliveryOrderStatusService extends BaseService<DeliveryOrderStatus>
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //------------------------------------------------------------------------------------------------------------------
+
+  apisUrl = 'deliveryOrderStatuses';
+  cacheKey = 'deliveryOrderStatuses';
+  apiUrl = 'deliveryOrderStatus';
+
+  //------------------------------------------------------------------------------------------------------------------
+
+  getItemId(item: DeliveryOrderStatus): number {
+    return item.deliveryOrderStatusId!;
+  }
+  
+  getItemName(item: DeliveryOrderStatus): string {
+    throw new Error('Method not implemented.');
+  }
 
   getObjectName(): string {
     return 'DeliveryOrderStatus';
   }
 
-  override gets(): Observable<DeliveryOrderStatus[]> {
-    return super.gets();
+  getCache(): Observable<any[]> {
+    return this.cache$;
   }
+
+  //------------------------------------------------------------------------------------------------------------------
 
   override add(newDeliveryOrderStatus: DeliveryOrderStatus): Observable<DeliveryOrderStatus> {
     return super.add(newDeliveryOrderStatus);
@@ -47,11 +60,10 @@ export class DeliveryOrderStatusService extends BaseService<DeliveryOrderStatus>
     return super.delete(id);
   }
 
-  override getItemId(item: DeliveryOrderStatus): number {
-    return item.deliveryOrderStatusId!;
-  }
-  override getItemName(item: DeliveryOrderStatus): string {
-    throw new Error('Method not implemented.');
-  }
+  //------------------------------------------------------------------------------------------------------------------
+
+
+
+  //------------------------------------------------------------------------------------------------------------------
 
 }

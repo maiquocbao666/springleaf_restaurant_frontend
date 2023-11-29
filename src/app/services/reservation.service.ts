@@ -12,13 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class ReservationService extends BaseService<Reservation> {
 
+    //--------------------------------------------------------------------------------------------------------------------
+
     apisUrl: string = 'reservations';
     cacheKey: string = 'reservations';
     apiUrl: string = 'reservation';
 
-    override receivedMessages: string[] = [];
-    override topicSubscription: Subscription | undefined;
-    override channel = 'public';
+    //--------------------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -26,57 +26,41 @@ export class ReservationService extends BaseService<Reservation> {
         sweetAlertService: ToastService,
     ) {
         super(apiService, rxStompService, sweetAlertService);
-        // this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
-        //     console.log('WebSocket Connection State:', state);
-        //     if (state === 0) {
-        //         if (this.channel === 'public') {
-        //             this.subscribeToQueue1();
-        //         } else if (this.channel === 'private') {
-        //             // console.log("Subscribe to socket private");
-        //         }
-        //     }
-        // });
     }
 
-    // subscribeToQueue1() {
-    //     this.topicSubscription = this.rxStompService
-    //         .watch(`/${this.channel}/reservations`)
-    //         .subscribe((message: Message) => {
-    //             try {
-    //                 if (message.body) {
-    //                     console.log(message.body);
-    //                     localStorage.setItem("reservations", JSON.stringify(Array.isArray(message.body) ? message.body : []));
-    //                 } else {
-    //                     console.error('Message body is undefined.');
-    //                 }
-    //             } catch (error) {
-    //                 console.error('Error parsing JSON from message body:', error);
-    //             }
-    //         });
-    // }
+    //--------------------------------------------------------------------------------------------------------------------
 
-    override getItemId(item: Reservation): string | number {
+    getItemId(item: Reservation): string | number {
         return item.reservationId!;
     }
-    override getItemName(item: Reservation): string {
+
+    getItemName(item: Reservation): string {
         throw new Error('Method not implemented.');
     }
-    override getObjectName(): string {
+
+    getObjectName(): string {
         return "Reservation";
     }
 
-    override gets(): Observable<Reservation[]> {
-        return super.gets();
+    getCache(): Observable<any[]> {
+        return this.cache$;
     }
+
+    //--------------------------------------------------------------------------------------------------------------------
+
     override add(newReservation: Reservation): Observable<Reservation> {
         return super.add(newReservation);
     }
+
     override update(updated: Reservation): Observable<any> {
         return super.update(updated);
     }
+    
     override delete(id: number): Observable<any> {
         return super.delete(id);
     }
+
+    //--------------------------------------------------------------------------------------------------------------------
 
     // getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
     //     if (this.cache) {

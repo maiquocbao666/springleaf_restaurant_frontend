@@ -49,16 +49,20 @@ export class AdminEventDetailComponent implements OnInit {
 
 
   getCarts(): void {
-    this.cartService.gets();
-    this.cartService.cache$
-      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
+    this.cartService.getCache().subscribe(
+      (cached: any[]) => {
+        this.carts = cached;
+      }
+    );
   }
 
 
   getCombos(): void {
-    this.comboService.gets();
-    this.comboService.cache$
-      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
+    this.comboService.getCache().subscribe(
+      (cached: any[]) => {
+        this.combos = cached;
+      }
+    );
   }
 
   setValue() {

@@ -50,23 +50,20 @@ export class AdminMenuItemIngredientDetailComponent implements OnInit {
 
 
   getProducts(): void { 
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(products => {
-        this.productService.gets();
-        this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null')
-      });
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
 
   getIngredients(): void {
-    this.ingredientService.gets();
-    this.ingredientService.cache$
-      .subscribe(ingredients => {
-        this.ingredientService.gets();
-        this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null')
-      });
-
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
 
   getIngredientById(id: number): Ingredient | null {

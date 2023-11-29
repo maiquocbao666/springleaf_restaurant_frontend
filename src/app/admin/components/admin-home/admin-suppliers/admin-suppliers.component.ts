@@ -42,13 +42,11 @@ export class AdminSuppliersComponent {
   }
 
   getSuppliers(): void {
-    this.supplierService.gets();  
-    this.supplierService.cache$
-      .subscribe(suppliers => {
-        this.supplierService.gets();
-        this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null')
-      });
-
+    this.supplierService.getCache().subscribe(
+      (cached: any[]) => {
+        this.suppliers = cached;
+      }
+    );
   }
 
   onTableDataChange(event: any) {

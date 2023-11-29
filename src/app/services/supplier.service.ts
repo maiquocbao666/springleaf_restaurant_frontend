@@ -11,11 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class SupplierService extends BaseService<Supplier>  {
 
+    //--------------------------------------------------------------------------------------------------------
+
     apisUrl = 'suppliers';
     cacheKey = 'suppliers';
     apiUrl = 'supplier';
 
-
+    //--------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -25,10 +27,25 @@ export class SupplierService extends BaseService<Supplier>  {
         super(apiService, rxStompService, sweetAlertService);
     }
 
+    //--------------------------------------------------------------------------------------------------------
 
-    override gets(): Observable<Supplier[]> {
-        return super.gets();
+    getItemId(item: Supplier): number {
+        return item.supplierId!;
     }
+
+    getItemName(item: Supplier): string {
+        return item.supplierName;
+    }
+
+    getObjectName(): string {
+        return "Supplier";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //--------------------------------------------------------------------------------------------------------
 
     override add(newObject: Supplier): Observable<Supplier> {
         return super.add(newObject);
@@ -38,26 +55,17 @@ export class SupplierService extends BaseService<Supplier>  {
         return super.update(updatedObject);
     }
 
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
 
     override searchByName(term: string): Observable<Supplier[]> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: Supplier): number {
-        return item.supplierId!;
-    }
+    //--------------------------------------------------------------------------------------------------------
 
-    override getItemName(item: Supplier): string {
-        return item.supplierName;
-    }
-
-    override getObjectName(): string {
-        return "Supplier";
-    }
-
+    
     // private updateCache(updatedSupplier: Supplier): void {
     //     const index = this.suppliersCache.findIndex(supplier => supplier.supplierId === updatedSupplier.supplierId);
     //     if (index !== -1) {

@@ -12,9 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
 
+    //------------------------------------------------------------------------------------------------
+
     apisUrl = 'menuItemIngredients';
     cacheKey = 'menuItemIngredients';
     apiUrl = 'menuItemIngredient';
+
+    //------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -24,30 +28,41 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
         super(apiService, rxStompService, sweetAlertService);
     }
 
-    override gets(): Observable<MenuItemIngredient[]> {
-        return super.gets();
-    }
-    override add(newObject: MenuItemIngredient): Observable<MenuItemIngredient> {
-        return super.add(newObject);
-    }
-    override update(updatedObject: MenuItemIngredient): Observable<MenuItemIngredient> {
-        return super.update(updatedObject);
-    }
-    override delete(id: number): Observable<any> {
-        return super.delete(id);
-    }
-    override searchByName(term: string): Observable<MenuItemIngredient[]> {
-        return super.searchByName(term);
-    }
-    override getItemId(item: MenuItemIngredient): number {
+    //------------------------------------------------------------------------------------------------
+
+    getItemId(item: MenuItemIngredient): number {
         return item.menuItemIngredientId!;
     }
-    override getItemName(item: MenuItemIngredient): string {
+
+    getItemName(item: MenuItemIngredient): string {
         throw new Error('Method not implemented.');
     }
 
-    override getObjectName(): string {
+    getObjectName(): string {
         return "MenuItemIngredient";
     }
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //------------------------------------------------------------------------------------------------
+
+    override add(newObject: MenuItemIngredient): Observable<MenuItemIngredient> {
+        return super.add(newObject);
+    }
+
+    override update(updatedObject: MenuItemIngredient): Observable<MenuItemIngredient> {
+        return super.update(updatedObject);
+    }
+
+    override delete(id: number): Observable<any> {
+        return super.delete(id);
+    }
+
+    override searchByName(term: string): Observable<MenuItemIngredient[]> {
+        return super.searchByName(term);
+    }
+    
+    //------------------------------------------------------------------------------------------------
 
 }

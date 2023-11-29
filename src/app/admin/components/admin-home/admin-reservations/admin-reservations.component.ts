@@ -154,11 +154,11 @@ export class AdminReservationsComponent {
   }
 
   getReservations(): void {
-    this.reservationService.gets();
-    this.reservationService.cache$
-      .subscribe(reservations => {
-        this.reservations = JSON.parse(localStorage.getItem(this.reservationsUrl) || 'null')
-      });
+    this.reservationService.getCache().subscribe(
+      (cached: any[]) => {
+        this.reservations = cached;
+      }
+    );
   }
 
   onTableDataChange(event: any) {

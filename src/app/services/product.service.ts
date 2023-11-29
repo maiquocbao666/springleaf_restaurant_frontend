@@ -11,6 +11,16 @@ import { RxStompService } from '../rx-stomp.service';
 })
 export class ProductService extends BaseService<Product> {
 
+  apisUrl = 'products';
+  
+  cacheKey = 'products';
+
+  apiUrl = 'product';
+
+  categoryUrl = "category";
+
+  //-------------------------------------------------------------------------------------------------
+
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
@@ -19,25 +29,25 @@ export class ProductService extends BaseService<Product> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
-  apisUrl = 'products';
-  cacheKey = 'products';
-  apiUrl = 'product';
-
-  categoryUrl = "category";
+  //-------------------------------------------------------------------------------------------------
 
   getItemId(item: Product): number {
     return item.menuItemId!;
   }
+
   getItemName(item: Product): string {
     return item.name;
   }
+
   getObjectName(): string {
     return "Product";
   }
 
-  override gets(): Observable<Product[]> {
-    return super.gets();
+  getCache(): Observable<any[]> {
+    return this.cache$;
   }
+
+  //-------------------------------------------------------------------------------------------------
 
   override add(newProduct: Product): Observable<Product> {
     return super.add(newProduct);
@@ -50,6 +60,8 @@ export class ProductService extends BaseService<Product> {
   override delete(id: number): Observable<any> {
     return super.delete(id);
   }
+
+  //-------------------------------------------------------------------------------------------------
 
   addToCart(productId: number): Observable<any> {
     const jwtToken = localStorage.getItem('access_token');
@@ -64,7 +76,6 @@ export class ProductService extends BaseService<Product> {
         map(cache => cache.filter(item => item.categoryId === categoryId))
       );
     }
-
     const url = `${this.categoryUrl}/${categoryId}/products`;
     return this.apiService.request<Product[]>('get', url);
   }

@@ -9,7 +9,15 @@ import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
-})export class BillDetailService extends BaseService<BillDetail>  {
+}) export class BillDetailService extends BaseService<BillDetail>  {
+
+  //----------------------------------------------------------------
+
+  apisUrl = 'billDetails';
+  cacheKey = 'billDetails';
+  apiUrl = 'billDetail';
+
+  //-----------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -19,14 +27,25 @@ import { ToastService } from './toast.service';
     super(apiService, rxStompService, sweetAlertService);
   }
 
-  apisUrl = 'billDetails';
-  cacheKey = 'billDetails';
-  apiUrl = 'billDetail';
+  //----------------------------------------------------------------
 
-
-  override gets(): Observable<BillDetail[]> {
-    return super.gets();
+  getItemId(item: BillDetail): number {
+    return item.billDetailId!;
   }
+
+  getItemName(item: BillDetail): string {
+    throw new Error('Method not implemented.');
+  }
+
+  getObjectName(): string {
+    throw new Error('Method not implemented.');
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //------------------------------------------------------------------------
 
   override add(newBillDetail: BillDetail): Observable<BillDetail> {
     return super.add(newBillDetail);
@@ -36,18 +55,10 @@ import { ToastService } from './toast.service';
     return super.update(updated);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
-  override getItemId(item: BillDetail): number {
-    throw new Error('Method not implemented.');
-  }
-  override getItemName(item: BillDetail): string {
-    throw new Error('Method not implemented.');
-  }
-  override getObjectName(): string {
-    throw new Error('Method not implemented.');
-  }
+  //------------------------------------------------------------------------
 
 }

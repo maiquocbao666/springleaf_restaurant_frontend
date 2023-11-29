@@ -12,6 +12,8 @@ import { ToastService } from './toast.service';
 })
 export class ComboDetailService extends BaseService<ComboDetail> {
 
+  //----------------------------------------------------------------------
+
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
@@ -20,25 +22,31 @@ export class ComboDetailService extends BaseService<ComboDetail> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //----------------------------------------------------------------------
+
   apiUrl = 'comboDetail';
   apisUrl = 'comboDetails';
   cacheKey = 'comboDetails';
+
+  //----------------------------------------------------------------------
 
   getItemId(item: ComboDetail): number {
     return item.comboDetailId!;
   }
 
-  override getItemName(item: ComboDetail): string {
+  getItemName(item: ComboDetail): string {
     throw new Error('Method not implemented.');
   }
 
-  override getObjectName(): string {
+  getObjectName(): string {
     return "ComboDetail";
   }
-
-  override gets(): Observable<ComboDetail[]> {
-    return super.gets();
+  
+  getCache(): Observable<any[]> {
+    return this.cache$;
   }
+
+  //---------------------------------------------------------------------------------
 
   override add(newComboDetail: ComboDetail): Observable<ComboDetail> {
     return super.add(newComboDetail);
@@ -51,5 +59,7 @@ export class ComboDetailService extends BaseService<ComboDetail> {
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
+
+  //----------------------------------------------------------------------------------
 
 }

@@ -11,10 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class OrderThresholdService extends BaseService<OrderThreshold> {
 
+    //------------------------------------------------------------------------------------------------------
+
     apisUrl = 'orderThresholds';
     cacheKey = 'orderThresholds';
     apiUrl = 'orderThreshold';
 
+    //------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -24,9 +27,25 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
         super(apiService, rxStompService, sweetAlertService);
     }
 
-    override gets(): Observable<OrderThreshold[]> {
-        return super.gets();
+    //------------------------------------------------------------------------------------------------------
+
+    getItemId(item: OrderThreshold): number {
+        return item.orderThresholdId!;
     }
+
+    getItemName(item: OrderThreshold): string {
+        throw new Error('Method not implemented.');
+    }
+
+    getObjectName(): string {
+        return "OrderThreshold";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //------------------------------------------------------------------------------------------------------
 
     override add(newObject: OrderThreshold): Observable<OrderThreshold> {
         return super.add(newObject);
@@ -44,16 +63,6 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: OrderThreshold): number {
-        return item.orderThresholdId!;
-    }
-
-    override getItemName(item: OrderThreshold): string {
-        throw new Error('Method not implemented.');
-    }
-
-    override getObjectName(): string {
-        return "OrderThreshold";
-    }
+    //------------------------------------------------------------------------------------------------------
 
 }
