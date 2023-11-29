@@ -131,6 +131,7 @@ export class UserRestaurantTableInfomationComponent {
     // Ngày mà khách hàng chọn
     const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
     let selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
+    console.log(selectedTimeStr);
 
     if (!this.checkDate(selectedDate, this.minDate, this.maxDate)) {
       selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
@@ -164,7 +165,7 @@ export class UserRestaurantTableInfomationComponent {
     // let reservations: Reservation[] = JSON.parse(localStorage.getItem('reservations') || '[]');
 
     // Tổng hợp ngày giờ lại
-    const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'dd-MM-yyyy')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
+    const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'yyyy-MM-dd')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
 
     const newReservation: Reservation = {
       restaurantTableId: this.restaurantTable?.tableId!,

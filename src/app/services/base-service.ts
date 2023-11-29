@@ -57,8 +57,8 @@ export abstract class BaseService<T> {
         this.topicSubscription = this.rxStompService
             .watch(`/${this.channel}/${this.cacheKey}`)
             .subscribe((message: Message) => {
-                console.log(this.cacheKey);
-                console.log(message.body);
+                //console.log(this.cacheKey);
+                //console.log(message.body);
                 try {
                     if (message.body) {
                         const messageData = JSON.parse(message.body);
