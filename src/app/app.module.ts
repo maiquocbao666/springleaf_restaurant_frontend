@@ -89,6 +89,7 @@ import { AdminMenuItemIngredientDetailComponent } from './admin/components/admin
 import { UserPasswordComponent } from './components/user-password/user-password.component';
 
 import { DatePipe } from '@angular/common';
+import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 
 @NgModule({
   declarations: [
@@ -111,6 +112,7 @@ import { DatePipe } from '@angular/common';
     UserBannerComponent,
     UserCheckoutComponent,
     UserRestaurantTableInfomationComponent,
+    UserReservationHistoriesComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,

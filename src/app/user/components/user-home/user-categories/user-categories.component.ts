@@ -21,7 +21,6 @@ export class UserCategoriesComponent {
   constructor(
     private categoryService: CategoryService,
   ) {
-    this.getCategories();
   }
 
   chunkArray(array: any[], size: number): any[] {
@@ -45,13 +44,15 @@ export class UserCategoriesComponent {
 
   ngOnInit(): void {
     console.log("Init User Categories Component");
-    this.categories$ = this.searchTerms.pipe(
-      // ignore new term if same as previous term
-      distinctUntilChanged(),
+    this.getCategories();
+    // this.categories$ = this.searchTerms.pipe(
 
-      // switch to new search observable each time the term changes
-      switchMap((categoryName: string) => this.categoryService.searchByName(categoryName)),
-    );
+    //   // ignore new term if same as previous term
+    //   distinctUntilChanged(),
+
+    //   // switch to new search observable each time the term changes
+    //   switchMap((categoryName: string) => this.categoryService.searchByName(categoryName)),
+    // );
     //this.search("");
   }
 
