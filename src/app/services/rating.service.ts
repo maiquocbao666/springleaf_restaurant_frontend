@@ -12,9 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class RatingService extends BaseService<Rating> {
 
+  //--------------------------------------------------------------------------------------------------
+
   apisUrl = 'ratings';
   cacheKey = 'ratings';
   apiUrl = 'rating';
+
+  //--------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -24,14 +28,25 @@ export class RatingService extends BaseService<Rating> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //--------------------------------------------------------------------------------------------------
 
-  override gets(): Observable<Rating[]> {
-    return super.gets();
+  getItemId(item: Rating): number {
+    return item.ratingId!;
   }
 
-  override getById(id: number): Observable<Rating | null> {
-    return super.getById(id);
+  getItemName(item: Rating): string {
+    throw new Error('Method not implemented.');
   }
+
+  getObjectName(): string {
+    return "Rating";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //--------------------------------------------------------------------------------------------------
 
   override add(newObject: Rating): Observable<Rating> {
     return super.add(newObject);
@@ -41,7 +56,7 @@ export class RatingService extends BaseService<Rating> {
     return super.update(updatedObject);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
@@ -49,15 +64,6 @@ export class RatingService extends BaseService<Rating> {
     return super.searchByName(term);
   }
 
-  override getItemId(item: Rating): number {
-    return item.ratingId!;
-  }
+  //--------------------------------------------------------------------------------------------------
 
-  override getItemName(item: Rating): string {
-    throw new Error('Method not implemented.');
-  }
-
-  override getObjectName(): string {
-    return "Rating";
-  }
 }

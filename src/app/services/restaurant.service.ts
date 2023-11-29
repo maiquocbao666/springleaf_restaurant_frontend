@@ -11,9 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class RestaurantService extends BaseService<Restaurant> {
 
+    //----------------------------------------------------------------------------------------------------------------------
+
     apisUrl = 'restaurants';
     cacheKey = 'restaurants';
     apiUrl = 'restaurant';
+
+    //-----------------------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -23,15 +27,25 @@ export class RestaurantService extends BaseService<Restaurant> {
         super(apiService, rxStompService, sweetAlertService);
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------
 
-
-    override gets(): Observable<Restaurant[]> {
-        return super.gets();
+    getItemId(item: Restaurant): number {
+        return item.restaurantId!;
     }
 
-    override getById(id: number): Observable<Restaurant | null> {
-        return super.getById(id);
+    getItemName(item: Restaurant): string {
+        return item.restaurantName;
     }
+
+    getObjectName(): string {
+        return "Restaurant";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------
 
     override add(newObject: Restaurant): Observable<Restaurant> {
         return super.add(newObject);
@@ -41,25 +55,15 @@ export class RestaurantService extends BaseService<Restaurant> {
         return super.update(updatedObject);
     }
 
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
 
     override searchByName(term: string): Observable<Restaurant[]> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: Restaurant): number {
-        return item.restaurantId!;
-    }
-
-    override getItemName(item: Restaurant): string {
-        return item.restaurantName;
-    }
-
-    override getObjectName(): string {
-        return "Restaurant";
-    }
+    //----------------------------------------------------------------------------------------------------------------------------
 
     // private isInCache(name: string, idToExclude: number | null = null): boolean {
     //     const isInCache = this.restaurantsCache?.some(
@@ -73,4 +77,5 @@ export class RestaurantService extends BaseService<Restaurant> {
 
     //     return isInCache || false;
     // }
+
 }

@@ -24,6 +24,11 @@ export class UserInventoryBranchesComponent {
   inventoryBranch!: InventoryBranch;
   fieldNames: string[] = [];
 
+  inventoryBranchesUrl = 'inventoryBranches';
+  restaurantsUrl = 'restaurants';
+  suppliersUrl = 'suppliers';
+  ingredientsUrl = 'ingredients';
+
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -62,32 +67,47 @@ export class UserInventoryBranchesComponent {
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.cache$
-      .subscribe(inventoryBranches => this.inventoryBranches = inventoryBranches);
+    this.inventoryBranchService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventoryBranches = cached;
+      }
+    );
   }
   getRestaurants(): void {
-    this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = restaurants);
+    this.restaurantService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
   }
   getSuppliers(): void {
-    this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = suppliers);
+    this.supplierService.getCache().subscribe(
+      (cached: any[]) => {
+        this.suppliers = cached;
+      }
+    );
   }
 
   getIngredients(): void {
-    this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = ingredients);
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
 
-  getRestaurantById(restaurantId: number): Observable<Restaurant | null> {
-    return this.restaurantService.getById(restaurantId);
+  getRestaurantById(id: number): Restaurant | null {
+    const found = this.restaurants.find(data => data.restaurantId === id);
+    return found || null;
   }
 
-  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
-    return this.ingredientService.getById(ingredientId);
+  getIngredientById(id: number): Ingredient | null {
+    const found = this.ingredients.find(data => data.ingredientId === id);
+    return found || null;
   }
 
-  getSupplierById(supplierId: number): Observable<Supplier | null> {
-    return this.supplierService.getById(supplierId);
+  getSupplierById(id: number): Supplier | null {
+    const found = this.suppliers.find(data => data.supplierId === id);
+    return found || null;
   }
 }

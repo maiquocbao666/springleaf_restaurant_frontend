@@ -68,32 +68,39 @@ export class AdminMenuItemIngredientsComponent {
 
 
   getMenuItemIngredients(): void {
-    this.menuItemIngredientService.gets();
-    this.menuItemIngredientService.cache$
-      .subscribe(menuItemIngredients => this.menuItemIngredients = JSON.parse(localStorage.getItem(this.menuItemIngredientsUrl) || 'null'));
+    this.menuItemIngredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.menuItemIngredients = cached;
+      }
+    );
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
 
   getIngredients(): void {
-    this.ingredientService.gets();
-    this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
-
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
 
 
-  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
-    return this.ingredientService.getById(ingredientId);
+  getIngredientById(id: number): Ingredient | null {
+    const found = this.ingredients.find(data => data.ingredientId === id);
+    return found || null;
   }
 
-  getProductById(menuItemId: number): Observable<Product | null> {
-    return this.productService.getById(menuItemId);
+  getProductById(id: number): Product | null {
+    const found = this.products.find(data => data.menuItemId === id);
+    return found || null;
   }
 
   addMenuItemIngredient(): void {

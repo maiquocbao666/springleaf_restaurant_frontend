@@ -36,11 +36,6 @@ export class AdminGoodsReceiptDetailComponent {
     public activeModal: NgbActiveModal,
     private zone: NgZone
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.goodsReceiptForm = this.formBuilder.group({
       goodsReceiptId: ['', [Validators.required]],
       inventoryBrand: ['', [Validators.required]],
@@ -56,21 +51,27 @@ export class AdminGoodsReceiptDetailComponent {
   }
 
   getGoodsReceipts(): void {
-    this.goodsReceiptService.gets();
-    this.goodsReceiptService.cache$
-      .subscribe(goodsReceipts => this.goodsReceipts = JSON.parse(localStorage.getItem(this.goodsReceiptsUrl) || 'null'));
+    this.goodsReceiptService.getCache().subscribe(
+      (cached: any[]) => {
+        this.goodsReceipts = cached;
+      }
+    );
   }
 
   getCarts(): void {
-    this.cartService.gets();
-    this.cartService.cache$
-      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
+    this.cartService.getCache().subscribe(
+      (cached: any[]) => {
+        this.carts = cached;
+      }
+    );
   }
 
   getInventoryBranches(): void {
-    this.inventoryBranchService.gets();
-    this.inventoryBranchService.cache$
-      .subscribe(inventoryBranches => this.inventoryBranches = JSON.parse(localStorage.getItem(this.inventoryBranchesUrl) || 'null'));
+    this.inventoryBranchService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventoryBranches = cached;
+      }
+    );
   }
 
   setValue() {

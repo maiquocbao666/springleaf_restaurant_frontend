@@ -15,6 +15,8 @@ import { ToastService } from './toast.service';
 
 export class CartDetailService extends BaseService<CartDetail> {
 
+  //----------------------------------------------------------------
+
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
@@ -23,18 +25,31 @@ export class CartDetailService extends BaseService<CartDetail> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //-----------------------------------------------------------------
+
   apisUrl = 'cartDetails';
   cacheKey = 'cartDetails';
   apiUrl = 'cartDetail';
 
+  //------------------------------------------------------------------
 
-  override gets(): Observable<CartDetail[]> {
-    return super.gets();
+  getItemId(item: CartDetail): number {
+    return item.orderDetailId!;
   }
 
-  override getById(id: number): Observable<CartDetail | null> {
-    return super.getById(id);
+  getItemName(item: CartDetail): string {
+    throw new Error('Method not implemented.');
   }
+
+  getObjectName(): string {
+    throw new Error('Method not implemented.');
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //-------------------------------------------------------------------
 
   override add(newProduct: CartDetail): Observable<CartDetail> {
     return super.add(newProduct);
@@ -43,19 +58,11 @@ export class CartDetailService extends BaseService<CartDetail> {
   override update(updated: CartDetail): Observable<any> {
     return super.update(updated);
   }
-
+  
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
 
-  override getItemId(item: CartDetail): number {
-    throw new Error('Method not implemented.');
-  }
-  override getItemName(item: CartDetail): string {
-    throw new Error('Method not implemented.');
-  }
-  override getObjectName(): string {
-    throw new Error('Method not implemented.');
-  }
+  //----------------------------------------------------------------------
 
 }

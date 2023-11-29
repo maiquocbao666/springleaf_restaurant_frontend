@@ -11,6 +11,8 @@ import { TableStatusService } from 'src/app/services/table-status.service';
 import { TableTypeService } from 'src/app/services/table-type.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
+import { TableType } from 'src/app/interfaces/table-type';
+import { Restaurant } from 'src/app/interfaces/restaurant';
 
 @Component({
   selector: 'app-user-table',
@@ -20,6 +22,10 @@ import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-
 export class UserRestaurantTablesComponent {
   restaurantTables: RestaurantTable[] = [];
   restaurantTablesUrl = 'restaurantTables';
+
+  tableStatuses: TableStatus[] = [];
+  tableTypes: TableType[] = [];
+  restaurants: Restaurant[] = [];
 
   constructor(
     private toastService: ToastService,
@@ -38,22 +44,26 @@ export class UserRestaurantTablesComponent {
   }
 
   getRestaurantTables(): void {
-    this.restaurantTableService.gets();
-    this.restaurantTableService.cache$
-      .subscribe(restaurantTables => this.restaurantTables = JSON.parse(localStorage.getItem(this.restaurantTablesUrl) || 'null'));
+    this.restaurantTableService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurantTables = cached;
+      }
+    );
   }
 
-
-  getTableStatusById(tableStatusId: number): Observable<TableStatus | null> {
-    return this.tableStatusService.getById(tableStatusId);
+  getTableStatusById(id: number): TableStatus | null {
+    const found = this.tableStatuses.find(data => data.tableStatusId === id);
+    return found || null;
   }
 
-  getTableTypeById(tableTypeId: number) {
-    return this.tableTypeService.getById(tableTypeId);
+  getTableTypeById(id: number): TableType | null {
+    const found = this.tableTypes.find(data => data.tableTypeId === id);
+    return found || null;
   }
 
-  getRestaurantById(restaurantId: number) {
-    return this.restaurantService.getById(restaurantId);
+  getRestaurantById(id: number): Restaurant | null {
+    const found = this.restaurants.find(data => data.restaurantId === id);
+    return found || null;
   }
 
   openRestaurantTableInfomationModal(restaurantTable: RestaurantTable) {

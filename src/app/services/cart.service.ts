@@ -13,6 +13,9 @@ import { ToastService } from './toast.service';
   providedIn: 'root'
 })
 export class CartService extends BaseService<Cart> {
+
+  //----------------------------------------------------------------------------------------------
+
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
@@ -23,12 +26,13 @@ export class CartService extends BaseService<Cart> {
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url))
   }
 
+  //----------------------------------------------------------------------------------------------
+
   apisUrl = 'carts';
   cacheKey = 'carts';
   apiUrl = 'cart';
   cartsCache!: Cart[];
   getDatasOfThisUserWorker: Worker;
-
 
   // Province
   public provinceDataSubject = new BehaviorSubject<Province[]>([]);
@@ -43,15 +47,25 @@ export class CartService extends BaseService<Cart> {
   selectedProvinceId: number | null = null;
   selectedDistrictId: number | null = null;
 
+  //----------------------------------------------------------------------------------------------
 
-
-  override gets(): Observable<Cart[]> {
-    return super.gets();
+  getItemId(item: Cart): number {
+    throw new Error('Method not implemented.');
   }
 
-  override getById(id: number): Observable<Cart | null> {
-    return super.getById(id);
+  getItemName(item: Cart): string {
+    throw new Error('Method not implemented.');
   }
+
+  getObjectName(): string {
+    return "Cart";
+  }
+  
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //----------------------------------------------------------------------------------------------
 
   override add(newCart: Cart): Observable<Cart> {
     return super.add(newCart);
@@ -61,16 +75,7 @@ export class CartService extends BaseService<Cart> {
     return super.update(updated);
   }
 
-  override getItemId(item: Cart): number {
-    throw new Error('Method not implemented.');
-  }
-  override getItemName(item: Cart): string {
-    throw new Error('Method not implemented.');
-  }
-  override getObjectName(): string {
-    return "Cart";
-  }
-
+  //----------------------------------------------------------------------------------------------  
 
   setProvinceData(provinceData: Province[]): void {
 

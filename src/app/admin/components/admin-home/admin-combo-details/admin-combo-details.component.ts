@@ -33,7 +33,7 @@ export class AdminComboDetailsComponent {
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
- 
+
   constructor(
     private comboDetailService: ComboDetailService,
     private comboService: ComboService,
@@ -56,29 +56,37 @@ export class AdminComboDetailsComponent {
   }
 
   getComboDetails(): void {
-    this.comboDetailService.gets();
-    this.comboDetailService.cache$
-      .subscribe(comboDetails => this.comboDetails = JSON.parse(localStorage.getItem(this.comboDetailsUrl) || 'null'));
+    this.comboDetailService.getCache().subscribe(
+      (cached: any[]) => {
+        this.comboDetails = cached;
+      }
+    );
   }
 
   getCombos(): void {
-    this.comboService.gets();
-    this.comboService.cache$
-      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
+    this.comboService.getCache().subscribe(
+      (cached: any[]) => {
+        this.combos = cached;
+      }
+    );
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
-  getProductById(menuItemId: number): Observable<Product | null> {
-    return this.productService.getById(menuItemId);
+  getProductById(id: number): Product | null {
+    const found = this.products.find(data => data.menuItemId === id);
+    return found || null;
   }
 
-  getComboById(comboId: number): Observable<Combo | null> {
-    return this.comboService.getById(comboId);
+  getComboById(id: number): Combo | null {
+    const found = this.combos.find(data => data.comboId === id);
+    return found || null;
   }
 
   onTableDataChange(event: any) {

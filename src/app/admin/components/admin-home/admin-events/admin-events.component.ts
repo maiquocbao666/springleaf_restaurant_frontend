@@ -68,30 +68,38 @@ export class AdminEventsComponent {
     this.page = 1;
   }
 
+  getCartById(id: number): Cart | null {
+    const found = this.carts.find(data => data.orderId === id);
+    return found || null;
+  }
+
+  getComboById(id: number): Combo | null {
+    const found = this.combos.find(data => data.comboId === id);
+    return found || null;
+  }
+
   getEvents(): void {
-    this.eventService.gets();
-    this.eventService.cache$
-      .subscribe(events => this.events = JSON.parse(localStorage.getItem(this.eventsUrl) || 'null'));
-  }
-
-  getCartById(orderId: number): Observable<Cart | null> {
-    return this.cartService.getById(orderId);
-  }
-
-  getComboById(comboId: number): Observable<Combo | null> {
-    return this.comboService.getById(comboId);
+    this.eventService.getCache().subscribe(
+      (cached: any[]) => {
+        this.events = cached;
+      }
+    );
   }
 
   getCarts(): void {
-    this.cartService.gets();
-    this.cartService.cache$
-      .subscribe(carts => this.carts = JSON.parse(localStorage.getItem(this.cartsUrl) || 'null'));
+    this.cartService.getCache().subscribe(
+      (cached: any[]) => {
+        this.carts = cached;
+      }
+    );
   }
 
   getCombos(): void {
-    this.comboService.gets();
-    this.comboService.cache$
-      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
+    this.comboService.getCache().subscribe(
+      (cached: any[]) => {
+        this.combos = cached;
+      }
+    );
   }
 
   addEvent(): void {

@@ -24,11 +24,6 @@ export class AdminTableTypeDetailComponent  implements OnInit {
     private modalService: NgbModal,
     public activeModal: NgbActiveModal,
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.tableTypeForm = this.formBuilder.group({
       tableTypeId: ['', [Validators.required]],
       name: ['', [Validators.required]],

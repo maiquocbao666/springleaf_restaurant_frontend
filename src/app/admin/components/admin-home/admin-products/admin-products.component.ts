@@ -24,7 +24,7 @@ export class AdminProductsComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
   productsUrl = 'products';
-  categoriesurl = 'categories';
+  categoriesUrl = 'categories';
 
   constructor(
     private productService: ProductService,
@@ -57,19 +57,24 @@ export class AdminProductsComponent {
   }
 
   getCategories(): void {
-    this.categoryService.gets();
-    this.categoryService.cache$
-      .subscribe(categories => this.categories = JSON.parse(localStorage.getItem(this.categoriesurl) || 'null'));
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
+      }
+    );
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
-  getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getById(categoryId);
+  getCategoryById(id: number): Category | null {
+    const found = this.categories.find(data => data.categoryId === id);
+    return found || null;
   }
 
   addProduct(): void {

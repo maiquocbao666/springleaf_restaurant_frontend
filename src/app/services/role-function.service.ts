@@ -17,7 +17,7 @@ export class RoleFunctionService extends BaseService<RoleFunction> {
     cacheKey = 'roleFunctions';
     apiUrl = 'roleFunction';
 
-   
+
     constructor(
         apiService: ApiService,
         rxStompService: RxStompService,
@@ -27,12 +27,8 @@ export class RoleFunctionService extends BaseService<RoleFunction> {
     }
 
 
-    override gets(): Observable<RoleFunction[]> {
-        return super.gets();
-    }
-
-    override getById(id: number): Observable<RoleFunction | null> {
-        return super.getById(id);
+    getCache(): Observable<any[]> {
+        return this.cache$;
     }
 
     override add(newObject: RoleFunction): Observable<RoleFunction> {
@@ -43,9 +39,9 @@ export class RoleFunctionService extends BaseService<RoleFunction> {
         return super.update(updatedObject);
     }
 
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
 
     override searchByName(term: string): Observable<RoleFunction[]> {
         return super.searchByName(term);

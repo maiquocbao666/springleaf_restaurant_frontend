@@ -44,20 +44,27 @@ export class UserProductDetailComponent {
   }
 
   getCategories(): void {
-    this.categoryService.gets()
-      .subscribe(categories => this.categories = categories);
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
+      }
+    );
   }
   getProducts(): void {
-    this.productService.gets()
-      .subscribe(product => this.products = product);
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
-  getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getById(categoryId);
+  getCategoryById(id: number): Category | null {
+    const found = this.categories.find(data => data.categoryId === id);
+    return found || null;
   }
   setValue() {
     if (this.product) {

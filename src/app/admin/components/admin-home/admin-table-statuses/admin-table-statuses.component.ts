@@ -36,11 +36,6 @@ export class AdminTableStatusesComponent {
     private restaurantTableService: RestaurantTableService,
     private sweetAlertService: ToastService,
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.tableStatusForm = this.formBuilder.group({
       tableStatusId: ['', [Validators.required]],
       statusName: new FormControl({ value: 'Chọn trạng thái bàn', disabled: false }),
@@ -80,10 +75,11 @@ export class AdminTableStatusesComponent {
   }
 
   getTableStatuses(): void {
-    this.tableStatusService.gets();
-    this.tableStatusService.cache$
-      .subscribe(tableStatuses => this.tableStatuses = JSON.parse(localStorage.getItem(this.tableStatusesUrl) || 'null'));
-
+    this.tableStatusService.getCache().subscribe(
+      (cached: any[]) => {
+        this.tableStatuses = cached;
+      }
+    );
   }
 
   addTableStatus(): void {

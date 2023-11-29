@@ -15,6 +15,8 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class AdminComboDetailsUpdateComponent {
 
+  //-----------------------------------------------------------------------------------------------------------------
+
   comboDetails: ComboDetail[] = [];
   comboDetailForm: FormGroup;
   combos: Combo[] = [];
@@ -26,6 +28,8 @@ export class AdminComboDetailsUpdateComponent {
   comboDetailsUrl = 'comboDetails';
   combosUrl = 'combos';
   productsUrl = 'products';
+
+  //-----------------------------------------------------------------------------------------------------------------
 
   constructor(
     private comboDetailService: ComboDetailService,
@@ -42,6 +46,8 @@ export class AdminComboDetailsUpdateComponent {
       comboTypeId: ['', [Validators.required]],
     });
   }
+
+  //-----------------------------------------------------------------------------------------------------------------
 
   ngOnInit(): void {
     this.getComboDetails();
@@ -63,23 +69,30 @@ export class AdminComboDetailsUpdateComponent {
   }
 
   getComboDetails(): void {
-    this.comboDetailService.gets();
-    this.comboDetailService.cache$
-      .subscribe(comboDetails => this.comboDetails = JSON.parse(localStorage.getItem(this.comboDetailsUrl) || 'null'));
+    this.comboDetailService.getCache().subscribe(
+      (cached: any[]) => {
+        this.comboDetails = cached;
+      }
+    );
   }
 
   getCombos(): void {
-    this.comboService.gets();
-    this.comboService.cache$
-      .subscribe(combos => this.combos = JSON.parse(localStorage.getItem(this.combosUrl) || 'null'));
+    this.comboService.getCache().subscribe(
+      (cached: any[]) => {
+        this.combos = cached;
+      }
+    );
   }
 
   getProducts(): void {
-    this.productService.gets();
-    this.productService.cache$
-      .subscribe(products => this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null'));
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
+  //-----------------------------------------------------------------------------------------------------------------
 
   updateComboDetail(): void {
     if (this.comboDetailForm.valid) {

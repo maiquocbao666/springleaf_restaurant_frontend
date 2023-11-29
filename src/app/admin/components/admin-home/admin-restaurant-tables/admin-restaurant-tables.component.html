@@ -25,8 +25,7 @@
       <div class="col-lg-3">
         <!-- <label *ngIf="!tableTypes || tableTypes.length >0" for="exampleInputPassword1" class="form-label">Kiểu
           bàn</label> -->
-        <a style="color: red;" class="nav-link"
-          routerLink="/admin/tableTypes">Thêm kiểu
+        <a style="color: red;" class="nav-link" routerLink="/admin/tableTypes">Thêm kiểu
           bàn</a>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
@@ -79,13 +78,9 @@
         *ngFor="let restaurantTable of restaurantTables | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
         <td>{{restaurantTable.tableId}}</td>
         <td>{{restaurantTable.tableName}}</td>
-        <td>{{ (getRestaurantById(restaurantTable.restaurantId) |
-          async)?.restaurantName }}</td>
-        <td>{{ (getTableStatusById(restaurantTable.tableStatusId) |
-          async)?.tableStatusName
-          }}</td>
-        <td>{{ (getTableTypeById(restaurantTable.tableTypeId) |
-          async)?.tableTypeName }}</td>
+        <td>{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }}</td>
+        <td>{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}</td>
+        <td>{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName  }}</td>
         <td>
           <button type="button" class="btn btn-outline-primary"
             (click)="openRestaurantTableDetailModal(restaurantTable)">Edit</button>

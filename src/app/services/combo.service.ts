@@ -12,6 +12,8 @@ import { ToastService } from './toast.service';
 })
 export class ComboService extends BaseService<Combo> {
 
+  //----------------------------------------------------------------------------
+
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
@@ -20,27 +22,28 @@ export class ComboService extends BaseService<Combo> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //----------------------------------------------------------------------------
+
   apisUrl = 'combos';
   cacheKey = 'combos';
   apiUrl = 'combo';
 
-  override getItemId(item: Combo): number {
+  //----------------------------------------------------------------------------
+
+  getItemId(item: Combo): number {
     return item.comboId!;
   }
-  override getItemName(item: Combo): string {
+  getItemName(item: Combo): string {
     return item.comboName;
   }
-  override getObjectName(): string {
+  getObjectName(): string {
     return "Combo";
   }
-
-  override gets(): Observable<Combo[]> {
-    return super.gets();
+  getCache(): Observable<any[]> {
+    return this.cache$;
   }
 
-  override getById(id: number): Observable<Combo | null> {
-    return super.getById(id);
-  }
+  //----------------------------------------------------------------------------
 
   override add(newCombo: Combo): Observable<Combo> {
     return super.add(newCombo);
@@ -57,5 +60,7 @@ export class ComboService extends BaseService<Combo> {
   override searchByName(term: string): Observable<Combo[]> {
     return super.searchByName(term);
   }
+
+  //----------------------------------------------------------------------------
 
 }

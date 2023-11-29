@@ -11,9 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class TableTypeService extends BaseService<TableType> {
 
+  //----------------------------------------------------------------------------------------------------------------
+
   apisUrl = 'tableTypes';
   cacheKey = 'tableTypes';
   apiUrl = 'tableType';
+
+  //----------------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -23,14 +27,25 @@ export class TableTypeService extends BaseService<TableType> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //----------------------------------------------------------------------------------------------------------------
 
-  override gets(): Observable<TableType[]> {
-    return super.gets();
+  getItemId(item: TableType): number {
+    return item.tableTypeId!;
   }
 
-  override getById(id: number): Observable<TableType | null> {
-    return super.getById(id);
+  getItemName(item: TableType): string {
+    return item.tableTypeName;
   }
+
+  getObjectName(): string {
+    return "TableType";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //----------------------------------------------------------------------------------------------------------------
 
   override add(newObject: TableType): Observable<TableType> {
     return super.add(newObject);
@@ -40,7 +55,7 @@ export class TableTypeService extends BaseService<TableType> {
     return super.update(updatedObject);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
@@ -48,15 +63,6 @@ export class TableTypeService extends BaseService<TableType> {
     return super.searchByName(term);
   }
 
-  override getItemId(item: TableType): number {
-    return item.tableTypeId!;
-  }
+  //----------------------------------------------------------------------------------------------------------------
 
-  override getItemName(item: TableType): string {
-    return item.tableTypeName;
-  }
-
-  override getObjectName(): string {
-    return "TableType";
-  }
 }

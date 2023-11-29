@@ -28,6 +28,9 @@ export class UserProductsComponent implements OnInit {
   remainingProducts!: number;
   user: User | null = null;
 
+  categoriesUrl = 'categories';
+  productsUrl = 'products';
+
   constructor(
     private reservationService: ReservationService,
     private orderService: OrderService,
@@ -72,28 +75,33 @@ export class UserProductsComponent implements OnInit {
   }
 
   getProducts(): void {
-    this.productService.gets()
-      .subscribe(products => {
-        this.products = products;
-        this.remainingProducts = this.products.length - this.visibleProductCount;
-      });
+    this.productService.getCache().subscribe(
+      (cached: any[]) => {
+        this.products = cached;
+      }
+    );
   }
 
-  getCategoryById(categoryId: number): Observable<Category | null> {
-    return this.categoryService.getById(categoryId);
+  getCategoryById(id: number): Category | null {
+    const found = this.categories.find(data => data.categoryId === id);
+    return found || null;
   }
 
   getCategories(): void {
-    this.categoryService.gets()
-      .subscribe(categories => this.categories = categories);
+    // this.categoryService.gets();
+    // this.categoryService.cache$
+    //   .subscribe(categories => {
+    //     this.categoryService.gets();
+    //     this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
+    //   });
   }
 
   getProductsByCategoryId(): void {
+    this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
     if (this.categoryId) {
-      this.productService.getProductsByCategoryId(this.categoryId)
-        .subscribe(products => {
-          this.products = products;
-        });
+      console.log(this.categoryId);
+      this.products = this.products.filter(data => data.categoryId === this.categoryId);
+      console.log(this.products);
     }
   }
 

@@ -11,11 +11,13 @@ import { ToastService } from './toast.service';
 })
 export class RoleService extends BaseService<Role> {
 
+    //--------------------------------------------------------------------------------------------------------
+
     apisUrl = 'roles';
     cacheKey = 'roles';
     apiUrl = 'role';
 
-
+    //--------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
@@ -25,15 +27,25 @@ export class RoleService extends BaseService<Role> {
         super(apiService, rxStompService, sweetAlertService);
     }
 
-   
+    //--------------------------------------------------------------------------------------------------------
 
-    override gets(): Observable<Role[]> {
-        return super.gets();
+    getItemId(item: Role): number {
+        return item.roleId!;
     }
 
-    override getById(id: number): Observable<Role | null> {
-        return super.getById(id);
+    getItemName(item: Role): string {
+        return item.roleName;
     }
+
+    getObjectName(): string {
+        return "Role";
+    }
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //--------------------------------------------------------------------------------------------------------
 
     override add(newObject: Role): Observable<Role> {
         return super.add(newObject);
@@ -43,25 +55,15 @@ export class RoleService extends BaseService<Role> {
         return super.update(updatedObject);
     }
 
-    override delete(id : number): Observable<any> {
+    override delete(id: number): Observable<any> {
         return super.delete(id);
-      }
+    }
 
     override searchByName(term: string): Observable<Role[]> {
         return super.searchByName(term);
     }
 
-    override getItemId(item: Role): number {
-        return item.roleId!;
-    }
-
-    override getItemName(item: Role): string {
-        return item.roleName;
-    }
-
-    override getObjectName(): string {
-        return "Role";
-    }
+    //--------------------------------------------------------------------------------------------------------
 
     // private updateCache(updatedRole: Role): void {
     //     const index = this.rolesCache.findIndex(role => role.roleId === updatedRole.roleId);

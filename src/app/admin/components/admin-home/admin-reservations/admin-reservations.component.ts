@@ -2,9 +2,15 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { RxStompService2 } from 'src/app/rx-stomp.service2';
+import { ApiService } from 'src/app/services/api.service';
 import { DateTimeService } from 'src/app/services/date-time.service';
 import { ReservationService } from 'src/app/services/reservation.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { Message } from '@stomp/stompjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-admin-reservations',
@@ -12,6 +18,10 @@ import { ReservationService } from 'src/app/services/reservation.service';
   styleUrls: ['./admin-reservations.component.css']
 })
 export class AdminReservationsComponent {
+
+  private receivedMessages: string[] = [];
+  private topicSubscription: Subscription | undefined;
+  private channel = 'public';
 
   page: number = 1;
   count: number = 0;
@@ -28,6 +38,10 @@ export class AdminReservationsComponent {
   constructor(
     private reservationService: ReservationService,
     private dateTimeService: DateTimeService,
+    private apiService: ApiService,
+    private rxStompService: RxStompService2,
+    private sweetAlertService: ToastService,
+    private datePipe: DatePipe,
   ) {
     this.dateTimeService.currentDateTimeCache$.subscribe((dateObject: Date) => {
       // Assuming the service emits Date objects
@@ -38,6 +52,40 @@ export class AdminReservationsComponent {
   ngOnInit(): void {
     console.log("Init admin reservation component");
     this.getReservations();
+  }
+
+  formatDate(reservationDate: string): string {
+    const dateParts = reservationDate.split(/[- :]/);
+    // Note: month is 0-based, so we subtract 1
+    const formattedDate = new Date(
+      +dateParts[2], // year
+      +dateParts[1] - 1, // month
+      +dateParts[0], // day
+      +dateParts[3], // hours
+      +dateParts[4], // minutes
+      +dateParts[5]  // seconds
+    );
+  
+    // Use the DatePipe to format the date
+    const formattedDateString = this.datePipe.transform(formattedDate, 'dd-MM-yyyy');
+    return formattedDateString || '';
+  }
+
+  formatTime(reservationDate: string): string {
+    const dateParts = reservationDate.split(/[- :]/);
+    // Note: month is 0-based, so we subtract 1
+    const formattedDate = new Date(
+      +dateParts[2], // year
+      +dateParts[1] - 1, // month
+      +dateParts[0], // day
+      +dateParts[3], // hours
+      +dateParts[4], // minutes
+      +dateParts[5]  // seconds
+    );
+  
+    // Use the DatePipe to format the date
+    const formattedDateString = this.datePipe.transform(formattedDate, 'HH:mm:ss');
+    return formattedDateString || '';
   }
 
   minusDateTime(currentDateTime: string, reservationDate: string): string {
@@ -94,7 +142,7 @@ export class AdminReservationsComponent {
     const minutes = Math.floor((differenceTime % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((differenceTime % (1000 * 60)) / 1000);
 
-    if(stautus === "Khách hàng đã rời đi"){
+    if (stautus === "Khách hàng đã rời đi") {
       return "Đã sử dụng xong";
     }
 
@@ -106,9 +154,11 @@ export class AdminReservationsComponent {
   }
 
   getReservations(): void {
-    this.reservationService.gets();
-    this.reservationService.reservationsCache$
-    .subscribe(reservations => this.reservations = JSON.parse(localStorage.getItem(this.reservationsUrl) || 'null'));
+    this.reservationService.getCache().subscribe(
+      (cached: any[]) => {
+        this.reservations = cached;
+      }
+    );
   }
 
   onTableDataChange(event: any) {

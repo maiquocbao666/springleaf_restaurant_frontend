@@ -12,10 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class PaymentService extends BaseService<Payment> {
 
-  apisUrl = 'payments'; 
-  cacheKey = 'payments'; 
-  apiUrl = 'payment'; 
+  //-----------------------------------------------------------------------------------------------------------
 
+  apisUrl = 'payments';
+  cacheKey = 'payments';
+  apiUrl = 'payment';
+
+  //-----------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -25,15 +28,25 @@ export class PaymentService extends BaseService<Payment> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //-----------------------------------------------------------------------------------------------------------
 
-
-  override gets(): Observable<Payment[]> {
-    return super.gets();
+  getItemId(item: Payment): number {
+    return item.paymentId!;
   }
 
-  override getById(id: number): Observable<Payment | null> {
-    return super.getById(id);
+  getItemName(item: Payment): string {
+    throw new Error('Method not implemented.');
   }
+
+  getObjectName(): string {
+    return "Payment";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
+  }
+
+  //-----------------------------------------------------------------------------------------------------------
 
   override add(newObject: Payment): Observable<Payment> {
     return super.add(newObject);
@@ -43,7 +56,7 @@ export class PaymentService extends BaseService<Payment> {
     return super.update(updatedObject);
   }
 
-  override delete(id : number): Observable<any> {
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
@@ -51,15 +64,6 @@ export class PaymentService extends BaseService<Payment> {
     return super.searchByName(term);
   }
 
-  override getItemId(item: Payment): number {
-    return item.paymentId!;
-  }
+  //-----------------------------------------------------------------------------------------------------------
 
-  override getItemName(item: Payment): string {
-    throw new Error('Method not implemented.');
-  }
-
-  override getObjectName(): string {
-    return "Payment";
-  }
 }

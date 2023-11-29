@@ -6,52 +6,102 @@ import { BehaviorSubject } from 'rxjs';
 import { BaseService } from './base-service';
 import { RxStompService } from '../rx-stomp.service';
 import { ToastService } from './toast.service';
+import { ReservationService } from './reservation.service';
+import { Reservation } from '../interfaces/reservation';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ReservationStatusService extends BaseService<ReservationStatus> {
+    
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     apisUrl: string = 'reservationStatuses';
     cacheKey: string = 'reservationStatuses';
     apiUrl: string = 'reservationStatus';
 
-    override getItemId(item: ReservationStatus): string {
-        return item.reservationStatusName!;
-    }
-    override getItemName(item: ReservationStatus): string {
-        return item.reservationStatusName!;
-    }
-    override getObjectName(): string {
-        return "ReservationStatus";
-    }
-
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     constructor(
         apiService: ApiService,
         rxStompService: RxStompService,
-        sweetAlertService: ToastService
+        sweetAlertService: ToastService,
+        private reservationService: ReservationService,
     ) {
         super(apiService, rxStompService, sweetAlertService);
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    override gets(): Observable<ReservationStatus[]> {
-        return super.gets();
+    getItemId(item: ReservationStatus): string {
+        return item.reservationStatusName!;
     }
-    override add(newStatus: ReservationStatus): Observable<ReservationStatus> {
-        return super.add(newStatus);
+
+    getItemName(item: ReservationStatus): string {
+        return item.reservationStatusName!;
     }
-    override update(updatedReservationStatus: ReservationStatus): Observable<ReservationStatus> {
-       return super.update(updatedReservationStatus);
+
+    getObjectName(): string {
+        return "ReservationStatus";
     }
-    override delete(id : number | string): Observable<any> {
+
+    getCache(): Observable<any[]> {
+        return this.cache$;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    override add(object: ReservationStatus): Observable<ReservationStatus> {
+        if (this.isNameInCache(object.reservationStatusName)) {
+            this.sweetAlertService.showTimedAlert(`${this.getObjectName()} này đã có rồi!`, '', 'error', 2000);
+            return of();
+        }
+        return super.add(object);
+    }
+    override update(object: ReservationStatus): Observable<ReservationStatus> {
+        if (this.isNameInCache(object.reservationStatusName)) {
+            this.sweetAlertService.showTimedAlert(`${this.getObjectName()} này đã được sử dụng bên đặt bàn rồi!`, '', 'error', 2000);
+            return of();
+        }
+        return super.update(object);
+    }
+    override delete(id: string): Observable<any> {
+        if (this.isStatusUsedInReservations(id)) {
+            this.sweetAlertService.showTimedAlert(`${this.getObjectName()} này đã được sử dụng bên đặt bàn rồi!`, '', 'error', 2000);
+            return of();
+        };
         return super.delete(id);
-      }
+    }
 
-    // override getById(id: string | number): Observable<ReservationStatus | null> {
-    //     return super.getById(id);
-    // }
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Hàm tùy chỉnh
+
+    isNameInCache(name: string, idToExclude: string | null = null): boolean {
+        let isInCache = false;
+        const cache: ReservationStatus[] = JSON.parse(localStorage.getItem('reservationStatuses') || 'null');
+
+        isInCache = cache.some(
+            (item: ReservationStatus) => item.reservationStatusName.toLowerCase() === name.toLowerCase() && item.reservationStatusName !== idToExclude
+        );
+
+        return isInCache;
+    }
+
+    // tìm coi có reservation nào đang dùng status này không
+    isStatusUsedInReservations(id: string): boolean {
+        const reservationsString = localStorage.getItem('reservations');
+        const reservations: Reservation[] | null = reservationsString ? JSON.parse(reservationsString) : null;
+        console.log(reservations);
+
+        if (!reservations) {
+            // Handle the case where reservations is null
+            return false;
+        }
+
+        const isUsed = !!reservations.find((reservation: Reservation) => reservation.reservationStatusName === id);
+        return isUsed;
+    }
 
     // searchReservationStatusesByName(term: string): Observable<ReservationStatus[]> {
     //     if (!term.trim()) {
@@ -84,18 +134,5 @@ export class ReservationStatusService extends BaseService<ReservationStatus> {
 
     //     return this.apiService.request('get', this.reservationStatusesUrl);
     // }
-
-      // private isReservationStatusNameInCache(name: string, reservationStatusIdToExclude: number | null = null): boolean {
-    //     const isReservationStatusInCache = this.reservationStatusesCache?.some(
-    //       (cache) =>
-    //         cache.reservationStatusName.toLowerCase() === name.toLowerCase() && cache.reservationStatusId !== reservationStatusIdToExclude
-    //     );
-    
-    //     if (isReservationStatusInCache) {
-    //       console.log("Danh mục này đã có rồi");
-    //     }
-    
-    //     return isReservationStatusInCache || false;
-    //   }
 
 }

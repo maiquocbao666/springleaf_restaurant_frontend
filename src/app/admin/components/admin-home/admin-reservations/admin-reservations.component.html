@@ -8,13 +8,13 @@
     </select>
 </div>
 <br>
-<table class="table table-light container">
+<table class="table table-light container-fluid">
     <tbody>
         <tr>
             <th>Reservation id</th>
-            <th>Resturant table</th>
+            <th>Mã bàn</th>
             <th>User</th>
-            <th>Ngày đặt</th>
+            <th>Ngày tới</th>
             <th>Giờ tới</th>
             <th>Giờ đi</th>
             <th>Trạng thái</th>
@@ -29,16 +29,19 @@
             <td>{{ reservation.reservationId }}</td>
             <td>{{ reservation.restaurantTableId }}</td>
             <td>{{ reservation.userId }}</td>
-            <td>{{ reservation.reservationDate | date: 'EEEE, MMMM d, y' }}</td>
-            <td>{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
+            <td>{{ (formatDate(reservation.reservationDate)) }}</td>
+            <td>{{ (formatTime(reservation.reservationDate)) }}</td>
             <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
             <td>
                 {{ reservation.reservationStatusName }}
             </td>
             <td>{{ reservation.numberOfGuests }}</td>
-            <td>{{ (minusDateTime(currentDateTime$, reservation.reservationDate)) }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td>{{ (minusDateTime(currentDateTime$, reservation.reservationDate)) }}</td>
             <td>{{ (reservationHoldTime(currentDateTime$, reservation.reservationDate)) }}</td>
-            <td>{{ (hoursUse(currentDateTime$, reservation.reservationDate)) }}</td>
+            <td>{{ (hoursUse(currentDateTime$, reservation.reservationDate)) }}</td> -->
             <td><button (click)="deletereservation(reservation)">Delete</button></td>
             <!-- <th> <a routerLink="/admin/reservation/{{reservation.reservationId}}" type="button">Edit
                 </a></th> -->

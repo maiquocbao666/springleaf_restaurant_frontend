@@ -10,9 +10,9 @@
                     {{ restaurantTable.tableName }}
                 </div>
                 <div class="card__info">
-                    <p class="episode__num">{{ (getRestaurantById(restaurantTable.restaurantId) | async)?.restaurantName
+                    <p class="episode__num">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName
                         }}</p>
-                    <p class="episode__type">{{ (getTableTypeById(restaurantTable.tableTypeId) | async)?.tableTypeName
+                    <p class="episode__type">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName
                         }}</p>
                 </div>
                 <div class="card__btns">

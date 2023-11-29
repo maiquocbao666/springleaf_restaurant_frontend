@@ -50,8 +50,8 @@
       <tr
         *ngFor="let menuItemIngredient of menuItemIngredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
         <td>{{menuItemIngredient.menuItemIngredientId}}</td>
-        <td>{{ (getIngredientById(menuItemIngredient.ingredientId) | async)?.name }}</td>
-        <td>{{ (getProductById(menuItemIngredient.menuItemId) | async)?.name }}</td>
+        <td>{{ getIngredientById(menuItemIngredient.ingredientId)?.name }}</td>
+        <td>{{ getProductById(menuItemIngredient.menuItemId)?.name }}</td>
         <td>{{menuItemIngredient.quantity}}</td>
         <td><button type="button" class="btn btn-outline-primary"
             (click)="openMenuItemIngredientDetailModal(menuItemIngredient)">Edit</button>

@@ -63,30 +63,38 @@ export class AdminInventoriesComponent {
   }
 
 
-  getIngredientById(ingredientId: number): Observable<Ingredient | null> {
-    return this.ingredientService.getById(ingredientId);
+  getIngredientById(id: number): Ingredient | null {
+    const found = this.ingredients.find(data => data.ingredientId === id);
+    return found || null;
   }
 
-  getSupplierById(supplierId: number): Observable<Supplier | null> {
-    return this.supplierService.getById(supplierId);
+  getSupplierById(id: number): Supplier | null {
+    const found = this.suppliers.find(data => data.supplierId === id);
+    return found || null;
   }
 
   getIngredients(): void {
-    this.ingredientService.gets();
-    this.ingredientService.cache$
-      .subscribe(ingredients => this.ingredients = JSON.parse(localStorage.getItem(this.ingredientsUrl) || 'null'));
+    this.ingredientService.getCache().subscribe(
+      (cached: any[]) => {
+        this.ingredients = cached;
+      }
+    );
   }
 
   getInventories(): void {
-    this.inventoryService.gets();
-    this.inventoryService.cache$
-      .subscribe(inventories => this.inventories = JSON.parse(localStorage.getItem(this.inventoriesUrl) || 'null'));
+    this.inventoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.inventories = cached;
+      }
+    );
   }
 
-  getSuppliers(): void {
-    this.supplierService.gets();
-    this.supplierService.cache$
-      .subscribe(suppliers => this.suppliers = JSON.parse(localStorage.getItem(this.suppliersUrl) || 'null'));
+  getSuppliers(): void { 
+    this.supplierService.getCache().subscribe(
+      (cached: any[]) => {
+        this.suppliers = cached;
+      }
+    );
   }
 
   addInventory(): void {

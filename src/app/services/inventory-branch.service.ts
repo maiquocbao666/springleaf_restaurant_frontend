@@ -12,11 +12,13 @@ import { ToastService } from './toast.service';
 })
 export class InventoryBranchService extends BaseService<InventoryBranch> {
 
+  //-------------------------------------------------------------------------------------------------------
+
   apisUrl = 'inventoryBranches';
   cacheKey = 'inventoryBranches';
   apiUrl = 'inventoryBranch';
 
-
+  //-------------------------------------------------------------------------------------------------------
 
   constructor(
     apiService: ApiService,
@@ -26,13 +28,18 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     super(apiService, rxStompService, sweetAlertService);
   }
 
+  //-------------------------------------------------------------------------------------------------------
 
-  override gets(): Observable<InventoryBranch[]> {
-    return super.gets();
+  getItemName(item: InventoryBranch): string {
+    throw new Error('Method not implemented.');
   }
 
-  override getById(id: number): Observable<InventoryBranch | null> {
-    return super.getById(id);
+  getObjectName(): string {
+    return "InventoryBranch";
+  }
+
+  getCache(): Observable<any[]> {
+    return this.cache$;
   }
 
   override add(newObject: InventoryBranch): Observable<InventoryBranch> {
@@ -55,11 +62,6 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     return item.inventoryBranchId!;
   }
 
-  override getItemName(item: InventoryBranch): string {
-    throw new Error('Method not implemented.');
-  }
+  //-------------------------------------------------------------------------------------------------------
 
-  override getObjectName(): string {
-    return "InventoryBranch";
-  }
 }

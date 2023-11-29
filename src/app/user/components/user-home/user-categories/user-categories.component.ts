@@ -16,6 +16,8 @@ export class UserCategoriesComponent {
   showMore: boolean = false;
   isMobile: boolean = false;
 
+  categoriesUrl = 'categories';
+
   constructor(
     private categoryService: CategoryService,
   ) {
@@ -50,33 +52,33 @@ export class UserCategoriesComponent {
       // switch to new search observable each time the term changes
       switchMap((categoryName: string) => this.categoryService.searchByName(categoryName)),
     );
-    this.search("");
+    //this.search("");
   }
 
-  search(term: string): void {
-    if (term.trim() === "") {
-      // Nếu term trống, gán categories$ bằng một observable chứa danh sách categories
-      this.categories$ = this.categoryService.gets();
-      //this.categories$ = of([]);
-    } else {
-      // Nếu term không trống, kiểm tra xem term có trong tên các categories hay không
-      const searchTerm = term.toLowerCase(); // Chuyển đổi term thành chữ thường để so sánh không phân biệt hoa thường
+  // search(term: string): void {
+  //   if (term.trim() === "") {
+  //     // Nếu term trống, gán categories$ bằng một observable chứa danh sách categories
+  //     this.categories$ = this.categoryService.gets();
+  //     //this.categories$ = of([]);
+  //   } else {
+  //     // Nếu term không trống, kiểm tra xem term có trong tên các categories hay không
+  //     const searchTerm = term.toLowerCase(); // Chuyển đổi term thành chữ thường để so sánh không phân biệt hoa thường
 
-      this.categories$ = this.categoryService.gets().pipe(
-        // Sử dụng operator map để lọc các categories thỏa mãn điều kiện
-        map(categories => categories.filter(category => category.name.toLowerCase().includes(searchTerm)))
-      );
+  //     this.categories$ = this.categoryService.gets().pipe(
+  //       // Sử dụng operator map để lọc các categories thỏa mãn điều kiện
+  //       map(categories => categories.filter(category => category.name.toLowerCase().includes(searchTerm)))
+  //     );
 
-      this.searchTerms.next(term);
-    }
-  }
+  //     this.searchTerms.next(term);
+  //   }
+  // }
 
   getCategories(): void {
-    this.categoryService.cache$.subscribe(categories => {
-      this.categories$ = of(categories);
-    });
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories$ = of(cached);
+      }
+    );
   }
-
-
 
 }

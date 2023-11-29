@@ -30,11 +30,6 @@ export class AdminRestaurantsComponent {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.restaurantForm = this.formBuilder.group({
       restaurantId: ['', [Validators.required]],
       restaurantName: ['', [Validators.required]],
@@ -57,10 +52,12 @@ export class AdminRestaurantsComponent {
     this.page = 1;
   }
 
-  getRestaurants(): void {
-    this.restaurantService.gets();
-    this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
+  getRestaurants(): void {    
+    this.restaurantService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
   }
 
   addRestaurant(): void {

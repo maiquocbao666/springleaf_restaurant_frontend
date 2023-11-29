@@ -21,8 +21,10 @@ export class UserRestaurantsComponent {
   }
 
   getRestaurants(): void {
-    this.restaurantService.gets();
-    this.restaurantService.cache$
-      .subscribe(restaurants => this.restaurants = JSON.parse(localStorage.getItem(this.restaurantsUrl) || 'null'));
+    this.restaurantService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
   }
 }
