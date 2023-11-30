@@ -7,6 +7,7 @@ import { Order } from 'src/app/interfaces/order';
 import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { OrderService } from 'src/app/services/order.service';
 import { Product } from 'src/app/interfaces/product';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-user-cart',
@@ -35,6 +36,7 @@ export class UserCartComponent implements OnInit {
     private deliveryOrderService : DeliveryOrderService,
     private orderService : OrderService,
     private cartDetailService : CartDetailService,
+    private toastService: ToastService,
   ) {
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
@@ -53,8 +55,8 @@ export class UserCartComponent implements OnInit {
     }
     this.cartDetailService.orderDetails$.subscribe(orderDetails => {
       this.orderDetailByUser = orderDetails;
-      this.setCartInfomationArrays();
     });
+    
     
   }
   @ViewChild('likeBtn') likeBtn!: ElementRef;
@@ -168,7 +170,19 @@ export class UserCartComponent implements OnInit {
 
   deleteCartDetail(cart : any) : void{
     const orderDetailId = cart.orderDetailId;
-    this.cartDetailService.delete(orderDetailId);
+    this.cartDetailService.delete(orderDetailId).subscribe({
+      next: (response) => {
+        if (response.message === "Delete is success") {
+          this.toastService.showTimedAlert('Xóa thành công', '', 'success', 2000);
+        }
+      },
+      error: (error) => {
+        this.toastService.showTimedAlert('Xóa thất bại', error, 'error', 2000);
+      }
+    });
+    if(this.orderByUser){
+      this.cartDetailService.getUserOrder(this.orderByUser?.orderId);
+    }
   }
 
   plusButtonHandler() {
@@ -188,6 +202,7 @@ export class UserCartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setCartInfomationArrays();
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.Provinces = Object.values(data);

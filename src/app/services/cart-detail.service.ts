@@ -4,7 +4,6 @@ import { ApiService } from 'src/app/services/api.service';
 import { CartDetail } from '../interfaces/cart-detail';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Cart } from '../interfaces/cart';
 import { RxStompService } from '../rx-stomp.service';
 import { BaseService } from './base-service';
 import { ToastService } from './toast.service';
@@ -85,6 +84,19 @@ export class CartDetailService extends BaseService<CartDetail> {
       );
 
     return orderDetailsObservable;
+  }
+
+  deleteDetail(id : number) : void{
+    const jwtToken = localStorage.getItem('access_token');
+    if (!jwtToken) {
+       of(null);
+    }
+    
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+    const url = `cartDetail/${id}`
+    this.apiService.request<null>('delete', url, null, customHeader)
   }
 
   

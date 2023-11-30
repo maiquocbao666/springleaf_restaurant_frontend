@@ -70,8 +70,9 @@ export class ApiService {
         this.setUrl(`create/${endpoint}`);
 
         return this.http.post<T>(this.baseUrl, data, { headers }).pipe(
-
+          
           tap(response => {
+            
             console.log(response);
           }),
 

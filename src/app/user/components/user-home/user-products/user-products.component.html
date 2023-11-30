@@ -1,80 +1,3 @@
-<!-- <div class="most_popular"> -->
-<!-- <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-sm-6" *ngFor="let product of getVisibleProducts(); let i = index">
-                <div class="most_popular_item">
-                    <div class="most_popular_thumb hover_zoom_brightness">
-                        <a href="javascript:void(0)">
-                            <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
-                                class="img-fluid" alt="most_popular">
-                            <div class="item_action">
-                                <ul class="list-unstyled">
-                                    <li class="list-inline-item"><a href="#" class="view icon"><i
-                                                class="fa-solid fa-eye"></i></a></li>
-                                    <li class="list-inline-item"><a href="#" class="wishlist icon"><i
-                                                class="fa-regular fa-heart"></i></a></li>
-                                    <li class="list-inline-item"><a class="buy icon"><i
-                                                class="fa-solid fa-cart-shopping" (click)="addToCart(product)"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="mostpopular_content text-center">
-                        <div class="mostpopular_name">
-                            <h5 class="product_name">{{product.name}}</h5>
-                        </div>
-                        <div class="mostpopular_rating">
-                            <a href="#"><i class="fa-solid fa-star"></i></a>
-                            <a href="#"><i class="fa-solid fa-star"></i></a>
-                            <a href="#"><i class="fa-solid fa-star"></i></a>
-                            <a href="#"><i class="fa-solid fa-star"></i></a>
-                            <a href="#"><i class="fa-solid fa-star"></i></a>
-                        </div>
-                        <p class="price">{{ product.price | currency: 'VND' }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-<!-- <div class="tab-content">
-        <div id="tab-1" class="tab-pane fade show p-0 active">
-            <div class="row g-4">
-                <div class="col-lg-6 h-50" *ngFor="let product of getVisibleProducts(); let i = index">
-                    <div class="d-flex align-items-center">
-                        <img class="flex-shrink-0 img-fluid rounded w-50"
-                            src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
-                            alt="">
-                        <div class="w-100 d-flex flex-column text-start ps-4">
-                            <h5 class="d-flex justify-content-between border-bottom pb-2">
-                                <span>{{product.name}}</span>
-                                <a class="text-primary btn-buy" (click)="addOrder()">
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </a>
-                            </h5>
-                            <h6><span class="text-primary">{{ product.unitPrice | currency: 'VND' }}</span></h6>
-                            <small class="fst-italic">{{product.description}}</small>
-                            <div class="mostpopular_rating">
-                                <a href="#"><i class="fa-solid fa-star"></i></a>
-                                <a href="#"><i class="fa-solid fa-star"></i></a>
-                                <a href="#"><i class="fa-solid fa-star"></i></a>
-                                <a href="#"><i class="fa-solid fa-star"></i></a>
-                                <a href="#"><i class="fa-solid fa-star"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="text-center mb-5">
-    <button class="Btn" (click)="showMore()" *ngIf="remainingProducts && remainingProducts > 0">Show
-        More</button>
-    <button class="Btn" (click)="showLess()" *ngIf="visibleProductCount > 12">Show
-        Less</button>
-</div> -->
 
 <section id="our_menu" class="pt-5 pb-5">
     <div class="container">
@@ -92,9 +15,9 @@
                                         <h4>{{product.name}} <span>{{ formatAmount(product.unitPrice ) }}</span> </h4>
                                     </a>
                                     <p>{{product.description}}</p>
-                                    <!-- <button style="float: right;" (click)="addOrder()">
+                                    <button style="float: right;" (click)="addToCart(product.menuItemId)">
                                         <i class="fa-solid fa-cart-shopping"></i>
-                                    </button> -->
+                                    </button>
                                 </div>
 
                             </div>
