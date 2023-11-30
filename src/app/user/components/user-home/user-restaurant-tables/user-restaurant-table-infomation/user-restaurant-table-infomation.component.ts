@@ -217,23 +217,4 @@ export class UserRestaurantTableInfomationComponent {
     );
   }
 
-  // getYear(dateString: string): number {
-  //   const dateParts = dateString.split('-');
-  //   const year = parseInt(dateParts[0], 10);
-  //   // 
-  //   return year;
-  // }
-
-  // getMonth(dateString: string): number {
-  //   const dateParts = dateString.split('-');
-  //   const month = parseInt(dateParts[1], 10) - 1;
-  //   return month;
-  // }
-
-  // getDay(dateString: string): number {
-  //   const dateParts = dateString.split('-');
-  //   const day = parseInt(dateParts[2], 10);
-  //   return day;
-  // }
-
 }
