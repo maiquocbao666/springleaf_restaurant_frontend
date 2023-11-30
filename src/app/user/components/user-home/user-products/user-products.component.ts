@@ -90,20 +90,19 @@ export class UserProductsComponent implements OnInit {
   }
 
   getCategories(): void {
-    // this.categoryService.gets();
-    // this.categoryService.cache$
-    //   .subscribe(categories => {
-    //     this.categoryService.gets();
-    //     this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
-    //   });
+    this.categoryService.getCache().subscribe(
+      cached => {
+        this.categories = this.categories;
+      }
+    )
   }
 
   getProductsByCategoryId(): void {
     this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
     if (this.categoryId) {
-      console.log(this.categoryId);
+      //console.log(this.categoryId);
       this.products = this.products.filter(data => data.categoryId === this.categoryId);
-      console.log(this.products);
+      //console.log(this.products);
     }
   }
 

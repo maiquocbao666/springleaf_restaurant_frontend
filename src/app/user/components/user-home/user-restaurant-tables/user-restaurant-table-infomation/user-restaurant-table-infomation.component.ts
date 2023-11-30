@@ -26,6 +26,9 @@ export class UserRestaurantTableInfomationComponent {
   reservations: Reservation[] = [];
   minDate!: string;
   maxDate!: string;
+  isSearch = false;
+
+  searchReservations: Reservation[] = [];
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -36,6 +39,7 @@ export class UserRestaurantTableInfomationComponent {
     private toastService: ToastService,
     private reservationStatusService: ReservationStatusService,
     private datePipe: DatePipe,
+    private sweetAlertService: ToastService,
   ) {
     this.authService.cachedData$.subscribe((data) => {
       this.user = data;
@@ -43,6 +47,8 @@ export class UserRestaurantTableInfomationComponent {
     this.reservationForm = this.formBuilder.group({
       selectedDate: [, [Validators.nullValidator]],
       selectedTime: ['', [Validators.required]],
+      outTime: ['', [Validators.required]],
+      searchKeyWord: ['', Validators.nullValidator],
     });
   }
 
@@ -56,6 +62,25 @@ export class UserRestaurantTableInfomationComponent {
         }
       }
     )
+  }
+
+  onSearch(): void {
+    const searchKeyWord = this.reservationForm.get('searchKeyWord')?.value;
+    //console.log('Search keyword:',  searchKeyWord);
+    if(searchKeyWord === ''){
+      this.isSearch = false;
+      return;
+    } else {
+      this.isSearch = true;
+    }
+    this.reservationService.searchReservations(this.restaurantTable?.tableId! ,this.reservationForm.get('searchKeyWord')?.value).subscribe(
+      results => {
+        this.searchReservations = results;
+      },
+      error => {
+        console.error('Error searching reservations:', error);
+      }
+    );
   }
 
   private addDays(date: Date, days: number): Date {
@@ -72,7 +97,7 @@ export class UserRestaurantTableInfomationComponent {
     this.reservationService.getReservationsByTableId(id).subscribe(
       cached => {
         this.reservations = cached;
-        console.log(this.reservations);
+        //console.log(this.reservations);
       }
     );
   }
@@ -108,14 +133,20 @@ export class UserRestaurantTableInfomationComponent {
     // Ngày mà khách hàng chọn
     const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
     let selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
-    console.log(selectedTimeStr);
+    let outTimeStr = this.reservationForm.get('outTime')?.value;
 
     if (!this.checkDate(selectedDate, this.minDate, this.maxDate)) {
-      selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
-      const currentDateStr = new Date().toLocaleDateString(); // Get the current date in a suitable format
 
-      const selectedDateTimeStr = `${currentDateStr} ${selectedTimeStr}`;
+      selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
+      outTimeStr = this.reservationForm.get('outTime')?.value;
+
+      // Thời gian tới
+      const selectedDateTimeStr = `${selectedDate} ${selectedTimeStr}`;
       const selectedTime = new Date(selectedDateTimeStr).getTime();
+
+      // Thời gian rời đi
+      const outDateTimeStr = `${selectedDate} ${outTimeStr}`;
+      const outDateTime = new Date(outDateTimeStr).getTime();
 
       // Add 1 hour to the current time
       // const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000).getTime();
@@ -129,11 +160,23 @@ export class UserRestaurantTableInfomationComponent {
 
       // Add 1 minute to the current time
       const oneMinuteLater = new Date(new Date().getTime() + 60 * 1000).getTime(); // Thêm 1 phút
+      let oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000).getTime(); // Thêm 1 tiếng
 
-      if (selectedTime <= oneMinuteLater) {
-        console.log(selectedTime);
-        console.log(oneMinuteLater);
-        console.log("Giờ đặt phải lớn hơn giờ hiện tại 1 phút");
+      if (selectedTime < oneMinuteLater) {
+        this.sweetAlertService.showTimedAlert('Cảnh báo!','Thời gian đến phải lớn hơn hoặc bằng giờ hiện tại 1 phút', 'warning', 3000);
+        return;
+      }
+
+      oneHourLater = new Date(new Date(selectedDateTimeStr).getTime() + 60 * 60 * 1000).getTime(); // Thêm 1 tiếng
+      console.log(selectedDateTimeStr, outDateTimeStr);
+
+      if (outDateTime < oneHourLater) {
+        this.sweetAlertService.showTimedAlert('Cảnh báo!','Thời gian rời đi phải lớn hơn hoặc bằng thời gian đến 1 giờ', 'warning', 3000);
+        return;
+      }
+
+      if(this.reservationService.isReservationsInTimeRangeByTableId(this.restaurantTable?.tableId! ,selectedDateTimeStr, outDateTimeStr)){
+        this.sweetAlertService.showTimedAlert('Cảnh báo!','Khoảng thời gian này đã được sử dụng', 'warning', 3000);
         return;
       }
 
@@ -143,12 +186,13 @@ export class UserRestaurantTableInfomationComponent {
 
     // Tổng hợp ngày giờ lại
     const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'yyyy-MM-dd')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
+    const outDateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'yyyy-MM-dd')! : '') + (outTimeStr ? ' ' + outTimeStr + ':00' : '');
 
     const newReservation: Reservation = {
       restaurantTableId: this.restaurantTable?.tableId!,
       userId: this.user?.userId!,
       reservationDate: dateTimeString,
-      outTime: '',
+      outTime: outDateTimeString,
       numberOfGuests: 1,
       reservationStatusName: 'Đang chờ',
     };
@@ -156,7 +200,7 @@ export class UserRestaurantTableInfomationComponent {
     this.reservationService.add(newReservation).subscribe(
       {
         next: (addedReservation) => {
-          console.log("Đặt bàn thành công");
+          this.sweetAlertService.showTimedAlert('Chức mừng!','Bạn đã dặt bàn thành công', 'success', 3000);
           // reservations.push(addedReservation);
           // localStorage.setItem('reservations', JSON.stringify(reservations));
         },
