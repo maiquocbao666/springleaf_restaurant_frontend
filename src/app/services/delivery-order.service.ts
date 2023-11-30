@@ -12,11 +12,11 @@ import { HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
+
   private userCartSubject = new BehaviorSubject<DeliveryOrder | null>(null);
   userCart$ = this.userCartSubject.asObservable();
 
   
-
   apisUrl = 'deliveryOrders';
   cacheKey = 'deliveryOrders';
   apiUrl = 'deliveryOrder';
@@ -29,9 +29,14 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-----------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   getItemId(item: DeliveryOrder): number {
     throw new Error('Method not implemented.');

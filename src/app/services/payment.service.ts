@@ -26,6 +26,7 @@ export class PaymentService extends BaseService<Payment> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-----------------------------------------------------------------------------------------------------------
@@ -47,6 +48,10 @@ export class PaymentService extends BaseService<Payment> {
   }
 
   //-----------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newObject: Payment): Observable<Payment> {
     return super.add(newObject);

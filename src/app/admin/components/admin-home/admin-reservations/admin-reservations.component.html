@@ -19,8 +19,6 @@
             <th>Giờ đi</th>
             <th>Trạng thái</th>
             <th>Số lượng khách hàng</th>
-            <th>Thời gian vào trạng thái chờ</th>
-            <th>Thời gian chờ còn lại</th>
             <th>Thời gian sử dụng còn lại</th>
             <th></th>
         </tr>
@@ -29,19 +27,12 @@
             <td>{{ reservation.reservationId }}</td>
             <td>{{ reservation.restaurantTableId }}</td>
             <td>{{ reservation.userId }}</td>
-            <td>{{ (formatDate(reservation.reservationDate)) }}</td>
-            <td>{{ (formatTime(reservation.reservationDate)) }}</td>
+            <td>{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
+            <td>{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td> 
             <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
-            <td>
-                {{ reservation.reservationStatusName }}
-            </td>
+            <td>{{ reservation.reservationStatusName }}</td>
             <td>{{ reservation.numberOfGuests }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td>{{ (minusDateTime(currentDateTime$, reservation.reservationDate)) }}</td>
-            <td>{{ (reservationHoldTime(currentDateTime$, reservation.reservationDate)) }}</td>
-            <td>{{ (hoursUse(currentDateTime$, reservation.reservationDate)) }}</td> -->
+            <td>{{ (hoursUse(reservation)) }}</td> 
             <td><button (click)="deletereservation(reservation)">Delete</button></td>
             <!-- <th> <a routerLink="/admin/reservation/{{reservation.reservationId}}" type="button">Edit
                 </a></th> -->

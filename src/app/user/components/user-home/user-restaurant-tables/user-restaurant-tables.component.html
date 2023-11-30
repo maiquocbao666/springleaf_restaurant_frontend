@@ -1,6 +1,7 @@
 <div class="container">
     <h1>ĐẶT BÀN</h1>
     <div class="row">
+        <button (click)="openUserReservationHistoriesModal()">Lịch sử đặt bàn</button>
         <div class="col-sm-2" *ngFor="let restaurantTable of restaurantTables">
             <div class="card  m-5">
                 <div class="card-top">
@@ -21,7 +22,6 @@
             </div>
         </div>
     </div>
-
 
 
 </div>

@@ -18,6 +18,7 @@ export class BillService extends BaseService<Bill> {
     rxStompService: RxStompService,
     sweetAlertService: ToastService) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-------------------------------------------------------------
@@ -45,6 +46,10 @@ export class BillService extends BaseService<Bill> {
   }
 
   //---------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newBill: Bill): Observable<Bill> {
     return super.add(newBill);

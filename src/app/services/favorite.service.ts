@@ -26,6 +26,7 @@ export class FavoriteService extends BaseService<Favorite> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------------------------------------------------------------
@@ -47,6 +48,10 @@ export class FavoriteService extends BaseService<Favorite> {
   }
 
   //----------------------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newFavorite: Favorite): Observable<Favorite> {
     return super.add(newFavorite);

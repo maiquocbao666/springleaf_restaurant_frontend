@@ -24,6 +24,7 @@ export class CartDetailService extends BaseService<CartDetail> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-----------------------------------------------------------------
@@ -51,6 +52,10 @@ export class CartDetailService extends BaseService<CartDetail> {
   }
 
   //-------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newProduct: CartDetail): Observable<CartDetail> {
     return super.add(newProduct);

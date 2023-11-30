@@ -1,15 +1,15 @@
+
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AppRoutingModule } from './app-routing.module';
-
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material/radio';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -67,33 +67,37 @@ import { AdminGoodsReceiptDetailComponent } from './admin/components/admin-home/
 import { AdminGoodsReceiptsComponent } from './admin/components/admin-home/admin-goods-receipts/admin-goods-receipts.component';
 import { AdminInventoryBranchDetailComponent } from './admin/components/admin-home/admin-inventory-branches/admin-inventory-branch-detail/admin-inventory-branch-detail.component';
 import { AdminInventoryBranchesComponent } from './admin/components/admin-home/admin-inventory-branches/admin-inventory-branches.component';
+import { AdminMenuItemIngredientDetailComponent } from './admin/components/admin-home/admin-menu-item-ingredients/admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
+import { AdminMenuItemIngredientsComponent } from './admin/components/admin-home/admin-menu-item-ingredients/admin-menu-item-ingredients.component';
+import { AdminOrderThresholdDetailComponent } from './admin/components/admin-home/admin-order-thresholds/admin-order-threshold-detail/admin-order-threshold-detail.component';
+import { AdminOrderThresholdsComponent } from './admin/components/admin-home/admin-order-thresholds/admin-order-thresholds.component';
 import { AdminReceiptDetailComponent } from './admin/components/admin-home/admin-receipts/admin-receipt-detail/admin-receipt-detail.component';
 import { AdminReceiptsComponent } from './admin/components/admin-home/admin-receipts/admin-receipts.component';
+import { AdminReservationStatusesComponent } from './admin/components/admin-home/admin-reservation-statuses/admin-reservation-statuses.component';
 import { AdminReservationsComponent } from './admin/components/admin-home/admin-reservations/admin-reservations.component';
 import { AdminRestaurantDetailComponent } from './admin/components/admin-home/admin-restaurants/admin-restaurant-detail/admin-restaurant-detail.component';
 import { AdminRestaurantsComponent } from './admin/components/admin-home/admin-restaurants/admin-restaurants.component';
+import { AdminStatisticalComponent } from './admin/components/admin-home/admin-statistical/admin-statistical.component';
 import { AdminTableStatusDetailComponent } from './admin/components/admin-home/admin-table-statuses/admin-table-status-detail/admin-table-status-detail.component';
 import { AdminTableStatusesComponent } from './admin/components/admin-home/admin-table-statuses/admin-table-statuses.component';
 import { AdminTableTypeDetailComponent } from './admin/components/admin-home/admin-table-types/admin-table-type-detail/admin-table-type-detail.component';
 import { AdminTableTypesComponent } from './admin/components/admin-home/admin-table-types/admin-table-types.component';
 import { AppComponent } from './app.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
+import { UserPasswordComponent } from './components/user-password/user-password.component';
+import { rxStompServiceFactory, rxStompServiceFactory2 } from './rx-stomp-service-factory';
+import { RxStompService } from './rx-stomp.service';
+import { RxStompService2 } from './rx-stomp.service2';
 import { UserCheckoutComponent } from './user/components/user-home/user-checkout/user-checkout.component';
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
-import { AdminReservationStatusesComponent } from './admin/components/admin-home/admin-reservation-statuses/admin-reservation-statuses.component';
-import { RxStompService } from './rx-stomp.service';
-import { rxStompServiceFactory, rxStompServiceFactory2 } from './rx-stomp-service-factory';
-import { RxStompService2 } from './rx-stomp.service2';
-import { AdminMenuItemIngredientsComponent } from './admin/components/admin-home/admin-menu-item-ingredients/admin-menu-item-ingredients.component';
-import { AdminMenuItemIngredientDetailComponent } from './admin/components/admin-home/admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
-import { UserPasswordComponent } from './components/user-password/user-password.component';
 
 import { DatePipe } from '@angular/common';
+import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    
+
     UserHomeComponent,
     UserCartComponent,
     UserHeaderComponent,
@@ -111,6 +115,7 @@ import { DatePipe } from '@angular/common';
     UserBannerComponent,
     UserCheckoutComponent,
     UserRestaurantTableInfomationComponent,
+    UserReservationHistoriesComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
@@ -151,6 +156,9 @@ import { DatePipe } from '@angular/common';
     AdminReservationStatusesComponent,
     AdminMenuItemIngredientsComponent,
     AdminMenuItemIngredientDetailComponent,
+    AdminOrderThresholdsComponent,
+    AdminOrderThresholdDetailComponent,
+    AdminStatisticalComponent,
 
 
     ChatComponent,

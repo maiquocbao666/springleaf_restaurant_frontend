@@ -73,6 +73,8 @@ export class AdminInventoriesComponent {
     return found || null;
   }
 
+  
+
   getIngredients(): void {
     this.ingredientService.getCache().subscribe(
       (cached: any[]) => {

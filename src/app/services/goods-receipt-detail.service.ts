@@ -25,6 +25,7 @@ export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-------------------------------------------------------------------------------------------------------------
@@ -46,6 +47,10 @@ export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  
   }
 
   //-------------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newGoodsReceiptDetail: GoodsReceiptDetail): Observable<GoodsReceiptDetail> {
     return super.add(newGoodsReceiptDetail);

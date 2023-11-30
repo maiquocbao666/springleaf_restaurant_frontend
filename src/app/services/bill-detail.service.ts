@@ -25,6 +25,7 @@ import { ToastService } from './toast.service';
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------
@@ -46,6 +47,10 @@ import { ToastService } from './toast.service';
   }
 
   //------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newBillDetail: BillDetail): Observable<BillDetail> {
     return super.add(newBillDetail);

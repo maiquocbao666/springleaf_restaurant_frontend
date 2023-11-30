@@ -53,16 +53,18 @@ export abstract class BaseService<T> {
         }
     }
 
-    private subscribeToQueue() {
+    subscribeToQueue() {
         this.topicSubscription = this.rxStompService
             .watch(`/${this.channel}/${this.cacheKey}`)
             .subscribe((message: Message) => {
+                //console.log(this.cacheKey);
+                //console.log(message.body);
                 try {
                     if (message.body) {
                         const messageData = JSON.parse(message.body);
                         if (Array.isArray(messageData.objects)) {
                             this.cache = messageData.objects;
-                            localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
+                            localStorage.setItem(this.cacheKey, JSON.stringify(messageData.objects));
                         } else {
                             console.error("Invalid message format. Unexpected 'objects' format.");
                         }
@@ -92,22 +94,6 @@ export abstract class BaseService<T> {
     set cache(value: T[]) {
         this.cacheSubject.next(value);
         localStorage.setItem(this.cacheKey, JSON.stringify(value));
-        this.onSendMessage(this.cacheKey);
-    }
-
-    // getById(id: number): T | null {
-    //     this.cache = JSON.parse(localStorage.getItem(this.apisUrl) || 'null');
-    //     const cached = this.cache.find(cache => this.getItemId(cache) === id);
-    //     if (cached) {
-    //         return cached;
-    //     } else {
-    //         return null;
-    //     }
-    // }
-
-    private resetCache() {
-        this.cache = [];
-        this.cache = JSON.parse(localStorage.getItem(this.cacheKey) || '[]');
     }
 
     add(newObject: T): Observable<T> {
@@ -115,7 +101,7 @@ export abstract class BaseService<T> {
         return this.apiService.request<T>('post', this.apiUrl, newObject).pipe(
             tap((added: T) => {
                 this.cache = [...this.cache, added];
-                localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
+                //localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
                 this.onSendMessage(this.cacheKey);
             })
         );
@@ -130,7 +116,7 @@ export abstract class BaseService<T> {
                     this.getItemId(cache) === this.getItemId(updatedObject) ? updatedObject : cache
                 );
                 this.cache = updatedObjects;
-                localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
+                //localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
                 this.onSendMessage(this.cacheKey);
             })
         );
@@ -143,7 +129,7 @@ export abstract class BaseService<T> {
             tap(() => {
                 const updated = this.cache.filter((cache) => this.getItemId(cache) !== id);
                 this.cache = updated;
-                localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
+                //localStorage.setItem(this.cacheKey, JSON.stringify(this.cache));
                 this.onSendMessage(this.cacheKey);
             })
         );

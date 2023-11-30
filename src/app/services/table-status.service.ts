@@ -25,6 +25,7 @@ export class TableStatusService extends BaseService<TableStatus> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -46,6 +47,10 @@ export class TableStatusService extends BaseService<TableStatus> {
     }
 
     //----------------------------------------------------------------------------------------------------------------
+
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
 
     override add(newObject: TableStatus): Observable<TableStatus> {
         return super.add(newObject);

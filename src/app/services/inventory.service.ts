@@ -26,6 +26,7 @@ export class InventoryService extends BaseService<Inventory> {
         sweetAlertService: ToastService
     ) {
         super(apiService, rxStompService, sweetAlertService);
+        this.subscribeToQueue();
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -47,6 +48,10 @@ export class InventoryService extends BaseService<Inventory> {
     }
 
     //-----------------------------------------------------------------------------------------------------
+
+    override subscribeToQueue(): void {
+        super.subscribeToQueue();
+    }
 
     override add(newObject: Inventory): Observable<Inventory> {
         return super.add(newObject);

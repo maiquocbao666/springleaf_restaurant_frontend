@@ -24,9 +24,14 @@ export class EventService extends BaseService<Event> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-----------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   getItemId(item: Event): number {
     return item.eventId!;

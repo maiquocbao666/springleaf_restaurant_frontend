@@ -20,6 +20,7 @@ export class ComboService extends BaseService<Combo> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //----------------------------------------------------------------------------
@@ -44,6 +45,10 @@ export class ComboService extends BaseService<Combo> {
   }
 
   //----------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newCombo: Combo): Observable<Combo> {
     return super.add(newCombo);

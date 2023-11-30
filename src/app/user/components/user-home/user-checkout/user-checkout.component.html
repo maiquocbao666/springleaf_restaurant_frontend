@@ -85,30 +85,24 @@
           </ul>
         </div>
       </div>
+      <div class="submit-order-container">
+        <div *ngIf="!submitted">
+          <label for="orderTotal">Order Total:</label>
+          <input type="number" id="orderTotal" [(ngModel)]="orderTotal" required>
+
+          <label for="orderInfo">Order Info:</label>
+          <input type="text" id="orderInfo" [(ngModel)]="orderInfo" required>
+        </div>
+
+        <div *ngIf="submitted">
+          <h2>Payment Status</h2>
+          <p>{{ paymentStatus }}</p>
+        </div>
+      </div>
     </div>
     <!-- payment-form.component.html -->
 
     <!-- user-checkout.component.html -->
-
-    <div>
-      <form #paymentForm="ngForm" (ngSubmit)="onSubmit(paymentForm)">
-        <div>
-          <label for="orderTotal">Số tiền:</label>
-          <input type="number" id="orderTotal" name="orderTotal" ngModel required>
-        </div>
-        <div>
-          <label for="orderInfo">Thông tin đơn hàng:</label>
-          <input type="text" id="orderInfo" name="orderInfo" ngModel required>
-        </div>
-        <button type="submit">Thanh toán</button>
-      </form>
-    </div>
-
-
-
-
-
-
     <div class="col-lg-4">
       <div class="card address-card">
         <h2>Đơn hàng (2 sản phẩm)</h2>
@@ -117,7 +111,7 @@
           <ul class="list-group">
             <!-- Phương thức thanh toán VNPAY -->
             <div class="payment-option">
-              <input type="radio" id="vnpay" name="paymentMethod" value="vnpay">
+              <input type="radio" id="vnpay" name="paymentMethod" value="vnpay" [(ngModel)]="selectedPaymentMethod">
               <label for="vnpay">
                 <img src="https://tse4.mm.bing.net/th?id=OIP.Jic8DogDMWbfEgp7wG6MhAAAAA&pid=Api&P=0&h=180"
                   alt="VNPAY Logo" width="100px"> VNPAY
@@ -125,14 +119,14 @@
             </div>
             <!-- Phương thức thanh toán MoMo -->
             <div class="payment-option">
-              <input type="radio" id="momo" name="paymentMethod" value="momo">
+              <input type="radio" id="momo" name="paymentMethod" value="momo" [(ngModel)]="selectedPaymentMethod">
               <label for="momo">
                 <img src="https://img.mservice.io/momo-payment/icon/images/logo512.png" alt="MoMo Logo" width="100px">
                 MoMo
               </label>
             </div>
             <div class="payment-option">
-              <input type="radio" id="cod" name="paymentMethod" value="cod">
+              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod">
               <label for="cod">
                 <img
                   src="https://cdn1.iconfinder.com/data/icons/marketplace-and-shipping-filled-outline/64/COD_cash_on_delivery_shipping_payment_delivery-512.png"
@@ -172,21 +166,43 @@
                   <span>Tổng cộng</span>
                 </div>
                 <div>
-                  <h4>70.000 VND</h4>
+                  <h4 id="orderTotal" [(ngModel)]="orderTotal">70.000 VND</h4>
                 </div>
               </li>
             </ul>
             <hr>
-            <button class="comic-button" (click)="showCustomAnimationAlert()">Thanh toán</button>
+            <button class="comic-button" (click)="processPayment()">Thanh toán</button>
           </ul>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
 
 
+
+
+<div *ngIf="paymentStatus">
+  <h2>Payment Status: {{ paymentStatus }}</h2>
+  <div *ngIf="paymentStatus === 'Order success'">
+    <table>
+      <tr>
+        <th>Order Info</th>
+        <th>Payment Time</th>
+        <th>Transaction ID</th>
+        <th>Total Price</th>
+      </tr>
+      <tr>
+        <td>{{ orderInfo }}</td>
+        <!-- <td>{{ paymentTime }}</td>
+        <td>{{ transactionId }}</td>
+        <td>{{ totalPrice }}</td> -->
+      </tr>
+    </table>
+  </div>
+</div>
 
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"

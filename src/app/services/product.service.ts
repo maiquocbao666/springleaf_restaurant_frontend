@@ -13,7 +13,7 @@ import { HttpHeaders } from '@angular/common/http';
 export class ProductService extends BaseService<Product> {
 
   apisUrl = 'products';
-  
+
   cacheKey = 'products';
 
   apiUrl = 'product';
@@ -28,6 +28,7 @@ export class ProductService extends BaseService<Product> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-------------------------------------------------------------------------------------------------
@@ -49,6 +50,10 @@ export class ProductService extends BaseService<Product> {
   }
 
   //-------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newProduct: Product): Observable<Product> {
     return super.add(newProduct);

@@ -1,8 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
-import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserPasswordComponent } from '../user-password/user-password.component';
@@ -14,6 +13,9 @@ import { DeviceDetectorService } from 'ngx-device-detector';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  loading = false;
+  ui = true;
+  error: string | undefined;
 
   active: string = "login";
   userEmail: string = '';
@@ -21,7 +23,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   registerForm: FormGroup;
   areEmailAndCodeEntered: boolean = false;
-  codeCache : string | null = null ;
+  codeCache: string | null = null;
   code: string = '';
   token: string = '';
   getDatasOfThisUserWorker: Worker;
@@ -52,15 +54,15 @@ export class LoginComponent {
     this.authService.cachedData$.subscribe((user) => {
       this.user = user;
     });
-    
+
     this.authService.accessCodeCacheData$.subscribe((code) => {
-      if(code != '' && code !=null){
+      if (code != '' && code != null) {
         console.log(code)
         this.codeCache = code.slice(-6);
         this.token = code.slice(0, -6);
         console.log(this.codeCache + 'token:  ' + this.token);
       }
-      
+
     })
     this.getBrowserInformation();
     this.getDatasOfThisUserWorker = new Worker(new URL('../../workers/user/user-call-all-apis.worker.ts', import.meta.url));
@@ -72,6 +74,7 @@ export class LoginComponent {
     this.registerForm.get('phone')?.disable();
     this.registerForm.get('password')?.disable();
     this.registerForm.get('repassword')?.disable();
+
   }
 
   getBrowserInformation() {
@@ -84,7 +87,7 @@ export class LoginComponent {
   }
 
   compareInputWithCodeCache(): boolean {
-    if(this.code === this.codeCache){
+    if (this.code === this.codeCache) {
       this.sweetAlertService.showTimedAlert('Xác nhận thành công!', '', 'success', 2000);
       this.registerForm.get('fullName')?.enable();
       this.registerForm.get('username')?.enable();
@@ -92,12 +95,12 @@ export class LoginComponent {
       this.registerForm.get('password')?.enable();
       this.registerForm.get('repassword')?.enable();
       return true;
-    }else{
+    } else {
       this.sweetAlertService.showTimedAlert('Xác nhận thất bại!', '', 'error', 2000);
       return false;
     }
   }
-  
+
 
   passwordMatchValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -116,18 +119,27 @@ export class LoginComponent {
   }
 
   async login() {
+    this.loading = true;
+    this.error = undefined;
+    this.ui = false;
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
-  
+
       try {
         const loginResult = await this.authService.login(username, password);
-  
+
         if (loginResult === true) {
           this.sweetAlertService.showTimedAlert('Đăng nhập thành công!', 'Chào mừng đăng nhập.', 'success', 2000);
           this.activeModal.close('Login Successful');
+          this.loading = false;
+          this.ui = true;
+
         } else {
           console.error('Login failed');
+          this.error = 'Failed to fetch statistics. Please try again.';
+          this.loading = false;
+          this.ui = true;
         }
       } catch (error) {
         console.error('Error during login:', error);
@@ -140,9 +152,9 @@ export class LoginComponent {
   }
 
   async getAccessCode() {
-      const email = this.userEmail;
-      const typeCode = 'register'
-      await this.authService.getAccessCode(email, typeCode);
+    const email = this.userEmail;
+    const typeCode = 'register'
+    await this.authService.getAccessCode(email, typeCode);
   }
 
   register() {
@@ -155,7 +167,7 @@ export class LoginComponent {
       const code = this.token;
       const fullName = this.upperCase(fullname);
 
-      this.authService.register(fullName, username, password, phone, email,code)
+      this.authService.register(fullName, username, password, phone, email, code)
         .subscribe(
           (response) => {
             if (response.error === 'JWT is valid') {
@@ -207,7 +219,7 @@ export class LoginComponent {
     });
   }
 
-  openUserPasswordModel(){
+  openUserPasswordModel() {
     const modalRef = this.modalService.open(UserPasswordComponent);
     modalRef.componentInstance.selected = 'forgot-password';
   }
@@ -216,12 +228,12 @@ export class LoginComponent {
   upperCase(str: string): string {
     return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
-  customFullNameValidator(control: AbstractControl){
+  customFullNameValidator(control: AbstractControl) {
     const fullName = control.value;
     if (!fullName) {
       return { 'required': true, 'message': 'Họ tên không được để trống' };
     }
-    if(fullName.length > 50){
+    if (fullName.length > 50) {
       return { 'required': true, 'message': 'Họ tên quá dài' };
     }
     if (/[^a-zA-Z ]/.test(fullName)) {
@@ -230,7 +242,7 @@ export class LoginComponent {
     if (/\d/.test(fullName)) {
       return { 'required': true, 'message': 'Không được chứa số' };
     }
-  
+
     return true;
   }
   customPasswordValidator(control: AbstractControl) {

@@ -13,6 +13,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { TableType } from 'src/app/interfaces/table-type';
 import { Restaurant } from 'src/app/interfaces/restaurant';
+import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 
 @Component({
   selector: 'app-user-table',
@@ -30,6 +31,7 @@ export class UserRestaurantTablesComponent {
   constructor(
     private toastService: ToastService,
     private modalService: NgbModal,
+    private modalService2: NgbModal,
     private restaurantTableService: RestaurantTableService,
     private tableStatusService: TableStatusService,
     private authenticationService: AuthenticationService,
@@ -70,8 +72,6 @@ export class UserRestaurantTablesComponent {
     if (!this.authenticationService.getUserCache()) {
       //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
     } else {
-      //this.toastService.showSuccess("Đặt bàn thành công");
-
       const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'lg' });
       modalRef.componentInstance.restaurantTable = restaurantTable;
 
@@ -79,10 +79,16 @@ export class UserRestaurantTablesComponent {
       modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
         this.getRestaurantTables(); // Refresh data in the parent component
       });
-
     }
+  }
 
-
+  openUserReservationHistoriesModal() {
+    if (!this.authenticationService.getUserCache()) {
+      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+    } else {
+      const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'lg' });
+      modalRef.componentInstance.userId = this.authenticationService.getUserCache()?.userId;
+    }
   }
 
 }

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { Product } from 'src/app/interfaces/product';
 import { IngredientService } from 'src/app/services/ingredient.service';
@@ -9,8 +8,8 @@ import { MenuItemIngredientService } from 'src/app/services/menu-Item-ingredient
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
-import { AdminMenuItemIngredientDetailComponent } from '../admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
 import { MenuItemIngredient } from './../../../../interfaces/menu-item-ingredient';
+import { AdminMenuItemIngredientDetailComponent } from './admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
 
 @Component({
   selector: 'app-admin-menu-item-ingredients',
@@ -102,6 +101,8 @@ export class AdminMenuItemIngredientsComponent {
     const found = this.products.find(data => data.menuItemId === id);
     return found || null;
   }
+
+
 
   addMenuItemIngredient(): void {
     const menuItemId = this.menuItemIngredientForm.get('menuItemId')?.value;

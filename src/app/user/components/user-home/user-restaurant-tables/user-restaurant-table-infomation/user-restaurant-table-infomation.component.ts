@@ -47,15 +47,15 @@ export class UserRestaurantTableInfomationComponent {
   }
 
   ngOnInit(): void {
-    //this.getReservationsByTableId();
-    // this.authService.cachedData$.subscribe((data) => {
-    //   this.user = data;
-    //   if (this.user && typeof this.user.userId === 'number') {
-    //     this.getReservationsByCurrentUser(this.user.userId);
-    //   }
-    // });
     this.minDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')!;
     this.maxDate = this.datePipe.transform(this.addDays(new Date(), 5), 'yyyy-MM-dd')!;
+    this.reservationService.getCache().subscribe(
+      () => {
+        if(this.restaurantTable?.tableId){
+          this.getRervationByTableId(this.restaurantTable.tableId);
+        }
+      }
+    )
   }
 
   private addDays(date: Date, days: number): Date {
@@ -64,41 +64,18 @@ export class UserRestaurantTableInfomationComponent {
     return result;
   }
 
-  bookingTable(): void {
+  bookingTable(): void { 
     this.addReservation();
   }
 
-  // getReservationsByTableId(): void {
-  //   if (this.restaurantTable?.tableId) {
-  //     this.reservationService.getReservationsByTableId(this.restaurantTable.tableId).subscribe(
-  //       {
-  //         next: (reservations) => {
-  //           this.reservations = reservations;
-  //           console.log(this.reservations);
-  //         },
-  //         error: (error) => {
-
-  //         },
-  //         complete: () => {
-
-  //         }
-  //       }
-  //     );
-  //   }
-  // }
-
-  // getReservationsByCurrentUser(userId: number): void {
-  //   this.reservationService.getReservationsByUser(userId).subscribe(
-  //     (reservations) => {
-  //       this.reservations = reservations;
-  //       console.log('Reservations for current user:', this.reservations);
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching reservations:', error);
-  //       // Xử lý lỗi nếu cần
-  //     }
-  //   );
-  // }
+  getRervationByTableId(id: number){
+    this.reservationService.getReservationsByTableId(id).subscribe(
+      cached => {
+        this.reservations = cached;
+        console.log(this.reservations);
+      }
+    );
+  }
 
   updateMinMaxDate() {
     const currentDate = new Date();
@@ -131,6 +108,7 @@ export class UserRestaurantTableInfomationComponent {
     // Ngày mà khách hàng chọn
     const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
     let selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
+    console.log(selectedTimeStr);
 
     if (!this.checkDate(selectedDate, this.minDate, this.maxDate)) {
       selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
@@ -161,10 +139,10 @@ export class UserRestaurantTableInfomationComponent {
 
     }
 
-    let reservations: Reservation[] = JSON.parse(localStorage.getItem('reservations') || '[]');
+    // let reservations: Reservation[] = JSON.parse(localStorage.getItem('reservations') || '[]');
 
     // Tổng hợp ngày giờ lại
-    const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'dd-MM-yyyy')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
+    const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'yyyy-MM-dd')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
 
     const newReservation: Reservation = {
       restaurantTableId: this.restaurantTable?.tableId!,
@@ -179,8 +157,8 @@ export class UserRestaurantTableInfomationComponent {
       {
         next: (addedReservation) => {
           console.log("Đặt bàn thành công");
-          reservations.push(addedReservation);
-          localStorage.setItem('reservations', JSON.stringify(reservations));
+          // reservations.push(addedReservation);
+          // localStorage.setItem('reservations', JSON.stringify(reservations));
         },
         error: (error) => {
           console.error('Error adding reservation:', error);

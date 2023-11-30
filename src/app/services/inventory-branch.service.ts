@@ -26,6 +26,7 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     sweetAlertService: ToastService
   ) {
     super(apiService, rxStompService, sweetAlertService);
+    this.subscribeToQueue();
   }
 
   //-------------------------------------------------------------------------------------------------------
@@ -40,6 +41,12 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
 
   getCache(): Observable<any[]> {
     return this.cache$;
+  }
+
+  //-------------------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
   }
 
   override add(newObject: InventoryBranch): Observable<InventoryBranch> {

@@ -1,0 +1,23 @@
+Lich sử đặt bàn
+<table class="table table-border table-responsive">
+    <thead>
+        <th>Id người dùng</th>
+        <th>Id bàn</th>
+        <th>Trạng thái đặt bàn</th>
+        <th>Id đặt bàn</th>
+        <th>Ngày giờ tới</th>
+        <th>Ngày giờ đi</th>
+        <th>Số lượng khách hàng</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let thisUserReservation of thisUserReservations">
+            <td>{{ thisUserReservation.userId }}</td>
+            <td>{{ thisUserReservation.restaurantTableId }}</td>
+            <td>{{ thisUserReservation.reservationStatusName }}</td>
+            <td>{{ thisUserReservation.reservationId }}</td>
+            <td>{{ thisUserReservation.reservationDate }}</td>
+            <td>{{ thisUserReservation.outTime }}</td>
+            <td>{{ thisUserReservation.numberOfGuests }}</td>
+        </tr>
+    </tbody>
+</table>

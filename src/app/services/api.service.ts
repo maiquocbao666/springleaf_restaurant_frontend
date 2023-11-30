@@ -38,6 +38,10 @@ export class ApiService {
   request<T>(method: string, endpoint: string, data: any = null, customHeaders: HttpHeaders | null = null): Observable<T> {
 
     let headers: HttpHeaders;
+    // Thêm logs để xác nhận thông tin
+    console.log('Method:', method);
+    console.log('Endpoint:', endpoint);
+    console.log('Data:', data);
 
     if (customHeaders) {
       headers = customHeaders.append('Content-Type', 'application/json');
