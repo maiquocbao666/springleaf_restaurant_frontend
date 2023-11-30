@@ -4,4 +4,5 @@ export interface RestaurantTable {
     tableTypeId: number;
     tableStatusId: number;
     restaurantId: number;
+    seatingCapacity: number;
 }

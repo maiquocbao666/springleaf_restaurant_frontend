@@ -19,7 +19,7 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class UserRestaurantTableInfomationComponent {
 
-  @Input() restaurantTable: RestaurantTable | undefined;
+  @Input() restaurantTable!: RestaurantTable;
   @Output() restaurantTableSaved: EventEmitter<void> = new EventEmitter<void>();
   user: User | null = null;
   reservationForm: FormGroup;
@@ -49,6 +49,7 @@ export class UserRestaurantTableInfomationComponent {
       selectedTime: ['', [Validators.required]],
       outTime: ['', [Validators.required]],
       searchKeyWord: ['', Validators.nullValidator],
+      seatingCapacity: [1, Validators.nullValidator]
     });
   }
 
@@ -58,10 +59,15 @@ export class UserRestaurantTableInfomationComponent {
     this.reservationService.getCache().subscribe(
       () => {
         if (this.restaurantTable?.tableId) {
-          this.getRervationByTableId(this.restaurantTable.tableId);
+          this.getRervationsByTableId(this.restaurantTable.tableId);
         }
       }
     )
+  }
+
+  getNumbersArray(): number[] {
+    // Use safe navigation operator (?) to check if restaurantTable is available
+    return this.restaurantTable?.seatingCapacity ? Array.from({ length: this.restaurantTable.seatingCapacity }, (_, index) => index + 1) : [];
   }
 
   onSearch(): void {
@@ -93,7 +99,7 @@ export class UserRestaurantTableInfomationComponent {
     this.addReservation();
   }
 
-  getRervationByTableId(id: number) {
+  getRervationsByTableId(id: number) {
     this.reservationService.getReservationsByTableId(id).subscribe(
       cached => {
         this.reservations = cached;
@@ -130,6 +136,8 @@ export class UserRestaurantTableInfomationComponent {
 
     // Cập nhật ngày min max
     this.updateMinMaxDate();
+
+    const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
 
     // Ngày mà khách hàng chọn
     const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
@@ -186,16 +194,18 @@ export class UserRestaurantTableInfomationComponent {
       userId: this.user?.userId!,
       reservationDate: dateTimeString,
       outTime: outDateTimeString,
-      numberOfGuests: 1,
-      reservationStatusName: 'Đang chờ',
+      numberOfGuests: seatingCapacity,
+      reservationStatusName: 'Đang đợi',
     };
+
+    let reservationsCache: Reservation[] = [];
 
     this.reservationService.add(newReservation).subscribe(
       {
         next: (addedReservation) => {
           this.sweetAlertService.showTimedAlert('Chức mừng!', 'Bạn đã dặt bàn thành công', 'success', 3000);
-          // reservations.push(addedReservation);
-          // localStorage.setItem('reservations', JSON.stringify(reservations));
+          reservationsCache.push(addedReservation);
+          localStorage.setItem('reservations', JSON.stringify(reservationsCache));
         },
         error: (error) => {
           console.error('Error adding reservation:', error);

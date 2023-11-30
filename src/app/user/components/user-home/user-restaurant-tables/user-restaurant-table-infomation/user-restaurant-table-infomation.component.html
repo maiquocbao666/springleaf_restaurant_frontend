@@ -8,10 +8,8 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <span class="form-label">Số khách</span>
-                                    <select class="form-control" formControlName="numberOfGuests">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
+                                    <select class="form-control" formControlName="seatingCapacity">
+                                        <option *ngFor="let number of getNumbersArray()" [value]="number">{{ number }}</option>
                                     </select>
                                 </div>
                             </div>

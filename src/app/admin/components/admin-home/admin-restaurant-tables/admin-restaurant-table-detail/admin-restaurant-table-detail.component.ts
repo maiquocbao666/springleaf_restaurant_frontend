@@ -29,6 +29,8 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
   tableStatusesUrl = 'tableStatuses';
   restaurantsUrl = 'restaurants';
 
+  numbersArray = Array.from({length: 10}, (_, index) => index + 1);
+
   constructor(
     private restaurantTablesService: RestaurantTableService,
     private tableTypeService: TableTypeService,
@@ -39,17 +41,13 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private zone: NgZone
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.restaurantTableForm = this.formBuilder.group({
       tableId: ['', [Validators.required]],
       tableName: ['', [Validators.required]],
       tableTypeId: ['', [Validators.required]],
       tableStatusId: ['', [Validators.required]],
       restaurantId: ['', [Validators.required]],
+      seatingCapacity: [1, [Validators.nullValidator]]
     });
   }
 
@@ -105,7 +103,8 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
         tableName: this.restaurantTableForm.get('tableName')?.value,
         tableStatusId: +this.restaurantTableForm.get('tableStatusId')?.value,
         tableTypeId: +this.restaurantTableForm.get('tableTypeId')?.value,
-        restaurantId: +this.restaurantTableForm.get('restaurantId')?.value
+        restaurantId: +this.restaurantTableForm.get('restaurantId')?.value,
+        seatingCapacity: +this.restaurantTableForm.get('seatingCapacity')?.value,
       };
 
       this.restaurantTablesService.update(updatedRestaurantTable).subscribe(() => {
