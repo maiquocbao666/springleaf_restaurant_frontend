@@ -1,27 +1,34 @@
 <div class="container">
     <h1>ĐẶT BÀN</h1>
-    <div class="row">
-        <button (click)="openUserReservationHistoriesModal()">Lịch sử đặt bàn</button>
-        <div class="col-sm-2" *ngFor="let restaurantTable of restaurantTables">
-            <div class="card  m-5">
-                <div class="card-top">
-                    <p class="card__title"><i class="fas fa-table"></i>
-
-                    </p>
-                    {{ restaurantTable.tableName }}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-9"><h2>Danh sách bàn</h2></div>
+                <div class="col-lg-3">
+                    <button class="watch-btn" (click)="openUserReservationHistoriesModal()">Lịch sử đặt bàn</button>
                 </div>
-                <div class="card__info">
-                    <p class="episode__num">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName
-                        }}</p>
-                    <p class="episode__type">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName
-                        }}</p>
-                </div>
-                <div class="card__btns">
-                    <button class="watch-btn" (click)="openRestaurantTableInfomationModal(restaurantTable)">Đặt</button>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s" *ngFor="let restaurantTable of restaurantTables">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fas fa-3x fa-table "></i>
+                            <h5>{{ restaurantTable.tableName }}</h5>
+                            <div>
+                                <span><i class="fa fa-user"></i>{{ restaurantTable.tableName }}</span>
+                            </div>
+                            <div>
+                                <span><i class="fa fa-user"></i>{{ restaurantTable.tableName }}</span>
+                            </div>
+                            <p class="episode__num">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName}}</p>
+                            <p class="episode__type">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName}}</p>
+                            <button class="watch-btn" 
+                                    (click)="openRestaurantTableInfomationModal(restaurantTable)">
+                                    Đặt bàn
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 
 </div>

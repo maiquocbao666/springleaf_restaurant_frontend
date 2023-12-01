@@ -47,7 +47,8 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       tableTypeId: ['', [Validators.required]],
       tableStatusId: ['', [Validators.required]],
       restaurantId: ['', [Validators.required]],
-      seatingCapacity: [1, [Validators.nullValidator]]
+      seatingCapacity: [1, [Validators.nullValidator]],
+      description: ['', [Validators.required]]
     });
   }
 
@@ -105,6 +106,7 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
         tableTypeId: +this.restaurantTableForm.get('tableTypeId')?.value,
         restaurantId: +this.restaurantTableForm.get('restaurantId')?.value,
         seatingCapacity: +this.restaurantTableForm.get('seatingCapacity')?.value,
+        description: this.restaurantTableForm.get('description')?.value,
       };
 
       this.restaurantTablesService.update(updatedRestaurantTable).subscribe(() => {

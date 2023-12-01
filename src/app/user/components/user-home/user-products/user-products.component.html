@@ -8,13 +8,14 @@
                     <div class="row">
                         <div class="col-md-6" *ngFor="let product of getVisibleProducts(); let i = index">
                             <div class="single_menu">
-                                <a (click)="openProductDetailModal(product)"><img
-                                        src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
+                                <a (click)="openProductDetailModal(product)">
+                                    <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
                                         alt="burger"></a>
                                 <div class=" menu_content">
                                     <a (click)="openProductDetailModal(product)">
-                                        <h4>{{product.name}} <span>{{ formatAmount(product.unitPrice ) }}</span> </h4>
+                                        <h4>{{product.name}}</h4>
                                     </a>
+                                    <span>{{ formatAmount(product.unitPrice ) }}</span>
                                     <p>{{product.description}}</p>
                                     <button style="float: right;" (click)="addToCart(product.menuItemId)">
                                         <i class="fa-solid fa-cart-shopping"></i>
@@ -37,7 +38,7 @@
         </div>
     </div>
 </section>
-<section class="coupon">
+<!-- <section class="coupon">
     <div class="coupon-wrapper flex-vertical padding-1">
         <div class="top">
             <small>Valid Until Sunday 1/10/18</small>
@@ -51,4 +52,4 @@
             <span class="promo-code">woodsigns20</span>
         </div>
     </div>
-</section>
+</section> -->

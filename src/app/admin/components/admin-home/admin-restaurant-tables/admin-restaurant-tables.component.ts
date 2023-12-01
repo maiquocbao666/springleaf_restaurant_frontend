@@ -51,7 +51,8 @@ export class AdminRestaurantTablesComponent {
       tableTypeId: ['', [Validators.required]],
       tableStatusId: ['', [Validators.required]],
       restaurantId: ['', [Validators.required]],
-      seatingCapacity: [1, [Validators.nullValidator]]
+      seatingCapacity: [1, [Validators.nullValidator]],
+      description: ['', [Validators.required]]
     });
   }
 
@@ -139,13 +140,15 @@ export class AdminRestaurantTablesComponent {
     const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
     const restaurantId = this.restaurantTableForm.get('restaurantId')?.value;
     const seatingCapacity = this.restaurantTableForm.get('seatingCapacity')?.value;
+    const description = this.restaurantTableForm.get('description')?.value?.trim() ?? '';
 
     const newRestaurantTable: RestaurantTable = {
       tableName: tableName,
       tableTypeId: +tableTypeId,
       tableStatusId: +tableStatusId,
       restaurantId: +restaurantId,
-      seatingCapacity: +seatingCapacity
+      seatingCapacity: +seatingCapacity,
+      description: description,
     };
 
     this.restaurantTableService.add(newRestaurantTable)

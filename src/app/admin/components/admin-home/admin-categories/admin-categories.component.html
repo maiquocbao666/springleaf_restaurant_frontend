@@ -1,69 +1,104 @@
-<h1>Categoriy Form</h1>
-
-<form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
-    <label for="categoryName">Category name: </label>
-    <input id="categoryName" formControlName="name" />
-    <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.dirty || categoryForm.get('name')?.touched)"
-        class="alert alert-danger">
-        <div *ngIf="categoryForm.get('name')?.hasError('required')">
-            Name is required
+<div class="container">
+    <div class="row d-flex align-items-center">
+        <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
+            <h1 class="mb-2">Category</h1>
+            <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="categoryName" formControlName="name" placeholder="Nhập tên category">
+                            <label for="name">Tên category</label>
+                            <i *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.dirty || categoryForm.get('name')?.touched)" style="color: red;">
+                                <span *ngIf="categoryForm.get('name')?.hasError('required')">* Tên category không được trống</span>
+                                <span *ngIf="categoryForm.get('name')?.hasError('minlength')">* Tên category phải dài hơn 3 ký tự</span>
+                            </i>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check form-check-inline mt-3">
+                            <label class="form-check-label">Trạng thái hoạt động: </label>
+                          </div>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="categoryActiveYes" formControlName="active" type="radio" [value]="true"
+                            [checked]="categoryForm.get('active')?.value === true">
+                            <label class="form-check-label" for="categoryActiveYes">Có</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="categoryActiveNo" formControlName="active" type="radio" [value]="false"
+                            [checked]="categoryForm.get('active')?.value === false">
+                            <label class="form-check-label" for="inlineRadio2">Không</label>
+                          </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Special Request" id="categoryDescription" formControlName="description"></textarea>
+                            <label for="message">Mô tả</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary py-2" type="submit" [disabled]="categoryForm.invalid">Lưu</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div *ngIf="categoryForm.get('name')?.hasError('minlength')">
-            Name must be at least 3 characters long
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12 w-10">
+            <select (change)="onTableSizeChange($event)" class="form-control">
+                <option *ngFor="let size of tableSizes">
+                    {{size}}
+                </option>
+            </select>
         </div>
-    </div> <br>
-
-    <label>Đang bán: </label>
-    <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true"
-        [checked]="categoryForm.get('active')?.value === true"> Có
-    <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false"
-        [checked]="categoryForm.get('active')?.value === false"> Không <br>
-
-    <label for="categoryDescription">Category description: </label>
-    <input id="categoryDescription" formControlName="description" /> <br>
-
-    <button type="submit" class="add-button" [disabled]="categoryForm.invalid">
-        Add category
-    </button>
-</form>
-
-<h1>Categories table</h1>
-<div>
-    <select (change)="onTableSizeChange($event)">
-        <option *ngFor="let size of tableSizes">
-            {{size}}
-        </option>
-    </select>
-</div>
-<br>
-<table class="table table-light container">
-    <tbody>
-        <tr>
-            <td>ID</td>
-            <td>Name</td>
-            <td>Active</td>
-            <td>Description</td>
-            <td>Edit</td>
-            <td>Delete</td>
-        </tr>
-        <tr
-            *ngFor="let category of categories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-            <th>{{category.categoryId}}</th>
-            <th>{{category.name}}</th>
-            <th>{{category.active}}</th>
-            <th>{{category.description}}</th>
-            <!-- <th> <a routerLink="/admin/category/{{category.categoryId}}" type="button">Edit
-                </a></th> -->
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item">
-                    <button (click)="openCategoryDetailModal(category)">Edit</button>
-                </li>
-            </ul>
-            <th><button (click)="deleteCategory(category)" >Delete</button></th>
-        </tr>
-    </tbody>
-</table>
-<div>
-    <pagination-controls previousLabel="Prev" nextLabel="Next"
-        (pageChange)="onTableDataChange($event)"></pagination-controls>
+        <div class="col">
+          <div class="card mb-grid">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <div class="card-header-title">Table</div>
+            </div>
+            <div class="table-responsive-md">
+              <table class="table table-actions table-striped table-hover mb-0">
+                <thead>
+                  <tr>
+                    <td>ID</td>
+                    <td>Name</td>
+                    <td>Active</td>
+                    <td>Description</td>
+                    <td>Edit</td>
+                    <td>Delete</td>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let category of categories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                        <th>{{category.categoryId}}</th>
+                        <th>{{category.name}}</th>
+                        <th>{{category.active}}</th>
+                        <th>{{category.description}}</th>
+                        <!-- <th> <a routerLink="/admin/category/{{category.categoryId}}" type="button">Edit
+                            </a></th> -->
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <button (click)="openCategoryDetailModal(category)" class="btn btn-sm btn-primary">
+                                    Edit
+                                </button>
+                            </li>
+                        </ul>
+                        <th>
+                            <button (click)="deleteCategory(category)" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </th>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <pagination-controls previousLabel="Prev" nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
+    
 </div>

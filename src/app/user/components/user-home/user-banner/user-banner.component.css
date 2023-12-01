@@ -1,0 +1,71 @@
+.coupon {
+    border-radius: 7px;
+    border: 5px dashed #75a418;
+    padding: .5rem;
+    margin: .5rem;
+  }
+  
+  .coupon .coupon-wrapper {
+    border-radius: 4px;
+    padding: 1rem;
+    background: rgba(256, 256, 256, .72);
+  }
+  
+  /* Top */
+  
+  .coupon .coupon-wrapper .top small {
+    text-transform: uppercase;
+    color: #75a418;
+  }
+  
+  /* Center */
+  .coupon .coupon-wrapper .center {
+    text-transform: uppercase;
+    padding: 1rem 0;
+  }
+  
+  .coupon .coupon-wrapper .center .big {
+    font-size: 84px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  
+  .coupon .coupon-wrapper .center .small {
+    text-transform: uppercase;
+    font-size: 32px;
+    font-weight: 300;
+  }
+  
+  /* Bottom */
+  .coupon .coupon-wrapper .bottom {
+    text-transform: uppercase;
+  }
+  
+  .coupon .coupon-wrapper .bottom .promo-title {
+    text-transform: uppercase;
+  }
+  
+  .coupon .coupon-wrapper .bottom .promo-code {
+    background: #75a418;
+    color: white;
+    display: inline-block;
+    padding: 3px 6px;
+    border-radius: 4px;
+  }
+  
+  /* Gradient */
+  .coupon {
+    background: -moz-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
+    /* ff3.6+ */
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #e3d5f2), color-stop(50%, #ffffff), color-stop(100%, #E3D5F2));
+    /* safari4+,chrome */
+    background: -webkit-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
+    /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
+    /* opera 11.10+ */
+    background: -ms-linear-gradient(310deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
+    /* ie10+ */
+    background: linear-gradient(140deg, #e3d5f2 0%, #ffffff 50%, #E3D5F2 100%);
+    /* w3c */
+  }
+  

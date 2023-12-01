@@ -217,4 +217,8 @@ export class UserRestaurantTableInfomationComponent {
     );
   }
 
+  orderAfterReservation(){
+    
+  }
+
 }

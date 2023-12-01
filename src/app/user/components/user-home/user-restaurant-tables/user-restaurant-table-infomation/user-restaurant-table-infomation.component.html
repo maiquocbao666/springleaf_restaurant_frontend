@@ -1,66 +1,57 @@
-<div id="booking" class="section">
-    <div class="section-center">
-        <div class="container">
-            <div class="row">
-                <div class="booking-form">
-                    <form [formGroup]="reservationForm">
-                        <div class="row no-margin">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <span class="form-label">Số khách</span>
-                                    <select class="form-control" formControlName="seatingCapacity">
-                                        <option *ngFor="let number of getNumbersArray()" [value]="number">{{ number }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="row no-margin">
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <span class="form-label">Ngày tới</span>
-                                            <input class="form-control" type="date" id="selectedDate"
-                                                formControlName="selectedDate" [min]="minDate" [max]="maxDate" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <span class="form-label">Thời gian tới</span>
-                                            <input class="form-control" type="time" id="selectedTime"
-                                                formControlName="selectedTime" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row no-margin">
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <span class="form-label">Định dạng VN</span>
-                                            <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <span class="form-label">Thời gian đi</span>
-                                            <input class="form-control" type="time" id="outTime"
-                                                formControlName="outTime" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-btn">
-                                    <button class="submit-btn" (click)="bookingTable()">Đặt bàn</button>
-                                </div>
 
+<div aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl section-center mt-0 mb-0" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mb-0">Đặt bàn {{restaurantTable.tableName}}</h3>
+            </div>
+            <div class="modal-body d-flex flex-column justify-content-center">
+                <div class="booking">
+
+                    <form class="booking-form row" role="form" [formGroup]="reservationForm">
+                        <div class="col-lg-12">
+                            <div class="col-lg-6 input-group">
+                                <input class="form-control" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss" (input)="onSearch()"/>
                             </div>
                         </div>
-            
-                        <input class="form-control" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss" (input)="onSearch()"/>
+                        <div class="col-lg-6 col-12">
+                            <span class="form-label">Số khách</span>
+                            <select class="form-control form-select" formControlName="seatingCapacity">
+                                <option *ngFor="let number of getNumbersArray()" [value]="number">{{ number }}</option>
+                            </select>
+                        </div>
 
+                        <div class="col-lg-6 col-12">
+                            <span class="form-label">Ngày tới</span>
+                            <input class="form-control" type="date" id="selectedDate"
+                                formControlName="selectedDate" [min]="minDate" [max]="maxDate" required>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <span class="form-label">Thời gian tới</span>
+                                <input class="form-control" type="time" id="selectedTime"
+                                    formControlName="selectedTime" required>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <span class="form-label">Thời gian đi</span>
+                            <input class="form-control" type="time" id="outTime"
+                                formControlName="outTime" required>
+                        </div>
+
+                        <div class="col-lg-12 col-12 form-group">
+                            <span class="form-label">Định dạng VN</span>
+                            <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
+                        </div>
+                        <div class="col-lg-4 col-12 ms-auto">
+                            <button type="submit" class="form-control submit-btn" (click)="bookingTable()">Đặt bàn</button>
+                        </div>
+                        <h3>Lịch sử</h3>
                         <ng-container *ngIf="isSearch; else elseTemplate">
-                            <div *ngFor="let reservation of searchReservations">
+                            <div *ngFor="let reservation of searchReservations" >
                                 <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
                                     reservation.outTime | date: 'HH:mm:ss' }}</div>
-                            </div>
+                                </div>
                         </ng-container>
                         <ng-template #elseTemplate>
                             <div *ngFor="let reservation of reservations">
@@ -68,7 +59,6 @@
                                     reservation.outTime | date: 'HH:mm:ss' }}</div>
                             </div>
                         </ng-template>
-
                     </form>
                 </div>
             </div>

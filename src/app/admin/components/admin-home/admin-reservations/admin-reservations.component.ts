@@ -12,7 +12,6 @@ import { ToastService } from 'src/app/services/toast.service';
 import { Message } from '@stomp/stompjs';
 import { DatePipe } from '@angular/common';
 import { addHours, differenceInMilliseconds, format } from 'date-fns';
-import { utcToZonedTime, format as formatTz } from 'date-fns-tz';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';

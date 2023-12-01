@@ -5,4 +5,5 @@ export interface RestaurantTable {
     tableStatusId: number;
     restaurantId: number;
     seatingCapacity: number;
+    description: string;
 }
