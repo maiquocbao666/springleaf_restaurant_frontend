@@ -1,0 +1,60 @@
+<h1>Hóa đơn</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">User </th>
+      <th scope="col">Date </th>
+      <th scope="col">totalAmount</th>
+      <th scope="col">paymentMethod</th>
+      <th scope="col">address</th>
+      <th scope="col">bankNumber</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let bill of bills">
+      <td> {{ bill.billId }}</td>
+      <td>{{bill.userId}}</td>
+      <td>{{bill.billTime}}</td>
+      <td>{{bill.totalAmount}}</td>
+      <td>{{bill.paymentMethod}}</td>
+      <td>{{bill.address}}</td>
+      <td>{{bill.bankNumber}}</td>
+      <td>
+        <button type="button" class="btn btn-outline-primary" (click)="openModal(content, bill.billId!)">Edit</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal Template -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Bill Details</h4>
+    <button class="btn btn-primary" type=" button" class="close" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Mã hóa đơn chi tiết</th>
+          <th scope="col">Món</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Mã Hóa đơn</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detail of billDetails">
+          <td>{{ detail.billDetailId }}</td>
+          <td>{{ getProductById(detail.menuItemId)?.name }}</td>
+          <td>{{ detail.quantity }}</td>
+          <td>{{ detail.bill }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

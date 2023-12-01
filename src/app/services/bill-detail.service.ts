@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { BillDetail } from '../interfaces/bill-detail';
-import { BehaviorSubject } from 'rxjs';
 import { RxStompService } from '../rx-stomp.service';
 import { BaseService } from './base-service';
 import { ToastService } from './toast.service';
@@ -65,5 +64,11 @@ import { ToastService } from './toast.service';
   }
 
   //------------------------------------------------------------------------
+  getBillDetailsByBillId(billId: number): Observable<BillDetail[]> {
+    const url = `billDetails/${billId}/billDetails`;
+    return this.apiService.request<BillDetail[]>('get', url);
+  }
+
+
 
 }

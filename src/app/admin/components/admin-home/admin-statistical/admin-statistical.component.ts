@@ -1,12 +1,19 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+// import { MatDialog } from '@angular/material/dialog';
+// import { MatPaginator } from '@angular/material/paginator';
+// import { MatSort } from '@angular/material/sort';
+// import { MatTableDataSource } from '@angular/material/table';
+import { Bill } from 'src/app/interfaces/bill';
+import { Category } from 'src/app/interfaces/category';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { MenuItemIngredient } from 'src/app/interfaces/menu-item-ingredient';
 import { Product } from 'src/app/interfaces/product';
+import { CategoryService } from 'src/app/services/category.service';
 import { IngredientService } from 'src/app/services/ingredient.service';
 import { ProductService } from 'src/app/services/product.service';
 import { StatisticsService } from 'src/app/services/statistical.service';
-
+import { AdminProductDetailComponent } from '../admin-products/admin-product-detail/admin-product-detail.component';
 @Component({
   selector: 'app-admin-statistical',
   templateUrl: './admin-statistical.component.html',
@@ -22,21 +29,59 @@ export class AdminStatisticalComponent {
   ingredients: Ingredient[] = [];
   productsUrl = 'products';
   ingredientsUrl = 'ingredients';
+  categoriesUrl = 'categories';
+  categories: Category[] = [];
+  revenueData: Object[] = [];
+  billsData: Bill[] = [];
 
   reservations: any[] = [];
   selectedDate: string = '';
   topItems: any[] = [];
-
+  startDate: string = '';
+  endDate: string = '';
+  displayedColumns: string[] = ['name', 'description', 'unitPrice', 'imageUrl', 'status']; // Các cột bạn muốn hiển thị
+  // dataSource!: MatTableDataSource<Product>;
+  selectedRow: any;
+  // @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private statisticsService: StatisticsService,
     private productService: ProductService,
     private ingredientService: IngredientService,
-    private http: HttpClient) { }
+    // private dialog: MatDialog,
+    private http: HttpClient,
+    private categoryService: CategoryService,
+  ) { }
 
   ngOnInit(): void {
     this.getProducts();
+    this.getCategories();
     this.getIngredients();
     this.getTop5OrderedItems();
+  }
+
+  
+
+
+  getProducts(): void {
+    this.productService.getCache().subscribe(
+      (cached: Product[]) => {
+        this.products = cached;
+        // this.dataSource = new MatTableDataSource(this.products);
+        // this.dataSource.paginator = this.paginator;
+        // this.dataSource.sort = this.sort;
+      },
+      (error: any) => {
+        console.error('Failed to fetch data', error);
+      }
+    );
+  }
+
+
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   fetchStatistics(): void {
@@ -55,23 +100,31 @@ export class AdminStatisticalComponent {
     );
   }
 
+
+  getCategoryById(id: number): Category | null {
+    const found = this.categories.find(data => data.categoryId === id);
+    return found || null;
+  }
+
   getProductById(id: number): Product | null {
     const found = this.products.find(data => data.menuItemId === id);
     return found || null;
   }
 
-  getProducts(): void {
-    this.productService.getCache().subscribe(
-      (cached: any[]) => {
-        this.products = cached;
-      }
-    );
-  }
 
   getIngredients(): void {
     this.ingredientService.getCache().subscribe(
       (cached: any[]) => {
         this.ingredients = cached;
+      }
+    );
+  }
+
+
+  getCategories(): void {
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
       }
     );
   }
@@ -104,7 +157,6 @@ export class AdminStatisticalComponent {
       this.statisticsService.getReservationsByDate(this.selectedDate).subscribe(
         (data: any[]) => {
           this.reservations = data;
-          // Xử lý dữ liệu nhận được từ API ở đây
         },
         (error: any) => {
           console.error('Failed to get reservations.', error);
@@ -117,12 +169,43 @@ export class AdminStatisticalComponent {
     this.statisticsService.getTop5MostOrderedItems().subscribe(
       (data: any) => {
         this.topItems = data;
-        console.log(data); // Hiển thị dữ liệu nhận được từ API trong console log
+        console.log(data);
       },
       (error) => {
-        // Xử lý lỗi nếu có
         console.error(error);
       }
     );
   }
+
+  getRevenueAndBills(): void {
+    if (this.startDate && this.endDate) {
+      this.statisticsService.getRevenueByTimeRange(this.startDate, this.endDate).subscribe(
+        (revenueData: Object[]) => {
+          this.revenueData = revenueData;
+        },
+        (error: any) => {
+          console.error('Failed to get revenue data.', error);
+        }
+      );
+
+      this.statisticsService.getBillsByTimeRange(this.startDate, this.endDate).subscribe(
+        (billsData: Bill[]) => {
+          this.billsData = billsData;
+        },
+        (error: any) => {
+          console.error('Failed to get bills data.', error);
+        }
+      );
+    } else {
+      console.error('Please provide both start date and end date.');
+    }
+  }
+
+  // openModal(row: any) {
+  //   this.selectedRow = row;
+  //   const dialogRef = this.dialog.open(AdminProductDetailComponent, {
+  //     width: '400px',
+  //     data: row
+  //   });
+  // }
 }

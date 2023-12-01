@@ -160,6 +160,12 @@ const routes: Routes = [
         loadChildren: () => import('./admin-statistical/admin-statistical.module').then(
           (m) => m.AdminStatisticalModule
         )
+      },
+      {
+        path: 'bills',
+        loadChildren: () => import('./admin-bills/admin-bills.module').then(
+          (m) => m.AdminBillsModule
+        )
       }
     ]
   },
