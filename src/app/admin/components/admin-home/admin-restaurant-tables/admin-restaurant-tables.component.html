@@ -49,6 +49,10 @@
           </select>
         </div>
       </div>
+      <label>Số lượng người tối đa</label>
+      <select formControlName="seatingCapacity">
+        <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
+      </select>
     </div>
     <button (click)="addRestaurantTable()" class="btn btn-primary">Save</button>
     <!-- Trong template HTML của Angular component -->
@@ -67,6 +71,7 @@
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Tên bàn</th>
+        <th scope="col">Số lượng người tối đa</th>
         <th scope="col">Restaurant</th>
         <th scope="col">Status</th>
         <th scope="col">Type</th>
@@ -78,6 +83,7 @@
         *ngFor="let restaurantTable of restaurantTables | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
         <td>{{restaurantTable.tableId}}</td>
         <td>{{restaurantTable.tableName}}</td>
+        <td>{{ restaurantTable.seatingCapacity }}</td>
         <td>{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }}</td>
         <td>{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}</td>
         <td>{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName  }}</td>

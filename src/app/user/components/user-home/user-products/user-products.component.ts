@@ -98,12 +98,11 @@ export class UserProductsComponent implements OnInit {
   }
 
   getCategories(): void {
-    // this.categoryService.gets();
-    // this.categoryService.cache$
-    //   .subscribe(categories => {
-    //     this.categoryService.gets();
-    //     this.categories = JSON.parse(localStorage.getItem(this.categoriesUrl) || 'null');
-    //   });
+    this.categoryService.getCache().subscribe(
+      cached => {
+        this.categories = this.categories;
+      }
+    )
   }
 
   getProductsByCategoryId(): void {

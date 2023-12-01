@@ -51,8 +51,11 @@ export class AdminRestaurantTablesComponent {
       tableTypeId: ['', [Validators.required]],
       tableStatusId: ['', [Validators.required]],
       restaurantId: ['', [Validators.required]],
+      seatingCapacity: [1, [Validators.nullValidator]]
     });
   }
+
+  numbersArray = Array.from({length: 10}, (_, index) => index + 1);
 
   ngOnInit(): void {
     this.getRestaurantTables();
@@ -135,18 +138,21 @@ export class AdminRestaurantTablesComponent {
     const tableTypeId = this.restaurantTableForm.get('tableTypeId')?.value;
     const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
     const restaurantId = this.restaurantTableForm.get('restaurantId')?.value;
+    const seatingCapacity = this.restaurantTableForm.get('seatingCapacity')?.value;
 
     const newRestaurantTable: RestaurantTable = {
       tableName: tableName,
       tableTypeId: +tableTypeId,
       tableStatusId: +tableStatusId,
       restaurantId: +restaurantId,
+      seatingCapacity: +seatingCapacity
     };
 
     this.restaurantTableService.add(newRestaurantTable)
       .subscribe(restaurantTable => {
         this.restaurantTableForm.reset();
-      });
+        this.restaurantTableForm.get('seatingCapacity')?.setValue(1);
+    });
   }
 
   deleteTable(restaurantTable: RestaurantTable): void {

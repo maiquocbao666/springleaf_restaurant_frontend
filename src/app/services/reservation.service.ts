@@ -73,14 +73,7 @@ export class ReservationService extends BaseService<Reservation> {
             return of(filteredReservations);
         }
 
-        const reservationsObservable = this.apiService.request<Reservation[]>('get', this.apisUrl);
-
-        return reservationsObservable.pipe(
-            tap(reservations => {
-                this.cache = reservations;
-            }),
-            map(reservations => reservations.filter(reservation => reservation.restaurantTableId === restaurantTableId))
-        );
+        return of();
     }
 
     getReservationsByUserId(userId: number): Observable<Reservation[]> {
@@ -89,14 +82,50 @@ export class ReservationService extends BaseService<Reservation> {
             return of(filteredReservations);
         }
 
-        const reservationsObservable = this.apiService.request<Reservation[]>('get', this.apisUrl);
+        return of();
 
-        return reservationsObservable.pipe(
-            tap(reservations => {
-                this.cache = reservations;
-            }),
-            map(reservations => reservations.filter(reservation => reservation.userId === userId))
+    }
+
+    isTimeInRange(startTime: Date, endTime: Date, checkTime: Date): boolean {
+        return checkTime.getTime() >= startTime.getTime() && checkTime.getTime() <= endTime.getTime();
+    }
+
+    hasReservationInTimeRange(reservations: Reservation[], tableId: number, startTime: Date, endTime: Date): boolean {
+        return reservations.some(reservation =>
+            reservation.restaurantTableId === tableId &&
+            (this.isTimeInRange(new Date(reservation.reservationDate), new Date(reservation.outTime), startTime) ||
+            this.isTimeInRange(new Date(reservation.reservationDate), new Date(reservation.outTime), endTime))
         );
+    }
+
+    isReservationsInTimeRangeByTableId(tableId: number, startTime: string, endTime: string): boolean {
+        const startTimeDate = new Date(startTime);
+        const endTimeDate = new Date(endTime);
+    
+        if (this.cache) {
+            const hasReservations = this.hasReservationInTimeRange(this.cache, tableId, startTimeDate, endTimeDate);
+            return hasReservations;
+        }
+    
+        // If this.cache is falsy (e.g., undefined), return false
+        return false;
+    }
+
+    searchReservations(tableId: number, keyword: string): Observable<Reservation[]> {
+        if (this.cache) {
+            const lowerCaseKeyword = keyword.toLowerCase();
+            const filteredReservations = this.cache.filter(reservation =>
+                reservation.restaurantTableId === tableId &&
+                (reservation.reservationDate.toLowerCase().includes(lowerCaseKeyword) ||
+                reservation.outTime.toLowerCase().includes(lowerCaseKeyword))
+                // Add more fields to search as needed
+                // Example: reservation.userId.toString().toLowerCase().includes(lowerCaseKeyword) ||
+                //         ...
+            );
+            return of(filteredReservations);
+        }
+    
+        return of([]);
     }
 
 }

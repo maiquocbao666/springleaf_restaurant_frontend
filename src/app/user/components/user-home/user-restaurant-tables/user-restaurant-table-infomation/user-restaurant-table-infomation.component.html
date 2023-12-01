@@ -8,10 +8,8 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <span class="form-label">Số khách</span>
-                                    <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
+                                    <select class="form-control" formControlName="seatingCapacity">
+                                        <option *ngFor="let number of getNumbersArray()" [value]="number">{{ number }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -19,18 +17,31 @@
                                 <div class="row no-margin">
                                     <div class="col-md-5">
                                         <div class="form-group">
-                                            <span class="form-label">Select date</span>
-                                            <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate" [min]="minDate" [max]="maxDate" required>
+                                            <span class="form-label">Ngày tới</span>
+                                            <input class="form-control" type="date" id="selectedDate"
+                                                formControlName="selectedDate" [min]="minDate" [max]="maxDate" required>
                                         </div>
+                                    </div>
+                                    <div class="col-md-5">
                                         <div class="form-group">
-                                            <span class="form-label">VN format</span>
+                                            <span class="form-label">Thời gian tới</span>
+                                            <input class="form-control" type="time" id="selectedTime"
+                                                formControlName="selectedTime" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row no-margin">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <span class="form-label">Định dạng VN</span>
                                             <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
                                         </div>
                                     </div>
                                     <div class="col-md-5">
                                         <div class="form-group">
-                                            <span class="form-label">Select time</span>
-                                            <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime" min="16:00" max="17:00" required>
+                                            <span class="form-label">Thời gian đi</span>
+                                            <input class="form-control" type="time" id="outTime"
+                                                formControlName="outTime" required>
                                         </div>
                                     </div>
                                 </div>
@@ -39,12 +50,25 @@
                                 <div class="form-btn">
                                     <button class="submit-btn" (click)="bookingTable()">Đặt bàn</button>
                                 </div>
-                                
+
                             </div>
                         </div>
-                        <div *ngFor="let reservation of reservations">
-                            <div>Ngày giờ tới: {{ reservation.reservationDate | date: 'dd-MM-yyyy HH:mm:ss' }}</div>
-                        </div>
+            
+                        <input class="form-control" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss" (input)="onSearch()"/>
+
+                        <ng-container *ngIf="isSearch; else elseTemplate">
+                            <div *ngFor="let reservation of searchReservations">
+                                <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
+                                    reservation.outTime | date: 'HH:mm:ss' }}</div>
+                            </div>
+                        </ng-container>
+                        <ng-template #elseTemplate>
+                            <div *ngFor="let reservation of reservations">
+                                <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
+                                    reservation.outTime | date: 'HH:mm:ss' }}</div>
+                            </div>
+                        </ng-template>
+
                     </form>
                 </div>
             </div>
