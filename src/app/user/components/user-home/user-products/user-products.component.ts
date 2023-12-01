@@ -40,6 +40,7 @@ export class UserProductsComponent implements OnInit {
     private orderService: OrderService,
     private deliveryOrderService : DeliveryOrderService,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private route: ActivatedRoute,
     private authService: AuthenticationService,
     private orderDetailService : CartDetailService,
