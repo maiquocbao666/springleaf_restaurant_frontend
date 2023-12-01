@@ -31,10 +31,19 @@ export class AuthenticationService {
   cachedData$: Observable<User | null> = this.cachedDataSubject.asObservable();
   roleCacheData$: Observable<String[] | null> = this.listRoleDataSubject.asObservable();
   accessCodeCacheData$: Observable<string | null> = this.accessCodeDataSubject.asObservable();
+  //  ----------------------------------------------------------------------------------- 
   setUserCache(user: User | null) {
+    this.userCache = user;
     this.cachedDataSubject.next(user);
   }
-
+  getUserCache(): User | null {
+    return this.userCache;
+  }
+  setAccessCodeCacheData(code: string) {
+    this.accessCode = code;
+    this.accessCodeDataSubject.next(code);
+  }
+  // -----------------------------------------------------------------------------------
   getAccessCode(email: string, typeCode: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.getDatasOfThisUserWorker.postMessage({
@@ -59,11 +68,7 @@ export class AuthenticationService {
       };
     });
   }
-  setAccessCodeCacheData(code: string) {
-    this.accessCode = code;
-    this.accessCodeDataSubject.next(code);
-  }
-
+  
   register(fullName: string, username: string, password: string, phone: string, email: string, code: string): Observable<any> {
     const registerData = {
       fullName: fullName,
@@ -100,7 +105,6 @@ export class AuthenticationService {
         }
         else {
           localStorage.setItem('access_token', data.loginResponse.access_token);
-          //localStorage.setItem('refresh_token', data.loginResponse.refresh_token);
           localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
           this.setUserCache(data.loginResponse.user);
           this.listRole = data.loginResponse.user.roleName;
@@ -246,10 +250,6 @@ export class AuthenticationService {
     });
   }
 
-  getUserCache(): User | null {
-
-    return this.userCache;
-
-  }
+  
 
 }
