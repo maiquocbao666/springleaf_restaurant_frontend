@@ -1,8 +1,53 @@
-<!-- <div style="display: block">
-  <canvas baseChart [data]="chartData" [labels]="chartLabels" [options]="chartOptions" [plugins]="chartPlugins"
-    [legend]="chartLegend" [chartType]="chartType">
-  </canvas>
+<!-- <div class="example-container mat-elevation-z8">
+  <mat-form-field class="example-form-field">
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+  </mat-form-field>
+  <mat-table #table [dataSource]="dataSource" matSort>
+   
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên món </th>
+      <td mat-cell *matCellDef="let row"> {{ row.name }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unitPrice">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Giá </th>
+      <td mat-cell *matCellDef="let row"> {{ row.unitPrice }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="categoryId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Loại </th>
+      <td mat-cell *matCellDef="let row">{{ getProductById(row.categoryId)?.name }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Trạng thái </th>
+      <td mat-cell *matCellDef="let row"> {{ row.status }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Mô tả </th>
+      <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Thao tác </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button>
+          Edit
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name', 'unitPrice','categoryId','status','description','actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'unitPrice','categoryId','status','description','actions']"></tr>
+
+
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="5" showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
 </div> -->
+
+
 <div class="statistics-container">
   <button (click)="fetchStatistics()">Fetch Statistics</button>
   <div *ngIf="statisticsData">
@@ -86,12 +131,29 @@
 
     </ul>
   </div>
+  <div>
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" [(ngModel)]="startDate">
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" [(ngModel)]="endDate">
+
+    <button (click)="getRevenueAndBills()">Get Data</button>
+  </div>
+  <div *ngFor="let item of revenueData">
+    <!-- Hiển thị thông tin từ API về doanh thu -->
+    {{ item }}
+  </div>
+
+  <div *ngFor="let bill of billsData">
+    <!-- Hiển thị thông tin từ API về hóa đơn -->
+    {{ bill.billId}}
+  </div>
+
 
   <div *ngIf="topItems.length === 0">
     <p>Không có </p>
   </div>
-
   <div *ngIf="loading">Loading...</div>
   <div *ngIf="error">{{ error }}</div>
-
 </div>
