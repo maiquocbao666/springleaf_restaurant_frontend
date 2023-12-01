@@ -14,7 +14,7 @@ addEventListener('message', async ({ data }) => {
                                 //'deliveryDetails',
                                 'deliveryOrders',
                                 'deliveryOrderStatuses',
-                                // discounts,
+                                'discounts',
                                 //'cartDetails',
                                 'carts',
                                 'cartDetails',

@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 import { ToastService } from './toast.service';
 import { BaseService } from './base-service';
 import { RxStompService } from '../rx-stomp.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -68,13 +69,6 @@ export class ProductService extends BaseService<Product> {
 
   //-------------------------------------------------------------------------------------------------
 
-  addToCart(productId: number): Observable<any> {
-    const jwtToken = localStorage.getItem('access_token');
-    console.log(jwtToken);
-    const url = `product/addToCart?productId=${productId}`;
-    return this.apiService.request('post', url);
-  }
-
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {
     if (this.cache$) {
       return this.cache$.pipe(
@@ -84,5 +78,20 @@ export class ProductService extends BaseService<Product> {
     const url = `${this.categoryUrl}/${categoryId}/products`;
     return this.apiService.request<Product[]>('get', url);
   }
+
+  addToCart(menuItemId: number, deliveryOrderId: number, orderId: number): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+    
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+    
+    // Thêm các tham số vào URL
+    const url = `addToCart/${menuItemId}/${deliveryOrderId}/${orderId}`;
+  
+    return this.apiService.request<any>('post', url, null, customHeader);
+    
+  }
+  
 
 }

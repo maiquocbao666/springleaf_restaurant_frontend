@@ -10,7 +10,7 @@
       <div class="col-lg-3">
         <label for="exampleInputPassword1" class="form-label">Tên bàn</label>
         <div class="mb-3">
-          <input type="text" class="form-control" formControlName="tableName">
+          <input type="text" class="form-control" formControlName="tableName" />
         </div>
       </div>
       <div class="col-lg-3">
@@ -18,9 +18,9 @@
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
             <option selected>Chọn nhà hàng</option>
-            <option *ngFor="let restaurant of restaurants " [value]="restaurant.restaurantId">{{
-              restaurant.restaurantName
-              }}</option>
+            <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId">
+              {{ restaurant.restaurantName }}
+            </option>
           </select>
         </div>
       </div>
@@ -28,8 +28,9 @@
         <label for="exampleInputPassword1" class="form-label">Kiểu bàn</label>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
-            <option [value]="">Chọn kiểu bàn</option>
-            <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId"> {{ tableType.tableTypeName }}
+            <option [value]>Chọn kiểu bàn</option>
+            <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId">
+              {{ tableType.tableTypeName }}
             </option>
           </select>
         </div>
@@ -38,13 +39,17 @@
         <label for="exampleInputPassword1" class="form-label">Trạng thái bàn</label>
         <div class="mb-3">
           <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
-            <option [value]="">Chọn trạng thái</option>
-            <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{ tableStatus.tableStatusName
-              }}
+            <option [value]>Chọn trạng thái</option>
+            <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId">
+              {{ tableStatus.tableStatusName }}
             </option>
           </select>
         </div>
       </div>
+      <label>Số lượng người tối đa</label>
+      <select formControlName="seatingCapacity">
+        <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
+      </select>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
   </form>

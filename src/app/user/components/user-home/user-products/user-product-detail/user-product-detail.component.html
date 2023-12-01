@@ -40,7 +40,7 @@
         <!-- Product Pricing -->
         <div class="product-price">
             <span> {{ formatAmount(product!.unitPrice) }}</span>
-            <a href="#" class="cart-btn">Add to cart</a>
+            <a class="cart-btn" (click)="addToCart(product?.menuItemId)">Add to cart</a>
         </div>
     </div>
 </main>

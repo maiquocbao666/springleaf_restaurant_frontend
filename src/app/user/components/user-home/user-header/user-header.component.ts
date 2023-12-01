@@ -31,6 +31,7 @@ export class UserHeaderComponent {
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
   orderDetailByUser: CartDetail[] | null = null;
+  orderDetailCount : number | null = null;
   constructor(
     private modalService: NgbModal,
     private authService: AuthenticationService,
@@ -46,17 +47,23 @@ export class UserHeaderComponent {
       this.user = data;
       console.log(this.user);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
-      this.getUserCart();
+      if(this.user != null){
+        this.getUserCart();
+      }
     });
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
+      //this.getUserOrder(this.cartByUser?.deliveryOrderId as number);
     });
     this.orderService.userOrderCache$.subscribe(order => {
       this.orderByUser = order;
+      //this.getUserOrderDetail(this.orderByUser?.orderId as number);
     });
-    this.cartDetailService.orderDetails$.subscribe(orderDetails => {
+    this.cartDetailService.orderDetails$.subscribe((orderDetails) => {
       this.orderDetailByUser = orderDetails;
+      this.orderDetailCount = orderDetails?.length as number;
     });
+    
   }
 
   openLoginModal() {
@@ -69,33 +76,53 @@ export class UserHeaderComponent {
     this.authService.logout();
   }
 
+  getUserLocation(){
+    
+  }
+
   getUserCart() {
-    this.deliveryOrderService.getUserCart().pipe(
-      switchMap((response) => {
-        return this.getUserOrder(response?.deliveryOrderId as number);
-      })
-    ).subscribe({
-      next: () => {},
+    this.deliveryOrderService.getUserCart().subscribe({
+      next: (response) => {
+          console.log('GetUserOrder: ', response);
+          if(response){
+            this.getUserOrder(this.cartByUser?.deliveryOrderId as number);
+          }
+      },
       error: (error) => {
-        console.error('Error fetching user cart:', error);
+        console.error('Error fetching user order:', error);
       }
     });
   }
   
-  getUserOrder(deliveryOrderId : number) {
-    return this.orderService.getUserOrder(deliveryOrderId).pipe(
-      switchMap((response) => {
-        return this.getUserOrderDetail(response?.orderId as number);
-      })
-    );
+  getUserOrder(deliveryOrderId: number) {
+    this.orderService.getUserOrder(deliveryOrderId).subscribe({
+      next: (response) => {
+          console.log('GetUserOrder: ', response);
+          if(response){
+            this.getUserOrderDetail(this.orderByUser?.orderId as number);
+          }
+      },
+      error: (error) => {
+        console.error('Error fetching user order:', error);
+      }
+    });
   }
   
+  
   getUserOrderDetail(orderId: number) {
-    return this.cartDetailService.getUserOrder(orderId);
+    this.cartDetailService.getUserOrderDetail(orderId).subscribe({
+      next: (response) => {
+          console.log('GetUserOrder: ', response);
+      },
+      error: (error) => {
+        console.error('Error fetching user order:', error);
+      }
+    });
   }
+  
 
   ngOnInit(): void {
-    this.user = this.authService.getUserCache(); // Lấy thông tin người dùng từ userCache
+    //this.user = this.authService.getUserCache(); 
     this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
 

@@ -3,9 +3,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
+import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
+import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
+import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { CategoryService } from 'src/app/services/category.service';
+import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
+import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
+import { ToastService } from 'src/app/services/toast.service';
 declare var $: any;
 @Component({
   selector: 'app-user-product-detail',
@@ -19,13 +25,26 @@ export class UserProductDetailComponent {
   categories: Category[] = [];
   productForm: FormGroup;
   fieldNames: string[] = [];
+  cartByUser: DeliveryOrder | null = null;
+  orderByUser: Order | null = null;
 
   constructor(
+    private orderService: OrderService,
+    private deliveryOrderService : DeliveryOrderService,
     private productService: ProductService,
     private categoryService: CategoryService,
+    private orderDetailService : CartDetailService,
     private formBuilder: FormBuilder,
     public activeModal: NgbActiveModal,
+    private toastService: ToastService,
   ) {
+    
+    this.deliveryOrderService.userCart$.subscribe(cart => {
+      this.cartByUser = cart;
+    });
+    this.orderService.userOrderCache$.subscribe(order => {
+      this.orderByUser = order;
+    });
     this.productForm = this.formBuilder.group({
       menuItemId: ['', [Validators.required]],
       name: ['', [Validators.required]],
@@ -79,6 +98,39 @@ export class UserProductDetailComponent {
         imageUrl: this.product.imageUrl
       });
 
+    }
+  }
+  addToCart(productId: number | undefined) {
+    if (productId) {
+      const deliveryOrderId = this.cartByUser?.deliveryOrderId as number;
+      const orderId = this.orderByUser?.orderId as number;
+  
+      this.productService.addToCart(productId, deliveryOrderId, orderId).subscribe({
+        next: (response) => {
+          if (response.message === "User not found") {
+            this.toastService.showTimedAlert('Sai user', '', 'error', 2000);
+          }
+          else if (response.message === "Type not found") {
+            this.toastService.showTimedAlert('Không thể đặt hàng', '', 'error', 2000);
+          }
+          else if (response.message === "MenuItem in cart") {
+            this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
+          }
+          else if(response.message === "Item in cart") {
+            this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
+          }
+          else {
+            this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
+            this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
+            
+          }
+        },
+        error: (error) => {
+          this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
+        }
+      });
+    } else {
+      console.error("Product ID is undefined. Cannot add to cart.");
     }
   }
 }
