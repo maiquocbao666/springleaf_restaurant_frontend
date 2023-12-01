@@ -13,9 +13,10 @@ import { ToastService } from './toast.service';
 })
 
 export class CartDetailService extends BaseService<CartDetail> {
+  
   private orderDetailsSubject = new BehaviorSubject<CartDetail[] | null>(null);
-  orderDetails$ = this.orderDetailsSubject.asObservable();
-
+  orderDetails$: Observable<CartDetail[] | null> = this.orderDetailsSubject.asObservable();
+  
   //----------------------------------------------------------------
 
   constructor(
@@ -71,7 +72,7 @@ export class CartDetailService extends BaseService<CartDetail> {
 
   //----------------------------------------------------------------------
 
-  getUserOrder(orderId: number): Observable<CartDetail[] | null> {
+  getUserOrderDetail(orderId: number): Observable<CartDetail[] | null> {
     const jwtToken = localStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);

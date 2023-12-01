@@ -31,6 +31,7 @@ export class UserHeaderComponent {
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
   orderDetailByUser: CartDetail[] | null = null;
+  orderDetailCount : number | null = null;
   constructor(
     private modalService: NgbModal,
     private authService: AuthenticationService,
@@ -46,16 +47,16 @@ export class UserHeaderComponent {
       this.user = data;
       console.log(this.user);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
-      this.getUserCart();
+      if(this.user != null){
+        this.getUserCart();
+        this.getUserOrder(this.cartByUser?.deliveryOrderId as number);
+        this.getUserOrderDetail(this.orderByUser?.orderId as number);
+      }
     });
-    this.deliveryOrderService.userCart$.subscribe(cart => {
-      this.cartByUser = cart;
-    });
-    this.orderService.userOrderCache$.subscribe(order => {
-      this.orderByUser = order;
-    });
-    this.cartDetailService.orderDetails$.subscribe(orderDetails => {
+    
+    this.cartDetailService.orderDetails$.subscribe((orderDetails) => {
       this.orderDetailByUser = orderDetails;
+      this.orderDetailCount = orderDetails?.length as number;
     });
   }
 
@@ -67,6 +68,10 @@ export class UserHeaderComponent {
     // Cập nhật userCache trước khi đăng xuất
     this.authService.setUserCache(null);
     this.authService.logout();
+  }
+
+  getUserLocation(){
+    
   }
 
   getUserCart() {
@@ -91,11 +96,11 @@ export class UserHeaderComponent {
   }
   
   getUserOrderDetail(orderId: number) {
-    return this.cartDetailService.getUserOrder(orderId);
+    return this.cartDetailService.getUserOrderDetail(orderId);
   }
 
   ngOnInit(): void {
-    this.user = this.authService.getUserCache(); // Lấy thông tin người dùng từ userCache
+    //this.user = this.authService.getUserCache(); 
     this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
 

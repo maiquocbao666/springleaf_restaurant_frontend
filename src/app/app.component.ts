@@ -35,6 +35,7 @@ import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
 import { OrderThresholdService } from "./services/order-threshold.service";
+import { DiscountService } from "./services/discount.service";
 
 
 interface DataService<T> {
@@ -97,6 +98,7 @@ export class AppComponent implements OnDestroy {
     private reservationsService: ReservationService,
     private tableTypesService: TableTypeService,
     private reservationStatusesService: ReservationStatusService,
+    private discountsService : DiscountService,
   ) {
 
     window.addEventListener('storage', (event) => {
@@ -154,6 +156,7 @@ export class AppComponent implements OnDestroy {
       reservations: { cache: this.reservationsService.cache, localStorageKey: 'reservations' },
       tableTypes: { cache: this.tableTypesService.cache, localStorageKey: 'tableTypes' },
       reservationStatuses: { cache: this.reservationStatusesService.cache, localStorageKey: 'reservationStatuses' },
+      discounts: { cache: this.discountsService.cache , localStorageKey : 'discounts'},
 
     };
 

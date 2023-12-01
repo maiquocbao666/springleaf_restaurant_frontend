@@ -32,7 +32,6 @@ export class AuthenticationService {
   roleCacheData$: Observable<String[] | null> = this.listRoleDataSubject.asObservable();
   accessCodeCacheData$: Observable<string | null> = this.accessCodeDataSubject.asObservable();
   setUserCache(user: User | null) {
-    this.userCache = user;
     this.cachedDataSubject.next(user);
   }
 
@@ -101,7 +100,7 @@ export class AuthenticationService {
         }
         else {
           localStorage.setItem('access_token', data.loginResponse.access_token);
-          localStorage.setItem('refresh_token', data.loginResponse.refresh_token);
+          //localStorage.setItem('refresh_token', data.loginResponse.refresh_token);
           localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
           this.setUserCache(data.loginResponse.user);
           this.listRole = data.loginResponse.user.roleName;
