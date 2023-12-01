@@ -73,6 +73,7 @@ export class CartDetailService extends BaseService<CartDetail> {
   //----------------------------------------------------------------------
 
   getUserOrderDetail(orderId: number): Observable<CartDetail[] | null> {
+    console.log(orderId);
     const jwtToken = localStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);

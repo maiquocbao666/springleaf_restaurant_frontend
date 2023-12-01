@@ -60,15 +60,13 @@
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="input-container">
-                                    <input placeholder="Khuyến mãi" class="input-field" type="text">
-                                    <label for="input-field" class="input-label">Khuyến mãi</label>
-                                    <span class="input-highlight"></span>
+                                    <input [(ngModel)]="discountCode" placeholder="Khuyến mãi" class="input-field" type="text" name="discountCode">
+                                    
+                                    
                                 </div>
                             </div>
                             <div class="col-lg-3">
-                                <button class="button">
-                                    Add
-                                </button>
+                                <button class="button" (click)="getDiscount()">Add</button>
                             </div>
                         </div>
                     </form>

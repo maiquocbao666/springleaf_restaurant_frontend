@@ -60,16 +60,16 @@ export class DiscountService extends BaseService<Discount>  {
         return super.delete(id);
     }
 
-    getDiscountById(discountCode: number, menuItemId: [] | null = null){
-        const jwtToken = localStorage.getItem('access_item');
+    getDiscountByName(discountCode: string, menuItemId: any[] = []) {
+        const jwtToken = localStorage.getItem('access_token');
         if (!jwtToken) {
-            of(null);
-         }
-         
-         const customHeader = new HttpHeaders({
-           'Authorization': `Bearer ${jwtToken}`,
-         });
-        this.apiService.request<any>('post', `getDiscountByMenuItem/${discountCode}`, menuItemId, customHeader);
+            return of(null);
+        }
+
+        const customHeader = new HttpHeaders({
+            'Authorization': `Bearer ${jwtToken}`,
+        });
+        return this.apiService.request<any>('post', `getDiscountByDiscountNameAndMenuItem/${discountCode}`, menuItemId, customHeader);
     }
 
 }

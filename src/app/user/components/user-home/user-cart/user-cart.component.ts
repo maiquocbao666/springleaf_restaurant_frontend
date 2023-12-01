@@ -33,15 +33,17 @@ export class UserCartComponent implements OnInit {
   selectedItems: any[] = [];
   selectAllChecked = false;
   selections: { [key: string]: boolean } = {};
+  discountCode: string = '';
+  discountPrice: number | null = null;
   constructor(
     private cartService: CartService,
-    private deliveryOrderService : DeliveryOrderService,
-    private orderService : OrderService,
-    private cartDetailService : CartDetailService,
+    private deliveryOrderService: DeliveryOrderService,
+    private orderService: OrderService,
+    private cartDetailService: CartDetailService,
     private toastService: ToastService,
-    private discountService : DiscountService,
+    private discountService: DiscountService,
   ) {
-    
+
     const productsString = localStorage.getItem('products');
     if (productsString) {
       const parsedProducts: Product[] = JSON.parse(productsString);
@@ -57,12 +59,12 @@ export class UserCartComponent implements OnInit {
     });
     this.cartDetailService.orderDetails$.subscribe(orderDetails => {
       this.orderDetailByUser = orderDetails;
-      if(orderDetails){
+      if (orderDetails) {
         this.setCartInfomationArrays();
       }
     });
-    
-    
+
+
   }
 
   ngOnInit(): void {
@@ -76,7 +78,6 @@ export class UserCartComponent implements OnInit {
     this.cartService.wardData$.subscribe(data => {
       this.Wards = Object.values(data);
     });
-   
   }
 
   @ViewChild('likeBtn') likeBtn!: ElementRef;
@@ -89,7 +90,7 @@ export class UserCartComponent implements OnInit {
     this.plusButtonHandler();
   }
 
-  setCartInfomationArrays(){
+  setCartInfomationArrays() {
     this.cartInformationArray = [];
     if (this.orderDetailByUser && this.products) {
       for (let i = 0; i < this.orderDetailByUser.length; i++) {
@@ -113,7 +114,7 @@ export class UserCartComponent implements OnInit {
       }
     }
   }
-  
+
 
   likeButtonHandler() {
     this.likeBtn.nativeElement.addEventListener('click', () => {
@@ -147,12 +148,12 @@ export class UserCartComponent implements OnInit {
       cart.quantity = newValue;
     }
   }
-  
+
   toggleSelectedAll() {
     this.selectAllChecked = !this.selectAllChecked;
-    if(this.selectAllChecked){
+    if (this.selectAllChecked) {
       this.selectedItems = this.cartInformationArray;
-    }else{
+    } else {
       this.selectedItems = [];
     }
     for (let cart of this.cartInformationArray) {
@@ -162,13 +163,13 @@ export class UserCartComponent implements OnInit {
 
   toggleSelection(cart: any): void {
     const index = this.selectedItems.indexOf(cart);
-  
+
     if (index === -1) {
       this.selectedItems.push(cart);
     } else {
       this.selectedItems.splice(index, 1);
     }
-  
+
     this.selectAllChecked = this.cartInformationArray.length === this.selectedItems.length;
   }
 
@@ -189,30 +190,30 @@ export class UserCartComponent implements OnInit {
     return finalPrice >= 0 ? finalPrice : 0;
   }
 
-  deleteCartDetail(cart : any) : void{
+  deleteCartDetail(cart: any): void {
     const orderDetailId = cart.orderDetailId;
     this.toastService.showConfirmAlert('Bạn chắc chắn xóa?', '', 'warning')
-    .then((result) => {
-      if (result.isConfirmed) {
-        this.cartDetailService.delete(orderDetailId).subscribe({
-          next: (response) => {
-            if (response.message === "Delete is success") {
-              this.cartDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
-              this.toastService.showTimedAlert('Xóa thành công', '', 'success', 2000);
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.cartDetailService.delete(orderDetailId).subscribe({
+            next: (response) => {
+              if (response.message === "Delete is success") {
+                this.cartDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
+                this.toastService.showTimedAlert('Xóa thành công', '', 'success', 2000);
+              }
+            },
+            error: (error) => {
+              this.toastService.showTimedAlert('Xóa thất bại', error, 'error', 2000);
             }
-          },
-          error: (error) => {
-            this.toastService.showTimedAlert('Xóa thất bại', error, 'error', 2000);
+          });
+          if (this.orderByUser) {
+            this.cartDetailService.getUserOrderDetail(this.orderByUser?.orderId);
           }
-        });
-        if(this.orderByUser){
-          this.cartDetailService.getUserOrderDetail(this.orderByUser?.orderId);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
         }
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        
-      }
-    });
-    
+      });
+
   }
 
   plusButtonHandler() {
@@ -231,9 +232,41 @@ export class UserCartComponent implements OnInit {
     });
   }
 
-  getDiscount(discountId: number){
+  getDiscount() {
     
-    this.discountService.getDiscountById(discountId);
+    if (this.selectedItems.length > 0) {
+      const listItemId: number[] = [];
+      for (const cart of this.selectedItems) {
+        listItemId.push(Number(cart.menuItemId as number));
+        console.log(cart.menuItemId);
+      }
+      console.log("CODE: ", listItemId);
+      if (this.discountCode != null) {
+        this.discountService.getDiscountByName(this.discountCode, listItemId).subscribe({
+          next: (response) => {
+            if (response.message === "Discount is not valid") {
+              this.toastService.showTimedAlert('Mã giảm giá sai', '', 'error', 2000);
+            }
+            else if (response.message === "Discount is Experied") {
+              this.toastService.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
+            }
+            else {
+              this.discountPrice = response.message;
+              this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
+
+            }
+          },
+          error: (error) => {
+            this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
+          }
+        });
+      } else {
+        this.toastService.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'info', 2000);
+      }
+
+    } else {
+      this.toastService.showTimedAlert('Vui lòng chọn sản phẩm trước', '', 'info', 2000);
+    }
   }
 
   onProvinceChange() {
@@ -253,7 +286,7 @@ export class UserCartComponent implements OnInit {
   }
 }
 
-export interface CartInfomation{
+export interface CartInfomation {
   orderDetailId?: number;
   order: number;
   menuItem: number;
