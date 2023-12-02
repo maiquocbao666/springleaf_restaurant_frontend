@@ -34,7 +34,7 @@ export class AdminCategoriesComponent {
   ) {
     this.categoryForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      active: [, [Validators.required]],
+      active: [true, [Validators.required]],
       description: [, [Validators.nullValidator]],
     });
   }
@@ -43,7 +43,6 @@ export class AdminCategoriesComponent {
     console.log("Init admin category component");
     this.getCategories();
     this.categoryForm.get('active')?.setValue(true);
-    this.toastr.success("Bruh");
   }
 
   getCategories(): void {
