@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { MatCardModule } from '@angular/material/card';
-// import { MatCheckboxModule } from '@angular/material/checkbox';
-// import { MatRadioModule } from '@angular/material/radio';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -14,12 +12,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatTableModule } from '@angular/material/table';
-// import { MatPaginatorModule } from '@angular/material/paginator';
-// import { MatSortModule } from '@angular/material/sort';
-// import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
@@ -197,7 +198,8 @@ import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/a
     }),
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
-    // MatCheckboxModule,
+    
+    MatCheckboxModule,
     // MatCardModule,
     // MatRadioModule,
     // MatInputModule,
