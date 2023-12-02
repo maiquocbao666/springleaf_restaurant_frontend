@@ -69,6 +69,44 @@ export class MergeTableService extends BaseService<MergeTable> {
         return super.searchByName(term);
     }
 
+    getUniqueMergeTableIds(): string[] {
+        if (!this.cache) {
+            return [];
+        }
+
+        // Lọc ra các mergeTableId không trùng lặp
+        const uniqueMergeTableIds = this.cache
+            .map(mergeTable => mergeTable.mergeTableId)
+            .filter((mergeTableId, index, array) => array.indexOf(mergeTableId) === index);
+
+        return uniqueMergeTableIds;
+    }
+
+    tableExistsInCache(tableId: number, mergeTableId: string): boolean {
+        if (!this.cache) {
+            return false;
+        }
+
+        const foundElement = this.cache.find(mergeTable =>
+            mergeTable.tableId === tableId &&
+            mergeTable.mergeTableId === mergeTableId &&
+            (mergeTable.status === "Đang chờ xác nhận" || mergeTable.status === "Xác nhận đã gộp")
+        );
+
+        return foundElement !== undefined;
+    }
+
+    getMergeTableWithTableIdExistsInCache(tableId: number): string {
+        if (!this.cache) {
+            return '';
+        }
     
+        const foundElement = this.cache.find(mergeTable =>
+            mergeTable.tableId === tableId &&
+            (mergeTable.status === "Đang chờ xác nhận" || mergeTable.status === "Xác nhận đã gộp")
+        );
+    
+        return foundElement?.mergeTableId || '';
+    }
 
 }

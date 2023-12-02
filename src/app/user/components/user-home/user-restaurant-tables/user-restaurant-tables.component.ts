@@ -14,6 +14,9 @@ import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-
 import { TableType } from 'src/app/interfaces/table-type';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
+import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.component';
+import { ReservationService } from 'src/app/services/reservation.service';
+import { Reservation } from 'src/app/interfaces/reservation';
 
 @Component({
   selector: 'app-user-table',
@@ -32,12 +35,15 @@ export class UserRestaurantTablesComponent {
     private toastService: ToastService,
     private modalService: NgbModal,
     private modalService2: NgbModal,
+    private modalService3: NgbModal,
     private restaurantTableService: RestaurantTableService,
     private tableStatusService: TableStatusService,
     private authenticationService: AuthenticationService,
     private tableTypeService: TableTypeService,
     private restaurantService: RestaurantService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private reservationService: ReservationService,
+    private sweetAlertService: ToastService,
   ) {
   }
 
@@ -89,6 +95,35 @@ export class UserRestaurantTablesComponent {
       const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'lg' });
       modalRef.componentInstance.userId = this.authenticationService.getUserCache()?.userId;
     }
+  }
+
+  openUserMergeTablesModal() {
+    if (!this.authenticationService.getUserCache()) {
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
+      return;
+    }
+  
+    let check = true;
+    let reservationInUse: Reservation[] = []
+  
+    this.reservationService.getReservationsInUseByUserId(this.authenticationService.getUserCache()?.userId!).subscribe(reservations => {
+      if (reservations.length > 0) {
+        reservationInUse = reservations;
+  
+        // Mở modal với kích thước lớn
+        const modalRef = this.modalService2.open(UserMergeTablesComponent, {
+          size: 'xl', // xl là kích thước lớn hơn
+          centered: false, // Đặt modal ở giữa trang
+          scrollable: true, // Cho phép cuộn nếu modal quá lớn
+        });
+  
+        // Truyền dữ liệu đến modal
+        modalRef.componentInstance.reservationOfUser = reservationInUse;
+      } else {
+        this.sweetAlertService.showTimedAlert('Không thể mở!', 'Bạn đang không sử dụng bàn nào', 'error', 3000);
+        check = false;
+      }
+    });
   }
 
 }

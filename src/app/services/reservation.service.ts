@@ -129,4 +129,33 @@ export class ReservationService extends BaseService<Reservation> {
         return of([]);
     }
 
+    getReservationsInUseByUserId(userId: number): Observable<Reservation[]> {
+        if (this.cache) {
+            const currentTime = new Date().getTime();
+            const reservationsInUse = this.cache.filter(reservation =>
+                reservation.userId === userId &&
+                reservation.reservationStatusName === 'Đang sử dụng' && // Thay 'in_use' bằng giá trị thực tế của trạng thái đang sử dụng
+                currentTime >= new Date(reservation.reservationDate).getTime() &&
+                currentTime <= new Date(reservation.outTime).getTime()
+            );
+            return of(reservationsInUse);
+        }
+    
+        return of([]);
+    }
+
+    getAllReservationsInUse(): Observable<Reservation[]> {
+        if (this.cache) {
+            const currentTime = new Date().getTime();
+            const reservationsInUse = this.cache.filter(reservation =>
+                reservation.reservationStatusName === 'Đang sử dụng' &&
+                currentTime >= new Date(reservation.reservationDate).getTime() &&
+                currentTime <= new Date(reservation.outTime).getTime()
+            );
+            return of(reservationsInUse);
+        }
+    
+        return of([]);
+    }
+
 }

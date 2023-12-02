@@ -152,10 +152,15 @@ export class UserRestaurantTableInfomationComponent {
     const outDateTimeStr = `${selectedDate} ${outTimeStr}`;
     const outDateTime = new Date(outDateTimeStr).getTime();
 
-    if (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime()) {
+    if (
+      (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 23:59:59`).getTime())
+      &&
+      (outDateTime >= new Date(`${selectedDate} 23:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 23:59:59`).getTime()
+      )
+    ) {
       this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
       return;
-  }
+    }
 
     if (selectedDate === '' || selectedTimeStr === '' || outTimeStr === '') {
       this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Mời chọn thời gian', 'warning', 3000);

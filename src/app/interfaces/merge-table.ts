@@ -1,6 +1,7 @@
 export interface MergeTable {
     id?: number;
-    table: number;
+    tableId: number;
     mergeTableId: string;
-    mergeTime: Date;
+    mergeTime: string;
+    status: string;
 }
