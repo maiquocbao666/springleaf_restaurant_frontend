@@ -49,10 +49,17 @@
           </select>
         </div>
       </div>
-      <label>Số lượng người tối đa</label>
-      <select formControlName="seatingCapacity">
-        <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
-      </select>
+      <div>
+        <label>Số lượng người tối đa</label>
+        <select formControlName="seatingCapacity">
+          <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
+        </select>
+      </div>
+      <label for="restaurantTableDescription">Mô tả</label>
+      <div>
+        <textarea class="form-control" placeholder="Special Request" id="restaurantTableDescription"
+          formControlName="description"></textarea>
+      </div>
     </div>
     <button (click)="addRestaurantTable()" class="btn btn-primary">Save</button>
     <!-- Trong template HTML của Angular component -->
@@ -72,21 +79,23 @@
         <th scope="col">ID</th>
         <th scope="col">Tên bàn</th>
         <th scope="col">Số lượng người tối đa</th>
-        <th scope="col">Restaurant</th>
-        <th scope="col">Status</th>
-        <th scope="col">Type</th>
+        <th scope="col">Nhà hàng</th>
+        <th scope="col">Trạng thái</th>
+        <th scope="col">Kiểu bàn</th>
+        <th scrope="col">Mô tả</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <tr
         *ngFor="let restaurantTable of restaurantTables | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-        <td>{{restaurantTable.tableId}}</td>
-        <td>{{restaurantTable.tableName}}</td>
+        <td>{{ restaurantTable.tableId }}</td>
+        <td>{{ restaurantTable.tableName }}</td>
         <td>{{ restaurantTable.seatingCapacity }}</td>
         <td>{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }}</td>
         <td>{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}</td>
-        <td>{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName  }}</td>
+        <td>{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName }}</td>
+        <td>{{ restaurantTable.description }}</td>
         <td>
           <button type="button" class="btn btn-outline-primary"
             (click)="openRestaurantTableDetailModal(restaurantTable)">Edit</button>
