@@ -69,11 +69,15 @@ export class ReservationService extends BaseService<Reservation> {
 
     getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
         if (this.cache) {
-            const filteredReservations = this.cache.filter(reservation => reservation.restaurantTableId === restaurantTableId);
+            const currentTime = new Date().getTime(); // Lấy thời điểm hiện tại và chuyển đổi thành định dạng yyyy-MM-dd HH:mm:ss
+            const filteredReservations = this.cache.filter(reservation => {
+                const outTime = new Date(reservation.outTime).getTime(); // Giả sử có trường reservationTime trong model Reservation, bạn cần điều chỉnh tên trường này theo thực tế
+                return reservation.restaurantTableId === restaurantTableId && currentTime < outTime;
+            });
             return of(filteredReservations);
         }
-
-        return of();
+    
+        return of([]);
     }
 
     getReservationsByUserId(userId: number): Observable<Reservation[]> {
@@ -118,9 +122,6 @@ export class ReservationService extends BaseService<Reservation> {
                 reservation.restaurantTableId === tableId &&
                 (reservation.reservationDate.toLowerCase().includes(lowerCaseKeyword) ||
                 reservation.outTime.toLowerCase().includes(lowerCaseKeyword))
-                // Add more fields to search as needed
-                // Example: reservation.userId.toString().toLowerCase().includes(lowerCaseKeyword) ||
-                //         ...
             );
             return of(filteredReservations);
         }
