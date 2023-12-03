@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserRestaurantTablesRoutingModule } from './user-restaurant-tables-routing.module';
 
 
+
 @NgModule({
   declarations: [
   ],

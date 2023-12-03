@@ -152,6 +152,16 @@ export class UserRestaurantTableInfomationComponent {
     const outDateTimeStr = `${selectedDate} ${outTimeStr}`;
     const outDateTime = new Date(outDateTimeStr).getTime();
 
+    if (
+      (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 23:59:59`).getTime())
+      &&
+      (outDateTime >= new Date(`${selectedDate} 23:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 23:59:59`).getTime()
+      )
+    ) {
+      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
+      return;
+    }
+
     if (selectedDate === '' || selectedTimeStr === '' || outTimeStr === '') {
       this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Mời chọn thời gian', 'warning', 3000);
       return;
@@ -171,12 +181,12 @@ export class UserRestaurantTableInfomationComponent {
 
     }
 
-    const oneMinuteLater = new Date(new Date(selectedDateTimeStr).getTime() + 2 * 60 * 1000).getTime(); // Thêm 2 phút
+    const threeMinutesLater = new Date(new Date(selectedDateTimeStr).getTime() + 3 * 60 * 1000).getTime(); // Thêm 2 phút
     const oneHourLater = new Date(new Date(selectedDateTimeStr).getTime() + 60 * 60 * 1000).getTime(); // Thêm 1 tiếng
     //console.log(selectedDateTimeStr, outDateTimeStr);
 
-    if (outDateTime < oneHourLater) {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian rời đi phải lớn hơn hoặc bằng thời gian đến 1 giờ', 'warning', 3000);
+    if (outDateTime < threeMinutesLater) {
+      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian rời đi phải lớn hơn hoặc bằng thời gian đến 3 phút', 'warning', 3000);
       return;
     }
 
@@ -217,8 +227,8 @@ export class UserRestaurantTableInfomationComponent {
     );
   }
 
-  orderAfterReservation(){
-    
+  orderAfterReservation() {
+
   }
 
 }

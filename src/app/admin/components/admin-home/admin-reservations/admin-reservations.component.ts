@@ -24,7 +24,7 @@ import { User } from 'src/app/interfaces/user';
 })
 export class AdminReservationsComponent {
 
-  numbersArray: number[] =[];
+  numbersArray: number[] = [];
   restaurantIdsArray = Array.from({ length: 10 }, (_, index) => index + 1);
 
   restaurantTables: RestaurantTable[] = [];
@@ -195,7 +195,7 @@ export class AdminReservationsComponent {
 
   addReservation() {
 
-    if(!this.user){
+    if (!this.user) {
       this.sweetAlertService.showTimedAlert('Mời đăng nhập!', 'Mời đăng nhập', 'error', 3000);
       return;
     }
@@ -217,6 +217,12 @@ export class AdminReservationsComponent {
     // Thời gian rời đi
     const outDateTimeStr = `${selectedDate} ${outTimeStr}`;
     const outDateTime = new Date(outDateTimeStr).getTime();
+
+    // Kiểm tra nếu thời gian nằm trong khoảng từ 23:00 đến 23:59
+    if (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime()) {
+      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
+      return;
+    }
 
     if (selectedDate === '' || selectedTimeStr === '' || outTimeStr === '') {
       this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Mời chọn thời gian', 'warning', 3000);
