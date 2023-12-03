@@ -100,7 +100,6 @@ import { UserRestaurantTableInfomationComponent } from './user/components/user-h
 
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
 import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
 import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
