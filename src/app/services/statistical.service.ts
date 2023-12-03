@@ -33,11 +33,21 @@ export class StatisticsService {
 
   getRevenueByTimeRange(startDate: string, endDate: string): Observable<Object[]> {
     const url = `revenue?startDate=${startDate}&endDate=${endDate}`;
-    return this.apiService.request<Object[]>('get',url);
+    return this.apiService.request<Object[]>('get', url);
   }
 
   getBillsByTimeRange(startDate: string, endDate: string): Observable<Bill[]> {
     const url = `billTimeRange?startDate=${startDate}&endDate=${endDate}`;
-    return this.apiService.request<Bill[]>('get',url);
+    return this.apiService.request<Bill[]>('get', url);
+  }
+
+  // getTotalAmount(){
+  //   const url = `totalRevenue`;
+  //   return this.apiService.request<any>('get', url);
+  // }
+
+  getTotalRevenue(): Observable<number> {
+    const url = `totalRevenue`;
+    return this.apiService.request<number>('get', url);
   }
 }

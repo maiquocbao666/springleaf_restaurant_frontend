@@ -143,6 +143,7 @@ export class AdminStatisticalComponent {
     );
   }
 
+  
 
   getCategories(): void {
     this.categoryService.getCache().subscribe(

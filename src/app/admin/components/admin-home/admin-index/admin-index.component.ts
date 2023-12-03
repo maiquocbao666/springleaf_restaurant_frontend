@@ -25,6 +25,7 @@ import { StatisticsService } from 'src/app/services/statistical.service';
   styleUrls: ['./admin-index.component.css']
 })
 export class AdminIndexComponent {
+  totalRevenue: number | undefined;
   statisticsData: any;
   loading = false;
   error: string | undefined;
@@ -47,6 +48,7 @@ export class AdminIndexComponent {
   displayedColumns: string[] = ['name', 'description', 'unitPrice', 'imageUrl', 'status']; // Các cột bạn muốn hiển thị
   dataSource!: MatTableDataSource<Product>;
   selectedRow: any;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -62,11 +64,39 @@ export class AdminIndexComponent {
   ) { }
 
   ngOnInit(): void {
-    // this.getProducts();
-    // this.getCategories();
+    this.getProducts();
+    this.getCategories();
     // this.getIngredients();
-    // this.getTop5OrderedItems();
+    this.getTop5OrderedItems();
     // this.fetchStatistics();
+    this.fetchTotalRevenue();
+  }
+
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  }
+
+
+  getCategories(): void {
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
+      }
+    );
+  }
+
+  getProducts(): void {
+    this.productService.getCache().subscribe(
+      (cached: Product[]) => {
+        this.products = cached;
+        this.dataSource = new MatTableDataSource(this.products);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      (error: any) => {
+        console.error('Failed to fetch data', error);
+      }
+    );
   }
 
   getReservations(): void {
@@ -129,6 +159,51 @@ export class AdminIndexComponent {
     }
   }
 
+  fetchTotalRevenue() {
+    this.statisticsService.getTotalRevenue()
+      .subscribe((data: number) => {
+        // Lưu kết quả vào biến totalRevenue để sử dụng trong giao diện
+        this.totalRevenue = data;
+        console.log('Total Revenue:', this.totalRevenue);
+      }, error => {
+        // Xử lý lỗi nếu có
+        console.error('Error fetching total revenue:', error);
+      });
+  }
 
-  
+  fetchStatistics(): void {
+    this.loading = true;
+    this.error = undefined;
+
+    this.statisticsService.getStatistics().subscribe(
+      (data: any) => {
+        this.statisticsData = data;
+        this.loading = false;
+      },
+      (error: any) => {
+        this.error = 'Failed to fetch statistics. Please try again.';
+        this.loading = false;
+      }
+    );
+  }
+
+  getTop5OrderedItems() {
+    this.statisticsService.getTop5MostOrderedItems().subscribe(
+      (data: any) => {
+        this.topItems = data;
+        console.log(data);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  getProductById(id: number): Product | null {
+    const found = this.products.find(data => data.menuItemId === id);
+    return found || null;
+  }
+
+
+
 }
