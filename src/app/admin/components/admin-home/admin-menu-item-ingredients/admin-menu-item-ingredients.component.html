@@ -1,68 +1,104 @@
 <div class="container">
-  <h1>Nguyên Liệu Món</h1>
-  <form [formGroup]="menuItemIngredientForm" (ngSubmit)="addMenuItemIngredient()">
-    <div class="mb-3">
-      <a class="nav-link" routerLink="/admin/ingredients">Thêm nguyên liệu</a>
-      <div class="mb-3">
-        <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
-          <option value="">Chọn nguyên liệu</option>
-          <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
-        </select>
-      </div>
-    </div>
-    <div class="mb-3">
-      <a class="nav-link" routerLink="/admin/products">Thêm món</a>
-      <div class="mb-3">
-        <select class="form-select" aria-label="Default select example" formControlName="menuItemId">
-          <option value="">Chọn món</option>
-          <option *ngFor="let product of products" [value]="product.menuItemId"> {{ product.name }}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Số lượng</label>
-      <div class="mb-3">
-        <input type="number" class="form-control" formControlName="quantity" placeholder="Nhập số lượng ...">
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-  </form>
-  <div class="col-2">
+  <h1 class="text-center display-4">Danh sách nguyên liệu món</h1>
+  <p class="d-inline-flex gap-1">
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+      aria-expanded="false" aria-controls="collapseExample">
+      Thêm nguyên liệu món
+    </button>
+  </p>
+  <p class="float-end">
     <select class="form-select" (change)="onTableSizeChange($event)">
-      <option value="">Page</option>
       <option *ngFor="let size of tableSizes">
         {{size}}
       </option>
     </select>
+  </p>
+  <div class="collapse pb-3" id="collapseExample">
+    <div class="card card-body">
+      <form [formGroup]="menuItemIngredientForm" (ngSubmit)="addMenuItemIngredient()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="menuItemId" class="form-label">Menu Item ID<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="menuItemId">
+              <!-- Options for menu item ID -->
+              <option value="">Chọn món</option>
+              <!-- Add options dynamically -->
+              <option *ngFor="let product of products" [value]="product.menuItemId"> {{
+                product.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="menuItemIngredientForm.get('menuItemId')?.invalid && (menuItemIngredientForm.get('menuItemId')?.touched || isSubmitted)"
+              class="text-danger">Chưa chọn món.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="ingredientId" class="form-label">Nguyên liệu<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
+              <option value="">Chọn nguyên liệu</option>
+              <option *ngFor="let ingredient of ingredients" [value]="ingredient.ingredientId"> {{
+                ingredient.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="menuItemIngredientForm.get('ingredientId')?.invalid && (menuItemIngredientForm.get('ingredientId')?.touched || isSubmitted)"
+              class="text-danger">Chưa chọn nguyên liệu.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="categoryId" class="form-label">Số lượng<span style="color: red;">(*)</span></label>
+            <input type="number" class="form-control" formControlName="quantity" placeholder="Nhập số lượng ...">
+            <div
+              *ngIf="menuItemIngredientForm.get('quantity')?.invalid && (menuItemIngredientForm.get('quantity')?.touched || isSubmitted)"
+              class="text-danger">
+              <div *ngIf="menuItemIngredientForm.get('quantity')?.hasError('nonNegative')">
+                Số không được âm
+              </div>
+              <div
+                *ngIf="menuItemIngredientForm.get('quantity')?.hasError && !menuItemIngredientForm.get('quantity')?.hasError('nonNegative')">
+                Chưa nhập tổng giá
+              </div>
+            </div>
+
+          </div>
+          <div class="text-center">
+            <button type="submit">Lưu</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Nguyên liệu</th>
-        <th scope="col">Món</th>
-        <th scope="col">Số lượng</th>
-        <th scope="col">Chức năng</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let menuItemIngredient of menuItemIngredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-        <td>{{menuItemIngredient.menuItemIngredientId}}</td>
-        <td>{{ getIngredientById(menuItemIngredient.ingredientId)?.name }}</td>
-        <td>{{ getProductById(menuItemIngredient.menuItemId)?.name }}</td>
-        <td>{{menuItemIngredient.quantity}}</td>
-        <td><button type="button" class="btn btn-outline-primary"
-            (click)="openMenuItemIngredientDetailModal(menuItemIngredient)">Edit</button>
-          <button type="button" class="btn btn-outline-danger"
-            (click)="deleteMenuItemIngredient(menuItemIngredient)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">Mã nguyên liệu món</th>
+          <th class="text-center">Món</th>
+          <th class="text-center">Nguyên liệu</th>
+          <th class="text-center">Số lượng</th>
+          <th class="text-center">Chức năng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let menuItemIngredient of menuItemIngredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+          <td class="text-center text-muted">I{{menuItemIngredient.menuItemIngredientId}}</td>
+          <td class="text-center">{{ getProductById(menuItemIngredient.menuItemId)?.name }}</td>
+          <td class="text-center">{{ getIngredientById(menuItemIngredient.ingredientId)?.name }}</td>
+          <td class="text-center">{{ menuItemIngredient.quantity }}</td>
+          <td class="text-center">
+            <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+              (click)="openMenuItemIngredientDetailModal(menuItemIngredient)"><i
+                class="fa-solid fa-pen-to-square"></i></a>
+            <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+              (click)="deleteMenuItemIngredient(menuItemIngredient)"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <div class="text-center">
-    <pagination-controls previousLabel="Prev" nextLabel="Next"
+    <pagination-controls previousLabel="Lùi" nextLabel="Tới"
       (pageChange)="onTableDataChange($event)"></pagination-controls>
   </div>
 </div>

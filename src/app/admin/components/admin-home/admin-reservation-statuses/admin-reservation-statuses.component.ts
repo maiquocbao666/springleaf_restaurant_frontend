@@ -25,7 +25,7 @@ export class AdminReservationStatusesComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
-  isCustomChecked = false;
+
 
   constructor(
     private reservationStatusService: ReservationStatusService,
@@ -43,7 +43,7 @@ export class AdminReservationStatusesComponent {
   ngOnInit(): void {
     this.getReservationStatuses();
   }
-
+  isCustomChecked = false;
   // Handle the checkbox change event
   onCheckboxChange(event: any) {
 

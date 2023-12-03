@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableStatus } from 'src/app/interfaces/table-status';
 import { TableStatusService } from 'src/app/services/table-status.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-table-status-detail',
@@ -15,6 +16,8 @@ export class AdminTableStatusDetailComponent  implements OnInit {
   tableStatuses: TableStatus[] = [];
   fieldNames: string[] = [];
   tableStatusForm: FormGroup;
+  isSubmitted = false;
+
 
   constructor(
     private tableStatusService: TableStatusService,
@@ -47,15 +50,28 @@ export class AdminTableStatusDetailComponent  implements OnInit {
   }
 
   updateTableStatus(): void {
-    this.activeModal.close('Close after saving');
+    this.isSubmitted = true;
+  
     if (this.tableStatusForm.valid) {
       const updatedTableStatus: TableStatus = {
         tableStatusId: +this.tableStatusForm.get('tableStatusId')?.value,
         tableStatusName: this.tableStatusForm.get('name')?.value,
       };
-
-      this.tableStatusService.update(updatedTableStatus).subscribe(() => {
-      });
+  
+      this.tableStatusService.update(updatedTableStatus).subscribe(
+        () => {
+          Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
+          this.activeModal.close('Close after saving');
+          this.tableStatusForm.reset();
+        },
+        (error) => {
+          Swal.fire('Thất bại', 'Cập nhật thất bại!', 'warning');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else {
+      Swal.fire('Thất bại', 'Cập nhật không thành công!', 'warning');
     }
   }
+  
 }

@@ -6,6 +6,7 @@ import { TableStatus } from 'src/app/interfaces/table-status';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { TableStatusService } from 'src/app/services/table-status.service';
 import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 import { AdminTableStatusDetailComponent } from './admin-table-status-detail/admin-table-status-detail.component';
 
 @Component({
@@ -23,6 +24,7 @@ export class AdminTableStatusesComponent {
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
+  isSubmitted = false;
 
   isCustomChecked = false;
 
@@ -108,6 +110,8 @@ export class AdminTableStatusesComponent {
     this.tableStatusService.add(newTableStatus)
       .subscribe(tableStatus => {
         this.tableStatusForm.reset();
+        this.sweetAlertService.showCustomAnimatedAlert('Thành công', 'success', 'Thêm thành công')
+
       });
 
   }
@@ -118,11 +122,13 @@ export class AdminTableStatusesComponent {
 
       if (this.restaurantTableService.findTableByStatusId(tableStatus?.tableStatusId)) {
         console.log("Có bàn đang sử dụng status này, không thể xóa");
+        Swal.fire('Thất bại', 'Có bàn đang sử dụng trạng thái này, không thể xóa!', 'warning');
         return;
       }
 
       this.tableStatuses = this.tableStatuses.filter(i => i !== tableStatus);
       this.tableStatusService.delete(tableStatus.tableStatusId).subscribe();
+      this.sweetAlertService.showCustomAnimatedAlert('Thành công', 'success', 'Xóa ' + tableStatus.tableStatusName + ' Thành công')
 
     } else {
       console.log("Không có tableStautsId");

@@ -1,0 +1,116 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #333;
+  font-family: 'Helvetica', san-serif;
+  color: #333;
+}
+
+.collapse1 {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+.form-group__file {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  min-width: 130px;
+  height: 180px;
+}
+
+.file-label {
+  margin: 10px 0;
+}
+
+.file-input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 130px;
+  height: 180px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.file-preview-background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 130px;
+  height: 140px;
+  background-color: #f7f7f7;
+  border: 2px dashed #dfdfdf;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-align: center;
+  color: #bbb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-inde: 1;
+}
+
+.file-preview {
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top: 46px;
+  left: 8px;
+  border-radius: 65px;
+  z-index: 10;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease-in;
+}
+
+/* CSS */
+textarea.form-control {
+  resize: none;
+  height: 100px;
+  min-height: 100px;
+  max-width: 100%;
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+button {
+  color: #fff;
+  padding: 17px 40px;
+  border-radius: 50px;
+  border: 0;
+  background-color: rgb(244, 46, 46);
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 10px;
+  transition: all .5s ease;
+}
+
+button:hover {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+button:active {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  transform: translateY(10px);
+  transition: 100ms;
+}
+
+/* page  */

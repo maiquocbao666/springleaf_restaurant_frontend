@@ -4,7 +4,7 @@
     <div class="mb-3">
       <label for="inventoryBranch" class="form-label">Chi nhánh hàng tồn</label>
       <div class="mb-3">
-        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranch">
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryBranchId">
           <option value="">Chọn chi nhánh hàng tồn</option>
           <option *ngFor="let branch of inventoryBranches " [value]="branch.inventoryBranchId">{{
             branch.inventoryBranchId }}</option>
@@ -18,15 +18,15 @@
       </div>
     </div>
     <div class="mb-3">
-      <label for="warehouseManager" class="form-label">Quản lý kho</label>
+      <label for="warehouseManagerId" class="form-label">Quản lý kho</label>
       <div class="mb-3">
-        <input type="text" class="form-control" formControlName="warehouseManager">
+        <input type="text" class="form-control" formControlName="warehouseManagerId">
       </div>
     </div>
     <div class="mb-3">
-      <label for="user" class="form-label">Người dùng</label>
+      <label for="inventoryBranchManagerId" class="form-label">Người dùng</label>
       <div class="mb-3">
-        <input type="text" class="form-control" formControlName="user">
+        <input type="text" class="form-control" formControlName="inventoryBranchManagerId">
       </div>
     </div>
     <button type="submit" class="btn btn-primary">Lưu</button>
@@ -54,10 +54,10 @@
       <tr
         *ngFor="let goodsReceipt of goodsReceipts | paginate: { itemsPerPage: tableSize, currentPage: page, totalItems: count }; let i = index">
         <td>{{ goodsReceipt.goodsReceiptId }}</td>
-        <td>{{ getInventoryBranchById(goodsReceipt.inventoryBranch)?.inventoryBranchId }}</td>
+        <td>{{ getInventoryBranchById(goodsReceipt.inventoryBranchId)?.inventoryBranchId }}</td>
         <td>{{ goodsReceipt.date | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-        <td>{{ goodsReceipt.warehouseManager }}</td>
-        <td>{{ goodsReceipt.user }}</td>
+        <td>{{ goodsReceipt.warehouseManagerId }}</td>
+        <td>{{ goodsReceipt.inventoryBranchManagerId }}</td>
         <td>
           <button type="button" class="btn btn-outline-primary"
             (click)="openGoodsReceiptDetailModal(goodsReceipt)">Sửa</button>

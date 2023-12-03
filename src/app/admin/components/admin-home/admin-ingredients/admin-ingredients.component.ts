@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { IngredientService } from 'src/app/services/ingredient.service';
-import { StatisticsService } from 'src/app/services/statistical.service';
+import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 import { AdminIngredientDetailComponent } from './admin-ingredient-detail/admin-ingredient-detail.component';
 
 @Component({
@@ -18,6 +19,7 @@ export class AdminIngredientsComponent {
   fieldNames: string[] = [];
   ingredientsUrl = 'ingredients';
 
+  isSubmitted = false;
 
   page: number = 1;
   count: number = 0;
@@ -28,13 +30,15 @@ export class AdminIngredientsComponent {
     private ingredientService: IngredientService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    private sweetAlertService: ToastService
+
   ) {
-    this.ingredientForm = this.formBuilder.group({
-      // ingredientId: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      orderThreshold: ['', [Validators.required]]
+    this.ingredientForm = new FormGroup({
+      name: new FormControl('', Validators.required),
+      description: new FormControl(''),
+      orderThreshold: new FormControl('', Validators.required)
     });
+
   }
 
   ngOnInit(): void {
@@ -59,32 +63,45 @@ export class AdminIngredientsComponent {
   }
 
   addIngredient(): void {
+    this.isSubmitted = true;
+    if (this.ingredientForm.valid) {
+      const name = this.ingredientForm.get('name')?.value?.trim() ?? '';
+      const description = this.ingredientForm.get('description')?.value;
+      const orderThreshold = this.ingredientForm.get('orderThreshold')?.value;
 
-    const name = this.ingredientForm.get('name')?.value?.trim() ?? '';
-    const description = this.ingredientForm.get('description')?.value;
-    const orderThreshold = this.ingredientForm.get('orderThreshold')?.value;
+      const newIngredient: Ingredient = {
+        name: name,
+        description: description,
+        orderThreshold: orderThreshold
+      }
+      this.ingredientService.add(newIngredient)
+        .subscribe(ingredient => {
+          this.ingredientForm.reset();
+          Swal.fire('Thành công', 'Thêm thành công!', 'success');
 
-    const newIngredient: Ingredient = {
-      name: name,
-      description: description,
-      orderThreshold: orderThreshold
-    }
-
-    this.ingredientService.add(newIngredient)
-      .subscribe(ingredient => {
-        this.ingredientForm.reset();
-      });
+        });
+    } else
+      Swal.fire('Thất bại', 'Thêm thất bại!', 'warning');
   }
-
   deleteIngredient(ingredient: Ingredient): void {
-
     if (ingredient.ingredientId) {
-      this.ingredientService.delete(ingredient.ingredientId).subscribe();
+      this.sweetAlertService.showConfirmAlert('Bạn có muốn xóa ' + ingredient.name, 'Không thể lưu lại!', 'warning')
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.ingredientService.delete(ingredient.ingredientId!)
+              .subscribe(() => {
+                console.log('Đã xóa thành phần!');
+                Swal.fire('Thành công', 'Xóa ' + ingredient.name + ' thành công!', 'success');
+                this.isSubmitted = false;
+
+
+              })
+          }
+        });
     } else {
-      console.log("Không có ingredientId");
+      Swal.fire('Thất bại', 'Không thể xóa nguyên liệu với mã không xác định!', 'warning');
+
     }
-
-
   }
 
   openIngredientDetailModal(ingredient: Ingredient) {

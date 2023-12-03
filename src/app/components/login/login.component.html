@@ -38,33 +38,36 @@
             <input type="password" id="repassword" placeholder="Enter Re-Password" formControlName="repassword"
                 name="repassword" [attr.disabled]="compareInputWithCodeCache" />
 
-            <button type="submit" #signUp [disabled]="!compareInputWithCodeCache || registerForm.invalid">Sign
-                Up</button>
+            <button type="submit" #signUp [disabled]="!compareInputWithCodeCache || registerForm.invalid">Đăng
+                ký</button>
         </form>
     </div>
 
     <div class="form-container sign-in-container">
         <form (submit)="login()" [formGroup]="loginForm">
+            <h1>Đăng nhập</h1>
+
             <input type="text" id="usernameLogin" placeholder="Enter Username" formControlName="username" />
             <input type="password" id="passwordLogin" placeholder="Enter Password" formControlName="password" />
-            <a (click)="openUserPasswordModel()">Forgot your password?</a>
-            <button type="submit" #signIn>Sign In</button>
-            <a class="google-a-button" (click)="loginWithGoogle()">LOGIN WITH GOOGLE <i
-                    class="fab fa-google-plus-g"></i></a>
+            <a (click)="openUserPasswordModel()">Quên mật khẩu?</a>
+            <button type="submit" #signIn>Đăng nhập</button>
+            <button class="google-a-button" (click)="loginWithGoogle()"> Đăng nhập với tài khoản <i
+                    class="fa-brands fa-google"></i>
+            </button>
         </form>
     </div>
 
     <div class="overlay-container">
         <div class="overlay">
             <div class="overlay-panel overlay-left">
-                <h1>Đăng ký tài khoản</h1>
-                <p>Bạn đã có 1 tài khoản?</p>
-                <button class="ghost" (click)="container.classList.remove('right-panel-active')">Sign In</button>
+                <h1>Đăng nhập</h1>
+                <p>Bạn đã có tài khoản?</p>
+                <button class="ghost" (click)="container.classList.remove('right-panel-active')">Đăng nhập</button>
             </div>
             <div class="overlay-panel overlay-right">
-                <h1>Hello, Friend!</h1>
-                <p>Enter your personal details and start journey with us</p>
-                <button class="ghost" (click)="container.classList.add('right-panel-active')">Sign Up</button>
+                <h1>Chào bạn!</h1>
+                <p>Bạn chưa có tài khoản?</p>
+                <button class="ghost" (click)="container.classList.add('right-panel-active')">Đăng ký</button>
             </div>
         </div>
     </div>

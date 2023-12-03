@@ -1,8 +1,8 @@
 export interface GoodsReceipt {
     goodsReceiptId: number;
-    inventoryBranch: number;
+    inventoryBranchId: number;
     date: Date;
-    warehouseManager: number;
-    user: number
+    warehouseManagerId: number;
+    inventoryBranchManagerId: number
 
 }

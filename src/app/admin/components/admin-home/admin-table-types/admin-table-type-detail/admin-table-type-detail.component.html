@@ -6,21 +6,19 @@
 </div>
 <div class="modal-body">
   <form [formGroup]="tableTypeForm" (ngSubmit)="updateTableType()">
-    <div class="row">
-      <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Id</label>
-        <div class="mb-3">
-          <input type="text" class="form-control" formControlName="tableTypeId" placeholder="Nhập Id...">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="tableTypeName" class="form-label">Tên kiểu bàn<span style="color: red;">(*)</span></label>
+        <input type="text" formControlName="tableTypeName" class="form-control" placeholder="Nhập tên kiểu bàn..">
+        <div
+          *ngIf="tableTypeForm.get('tableTypeName')?.invalid && (tableTypeForm.get('tableTypeName')?.touched || isSubmitted )"
+          class="text-danger">Tên kiểu bàn không được để trống.
         </div>
       </div>
-      <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Name</label>
-        <div class="mb-3">
-          <input type="text" class="form-control" formControlName="name" placeholder="Nhập tên nhà cung cấp...">
-        </div>
+      <div class="text-center">
+        <button type="submit">Lưu</button>
       </div>
     </div>
-    <button type="submit" class="btn btn-info">Save</button>
   </form>
 </div>
 

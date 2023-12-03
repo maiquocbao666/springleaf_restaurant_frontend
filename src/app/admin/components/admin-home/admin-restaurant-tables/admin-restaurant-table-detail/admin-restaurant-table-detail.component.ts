@@ -9,6 +9,7 @@ import { RestaurantTableService } from 'src/app/services/restaurant-table.servic
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { TableStatusService } from 'src/app/services/table-status.service';
 import { TableTypeService } from 'src/app/services/table-type.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-restaurant-table-detail',
@@ -23,6 +24,8 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
   restaurants: Restaurant[] = [];
   fieldNames: string[] = [];
   restaurantTableForm: FormGroup;
+  isSubmitted = false;
+
 
   restaurantTablesUrl = 'restaurantTables';
   tableTypesUrl = 'tableTypes';
@@ -94,9 +97,9 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       }
     );
   }
-
   updateRestaurantTable(): void {
-    this.activeModal.close('Close after saving');
+    this.isSubmitted = true;
+  
     if (this.restaurantTableForm.valid) {
       const updatedRestaurantTable: RestaurantTable = {
         tableId: +this.restaurantTableForm.get('tableId')?.value,
@@ -106,9 +109,21 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
         restaurantId: +this.restaurantTableForm.get('restaurantId')?.value,
         seatingCapacity: +this.restaurantTableForm.get('seatingCapacity')?.value,
       };
-
-      this.restaurantTablesService.update(updatedRestaurantTable).subscribe(() => {
-      });
+  
+      this.restaurantTablesService.update(updatedRestaurantTable).subscribe(
+        () => {
+          Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
+          this.activeModal.close('Close after saving');
+          this.restaurantTableForm.reset();
+        },
+        (error) => {
+          Swal.fire('Thất bại', 'Cập nhật thất bại!', 'warning');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else {
+      Swal.fire('Thất bại', 'Cập nhật không thành công!', 'warning');
     }
   }
+  
 }

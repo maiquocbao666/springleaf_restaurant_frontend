@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Category } from 'src/app/interfaces/category';
 import { CategoryService } from 'src/app/services/category.service';
+import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 import { AdminCategoryDetailComponent } from './admin-category-detail/admin-category-detail.component';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-categories',
@@ -18,7 +20,7 @@ export class AdminCategoriesComponent {
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
-
+  isSubmitted = false;
   category!: Category | null;
   categories: Category[] = [];
   categoryForm: FormGroup;
@@ -31,12 +33,15 @@ export class AdminCategoriesComponent {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    private sweetAlertService: ToastService
+
   ) {
-    this.categoryForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      active: [, [Validators.required]],
-      description: [, [Validators.nullValidator]],
+    this.categoryForm = new FormGroup({
+      name: new FormControl('', Validators.required),
+      active: new FormControl('', Validators.required),
+      description: new FormControl('', Validators.nullValidator)
     });
+
   }
 
   ngOnInit(): void {
@@ -64,35 +69,50 @@ export class AdminCategoriesComponent {
   }
 
   addCategory(): void {
-    const name = this.categoryForm.get('name')?.value?.trim() ?? '';
-    const active = this.categoryForm.get('active')?.value;
-    const description = this.categoryForm.get('description')?.value;
+    this.isSubmitted = true;
+    if (this.categoryForm.valid) {
+      const name = this.categoryForm.get('name')?.value?.trim() ?? '';
+      const active = this.categoryForm.get('active')?.value;
+      const description = this.categoryForm.get('description')?.value;
+      const newCategory: Category = {
+        name: name,
+        active: active,
+        description: description,
+      };
 
-    if (!name || active === null) {
-      return;
-    }
+      this.categoryService.add(newCategory)
+        .subscribe(() => {
+          this.categoryForm.reset();
+          this.categoryForm.get('active')?.setValue(true);
+          Swal.fire('Thành công', 'Thêm thành công!', 'success');
+          this.isSubmitted = false;
 
-    // Tạo một đối tượng Inventory và gán giá trị
-    const newCategory: Category = {
-      name: name,
-      active: active,
-      description: description,
-    };
 
-    this.categoryService.add(newCategory)
-      .subscribe(() => {
-        this.categoryForm.reset();
-        this.categoryForm.get('active')?.setValue(true);
-      });
+        });
+    } else
+      Swal.fire('Thất bại', 'Thêm thất bại!', 'warning');
   }
 
   deleteCategory(category: Category): void {
     if (category.categoryId) {
-      this.categoryService.delete(category.categoryId).subscribe();
+      this.sweetAlertService.showConfirmAlert('Bạn có muốn xóa ' + category.name, ' Không thể lưu lại!', 'warning')
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.categoryService.delete(category.categoryId!)
+              .subscribe(() => {
+                console.log('Đã xóa danh mục!');
+                Swal.fire('Thành công', 'Xóa ' + category.name + ' thành công!', 'success');
+                // Thực hiện các hành động bổ sung sau khi xóa nếu cần
+              })
+
+          }
+        });
     } else {
-      console.error("Cannot delete category with undefined categoryId.");
+      Swal.fire('Thất bại', 'Không thể xóa danh mục với categoryId không xác định!', 'warning');
+
     }
   }
+
 
   // getCategoryById(): void {
   //   const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);

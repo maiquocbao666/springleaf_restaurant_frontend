@@ -1,37 +1,42 @@
 <div class="modal-header">
-  <h4 class="modal-title">Login</h4>
+  <h4 class="modal-title">Chi tiết</h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
   <form [formGroup]="ingredientForm" (ngSubmit)="updateIngredient()">
-    <div class="row">
-        <div class="col-sm-6">
-            <label for="exampleInputPassword1" class="form-label">Name</label>
-            <div class="mb-3">
-                <input type="text" class="form-control" formControlName="name">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label for="exampleInputPassword1" class="form-label">Tên nguyên liệu<span
+                    style="color: red;">(*)</span></label>
+            <input type="text" formControlName="name" class="form-control"
+                placeholder="Nhập tên nguyên liệu...">
+            <div *ngIf="ingredientForm.get('name')?.invalid && (ingredientForm.get('name')?.touched || isSubmitted)"
+                class="text-danger"> Không bỏ trống tên nguyên liệu.
             </div>
         </div>
-        <div class="col-sm-6">
-            <label for="exampleInputPassword1" class="form-label">OrderThreshold</label>
-            <div class="mb-3">
-                <input type="text" class="form-control" formControlName="orderThreshold">
+        <div class="col-md-4">
+            <label for="orderThreshold" class="form-label">Ngưỡng đặt<span
+                    style="color: red;">(*)</span></label>
+            <input type="number" formControlName="orderThreshold" class="form-control" id="orderThreshold"
+                placeholder="Nhập giá">
+            <div *ngIf="ingredientForm.get('orderThreshold')?.invalid && (ingredientForm.get('orderThreshold')?.touched || isSubmitted)"
+                class="text-danger">
+                Ngưỡng không bỏ trống.
             </div>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Description</label>
-            <div class="mb-3">
-                <textarea class="form-control" cols="30" rows="10" formControlName="description"></textarea>
-            </div>
+
+
+        <div class="col-md-4">
+            <label for="exampleInputPassword1" class="form-label">Mô tả</label>
+            <textarea class="form-control" formControlName="description" id="" cols="10" rows="10"
+                placeholder="Nhập mô tả..."></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit">Thay đổi</button>
         </div>
     </div>
-    <button type="submit" class="btn btn-info">Save</button>
 </form>
-</div>
-
-<div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
-    Đóng
-  </button>
 </div>

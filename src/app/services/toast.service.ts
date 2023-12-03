@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NgToastService } from 'ng-angular-popup';
-import { ToastrService } from "ngx-toastr";
-import Swal, { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertIcon, SweetAlertOptions } from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +9,13 @@ export class ToastService {
   constructor(
   ) { }
 
+  fireAlert(title: string, message: string, icon: SweetAlertIcon): void {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: icon
+    });
+  }
 
   showAlert(title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') {
     Swal.fire({

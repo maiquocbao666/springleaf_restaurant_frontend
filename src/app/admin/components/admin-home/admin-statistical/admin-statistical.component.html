@@ -1,159 +1,269 @@
-<!-- <div class="example-container mat-elevation-z8">
-  <mat-form-field class="example-form-field">
-    <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
-  </mat-form-field>
-  <mat-table #table [dataSource]="dataSource" matSort>
-   
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên món </th>
-      <td mat-cell *matCellDef="let row"> {{ row.name }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="unitPrice">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Giá </th>
-      <td mat-cell *matCellDef="let row"> {{ row.unitPrice }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="categoryId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Loại </th>
-      <td mat-cell *matCellDef="let row">{{ getProductById(row.categoryId)?.name }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Trạng thái </th>
-      <td mat-cell *matCellDef="let row"> {{ row.status }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Mô tả </th>
-      <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Thao tác </th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-icon-button>
-          Edit
-        </button>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="['name', 'unitPrice','categoryId','status','description','actions']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name', 'unitPrice','categoryId','status','description','actions']"></tr>
-
-
-  </mat-table>
-  <mat-paginator #paginator [pageSize]="5" showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-
-</div> -->
-
-
-<div class="statistics-container">
-  <button (click)="fetchStatistics()">Fetch Statistics</button>
-  <div *ngIf="statisticsData">
-    <h2>Statistics</h2>
-    <p>Total Ingredient: {{ statisticsData }}</p>
-    <!-- Hiển thị các thông tin thống kê khác tương tự -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-xl-4">
+      <div class="card mb-3 widget-content bg-midnight-bloom">
+        <div class="widget-content-wrapper text-white">
+          <div class="widget-content-left">
+            <div class="widget-heading">Tổng nguyên liệu </div>
+            <div class="widget-subheading"></div>
+          </div>
+          <div class="widget-content-right">
+            <div class="widget-numbers text-white"><span> {{ statisticsData }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card mb-3 widget-content bg-arielle-smile">
+        <div class="widget-content-wrapper text-white">
+          <div class="widget-content-left">
+            <div class="widget-heading">Tổng đơn</div>
+            <div class="widget-subheading"></div>
+          </div>
+          <div class="widget-content-right">
+            <div class="widget-numbers text-white"><span> 2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card mb-3 widget-content bg-grow-early">
+        <div class="widget-content-wrapper text-white">
+          <div class="widget-content-left">
+            <div class="widget-heading">Tổng doanh thu</div>
+            <div class="widget-subheading"></div>
+          </div>
+          <div class="widget-content-right">
+            <div class="widget-numbers text-white"><span>55.000.000đ</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-xl-none d-lg-block col-md-6 col-xl-4">
+      <div class="card mb-3 widget-content bg-premium-dark">
+        <div class="widget-content-wrapper text-white">
+          <div class="widget-content-left">
+            <div class="widget-heading">Products Sold</div>
+            <div class="widget-subheading">Revenue streams</div>
+          </div>
+          <div class="widget-content-right">
+            <div class="widget-numbers text-warning"><span>$14M</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div *ngIf="loading">Loading...</div>
-  <div *ngIf="error">{{ error }}</div>
-</div>
-
-
-<div class="menu-item-container">
-  <h2>Tổng nguyên liệu</h2>
-  <select [(ngModel)]="selectedMenuItemId" (change)="onMenuItemChange()">
-    <option *ngFor="let product of products" [value]="product.menuItemId">{{ product.name }}</option>
-  </select>
-
-  <div *ngIf="ingredients">
-    <h2>Nguyên liệu trong món</h2>
-    <ul>
-      <li *ngFor="let menuItemIngredient of menuItemIngredients">{{
-        getIngredientById(menuItemIngredient.ingredientId)?.name }}
-      </li>
-    </ul>
-  </div>
-
   <div>
-    <label for="dateInput">Enter Date:</label>
-    <input type="date" id="dateInput" [(ngModel)]="selectedDate">
 
-    <button (click)="getReservations()">Get Reservations</button>
+    <mat-form-field class="example-form-field">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên món </th>
+        <td mat-cell *matCellDef="let row"> {{ row.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="unitPrice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Giá </th>
+        <td mat-cell *matCellDef="let row"> {{ row.unitPrice }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="categoryId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Loại </th>
+        <td mat-cell *matCellDef="let row">{{ getProductById(row.categoryId)?.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Trạng thái </th>
+        <td mat-cell *matCellDef="let row"> {{ row.status }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mô tả </th>
+        <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Thao tác </th>
+        <td mat-cell *matCellDef="let row">
+          <button class="btn" mat-button color="accent">
+            Edit
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['name', 'unitPrice','categoryId','status','description','actions']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['name', 'unitPrice','categoryId','status','description','actions']">
+      </tr>
+    </table>
+
+    <mat-paginator #paginator [pageSize]="5" showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of periodic elements"></mat-paginator>
   </div>
 
-  <div *ngIf="reservations.length > 0">
-    <h2>Các bàn được đặt trong ngày {{ selectedDate }}</h2>
-    <ul>
 
-      <table class="table table-light container-fluid">
-        <tbody>
-          <tr>
-            <th>Reservation id</th>
-            <th>Mã bàn</th>
-            <th>User</th>
-            <th>Ngày tới</th>
-            <th>Giờ tới</th>
-            <th>Giờ đi</th>
-            <th>Trạng thái</th>
-            <th>Số lượng khách hàng</th>
-            <th>Thời gian vào trạng thái chờ</th>
-            <th>Thời gian chờ còn lại</th>
-            <th>Thời gian sử dụng còn lại</th>
-            <th></th>
-          </tr>
-          <tr *ngFor="let reservation of reservations">
-            <td>{{ reservation.reservationId }}</td>
-            <td>{{ reservation.restaurantTableId }}</td>
-            <td>{{ reservation.userId }}</td>
-            <!-- <td>{{ (formatDate(reservation.reservationDate)) }}</td>
+
+  <div class="statistics-container">
+    <button (click)="fetchStatistics()">Fetch Statistics</button>
+    <div *ngIf="statisticsData">
+      <h2>Statistics</h2>
+      <p>Total Ingredient: {{ statisticsData }}</p>
+      <!-- Hiển thị các thông tin thống kê khác tương tự -->
+    </div>
+    <div *ngIf="loading">Loading...</div>
+    <div *ngIf="error">{{ error }}</div>
+  </div>
+
+
+  <div class="menu-item-container">
+    <h2>Tổng nguyên liệu</h2>
+    <select [(ngModel)]="selectedMenuItemId" (change)="onMenuItemChange()">
+      <option *ngFor="let product of products" [value]="product.menuItemId">{{ product.name }}</option>
+    </select>
+
+    <div *ngIf="ingredients">
+      <h2>Nguyên liệu trong món</h2>
+      <ul>
+        <li *ngFor="let menuItemIngredient of menuItemIngredients">{{
+          getIngredientById(menuItemIngredient.ingredientId)?.name }}
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <label for="dateInput">Enter Date:</label>
+      <input type="date" id="dateInput" [(ngModel)]="selectedDate">
+
+      <button (click)="getReservations()">Get Reservations</button>
+    </div>
+
+    <div *ngIf="reservations.length > 0">
+      <h2>Các bàn được đặt trong ngày {{ selectedDate }}</h2>
+      <ul>
+
+        <table class="table table-light container-fluid">
+          <tbody>
+            <tr>
+              <th>Reservation id</th>
+              <th>Mã bàn</th>
+              <th>User</th>
+              <th>Ngày tới</th>
+              <th>Giờ tới</th>
+              <th>Giờ đi</th>
+              <th>Trạng thái</th>
+              <th>Số lượng khách hàng</th>
+              <th>Thời gian vào trạng thái chờ</th>
+              <th>Thời gian chờ còn lại</th>
+              <th>Thời gian sử dụng còn lại</th>
+              <th></th>
+            </tr>
+            <tr *ngFor="let reservation of reservations">
+              <td>{{ reservation.reservationId }}</td>
+              <td>{{ reservation.restaurantTableId }}</td>
+              <td>{{ reservation.userId }}</td>
+              <!-- <td>{{ (formatDate(reservation.reservationDate)) }}</td>
                 <td>{{ (formatTime(reservation.reservationDate)) }}</td> -->
-            <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
-            <td>
-              {{ reservation.reservationStatusName }}
-            </td>
-            <td>{{ reservation.numberOfGuests }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+              <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
+              <td>
+                {{ reservation.reservationStatusName }}
+              </td>
+              <td>{{ reservation.numberOfGuests }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </ul>
+    </div>
+    <div *ngIf="reservations.length < 0">Không có bàn được đặt trong ngày.</div>
+    <div *ngIf="topItems.length > 0">
+      <h2>Top 5 món được mua nhiều</h2>
+      <ul>
+        <li *ngFor="let item of topItems; let i = index">
+          {{ i + 1 }}. {{ getProductById(item[0])?.name }} - mua {{ item[1] }} lần
+        </li>
+
+      </ul>
+    </div>
+    <div>
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" [(ngModel)]="startDate">
+
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" [(ngModel)]="endDate">
+
+      <button (click)="getRevenueAndBills()">Get Data</button>
+    </div>
+    <div *ngFor="let item of revenueData">
+      <!-- Hiển thị thông tin từ API về doanh thu -->
+      {{ item }}
+    </div>
+
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">User </th>
+          <th scope="col">Date </th>
+          <th scope="col">totalAmount</th>
+          <th scope="col">paymentMethod</th>
+          <th scope="col">address</th>
+          <th scope="col">bankNumber</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bill of billsData">
+          <td> {{ bill.billId }}</td>
+          <td>{{bill.userId}}</td>
+          <td>{{bill.billTime}}</td>
+          <td>{{bill.totalAmount}}</td>
+          <td>{{bill.paymentMethod}}</td>
+          <td>{{bill.address}}</td>
+          <td>{{bill.bankNumber}}</td>
+
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="loading">Loading...</div>
+    <div *ngIf="error">{{ error }}</div>
+  </div>
+
+
+
+
+
+
+  <!-- Modal Template -->
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Bill Details</h4>
+      <button class="btn btn-primary" type=" button" class="close" aria-label="Close"
+        (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Mã hóa đơn chi tiết</th>
+            <th scope="col">Món</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Mã Hóa đơn</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detail of billDetails">
+            <td>{{ detail.billDetailId }}</td>
+            <td>{{ getProductById(detail.menuItemId)?.name }}</td>
+            <td>{{ detail.quantity }}</td>
+            <td>{{ detail.bill }}</td>
           </tr>
         </tbody>
       </table>
-    </ul>
-  </div>
-  <div *ngIf="reservations.length < 0">Không có bàn được đặt trong ngày.</div>
-  <div *ngIf="topItems.length > 0">
-    <h2>Top 5 món được mua nhiều</h2>
-    <ul>
-      <li *ngFor="let item of topItems; let i = index">
-        {{ i + 1 }}. {{ getProductById(item[0])?.name }} - mua {{ item[1] }} lần
-      </li>
-
-    </ul>
-  </div>
-  <div>
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" [(ngModel)]="startDate">
-
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" [(ngModel)]="endDate">
-
-    <button (click)="getRevenueAndBills()">Get Data</button>
-  </div>
-  <div *ngFor="let item of revenueData">
-    <!-- Hiển thị thông tin từ API về doanh thu -->
-    {{ item }}
-  </div>
-
-  <div *ngFor="let bill of billsData">
-    <!-- Hiển thị thông tin từ API về hóa đơn -->
-    {{ bill.billId}}
-  </div>
-
-
-  <div *ngIf="topItems.length === 0">
-    <p>Không có </p>
-  </div>
-  <div *ngIf="loading">Loading...</div>
-  <div *ngIf="error">{{ error }}</div>
-</div>
+    </div>
+  </ng-template>

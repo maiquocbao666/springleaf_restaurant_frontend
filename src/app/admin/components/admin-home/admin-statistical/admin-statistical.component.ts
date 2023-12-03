@@ -1,14 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
-// import { MatDialog } from '@angular/material/dialog';
-// import { MatPaginator } from '@angular/material/paginator';
-// import { MatSort } from '@angular/material/sort';
-// import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Bill } from 'src/app/interfaces/bill';
+import { BillDetail } from 'src/app/interfaces/bill-detail';
 import { Category } from 'src/app/interfaces/category';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { MenuItemIngredient } from 'src/app/interfaces/menu-item-ingredient';
 import { Product } from 'src/app/interfaces/product';
+import { BillDetailService } from 'src/app/services/bill-detail.service';
+import { BillService } from 'src/app/services/bill.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { IngredientService } from 'src/app/services/ingredient.service';
 import { ProductService } from 'src/app/services/product.service';
@@ -33,6 +37,10 @@ export class AdminStatisticalComponent {
   categories: Category[] = [];
   revenueData: Object[] = [];
   billsData: Bill[] = [];
+  billDetails: BillDetail[] = [];
+
+  bill: Bill | undefined;
+
 
   reservations: any[] = [];
   selectedDate: string = '';
@@ -40,15 +48,18 @@ export class AdminStatisticalComponent {
   startDate: string = '';
   endDate: string = '';
   displayedColumns: string[] = ['name', 'description', 'unitPrice', 'imageUrl', 'status']; // Các cột bạn muốn hiển thị
-  // dataSource!: MatTableDataSource<Product>;
+  dataSource!: MatTableDataSource<Product>;
   selectedRow: any;
-  // @ViewChild(MatPaginator) paginator!: MatPaginator;
-  // @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private statisticsService: StatisticsService,
+    private billService: BillService,
+    private billDetailService: BillDetailService,
+    private modalService: NgbModal,
     private productService: ProductService,
     private ingredientService: IngredientService,
-    // private dialog: MatDialog,
+    private dialog: MatDialog,
     private http: HttpClient,
     private categoryService: CategoryService,
   ) { }
@@ -58,18 +69,30 @@ export class AdminStatisticalComponent {
     this.getCategories();
     this.getIngredients();
     this.getTop5OrderedItems();
+    this.fetchStatistics();
   }
 
-  
+  getBillDetails(billId: number): void {
+    this.billDetailService.getBillDetailsByBillId(billId)
+      .subscribe(
+        (data: BillDetail[]) => {
+          this.billDetails = data;
+          // Xử lý dữ liệu nhận được từ API ở đây
+        },
+        (error: any) => {
+          console.error('Failed to get bill details.', error);
+        }
+      );
+  }
 
 
   getProducts(): void {
     this.productService.getCache().subscribe(
       (cached: Product[]) => {
         this.products = cached;
-        // this.dataSource = new MatTableDataSource(this.products);
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
+        this.dataSource = new MatTableDataSource(this.products);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       (error: any) => {
         console.error('Failed to fetch data', error);
@@ -81,7 +104,7 @@ export class AdminStatisticalComponent {
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   fetchStatistics(): void {
@@ -201,11 +224,24 @@ export class AdminStatisticalComponent {
     }
   }
 
-  // openModal(row: any) {
-  //   this.selectedRow = row;
-  //   const dialogRef = this.dialog.open(AdminProductDetailComponent, {
-  //     width: '400px',
-  //     data: row
-  //   });
-  // }
+  openModal(row: any) {
+    this.selectedRow = row;
+    const dialogRef = this.dialog.open(AdminProductDetailComponent, {
+      width: '400px',
+      data: row
+    });
+  }
+
+  openModal2(content: any, billId: number): void {
+    this.billDetailService.getBillDetailsByBillId(billId)
+      .subscribe(
+        (data: BillDetail[]) => {
+          this.billDetails = data;
+          this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+        },
+        (error: any) => {
+          console.error('Failed to get bill details.', error);
+        }
+      );
+  }
 }

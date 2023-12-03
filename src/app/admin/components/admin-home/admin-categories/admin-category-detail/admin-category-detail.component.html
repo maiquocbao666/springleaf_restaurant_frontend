@@ -1,47 +1,34 @@
 <div class="modal-header">
-    <h4 class="modal-title">Category Detail</h4>
+    <h4 class="modal-title">Chi tiết</h4>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
 <div class="modal-body">
     <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
-
-        <label for="categoryId">Category id: </label>
-        <input id="categoryId" formControlName="id" readonly />
-        <div *ngIf="categoryForm.get('id')?.invalid && (categoryForm.get('id')?.dirty || categoryForm.get('id')?.touched)"
-            class="alert alert-danger">
-        </div> <br>
-
-        <label for="categoryName">Category name: </label>
-        <input id="categoryName" formControlName="name" />
-        <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.dirty || categoryForm.get('name')?.touched)"
-            class="alert alert-danger">
-            <div *ngIf="categoryForm.get('name')?.hasError('required')">
-                Name is required
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="categoryName" class="form-label">Tên loại<span style="color: red;">(*)</span></label>
+                <input type="text" formControlName="name" class="form-control" placeholder="Nhập tên danh mục...">
+                <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.touched || isSubmitted)"
+                    class="text-danger"> Không bỏ trống tên loại.
+                </div>
             </div>
-            <div *ngIf="categoryForm.get('name')?.hasError('minlength')">
-                Name must be at least 3 characters long
+            <div class="col-md-4">
+                <label for="categoryActive" class="form-label">Đang bán<span style="color: red;">(*)</span></label><br>
+                <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true">
+                <label for="categoryActiveYes">Có</label>
+                <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false">
+                <label for="categoryActiveNo">Không</label>
             </div>
-        </div> <br>
-
-        <label>Đang bán: </label>
-        <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true"
-            [checked]="categoryForm.get('active')?.value === true"> Có
-        <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false"
-            [checked]="categoryForm.get('active')?.value === false"> Không <br>
-
-        <label for="categoryDescription">Category description: </label>
-        <input id="categoryDescription" formControlName="description" /> <br>
-
-        <button type="submit" class="add-button" [disabled]="categoryForm.invalid">
-            Save category
-        </button>
+            <div class="col-md-4">
+                <label for="categoryDescription" class="form-label">Mô tả</label>
+                <textarea class="form-control" formControlName="description" id="" cols="10" rows="10"
+                    placeholder="Nhập mô tả..."></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit">Thay đổi</button>
+            </div>
+        </div>
     </form>
-</div>
-
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
-        Đóng
-    </button>
 </div>

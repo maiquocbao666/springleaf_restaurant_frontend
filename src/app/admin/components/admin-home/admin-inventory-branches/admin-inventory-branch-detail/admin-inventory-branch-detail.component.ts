@@ -9,6 +9,7 @@ import { IngredientService } from 'src/app/services/ingredient.service';
 import { InventoryBranchService } from 'src/app/services/inventory-branch.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { SupplierService } from 'src/app/services/supplier.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-inventory-branch-detail',
@@ -24,6 +25,7 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
   suppliers: Supplier[] = [];
   inventoryBranchForm: FormGroup;
   fieldNames: string[] = [];
+  isSubmitted = false;
 
   restaurantsUrl = 'restaurants';
   ingredientsUrl = 'ingredients';
@@ -89,7 +91,8 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
   }
 
   updateInventoryBranch(): void {
-    this.activeModal.close('Close after saving');
+    this.isSubmitted = true;
+  
     if (this.inventoryBranchForm.valid) {
       const updateInventoryBranch: InventoryBranch = {
         inventoryBranchId: +this.inventoryBranchForm.get('inventoryBranchId')?.value,
@@ -97,10 +100,21 @@ export class AdminInventoryBranchDetailComponent implements OnInit {
         supplierId: +this.inventoryBranchForm.get('supplierId')?.value,
         restaurantId: +this.inventoryBranchForm.get('restaurantId')?.value
       };
-
-      this.inventoryBranchService.update(updateInventoryBranch).subscribe(() => {
-        //this.inventoryBranchSaved.emit(); // Emit the event
-      });
+  
+      this.inventoryBranchService.update(updateInventoryBranch).subscribe(
+        () => {
+          Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
+          this.activeModal.close('Close after saving');
+          this.inventoryBranchForm.reset();
+        },
+        (error) => {
+          Swal.fire('Thất bại', 'Cập nhật thất bại!', 'warning');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else {
+      Swal.fire('Thất bại', 'Cập nhật không thành công!', 'warning');
     }
   }
+  
 }

@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableType } from 'src/app/interfaces/table-type';
 import { TableTypeService } from 'src/app/services/table-type.service';
+import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 import { AdminTableTypeDetailComponent } from './admin-table-type-detail/admin-table-type-detail.component';
 
 @Component({
@@ -21,6 +23,8 @@ export class AdminTableTypesComponent {
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
+  isSubmitted = false;
+
 
   tableTypesUrl = 'tableTypes';
 
@@ -37,11 +41,14 @@ export class AdminTableTypesComponent {
     private tableTypeService: TableTypeService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private sweetAlertService: ToastService
+
+
   ) {
     this.tableTypeForm = this.formBuilder.group({
-      tableTypeId: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      // tableTypeId: ['', [Validators.required]],
+      tableTypeName: ['', [Validators.required]],
     });
   }
 
@@ -49,7 +56,7 @@ export class AdminTableTypesComponent {
     this.getTableTypes();
   }
 
-  getTableTypes(): void {    
+  getTableTypes(): void {
     this.tableTypeService.getCache().subscribe(
       (cached: any[]) => {
         this.tableTypes = cached;
@@ -58,28 +65,43 @@ export class AdminTableTypesComponent {
   }
 
   addTableType(): void {
-    const name = this.tableTypeForm.get('name')?.value?.trim() ?? '';
+    this.isSubmitted = true;
+    if (this.tableTypeForm.valid) {
+      const tableTypeName = this.tableTypeForm.get('tableTypeName')?.value?.trim() ?? '';
+      const newTableType: TableType = {
+        tableTypeName: tableTypeName,
+      };
+      this.tableTypeService.add(newTableType)
+        .subscribe(tableType => {
+          this.tableTypeForm.reset();
+          this.sweetAlertService.showCustomAnimatedAlert('Thành công', 'success', 'Thêm thành công')
 
-    const newTableType: TableType = {
-      tableTypeName: name,
-    };
+          this.isSubmitted = false;
 
-    this.tableTypeService.add(newTableType)
-      .subscribe(tableType => {
-        this.tableTypeForm.reset();
-      });
+        });
+    } else
+      this.sweetAlertService.showCustomAnimatedAlert('Thất bại', 'warning', 'Thêm thất bại')
+
   }
 
   deleteTableType(tableType: TableType): void {
-
     if (tableType.tableTypeId) {
-      this.tableTypeService.delete(tableType.tableTypeId).subscribe();
+      this.sweetAlertService
+        .showConfirmAlert('Bạn có muốn xóa loại bàn ' + tableType.tableTypeName + '?', 'Không thể lưu lại!', 'warning')
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.tableTypeService.delete(tableType.tableTypeId!).subscribe(() => {
+              console.log('Đã xóa loại bàn!');
+              Swal.fire('Thành công', 'Xóa loại bàn ' + tableType.tableTypeName + ' thành công!', 'success');
+              this.isSubmitted = false;
+            });
+          }
+        });
     } else {
-      console.log("Không có tableTypeId");
+      Swal.fire('Thất bại', 'Không thể xóa loại bàn với mã không xác định!', 'warning');
     }
-
-
   }
+
 
   openTableTypeDetailModal(tableType: TableType) {
     const modalRef = this.modalService.open(AdminTableTypeDetailComponent, { size: 'lg' });

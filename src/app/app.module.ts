@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { MatCardModule } from '@angular/material/card';
-// import { MatCheckboxModule } from '@angular/material/checkbox';
-// import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -14,12 +14,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatTableModule } from '@angular/material/table';
-// import { MatPaginatorModule } from '@angular/material/paginator';
-// import { MatSortModule } from '@angular/material/sort';
-// import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
@@ -99,8 +99,9 @@ import { UserCheckoutComponent } from './user/components/user-home/user-checkout
 import { UserRestaurantTableInfomationComponent } from './user/components/user-home/user-restaurant-tables/user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 
 import { DatePipe } from '@angular/common';
-import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
+import { MatButtonModule } from '@angular/material/button';
 import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
+import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 
 @NgModule({
   declarations: [
@@ -197,15 +198,17 @@ import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/a
     }),
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
-    // MatCheckboxModule,
-    // MatCardModule,
-    // MatRadioModule,
-    // MatInputModule,
-    // MatFormFieldModule,
-    // MatTableModule,
-    // MatPaginatorModule,
-    // MatSortModule,
-    // MatDialogModule,
+    MatCheckboxModule,
+    MatCardModule,
+    MatRadioModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    MatButtonModule,
+
   ],
   providers: [
     DatePipe,

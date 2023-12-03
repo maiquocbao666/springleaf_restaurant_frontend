@@ -8,15 +8,12 @@
   <form [formGroup]="tableStatusForm" (ngSubmit)="updateTableStatus()">
     <div class="row">
       <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Id</label>
+        <label for="exampleInputPassword1" class="form-label">Tên trạng thái</label>
         <div class="mb-3">
-          <input type="text" class="form-control" formControlName="tableStatusId" placeholder="Nhập Id...">
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Name</label>
-        <div class="mb-3">
-          <input type="text" class="form-control" formControlName="name" placeholder="Nhập tên nhà cung cấp...">
+          <input type="text" class="form-control" formControlName="name" placeholder="Nhập tên trạng thái...">
+          <div *ngIf="tableStatusForm.get('name')?.invalid && (tableStatusForm.get('name')?.touched || isSubmitted )"
+            class="text-danger">Tên trạng thái không được để trống.
+          </div>
         </div>
       </div>
     </div>

@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { Cart } from 'src/app/interfaces/cart';
 import { GoodsReceipt } from 'src/app/interfaces/goods-receipt';
 import { InventoryBranch } from 'src/app/interfaces/inventory-branch';
+import { CartService } from 'src/app/services/cart.service';
 import { GoodsReceiptService } from 'src/app/services/goods-receipt.service';
 import { InventoryBranchService } from 'src/app/services/inventory-branch.service';
 import { AdminGoodsReceiptDetailComponent } from './admin-goods-receipt-detail/admin-goods-receipt-detail.component';
-import { CartService } from 'src/app/services/cart.service';
-import { Cart } from 'src/app/interfaces/cart';
 
 @Component({
   selector: 'app-admin-goods-receipts',
@@ -39,10 +38,10 @@ export class AdminGoodsReceiptsComponent {
   ) {
     this.goodsReceiptForm = this.formBuilder.group({
       goodsReceiptId: ['', [Validators.required]],
-      inventoryBrand: ['', [Validators.required]],
+      inventoryBranchId: ['', [Validators.required]],
       date: ['', [Validators.required]],
-      warehouseManager: ['', [Validators.required]],
-      user: ['', [Validators.required]]
+      warehouseManagerId: ['', [Validators.required]],
+      inventoryBranchManagerId: ['', [Validators.required]]
     });
   }
 
@@ -90,12 +89,12 @@ export class AdminGoodsReceiptsComponent {
   }
 
   addGoodsReceipt(): void {
-    const inventoryBranch = this.goodsReceiptForm.get('inventoryBranch')?.value;
+    const inventoryBranchId = this.goodsReceiptForm.get('inventoryBranchId')?.value;
     const date = this.goodsReceiptForm.get('date')?.value;
-    const warehouseManager = this.goodsReceiptForm.get('warehouseManager')?.value;
-    const user = this.goodsReceiptForm.get('user')?.value;
+    const warehouseManagerId = this.goodsReceiptForm.get('warehouseManagerId')?.value;
+    const inventoryBranchManagerId = this.goodsReceiptForm.get('inventoryBranchManagerId')?.value;
 
-    this.goodsReceiptService.add({ inventoryBranch, date, warehouseManager, user } as GoodsReceipt)
+    this.goodsReceiptService.add({ inventoryBranchId, date, warehouseManagerId, inventoryBranchManagerId } as GoodsReceipt)
       .subscribe(goodsReceipt => {
         this.goodsReceiptForm.reset();
       });

@@ -1,65 +1,85 @@
 <div class="container">
-    <h1>Kho</h1>
-    <form [formGroup]="inventoryForm" (ngSubmit)="addInventory()">
-        <div class="mb-3">
-            <label *ngIf="!ingredients || ingredients.length >0" for="exampleInputPassword1"
-                class="form-label">Ingredient</label>
-            <a style="color: red;" *ngIf="!ingredients || ingredients.length === 0" class="nav-link"
-                routerLink="/admin/ingredients">Thêm nguyên liệu</a>
-            <div class="mb-3">
-                <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
-                    <option value="">Chọn nguyên liệu</option>
-                    <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
-                </select>
-            </div>
-        </div>
-        <div class="mb-3">
-
-            <a class="nav-link" routerLink="/admin/suppliers">Thêm nhà sản xuất</a>
-            <div class="mb-3">
-                <select class="form-select" aria-label="Default select example" formControlName="supplierId">
-                    <option value="">Chọn nhà sản xuất</option>
-                    <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.supplierName
-                        }}
-                    </option>
-                </select>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
-    <div class="col-2">
+    <h1 class="text-center display-4">Danh sách kho</h1>
+    <p class="d-inline-flex gap-1">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">
+            Thêm kho
+        </button>
+    </p>
+    <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
-            <option value="">Page</option>
             <option *ngFor="let size of tableSizes">
                 {{size}}
             </option>
         </select>
+    </p>
+    <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+
+            <form [formGroup]="inventoryForm" (ngSubmit)="addInventory()">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="supplierId" class="form-label">Nhà sản xuất<span
+                                style="color: red;">(*)</span></label>
+                        <select class="form-select" aria-label="Default select example" formControlName="supplierId">
+                            <option value="">Chọn nhà sản xuất</option>
+                            <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{
+                                supplier.supplierName }}
+                            </option>
+                        </select>
+                        <div *ngIf="inventoryForm.get('supplierId')?.invalid && (inventoryForm.get('supplierId')?.touched || isSubmitted)"
+                            class="text-danger"> Không bỏ trống nhà sản xuất.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ingredientId" class="form-label">Nguyên liệu<span
+                                style="color: red;">(*)</span></label>
+                        <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
+                            <option value="">Chọn nguyên liệu</option>
+                            <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
+                        </select>
+                        <div *ngIf="inventoryForm.get('ingredientId')?.invalid && (inventoryForm.get('ingredientId')?.touched || isSubmitted)"
+                            class="text-danger"> Không bỏ trống nguyên liệu.
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit">Lưu</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Ingredient</th>
-                <th scope="col">Supplier</th>
-                <th scope="col">Chức năng</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr
-                *ngFor="let inventory of inventories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                <td>{{inventory.inventoryId}}</td>
-                <td>{{ getIngredientById(inventory.ingredientId)?.name }}</td>
-                <td>{{ getSupplierById(inventory.supplierId)?.supplierName }}</td>
-                <td><button type="button" class="btn btn-outline-primary"
-                        (click)="openInventoryDetailModal(inventory)">Edit</button>
-                    <button type="button" class="btn btn-outline-danger"
-                        (click)="deleteInventory(inventory)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">Mã kho</th>
+                    <th class="text-center">Nguyên liệu</th>
+                    <th class="text-center">Nhà sản xuất</th>
+                    <th class="text-center">Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let inventory of inventories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                    <td class="text-center text-muted">I{{inventory.inventoryId}}</td>
+                    <td class="text-center">{{ getIngredientById(inventory.ingredientId)?.name }}</td>
+                    <td class="text-center text-muted">{{ getSupplierById(inventory.supplierId)?.supplierName }}
+                    </td>
+                    <td class="text-center">
+                        <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+                            (click)="openInventoryDetailModal(inventory)"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+                            (click)="deleteInventory(inventory)"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="text-center">
-        <pagination-controls previousLabel="Prev" nextLabel="Next"
+        <pagination-controls previousLabel="Lùi" nextLabel="Tới"
             (pageChange)="onTableDataChange($event)"></pagination-controls>
     </div>
+
 </div>

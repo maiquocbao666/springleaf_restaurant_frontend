@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantService } from 'src/app/services/restaurant.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-restaurant-detail',
@@ -15,7 +16,8 @@ export class AdminRestaurantDetailComponent {
   fieldNames: string[] = [];
   restaurants: Restaurant[] = [];
   restaurantForm: FormGroup;
-  
+  isSubmitted = false;
+
   constructor(
     private restaurantService: RestaurantService,
     private formBuilder: FormBuilder,
@@ -31,15 +33,15 @@ export class AdminRestaurantDetailComponent {
       restaurantId: ['', [Validators.required]],
       restaurantName: ['', [Validators.required]],
       address: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern('^\\d{10,11}$')]],
       email: ['', [Validators.required, Validators.email]]
     });
   }
-  
+
   ngOnInit(): void {
     this.setValue();
   }
-  
+
   setValue() {
     if (this.restaurant) {
       this.restaurantForm.patchValue({
@@ -51,21 +53,33 @@ export class AdminRestaurantDetailComponent {
       });
     }
   }
-  
+
   updateRestaurant(): void {
-    this.activeModal.close('Close after saving');
+    this.isSubmitted = true;
+
     if (this.restaurantForm.valid) {
       const updatedRestaurant: Restaurant = {
         restaurantId: +this.restaurantForm.get('restaurantId')?.value,
         restaurantName: this.restaurantForm.get('restaurantName')?.value,
-        address: +this.restaurantForm.get('address')?.value,
+        address: this.restaurantForm.get('address')?.value,
         phone: this.restaurantForm.get('phone')?.value,
         email: this.restaurantForm.get('email')?.value,
       };
-  
-      this.restaurantService.update(updatedRestaurant).subscribe(() => {
-      });
-    }
+
+      this.restaurantService.update(updatedRestaurant).subscribe(
+        () => {
+          Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
+          this.activeModal.close('Close after saving');
+          this.restaurantForm.reset();
+
+        },
+        (error) => {
+          Swal.fire('Thất bại', 'Cập nhật thất bại!', 'warning');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else
+      Swal.fire('Thất bại', 'Cập nhật không thành công!', 'warning');
   }
-  
+
 }

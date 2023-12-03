@@ -1,22 +1,20 @@
-import { Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, Subscription, filter, map, of, tap } from 'rxjs';
 import { Reservation } from 'src/app/interfaces/reservation';
-import { RxStompService2 } from 'src/app/rx-stomp.service2';
 import { ApiService } from 'src/app/services/api.service';
 import { DateTimeService } from 'src/app/services/date-time.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { Message } from '@stomp/stompjs';
-import { DatePipe } from '@angular/common';
-import { addHours, differenceInMilliseconds, format } from 'date-fns';
-import { utcToZonedTime, format as formatTz } from 'date-fns-tz';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+// import { addHours, differenceInMilliseconds, format } from 'date-fns';
+// import { utcToZonedTime, format as formatTz } from 'date-fns-tz';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
-import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-admin-reservations',
@@ -24,6 +22,10 @@ import { User } from 'src/app/interfaces/user';
   styleUrls: ['./admin-reservations.component.css']
 })
 export class AdminReservationsComponent {
+  dataSource!: MatTableDataSource<Reservation>;
+  selectedRow: any;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   numbersArray: number[] =[];
   restaurantIdsArray = Array.from({ length: 10 }, (_, index) => index + 1);
@@ -125,7 +127,7 @@ export class AdminReservationsComponent {
 
     // 1000ms = 1s
     if (reservation.reservationStatusName === "Đã sử dụng xong") {
-      return "Hết cứu";
+      return "Hết giờ sử dụng";
     }
 
     const currentTime = new Date();
@@ -141,13 +143,32 @@ export class AdminReservationsComponent {
       return hours + ':' + minutes + ':' + seconds;
     }
 
-    return "Hết cứu";
+    return "Hết giờ sử dụng";
+  }
+
+  // getReservations(): void {
+  //   this.reservationService.getCache().subscribe(
+  //     (cached: any[]) => {
+  //       this.reservations = cached;
+  //     }
+  //   );
+  // }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getReservations(): void {
     this.reservationService.getCache().subscribe(
-      (cached: any[]) => {
+      (cached: Reservation[]) => {
         this.reservations = cached;
+        this.dataSource = new MatTableDataSource(this.reservations);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      (error: any) => {
+        console.error('Failed to fetch data', error);
       }
     );
   }

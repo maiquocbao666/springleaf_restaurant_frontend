@@ -1,125 +1,119 @@
-<h1>Biểu mẫu đặt bàn</h1>
-<td>Ngày giờ hiện tại: {{currentDateTime$ | date: 'EEEE, MMMM d, y, HH:mm:ss a'}}</td>
-<div>
-    <select (change)="onTableSizeChange($event)">
+<div class="container">
+    <h1 class="text-center display-4">Danh sách đặt bàn</h1>
+    <p class="d-inline-flex gap-1">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">
+            Đặt bàn
+        </button>
+    </p>
+
+    <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+            <form [formGroup]="reservationForm" (ngSubmit)="addReservation()">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="exampleInputPassword1" class="form-label">Số lượng khách<span
+                                style="color: red;">(*)</span></label>
+                        <select class="form-control" formControlName="seatingCapacity">
+                            <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="unitPrice" class="form-label">Bàn<span style="color: red;">(*)</span></label>
+                        <select class="form-control" formControlName="restaurantTableId"
+                            (change)="changeSeatingCapacity($event)">
+                            <option *ngFor="let number of restaurantTables" [value]=number.tableId>{{ number.tableId }}
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <span class="form-label">Ngày tới</span>
+                                <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate"
+                                    [min]="minDate" [max]="maxDate" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <span class="form-label">Thời gian tới</span>
+                                <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime"
+                                    required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <span class="form-label">Định dạng VN</span>
+                                <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <span class="form-label">Thời gian đi</span>
+                                <input class="form-control" type="time" id="outTime" formControlName="outTime" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit">Thêm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <select class="form-select col-4" (change)="onTableSizeChange($event)">
         <option *ngFor="let size of tableSizes">
             {{size}}
         </option>
     </select>
-</div>
-<br>
+    <input class="form-control col-4" formControlName=" searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss" />
+    <td>Ngày giờ hiện tại: {{currentDateTime$ | date: 'EEEE, MMMM d, y, HH:mm:ss a'}}</td>
 
-<form [formGroup]="reservationForm">
-    <div class="row no-margin">
-        <div class="col-md-2">
-            <div class="form-group">
-                <span class="form-label">Số khách</span>
-                <select class="form-control" formControlName="seatingCapacity">
-                    <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <span class="form-label">Mã bàn</span>
-                <select class="form-control" formControlName="restaurantTableId" (change)="changeSeatingCapacity($event)">
-                    <option *ngFor="let number of restaurantTables" [value]=number.tableId>{{ number.tableId }}</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-7">
-            <div class="row no-margin">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <span class="form-label">Ngày tới</span>
-                        <input class="form-control" type="date" id="selectedDate"
-                            formControlName="selectedDate" [min]="minDate" [max]="maxDate" required>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <span class="form-label">Thời gian tới</span>
-                        <input class="form-control" type="time" id="selectedTime"
-                            formControlName="selectedTime" required>
-                    </div>
-                </div>
-            </div>
-            <div class="row no-margin">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <span class="form-label">Định dạng VN</span>
-                        <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <span class="form-label">Thời gian đi</span>
-                        <input class="form-control" type="time" id="outTime"
-                            formControlName="outTime" required>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-btn">
-                <button class="submit-btn" (click)="bookingTable()">Đặt bàn</button>
-            </div>
+    <div class="table-responsive">
+        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">Mã đặt bàn</th>
+                    <th class="text-center">Mã bàn</th>
+                    <th class="text-center">Khách</th>
+                    <th class="text-center">Ngày tới</th>
+                    <th class="text-center">Giờ tới</th>
+                    <th class="text-center">Giờ đi</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Số lượng khách hàng</th>
+                    <th class="text-center">Thời gian sử dụng còn lại</th>
+                    <th class="text-center">Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let reservation of reservations | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                    <td class="text-center text-muted">RS{{ reservation.reservationId }}</td>
+                    <td class="text-center text-muted">{{ reservation.restaurantTableId }}</td>
+                    <td class="text-center text-muted">{{ reservation.userId }}</td>
+                    <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
+                    <td class="text-center text-muted">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
+                    <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
+                    <td class="text-center text-muted">{{ reservation.reservationStatusName }}</td>
+                    <td class="text-center text-muted">{{ reservation.numberOfGuests }}</td>
+                    <td class="text-center text-muted">{{ (hoursUse(reservation)) }}</td>
+                    <td class="text-center">
+                        <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+                            (click)="deletereservation(reservation)"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
 
-        </div>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
     </div>
 
-    <input class="form-control" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss"/>
-
-    <!-- <ng-container *ngIf="isSearch; else elseTemplate">
-        <div *ngFor="let reservation of searchReservations">
-            <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
-                reservation.outTime | date: 'HH:mm:ss' }}</div>
-        </div>
-    </ng-container>
-    <ng-template #elseTemplate>
-        <div *ngFor="let reservation of reservations">
-            <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
-                reservation.outTime | date: 'HH:mm:ss' }}</div>
-        </div>
-    </ng-template> -->
-
-</form>
-
-<table class="table table-light container-fluid">
-    <tbody>
-        <tr>
-            <th>Reservation id</th>
-            <th>Mã bàn</th>
-            <th>User</th>
-            <th>Ngày tới</th>
-            <th>Giờ tới</th>
-            <th>Giờ đi</th>
-            <th>Trạng thái</th>
-            <th>Số lượng khách hàng</th>
-            <th>Thời gian sử dụng còn lại</th>
-            <th></th>
-        </tr>
-        <tr
-            *ngFor="let reservation of reservations | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-            <td>{{ reservation.reservationId }}</td>
-            <td>{{ reservation.restaurantTableId }}</td>
-            <td>{{ reservation.userId }}</td>
-            <td>{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
-            <td>{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td> 
-            <td>{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
-            <td>{{ reservation.reservationStatusName }}</td>
-            <td>{{ reservation.numberOfGuests }}</td>
-            <td>{{ (hoursUse(reservation)) }}</td> 
-            <td><button (click)="deletereservation(reservation)">Delete</button></td>
-            <!-- <th> <a routerLink="/admin/reservation/{{reservation.reservationId}}" type="button">Edit
-                </a></th> -->
-            <!-- <ul class="navbar-nav mx-auto">
-                <li class="nav-item">
-                    <button (click)="openreservationDetailModal(reservation)">Edit</button>
-                </li>
-            </ul> -->
-        </tr>
-    </tbody>
-</table>
-<div>
-    <pagination-controls previousLabel="Prev" nextLabel="Next"
-        (pageChange)="onTableDataChange($event)"></pagination-controls>
 </div>
