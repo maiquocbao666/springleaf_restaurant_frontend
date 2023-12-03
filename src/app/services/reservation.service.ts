@@ -6,6 +6,8 @@ import { BaseService } from './base-service';
 import { Message } from '@stomp/stompjs';
 import { RxStompService } from '../rx-stomp.service';
 import { ToastService } from './toast.service';
+import { HttpHeaders } from '@angular/common/http';
+import { Product } from '../interfaces/product';
 
 @Injectable({
     providedIn: 'root'
@@ -126,6 +128,18 @@ export class ReservationService extends BaseService<Reservation> {
         }
     
         return of([]);
+    }
+
+    order(productList : any[] , reservationId : number){
+        const jwtToken = localStorage.getItem('access_token');
+    if (!jwtToken) {
+      return of(null);
+    }
+  
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+        return this.apiService.request<any>('post',`order/${reservationId}`, productList, customHeader);
     }
 
 }

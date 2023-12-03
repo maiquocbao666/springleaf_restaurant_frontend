@@ -14,6 +14,8 @@ import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-
 import { TableType } from 'src/app/interfaces/table-type';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
+import { Product } from 'src/app/interfaces/product';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-user-table',
@@ -27,6 +29,7 @@ export class UserRestaurantTablesComponent {
   tableStatuses: TableStatus[] = [];
   tableTypes: TableType[] = [];
   restaurants: Restaurant[] = [];
+  
 
   constructor(
     private toastService: ToastService,

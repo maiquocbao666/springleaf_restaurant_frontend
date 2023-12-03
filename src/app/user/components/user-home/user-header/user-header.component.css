@@ -553,5 +553,6 @@ button:active {
 }
 
 .menu-right{
-	float: right;
+	display: fixed;
+	float: left;
 }

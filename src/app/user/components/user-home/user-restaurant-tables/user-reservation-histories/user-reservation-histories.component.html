@@ -1,49 +1,94 @@
-
 <div aria-hidden="true" class="body">
-    <div class="modal-dialog modal-dialog-centered modal-xl section-center mt-0 mb-0" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="input-group row">
-                    <h3 class="col-lg-7 mb-0">Lịch sử đặt bàn</h3>
-                    <input class="col-lg-5 input-search" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                  <div class="card mb-grid">
-                    <div class="table-responsive-md">
-                      <table class="table table-actions table-hover mb-0">
-                        <thead>
-                          <tr>
-                            <!-- <th>Id người dùng</th> -->
-                            <!-- <th>Id bàn</th> -->
-                            <th>Trạng thái</th>
-                            <!-- <th>Id đặt bàn</th> -->
-                            <th>Ngày giờ tới</th>
-                            <th>Ngày giờ đi</th>
-                            <th>Số lượng khách hàng</th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let thisUserReservation of thisUserReservations">
-                                <!-- <td>{{ thisUserReservation.userId }}</td> -->
-                                <!-- <td>{{ thisUserReservation.restaurantTableId }}</td> -->
-                                <td>{{ thisUserReservation.reservationStatusName }}</td>
-                                <!-- <td>{{ thisUserReservation.reservationId }}</td> -->
-                                <td>{{ thisUserReservation.reservationDate }}</td>
-                                <td>{{ thisUserReservation.outTime }}</td>
-                                <td>{{ thisUserReservation.numberOfGuests }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary">Đặt món</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  <div class="modal-dialog modal-dialog-centered modal-xl section-center mt-0 mb-0">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="input-group row">
+          <h3 class="col-lg-7 mb-0">Lịch đặt bàn của bạn</h3>
+          <!-- <input class="col-lg-5 input-search" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss"/> -->
         </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card mb-grid">
+            <div class="table-responsive-md">
+              <table class="table table-actions table-hover mb-0">
+                <thead>
+                  <tr>
+                    <!-- <th>Id người dùng</th> -->
+                    <!-- <th>Id bàn</th> -->
+                    <!-- <th>Id đặt bàn</th> -->
+                    <th>Ngày đặt</th>
+                    <th>Giờ tới</th>
+                    <th>Giờ đi</th>
+                    <th>Số lượng khách hàng</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let thisUserReservation of thisUserReservations">
+                    <!-- <td>{{ thisUserReservation.userId }}</td> -->
+                    <!-- <td>{{ thisUserReservation.restaurantTableId }}</td> -->
+
+                    <!-- <td>{{ thisUserReservation.reservationId }}</td> -->
+                    <td>{{ thisUserReservation.reservationDate | date: 'dd-MM-yyyy'}}</td>
+                    <td>{{ thisUserReservation.reservationDate | date: 'HH:mm:ss'}}</td>
+                    <td>{{ thisUserReservation.outTime | date: 'HH:mm:ss'}}</td>
+                    <td>{{ thisUserReservation.numberOfGuests }}</td>
+                    <td>{{ thisUserReservation.reservationStatusName }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-primary" (click)="handleButtonClick(thisUserReservation.reservationId)">Đặt món</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" *ngIf="products.length > 0">
+        <div class="row">
+          <div class="col-lg-7">
+            <b>Tổng: {{selectedItems.length }} sản phẩm </b>
+          </div>
+          <div class="col-lg-3">
+            <b>Thành tiền:</b> {{ calculateTotalPrice() }}
+          </div>
+          <div class="col-lg-2">
+            <button class="btn btn-sm btn-primary" (click)="orderReservation()">Đặt món</button>
+          </div>
+        </div>
+        <div class="table-responsive-md">
+        <table class="table table-actions table-hover mb-0">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Ảnh</th>
+              <th>Tên món</th>
+              <th>Đơn giá</th>
+              <!-- <th>SL</th> -->
+              <th>Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products">
+              <!-- <td>{{ thisUserReservation.userId }}</td> -->
+              <!-- <td>{{ thisUserReservation.restaurantTableId }}</td> -->
+
+              <!-- <td>{{ thisUserReservation.reservationId }}</td> -->
+              <td><input type="checkbox" [(ngModel)]="selections[product.menuItemId!]" (click)="toggleSelection(product)"></td>
+              <td><img class="img-fluid" style="height: 50px; width: 50px;" src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt="">
+              </td>
+              <td>{{product.name}}</td>
+              <td>{{product.unitPrice}}</td>
+              <!-- <td><input type="number" class="form-control" min="1" max="10"></td> -->
+              <td>{{product.unitPrice}} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
     </div>
-</div>
+  </div>
+  </div>

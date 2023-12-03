@@ -152,7 +152,7 @@ export class UserCartComponent implements OnInit {
   toggleSelectedAll() {
     this.selectAllChecked = !this.selectAllChecked;
     if (this.selectAllChecked) {
-      this.selectedItems = this.cartInformationArray;
+      this.selectedItems = this.cartInformationArray; // check lại lỗi này
     } else {
       this.selectedItems = [];
     }
