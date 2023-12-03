@@ -1,4 +1,3 @@
-
 /*Menu starts*/
 .menu_tab {
   margin: 0 auto;
@@ -66,6 +65,10 @@
   border-bottom: 1px dashed #c0392b;
   line-height: 2;
   text-transform: capitalize;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 
 .menu_content h3 {
