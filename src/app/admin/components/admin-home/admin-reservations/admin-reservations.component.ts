@@ -7,7 +7,6 @@ import { DateTimeService } from 'src/app/services/date-time.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { Message } from '@stomp/stompjs';
-import { DatePipe } from '@angular/common';
 import { addHours, differenceInMilliseconds, format } from 'date-fns';
 // import { addHours, differenceInMilliseconds, format } from 'date-fns';
 // import { utcToZonedTime, format as formatTz } from 'date-fns-tz';
