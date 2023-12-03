@@ -1,6 +1,6 @@
 <section id="our_menu" class="pt-5 pb-5">
     <div class="container">
-        <!-- <a routerLink="/user/index">Hiển thị tất cả món</a> -->
+        <a routerLink="/user/index">Hiển thị tất cả món</a>
         <div class="row">
             <div class="tab-content col-lg-12" id="myTabContent">
                 <div class="tab-pane fade show active" id="breakfast" role="tabpanel" aria-labelledby="breakfast-tab">
@@ -8,7 +8,7 @@
                         <div class="col-md-6" *ngFor="let product of getVisibleProducts(); let i = index">
                             <div class="single_menu">
                                 <a (click)="openProductDetailModal(product)">
-                                    <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
+                                    <img src="https://drive.google.com/uc?id={{product.imageUrl}}"
                                         alt="burger"></a>
                                 <div class=" menu_content">
                                     <a (click)="openProductDetailModal(product)">
