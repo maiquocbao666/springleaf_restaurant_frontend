@@ -21,7 +21,7 @@
             <div class="widget-subheading"></div>
           </div>
           <div class="widget-content-right">
-            <div class="widget-numbers text-white"><span> 2</span></div>
+            <div class="widget-numbers text-white"><span> {{ statisticsData }}</span></div>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
             <div class="widget-subheading"></div>
           </div>
           <div class="widget-content-right">
-            <div class="widget-numbers text-white"><span>55.000.000đ</span></div>
+            <div class="widget-numbers text-white"><span>{{ formatAmount(totalRevenue!) }}</span></div>
           </div>
         </div>
       </div>
@@ -204,6 +204,12 @@
         </table>
       </ul>
     </div>
+    <h2>Số lượt mua sản phẩm</h2>
+    <ul>
+      <li *ngFor="let item of topItems; let i = index">
+        {{ i + 1 }}. {{ getProductById(item[0])?.name }} - mua {{ item[1] }} lần
+      </li>
+    </ul>
   </div>
 
 </div>
