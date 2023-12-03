@@ -1,13 +1,20 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { MenuItemIngredient } from 'src/app/interfaces/menu-item-ingredient';
 import { Product } from 'src/app/interfaces/product';
 import { IngredientService } from 'src/app/services/ingredient.service';
 import { MenuItemIngredientService } from 'src/app/services/menu-Item-ingredient.service';
 import { ProductService } from 'src/app/services/product.service';
+import Swal from 'sweetalert2';
+
+const nonNegativeNumberValidator = (control: AbstractControl): { [key: string]: boolean } | null => {
+  if (control.value < 0) {
+    return { nonNegative: true };
+  }
+  return null;
+};
 
 @Component({
   selector: 'app-admin-menu-item-ingredient-detail',
@@ -22,6 +29,7 @@ export class AdminMenuItemIngredientDetailComponent implements OnInit {
   products: Product[] = [];
   menuItemIngredientForm: FormGroup;
   fieldNames: string[] = [];
+  isSubmitted = false;
 
   menuItemIngredientsUrl = 'menuItemIngredients';
   ingredientsUrl = 'ingredients';
@@ -39,7 +47,8 @@ export class AdminMenuItemIngredientDetailComponent implements OnInit {
       menuItemIngredientId: ['', [Validators.required]],
       menuItemId: ['', [Validators.required]],
       ingredientId: ['', [Validators.required]],
-      quantity: ['', [Validators.required]]
+      quantity: ['', [Validators.required, nonNegativeNumberValidator]],
+
     });
   }
   ngOnInit(): void {
@@ -49,7 +58,7 @@ export class AdminMenuItemIngredientDetailComponent implements OnInit {
   }
 
 
-  getProducts(): void { 
+  getProducts(): void {
     this.productService.getCache().subscribe(
       (cached: any[]) => {
         this.products = cached;
@@ -86,9 +95,9 @@ export class AdminMenuItemIngredientDetailComponent implements OnInit {
       });
     }
   }
-
   updateMenuItemIngredient(): void {
-    this.activeModal.close('Close after saving');
+    this.isSubmitted = true;
+
     if (this.menuItemIngredientForm.valid) {
       const updatedMenuItemIngredient: MenuItemIngredient = {
         menuItemIngredientId: +this.menuItemIngredientForm.get('menuItemIngredientId')?.value,
@@ -97,10 +106,22 @@ export class AdminMenuItemIngredientDetailComponent implements OnInit {
         quantity: +this.menuItemIngredientForm.get('quantity')?.value,
       };
 
-      this.menuItemIngredientService.update(updatedMenuItemIngredient).subscribe(() => {
-        //this.menuItemIngredientSaved.emit(); // Emit the event
-      });
+      this.menuItemIngredientService.update(updatedMenuItemIngredient).subscribe(
+        () => {
+          Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
+          this.activeModal.close('Close after saving');
+          this.menuItemIngredientForm.reset();
+          //this.menuItemIngredientSaved.emit(); // Emit the event
+        },
+        (error) => {
+          Swal.fire('Thất bại', 'Cập nhật thất bại!', 'warning');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else {
+      Swal.fire('Thất bại', 'Cập nhật không thành công!', 'warning');
     }
   }
+
 }
 

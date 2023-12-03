@@ -1,74 +1,92 @@
+<!-- kk -->
 <div class="container">
-    <h1>Trạng thái bàn</h1>
-
-    <form [formGroup]="tableStatusForm" (ngSubmit)="addTableStatus()">
-        <div class="row">
-
-            <div class="col-sm-6">
-                <label class="form-label">Trạng thái</label>
-                <div class="mb-3">
-                    <select class="form-select" formControlName="statusName">
-                        <option value="Chọn trạng thái bàn">Chọn trạng thái bàn</option>
-                        <option value="Đang sử dụng">Đang sử dụng</option>
-                        <option value="Đang đợi">Đang đợi</option>
-                        <option value="Đang bảo dưỡng">Đang bảo dưỡng</option>
-                        <option value="Đang không có ai đặt">Đang không có ai đặt</option>
-                        <option value="Bàn chưa kín lịch">Bàn chưa kín lịch</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-sm-6">
-                <div class="row">
-                    <div class="col-sm-10">
-
-                        <mat-checkbox (change)="onCheckboxChange($event)">Tên trạng thái tự định dạng</mat-checkbox>
-
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <input type="text" class="form-control" formControlName="name"
-                        [attr.disabled]="tableStatusForm.get('name')?.disabled ? true : null">
-                </div>
-            </div>
-
-        </div>
-
-        <button type="submit" class="btn btn-info">Save</button>
-    </form>
-
-    <div class="col-2">
+    <h1 class="text-center display-4">Danh sách trạng thái bàn</h1>
+    <p class="d-inline-flex gap-1">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">
+            Thêm trạng thái bàn
+        </button>
+    </p>
+    <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
-            <option value>Page</option>
             <option *ngFor="let size of tableSizes">
                 {{size}}
             </option>
         </select>
+    </p>
+    <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+            <form [formGroup]="tableStatusForm" (ngSubmit)="addTableStatus()">
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label for="tableTypeName" class="form-label">Tên trạng thái bàn<span
+                                style="color: red;">(*)</span></label>
+                        <div class="mb-3">
+                            <select class="form-select" formControlName="statusName">
+                                <option value="Chọn trạng thái bàn">Chọn trạng thái bàn</option>
+                                <option value="Đang sử dụng">Đang sử dụng</option>
+                                <option value="Đang đợi">Đang đợi</option>
+                                <option value="Đang bảo dưỡng">Đang bảo dưỡng</option>
+                                <option value="Đang không có ai đặt">Đang không có ai đặt</option>
+                                <option value="Bàn chưa kín lịch">Bàn chưa kín lịch</option>
+                            </select>
+                        </div>
+                        <div *ngIf="tableStatusForm.get('tableTypeName')?.invalid && (tableStatusForm.get('tableTypeName')?.touched || isSubmitted )"
+                            class="text-danger">Tên trạng thái không được để trống.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <mat-checkbox (change)="onCheckboxChange($event)">Tên trạng thái tự định
+                                    dạng</mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" formControlName="name"
+                                [attr.disabled]="tableStatusForm.get('name')?.disabled ? true : null">
+                        </div>
+                        <div *ngIf="tableStatusForm.get('tableTypeName')?.invalid && (tableStatusForm.get('tableTypeName')?.touched || isSubmitted )"
+                            class="text-danger">Tên trạng thái bàn không được để trống.
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit">Lưu</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr
-                *ngFor="let tableStatus of tableStatuses | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                <td>{{tableStatus.tableStatusId}}</td>
-                <td>{{tableStatus.tableStatusName}}</td>
-                <td>
-                    <button type="button" class="btn btn-outline-primary"
-                        (click)="openTableStatusDetailModal(tableStatus)">Edit</button>
-                    <button type="button" class="btn btn-outline-danger"
-                        (click)="deleteTableStatus(tableStatus)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div class="table-responsive">
+        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">Mã trạng thái bàn</th>
+                    <th class="text-center">Tên trạng thái bàn</th>
+                    <th class="text-center">Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let tableStatus of tableStatuses | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                    <td class="text-center text-muted">S{{tableStatus.tableStatusId}}</td>
+                    <td class="text-center">{{tableStatus.tableStatusName}}</td>
+                    <td class="text-center">
+                        <a type="button" class="btn btn-primary m-2"
+                            (click)="openTableStatusDetailModal(tableStatus)"><i
+                                class="fa-solid fa-pen-to-square"></i></a>
+                        <a type="button" class="btn btn-danger" (click)="deleteTableStatus(tableStatus)"><i
+                                class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="text-center">
-        <pagination-controls previousLabel="Prev" nextLabel="Next"
+        <pagination-controls previousLabel="Trước" nextLabel="Sau"
             (pageChange)="onTableDataChange($event)"></pagination-controls>
     </div>
 </div>

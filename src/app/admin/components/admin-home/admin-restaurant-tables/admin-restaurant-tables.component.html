@@ -1,111 +1,131 @@
 <div class="container">
-  <h1>Bàn</h1>
-  <form [formGroup]="restaurantTableForm">
-    <div class="row">
-      <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Tên bàn</label>
-        <div class="mb-3">
-          <input type="text" class="form-control" formControlName="tableName" placeholder="Nhập tên bàn...">
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <!-- <label *ngIf="!restaurants || restaurants.length >0" for="exampleInputPassword1" class="form-label">Nhà
-          hàng</label> -->
-        <a style="color: red;" class="nav-link" routerLink="/admin/restaurants">Thêm nhà hàng</a>
-
-        <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
-            <option value>Chọn nhà hàng</option>
-            <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId">{{
-              restaurant.restaurantName }}</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="col-lg-3">
-        <!-- <label *ngIf="!tableTypes || tableTypes.length >0" for="exampleInputPassword1" class="form-label">Kiểu
-          bàn</label> -->
-        <a style="color: red;" class="nav-link" routerLink="/admin/tableTypes">Thêm kiểu
-          bàn</a>
-        <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
-            <option value>Chọn kiểu bàn</option>
-            <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId"> {{ tableType.tableTypeName }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <!-- <label *ngIf="!tableStatuses || tableStatuses.length >0" for="exampleInputPassword1" class="form-label">Trạng
-          thái bàn</label> -->
-        <a style="color: red;" class="nav-link" routerLink="/admin/tableStatuses">Thêm trạng thái bàn</a>
-        <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
-            <option value>Chọn trạng thái</option>
-            <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{
-              tableStatus.tableStatusName
-              }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div>
-        <label>Số lượng người tối đa</label>
-        <select formControlName="seatingCapacity">
-          <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
-        </select>
-      </div>
-      <label for="restaurantTableDescription">Mô tả</label>
-      <div>
-        <textarea class="form-control" placeholder="Special Request" id="restaurantTableDescription"
-          formControlName="description"></textarea>
-      </div>
-    </div>
-    <button (click)="addRestaurantTable()" class="btn btn-primary">Save</button>
-    <!-- Trong template HTML của Angular component -->
-
-  </form>
-  <div class="col-2">
+  <h1 class="text-center display-4">Danh sách bàn</h1>
+  <p class="d-inline-flex gap-1">
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+      aria-expanded="false" aria-controls="collapseExample">
+      Thêm bàn
+    </button>
+  </p>
+  <p class="float-end">
     <select class="form-select" (change)="onTableSizeChange($event)">
-      <option value>Page</option>
       <option *ngFor="let size of tableSizes">
         {{size}}
       </option>
     </select>
+  </p>
+  <div class="collapse pb-3" id="collapseExample">
+    <div class="card card-body">
+      <form [formGroup]="restaurantTableForm" (ngSubmit)="addRestaurantTable()">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="tableName" class="form-label">Tên bàn<span style="color: red;">(*)</span></label>
+            <input type="text" formControlName="tableName" class="form-control" placeholder="Nhập tên bàn...">
+            <div
+              *ngIf="restaurantTableForm.get('tableName')?.invalid && (restaurantTableForm.get('tableName')?.touched || isSubmitted)"
+              class="text-danger"> Không bỏ trống tên bàn.
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="restaurantId" class="form-label">Nhà hàng<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
+              <option value>Chọn nhà hàng</option>
+              <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId"> {{
+                restaurant.restaurantName
+                }}
+              </option>
+            </select>
+            <div
+              *ngIf="restaurantTableForm.get('restaurantId')?.invalid && (restaurantTableForm.get('restaurantId')?.touched || isSubmitted)"
+              class="text-danger">
+              Không bỏ trống nhà hàng.
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="tableTypeId" class="form-label">Kiểu bàn<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="tableTypeId">
+              <option value>Chọn kiểu bàn</option>
+              <option *ngFor="let tableType of tableTypes" [value]="tableType.tableTypeId"> {{ tableType.tableTypeName
+                }}
+              </option>
+            </select>
+            <div
+              *ngIf="restaurantTableForm.get('tableTypeId')?.invalid && (restaurantTableForm.get('tableTypeId')?.touched || isSubmitted)"
+              class="text-danger">
+              Không bỏ trống kiểu bàn.
+            </div>
+          </div>
+
+
+          <div class="col-md-4">
+            <label for="tableStatusId" class="form-label">Trạng thái bàn<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
+              <option value>Chọn trạng thái</option>
+              <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{
+                tableStatus.tableStatusName
+                }}
+              </option>
+            </select>
+            <div
+              *ngIf="restaurantTableForm.get('tableStatusId')?.invalid && (restaurantTableForm.get('tableStatusId')?.touched || isSubmitted)"
+              class="text-danger">
+              Không bỏ trống trạng thái bàn.
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="exampleInputPassword1" class="form-label">Số khách tối đa</label>
+            <select class="form-select" formControlName="seatingCapacity">
+              <option *ngFor="let number of numbersArray" [value]="number">{{ number }}</option>
+            </select>
+          </div>
+
+          <div class="text-center">
+            <button type="submit">Thêm</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Tên bàn</th>
-        <th scope="col">Số lượng người tối đa</th>
-        <th scope="col">Nhà hàng</th>
-        <th scope="col">Trạng thái</th>
-        <th scope="col">Kiểu bàn</th>
-        <th scrope="col">Mô tả</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let restaurantTable of restaurantTables | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-        <td>{{ restaurantTable.tableId }}</td>
-        <td>{{ restaurantTable.tableName }}</td>
-        <td>{{ restaurantTable.seatingCapacity }}</td>
-        <td>{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }}</td>
-        <td>{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}</td>
-        <td>{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName }}</td>
-        <td>{{ restaurantTable.description }}</td>
-        <td>
-          <button type="button" class="btn btn-outline-primary"
-            (click)="openRestaurantTableDetailModal(restaurantTable)">Edit</button>
-          <button type="button" class="btn btn-outline-danger" (click)="deleteTable(restaurantTable)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+
+  <div class="table-responsive">
+    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">Mã bàn</th>
+          <th class="text-center">Tên bàn</th>
+          <th class="text-center">Số khách tối đa</th>
+          <th class="text-center">Nhà hàng</th>
+          <th class="text-center">Trạng thái</th>
+          <th class="text-center">Kiểu bàn</th>
+          <th class="text-center">Chức năng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let restaurantTable of restaurantTables | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+          <td class="text-center text-muted">R{{restaurantTable.tableId}}</td>
+          <td class="text-center">{{restaurantTable.tableName}}</td>
+          <td class="text-center text-muted">{{ restaurantTable.seatingCapacity }}</td>
+          <td class="text-center text-muted">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }}</td>
+          <td class="text-center text-muted">{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}
+          </td>
+          <td class="text-center text-muted">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName }}</td>
+          <td class="text-center">
+            <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+              (click)="openRestaurantTableDetailModal(restaurantTable)"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+              (click)="deleteTable(restaurantTable)"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <div class="text-center">
-    <pagination-controls previousLabel="Prev" nextLabel="Next"
+    <pagination-controls previousLabel="Lùi" nextLabel="Tới"
       (pageChange)="onTableDataChange($event)"></pagination-controls>
   </div>
+
 </div>

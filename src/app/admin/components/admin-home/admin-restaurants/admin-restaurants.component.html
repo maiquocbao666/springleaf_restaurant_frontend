@@ -1,75 +1,102 @@
 <div class="container">
-  <h1>Nhà hàng</h1>
-  <form [formGroup]="restaurantForm" (ngSubmit)="addRestaurant()">
-      <div class="row">
-          <div class="col-sm-6">
-              <label for="exampleInputPassword1" class="form-label">Tên nhà hàng</label>
-              <div class="mb-3">
-                  <input type="text" class="form-control" formControlName="restaurantName"
-                      placeholder="Nhập tên nhà hàng...">
-              </div>
-          </div>
-          <div class="col-sm-6">
-              <label for="exampleInputPassword1" class="form-label">Địa chỉ</label>
-              <div class="mb-3">
-                  <input type="number" class="form-control" formControlName="address"
-                      placeholder="Nhập địa chỉ...">
-              </div>
-          </div>
-          <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Số điện thoại</label>
-              <div class="mb-3">
-                  <input type="text" class="form-control" formControlName="phone"
-                      placeholder="Nhập số điện thoại...">
-              </div>
-          </div>
-          <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Email</label>
-              <div class="mb-3">
-                  <input type="email" class="form-control" formControlName="email"
-                      placeholder="Nhập địa chỉ email...">
-              </div>
-          </div>
-      </div>
-      <button type="submit" class="btn btn-info">Lưu</button>
-  </form>
-  <div class="col-2">
-      <select class="form-select" (change)="onTableSizeChange($event)">
-          <option value="">Trang</option>
-          <option *ngFor="let size of tableSizes">
-              {{size}}
-          </option>
-      </select>
-  </div>
-  <table class="table">
-      <thead>
-          <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Tên nhà hàng</th>
-              <th scope="col">Địa chỉ</th>
-              <th scope="col">Số điện thoại</th>
-              <th scope="col">Email</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr
-              *ngFor="let restaurant of restaurants | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-              <td>{{restaurant.restaurantId}}</td>
-              <td>{{restaurant.restaurantName}}</td>
-              <td>{{restaurant.address}}</td>
-              <td>{{restaurant.phone}}</td>
-              <td>{{restaurant.email}}</td>
-              <td>
-                  <button type="button" class="btn btn-outline-primary"
-                      (click)="openRestaurantDetailModal(restaurant)">Sửa</button>
-                  <button type="button" class="btn btn-outline-danger"
-                      (click)="deleteRestaurant(restaurant)">Xóa</button>
-              </td>
-          </tr>
-      </tbody>
-  </table>
-  <div class="text-center">
-      <pagination-controls previousLabel="Trước" nextLabel="Sau"
-          (pageChange)="onTableDataChange($event)"></pagination-controls>
-  </div>
+    <h1 class="text-center display-4">Danh sách nhà hàng</h1>
+    <p class="d-inline-flex gap-1">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">
+            Thêm nhà hàng
+        </button>
+    </p>
+    <p class="float-end">
+        <select class="form-select" (change)="onTableSizeChange($event)">
+            <option *ngFor="let size of tableSizes">
+                {{size}}
+            </option>
+        </select>
+    </p>
+    <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+            <form [formGroup]="restaurantForm" (ngSubmit)="addRestaurant()">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="restaurantName" class="form-label">Tên nhà hàng<span
+                                style="color: red;">(*)</span></label>
+                        <input type="text" formControlName="restaurantName" class="form-control"
+                            placeholder="Nhập tên nhà hàng...">
+                        <div *ngIf="restaurantForm.get('restaurantName')?.invalid && (restaurantForm.get('restaurantName')?.touched || isSubmitted || isNewlyAdded)"
+                            class="text-danger">Tên nhà hàng không được để trống.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="address" class="form-label">Địa chỉ<span style="color: red;">(*)</span></label>
+                        <input type="text" formControlName="address" class="form-control" placeholder="Nhập địa chỉ...">
+                        <div *ngIf="restaurantForm.get('address')?.invalid && (restaurantForm.get('address')?.touched || isSubmitted)"
+                            class="text-danger">Vui lòng nhập địa chỉ.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">Số điện thoại<span style="color: red;">(*)</span></label>
+                        <input type="text" class="form-control" formControlName="phone">
+                        <div *ngIf="restaurantForm.get('phone')?.invalid && restaurantForm.get('phone')?.errors?.['pattern']"
+                            class="text-danger">
+                            Số điện thoại không đúng định dạng.
+                        </div>
+                        <div *ngIf="restaurantForm.get('phone')?.invalid && restaurantForm.get('phone')?.errors?.['required'] && 
+                          (restaurantForm.get('phone')?.touched || isSubmitted)" class="text-danger">
+                            Số điện thoại là bắt buộc.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email<span style="color: red;">(*)</span></label>
+                        <input type="email" class="form-control" formControlName="email">
+                        <div *ngIf="restaurantForm.get('email')?.invalid && restaurantForm.get('email')?.errors?.['email'] &&
+                              (restaurantForm.get('email')?.touched || isSubmitted)" class="text-danger">
+                          Email không đúng định dạng.
+                        </div>
+                        <div *ngIf="restaurantForm.get('email')?.invalid && restaurantForm.get('email')?.errors?.['required'] &&
+                              (restaurantForm.get('email')?.touched || isSubmitted)" class="text-danger">
+                          Email là bắt buộc.
+                        </div>
+                      </div>
+                    <div class="text-center">
+                        <button type="submit">Lưu</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">Mã nhà hàng</th>
+                    <th class="text-center">Tên nhà hàng</th>
+                    <th class="text-center">Địa chỉ</th>
+                    <th class="text-center">Số điện thoại</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let restaurant of restaurants | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                    <td class="text-center text-muted">NH{{restaurant.restaurantId}}</td>
+                    <td class="text-center">{{restaurant.restaurantName}}</td>
+                    <td class="text-center">{{restaurant.address}}</td>
+                    <td class="text-center">{{restaurant.phone}}</td>
+                    <td class="text-center">{{restaurant.email}}</td>
+                    <td class="text-center">
+                        <a type="button" class="btn btn-primary m-2" (click)="openRestaurantDetailModal(restaurant)"><i
+                                class="fa-solid fa-pen-to-square"></i></a>
+                        <a type="button" class="btn btn-danger" (click)="deleteRestaurant(restaurant)"><i
+                                class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <pagination-controls previousLabel="Trước" nextLabel="Sau"
+            (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
 </div>

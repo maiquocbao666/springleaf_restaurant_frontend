@@ -1,50 +1,60 @@
 /* CSS cho form container */
 .form-container {
-    width: 500px;
-    margin: 0;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 20px;
-  }
-h3 {
-    margin: 5 5px;
+  width: 500px;
+  margin: 0;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 20px;
 }
-  .grid-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px; /* Khoảng cách giữa hai cột */
-  }
-  
-  /* CSS cho label */
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  /* CSS cho input */
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  /* CSS cho button */
-  button {
-    margin-top: 10px;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  /* CSS cho button hover state */
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+
+h3 {
+  margin: 5 5px;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
+  /* Khoảng cách giữa hai cột */
+}
+
+/* CSS cho label */
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* CSS cho input */
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* CSS cho button */
+
+button {
+  border-radius: 20px;
+  border: 1px solid #75a418;
+  background-color: #75a418;
+  /* color: #FFFFFF; */
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+  margin-bottom: 10px;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:focus {
+  outline: none;
+}

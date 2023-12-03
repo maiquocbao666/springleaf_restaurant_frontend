@@ -1,70 +1,105 @@
 <div class="container">
-    <h1>Combo</h1>
-    <form [formGroup]="comboForm" (ngSubmit)="addCombo()">
-        <div class="row">
-            <div class="col-sm-6">
-                <label for="exampleInputPassword1" class="form-label">Tên Combo</label>
-                <div class="mb-3">
-                    <input type="text" class="form-control" formControlName="comboName" placeholder="Nhập tên combo...">
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <label for="exampleInputPassword1" class="form-label">Người đặt</label>
-                <div class="mb-3">
-                    <input type="text" class="form-control" formControlName="comboUser"
-                        placeholder="Nhập tên người đặt ...">
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <label for="exampleInputPassword1" class="form-label">Tổng tiền</label>
-                <div class="mb-3">
-                    <input type="number" class="form-control" formControlName="totalAmount"
-                        placeholder="Nhập tổng tiền ...">
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-info">Lưu</button>
-    </form>
-    <div class="col-2">
+    <h1 class="text-center display-4">Danh sách Combo</h1>
+    <p class="d-inline-flex gap-1">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">
+            Thêm combo
+        </button>
+    </p>
+    <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
-            <option value="">Page</option>
             <option *ngFor="let size of tableSizes">
                 {{size}}
             </option>
         </select>
+    </p>
+    <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+            <form [formGroup]="comboForm" (ngSubmit)="addCombo()">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="exampleInputPassword1" class="form-label">Tên combo<span
+                                style="color: red;">(*)</span></label>
+                        <input type="text" class="form-control" formControlName="comboName"
+                            placeholder="Nhập tên combo...">
+                        <div *ngIf="comboForm.get('comboName')?.invalid && (comboForm.get('comboName')?.touched || isSubmitted)"
+                            class="text-danger"> Không bỏ trống tên combo.
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="comboUser" class="form-label">Số khách<span style="color: red;">(*)</span></label>
+                        <input type="number" class="form-control" formControlName="comboUser"
+                            placeholder="Nhập số khách ...">
+                        <div *ngIf="comboForm.get('comboUser')?.invalid && (comboForm.get('comboUser')?.touched || isSubmitted)"
+                            class="text-danger">
+                            <div *ngIf="comboForm.get('comboUser')?.hasError('required') && !comboForm.get('comboUser')?.hasError('nonNegative')"
+                                s>
+                                Số khách là bắt buộc.
+                            </div>
+                            <div *ngIf="comboForm.get('comboUser')?.hasError('nonNegative')">
+                                Số khách không được âm.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="categoryId" class="form-label">Tồng giá<span style="color: red;">(*)</span></label>
+                        <input type="number" class="form-control" formControlName="totalAmount"
+                            placeholder="Nhập tổng tiền ...">
+                        <div *ngIf="comboForm.get('totalAmount')?.invalid && (comboForm.get('totalAmount')?.touched || isSubmitted)"
+                            class="text-danger">
+                            <div *ngIf="comboForm.get('totalAmount')?.hasError('nonNegative')">
+                                Số không được âm
+                            </div>
+                            <div
+                                *ngIf="comboForm.get('totalAmount')?.hasError && !comboForm.get('totalAmount')?.hasError('nonNegative')">
+                                Chưa nhập tổng giá
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit">Thêm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Tên Combo</th>
-                <th scope="col">Người đặt</th>
-                <th scope="col">Tổng tiền</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr
-                *ngFor="let combo of combos | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                <td>{{combo.comboId}}</td>
-                <td>{{combo.comboName}}</td>
-                <td>{{combo.comboUser}}</td>
-                <td>{{ formatAmount(combo.totalAmount) }}</td>
 
+    <div class="table-responsive">
+        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">Mã Combo</th>
+                    <th class="text-center">Tên combo</th>
+                    <th class="text-center">Số khách</th>
+                    <th class="text-center">Tổng tiền</th>
+                    <th class="text-center">Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let combo of combos | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
 
-
-
-
-                <td>
-                    <button type="button" class="btn btn-outline-primary"
-                        (click)="openComboDetailModal(combo)">Edit</button>
-                    <button type="button" class="btn btn-outline-danger" (click)="deleteCombo(combo)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <td class="text-center text-muted">CB{{combo.comboId}}</td>
+                    <td class="text-center">{{combo.comboName}}</td>
+                    <td class="text-center">{{combo.comboUser}}</td>
+                    <td class="text-center">
+                        {{ formatAmount(combo.totalAmount) }}
+                    </td>
+                    <td class="text-center">
+                        <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+                            (click)="openComboDetailModal(combo)"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+                            (click)="deleteCombo(combo)"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="text-center">
-        <pagination-controls previousLabel="Prev" nextLabel="Next"
+        <pagination-controls previousLabel="Lùi" nextLabel="Tới"
             (pageChange)="onTableDataChange($event)"></pagination-controls>
     </div>
+
 </div>

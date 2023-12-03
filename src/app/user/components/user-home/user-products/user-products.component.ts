@@ -3,18 +3,18 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
+import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
+import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { CategoryService } from 'src/app/services/category.service';
+import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
-import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
-import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
-import { Order } from 'src/app/interfaces/order';
-import { CartDetailService } from 'src/app/services/cart-detail.service';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -38,12 +38,12 @@ export class UserProductsComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private deliveryOrderService : DeliveryOrderService,
+    private deliveryOrderService: DeliveryOrderService,
     private productService: ProductService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
     private authService: AuthenticationService,
-    private orderDetailService : CartDetailService,
+    private orderDetailService: CartDetailService,
     private modalService: NgbModal,
     private toastService: ToastService,
   ) {
@@ -74,11 +74,11 @@ export class UserProductsComponent implements OnInit {
     return this.products.filter(product => product.categoryId === categoryId);
   }
   showMore(): void {
-    this.visibleProductCount += 10; // Tăng số sản phẩm hiển thị lên 10
+    this.visibleProductCount += 12; // Tăng số sản phẩm hiển thị lên 10
   }
 
   showLess(): void {
-    this.visibleProductCount -= 10; // Giảm số sản phẩm hiển thị đi 10
+    this.visibleProductCount -= 12; // Giảm số sản phẩm hiển thị đi 10
   }
 
   getVisibleProducts(): Product[] {
@@ -117,7 +117,7 @@ export class UserProductsComponent implements OnInit {
     if (productId) {
       const deliveryOrderId = this.cartByUser?.deliveryOrderId as number;
       const orderId = this.orderByUser?.orderId as number;
-  
+
       this.productService.addToCart(productId, deliveryOrderId, orderId).subscribe({
         next: (response) => {
           if (response.message === "User not found") {
@@ -129,13 +129,13 @@ export class UserProductsComponent implements OnInit {
           else if (response.message === "MenuItem in cart") {
             this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
           }
-          else if(response.message === "Item in cart") {
+          else if (response.message === "Item in cart") {
             this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
           }
           else {
             this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
             this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
-            
+
           }
         },
         error: (error) => {
@@ -146,9 +146,9 @@ export class UserProductsComponent implements OnInit {
       console.error("Product ID is undefined. Cannot add to cart.");
     }
   }
-  
 
-  
+
+
 
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });

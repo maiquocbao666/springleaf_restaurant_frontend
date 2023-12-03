@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Supplier } from 'src/app/interfaces/supplier';
 import { SupplierService } from 'src/app/services/supplier.service';
 import { AdminSupplierDetailComponent } from './admin-supplier-detail/admin-supplier-detail.component';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-admin-supplier',
@@ -15,6 +16,7 @@ export class AdminSuppliersComponent {
   supplierForm: FormGroup;
   supplier: Supplier | undefined;
   fieldNames: string[] = [];
+  isSubmitted = false;
 
   page: number = 1;
   count: number = 0;
@@ -26,13 +28,15 @@ export class AdminSuppliersComponent {
   constructor(
     private supplierService: SupplierService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private sweetAlertService: ToastService
+
   ) {
     this.supplierForm = this.formBuilder.group({
       // supplierId: ['', [Validators.required]],
       supplierName: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern('^\\d{10,11}$')]],
+      email: ['', [Validators.required, Validators.email]],
       address: ['', [Validators.required]]
     });
   }
@@ -60,24 +64,37 @@ export class AdminSuppliersComponent {
   }
 
   addSupplier(): void {
-
-    const supplierName = this.supplierForm.get('supplierName')?.value;
-    const phone = this.supplierForm.get('phone')?.value;
-    const address = this.supplierForm.get('address')?.value;
-    const email = this.supplierForm.get('email')?.value;
-
-    const newSupplier: Supplier = {
-      supplierName: supplierName,
-      address: address,
-      phone: phone,
-      email: email
-    };
-
-    this.supplierService.add(newSupplier)
-      .subscribe(supplier => {
-        this.supplierForm.reset();
-      });
+    this.isSubmitted = true;
+    if (this.supplierForm.valid) {
+      const supplierName = this.supplierForm.get('supplierName')?.value;
+      const phone = this.supplierForm.get('phone')?.value;
+      const address = this.supplierForm.get('address')?.value;
+      const email = this.supplierForm.get('email')?.value;
+  
+      const newSupplier: Supplier = {
+        supplierName: supplierName,
+        address: address,
+        phone: phone,
+        email: email
+      };
+  
+      this.supplierService.add(newSupplier)
+        .subscribe(
+          () => {
+            this.supplierForm.reset();
+            this.isSubmitted = false;
+            this.sweetAlertService.showCustomAnimatedAlert('Thêm thành công', 'success', 'animated tada');
+          },
+          (error) => {
+            this.sweetAlertService.showCustomAnimatedAlert('Thất bại, không thể thêm', 'warning', 'animated tada');
+            console.error('Lỗi khi thêm:', error);
+          }
+        );
+    } else {
+      this.sweetAlertService.showCustomAnimatedAlert('Thất bại, chưa nhập đủ dữ liệu', 'warning', 'animated tada');
+    }
   }
+  
 
   deleteSupplier(supplier: Supplier): void {
 

@@ -1,67 +1,94 @@
-<div class="container">
-    <h1>Nguyên liệu</h1>
 
-    <form [formGroup]="ingredientForm" (ngSubmit)="addIngredient()">
-        <div class="row">
-            <div class="col-sm-6">
-                <label for="exampleInputPassword1" class="form-label">Name</label>
-                <div class="mb-3">
-                    <input type="text" class="form-control" formControlName="name"
-                        placeholder="Nhập tên nguyên liệu...">
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <label for="exampleInputPassword1" class="form-label">OrderThreshold</label>
-                <div class="mb-3">
-                    <input type="text" class="form-control" formControlName="orderThreshold"
-                        placeholder="Nhập số lượng ...">
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Description</label>
-                <div class="mb-3">
-                    <textarea class="form-control" cols="30" rows="10" formControlName="description"
-                        placeholder="Nhập mô tả..."></textarea>
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-info">Save</button>
-    </form>
-    <div class="col-2">
+
+<div class="container">
+    <h1 class="text-center display-4">Danh sách nguyên liệu</h1>
+    <p class="d-inline-flex gap-1">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">
+            Thêm nguyên liệu
+        </button>
+    </p>
+    <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
-            <option value="">Page</option>
             <option *ngFor="let size of tableSizes">
                 {{size}}
             </option>
         </select>
+    </p>
+    <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+            <form [formGroup]="ingredientForm" (ngSubmit)="addIngredient()">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="exampleInputPassword1" class="form-label">Tên nguyên liệu<span
+                                style="color: red;">(*)</span></label>
+                        <input type="text" formControlName="name" class="form-control"
+                            placeholder="Nhập tên nguyên liệu...">
+                        <div *ngIf="ingredientForm.get('name')?.invalid && (ingredientForm.get('name')?.touched || isSubmitted)"
+                            class="text-danger"> Không bỏ trống tên nguyên liệu.
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="orderThreshold" class="form-label">Ngưỡng đặt<span
+                                style="color: red;">(*)</span></label>
+                        <input type="number" formControlName="orderThreshold" class="form-control" id="orderThreshold"
+                            placeholder="Nhập giá">
+                        <div *ngIf="ingredientForm.get('orderThreshold')?.invalid && (ingredientForm.get('orderThreshold')?.touched || isSubmitted)"
+                            class="text-danger">
+                            Ngưỡng không bỏ trống.
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label for="exampleInputPassword1" class="form-label">Mô tả</label>
+                        <textarea class="form-control" formControlName="description" id="" cols="10" rows="10"
+                            placeholder="Nhập mô tả..."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit">Thêm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">OrderThreshold</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr
-                *ngFor="let ingredient of ingredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                <td>{{ingredient.ingredientId}}</td>
-                <td>{{ingredient.name}}</td>
-                <td>{{ingredient.description}}</td>
-                <td>{{ingredient.orderThreshold}}</td>
-                <td>
-                    <button type="button" class="btn btn-outline-primary"
-                        (click)="openIngredientDetailModal(ingredient)">Edit</button>
-                    <button type="button" class="btn btn-outline-danger"
-                        (click)="deleteIngredient(ingredient)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+
+    <div class="table-responsive">
+        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">Mã nguyên liệu</th>
+                    <th class="text-center">Tên nguyên liệu</th>
+                    <th class="text-center">Ngưỡng đặt</th>
+                    <th class="text-center">Mô tả</th>
+                    <th class="text-center">Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let ingredient of ingredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                    <td class="text-center text-muted">NL{{ingredient.ingredientId}}</td>
+                    <td class="text-center">{{ingredient.name}}</td>
+                    <td class="text-center">{{ingredient.orderThreshold}}</td>
+                    <td class="text-center">{{ ingredient.description.length > 30 ? ingredient.description.slice(0, 30)
+                        + '...' :
+                        ingredient.description }}</td>
+                    <td class="text-center">
+                        <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+                            (click)="openIngredientDetailModal(ingredient)"><i
+                                class="fa-solid fa-pen-to-square"></i></a>
+                        <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+                            (click)="deleteIngredient(ingredient)"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="text-center">
-        <pagination-controls previousLabel="Prev" nextLabel="Next"
+        <pagination-controls previousLabel="Lùi" nextLabel="Tới"
             (pageChange)="onTableDataChange($event)"></pagination-controls>
     </div>
+
 </div>

@@ -1,9 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Combo } from 'src/app/interfaces/combo';
 import { ComboService } from 'src/app/services/combo.service';
-
+import Swal from 'sweetalert2';
+const nonNegativeNumberValidator = (control: AbstractControl): { [key: string]: boolean } | null => {
+  if (control.value < 0) {
+    return { nonNegative: true };
+  }
+  return null;
+};
 @Component({
   selector: 'app-admin-combo-detail',
   templateUrl: './admin-combo-detail.component.html',
@@ -15,6 +21,8 @@ export class AdminComboDetailComponent implements OnInit {
   combos: Combo[] = [];
   fieldNames: string[] = [];
   comboForm: FormGroup;
+  isSubmitted = false;
+
 
   constructor(
     private comboService: ComboService,
@@ -23,8 +31,8 @@ export class AdminComboDetailComponent implements OnInit {
     this.comboForm = this.formBuilder.group({
       comboId: ['', [Validators.required]],
       comboName: ['', [Validators.required]],
-      comboUser: ['', [Validators.required]],
-      totalAmount: ['', [Validators.required]],
+      comboUser: ['', [Validators.required, nonNegativeNumberValidator]],
+      totalAmount: ['', [Validators.required, nonNegativeNumberValidator]],
     });
   }
   ngOnInit(): void {
@@ -43,7 +51,8 @@ export class AdminComboDetailComponent implements OnInit {
   }
 
   updateCombo(): void {
-    this.activeModal.close('Close after saving');
+    this.isSubmitted = true;
+
     if (this.comboForm.valid) {
       const updatedCombo: Combo = {
         comboId: +this.comboForm.get('comboId')?.value,
@@ -52,11 +61,23 @@ export class AdminComboDetailComponent implements OnInit {
         totalAmount: +this.comboForm.get('totalAmount')?.value,
       };
 
-      this.comboService.update(updatedCombo).subscribe(() => {
-        // Cập nhật cache
-        this.comboService.update(updatedCombo);
-        this.comboSaved.emit(); // Emit the event
-      });
+      this.comboService.update(updatedCombo).subscribe(
+        () => {
+          Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
+          this.activeModal.close('Close after saving');
+          this.comboForm.reset();
+          // Cập nhật cache
+          this.comboService.update(updatedCombo);
+          this.comboSaved.emit(); // Emit the event
+        },
+        (error) => {
+          Swal.fire('Thất bại', 'Cập nhật thất bại!', 'warning');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else {
+      Swal.fire('Thất bại', 'Cập nhật không thành công!', 'warning');
     }
   }
+
 }

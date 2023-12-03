@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { Inventory } from 'src/app/interfaces/inventory';
@@ -11,6 +11,12 @@ import { InventoryService } from 'src/app/services/inventory.service';
 import { OrderThresholdService } from 'src/app/services/order-threshold.service';
 import { ToastService } from 'src/app/services/toast.service';
 
+const nonNegativeNumberValidator = (control: AbstractControl): { [key: string]: boolean } | null => {
+  if (control.value < 0) {
+    return { nonNegative: true };
+  }
+  return null;
+};
 @Component({
   selector: 'app-admin-order-threshold-detail',
   templateUrl: './admin-order-threshold-detail.component.html',
@@ -25,6 +31,7 @@ export class AdminOrderThresholdDetailComponent {
   inventories: Inventory[] = [];
   orderThresholdForm: FormGroup;
   fieldNames: string[] = [];
+  isSubmitted = false;
 
   inventoryBranchesUrl = 'inventoryBranches';
   ingredientsUrl = 'ingredients';
@@ -44,7 +51,7 @@ export class AdminOrderThresholdDetailComponent {
     public activeModal: NgbActiveModal,
   ) {
     this.orderThresholdForm = this.formBuilder.group({
-      reorderPoint: ['', [Validators.required]],
+      reorderPoint: ['', [Validators.required, nonNegativeNumberValidator]],
       ingredientId: ['', [Validators.required]],
       inventoryBranchId: ['', [Validators.required]],
       inventoryId: ['', [Validators.required]],
@@ -103,10 +110,10 @@ export class AdminOrderThresholdDetailComponent {
       });
     }
   }
-
   updateOrderThreshold(): void {
     // Đóng modal sau khi lưu
-    this.activeModal.close('Close after saving');
+
+    this.isSubmitted = true;
 
     if (this.orderThresholdForm.valid) {
       const updatedOrderThreshold: OrderThreshold = {
@@ -117,11 +124,19 @@ export class AdminOrderThresholdDetailComponent {
         inventoryId: +this.orderThresholdForm.get('inventoryId')?.value,
       };
 
-      this.orderThresholdService.update(updatedOrderThreshold).subscribe(() => {
-        this.sweetAlertService.showCustomAnimatedAlert('Cập nhật thành công', 'success', 'animated tada')
-      });
+      this.orderThresholdService.update(updatedOrderThreshold).subscribe(
+        () => {
+          this.sweetAlertService.showCustomAnimatedAlert('Cập nhật thành công', 'success', 'animated tada');
+          this.activeModal.close('Close after saving');
+        },
+        (error) => {
+          this.sweetAlertService.showCustomAnimatedAlert('Cập nhật thất bại', 'warning', 'animated shake');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else {
+      this.sweetAlertService.showCustomAnimatedAlert('Cập nhật không thành công', 'warning', 'animated shake');
     }
   }
-
 
 }

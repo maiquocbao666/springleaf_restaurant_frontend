@@ -1,43 +1,64 @@
 <div class="container">
   <h1>Cập nhật</h1>
   <form [formGroup]="orderThresholdForm" (ngSubmit)="updateOrderThreshold()">
-    <div class="mb-3">
-      <a class="nav-link" routerLink="/admin/ingredients">Thêm nguyên liệu</a>
-      <div class="mb-3">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="categoryId" class="form-label">Ngưỡng đặt lại<span style="color: red;">(*)</span></label>
+        <input type="number" class="form-control" formControlName="reorderPoint" placeholder="Nhập ngưỡng đặt lại...">
+        <div
+          *ngIf="orderThresholdForm.get('reorderPoint')?.invalid && (orderThresholdForm.get('reorderPoint')?.touched || isSubmitted)"
+          class="text-danger">
+          <div *ngIf="orderThresholdForm.get('reorderPoint')?.hasError('nonNegative')">
+            Số không được âm
+          </div>
+          <div
+            *ngIf="orderThresholdForm.get('reorderPoint')?.hasError && !orderThresholdForm.get('reorderPoint')?.hasError('nonNegative')">
+            Chưa nhập ngưỡng
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-6">
+        <label for="ingredientId" class="form-label">Nguyên liệu<span style="color: red;">(*)</span></label>
         <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
           <option value="">Chọn nguyên liệu</option>
-          <option *ngFor="let ingredient of ingredients" [value]="ingredient.ingredientId">{{ ingredient.name }}
+          <option *ngFor="let ingredient of ingredients" [value]="ingredient.ingredientId"> {{
+            ingredient.name }}
           </option>
         </select>
+        <div
+          *ngIf="orderThresholdForm.get('ingredientId')?.invalid && (orderThresholdForm.get('ingredientId')?.touched || isSubmitted)"
+          class="text-danger">Chưa chọn nguyên liệu.
+        </div>
       </div>
-    </div>
-    <div class="mb-3">
-      <a class="nav-link" routerLink="/admin/products">Thêm kho</a>
-      <div class="mb-3">
-        <select class="form-select" aria-label="Default select example" formControlName="inventoryId">
-          <option value="">Chọn kho</option>
-          <option *ngFor="let inventory of inventories" [value]="inventory.inventoryId">
-            {{ inventory.inventoryId }}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div class="mb-3">
-      <a class="nav-link" routerLink="/admin/products">Chi nhánh kho</a>
-      <div class="mb-3">
+      <div class="col-md-6">
+        <label for="inventoryBranchId" class="form-label">Mã chi nhánh kho<span style="color: red;">(*)</span></label>
         <select class="form-select" aria-label="Default select example" formControlName="inventoryBranchId">
-          <option value="">Chọn kho</option>
-          <option *ngFor="let inventoryBranch of inventoryBranches" [value]="inventoryBranch.inventoryBranchId">
-            {{ inventoryBranch.inventoryBranchId }}
+          <option value="">Chọn chi nhánh</option>
+          <option *ngFor="let inventoryBranch of inventoryBranches" [value]="inventoryBranch.inventoryBranchId"> {{
+            inventoryBranch.inventoryBranchId }}
           </option>
         </select>
+        <div
+          *ngIf="orderThresholdForm.get('inventoryBranchId')?.invalid && (orderThresholdForm.get('inventoryBranchId')?.touched || isSubmitted)"
+          class="text-danger">Mã chi nhánh kho là bắt buộc.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="inventoryId" class="form-label">Mã kho<span style="color: red;">(*)</span></label>
+        <select class="form-select" aria-label="Default select example" formControlName="inventoryId">
+          <option value="">Chọn chi kho</option>
+          <option *ngFor="let inventory of inventories" [value]="inventory.inventoryId"> {{
+            inventory.inventoryId }}
+          </option>
+        </select>
+        <div
+          *ngIf="orderThresholdForm.get('inventoryId')?.invalid && (orderThresholdForm.get('inventoryId')?.touched || isSubmitted)"
+          class="text-danger">Mã kho là bắt buộc.
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit">Lưu</button>
       </div>
     </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Số lượng</label>
-      <div class="mb-3">
-        <input type="number" class="form-control" formControlName="reorderPoint" placeholder="Nhập số lượng ...">
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Lưu</button>
   </form>

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
@@ -10,6 +9,7 @@ import { RestaurantTableService } from 'src/app/services/restaurant-table.servic
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { TableStatusService } from 'src/app/services/table-status.service';
 import { TableTypeService } from 'src/app/services/table-type.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { AdminRestaurantTableDetailComponent } from './admin-restaurant-table-detail/admin-restaurant-table-detail.component';
 
 @Component({
@@ -26,6 +26,8 @@ export class AdminRestaurantTablesComponent {
   //restaurantTable: RestaurantTable | undefined;
   fieldNames: string[] = [];
   restaurantTableForm: FormGroup;
+  isSubmitted = false;
+
 
   restaurantTablesUrl = 'restaurantTables';
   tableTypesUrl = 'tableTypes';
@@ -44,19 +46,21 @@ export class AdminRestaurantTablesComponent {
     private restaurantService: RestaurantService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    private sweetAlertService: ToastService
+
   ) {
-    this.restaurantTableForm = this.formBuilder.group({
-      tableId: ['', [Validators.required]],
-      tableName: ['', [Validators.required]],
-      tableTypeId: ['', [Validators.required]],
-      tableStatusId: ['', [Validators.required]],
-      restaurantId: ['', [Validators.required]],
-      seatingCapacity: [1, [Validators.nullValidator]],
-      description: ['', [Validators.required]]
+    this.restaurantTableForm = new FormGroup({
+      // tableId: new FormControl('', Validators.required),
+      tableName: new FormControl('', Validators.required),
+      tableTypeId: new FormControl('', Validators.required),
+      tableStatusId: new FormControl('', Validators.required),
+      restaurantId: new FormControl('', Validators.required),
+      seatingCapacity: new FormControl(1)
     });
+
   }
 
-  numbersArray = Array.from({length: 10}, (_, index) => index + 1);
+  numbersArray = Array.from({ length: 10 }, (_, index) => index + 1);
 
   ngOnInit(): void {
     this.getRestaurantTables();
@@ -74,7 +78,7 @@ export class AdminRestaurantTablesComponent {
     this.page = 1;
   }
 
-  getRestaurantTables(): void {    
+  getRestaurantTables(): void {
     this.restaurantTableService.getCache().subscribe(
       (cached: any[]) => {
         this.restaurantTables = cached;
@@ -98,7 +102,7 @@ export class AdminRestaurantTablesComponent {
     );
   }
 
-  getRestaurants(): void { 
+  getRestaurants(): void {
     this.restaurantService.getCache().subscribe(
       (cached: any[]) => {
         this.restaurants = cached;
@@ -135,12 +139,14 @@ export class AdminRestaurantTablesComponent {
   }
 
   addRestaurantTable(): void {
-    const tableName = this.restaurantTableForm.get('tableName')?.value?.trim() ?? '';
-    const tableTypeId = this.restaurantTableForm.get('tableTypeId')?.value;
-    const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
-    const restaurantId = this.restaurantTableForm.get('restaurantId')?.value;
-    const seatingCapacity = this.restaurantTableForm.get('seatingCapacity')?.value;
-    const description = this.restaurantTableForm.get('description')?.value?.trim() ?? '';
+    this.isSubmitted = true;
+    if (this.restaurantTableForm.valid) {
+      const tableName = this.restaurantTableForm.get('tableName')?.value?.trim() ?? '';
+      const tableTypeId = this.restaurantTableForm.get('tableTypeId')?.value;
+      const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
+      const restaurantId = this.restaurantTableForm.get('restaurantId')?.value;
+      const seatingCapacity = this.restaurantTableForm.get('seatingCapacity')?.value;
+      const description = this.restaurantTableForm.get('description')?.value?.trim() ?? '';
 
     const newRestaurantTable: RestaurantTable = {
       tableName: tableName,
@@ -151,22 +157,39 @@ export class AdminRestaurantTablesComponent {
       description: description,
     };
 
-    this.restaurantTableService.add(newRestaurantTable)
-      .subscribe(restaurantTable => {
-        this.restaurantTableForm.reset();
-        this.restaurantTableForm.get('seatingCapacity')?.setValue(1);
-    });
+      this.restaurantTableService.add(newRestaurantTable)
+        .subscribe(restaurantTable => {
+          this.restaurantTableForm.reset();
+          this.restaurantTableForm.get('seatingCapacity')?.setValue(1);
+          this.isSubmitted = false;
+          this.sweetAlertService.showCustomAnimatedAlert('Thêm thành công', 'success', 'animated tada');
+        });
+    } else {
+      this.sweetAlertService.showCustomAnimatedAlert('Thất bại , chưa nhập dữ liệu', 'warning', 'animated tada');
+    }
   }
 
   deleteTable(restaurantTable: RestaurantTable): void {
-
     if (restaurantTable.tableId) {
-      this.restaurantTableService.delete(restaurantTable.tableId).subscribe();
-    } {
-      console.log("Không có restaurantTableId");
+      this.sweetAlertService.showConfirmAlert('Bạn có muốn xóa bàn ' + restaurantTable.tableName + '?', 'Không thể lưu lại!', 'warning')
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.restaurantTableService.delete(restaurantTable.tableId!)
+              .subscribe(() => {
+                this.sweetAlertService.fireAlert('Đã xóa!', 'Bạn đã xóa bàn ' + restaurantTable.tableName + ' thành công', 'success');
+                // Thực hiện các hành động bổ sung sau khi xóa nếu cần
+              },
+                error => {
+                  this.sweetAlertService.fireAlert('Lỗi khi xóa!', 'Đã xảy ra lỗi khi xóa bàn ' + restaurantTable.tableName, 'error');
+                  console.error('Lỗi khi xóa bàn ăn:', error);
+                });
+          }
+        });
+    } else {
+      this.sweetAlertService.fireAlert('Không có tableId!', 'Không có tableId để xóa.', 'info');
     }
-
   }
+
 
   openRestaurantTableDetailModal(restaurantTable: RestaurantTable) {
     const modalRef = this.modalService.open(AdminRestaurantTableDetailComponent, { size: 'lg' });

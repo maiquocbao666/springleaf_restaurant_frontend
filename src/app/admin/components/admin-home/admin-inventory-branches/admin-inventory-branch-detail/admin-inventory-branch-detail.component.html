@@ -1,46 +1,57 @@
 <div class="modal-header">
-  <h4 class="modal-title">Update</h4>
+  <h4 class="modal-title">Chi tiết</h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
   <form [formGroup]="inventoryBranchForm" (ngSubmit)="updateInventoryBranch()">
-    <div class="row">
-      <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Nhà sản xuất</label>
-        <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="supplierId">
-            <option value="">Chọn nhà sản xuất</option>
-            <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.supplierName }}
-            </option>
-          </select>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="supplierId" class="form-label">Tên bàn<span style="color: red;">(*)</span></label>
+        <select class="form-select" aria-label="Default select example" formControlName="supplierId">
+          <option value="">Chọn nhà sản xuất</option>
+          <option *ngFor="let supplier of suppliers" [value]="supplier.supplierId"> {{ supplier.supplierName }}
+          </option>
+        </select>
+        <div
+          *ngIf="inventoryBranchForm.get('supplierId')?.invalid && (inventoryBranchForm.get('supplierId')?.touched || isSubmitted)"
+          class="text-danger"> Không bỏ trống nhà sản xuất.
         </div>
       </div>
-      <div class="col-lg-3">
-        <label for="exampleInputPassword1" class="form-label">Nhà hàng</label>
-        <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
-            <option value="">Chọn nhà hàng</option>
-            <option *ngFor="let restaurant of restaurants " [value]="restaurant.restaurantId">{{
-              restaurant.restaurantName
-              }}</option>
-          </select>
+
+      <div class="col-md-4">
+        <label for="restaurantId" class="form-label">Nhà hàng<span style="color: red;">(*)</span></label>
+        <select class="form-select" aria-label="Default select example" formControlName="restaurantId">
+          <option value>Chọn nhà hàng</option>
+          <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId"> {{
+            restaurant.restaurantName
+            }}
+          </option>
+        </select>
+        <div
+          *ngIf="inventoryBranchForm.get('restaurantId')?.invalid && (inventoryBranchForm.get('restaurantId')?.touched || isSubmitted)"
+          class="text-danger">
+          Không bỏ trống nhà hàng.
         </div>
       </div>
-      <div class="col-lg-3">
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Nguyên liệu</label>
-          <div class="mb-3">
-            <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
-              <option value="">Chọn nguyên liệu</option>
-              <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
-            </select>
-          </div>
+
+      <div class="col-md-4">
+        <label for="ingredientId" class="form-label">Kiểu bàn<span style="color: red;">(*)</span></label>
+        <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
+          <option value="">Chọn nguyên liệu</option>
+          <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
+        </select>
+        <div
+          *ngIf="inventoryBranchForm.get('ingredientId')?.invalid && (inventoryBranchForm.get('ingredientId')?.touched || isSubmitted)"
+          class="text-danger">
+          Không bỏ trống nguyên liệu.
         </div>
+      </div>
+      <div class="text-center">
+        <button type="submit">Thay đổi</button>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
   </form>
 </div>
 

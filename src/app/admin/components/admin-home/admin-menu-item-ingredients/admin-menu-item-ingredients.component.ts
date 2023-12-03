@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ingredient } from 'src/app/interfaces/ingredient';
 import { Product } from 'src/app/interfaces/product';
@@ -10,7 +10,12 @@ import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { MenuItemIngredient } from './../../../../interfaces/menu-item-ingredient';
 import { AdminMenuItemIngredientDetailComponent } from './admin-menu-item-ingredient-detail/admin-menu-item-ingredient-detail.component';
-
+const nonNegativeNumberValidator = (control: AbstractControl): { [key: string]: boolean } | null => {
+  if (control.value < 0) {
+    return { nonNegative: true };
+  }
+  return null;
+};
 @Component({
   selector: 'app-admin-menu-item-ingredients',
   templateUrl: './admin-menu-item-ingredients.component.html',
@@ -23,6 +28,7 @@ export class AdminMenuItemIngredientsComponent {
   products: Product[] = [];
   ingredients: Ingredient[] = [];
   fieldNames: string[] = [];
+  isSubmitted = false;
 
   page: number = 1;
   count: number = 0;
@@ -44,7 +50,7 @@ export class AdminMenuItemIngredientsComponent {
     this.menuItemIngredientForm = this.formBuilder.group({
       menuItemId: ['', [Validators.required]],
       ingredientId: ['', [Validators.required]],
-      quantity: ['', [Validators.required]]
+      quantity: ['', [Validators.required, nonNegativeNumberValidator]],
     });
   }
 
@@ -105,26 +111,38 @@ export class AdminMenuItemIngredientsComponent {
 
 
   addMenuItemIngredient(): void {
-    const menuItemId = this.menuItemIngredientForm.get('menuItemId')?.value;
-    const ingredientId = this.menuItemIngredientForm.get('ingredientId')?.value;
-    const quantity = this.menuItemIngredientForm.get('quantity')?.value;
+    this.isSubmitted = true;
+    if (this.menuItemIngredientForm.valid) {
+      const menuItemId = this.menuItemIngredientForm.get('menuItemId')?.value;
+      const ingredientId = this.menuItemIngredientForm.get('ingredientId')?.value;
+      const quantity = this.menuItemIngredientForm.get('quantity')?.value;
 
-    const newMenuItemIngredient: MenuItemIngredient = {
-      menuItemIngredientId: 0,
-      menuItemId: menuItemId,
-      ingredientId: ingredientId,
-      quantity: quantity
-    };
+      const newMenuItemIngredient: MenuItemIngredient = {
+        menuItemIngredientId: 0,
+        menuItemId: menuItemId,
+        ingredientId: ingredientId,
+        quantity: quantity
+      };
 
-    this.menuItemIngredientService.add(newMenuItemIngredient)
-      .subscribe(() => {
-        this.getMenuItemIngredients(); // Sau khi thêm, cập nhật lại danh sách
-        this.menuItemIngredientForm.reset();
-
-        this.sweetAlertService.showCustomAnimatedAlert('Thêm thành công', 'success', 'animated tada')
-
-      });
+      this.menuItemIngredientService.add(newMenuItemIngredient)
+        .subscribe(
+          () => {
+            this.getMenuItemIngredients(); // Sau khi thêm, cập nhật lại danh sách
+            this.menuItemIngredientForm.reset();
+            this.isSubmitted = false;
+            this.sweetAlertService.showCustomAnimatedAlert('Thêm thành công', 'success', 'animated tada');
+          },
+          (error) => {
+            // Nếu có lỗi, hiển thị thông báo lỗi mà không thực hiện bất kỳ hành động nào khác
+            this.sweetAlertService.showCustomAnimatedAlert('Thất bại, không thể thêm', 'warning', 'animated tada');
+            console.error('Lỗi khi thêm:', error);
+          }
+        );
+    } else {
+      this.sweetAlertService.showCustomAnimatedAlert('Thất bại, chưa nhập đủ dữ liệu', 'warning', 'animated tada');
+    }
   }
+
 
   deleteMenuItemIngredient(menuItemIngredient: MenuItemIngredient): void {
     if (menuItemIngredient.menuItemIngredientId) {

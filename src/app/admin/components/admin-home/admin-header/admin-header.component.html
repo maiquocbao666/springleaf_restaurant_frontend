@@ -1,77 +1,430 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link active" routerLink="/admin/index" routerLinkActive="active">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/categories" routerLinkActive="active">Categories</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/inventories" routerLinkActive="active">Kho</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/products" routerLinkActive="active">Sản phẩm</a>
-                <i class="en-gauge"></i>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/restaurantTables" routerLinkActive="active">Bàn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/tableStatuses" routerLinkActive="active">Trạng thái bàn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/suppliers" routerLinkActive="active">Nhà cung cấp</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/ingredients" routerLinkActive="active">Nguyên liệu</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/inventoryBranches" routerLinkActive="active">Chi nhánh</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/user/index" routerLinkActive="active">User</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/combos" routerLinkActive="active">Combo</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/goodsReceipts" routerLinkActive="active">Phân phối</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/events" routerLinkActive="active">Sự kiện</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/tableTypes" routerLinkActive="active">Kiểu bàn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/restaurants" routerLinkActive="active">Nhà hàng</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/receipts" routerLinkActive="active">Hóa đơn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/comboDetails" routerLinkActive="active">Chi tiết combo</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/reservations" routerLinkActive="active">Đặt bàn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/reservationStatuses" routerLinkActive="active">Trạng thái đặt
-                    bàn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/menuItemIngredients" routerLinkActive="active">Nguyên Liệu SP</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/orderThresholds" routerLinkActive="active">Ngưỡng đặt</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/statistical" routerLinkActive="active">Thống kê</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/admin/bills" routerLinkActive="active">Hóa đơn</a>
-            </li>
-        </ul>
+<div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+  <div class="app-header header-shadow">
+    <div class="app-header__logo">
+      <!-- <div class="logo-src"></div> -->
+      <i class="fa-solid fa-seedling"></i> <b> SPRINGLEAF</b>
+      <div class="header__pane ml-auto">
+        <div>
+          <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+            <span class="hamburger-box">
+              <span class="hamburger-inner"></span>
+            </span>
+          </button>
+        </div>
+      </div>
     </div>
-</nav>
+    <div class="app-header__mobile-menu">
+      <div>
+        <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="app-header__menu">
+      <span>
+        <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+          <span class="btn-icon-wrapper">
+            <i class="fa fa-ellipsis-v fa-w-6"></i>
+          </span>
+        </button>
+      </span>
+    </div>
+    <div class="app-header__content">
+      <div class="app-header-left">
+        <div class="search-wrapper">
+          <div class="input-holder">
+            <input type="text" class="search-input" placeholder="Type to search">
+            <button class="search-icon"><span></span></button>
+          </div>
+          <button class="close"></button>
+        </div>
+        <ul class="header-menu nav">
+          <li class="nav-item">
+            <a routerLink="/user/index" class="nav-link">
+              <i class="nav-link-icon fa fa-database"> </i>
+              Trang bán hàng
+            </a>
+          </li>
+          <!-- <li class="btn-group nav-item">
+            <a href="javascript:void(0);" class="nav-link">
+              <i class="nav-link-icon fa fa-edit"></i>
+              Projects
+            </a>
+          </li>
+          <li class="dropdown nav-item">
+            <a href="javascript:void(0);" class="nav-link">
+              <i class="nav-link-icon fa fa-cog"></i>
+              Settings
+            </a>
+          </li> -->
+        </ul>
+      </div>
+      <div class="app-header-right">
+        <div class="header-btn-lg pr-0">
+          <div class="widget-content p-0">
+            <div class="widget-content-wrapper">
+              <div class="widget-content-left">
+                <div class="btn-group">
+                  <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+                    <!-- <img width="42" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""> -->
+                    <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                  </a>
+                  <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                    <button type="button" tabindex="0" class="dropdown-item" (click)="logOut()">Đăng xuất</button>
+                    <button type="button" tabindex="0" class="dropdown-item">Settings</button>
+                    <!-- <h6 tabindex="-1" class="dropdown-header">Header</h6>
+                    <button type="button" tabindex="0" class="dropdown-item">Actions</button>
+                    <div tabindex="-1" class="dropdown-divider"></div>
+                    <button type="button" tabindex="0" class="dropdown-item">Dividers</button> -->
+                  </div>
+                </div>
+              </div>
+              <div class="widget-content-left  ml-3 header-user-info">
+                <div class="widget-heading">
+                  {{truncateString(user?.fullName!)}}
+                </div>
+                <div class="widget-subheading">
+                  Admin
+                </div>
+              </div>
+              <div class="widget-content-right header-user-info ml-3">
+                <img class="small-round-image"
+                  src="https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg"
+                  alt="Small Image" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui-theme-settings">
+    <!-- <button type="button" id="TooltipDemo" class="btn-open-options btn btn-warning">
+      <i class="fa fa-cog fa-w-16 fa-spin fa-2x"></i>
+    </button> -->
+    <div class="theme-settings__inner">
+      <div class="scrollbar-container">
+        <div class="theme-settings__options-wrapper">
+          <h3 class="themeoptions-heading">Layout Options
+          </h3>
+          <div class="p-3">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <div class="widget-content p-0">
+                  <div class="widget-content-wrapper">
+                    <div class="widget-content-left mr-3">
+                      <div class="switch has-switch switch-container-class" data-class="fixed-header">
+                        <div class="switch-animate switch-on">
+                          <input type="checkbox" checked data-toggle="toggle" data-onstyle="success">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="widget-content-left">
+                      <div class="widget-heading">Fixed Header
+                      </div>
+                      <div class="widget-subheading">Makes the header top fixed, always visible!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="widget-content p-0">
+                  <div class="widget-content-wrapper">
+                    <div class="widget-content-left mr-3">
+                      <div class="switch has-switch switch-container-class" data-class="fixed-sidebar">
+                        <div class="switch-animate switch-on">
+                          <input type="checkbox" checked data-toggle="toggle" data-onstyle="success">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="widget-content-left">
+                      <div class="widget-heading">Fixed Sidebar
+                      </div>
+                      <div class="widget-subheading">Makes the sidebar left fixed, always visible!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="widget-content p-0">
+                  <div class="widget-content-wrapper">
+                    <div class="widget-content-left mr-3">
+                      <div class="switch has-switch switch-container-class" data-class="fixed-footer">
+                        <div class="switch-animate switch-off">
+                          <input type="checkbox" data-toggle="toggle" data-onstyle="success">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="widget-content-left">
+                      <div class="widget-heading">Fixed Footer
+                      </div>
+                      <div class="widget-subheading">Makes the app footer bottom fixed, always visible!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <h3 class="themeoptions-heading">
+            <div>
+              Header Options
+            </div>
+            <button type="button"
+              class="btn-pill btn-shadow btn-wide ml-auto btn btn-focus btn-sm switch-header-cs-class" data-class="">
+              Restore Default
+            </button>
+          </h3>
+
+          <h3 class="themeoptions-heading">
+            <div>Sidebar Options</div>
+            <button type="button"
+              class="btn-pill btn-shadow btn-wide ml-auto btn btn-focus btn-sm switch-sidebar-cs-class" data-class="">
+              Restore Default
+            </button>
+          </h3>
+
+          <h3 class="themeoptions-heading">
+            <div>Main Content Options</div>
+            <button type="button" class="btn-pill btn-shadow btn-wide ml-auto active btn btn-focus btn-sm">Restore
+              Default
+            </button>
+          </h3>
+          <div class="p-3">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h5 class="pb-2">Page Section Tabs
+                </h5>
+                <div class="theme-settings-swatches">
+                  <div role="group" class="mt-2 btn-group">
+                    <button type="button" class="btn-wide btn-shadow btn-primary btn btn-secondary switch-theme-class"
+                      data-class="body-tabs-line">
+                      Line
+                    </button>
+                    <button type="button"
+                      class="btn-wide btn-shadow btn-primary active btn btn-secondary switch-theme-class"
+                      data-class="body-tabs-shadow">
+                      Shadow
+                    </button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="app-main">
+    <div class="app-sidebar sidebar-shadow">
+      <div class="app-header__logo">
+        <div class="logo-src"></div>
+        <div class="header__pane ml-auto">
+          <div>
+            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="app-header__mobile-menu">
+        <div>
+          <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+            <span class="hamburger-box">
+              <span class="hamburger-inner"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="app-header__menu">
+        <span>
+          <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+            <span class="btn-icon-wrapper">
+              <i class="fa fa-ellipsis-v fa-w-6"></i>
+            </span>
+          </button>
+        </span>
+      </div>
+      <div class="scrollbar-sidebar">
+        <div class="app-sidebar__inner">
+          <ul class="vertical-nav-menu">
+            <li class="app-sidebar__heading">DASHBOARDS</li>
+            <li>
+              <a routerLink="/admin/statistical" class="mm-active">
+                <i class="fa-solid fa-chart-simple metismenu-icon"></i>
+                Biểu đồ
+              </a>
+            </li>
+            <li class="app-sidebar__heading">Quản trị</li>
+            <li>
+              <a>
+                <i class="fas fa-user-tie metismenu-icon"></i>
+                Quản lý
+                <i class="fas fa-caret-right metismenu-state-icon "></i>
+              </a>
+              <!-- <ul>
+                <li>
+                  <a routerLink="/admin/user">
+                    <i class="metismenu-icon"></i>
+                    Quản lý người dùng
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="">
+                    <i class="metismenu-icon"></i>
+                    Quản lý quyền
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="">
+                    <i class="metismenu-icon">
+                    </i>Quản quyền người dùng
+                  </a>
+                </li>
+              </ul> -->
+            </li>
+            <li class="app-sidebar__heading">Món ăn</li>
+            <li>
+              <a>
+                <!-- <i class="fas fa-user-tie metismenu-icon"></i> -->
+                <i class="fa-solid fa-bowl-food metismenu-icon"></i>
+                Quản lý món
+                <i class="fas fa-caret-right metismenu-state-icon "></i>
+              </a>
+              <ul>
+                <li>
+                  <a routerLink="/admin/products">
+                    <i class="metismenu-icon"></i>
+                    Quản lý món
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/ingredients">
+                    <i class="metismenu-icon">
+                    </i>Quản lý nguyên liệu
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/categories">
+                    <i class="metismenu-icon">
+                    </i>Quản lý loại
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="app-sidebar__heading">Nhà hàng</li>
+            <li>
+              <a href="#">
+                <!-- <i class="metismenu-icon pe-7s-car"></i> -->
+                <i class="fa-solid fa-utensils metismenu-icon"></i>
+                Quản lý nhà hàng
+                <i class="fas fa-caret-right metismenu-state-icon "></i>
+              </a>
+              <ul>
+                <li>
+                  <a routerLink="/admin/restaurants">
+                    <i class="metismenu-icon"></i>Nhà hàng
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/tableTypes">
+                    <i class="metismenu-icon"></i>Quản lý kiểu bàn
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/reservations">
+                    <i class="metismenu-icon"></i>Quản lý đặt bàn
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/tableStatuses">
+                    <i class="metismenu-icon"></i>Quản lý trạng thái bàn
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/restaurantTables">
+                    <i class="metismenu-icon"></i>Quản lý Bàn
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/inventoryBranches">
+                    <i class="metismenu-icon"></i>Quản lý chi nhánh
+                  </a>
+                </li>
+                <!-- <li>
+                  <a routerLink="/admin/goodsReceipts">
+                    <i class="metismenu-icon"></i>Quản lý nhà phân phối
+                  </a>
+                </li> -->
+                <!-- <li>
+                  <a routerLink="/admin/events">
+                    <i class="metismenu-icon"></i> Quản lý sự kiện
+                  </a>
+                </li> -->
+                <li>
+                  <a routerLink="/admin/combos">
+                    <i class="metismenu-icon"></i>Quản lý Combo
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <!-- <li class="app-sidebar__heading">Báo cáo</li>
+            <li>
+              <a routerLink="/admin/receipts">
+                <i class="metismenu-icon"></i>
+                <i class="fa-solid fa-wallet metismenu-icon"></i>Hóa đơn nhập hàng
+              </a>
+            </li> -->
+            <li class="app-sidebar__heading">Kho</li>
+            <li>
+              <a routerLink="/admin/menuItemIngredients">
+                <i class="fa-solid fa-plate-wheat metismenu-icon"></i>Quản lý nguyên liệu món
+              </a>
+            </li>
+            <li>
+              <a routerLink="/admin/orderThresholds">
+                <i class="fa-solid fa-chart-line metismenu-icon"></i>Quản lý ngưỡng đặt
+              </a>
+            </li>
+            <li>
+              <a routerLink="/admin/suppliers">
+                <i class="fa-solid fa-building metismenu-icon"></i>
+                Quản lý nhà sản xuất
+              </a>
+            </li>
+            <li>
+              <a routerLink="/admin/inventories">
+                <i class="fa-solid fa-warehouse metismenu-icon"></i>
+                Quản lý kho
+              </a>
+            </li>
+            <li class="app-sidebar__heading">Đơn hàng</li>
+            <li>
+              <a>
+                <i class="fa-solid fa-file-invoice metismenu-icon"></i>
+                Quản lý đơn hàng
+                <i class="fas fa-caret-right metismenu-state-icon "></i>
+              </a>
+              <ul>
+                <li>
+                  <a routerLink="/admin/bills">
+                    <i class="fa-solid fa-file-invoice metismenu-icon"></i>
+                    Quản lý đơn hàng
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="app-sidebar__heading">PRO Version</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

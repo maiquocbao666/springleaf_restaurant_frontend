@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantService } from 'src/app/services/restaurant.service';
+import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 import { AdminRestaurantDetailComponent } from './admin-restaurant-detail/admin-restaurant-detail.component';
 
 @Component({
@@ -16,7 +18,8 @@ export class AdminRestaurantsComponent {
   restaurantForm: FormGroup;
   restaurant: Restaurant | undefined;
   fieldNames: string[] = [];
-
+  isSubmitted = false;
+  isNewlyAdded = false;
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -29,14 +32,17 @@ export class AdminRestaurantsComponent {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    private sweetAlertService: ToastService
+
   ) {
-    this.restaurantForm = this.formBuilder.group({
-      restaurantId: ['', [Validators.required]],
-      restaurantName: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]]
+    this.restaurantForm = new FormGroup({
+      // restaurantId: new FormControl('', Validators.required),
+      restaurantName: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
+      phone: new FormControl('', [Validators.required, Validators.pattern('^\\d{10,11}$')]),
+      email: new FormControl('', [Validators.required, Validators.email])
     });
+
   }
 
   ngOnInit(): void {
@@ -52,7 +58,7 @@ export class AdminRestaurantsComponent {
     this.page = 1;
   }
 
-  getRestaurants(): void {    
+  getRestaurants(): void {
     this.restaurantService.getCache().subscribe(
       (cached: any[]) => {
         this.restaurants = cached;
@@ -61,8 +67,9 @@ export class AdminRestaurantsComponent {
   }
 
   addRestaurant(): void {
+    this.isSubmitted = true;
+    if (this.restaurantForm.valid) {
 
-    try {
       const restaurantName = this.restaurantForm.get('restaurantName')?.value?.trim() ?? '';
       const address = this.restaurantForm.get('address')?.value;
       const phone = this.restaurantForm.get('phone')?.value;
@@ -78,22 +85,35 @@ export class AdminRestaurantsComponent {
       this.restaurantService.add(newRestaurant)
         .subscribe(restaurant => {
           this.restaurantForm.reset();
+          this.isSubmitted = false;
+          this.sweetAlertService.showCustomAnimatedAlert('Thành công', 'success', 'Thêm thành công')
+
         });
-    } catch (error) {
-      console.log("Thêm nhà hàng: Lỗi");
-    }
+
+    } else
+      this.sweetAlertService.showCustomAnimatedAlert('Thất bại', 'warning', 'Thêm thất bại')
+
+
   }
 
   deleteRestaurant(restaurant: Restaurant): void {
-
     if (restaurant.restaurantId) {
-      this.restaurantService.delete(restaurant.restaurantId).subscribe();
+      this.sweetAlertService
+        .showConfirmAlert('Bạn có muốn xóa ' + restaurant.restaurantName + '?', 'Không thể lưu lại!', 'warning')
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.restaurantService.delete(restaurant.restaurantId!).subscribe(() => {
+              console.log('Đã xóa nhà hàng!');
+              Swal.fire('Thành công', 'Xóa ' + restaurant.restaurantName + ' thành công!', 'success');
+              this.isSubmitted = false;
+            });
+          }
+        });
     } else {
-      console.log("Không có restaurantId");
+      Swal.fire('Thất bại', 'Không thể xóa nhà hàng với mã không xác định!', 'warning');
     }
-
-
   }
+
 
   openRestaurantDetailModal(restaurant: Restaurant) {
     const modalRef = this.modalService.open(AdminRestaurantDetailComponent, { size: 'lg' });

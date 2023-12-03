@@ -1,96 +1,132 @@
 <div class="container">
-  <h1>Product</h1>
-  <form [formGroup]="productForm" (ngSubmit)="addProduct()">
-    <div class="row">
-      <div class="col-sm-3">
-        <label for="exampleInputPassword1" class="form-label">Tên sản phẩm</label>
-        <div class="mb-3">
-          <input type="text" formControlName="name" class="form-control" placeholder="Nhập tên sản phẩm...">
-        </div>
-      </div>
-      <div class="col-sm-3">
-        <label for="exampleInputPassword1" class="form-label">Giá</label>
-        <div class="mb-3">
-          <input type="number" formControlName="unitPrice" class="form-control" placeholder="Nhập giá...">
-        </div>
-      </div>
-      <div class="col-sm-3">
-        <label for="exampleInputPassword1" class="form-label">ImageUrl</label>
-        <div class="mb-3">
-          <input type="text" formControlName="imageUrl" class="form-control">
-        </div>
-      </div>
-      <div class="col-sm-3">
-        <label *ngIf="!categories || categories.length >0" for="exampleInputPassword1"
-          class="form-label">Category</label>
-        <a style="color: red;" *ngIf="!categories || categories.length === 0" class="nav-link"
-          routerLink="/admin/categories">Thêm loại</a>
-        <div class="mb-3">
-          <select class="form-select" aria-label="Default select example" formControlName="categoryId">
-            <option value="">Chọn loại </option>
-            <option *ngFor="let category of categories" [value]="category.categoryId"> {{ category.name }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <label>Đang bán: </label>
-        <input id="categoryActiveYes" formControlName="status" type="radio" [value]="true"
-          [checked]="productForm.get('status')?.value === true"> Có
-        <input id="categoryActiveNo" formControlName="status" type="radio" [value]="false"
-          [checked]="productForm.get('status')?.value === false"> Không <br>
-      </div>
-      <div class="col-sm-12">
-        <label for="exampleInputPassword1" class="form-label">Mô tả</label>
-        <div class="mb-3">
-          <textarea class="form-control" formControlName="description" id="" cols="30" rows="10"
-            placeholder="Nhập mô tả..."></textarea>
-        </div>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Save</button>
-
-  </form>
-  <div class="col-2">
+  <h1 class="text-center display-4">Danh sách món</h1>
+  <p class="d-inline-flex gap-1">
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+      aria-expanded="false" aria-controls="collapseExample">
+      Thêm món
+    </button>
+  </p>
+  <p class="float-end">
     <select class="form-select" (change)="onTableSizeChange($event)">
-      <option value="">Page</option>
       <option *ngFor="let size of tableSizes">
         {{size}}
       </option>
     </select>
-  </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">Price</th>
-        <th scope="col">Image</th>
-        <th scope="col">Category</th>
-        <th scope="col">Status</th>
-      </tr>
+  </p>
+  <div class="collapse pb-3" id="collapseExample">
+    <div class="card card-body">
+      <form [formGroup]="productForm" (ngSubmit)="addProduct()">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="exampleInputPassword1" class="form-label">Tên sản phẩm<span
+                style="color: red;">(*)</span></label>
+            <input type="text" formControlName="name" class="form-control" placeholder="Nhập tên sản phẩm...">
+            <div *ngIf="productForm.get('name')?.invalid && (productForm.get('name')?.touched || isSubmitted)"
+              class="text-danger"> Không bỏ trống tên món.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="unitPrice" class="form-label">Giá<span style="color: red;">(*)</span></label>
+            <input type="number" formControlName="unitPrice" class="form-control" id="unitPrice" placeholder="Nhập giá">
+            <div *ngIf="productForm.get('unitPrice')?.invalid && (productForm.get('unitPrice')?.touched || isSubmitted)"
+              class="text-danger">
+              Giá là bắt buộc.
+            </div>
+          </div>
 
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let product of products | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-        <td>{{product.menuItemId}}</td>
-        <td>{{product.name}}</td>
-        <td>{{product.description}}</td>
-        <td>{{product.unitPrice}}</td>
-        <td>{{product.imageUrl}}</td>
-        <td>{{ getCategoryById(product.categoryId)?.name }}</td>
-        <td>{{product.status ? 'Còn':'Hết'}}</td>
-        <td><button type="button" class="btn btn-outline-primary"
-            (click)="openProductDetailModal(product)">Edit</button>
-          <button type="button" class="btn btn-outline-danger" (click)="deleteProduct(product)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <div class="col-md-4">
+            <label for="categoryId" class="form-label">Loại<span style="color: red;">(*)</span></label>
+            <select class="form-select" formControlName="categoryId" id="categoryId">
+              <option value="">--Chọn loại-- </option>
+              <option *ngFor="let category of categories" [value]="category.categoryId"> {{ category.name }}</option>
+            </select>
+            <div
+              *ngIf="productForm.get('categoryId')?.invalid && (productForm.get('categoryId')?.touched || isSubmitted)"
+              class="text-danger">
+              Loại là bắt buộc.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group__file">
+              <label for="imageUpload" class="file-label">Chọn ảnh<span style="color: red;">(*)</span></label>
+              <div class="file-wrapper">
+                <input type="file" name="imageUpload" #imageUpload formControlName="imageUrl" class="file-input" />
+                <div class="file-preview-background">Upload Image</div>
+                <img src="" #imagePreview width="200px" class="file-preview" />
+              </div>
+            </div>
+            <div *ngIf="productForm.get('imageUrl')?.invalid && (productForm.get('imageUrl')?.touched || isSubmitted)"
+              class="text-danger">
+              Vui lòng chọn ảnh.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="exampleInputPassword1" class="form-label">Mô tả</label>
+            <textarea class="form-control" formControlName="description" id="" cols="10" rows="10"
+              placeholder="Nhập mô tả..."></textarea>
+          </div>
+          <div class="col-md-4">
+            <label>Đang bán <span style="color: red;">(*)</span> </label><br>
+            <input id="categoryActiveYes" formControlName="status" type="radio" [value]="true"
+              [checked]="productForm.get('status')?.value === true"> Có
+            <input id="categoryActiveNo" formControlName="status" type="radio" [value]="false"
+              [checked]="productForm.get('status')?.value === false"> Không
+          </div>
+          <div class="text-center">
+            <button type="submit">Thêm</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="table-responsive">
+    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">Mã món</th>
+          <th class="text-center">Tên món</th>
+          <th class="text-center">Giá</th>
+          <th class="text-center">Trạng thái</th>
+          <th class="text-center">Loại</th>
+          <th class="text-center">Mô tả</th>
+          <th class="text-center">Ảnh</th>
+          <th class="text-center">Chức năng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let product of products | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+          <td class="text-center text-muted">SP{{product.menuItemId}}</td>
+          <td class="text-center">{{product.name}}</td>
+          <td class="text-center">{{ formatAmount(product.unitPrice) }}</td>
+
+          <td class="text-center">
+            <div [ngClass]="product.status ? 'badge badge-warning' : 'badge badge-danger'">
+              {{ product.status ? 'Đang có hàng' : 'Hết hàng' }}
+            </div>
+          </td>
+          <td class="text-center">{{ getCategoryById(product.categoryId)?.name }}</td>
+          <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 30) + '...' :
+            product.description }}</td>
+          <td class="text-center">
+            <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
+              alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;">
+          </td>
+          <td class="text-center">
+            <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+              (click)="openProductDetailModal(product)"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm" (click)="deleteProduct(product)"><i
+                class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <div class="text-center">
-    <pagination-controls previousLabel="Prev" nextLabel="Next"
+    <pagination-controls previousLabel="Lùi" nextLabel="Tới"
       (pageChange)="onTableDataChange($event)"></pagination-controls>
   </div>
+
 </div>

@@ -4,32 +4,48 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <h1>Cập nhật Combo</h1>
+  <h1>Chi tiết</h1>
   <form [formGroup]="comboForm" (ngSubmit)="updateCombo()">
-    <div class="row">
-      <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Tên Combo</label>
-        <div class="mb-3">
-          <input type="text" class="form-control" formControlName="comboName" placeholder="Nhập tên combo...">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="exampleInputPassword1" class="form-label">Tên combo<span style="color: red;">(*)</span></label>
+        <input type="text" class="form-control" formControlName="comboName" placeholder="Nhập tên combo...">
+        <div *ngIf="comboForm.get('comboName')?.invalid && (comboForm.get('comboName')?.touched || isSubmitted)"
+          class="text-danger"> Không bỏ trống tên combo.
         </div>
       </div>
-      <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Người đặt</label>
-        <div class="mb-3">
-          <input type="text" class="form-control" formControlName="comboUser" placeholder="Nhập tên người đặt ...">
+      <div class="col-md-4">
+        <label for="comboUser" class="form-label">Số khách<span style="color: red;">(*)</span></label>
+        <input type="number" class="form-control" formControlName="comboUser" placeholder="Nhập số khách ...">
+        <div *ngIf="comboForm.get('comboUser')?.invalid && (comboForm.get('comboUser')?.touched || isSubmitted)"
+          class="text-danger">
+          <div
+            *ngIf="comboForm.get('comboUser')?.hasError('required') && !comboForm.get('comboUser')?.hasError('nonNegative')"
+            s>
+            Số khách là bắt buộc.
+          </div>
+          <div *ngIf="comboForm.get('comboUser')?.hasError('nonNegative')">
+            Số khách không được âm.
+          </div>
         </div>
       </div>
-      <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Tổng tiền</label>
-        <div class="mb-3">
-          <input type="number" class="form-control" formControlName="totalAmount" placeholder="Nhập tổng tiền ...">
+      <div class="col-md-4">
+        <label for="categoryId" class="form-label">Tồng giá<span style="color: red;">(*)</span></label>
+        <input type="number" class="form-control" formControlName="totalAmount" placeholder="Nhập tổng tiền ...">
+        <div *ngIf="comboForm.get('totalAmount')?.invalid && (comboForm.get('totalAmount')?.touched || isSubmitted)"
+          class="text-danger">
+          <div *ngIf="comboForm.get('totalAmount')?.hasError('nonNegative')">
+            Số không được âm
+          </div>
+          <div *ngIf="comboForm.get('totalAmount')?.hasError && !comboForm.get('totalAmount')?.hasError('nonNegative')">
+            Chưa nhập tổng giá
+          </div>
         </div>
+
+      </div>
+
+      <div class="text-center">
+        <button type="submit">Thay đổi</button>
       </div>
     </div>
-    <button type="submit" class="btn btn-info">Lưu</button>
   </form>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">
-      Đóng
-    </button>
-  </div>

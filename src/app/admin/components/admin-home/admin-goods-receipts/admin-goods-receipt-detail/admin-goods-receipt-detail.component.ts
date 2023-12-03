@@ -38,10 +38,10 @@ export class AdminGoodsReceiptDetailComponent {
   ) {
     this.goodsReceiptForm = this.formBuilder.group({
       goodsReceiptId: ['', [Validators.required]],
-      inventoryBrand: ['', [Validators.required]],
+      inventoryBranchId: ['', [Validators.required]],
       date: ['', [Validators.required]],
-      warehouseManager: ['', [Validators.required]],
-      user: ['', [Validators.required]],
+      warehouseManagerId: ['', [Validators.required]],
+      inventoryBranchManagerId: ['', [Validators.required]],
     });
   }
 
@@ -79,10 +79,10 @@ export class AdminGoodsReceiptDetailComponent {
       const formattedDate = new Date(this.goodsReceipt.date).toISOString().slice(0, 10);
       this.goodsReceiptForm.patchValue({
         goodsReceiptId: this.goodsReceipt.goodsReceiptId,
-        inventoryBranch: this.goodsReceipt.inventoryBranch,
+        inventoryBranchId: this.goodsReceipt.inventoryBranchId,
         date: formattedDate, // Gán giá trị date đã được chuyển đổi
-        warehouseManager: this.goodsReceipt.warehouseManager,
-        user: this.goodsReceipt.user,
+        warehouseManagerId: this.goodsReceipt.warehouseManagerId,
+        inventoryBranchManagerId: this.goodsReceipt.inventoryBranchManagerId,
       });
     }
   }
@@ -92,10 +92,10 @@ export class AdminGoodsReceiptDetailComponent {
     if (this.goodsReceiptForm.valid) {
       const updatedGoodsReceipt: GoodsReceipt = {
         goodsReceiptId: +this.goodsReceiptForm.get('goodsReceiptId')?.value,
-        inventoryBranch: +this.goodsReceiptForm.get('inventoryBranch')?.value,
+        inventoryBranchId: +this.goodsReceiptForm.get('inventoryBranchId')?.value,
         date: this.goodsReceiptForm.get('date')?.value,
-        warehouseManager: +this.goodsReceiptForm.get('warehouseManager')?.value,
-        user: +this.goodsReceiptForm.get('user')?.value,
+        warehouseManagerId: +this.goodsReceiptForm.get('warehouseManagerId')?.value,
+        inventoryBranchManagerId: +this.goodsReceiptForm.get('inventoryBranchManagerId')?.value,
       };
 
       this.goodsReceiptService.update(updatedGoodsReceipt).subscribe(() => {

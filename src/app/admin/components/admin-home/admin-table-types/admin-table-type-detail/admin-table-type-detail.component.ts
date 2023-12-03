@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableType } from 'src/app/interfaces/table-type';
 import { TableTypeService } from 'src/app/services/table-type.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-table-type-detail',
@@ -16,6 +17,7 @@ export class AdminTableTypeDetailComponent  implements OnInit {
   @Input() tableType: TableType | undefined;
   @Output() tableTypeSaved: EventEmitter<void> = new EventEmitter<void>();
   fieldNames: string[] = [];
+  isSubmitted = false;
 
   constructor(
     private tableTypeService: TableTypeService,
@@ -26,7 +28,7 @@ export class AdminTableTypeDetailComponent  implements OnInit {
   ) {
     this.tableTypeForm = this.formBuilder.group({
       tableTypeId: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      tableTypeName: ['', [Validators.required]],
     });
   }
 
@@ -39,22 +41,34 @@ export class AdminTableTypeDetailComponent  implements OnInit {
     if (this.tableType) {
       this.tableTypeForm.patchValue({
         tableTypeId: this.tableType.tableTypeId,
-        name: this.tableType.tableTypeName,
+        tableTypeName: this.tableType.tableTypeName,
       });
     }
   }
-
   updateTableType(): void {
-    this.activeModal.close('Close after saving');
+    this.isSubmitted = true;
+  
     if (this.tableTypeForm.valid) {
       const updatedTableType: TableType = {
         tableTypeId: +this.tableTypeForm.get('tableTypeId')?.value,
-        tableTypeName: this.tableTypeForm.get('name')?.value,
+        tableTypeName: this.tableTypeForm.get('tableTypeName')?.value,
       };
-
-      this.tableTypeService.update(updatedTableType).subscribe(() => {
-      });
+  
+      this.tableTypeService.update(updatedTableType).subscribe(
+        () => {
+          Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
+          this.activeModal.close('Close after saving');
+          this.tableTypeForm.reset();
+        },
+        (error) => {
+          Swal.fire('Thất bại', 'Cập nhật thất bại!', 'warning');
+          console.error('Cập nhật không thành công:', error);
+        }
+      );
+    } else {
+      Swal.fire('Thất bại', 'Cập nhật không thành công!', 'warning');
     }
   }
+  
 
 }

@@ -1,49 +1,66 @@
+
+<!-- kk -->
 <div class="container">
-  <h1>Kiểu bàn</h1>
-  <form [formGroup]="tableTypeForm" (ngSubmit)="addTableType()">
-    <div class="row">
-      <div class="col-sm-6">
-        <label for="exampleInputPassword1" class="form-label">Name</label>
-        <div class="mb-3">
-          <input type="text" class="form-control" formControlName="name"
-            placeholder="Nhập kiểu bàn...">
-        </div>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-info">Save</button>
-  </form>
-  <div class="col-2">
+  <h1 class="text-center display-4">Danh sách kiểu bàn</h1>
+  <p class="d-inline-flex gap-1">
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+      aria-expanded="false" aria-controls="collapseExample">
+      Thêm kiểu bàn
+    </button>
+  </p>
+  <p class="float-end">
     <select class="form-select" (change)="onTableSizeChange($event)">
-      <option value>Page</option>
       <option *ngFor="let size of tableSizes">
         {{size}}
       </option>
     </select>
+  </p>
+  <div class="collapse pb-3" id="collapseExample">
+    <div class="card card-body">
+      <form [formGroup]="tableTypeForm" (ngSubmit)="addTableType()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="tableTypeName" class="form-label">Tên kiểu bàn<span style="color: red;">(*)</span></label>
+            <input type="text" formControlName="tableTypeName" class="form-control" placeholder="Nhập tên kiểu bàn..">
+            <div
+              *ngIf="tableTypeForm.get('tableTypeName')?.invalid && (tableTypeForm.get('tableTypeName')?.touched || isSubmitted )"
+              class="text-danger">Tên kiểu bàn không được để trống.
+            </div>
+          </div>
+          <div class="text-center">
+            <button type="submit">Lưu</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let tableType of tableTypes | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-        <td>{{tableType.tableTypeId}}</td>
-        <td>{{tableType.tableTypeName}}</td>
-        <td>
-          <button type="button" class="btn btn-outline-primary"
-            (click)="openTableTypeDetailModal(tableType)">Edit</button>
-          <button type="button" class="btn btn-outline-danger"
-            (click)="deleteTableType(tableType)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+  <div class="table-responsive">
+    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">Mã kiễu bàn</th>
+          <th class="text-center">Tên kiểu bàn</th>
+          <th class="text-center">Chức năng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let tableType of tableTypes | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+          <td class="text-center text-muted">T{{tableType.tableTypeId}}</td>
+          <td class="text-center">{{tableType.tableTypeName}}</td>
+          <td class="text-center">
+            <a type="button" class="btn btn-primary m-2" (click)="openTableTypeDetailModal(tableType)"><i
+                class="fa-solid fa-pen-to-square"></i></a>
+            <a type="button" class="btn btn-danger" (click)="deleteTableType(tableType)"><i
+                class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <div class="text-center">
-    <pagination-controls previousLabel="Prev" nextLabel="Next"
+    <pagination-controls previousLabel="Trước" nextLabel="Sau"
       (pageChange)="onTableDataChange($event)"></pagination-controls>
   </div>
 </div>
