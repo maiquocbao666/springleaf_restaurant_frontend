@@ -17,7 +17,7 @@
                         <th>Hình ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Số lượng</th>
-                        <th>Giá</th>
+                        <th>Đơn giá</th>
                         <th>Xóa</th>
                         <th>Tổng</th>
                     </tr>
@@ -34,7 +34,7 @@
                         <td>
                             <input type="number" [value]="cart.quantity" (input)="validateQuantity($event, cart)">
                         </td>
-                        <td>{{ cart.menuItemPrice }}</td>
+                        <td>{{ formatAmount(cart.menuItemPrice) }}</td>
                         <td>
                             <button class="btn" (click)="deleteCartDetail(cart)">
                                 <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,7 @@
                                 </svg>
                             </button>
                         </td>
-                        <td>{{ cart.menuItemPrice  * cart.quantity}}</td>
+                        <td>{{ formatAmount(cart.menuItemPrice  * cart.quantity)}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -61,8 +61,6 @@
                             <div class="col-lg-9">
                                 <div class="input-container">
                                     <input [(ngModel)]="discountCode" placeholder="Khuyến mãi" class="input-field" type="text" name="discountCode">
-                                    
-                                    
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -73,18 +71,44 @@
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-sm-7 mb-2"><b>Tạm tính:</b> </div>{{ calculateTotalPrice() }}
-                        <div class="col-sm-7 mb-2"><b>Giảm giá:</b> </div>35.000 VND
-                        <div class="col-sm-7 mb-2"><b>Tổng tiền:</b> </div>{{ calculateFinalPrice(35000) }}
+                        <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ calculateTotalPrice() }}</div>
+                        <div class="col-lg-12 col-sm-7 mb-2"><b>Giảm giá:</b> 35.000 VND</div>
+                        <div class="col-lg-12 col-sm-7 mb-2"><b>Tổng tiền:</b> {{ calculateFinalPrice(35000) }}</div>
                     </div>
                     <hr>
-                    <div class="center text-center">
+                    <div class="center text-center row">
                         <button class="learn-more" routerLink="/user/checkout">
                             <span aria-hidden="true" class="circle">
                                 <span class="icon arrow"></span>
                             </span>
                             <span class="button-text">Thanh toán</span>
                         </button>
+                        <div class="select-container">
+                            <div class="select-column">
+                                <select [(ngModel)]="selectedProvince" (ngModelChange)="onProvinceChange()" class="select">
+                                    <option [ngValue]="null">Vui lòng chọn tỉnh/thành phố</option>
+                                    <option *ngFor="let province of Provinces[2]" [ngValue]="province.ProvinceID">
+                                        {{ province.ProvinceName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="select-column">
+                                <select [(ngModel)]="selectedDistrict" [disabled]="!Districts" (ngModelChange)="onDistrictChange()" class="select">
+                                    <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
+                                    <option *ngFor="let district of Districts[2]" [ngValue]="district.DistrictID">
+                                        {{ district.DistrictName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="select-column">
+                                <select [(ngModel)]="selectedWard" [disabled]="!Wards" class="select">
+                                    <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
+                                    <option *ngFor="let ward of Wards[2]" [ngValue]="ward.WardCode">
+                                        {{ ward.WardName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

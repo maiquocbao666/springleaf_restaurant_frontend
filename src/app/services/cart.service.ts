@@ -86,7 +86,7 @@ export class CartService extends BaseService<Cart> {
 
   getProvince(): void {
 
-    this.getDatasOfThisUserWorker.postMessage({ type: 'cart' });
+    this.getDatasOfThisUserWorker.postMessage({ type: 'provinces' });
     this.getDatasOfThisUserWorker.onmessage = (event) => {
 
       const dataMap = event.data;
