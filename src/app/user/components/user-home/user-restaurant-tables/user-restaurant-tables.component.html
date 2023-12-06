@@ -3,7 +3,9 @@
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-4">
-                <div class="col-lg-3"><h1>Danh sách bàn</h1></div>
+                <div class="col-lg-3">
+                    <h1>Danh sách bàn</h1>
+                </div>
                 <div class="col-lg-3">
                     <button class="watch-btn" (click)="openUserMergeTablesModal()">Gộp bàn</button>
                 </div>
@@ -13,7 +15,8 @@
                 <div class="col-lg-3">
                     <button class="watch-btn" (click)="openUserReservationHistoriesModal()">Lịch đặt bàn</button>
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s" *ngFor="let restaurantTable of restaurantTables">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s"
+                    *ngFor="let restaurantTable of restaurantTables">
                     <div class="service-item rounded pt-3">
                         <div class="p-4">
                             <i class="fas fa-3x fa-table "></i>
@@ -24,18 +27,22 @@
                             <div>
                                 <span><i class="fa fa-user"></i>{{ restaurantTable.tableName }}</span>
                             </div>
-                            <p class="episode__num">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName}}</p>
-                            <p class="episode__type">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName}}</p>
-                            <button class="watch-btn" 
-                                    (click)="openRestaurantTableInfomationModal(restaurantTable)">
-                                    Đặt bàn
+                            <p class="episode__num">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName}}
+                            </p>
+                            <p class="episode__type">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName}}
+                            </p>
+                            <button class="watch-btn" (click)="openRestaurantTableInfomationModal(restaurantTable)">
+                                Đặt bàn
                             </button>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
 
 </div>
+
+
+

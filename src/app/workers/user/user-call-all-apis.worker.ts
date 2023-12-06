@@ -3,8 +3,8 @@
 addEventListener('message', async (event) => {
     const { type, loginData, token, tokenUser, email, password, typeCode } = event.data;
     console.log("Call all this User Apis Worker Works", type);
-    //const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
-    const domain = 'http://localhost:8080/auth';
+    const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
+    //const domain = 'http://localhost:8080/auth';
     if (type === 'check_access_token') {
         const  accessToken  = token;
         try {
@@ -40,7 +40,7 @@ addEventListener('message', async (event) => {
         console.log(token);
         try {
             const responses = await Promise.all([
-                fetch(`http://localhost:8080/auth2/logout`, {
+                fetch(`https://springleafrestaurantbackend.onrender.com/auth2/logout`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ addEventListener('message', async (event) => {
         
         try {
             const responses = await Promise.all([
-                fetch(`http://localhost:8080/abc`, {
+                fetch(`https://springleafrestaurantbackend.onrender.com/abc`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

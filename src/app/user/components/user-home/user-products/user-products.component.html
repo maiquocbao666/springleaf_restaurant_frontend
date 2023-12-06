@@ -2,26 +2,27 @@
     <div class="container">
         <a routerLink="/user/index">Hiển thị tất cả món</a>
         <div class="row">
-            <div class="tab-content col-lg-12" id="myTabContent">
-                <div class="tab-pane fade show active" id="breakfast" role="tabpanel" aria-labelledby="breakfast-tab">
-                    <div class="row">
-                        <div class="col-md-6" *ngFor="let product of getVisibleProducts(); let i = index">
-                            <div class="single_menu">
-                                <a (click)="openProductDetailModal(product)">
-                                    <img src="https://drive.google.com/uc?id={{product.imageUrl}}"
-                                        alt="burger"></a>
-                                <div class=" menu_content">
-                                    <a (click)="openProductDetailModal(product)">
-                                        <h4>{{product.name}}</h4>
-                                    </a>
-                                    <span>{{ formatAmount(product.unitPrice ) }}</span>
-                                    <p>{{product.description}}</p>
-                                    <button style="float: right;" (click)="addToCart(product.menuItemId)">
-                                        <i class="fa-solid fa-cart-shopping"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-lg-3 col-md-6 mb-5 " *ngFor="let product of getVisibleProducts(); let i = index">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <a href="#" class="image">
+                            <img src="https://drive.google.com/uc?id={{product.imageUrl}}"
+                                        alt="burger">
+                        </a>
+                        <span class=" product-discount-label">-33%</span>
+                        <ul class="product-links">
+                            <li><a href="#" data-tip="Add to Wishlist"><i class="fas fa-heart"></i></a></li>
+                            <li><a href="#" data-tip="Compare"><i class="fa fa-random"></i></a></li>
+                            <li><a (click)="openProductDetailModal(product)" data-tip="Quick View"><i
+                                        class="fa fa-search"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="title"><a (click)="openProductDetailModal(product)">{{ truncateString(product.name,
+                                20)
+                                }}</a></h3>
+                        <div class="price"><span>900.00 đ</span> {{ formatAmount(product.unitPrice ) }}</div>
+                        <a class="add-to-cart" (click)="addToCart(product.menuItemId)">Thêm vào giỏ </a>
                     </div>
                 </div>
             </div>
@@ -49,3 +50,21 @@
         </div>
     </div>
 </section> -->
+
+
+<!-- <div class="container">
+    <h4>Best Food in Mumbai <i class="fa fa-map-marker" aria-hidden="true"></i>
+    </h4> <br>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3" *ngFor="let product of getVisibleProducts(); let i = index">
+            <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+                class="img-fluid" />
+            <h4>{{product.name}}</h4>
+            <span>{{ formatAmount(product.unitPrice ) }}</span>
+            <span class="flr">
+                Mua ngay<i class="fa-solid fa-cart-shopping"></i>
+            </span>
+            <p>{{product.description}}</p>
+        </div>
+    </div>
+</div> -->

@@ -1,67 +1,246 @@
+<div class="container">
+    <div class="modal-header">
+        <h4 class="modal-title">Đặt bàn {{restaurantTable.tableName}}</h4> (Quý khách vui lòng không đặt bàn từ
+        23:00:00-23:59:59)
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
-<div aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl section-center mt-0 mb-0" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="mb-0">Đặt bàn {{restaurantTable.tableName}}</h3> (Quý khách vui lòng không đặt bàn từ 23:00:00-23:59:59)
+
+
+
+    <div class="booking">
+        <form class="booking-form row" role="form" [formGroup]="reservationForm">
+
+            <div class="col-lg-6 col-12">
+                <span class="form-label">Số khách</span>
+                <select class="form-control form-select" formControlName="seatingCapacity">
+                    <option *ngFor="let number of getNumbersArray()" [value]="number">{{ number }}</option>
+                </select>
             </div>
-            <div class="modal-body d-flex flex-column justify-content-center">
-                <div class="booking">
 
-                    <form class="booking-form row" role="form" [formGroup]="reservationForm">
-                        <div class="col-lg-12">
-                            <div class="col-lg-6 input-group">
-                                <input class="form-control" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss" (input)="onSearch()"/>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-12">
-                            <span class="form-label">Số khách</span>
-                            <select class="form-control form-select" formControlName="seatingCapacity">
-                                <option *ngFor="let number of getNumbersArray()" [value]="number">{{ number }}</option>
-                            </select>
-                        </div>
+            <div class="col-lg-6 col-12">
+                <span class="form-label">Ngày tới</span>
+                <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate" [min]="minDate"
+                    [max]="maxDate" required>
+            </div>
 
-                        <div class="col-lg-6 col-12">
-                            <span class="form-label">Ngày tới</span>
-                            <input class="form-control" type="date" id="selectedDate"
-                                formControlName="selectedDate" [min]="minDate" [max]="maxDate" required>
-                        </div>
+            <div class="col-lg-6 col-12">
+                <span class="form-label">Thời gian tới</span>
+                <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime" required>
+            </div>
 
-                        <div class="col-lg-6 col-12">
-                            <span class="form-label">Thời gian tới</span>
-                                <input class="form-control" type="time" id="selectedTime"
-                                    formControlName="selectedTime" required>
-                        </div>
+            <div class="col-lg-6 col-12">
+                <span class="form-label">Thời gian đi</span>
+                <input class="form-control" type="time" id="outTime" formControlName="outTime" required>
+            </div>
 
-                        <div class="col-lg-6 col-12">
-                            <span class="form-label">Thời gian đi</span>
-                            <input class="form-control" type="time" id="outTime"
-                                formControlName="outTime" required>
-                        </div>
+            <!-- <div class="col-lg-12 col-12 form-group">
+                <span class="form-label">Định dạng VN</span>
+                <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
+            </div> -->
+            <div class=" d-flex col-lg-4 col-12 ms-auto">
+                <button type="submit" class="form-control submit-btn mr-2" (click)="bookingTable()">Đặt
+                    bàn</button>
 
-                        <div class="col-lg-12 col-12 form-group">
-                            <span class="form-label">Định dạng VN</span>
-                            <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
-                        </div>
-                        <div class="col-lg-4 col-12 ms-auto">
-                            <button type="submit" class="form-control submit-btn" (click)="bookingTable()">Đặt bàn</button>
-                        </div>
-                        <h3>Lịch sử</h3>
-                        <ng-container *ngIf="isSearch; else elseTemplate">
-                            <div *ngFor="let reservation of searchReservations" >
-                                <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
-                                    reservation.outTime | date: 'HH:mm:ss' }}</div>
-                                </div>
-                        </ng-container>
-                        <ng-template #elseTemplate>
-                            <div *ngFor="let reservation of reservations">
-                                <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
-                                    reservation.outTime | date: 'HH:mm:ss' }}</div>
-                            </div>
-                        </ng-template>
-                    </form>
+                <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Lịch sử
+                </button>
+                <!-- <button class="btn btn-primary" (click)="openTermsModal()">Điều khoản</button> -->
+            </div>
+        </form>
+    </div>
+    <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+            <h3>Lịch sử</h3>
+            <form [formGroup]="reservationForm">
+                <div class="col-lg-6 input-group">
+                    <div class="inputBox_container">
+                        <svg class="search_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
+                            alt="search icon">
+                        </svg>
+                        <input formControlName="searchKeyWord" class="inputBox" id="inputBox" type="text"
+                            placeholder="Tìm theo ngày và giờ" (input)="onSearch()">
+                    </div>
                 </div>
-            </div>
+            </form>
+            <ng-container *ngIf="isSearch; else elseTemplate">
+                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Ngày giờ tới</th>
+                            <th class="text-center">Giờ đi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let reservation of searchReservations">
+                            <!-- <td>{{ thisUserReservation.userId }}</td> -->
+                            <td class="text-center">{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }}
+                            </td>
+                            <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Ngày giờ tới</th>
+                            <th class="text-center">Giờ đi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let reservation of reservations">
+                            <!-- <td>{{ thisUserReservation.userId }}</td> -->
+                            <td class="text-center">{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }}
+                            </td>
+                            <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-template>
+            <!-- <ng-container *ngIf="isSearch; else elseTemplate">
+                <div *ngFor="let reservation of searchReservations">
+                    <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
+                        reservation.outTime | date: 'HH:mm:ss' }}</div>
+                </div>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <div *ngFor="let reservation of reservations">
+                    <div>{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }} - {{
+                        reservation.outTime | date: 'HH:mm:ss' }}</div>
+                </div>
+            </ng-template> -->
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+<!-- Điều khoản Modal -->
+<ng-template #termsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Điều khoản và Điều kiện</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body" (scroll)="onScroll($event)">
+
+        Cọc 50k cho việc giữ bàn:
+
+        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
+        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
+        Quy định về hủy đặt bàn:
+
+        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
+        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
+        mất cọc.
+        Hoàn trả cọc:
+
+        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
+        bàn.
+        Thông tin cá nhân:
+
+        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
+        Sự chấp nhận:
+
+        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
+        Cọc 50k cho việc giữ bàn:
+
+        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
+        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
+        Quy định về hủy đặt bàn:
+
+        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
+        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
+        mất cọc.
+        Hoàn trả cọc:
+
+        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
+        bàn.
+        Thông tin cá nhân:
+
+        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
+        Sự chấp nhận:
+
+        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
+        Cọc 50k cho việc giữ bàn:
+
+        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
+        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
+        Quy định về hủy đặt bàn:
+
+        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
+        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
+        mất cọc.
+        Hoàn trả cọc:
+
+        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
+        bàn.
+        Thông tin cá nhân:
+
+        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
+        Sự chấp nhận:
+
+        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
+        Cọc 50k cho việc giữ bàn:
+
+        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
+        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
+        Quy định về hủy đặt bàn:
+
+        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
+        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
+        mất cọc.
+        Hoàn trả cọc:
+
+        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
+        bàn.
+        Thông tin cá nhân:
+
+        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
+        Sự chấp nhận:
+
+        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
+        Cọc 50k cho việc giữ bàn:
+
+        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
+        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
+        Quy định về hủy đặt bàn:
+
+        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
+        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
+        mất cọc.
+        Hoàn trả cọc:
+
+        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
+        bàn.
+        Thông tin cá nhân:
+
+        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
+        Sự chấp nhận:
+
+        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
+
+
+        <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="confirmCheckbox" [(ngModel)]="isConfirmed">
+            <label class="form-check-label" for="confirmCheckbox">
+                Tôi đã đọc và đồng ý với Điều khoản và Điều kiện
+            </label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Đóng</button>
+        <button type="button" class="btn btn-primary" [disabled]="!isConfirmed" (click)="modal.close('Save click')">Đồng
+            ý</button>
+    </div>
+</ng-template>

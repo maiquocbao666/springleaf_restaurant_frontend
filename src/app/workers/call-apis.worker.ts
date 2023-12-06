@@ -2,7 +2,7 @@
 
 addEventListener('message', async ({ data }) => {
         console.log("Call Apis Worker Works", data);
-        //const domain = 'https://springleafrestaurantbackend.onrender.com/public';
+        // const domain = 'https://springleafrestaurantbackend.onrender.com/public';
         const domain = 'http://localhost:8080/public';
         if (data === 'start') {
                 try {

@@ -50,4 +50,10 @@ export class StatisticsService {
     const url = `totalRevenue`;
     return this.apiService.request<number>('get', url);
   }
+
+  getMonthlyRevenueByYear(year: number): Observable<any> {
+    const url = `year/${year}`;
+    return this.apiService.request<any>('get', url);
+  }
+
 }

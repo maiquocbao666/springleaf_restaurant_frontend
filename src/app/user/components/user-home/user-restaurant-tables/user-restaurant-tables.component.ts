@@ -1,24 +1,21 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { Reservation } from 'src/app/interfaces/reservation';
+import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
+import { TableType } from 'src/app/interfaces/table-type';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { TableStatusService } from 'src/app/services/table-status.service';
 import { TableTypeService } from 'src/app/services/table-type.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
-import { TableType } from 'src/app/interfaces/table-type';
-import { Restaurant } from 'src/app/interfaces/restaurant';
-import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.component';
-import { ReservationService } from 'src/app/services/reservation.service';
-import { Reservation } from 'src/app/interfaces/reservation';
-import { Product } from 'src/app/interfaces/product';
-import { ProductService } from 'src/app/services/product.service';
+import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
+import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 
 @Component({
   selector: 'app-user-table',
@@ -52,6 +49,8 @@ export class UserRestaurantTablesComponent {
   ngOnInit(): void {
     this.getRestaurantTables();
   }
+
+
 
   getRestaurantTables(): void {
     this.restaurantTableService.getCache().subscribe(
@@ -104,21 +103,21 @@ export class UserRestaurantTablesComponent {
       this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
       return;
     }
-  
+
     let check = true;
     let reservationInUse: Reservation[] = []
-  
+
     this.reservationService.getReservationsInUseByUserId(this.authenticationService.getUserCache()?.userId!).subscribe(reservations => {
       if (reservations.length > 0) {
         reservationInUse = reservations;
-  
+
         // Mở modal với kích thước lớn
         const modalRef = this.modalService2.open(UserMergeTablesComponent, {
           size: 'xl', // xl là kích thước lớn hơn
           centered: false, // Đặt modal ở giữa trang
           scrollable: true, // Cho phép cuộn nếu modal quá lớn
         });
-  
+
         // Truyền dữ liệu đến modal
         modalRef.componentInstance.reservationOfUser = reservationInUse;
       } else {

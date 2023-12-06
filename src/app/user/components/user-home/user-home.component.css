@@ -1,3 +1,11 @@
 .margin-body-header {
-    margin-bottom: 140px;
+    margin-bottom: 120px;
+
+}
+
+body {
+    background-image: url('https://raw.githubusercontent.com/ibrahimouachem/Royal-Burger/master/CSS/bg.png');
+    background-color: black;
+    font-family: BrandonText, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+
 }
