@@ -71,6 +71,7 @@ export class UserCartComponent implements OnInit {
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.Provinces = Object.values(data);
+      console.log(this.Provinces)
     });
     this.cartService.districtData$.subscribe(data => {
       this.Districts = Object.values(data);
@@ -88,6 +89,10 @@ export class UserCartComponent implements OnInit {
     this.likeButtonHandler();
     this.minusButtonHandler();
     this.plusButtonHandler();
+  }
+
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
   setCartInfomationArrays() {
@@ -183,11 +188,10 @@ export class UserCartComponent implements OnInit {
     return totalPrice;
   }
 
-  calculateFinalPrice(discount: number): number {
+  calculateFinalPrice(discount: number): any {
     const totalPrice = this.calculateTotalPrice();
     const finalPrice = totalPrice - discount;
-
-    return finalPrice >= 0 ? finalPrice : 0;
+    return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
   }
 
   deleteCartDetail(cart: any): void {

@@ -256,12 +256,12 @@ addEventListener('message', async (event) => {
         }
     }
     
-    if (type === 'cart') {
+    if (type === 'provinces') {
         const token = "d6f64767-329b-11ee-af43-6ead57e9219a";
         try {
             const responses = await Promise.all([
 
-                fetch(`${domain}/your-profile`, {
+                fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/province`, {
                     method: 'GET',
                     headers: {
                         'token': token,
