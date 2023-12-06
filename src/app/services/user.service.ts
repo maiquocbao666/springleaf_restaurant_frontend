@@ -88,7 +88,7 @@ export class UserService {
   updateProfile(updatedUserData: User): Observable<any> {
 
     const token = localStorage.getItem('access_token');
-    const url = `http://localhost:8080/api/auth/your-profile/update`;
+    const url = `http://localhost:8080/auth/your-profile/update`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.put(url, updatedUserData, { headers });

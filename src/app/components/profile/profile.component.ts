@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
+import { ToastService } from 'src/app/services/toast.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -19,7 +20,8 @@ export class ProfileComponent {
   constructor(
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private toastService : ToastService,
   ) {
     this.profileForm = this.formBuilder.group({
       fullName: [null, [Validators.nullValidator]],
@@ -74,7 +76,7 @@ export class ProfileComponent {
   
       this.userService.updateProfile(userUpdate).subscribe(
         () => {
-          // Xử lý khi cập nhật thành công
+          this.toastService.showTimedAlert('Cập nhật thành công','','success',1500)
         },
         (error) => {
           console.error('Error updating profile:', error);

@@ -10,6 +10,7 @@ import { Product } from 'src/app/interfaces/product';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { DiscountService } from 'src/app/services/discount.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-cart',
@@ -24,6 +25,7 @@ export class UserCartComponent implements OnInit {
   selectedDistrict: number | null = null;
   Wards: any = [];
   selectedWard: number | null = null;
+  shipFee : number | null = null;
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
   orderDetailByUser: CartDetail[] | null = null;
@@ -42,6 +44,7 @@ export class UserCartComponent implements OnInit {
     private cartDetailService: CartDetailService,
     private toastService: ToastService,
     private discountService: DiscountService,
+    private http : HttpClient,
   ) {
 
     const productsString = localStorage.getItem('products');
@@ -71,7 +74,6 @@ export class UserCartComponent implements OnInit {
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.Provinces = Object.values(data);
-      console.log(this.Provinces)
     });
     this.cartService.districtData$.subscribe(data => {
       this.Districts = Object.values(data);
@@ -171,6 +173,7 @@ export class UserCartComponent implements OnInit {
 
     if (index === -1) {
       this.selectedItems.push(cart);
+      console.log(this.selectedItems[0].menuItem);
     } else {
       this.selectedItems.splice(index, 1);
     }
@@ -240,10 +243,10 @@ export class UserCartComponent implements OnInit {
     
     if (this.selectedItems.length > 0) {
       const listItemId: number[] = [];
-      for (const cart of this.selectedItems) {
-        listItemId.push(Number(cart.menuItemId as number));
-        console.log(cart.menuItemId);
-      }
+      this.selectedItems.forEach((item, index) => {
+        listItemId.push(Number(this.selectedItems[index].menuItem as number));
+        console.log('here', this.selectedItems[index].menuItem);
+      });
       console.log("CODE: ", listItemId);
       if (this.discountCode != null) {
         this.discountService.getDiscountByName(this.discountCode, listItemId).subscribe({
@@ -285,8 +288,13 @@ export class UserCartComponent implements OnInit {
     console.log('onDistrictChange called');
     if (typeof this.selectedDistrict === 'number') {
       this.cartService.getWard(this.selectedDistrict);
+      
     }
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
+  }
+
+  shipFeeWithUser(){
+    
   }
 }
 
