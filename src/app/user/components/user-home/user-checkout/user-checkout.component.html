@@ -55,30 +55,17 @@
         <h2>Sản phẩm</h2>
         <hr>
         <div class="row">
-          <ul class="list-group">
-            <li class="d-flex align-items-center">
+          <ul class="list-group" >
+            <li class="d-flex align-items-center" *ngFor="let cart of cartInfos">
               <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt=""
                 width="100">
               <div class="d-flex flex-column ms-3 me-auto">
-                <span>Sản phẩm 1</span>
-                <span>Mô tả sản phẩm 1</span>
-                <span>Số lượng: 1</span>
+                <span>{{cart.menuItemName}}</span>
+                <span>Mô tả: {{cart.menuItem}}</span>
+                <span>Số lượng : {{cart.quantity}}</span>
               </div>
               <div>
-                <span>35.000 VND</span>
-              </div>
-            </li>
-            <hr>
-            <li class=" d-flex align-items-center">
-              <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt=""
-                width="100">
-              <div class="d-flex flex-column ms-3 me-auto">
-                <span>Sản phẩm 2</span>
-                <span>Mô tả sản phẩm 2</span>
-                <span>Số lượng: 1</span>
-              </div>
-              <div>
-                <span>35.000 VND</span>
+                <span>Tổng tiền: {{cart.menuItemPrice * cart.quantity}}</span>
               </div>
             </li>
             <hr>

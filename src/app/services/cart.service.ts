@@ -48,6 +48,8 @@ export class CartService extends BaseService<Cart> {
   selectedProvinceId: number | null = null;
   selectedDistrictId: number | null = null;
 
+  cartInfo : any[] = [];
+
   //----------------------------------------------------------------------------------------------
 
   getItemId(item: Cart): number {
@@ -160,7 +162,13 @@ export class CartService extends BaseService<Cart> {
 
   }
 
+  setCartData(cart : any[]){
+    this.cartInfo = cart;
+  }
 
+  getCartData() {
+    return this.cartInfo;
+  }
 
 }
 export interface Province {

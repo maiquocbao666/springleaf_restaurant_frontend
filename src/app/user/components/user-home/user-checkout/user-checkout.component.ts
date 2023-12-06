@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VNPayService } from 'src/app/services/VNpay.service';
+import { CartService } from 'src/app/services/cart.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 @Component({
@@ -15,16 +16,21 @@ import Swal from 'sweetalert2';
   paymentStatus: string | undefined;
   redirectUrl: string | undefined;
   selectedPaymentMethod: string | undefined;
-
+  cartInfos : CartInfomation[] = [];
   constructor(
     private sweetAlertService: ToastService,
     private vnpayService: VNPayService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private cartService : CartService,
+  ) { 
+    
+  }
 
 
   ngOnInit(): void {
-    this.onGetPaymentStatus();
+    // this.onGetPaymentStatus();
+    this.cartInfos = this.cartService.getCartData()
+    console.log(this.cartInfos)
   }
 
   processPayment(): void {
@@ -95,6 +101,17 @@ import Swal from 'sweetalert2';
 
   payWithCOD(): void {
     console.log('Thanh toán bằng COD');
+    
   }
 
+}
+export interface CartInfomation {
+  orderDetailId?: number;
+  order: number;
+  menuItem: number;
+  quantity: number;
+  menuItemName: string;
+  menuItemPrice: number;
+  menuItemImage: string;
+  menuItemQuantity: number
 }

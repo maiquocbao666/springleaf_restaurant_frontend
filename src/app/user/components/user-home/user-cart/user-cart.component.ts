@@ -11,6 +11,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { DiscountService } from 'src/app/services/discount.service';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-cart',
@@ -25,14 +26,14 @@ export class UserCartComponent implements OnInit {
   selectedDistrict: number | null = null;
   Wards: any = [];
   selectedWard: number | null = null;
-  shipFee : number | null = null;
+  shipFee: number | null = null;
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
   orderDetailByUser: CartDetail[] | null = null;
   products: Product[] | null = null;
   cartInformationArray: CartInfomation[] = [];
 
-  selectedItems: any[] = [];
+  selectedItems: CartInfomation[] = [];
   selectAllChecked = false;
   selections: { [key: string]: boolean } = {};
   discountCode: string = '';
@@ -44,7 +45,8 @@ export class UserCartComponent implements OnInit {
     private cartDetailService: CartDetailService,
     private toastService: ToastService,
     private discountService: DiscountService,
-    private http : HttpClient,
+    private http: HttpClient,
+    private router: Router
   ) {
 
     const productsString = localStorage.getItem('products');
@@ -107,7 +109,7 @@ export class UserCartComponent implements OnInit {
           if (orderDetail.menuItemId === product.menuItemId) {
             const cartInfo: CartInfomation = {
               orderDetailId: orderDetail.orderDetailId,
-              order: orderDetail.order,
+              order: orderDetail.orderId,
               menuItem: orderDetail.menuItemId,
               quantity: orderDetail.quantity,
               menuItemPrice: product.unitPrice,
@@ -153,6 +155,13 @@ export class UserCartComponent implements OnInit {
       inputElement.value = cart.quantity.toString();
     } else {
       cart.quantity = newValue;
+      const cartDetail : CartDetail = {
+        orderDetailId : cart.orderDetailId,
+        orderId : cart.order,
+        menuItemId : cart.menuItem,
+        quantity : newValue
+      };
+      this.cartDetailService.update(cartDetail).subscribe();
     }
   }
 
@@ -240,19 +249,16 @@ export class UserCartComponent implements OnInit {
   }
 
   getDiscount() {
-    
     if (this.selectedItems.length > 0) {
       const listItemId: number[] = [];
       this.selectedItems.forEach((item, index) => {
         listItemId.push(Number(this.selectedItems[index].menuItem as number));
-        console.log('here', this.selectedItems[index].menuItem);
       });
-      console.log("CODE: ", listItemId);
       if (this.discountCode != null) {
         this.discountService.getDiscountByName(this.discountCode, listItemId).subscribe({
           next: (response) => {
             if (response.message === "Discount is not valid") {
-              this.toastService.showTimedAlert('Mã giảm giá sai', '', 'error', 2000);
+              this.toastService.showTimedAlert('Mã giảm giá không tồn tại', '', 'error', 2000);
             }
             else if (response.message === "Discount is Experied") {
               this.toastService.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
@@ -260,7 +266,6 @@ export class UserCartComponent implements OnInit {
             else {
               this.discountPrice = response.message;
               this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
-
             }
           },
           error: (error) => {
@@ -276,6 +281,15 @@ export class UserCartComponent implements OnInit {
     }
   }
 
+  checkout() {
+    if (this.selectedItems.length > 0) {
+      this.cartService.setCartData(this.selectedItems)
+      this.router.navigate(['/user/checkout'], { state: { cartInfos: this.selectedItems } });
+    } else {
+      this.toastService.showTimedAlert('Vui lòng chọn sản phẩm trước khi thanh toán', '', 'info', 2000);
+    }
+  }
+
   onProvinceChange() {
     console.log('onProvinceChange called');
     if (typeof this.selectedProvince === 'number') {
@@ -288,13 +302,13 @@ export class UserCartComponent implements OnInit {
     console.log('onDistrictChange called');
     if (typeof this.selectedDistrict === 'number') {
       this.cartService.getWard(this.selectedDistrict);
-      
+
     }
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
   }
 
-  shipFeeWithUser(){
-    
+  shipFeeWithUser() {
+
   }
 }
 
