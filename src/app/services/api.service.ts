@@ -28,9 +28,9 @@ export class ApiService {
 
   setUrl(uri: string) {
 
-    //this.baseUrl = 'http://localhost:8080/public/' + uri;
-    //console.log('API Endpoint:', this.baseUrl);
-    this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
+    this.baseUrl = 'http://localhost:8080/public/' + uri;
+    console.log('API Endpoint:', this.baseUrl);
+    // this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
 
     //this.baseUrl = 'http://localhost:8080/public/' + uri;
   }
@@ -74,9 +74,9 @@ export class ApiService {
         this.setUrl(`create/${endpoint}`);
 
         return this.http.post<T>(this.baseUrl, data, { headers }).pipe(
-          
+
           tap(response => {
-            
+
             console.log(response);
           }),
 

@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergeTable } from 'src/app/interfaces/merge-table';
 import { Reservation } from 'src/app/interfaces/reservation';
 import { MergeTableService } from 'src/app/services/merge-table.service';
@@ -32,6 +33,7 @@ export class UserMergeTablesComponent {
     private mergeTableService: MergeTableService,
     private datePipe: DatePipe,
     private sweetAlertService: ToastService,
+    public activeModal: NgbActiveModal
   ) {
     this.reservationForm = this.formBuilder.group({
       tableId: [, [Validators.nullValidator]],
@@ -102,6 +104,17 @@ export class UserMergeTablesComponent {
     )
   }
 
+  getClassForStatus(status: string): string {
+    if (status === 'Đang chờ xác nhận') {
+      return 'badge badge-warning';
+    } else if (status === 'Đã sử dụng xong') {
+      return 'badge badge-success';
+    } else if (status === 'Đang sử dụng') {
+      return 'badge badge-danger';
+    }
+    return ''; // Hoặc class mặc định khác nếu cần
+  }
+
   mergeTables() {
     if (!this.mergeTableId) {
       this.sweetAlertService.showTimedAlert('Không thể gộp!', 'Mời chọn hoặc tạo id gộp bàn', 'error', 3000);
@@ -126,13 +139,13 @@ export class UserMergeTablesComponent {
 
     this.mergeTableService.add(mergeTable).subscribe(() => {
       const mergeTableId = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+tableId);
-        if (mergeTableId != '') {
-          this.isResetDisabled = true;
-          this.mergeTableId = mergeTableId;
-        } else {
-          this.isResetDisabled = false;
-          console.log(mergeTableId);
-        }
+      if (mergeTableId != '') {
+        this.isResetDisabled = true;
+        this.mergeTableId = mergeTableId;
+      } else {
+        this.isResetDisabled = false;
+        console.log(mergeTableId);
+      }
     });
   }
 

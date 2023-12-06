@@ -8,6 +8,7 @@ body {
     text-align: left;
     background-color: #f6f9fa
 }
+
 .card {
     position: relative;
     display: -webkit-box;
@@ -145,12 +146,25 @@ body {
     margin-bottom: 15px
 }
 
-.input-search{
+.input-search {
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, .125);
 }
 
-.input-search:focus{
+.input-search:focus {
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, .125);
 }
+
+.btn {
+    /* width: 100%; */
+    /* padding: 5px 0px; */
+    border: 1px solid #75a418;
+    border-radius: 5px;
+    background-color: #75a418;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+}
+
+

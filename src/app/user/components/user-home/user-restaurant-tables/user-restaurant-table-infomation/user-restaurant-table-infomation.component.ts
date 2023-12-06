@@ -1,9 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Reservation } from 'src/app/interfaces/reservation';
-import { ReservationStatus } from 'src/app/interfaces/reservation-status';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -27,6 +26,8 @@ export class UserRestaurantTableInfomationComponent {
   minDate!: string;
   maxDate!: string;
   isSearch = false;
+  isTermsAccepted: boolean = false;
+
 
   searchReservations: Reservation[] = [];
 
@@ -39,6 +40,7 @@ export class UserRestaurantTableInfomationComponent {
     private toastService: ToastService,
     private reservationStatusService: ReservationStatusService,
     private datePipe: DatePipe,
+    private modalService: NgbModal,
     private sweetAlertService: ToastService,
   ) {
     this.authService.cachedData$.subscribe((data) => {
@@ -63,6 +65,22 @@ export class UserRestaurantTableInfomationComponent {
         }
       }
     )
+  }
+
+
+  @ViewChild('termsModal') termsModal!: ElementRef;
+
+  isConfirmed: boolean = false;
+
+  openTermsModal() {
+    this.modalService.open(this.termsModal, { scrollable: true, size: 'lg' });
+  }
+
+  onScroll(event: any) {
+    const element = event.target;
+    if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+      this.isTermsAccepted = true;
+    }
   }
 
   getNumbersArray(): number[] {
@@ -133,7 +151,6 @@ export class UserRestaurantTableInfomationComponent {
   }
 
   addReservation() {
-
     // Cập nhật ngày min max
     this.updateMinMaxDate();
 
@@ -209,7 +226,6 @@ export class UserRestaurantTableInfomationComponent {
     };
 
     let reservationsCache: Reservation[] = [];
-
     this.reservationService.add(newReservation).subscribe(
       {
         next: (addedReservation) => {

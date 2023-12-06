@@ -103,6 +103,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
 import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -191,6 +192,7 @@ import { UserMergeTablesComponent } from './user/components/user-home/user-resta
     ReactiveFormsModule,
     NgxPaginationModule,
     NgToastModule,
+    NgxChartsModule, // Thêm vào đây
     FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),

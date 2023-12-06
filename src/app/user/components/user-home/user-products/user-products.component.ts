@@ -81,6 +81,15 @@ export class UserProductsComponent implements OnInit {
     this.visibleProductCount -= 12; // Giảm số sản phẩm hiển thị đi 10
   }
 
+
+  // Trong file của bạn có thể thêm một hàm để giới hạn độ dài của chuỗi
+  truncateString(str: string, maxLength: number): string {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + '...'; // Trả về chuỗi được giới hạn độ dài
+    }
+    return str; // Trả về chuỗi ban đầu nếu không vượt quá độ dài tối đa
+  }
+
   getVisibleProducts(): Product[] {
     return this.products ? this.products.slice(0, this.visibleProductCount) : [];
   }
