@@ -10,7 +10,7 @@ import { Product } from 'src/app/interfaces/product';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { DiscountService } from 'src/app/services/discount.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
@@ -310,9 +310,7 @@ export class UserCartComponent implements OnInit {
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
   }
 
-  shipFeeWithUser() {
-
-  }
+  
 }
 
 export interface CartInfomation {

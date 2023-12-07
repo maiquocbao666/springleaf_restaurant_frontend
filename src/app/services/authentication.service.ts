@@ -39,6 +39,7 @@ export class AuthenticationService {
   getUserCache(): User | null {
     return this.userCache;
   }
+  
   setAccessCodeCacheData(code: string) {
     this.accessCode = code;
     this.accessCodeDataSubject.next(code);
