@@ -144,6 +144,12 @@ export class ProfileComponent {
   }
 
   updateProfile() {
+    let addressChange = '';
+    if (this.selectedProvince && this.selectedDistrict && this.selectedWard) {
+      addressChange = `${this.selectedWard}-${this.selectedDistrict}-${this.selectedProvince}`;
+    }else{
+      addressChange = this.userData.address;
+    }
     if (this.userData) {
       const userUpdate: User = {
         userId: this.userData.userId,
@@ -151,7 +157,7 @@ export class ProfileComponent {
         username: this.userData.username,
         password : this.userData.password,
         email: this.profileForm.get('email')?.value,
-        address: this.profileForm.get('address')?.value,
+        address: addressChange,
         phone: this.profileForm.get('phone')?.value,
         restaurantBranchId: this.userData.restaurantBranchId,
         image: this.userData.image,
