@@ -167,6 +167,7 @@ export class ProfileComponent {
   
       this.userService.updateProfile(userUpdate).subscribe(
         () => {
+          this.authService.setUserCache(userUpdate);
           this.toastService.showTimedAlert('Cập nhật thành công','','success',1500)
         },
         (error) => {
