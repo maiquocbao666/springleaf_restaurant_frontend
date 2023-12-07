@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { User } from '../interfaces/user';
@@ -12,7 +12,7 @@ export class AdminGuardService implements CanActivate {
 
     roles: String[] | null = null;
 
-    constructor(private authService: AuthenticationService) {
+    constructor(private authService: AuthenticationService, private router: Router) {
     }
 
     checkRoles(): boolean {
@@ -58,6 +58,9 @@ export class AdminGuardService implements CanActivate {
             // Nếu là đường dẫn bắt đầu bằng '/admin', cho phép truy cập
             let checked = true;
             checked = this.checkRoles();
+            if(checked === false){
+                this.router.navigate(['/user/index']);
+            }
             return checked;
         } else {
             // Nếu không phải, bạn có thể chuyển hướng hoặc xử lý theo logic của mình
