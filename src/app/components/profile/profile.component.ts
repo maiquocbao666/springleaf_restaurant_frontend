@@ -26,7 +26,6 @@ export class ProfileComponent {
     this.profileForm = this.formBuilder.group({
       fullName: [null, [Validators.nullValidator]],
       username: [null, [Validators.nullValidator]],
-      password: [null, [Validators.nullValidator]],
       email: [null, [Validators.nullValidator]],
       phone: [null, [Validators.nullValidator]],
       address: [null, [Validators.nullValidator]],
@@ -64,7 +63,7 @@ export class ProfileComponent {
         userId: this.userData.userId,
         fullName: this.profileForm.get('fullName')?.value,
         username: this.userData.username,
-        password: "123",
+        password : this.userData.password,
         email: this.profileForm.get('email')?.value,
         address: this.profileForm.get('address')?.value,
         phone: this.profileForm.get('phone')?.value,

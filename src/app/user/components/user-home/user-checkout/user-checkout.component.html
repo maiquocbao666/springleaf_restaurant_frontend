@@ -52,7 +52,7 @@
   <div class="row">
     <div class="col-lg-8">
       <div class="payment-method">
-        <h2>Sản phẩm</h2>
+        <h2>{{cartInfos.length}} Sản phẩm</h2>
         <hr>
         <div class="row">
           <ul class="list-group" >
@@ -92,7 +92,7 @@
     <!-- user-checkout.component.html -->
     <div class="col-lg-4">
       <div class="card address-card">
-        <h2>Đơn hàng (2 sản phẩm)</h2>
+        <h5>Phương thức thanh toán</h5>
         <hr>
         <div class="card-body ">
           <ul class="list-group">
@@ -122,7 +122,6 @@
               </label>
             </div>
             <hr>
-            <!-- <b class="d-flex justify-content-end">Tổng tiền: 70. 000 VND</b> -->
             <div class="input-container">
               <input required="" placeholder="Add Vorcher" type="email">
               <button class="invite-btn" type="button">
@@ -136,7 +135,7 @@
                   <span>Tạm tính</span>
                 </div>
                 <div>
-                  <span>35.000 VND</span>
+                  <span>{{ calculateTotalPrice() }}</span>
                 </div>
               </li>
               <li class="d-flex align-items-center">
@@ -153,7 +152,7 @@
                   <span>Tổng cộng</span>
                 </div>
                 <div>
-                  <h4 id="orderTotal" [(ngModel)]="orderTotal">70.000 VND</h4>
+                  <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ calculateFinalPrice(15000)}}</h4>
                 </div>
               </li>
             </ul>

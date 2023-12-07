@@ -162,6 +162,7 @@ export class UserCartComponent implements OnInit {
         quantity : newValue
       };
       this.cartDetailService.update(cartDetail).subscribe();
+      this.cartDetailService.getUserOrderDetail(cart.order).subscribe();
     }
   }
 
@@ -187,7 +188,10 @@ export class UserCartComponent implements OnInit {
       this.selectedItems.splice(index, 1);
     }
 
-    this.selectAllChecked = this.cartInformationArray.length === this.selectedItems.length;
+    const anyUnchecked = this.cartInformationArray.some(cart => !this.selections[cart.menuItem]);
+
+    // Cập nhật giá trị của selectAllChecked dựa trên kết quả kiểm tra
+    this.selectAllChecked = !anyUnchecked;
   }
 
   calculateTotalPrice(): number {
@@ -286,7 +290,7 @@ export class UserCartComponent implements OnInit {
       this.cartService.setCartData(this.selectedItems)
       this.router.navigate(['/user/checkout'], { state: { cartInfos: this.selectedItems } });
     } else {
-      this.toastService.showTimedAlert('Vui lòng chọn sản phẩm trước khi thanh toán', '', 'info', 2000);
+      this.toastService.showTimedAlert('Vui lòng chọn ít nhất 1 sản phẩm', '', 'info', 2000);
     }
   }
 

@@ -2,31 +2,27 @@
 <div class="form-container">
   <form (submit)="updateProfile()" [formGroup]="profileForm" class="grid-form">
     <div class="form-group">
-      <label for="fullName">First Name</label>
+      <label for="fullName">Họ và tên</label>
       <input type="text" id="fullName" formControlName="fullName" name="fullName">
     </div>
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="username">Tài khoản</label>
       <input type="text" id="username" formControlName="username" name="username">
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" formControlName="password" name="password">
     </div>
     <div class="form-group">
       <label for="email">Email</label>
       <input type="text" id="email" formControlName="email" name="email">
     </div>
     <div class="form-group">
-      <label for="phone">Phone number</label>
+      <label for="phone">Số điện thoại</label>
       <input type="text" id="phone" formControlName="phone" name="phone">
     </div>
     <div class="form-group">
-      <label for="address">Address</label>
+      <label for="address">Địa chỉ</label>
       <input type="text" id="address" formControlName="address" name="address">
     </div>
     <div class="form-group">
-      <button type="submit">Update Profile</button>
+      <button type="submit">Cập nhật</button>
     </div>
   </form>
 </div>

@@ -10,8 +10,8 @@ import { ToastService } from './toast.service';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
-  //private apiUrl = 'http://localhost:8080/auth';
+  //private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
+  private apiUrl = 'http://localhost:8080/auth';
   private userCache: User | null = null;
   private cachedDataSubject = new BehaviorSubject<User | null>(null);
   private listRole  : String[] | null = null;
