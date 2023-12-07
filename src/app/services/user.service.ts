@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { User } from '../interfaces/user';
-
+import { BaseService } from './base-service';
+import { RxStompService } from '../rx-stomp.service';
+import { ToastService } from './toast.service';
 
 
 @Injectable({
@@ -19,30 +21,21 @@ export class UserService {
 
   getDatasOfThisUserWorker: Worker;
 
-  constructor(private apiService: ApiService, private http: HttpClient) {
-
+  constructor(
+    private apiService: ApiService,
+    private rxStompService: RxStompService,
+    private sweetAlertService: ToastService,
+    private http : HttpClient,
+  ) {
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url));
-
   }
 
-  getUsers(): Observable<User[]> {
-
-    if (this.usersCache) {
-
-      return of(this.usersCache);
-
-    }
-
-    const usersObservable = this.apiService.request<User[]>('get', this.usersUrl);
-
-    usersObservable.subscribe(data => {
-
-      this.usersCache = data;
-
-    });
-
-    return usersObservable;
-
+  gets(): Observable<User[]> {
+    const token = localStorage.getItem('access_token');
+    const url = 'http://localhost:8080/manager/users';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+    return this.http.post<User[]>(url, null,{ headers });
   }
 
   getProfile(): Observable<any> {
