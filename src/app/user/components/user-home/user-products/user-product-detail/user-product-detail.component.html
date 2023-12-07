@@ -7,10 +7,8 @@
 <main class="container">
     <!-- Left Column / Headphones Image -->
     <div class="left-column">
-        <img class="active" style="width: 90%;"
-            src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt="burger">
-        <img data-image="blue" src="https://designmodo.com/demo/product-page/images/blue.png" alt="">
-        <!-- <img data-image="red" class="active" src="https://designmodo.com/demo/product-page/images/red.png" alt=""> -->
+        <img class="active" style="width: 90%;" [src]="'http://localhost:8080/public/getImage/'+ product?.imageUrl"
+            alt="burger">
     </div>
 
 

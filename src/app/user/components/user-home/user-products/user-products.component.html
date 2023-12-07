@@ -7,8 +7,7 @@
                     <div class="product-image">
                         <a href="#" class="image">
                             <img class="pic-1" (click)="openProductDetailModal(product)"
-                                src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
-                                alt="burger">
+                                [src]="'http://localhost:8080/public/getImage/'+ product.imageUrl" alt="burger">
                         </a>
                         <span class=" product-discount-label">-33%</span>
                         <ul class="product-links">

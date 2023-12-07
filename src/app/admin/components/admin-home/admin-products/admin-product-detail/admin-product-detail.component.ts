@@ -89,12 +89,13 @@ export class AdminProductDetailComponent implements OnInit {
         description: this.productForm.get('description')?.value,
         status: this.productForm.get('status')?.value,
         categoryId: +this.productForm.get('categoryId')?.value,
-        imageUrl: this.productForm.get('imageUrl')?.value,
+        imageUrl: this.selectedFileName || this.productForm.get('imageUrl')?.value,
       };
       this.productService.update(updatedProduct).subscribe(
         () => {
           // Nếu cập nhật thành công, đóng modal ở đây
           this.activeModal.close('Close after saving');
+          this.onUpload();
           Swal.fire('Thành công', 'Cập nhật thành công!', 'success');
         },
         (error) => {
@@ -107,9 +108,6 @@ export class AdminProductDetailComponent implements OnInit {
       Swal.fire('Lỗi', 'Vui lòng điền đầy đủ thông tin!', 'warning');
     }
   }
-
-
-
   ngAfterViewInit() {
     this.imageUpload.nativeElement.addEventListener('change', (event) => {
       this.readImgUrlAndPreview(event.target!);
@@ -125,6 +123,27 @@ export class AdminProductDetailComponent implements OnInit {
         this.imagePreview.nativeElement.style.opacity = '1';
       };
       reader.readAsDataURL(fileInput.files[0]);
+    }
+  }
+
+
+  selectedFileName: string | undefined;
+  selectedFile: File | undefined;
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0] as File;
+    this.selectedFileName = this.selectedFile?.name;
+  }
+
+  onUpload() {
+    if (this.selectedFile) {
+      this.productService.uploadImage(this.selectedFile)
+        .subscribe(response => {
+          // Xử lý phản hồi từ server nếu cần
+          console.log('Phản hồi từ server:', response);
+        }, error => {
+          // Xử lý lỗi nếu có
+          console.error('Lỗi khi tải lên:', error);
+        });
     }
   }
 }

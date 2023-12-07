@@ -39,49 +39,9 @@
         </div>
       </div>
     </div>
-    <div class="d-xl-none d-lg-block col-md-6 col-xl-4">
-      <div class="card mb-3 widget-content bg-premium-dark">
-        <div class="widget-content-wrapper text-white">
-          <div class="widget-content-left">
-            <div class="widget-heading">Products Sold</div>
-            <div class="widget-subheading">Revenue streams</div>
-          </div>
-          <div class="widget-content-right">
-            <div class="widget-numbers text-warning"><span>$14M</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="col-md-12 col-lg-12">
-      <div class="mb-3 card">
-        <div class="card-header-tab card-header-tab-animation card-header">
-          <div class="card-header-title">
-            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-            Tổng doanh thhu
-          </div>
-          <ul class="nav">
-            <li class="nav-item"><a href="javascript:void(0);" class="active nav-link">Last</a></li>
-            <li class="nav-item"><a href="javascript:void(0);" class="nav-link second-tab-toggle">Current</a>
-            </li>
-          </ul>
-        </div>
-        <div class="card-body">
-          <div class="tab-content">
-            <div class="tab-pane fade show active" id="tabs-eg-77">
-              <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                <div class="widget-chat-wrapper-outer">
-                  <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
-                    <canvas id="canvas"></canvas>
-                  </div>
-                </div>
-              </div>
-              <h6 class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal">Top Authors</h6>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-6">
+      <div class="col-md-12 col-lg-12">
         <!-- revenue-chart.component.html -->
         <div class="chart-container">
           <ngx-charts-bar-vertical [view]="[700, 400]" [scheme]="colorScheme" [results]="monthlyRevenue"
@@ -91,10 +51,6 @@
         </div>
       </div>
     </div>
-
-
-
-
     <div>
       <div>
         <h3 class="text-center">Kiểm tra doanh thu và hóa đơn</h3><br>
@@ -206,16 +162,4 @@
       <!-- 
     <ngx-charts-bar-vertical [view]="[700, 400]" [scheme]="scheme" [results]="revenueData1" [xAxis]="true"
       [yAxis]="true" [legend]="true"></ngx-charts-bar-vertical> -->
-      <div *ngIf="monthlyRevenue">
-        <h2>Monthly Revenue for {{ selectedYear }}:</h2>
-        <ul>
-          <li *ngFor="let revenue of monthlyRevenue | keyvalue">
-            Month: {{ revenue.key }}, Revenue: {{ revenue.value }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
-
-
   </div>
