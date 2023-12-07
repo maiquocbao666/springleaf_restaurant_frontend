@@ -87,7 +87,6 @@ export class UserProductDetailComponent {
   }
   setValue() {
     if (this.product) {
-
       this.productForm.patchValue({
         menuItemId: this.product.menuItemId,
         name: this.product.name,

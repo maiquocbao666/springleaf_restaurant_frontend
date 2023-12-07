@@ -16,6 +16,7 @@ import { OrderService } from 'src/app/services/order.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { switchMap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-header',
@@ -49,6 +50,7 @@ export class UserHeaderComponent {
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
       if(this.user != null){
         this.getUserCart();
+        this.checkUserRestaurant();
       }
     });
     this.deliveryOrderService.userCart$.subscribe(cart => {
@@ -64,6 +66,21 @@ export class UserHeaderComponent {
       this.orderDetailCount = orderDetails?.length as number;
     });
     
+  }
+
+  checkUserRestaurant(){
+    console.log('branch id: ' ,this.user?.restaurantBranchId);
+    if(this.user?.restaurantBranchId === null){
+      // console.log('vô đây')
+       this.toastService.showConfirmAlert('Bạn chưa chọn chi nhánh', 'OK', 'warning')
+      // .then((result) => {
+      //   if (result.isConfirmed) {
+      //     console.log('ok');
+      //   } else if (result.dismiss === Swal.DismissReason.cancel) {
+      //     console.log('cancel');
+      //   }
+      // });
+    }
   }
 
   openLoginModal() {
@@ -135,6 +152,8 @@ export class UserHeaderComponent {
       }
       prevScrollPos = currentScrollPos;
     };
+
+    
 
   }
 
