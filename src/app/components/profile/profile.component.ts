@@ -70,8 +70,12 @@ export class ProfileComponent {
     });
     
     
+    this.initUserAddress();
+  }
+
+  initUserAddress(){
     if (this.user) {
-      console.log('check: ', this.user.address);
+      if(this.user.address){
       const address = this.user.address.toString(); 
       const splittedStrings = address.split('-');
       const addressWard = splittedStrings[0];
@@ -109,14 +113,13 @@ export class ProfileComponent {
           }
         });
       }
+      }else{
+        this.setValue();
+      }
+      
     }
   }
   
-
-  toggleAddressInput() {
-    this.showAddressInput = !this.showAddressInput;
-  }
-
   ngOnInit() {
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
@@ -131,21 +134,42 @@ export class ProfileComponent {
   }
 
   setValue() {
-    if (this.user && this.userProvince && this.userDistrict && this.userWard) {
-      this.profileForm.patchValue({
-        fullName: this.user.fullName,
-        username: this.user.username,
-        password: this.user.password,
-        email : this.user.email,
-        phone : this.user.phone,
-        address : `${this.userProvince.ProvinceName} - ${this.userDistrict.DistrictName} - ${this.userWard.WardName}`,
-      });
+    if (this.user) {
+      if(this.userProvince && this.userDistrict && this.userWard){
+        this.profileForm.patchValue({
+          fullName: this.user.fullName,
+          username: this.user.username,
+          password: this.user.password,
+          email : this.user.email,
+          phone : this.user.phone,
+          address : `${this.userProvince.ProvinceName} - ${this.userDistrict.DistrictName} - ${this.userWard.WardName}`,
+        });
+      }else{
+        this.profileForm.patchValue({
+          fullName: this.user.fullName,
+          username: this.user.username,
+          password: this.user.password,
+          email : this.user.email,
+          phone : this.user.phone,
+          address : this.user.address,
+        });
+      }
+      
     }
+  }
+
+  toggleAddressInput() {
+    this.setValue();
+    this.showAddressInput = !this.showAddressInput;
+  }
+  CancelChangeAdress(){
+    this.initUserAddress();
+    this.showAddressInput = !this.showAddressInput;
   }
 
   updateProfile() {
     let addressChange = '';
-    if (this.selectedProvince && this.selectedDistrict && this.selectedWard) {
+    if (this.selectedDistrict !== null && this.selectedWard !== null) {
       addressChange = `${this.selectedWard}-${this.selectedDistrict}-${this.selectedProvince}`;
     }else{
       addressChange = this.userData.address;
@@ -168,6 +192,7 @@ export class ProfileComponent {
       this.userService.updateProfile(userUpdate).subscribe(
         () => {
           this.authService.setUserCache(userUpdate);
+          this.initUserAddress();
           this.toastService.showTimedAlert('Cập nhật thành công','','success',1500)
         },
         (error) => {

@@ -19,7 +19,7 @@
     </div>
     <div class="form-group" *ngIf="showAddressInput">
       <label for="address">Địa chỉ</label><button (click)="toggleAddressInput()">Chỉnh sửa</button>
-      <input type="text" id="address" formControlName="address" name="address">
+      <input type="text" id="address" formControlName="address" name="address" >
     </div>
     <div class="select-container" *ngIf="!showAddressInput">
       <div class="select-column">
@@ -47,7 +47,7 @@
           </select>
       </div>
       <button (click)="toggleAddressInput()">Đồng ý</button>
-      <button (click)="toggleAddressInput()">Hủy bỏ</button>
+      <button (click)="CancelChangeAdress()">Hủy bỏ</button>
   </div>
     <div class="form-group">
       <button type="submit">Cập nhật</button>
