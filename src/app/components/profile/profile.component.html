@@ -1,14 +1,14 @@
-<h3>Your Profile</h3>
+<h3>Hồ sơ cá nhân</h3>
 <div class="form-container">
   <form (submit)="updateProfile()" [formGroup]="profileForm" class="grid-form">
     <div class="form-group">
       <label for="fullName">Họ và tên</label>
       <input type="text" id="fullName" formControlName="fullName" name="fullName">
     </div>
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label for="username">Tài khoản</label>
       <input type="text" id="username" formControlName="username" name="username">
-    </div>
+    </div> -->
     <div class="form-group">
       <label for="email">Email</label>
       <input type="text" id="email" formControlName="email" name="email">
@@ -17,10 +17,38 @@
       <label for="phone">Số điện thoại</label>
       <input type="text" id="phone" formControlName="phone" name="phone">
     </div>
-    <div class="form-group">
-      <label for="address">Địa chỉ</label>
+    <div class="form-group" *ngIf="showAddressInput">
+      <label for="address">Địa chỉ</label><button (click)="toggleAddressInput()">Chỉnh sửa</button>
       <input type="text" id="address" formControlName="address" name="address">
     </div>
+    <div class="select-container" *ngIf="!showAddressInput">
+      <div class="select-column">
+          <select formControlName="provinceChange" [(ngModel)]="selectedProvince" (ngModelChange)="onProvinceChange()" class="select">
+              <option [ngValue]="null">Vui lòng chọn tỉnh/thành phố</option>
+              <option *ngFor="let province of ProvincesAPI[2]" [ngValue]="province.ProvinceID">
+                  {{ province.ProvinceName }}
+              </option>
+          </select>
+      </div>
+      <div class="select-column">
+          <select formControlName="districtChange" [(ngModel)]="selectedDistrict" [disabled]="!Districts" (ngModelChange)="onDistrictChange()" class="select">
+              <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
+              <option *ngFor="let district of DisTrictsFromAPI[2]" [ngValue]="district.DistrictID">
+                  {{ district.DistrictName }}
+              </option>
+          </select>
+      </div>
+      <div class="select-column">
+          <select formControlName="wardChange" [(ngModel)]="selectedWard" [disabled]="!Wards" class="select">
+              <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
+              <option *ngFor="let ward of WardsFromAPI[2]" [ngValue]="ward.WardCode">
+                  {{ ward.WardName }}
+              </option>
+          </select>
+      </div>
+      <button (click)="toggleAddressInput()">Đồng ý</button>
+      <button (click)="toggleAddressInput()">Hủy bỏ</button>
+  </div>
     <div class="form-group">
       <button type="submit">Cập nhật</button>
     </div>

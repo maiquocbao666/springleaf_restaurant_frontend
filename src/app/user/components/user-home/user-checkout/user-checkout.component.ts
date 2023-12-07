@@ -23,7 +23,6 @@ import { Order } from 'src/app/interfaces/order';
   cartInfos: CartInfomation[] = [];
   orderByUser: Order | null = null;
   constructor(
-    private sweetAlertService: ToastService,
     private vnpayService: VNPayService,
     private router: Router,
     private cartService: CartService,
