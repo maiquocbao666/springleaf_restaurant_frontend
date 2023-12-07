@@ -76,8 +76,8 @@ export class UserCategoriesComponent {
 
   getCategories(): void {
     this.categoryService.getCache().subscribe(
-      (cached: any[]) => {
-        this.categories$ = of(cached);
+      (cached: Category[]) => {
+        this.categories$ = of(cached.filter(category => category.active === true));
       }
     );
   }

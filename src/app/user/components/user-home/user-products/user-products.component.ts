@@ -97,7 +97,7 @@ export class UserProductsComponent implements OnInit {
   getProducts(): void {
     this.productService.getCache().subscribe(
       (cached: any[]) => {
-        this.products = cached;
+        this.products = cached.filter(product => product.status === true);
       }
     );
   }

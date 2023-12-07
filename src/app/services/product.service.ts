@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { Product } from '../interfaces/product';
 import { ApiService } from './api.service';
 import { ToastService } from './toast.service';
@@ -77,6 +77,22 @@ export class ProductService extends BaseService<Product> {
     }
     const url = `${this.categoryUrl}/${categoryId}/products`;
     return this.apiService.request<Product[]>('get', url);
+  }
+
+  updateProductsStatusByCategoryId(categoryId: number, status: boolean): void {
+    if (this.cache) {
+      this.cache.forEach(item => {
+        if (item.categoryId === categoryId) {
+          item.status = status;
+          this.update(item).subscribe(
+            () => {       
+            },
+            error => {
+            }
+          );
+        }
+      });
+    }
   }
 
   addToCart(menuItemId: number, deliveryOrderId: number, orderId: number): Observable<any> {

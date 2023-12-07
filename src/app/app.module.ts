@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
@@ -212,6 +213,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatSortModule,
     MatDialogModule,
     MatButtonModule,
+    MatSlideToggleModule,
 
   ],
   providers: [

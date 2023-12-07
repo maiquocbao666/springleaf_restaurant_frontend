@@ -64,7 +64,7 @@
                     <td class="text-center">{{category.name}}</td>
                     <td class="text-center">
                         <div [ngClass]="category.active ? 'badge badge-warning' : 'badge badge-danger'">
-                            {{ category.active ? 'Đang có hàng' : 'Hết hàng' }}
+                            {{ category.active ? 'Có' : 'Không' }}
                         </div>
                     </td>
                     <td class="text-center">{{ category.description.length > 30 ? category.description.slice(0, 30) +
