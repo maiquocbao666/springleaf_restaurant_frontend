@@ -6,8 +6,8 @@
                 <div class="product-grid">
                     <div class="product-image">
                         <a href="#" class="image">
-                            <img src="https://drive.google.com/uc?id={{product.imageUrl}}"
-                                        alt="burger">
+                            <img class="pic-1" (click)="openProductDetailModal(product)"
+                                [src]="'http://localhost:8080/public/getImage/'+ product.imageUrl" alt="burger">
                         </a>
                         <!-- <span class=" product-discount-label">-33%</span> -->
                         <ul class="product-links">

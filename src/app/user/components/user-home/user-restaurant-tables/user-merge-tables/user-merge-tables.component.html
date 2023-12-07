@@ -68,14 +68,14 @@
             <form [formGroup]="reservationForm">
 
                 <div class="col-lg-6 mb-3">
-                    <button class="btn btn-primary" (click)="createMergeTableId()">Tạo id gộp bàn: </button>
+                    <button class="btn btn-primary" (click)="createMergeTableId()">Tạo mã gộp bàn: </button>
                     {{ mergeTableId }}
                     <button class="btn btn-primary" [disabled]="isResetDisabled"
-                        (click)="resetMergeTableId()">Reset</button>
+                        (click)="resetMergeTableId()">Đặt lại</button>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 mb-3">
-                        <label for="mergeTableIdSelect">Hoặc chọn id gộp bàn muốn gộp vào</label>
+                        <label for="mergeTableIdSelect">Hoặc chọn mã gộp bàn muốn gộp vào</label>
                         <select formControlName="mergeTableId" (change)="onMergeTableIdChange($event)"
                             class="form-select" id="mergeTableIdSelect">
                             <option *ngFor="let mergeTableId of mergeTableIds" [value]="mergeTableId">

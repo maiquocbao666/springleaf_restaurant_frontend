@@ -6,6 +6,7 @@
       Thêm món
     </button>
   </p>
+  <!-- HTML file -->
   <p class="float-end">
     <select class="form-select" (change)="onTableSizeChange($event)">
       <option *ngFor="let size of tableSizes">
@@ -50,7 +51,8 @@
             <div class="form-group__file">
               <label for="imageUpload" class="file-label">Chọn ảnh<span style="color: red;">(*)</span></label>
               <div class="file-wrapper">
-                <input type="file" name="imageUpload" #imageUpload formControlName="imageUrl" class="file-input" />
+                <input type="file" name="imageUpload" #imageUpload formControlName="imageUrl" class="file-input"
+                  (change)="onFileSelected($event)" />
                 <div class="file-preview-background">Upload Image</div>
                 <img src="" #imagePreview width="200px" class="file-preview" />
               </div>
@@ -111,8 +113,8 @@
           <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 30) + '...' :
             product.description }}</td>
           <td class="text-center">
-            <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
-              alt="Hình ảnh sản phẩm" style="width: 50px; height: 50px;">
+            <img alt="Hình ảnh sản phẩm" [src]="'http://localhost:8080/public/getImage/' + product.imageUrl"
+              style="width: 50px; height: 50px;">
           </td>
           <td class="text-center">
             <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
