@@ -47,14 +47,14 @@
                 <button type="submit" class="form-control submit-btn mr-2" (click)="bookingTable()">Đặt bàn</button>
                 <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Lịch sử dụng bàn sắp tới
+                    Lịch đã đặt
                 </button>   
             </div>
         </form>
     </div>
     <div class="collapse pb-3" id="collapseExample">
         <div class="card card-body">
-            <h3>Lịch sử dụng</h3>
+            <h3>Lịch đặt bàn sắp tới</h3>
             <form [formGroup]="reservationForm">
                 <div class="col-lg-6 input-group">
                     <div class="inputBox_container">
