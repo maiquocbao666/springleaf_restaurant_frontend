@@ -8,6 +8,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { AdminCategoryDetailComponent } from './admin-category-detail/admin-category-detail.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-categories',
@@ -33,7 +34,8 @@ export class AdminCategoriesComponent {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private sweetAlertService: ToastService
+    private sweetAlertService: ToastService,
+    private http : HttpClient,
 
   ) {
     this.categoryForm = new FormGroup({
@@ -78,7 +80,7 @@ export class AdminCategoriesComponent {
         active: active,
         description: description,
       };
-
+      
       this.categoryService.add(newCategory)
         .subscribe(() => {
           this.categoryForm.reset();
