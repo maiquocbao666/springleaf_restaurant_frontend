@@ -283,7 +283,6 @@ addEventListener('message', async (event) => {
 
             }
             postMessage(dataMap);
-
         } catch {
 
         }

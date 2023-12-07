@@ -5,7 +5,7 @@ export interface User {
   password: string;
   phone: string;
   email: string;
-  address: number; 
+  address: string; 
   image: string;
   managerId: number;
   restaurantBranchId: number; 
