@@ -14,7 +14,7 @@ export class AuthenticationService {
   private apiUrl = 'http://localhost:8080/auth';
   private userCache: User | null = null;
   private cachedDataSubject = new BehaviorSubject<User | null>(null);
-  private listRole  : String[] | null = null;
+  private listRole  : string[] | null = null;
   private listRoleDataSubject = new BehaviorSubject<String[] | null>(null);
   private accessCode  : string | null = null;
   private accessCodeDataSubject = new BehaviorSubject<string | null>(null);
