@@ -40,21 +40,21 @@
                 <span class="form-label">Định dạng VN</span>
                 <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
             </div> -->
+            <mat-checkbox>
+                <a class="dieu-khoan" (click)="openTermsModal()">Đồng ý với điều khoản và chính sách đặt bàn</a>
+            </mat-checkbox>
             <div class=" d-flex col-lg-4 col-12 ms-auto">
-                <button type="submit" class="form-control submit-btn mr-2" (click)="bookingTable()">Đặt
-                    bàn</button>
-
+                <button type="submit" class="form-control submit-btn mr-2" (click)="bookingTable()">Đặt bàn</button>
                 <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Lịch sử
-                </button>
-                <!-- <button class="btn btn-primary" (click)="openTermsModal()">Điều khoản</button> -->
+                    Lịch sử dụng bàn sắp tới
+                </button>   
             </div>
         </form>
     </div>
     <div class="collapse pb-3" id="collapseExample">
         <div class="card card-body">
-            <h3>Lịch sử</h3>
+            <h3>Lịch sử dụng</h3>
             <form [formGroup]="reservationForm">
                 <div class="col-lg-6 input-group">
                     <div class="inputBox_container">

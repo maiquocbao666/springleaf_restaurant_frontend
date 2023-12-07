@@ -27,6 +27,7 @@ export class UserRestaurantTableInfomationComponent {
   maxDate!: string;
   isSearch = false;
   isTermsAccepted: boolean = false;
+  agreeToTerms: boolean = false;
 
 
   searchReservations: Reservation[] = [];
