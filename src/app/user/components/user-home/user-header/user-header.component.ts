@@ -17,6 +17,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { switchMap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
+import { Restaurant } from 'src/app/interfaces/restaurant';
 
 @Component({
   selector: 'app-user-header',
@@ -33,6 +34,8 @@ export class UserHeaderComponent {
   orderByUser: Order | null = null;
   orderDetailByUser: CartDetail[] | null = null;
   orderDetailCount : number | null = null;
+  isConfigUserRestaurant: boolean = true;
+  restaurants: Restaurant[] | null = null;
   constructor(
     private modalService: NgbModal,
     private authService: AuthenticationService,
@@ -44,22 +47,13 @@ export class UserHeaderComponent {
     private http: HttpClient,
     private toastService : ToastService,
   ) {
-    this.authService.cachedData$.subscribe((data) => {
-      this.user = data;
-      console.log(this.user);
-      // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
-      if(this.user != null){
-        this.getUserCart();
-        this.checkUserRestaurant();
-      }
-    });
+    
+    
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
-      //this.getUserOrder(this.cartByUser?.deliveryOrderId as number);
     });
     this.orderService.userOrderCache$.subscribe(order => {
       this.orderByUser = order;
-      //this.getUserOrderDetail(this.orderByUser?.orderId as number);
     });
     this.cartDetailService.orderDetails$.subscribe((orderDetails) => {
       this.orderDetailByUser = orderDetails;
@@ -73,13 +67,14 @@ export class UserHeaderComponent {
     if(this.user?.restaurantBranchId === null){
       // console.log('vô đây')
        this.toastService.showConfirmAlert('Bạn chưa chọn chi nhánh', 'OK', 'warning')
-      // .then((result) => {
-      //   if (result.isConfirmed) {
-      //     console.log('ok');
-      //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-      //     console.log('cancel');
-      //   }
-      // });
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.openUserRestaurant();
+          console.log('ok');
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          console.log('cancel');
+        }
+      });
     }
   }
 
@@ -90,11 +85,8 @@ export class UserHeaderComponent {
   logOut() {
     // Cập nhật userCache trước khi đăng xuất
     this.authService.setUserCache(null);
-    this.authService.logout();
-  }
-
-  getUserLocation(){
     
+    this.authService.logout();
   }
 
   getUserCart() {
@@ -142,7 +134,23 @@ export class UserHeaderComponent {
     //this.user = this.authService.getUserCache(); 
     this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
-
+    this.authService.cachedData$.subscribe((data) => {
+      this.user = data;
+      console.log(this.user);
+      // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
+      if(this.user != null){
+        this.getUserCart();
+        this.checkUserRestaurant();
+      }
+    });
+    const restaurantsString = localStorage.getItem('restaurants');
+    if (restaurantsString) {
+      const parsedRestaurants: Restaurant[] = JSON.parse(restaurantsString);
+      this.restaurants = parsedRestaurants;
+      console.log('restaurant : ',this.restaurants)
+    } else {
+      console.error('No products found in local storage or the value is null.');
+    }
     window.onscroll = () => {
       const currentScrollPos = window.scrollY;
       if (prevScrollPos > currentScrollPos) {
@@ -164,6 +172,11 @@ export class UserHeaderComponent {
   openUserPasswordModel(){
     const modalRef = this.modalService.open(UserPasswordComponent);
     modalRef.componentInstance.selected = 'password';
+  }
+
+  openUserRestaurant(){
+    const modalRef = this.modalService.open(UserPasswordComponent);
+    modalRef.componentInstance.selected = 'restaurant';
   }
 
   truncateString(inputString: string): string {
