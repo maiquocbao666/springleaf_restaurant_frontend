@@ -51,6 +51,7 @@ export class AdminOrderThresholdDetailComponent {
     public activeModal: NgbActiveModal,
   ) {
     this.orderThresholdForm = this.formBuilder.group({
+      orderThresholdId: ['', [Validators.required]],
       reorderPoint: ['', [Validators.required, nonNegativeNumberValidator]],
       ingredientId: ['', [Validators.required]],
       inventoryBranchId: ['', [Validators.required]],
