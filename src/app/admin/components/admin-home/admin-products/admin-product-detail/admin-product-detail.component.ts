@@ -77,6 +77,8 @@ export class AdminProductDetailComponent implements OnInit {
         categoryId: this.product.categoryId,
         imageUrl: this.product.imageUrl
       });
+
+      this.updateImagePreview();
     }
   }
   updateProduct(): void {
@@ -144,6 +146,14 @@ export class AdminProductDetailComponent implements OnInit {
           // Xử lý lỗi nếu có
           console.error('Lỗi khi tải lên:', error);
         });
+    }
+  }
+
+  updateImagePreview() {
+    const imageUrl = this.productForm.get('imageUrl')?.value;
+    alert(imageUrl)
+    if (imageUrl && this.imagePreview) {
+      this.imagePreview.nativeElement.src = 'http://localhost:8080/public/getImage/' + imageUrl;
     }
   }
 }

@@ -77,6 +77,7 @@ export class AdminIngredientsComponent {
       this.ingredientService.add(newIngredient)
         .subscribe(ingredient => {
           this.ingredientForm.reset();
+          this.isSubmitted = false;
           Swal.fire('Thành công', 'Thêm thành công!', 'success');
 
         });

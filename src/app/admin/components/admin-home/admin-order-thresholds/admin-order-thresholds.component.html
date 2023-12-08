@@ -94,7 +94,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let orderThreshold of orderThresholds">
+        <tr
+          *ngFor="let orderThreshold of orderThresholds | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
           <td class="text-center text-muted">{{ orderThreshold.orderThresholdId }}</td>
           <td class="text-center">{{ orderThreshold.reorderPoint }}</td>
           <td class="text-center">{{ getIngredientById(orderThreshold.ingredientId)?.name }}</td>
