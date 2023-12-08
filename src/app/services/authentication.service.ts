@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable} from 'rxjs';
 import { User } from '../interfaces/user';
-import { ApiService } from './api.service';
-import { UserInventoryBranchesModule } from '../user/components/user-home/user-inventory-branches/user-inventory-branches.module';
 import { ToastService } from './toast.service';
 
 @Injectable({
@@ -21,8 +19,10 @@ export class AuthenticationService {
   getDatasOfThisUserWorker: Worker;
 
   constructor(private http: HttpClient,
-    private sweetAlertService: ToastService,) {
-
+    private sweetAlertService: ToastService,
+    
+    ) {
+      
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url));
 
   }
@@ -243,8 +243,9 @@ export class AuthenticationService {
 
   logout() {
     console.log("logout")
-    //localStorage.removeItem('access_token');
+    localStorage.removeItem('access_token');
     const token = localStorage.getItem('access_token');
+    
     this.getDatasOfThisUserWorker.postMessage({
       type: 'logout',
       token

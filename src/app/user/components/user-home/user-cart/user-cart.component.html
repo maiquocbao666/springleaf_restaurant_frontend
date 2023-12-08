@@ -73,17 +73,13 @@
                     <div class="row">
                         <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ calculateTotalPrice() }}</div>
                         <div class="col-lg-12 col-sm-7 mb-2"><b>Giảm giá:</b> {{discountPrice}}</div>
+                        <!-- <div class="col-lg-12 col-sm-7 mb-2"><b>Giảm giá:</b> {{ ship }}</div> -->
+                        <!-- <button (click)="calculateShipping()">Calculate Shipping</button> -->
                         <div class="col-lg-12 col-sm-7 mb-2"><b>Tổng tiền:</b> {{ calculateFinalPrice(discountPrice || 0) }}</div>
                     </div>
                     <hr>
                     <div class="center text-center row">
-                        <button class="learn-more" (click)="checkout()">
-                            <span aria-hidden="true" class="circle">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Thanh toán</span>
-                        </button>
-                        <div class="select-container">
+                        <!-- <div class="select-container">
                             <div class="select-column">
                                 <select [(ngModel)]="selectedProvince" (ngModelChange)="onProvinceChange()" class="select">
                                     <option [ngValue]="null">Vui lòng chọn tỉnh/thành phố</option>
@@ -108,7 +104,17 @@
                                     </option>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="center text-center row">
+                        <button class="learn-more" (click)="checkout()">
+                            <span aria-hidden="true" class="circle">
+                                <span class="icon arrow"></span>
+                            </span>
+                            <span class="button-text">Thanh toán</span>
+                        </button>
                     </div>
                 </div>
             </div>

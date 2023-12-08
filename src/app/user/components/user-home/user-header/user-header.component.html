@@ -70,36 +70,13 @@
                                     </li>
                                     <li><a>MENU<i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
-                                            <!-- <li routerLinkActive="active"><a routerLink="/user/upload">Upload</a></li> -->
-                                            <!-- <li routerLinkActive="active">
-                                                <a routerLink="/user/inventoryBranches">InventoryBranch</a>
+                                            <li routerLinkActive="active" *ngFor="let category of categorys">
+                                                <a [routerLink]="['/user/index/category', category.categoryId, 'products']">{{category.name}}</a>
                                             </li>
-                                            <li routerLinkActive="active"><a routerLink="/user/combo">Combo</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/chat">Chat</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/user/cart">Cart</a></li>
-                                            <li>
-                                                <a routerLink="/user/restaurant"
-                                                    routerLinkActive="active">Restaurant</a>
-                                            </li> -->
+                                            
                                         </ul>
                                     </li>
-                                    <!-- <li><a href="#">Danh mục <i class="icofont-rounded-down"></i></a>
-                                        <ul class="dropdown">
-                                            <li routerLinkActive="active"><a routerLink="/user/upload">Upload</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/user/event">Event</a></li>
-                                            <li routerLinkActive="active">
-                                                <a routerLink="/user/inventoryBranches">InventoryBranch</a>
-                                            </li>
-                                            <li routerLinkActive="active"><a routerLink="/user/combo">Combo</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/chat">Chat</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/user/cart">Cart</a></li>
-                                            <li>
-                                                <a routerLink="/user/restaurant"
-                                                    routerLinkActive="active">Restaurant</a>
-                                            </li>
-                                        </ul>
-                                    </li> -->
-                                    <li routerLinkActive="active"><a routerLink="/admin">ADMIN</a></li>
+                                    <li routerLinkActive="active"><a routerLink="/admin">TRANG QUẢN LÝ</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -109,7 +86,7 @@
                         <nav class="navigation">
                             <ul class="nav menu-right">
                                 <li>
-                                    <button class="mt-3" routerLink="/user/table"> ĐẶT CHỔ</button>
+                                    <button class="mt-3" routerLink="/user/table"> ĐẶT BÀN</button>
                                 </li>
                                 <li><button class="mt-3" routerLink="/user/cart">
                                         <i class="fa-solid fa-cart-shopping">
@@ -130,12 +107,14 @@
                                     </div>
                                     <ul class="dropdown">
                                         <li routerLinkActive="active"><a class="nav-link"
-                                                (click)="openUserPasswordModel()">Đổi mật khẩu
-                                            </a></li>
+                                            (click)="openProfileModel()">Hồ sơ
+                                            cá nhân</a>
+                                    </li>
                                         <li routerLinkActive="active"><a class="nav-link"
-                                                (click)="openProfileModel()">Hồ sơ
-                                                cá nhân</a></li>
-
+                                                (click)="openUserPasswordModel()">Đổi mật khẩu
+                                            </a>
+                                        </li>
+                                        
                                         <li routerLinkActive="active"><a class="nav-link" (click)="logOut()">Đăng
                                                 xuất</a>
                                         </li>

@@ -1,12 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { ProfileComponent } from 'src/app/components/profile/profile.component';
 import { UserPasswordComponent } from 'src/app/components/user-password/user-password.component';
 import { CartDetail } from 'src/app/interfaces/cart-detail';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
-import { DeliveryOrderDetail } from 'src/app/interfaces/delivery-order-detail';
 import { Order } from 'src/app/interfaces/order';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -14,10 +13,9 @@ import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { OrderService } from 'src/app/services/order.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { switchMap } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Restaurant } from 'src/app/interfaces/restaurant';
+import { Category } from 'src/app/interfaces/category';
 
 @Component({
   selector: 'app-user-header',
@@ -36,6 +34,7 @@ export class UserHeaderComponent {
   orderDetailCount : number | null = null;
   isConfigUserRestaurant: boolean = true;
   restaurants: Restaurant[] | null = null;
+  categorys: Category[] | null = null;
   constructor(
     private modalService: NgbModal,
     private authService: AuthenticationService,
@@ -46,9 +45,15 @@ export class UserHeaderComponent {
     private el: ElementRef,
     private http: HttpClient,
     private toastService : ToastService,
+    
   ) {
-    
-    
+    const categoresString = localStorage.getItem('categories');
+    if (categoresString) {
+      const parsedCategories: Category[] = JSON.parse(categoresString);
+      this.categorys = parsedCategories;
+    } else {
+      console.error('No products found in local storage or the value is null.');
+    }
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
     });
@@ -160,11 +165,11 @@ export class UserHeaderComponent {
       }
       prevScrollPos = currentScrollPos;
     };
-
+   
     
 
   }
-
+  
   openProfileModel() {
     const modalRef = this.modalService.open(ProfileComponent);
   }

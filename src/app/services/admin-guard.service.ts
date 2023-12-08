@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { User } from '../interfaces/user';
 import { Role } from '../interfaces/role';
+import { ToastService } from './toast.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +13,11 @@ export class AdminGuardService implements CanActivate {
 
     roles: String[] | null = null;
 
-    constructor(private authService: AuthenticationService, private router: Router) {
+    constructor(
+      private authService: AuthenticationService, 
+      private router: Router,
+      private toast : ToastService,
+      ) {
     }
 
     checkRoles(): boolean {
@@ -23,7 +28,8 @@ export class AdminGuardService implements CanActivate {
         });
 
         if(!this.roles){
-            alert("Tính làm gì vậy anh bạn bruh");
+            // alert("Bạn không có quyền truy cập url này");
+            this.toast.showTimedAlert('404','Bạn không có quyền truy cập', 'error',1500);
             return false;
         }
 
@@ -35,7 +41,8 @@ export class AdminGuardService implements CanActivate {
             console.log('Có vai trò ADMIN hoặc MANAGER');
             return true;
           } else {
-            alert("Tính làm gì vậy anh bạn bruh");
+            this.toast.showTimedAlert('404','Bạn không có quyền truy cập', 'error',1500);
+            //alert("Bạn không có quyền truy cập url này");
             console.log('Không có vai trò ADMIN hoặc MANAGER');
             return false;
           }
