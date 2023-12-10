@@ -58,3 +58,23 @@ button:active {
 button:focus {
   outline: none;
 }
+
+.select-column select {
+  width: 100%; 
+  padding: 8px; 
+  margin-bottom: 2px;
+  border: 1px solid #ced4da; 
+  border-radius: 4px; 
+  box-sizing: border-box; 
+}
+
+/* Tùy chỉnh option trong dropdown */
+.select-column select option {
+  background-color: #fff; 
+  color: #495057; 
+}
+
+/* Tùy chỉnh hover state cho option */
+.select-column select option:hover {
+  background-color: #f8f9fa; 
+}

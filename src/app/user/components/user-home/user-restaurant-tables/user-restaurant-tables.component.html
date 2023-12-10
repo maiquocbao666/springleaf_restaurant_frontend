@@ -22,10 +22,10 @@
                             <i class="fas fa-3x fa-table "></i>
                             <h5>{{ restaurantTable.tableName }}</h5>
                             <div>
-                                <span><i class="fa fa-user"></i>{{ restaurantTable.tableName }}</span>
+                                <span><i class="fa fa-user"></i>{{ restaurantTable.seatingCapacity }} người / bàn</span>
                             </div>
                             <div>
-                                <span><i class="fa fa-user"></i>{{ restaurantTable.tableName }}</span>
+                                <span>{{ restaurantTable.description }}</span>
                             </div>
                             <p class="episode__num">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName}}
                             </p>

@@ -10,36 +10,35 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 15px;
+  padding: 5px;
   display: flex;
+  justify-content: space-between; /* Đặt khoảng cách giữa .left-column và .right-column */
 }
 
 /* Columns */
 .left-column {
-  width: 65%;
+  width: 40%; /* Thay đổi kích thước left-column thành 30% */
   position: relative;
+  overflow: hidden;
 }
 
 .right-column {
-  width: 35%;
-  margin-top: 60px;
+  width: 60%; /* Thay đổi kích thước right-column thành 60% */
+  margin-top: 30px;
+  margin-left: 10px; /* Thêm margin bên trái */
 }
-
 
 /* Left Column */
 .left-column img {
   width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  transition: all 0.3s ease;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
 .left-column img.active {
   opacity: 1;
 }
-
 
 /* Right Column */
 
@@ -109,7 +108,11 @@ body {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
 }
 
-.color-choose input[type="radio"]#red+label span {
+.color-choose input[type="radio"]+label span {
+  background-color: #C91524;
+}
+
+.color-choose input[type="radio"]+label span {
   background-color: #C91524;
 }
 

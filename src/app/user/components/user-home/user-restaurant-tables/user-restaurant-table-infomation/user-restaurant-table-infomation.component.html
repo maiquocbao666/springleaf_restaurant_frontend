@@ -40,8 +40,8 @@
                 <span class="form-label">Định dạng VN</span>
                 <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
             </div> -->
-            <mat-checkbox>
-                <a class="dieu-khoan" (click)="openTermsModal()">Đồng ý với điều khoản và chính sách đặt bàn</a>
+            <mat-checkbox style="margin-top: 10px;" class="col-lg-6">
+                <a class="dieu-khoan" (click)="openTermsModal()"><i>i  </i>Đồng ý với điều khoản và chính sách đặt bàn</a>
             </mat-checkbox>
             <div class=" d-flex col-lg-4 col-12 ms-auto">
                 <button type="submit" class="form-control submit-btn mr-2" (click)="bookingTable()">Đặt bàn</button>
@@ -50,7 +50,7 @@
                     Lịch đã đặt
                 </button>   
                
-                <button class="btn btn-primary" (click)="openTermsModal()">Điều khoản</button>
+                <!-- <button class="btn btn-primary" (click)="openTermsModal()">Điều khoản</button> -->
             </div>
         </form>
     </div>

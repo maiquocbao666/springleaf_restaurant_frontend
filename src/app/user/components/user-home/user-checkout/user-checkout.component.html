@@ -61,7 +61,7 @@
                 width="100">
               <div class="d-flex flex-column ms-3 me-auto">
                 <span>{{cart.menuItemName}}</span>
-                <span>Mô tả: {{cart.menuItem}}</span>
+                <!-- <span>Mô tả: {{cart.menuItem}}</span> -->
                 <span>Số lượng : {{cart.quantity}}</span>
               </div>
               <div>
@@ -105,30 +105,30 @@
               </label>
             </div>
             <!-- Phương thức thanh toán MoMo -->
-            <div class="payment-option">
+            <!-- <div class="payment-option">
               <input type="radio" id="momo" name="paymentMethod" value="momo" [(ngModel)]="selectedPaymentMethod">
               <label for="momo">
                 <img src="https://img.mservice.io/momo-payment/icon/images/logo512.png" alt="MoMo Logo" width="100px">
                 MoMo
               </label>
-            </div>
+            </div> -->
             <div class="payment-option">
-              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod">
+              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod"  (click)="calculateShipping(total || 0)">
               <label for="cod">
                 <img
                   src="https://cdn1.iconfinder.com/data/icons/marketplace-and-shipping-filled-outline/64/COD_cash_on_delivery_shipping_payment_delivery-512.png"
                   alt="cod Logo" width="100px">
-                COD
+                COD (Tính phí)
               </label>
             </div>
             <hr>
-            <div class="input-container">
+            <!-- <div class="input-container">
               <input required="" placeholder="Add Vorcher" type="email">
               <button class="invite-btn" type="button">
                 Add
               </button>
             </div>
-            <hr>
+            <hr> -->
             <ul class="list-group">
               <li class="d-flex align-items-center">
                 <div class="d-flex flex-column ms-3 me-auto">
@@ -143,7 +143,7 @@
                   <span>Phí vận chuyển</span>
                 </div>
                 <div>
-                  <span>-</span>
+                  <span>{{ship}}</span>
                 </div>
               </li>
               <hr>
@@ -152,7 +152,7 @@
                   <span>Tổng cộng</span>
                 </div>
                 <div>
-                  <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ calculateFinalPrice(15000)}}</h4>
+                  <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ calculateFinalPrice(ship || 0)}}</h4>
                 </div>
               </li>
             </ul>
