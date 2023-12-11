@@ -16,6 +16,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { Category } from 'src/app/interfaces/category';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 
 @Component({
   selector: 'app-user-header',
@@ -37,6 +38,7 @@ export class UserHeaderComponent {
   categorys: Category[] | null = null;
   roles: String[] | null = null;
   isAdminHeader: boolean = false;
+  userRestaurant : Restaurant | null = null;
   constructor(
     private modalService: NgbModal,
     private authService: AuthenticationService,
@@ -47,7 +49,7 @@ export class UserHeaderComponent {
     private el: ElementRef,
     private http: HttpClient,
     private toastService: ToastService,
-
+    private restaurantService: RestaurantService,
   ) {
     const categoresString = localStorage.getItem('categories');
     if (categoresString) {
@@ -82,19 +84,23 @@ export class UserHeaderComponent {
             console.log('cancel');
           }
         });
+    }else{
+      if(this.restaurants){
+        for (const item of this.restaurants) {
+          console.log(item);
+          if (item.restaurantId === this.user?.restaurantBranchId) {
+            this.userRestaurant = item;
+            break;
+          }
+        }
+      }
+      
     }
   }
 
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
   }
-
-  // logOut() {
-  //   // Cập nhật userCache trước khi đăng xuất
-  //   this.authService.setUserCache(null);
-
-  //   this.authService.logout();
-  // }
 
   logOut(): void {
     this.authService.logout().subscribe({
@@ -103,6 +109,7 @@ export class UserHeaderComponent {
         this.authService.setUserCache(null);
         this.authService.setRoleCache(null);
         this.cartDetailService.setOrderDetails(null);
+        this.orderDetailCount = 0;
         this.toastService.showTimedAlert('Đăng xuất thành công', 'Hẹn gặp lại', 'success', 1000);
       },
       error: (error) => {
@@ -155,6 +162,7 @@ export class UserHeaderComponent {
 
   ngOnInit(): void {
     //this.user = this.authService.getUserCache(); 
+    this.getRestaurants();
     this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
     this.authService.cachedData$.subscribe((data) => {
@@ -273,6 +281,14 @@ export class UserHeaderComponent {
     console.log('USER');
     // Mặc định trả về 'USER' nếu không có role nào khớp
     return 'USER';
+}
+
+getRestaurants(): void {
+  this.restaurantService.getCache().subscribe(
+    (cached: any[]) => {
+      this.restaurants = cached;
+    }
+  );
 }
 
 

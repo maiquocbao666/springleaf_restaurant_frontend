@@ -169,7 +169,8 @@ export class AppComponent implements OnDestroy {
 
     var accessToken = localStorage.getItem('access_token');
     console.log(accessToken);
-    if (accessToken != null) {
+
+    if (accessToken != null && this.authentication.getUserCache() === null) {
       this.authentication.checkUserByAccessToken(accessToken);
     }
 

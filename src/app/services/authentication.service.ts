@@ -230,7 +230,7 @@ export class AuthenticationService {
           this.setUserCache(data.checkTokenRespone.user);
           this.listRole = data.checkTokenRespone.user.roleName;
           this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
-          this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 1000);
+          //this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 1000);
           resolve(true);
 
         }
@@ -247,17 +247,6 @@ export class AuthenticationService {
       type: 'login-with-google'
     });
   }
-
-
-  // logout() {
-  //   localStorage.removeItem('access_token');
-  //   const token = localStorage.getItem('access_token');
-    
-  //   this.getDatasOfThisUserWorker.postMessage({
-  //     type: 'logout',
-  //     token
-  //   });
-  // }
 
   logout(): Observable<any> {
     const jwtToken = localStorage.getItem('access_token');

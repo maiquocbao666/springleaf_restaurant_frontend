@@ -6,7 +6,8 @@
                 <i class="fas fa-map-marker-alt"></i>
             </div>
             <div class="address">
-                <a href="">288 An Khánh, Ninh Kiều, Cần Thơ</a>
+                <a href="" *ngIf="userRestaurant">{{ userRestaurant.restaurantName}}</a>
+                <a href="" *ngIf="!userRestaurant">Bạn chưa chọn nhà hàng</a>
             </div>
         </div>
         <div class="right-content">
@@ -41,7 +42,7 @@
                     </li>
                 </ul> -->
                 <div class="address">
-                    <a href="">+0789829299</a>
+                    <a href="" *ngIf="userRestaurant">{{ userRestaurant.phone}}</a>
                 </div>
             </div>
         </div>
