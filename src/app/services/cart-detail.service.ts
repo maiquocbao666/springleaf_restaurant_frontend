@@ -13,10 +13,10 @@ import { ToastService } from './toast.service';
 })
 
 export class CartDetailService extends BaseService<CartDetail> {
-  
+
   private orderDetailsSubject = new BehaviorSubject<CartDetail[] | null>(null);
   orderDetails$: Observable<CartDetail[] | null> = this.orderDetailsSubject.asObservable();
-  
+
   //----------------------------------------------------------------
 
   constructor(
@@ -65,20 +65,28 @@ export class CartDetailService extends BaseService<CartDetail> {
   override update(updated: CartDetail): Observable<any> {
     return super.update(updated);
   }
-  
-  override delete(id : number): Observable<any> {
+
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
   //----------------------------------------------------------------------
 
+  getOrderDetails(): Observable<CartDetail[] | null> {
+    return this.orderDetailsSubject.asObservable();
+  }
+
+  setOrderDetails(orderDetails: CartDetail[] | null): void {
+    
+    this.orderDetailsSubject.next(orderDetails);
+  }
   getUserOrderDetail(orderId: number): Observable<CartDetail[] | null> {
-    console.log(orderId);
+
     const jwtToken = localStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }
-    
+
     const customHeader = new HttpHeaders({
       'Authorization': `Bearer ${jwtToken}`,
     });
@@ -93,12 +101,12 @@ export class CartDetailService extends BaseService<CartDetail> {
     return orderDetailsObservable;
   }
 
-  deleteDetail(id : number) : void{
+  deleteDetail(id: number): void {
     const jwtToken = localStorage.getItem('access_token');
     if (!jwtToken) {
-       of(null);
+      of(null);
     }
-    
+
     const customHeader = new HttpHeaders({
       'Authorization': `Bearer ${jwtToken}`,
     });
@@ -106,6 +114,6 @@ export class CartDetailService extends BaseService<CartDetail> {
     this.apiService.request<null>('delete', url, null, customHeader)
   }
 
-  
+
 
 }

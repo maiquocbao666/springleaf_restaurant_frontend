@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable} from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of} from 'rxjs';
 import { User } from '../interfaces/user';
 import { ToastService } from './toast.service';
 
@@ -38,6 +38,14 @@ export class AuthenticationService {
   }
   getUserCache(): User | null {
     return this.userCache;
+  }
+
+  setRoleCache(roles: string[] | null) {
+    this.listRole = roles;
+    this.listRoleDataSubject.next(roles);
+  }
+  getRoleCache(): string[] | null {
+    return this.listRole;
   }
   
   setAccessCodeCacheData(code: string) {
@@ -222,7 +230,7 @@ export class AuthenticationService {
           this.setUserCache(data.checkTokenRespone.user);
           this.listRole = data.checkTokenRespone.user.roleName;
           this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
-          this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 2000);
+          this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 1000);
           resolve(true);
 
         }
@@ -241,15 +249,32 @@ export class AuthenticationService {
   }
 
 
-  logout() {
-    console.log("logout")
-    localStorage.removeItem('access_token');
-    const token = localStorage.getItem('access_token');
+  // logout() {
+  //   localStorage.removeItem('access_token');
+  //   const token = localStorage.getItem('access_token');
     
-    this.getDatasOfThisUserWorker.postMessage({
-      type: 'logout',
-      token
+  //   this.getDatasOfThisUserWorker.postMessage({
+  //     type: 'logout',
+  //     token
+  //   });
+  // }
+
+  logout(): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+    if (!jwtToken) {
+      return of(null);
+    }
+
+    const customHeader = new HttpHeaders({
+      Authorization: `Bearer ${jwtToken}`,
     });
+
+    return this.http.post<any>('http://localhost:8080/auth2/logout', null, {
+      headers: customHeader,
+    });
+    // return this.http.post<any>('https://springleafrestaurantbackend.onrender.com/auth2/logout', null, {
+    //   headers: customHeader,
+    // });
   }
 
   

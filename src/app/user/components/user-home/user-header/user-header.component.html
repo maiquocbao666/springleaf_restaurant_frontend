@@ -76,7 +76,9 @@
                                             
                                         </ul>
                                     </li>
-                                    <li routerLinkActive="active"><a routerLink="/admin">TRANG QUẢN LÝ</a></li>
+                                    <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a routerLink="/admin">TRANG QUẢN LÝ</a></li>
+                                    <li class="active" routerLinkActive="active"><a (click)="getHighestRole(['USER','ADMIN','MANAGER'])">CHECK</a>
+                                </li>
                                 </ul>
                             </nav>
                         </div>
