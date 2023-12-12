@@ -33,7 +33,6 @@
           Loại là bắt buộc.
         </div>
       </div>
-
       <div class="col-md-4">
         <div class="form-group__file">
           <label for="imageUpload" class="file-label">Chọn ảnh<span style="color: red;">(*)</span></label>
@@ -41,7 +40,10 @@
             <input type="file" name="imageUpload" #imageUpload formControlName="imageUrl" class="file-input"
               (change)="onFileSelected($event)" />
             <div class="file-preview-background">Upload Image</div>
-            <img [src]="productForm.get('imageUrl')?.value" #imagePreview width="200px" class="file-preview" />
+            <!-- <img [src]="productForm.get('imageUrl')?.value" #imagePreview width="200px" class="file-preview" /> -->
+            <img [src]="'http://localhost:8080/public/getImage/' + productForm.get('imageUrl')?.value" #imagePreview
+              width="200px" class="file-preview" />
+
           </div>
         </div>
         <div *ngIf="productForm.get('imageUrl')?.invalid && (productForm.get('imageUrl')?.touched || isSubmitted)"

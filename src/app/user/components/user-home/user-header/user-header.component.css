@@ -507,10 +507,14 @@ button:active {
 
 
 .small-round-image {
-	width: 30px;
-	height: 30px;
+	width: 35px;
+	height: 35px;
 	border-radius: 50%;
 	object-fit: cover;
+}
+
+.image {
+	padding-top: 18px;
 }
 
 .topnav {

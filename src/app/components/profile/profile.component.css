@@ -1,5 +1,5 @@
 /* CSS cho form container */
-.form-container {
+/* .form-container {
   width: 500px;
   margin: 0;
   border-radius: 4px;
@@ -12,22 +12,21 @@
 
 h3 {
   margin: 5 5px;
-}
+} */
 
-.grid-form {
+/* .grid-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 20px;
-  /* Khoảng cách giữa hai cột */
-}
+ 
+} */
 
 /* CSS cho label */
-label {
+/* label {
   display: block;
   margin-bottom: 5px;
-}
+} */
 
-/* CSS cho input */
 input {
   width: 100%;
   padding: 10px;
@@ -60,21 +59,79 @@ button:focus {
 }
 
 .select-column select {
-  width: 100%; 
-  padding: 8px; 
+  width: 100%;
+  padding: 8px;
   margin-bottom: 2px;
-  border: 1px solid #ced4da; 
-  border-radius: 4px; 
-  box-sizing: border-box; 
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 /* Tùy chỉnh option trong dropdown */
 .select-column select option {
-  background-color: #fff; 
-  color: #495057; 
+  background-color: #fff;
+  color: #495057;
 }
 
 /* Tùy chỉnh hover state cho option */
 .select-column select option:hover {
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
+}
+
+
+.file-input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* width: 130px; */
+  height: 180px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.file-preview-background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 244px;
+  height: 180px;
+  background-color: #f7f7f7;
+  border: 2px dashed #dfdfdf;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-align: center;
+  color: #bbb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.file-preview {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  top: 15px;
+  left: 50px;
+  border-radius: 65px;
+  z-index: 10;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 0.4s ease-in;
+}
+
+.form-group__file {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  min-width: 130px;
+  height: 180px;
+  justify-content: center;
+  align-items: center;
 }

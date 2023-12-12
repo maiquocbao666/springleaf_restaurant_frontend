@@ -1,9 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { User } from '../interfaces/user';
-import { BaseService } from './base-service';
 import { RxStompService } from '../rx-stomp.service';
 import { ToastService } from './toast.service';
 
@@ -18,6 +17,7 @@ export class UserService {
   usersCache: User[] | null = null;
 
   private profileSubject = new Subject<User>();
+  private apiPostUrl = 'http://localhost:8080/public/create/uploadImage';
 
   getDatasOfThisUserWorker: Worker;
 
@@ -25,7 +25,7 @@ export class UserService {
     private apiService: ApiService,
     private rxStompService: RxStompService,
     private sweetAlertService: ToastService,
-    private http : HttpClient,
+    private http: HttpClient,
   ) {
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url));
   }
@@ -34,8 +34,8 @@ export class UserService {
     const token = localStorage.getItem('access_token');
     const url = 'http://localhost:8080/manager/users';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this.http.post<User[]>(url, null,{ headers });
+
+    return this.http.post<User[]>(url, null, { headers });
   }
 
   getProfile(): Observable<any> {
@@ -77,7 +77,6 @@ export class UserService {
 
   }
 
-
   updateProfile(updatedUserData: User): Observable<any> {
 
     const token = localStorage.getItem('access_token');
@@ -88,6 +87,17 @@ export class UserService {
 
   }
 
+
+
+  uploadImage(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+
+    return this.http.post<any>(this.apiPostUrl, formData, { headers: headers });
+  }
 
 
 }

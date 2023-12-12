@@ -1,58 +1,87 @@
-<h3 style="padding-left: 20px; padding-top: 10px;">Hồ sơ cá nhân</h3>
-<div class="form-container">
-  <form (submit)="updateProfile()" [formGroup]="profileForm" class="grid-form">
-    <div class="form-group">
-      <label for="fullName">Họ và tên</label>
-      <input type="text" id="fullName" formControlName="fullName" name="fullName">
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="text" id="email" formControlName="email" name="email">
-    </div>
-    <div class="form-group">
-      <label for="phone">Số điện thoại</label>
-      <input type="text" id="phone" formControlName="phone" name="phone">
-    </div>
-    <div class="form-group" *ngIf="showAddressInput">
-      <label for="address">Địa chỉ   <i class="fa fa-pen-to-square" (click)="toggleAddressInput()"></i></label> 
-      <input type="text" id="address" formControlName="address" name="address" >
-    </div>
-    <div class="form-group" *ngIf="!showAddressInput">
-      <div class="select-column">
-          <select class="form-select" formControlName="provinceChange" [(ngModel)]="selectedProvince" (ngModelChange)="onProvinceChange()" class="select">
-              <option [ngValue]="null">Vui lòng chọn tỉnh/thành phố</option>
-              <option *ngFor="let province of ProvincesAPI[2]" [ngValue]="province.ProvinceID">
-                  {{ province.ProvinceName }}
-              </option>
-          </select>
+<div class="modal-header">
+  <h4 class="modal-title">Hồ sơ cá nhân</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="container">
+    <form (submit)="updateProfile()" [formGroup]="profileForm">
+      <div class="row">
+        <div class="col-md-4 d-flex justify-content-center">
+          <div class="form-group__file ">
+            <label for="imageUpload" class="file-label">Chọn ảnh<span style="color: red;">(*)</span></label>
+            <div class="file-wrapper">
+              <input type="file" name="imageUpload" #imageUpload class="file-input" (change)="onFileSelected($event)" />
+              <div class="file-preview-background">Upload Image</div>
+              <img [src]="'http://localhost:8080/public/getImage/' + profileForm.get('image')?.value" #imagePreview
+                width="300px" class="file-preview" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="fullName" class="form-label">Họ và tên<span style="color: red;">(*)</span></label>
+              <input type="text" formControlName="fullName" class="form-control" id="unitPrice"
+                placeholder="Nhập họ và tên..">
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email<span style="color: red;">(*)</span></label>
+              <input type="text" id="email" class="form-control" formControlName="email" name="email">
+            </div>
+            <div class="col-md-6" class="form-label">
+              <label for="phone">Số điện thoại</label>
+              <input type="text" id="phone" class="form-control" formControlName="phone" name="phone">
+            </div>
+            <div class="col-md-6" class="form-label" *ngIf="showAddressInput">
+              <label for="address">Địa chỉ <i class="fa fa-pen-to-square" (click)="toggleAddressInput()"></i></label>
+              <input type="text" class="form-control" id="address" formControlName="address" name="address">
+            </div>
+            <div class="col-md-6" *ngIf="!showAddressInput">
+              <div class="select-column">
+                <select class="form-select" formControlName="provinceChange" [(ngModel)]="selectedProvince"
+                  (ngModelChange)="onProvinceChange()" class="select">
+                  <option [ngValue]="null">Vui lòng chọn tỉnh/thành phố</option>
+                  <option *ngFor="let province of ProvincesAPI[2]" [ngValue]="province.ProvinceID">
+                    {{ province.ProvinceName }}
+                  </option>
+                </select>
+              </div>
+              <div class="select-column">
+                <select class="form-select" formControlName="districtChange" [(ngModel)]="selectedDistrict"
+                  [disabled]="!Districts" (ngModelChange)="onDistrictChange()" class="select">
+                  <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
+                  <option *ngFor="let district of DisTrictsFromAPI[2]" [ngValue]="district.DistrictID">
+                    {{ district.DistrictName }}
+                  </option>
+                </select>
+              </div>
+              <div class="select-column">
+                <select class="form-select" formControlName="wardChange" [(ngModel)]="selectedWard" [disabled]="!Wards"
+                  class="select">
+                  <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
+                  <option *ngFor="let ward of WardsFromAPI[2]" [ngValue]="ward.WardCode">
+                    {{ ward.WardName }}
+                  </option>
+                </select>
+              </div>
+
+              <i class="fa-solid fa-check"
+                style="border: 1px solid #75a418; background-color: #75a418; padding: 5px 10px; border-radius: 10px; margin: 5px 5px;"
+                (click)="toggleAddressInput()">
+              </i>
+              <i class="fa-solid fa-x"
+                style="border: 1px solid #b91b06; background-color: #b91b06; padding: 5px 10px; border-radius: 10px; margin: 5px 5px;"
+                (click)="CancelChangeAdress()">
+              </i>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="select-column">
-          <select class="form-select" formControlName="districtChange" [(ngModel)]="selectedDistrict" [disabled]="!Districts" (ngModelChange)="onDistrictChange()" class="select">
-              <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
-              <option *ngFor="let district of DisTrictsFromAPI[2]" [ngValue]="district.DistrictID">
-                  {{ district.DistrictName }}
-              </option>
-          </select>
+      <div class="form-group text-center pt-5">
+        <button type="submit">Cập nhật</button>
       </div>
-      <div class="select-column">
-          <select class="form-select" formControlName="wardChange" [(ngModel)]="selectedWard" [disabled]="!Wards" class="select">
-              <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
-              <option *ngFor="let ward of WardsFromAPI[2]" [ngValue]="ward.WardCode">
-                  {{ ward.WardName }}
-              </option>
-          </select>
-      </div>
-      <i class="fa-solid fa-check" 
-        style="border: 1px solid #75a418; background-color: #75a418; padding: 5px 10px; border-radius: 10px; margin: 5px 5px;"
-        (click)="toggleAddressInput()">
-      </i>
-      <i class="fa-solid fa-x" 
-      style="border: 1px solid #b91b06; background-color: #b91b06; padding: 5px 10px; border-radius: 10px; margin: 5px 5px;"
-        (click)="CancelChangeAdress()">
-      </i>
+    </form>
   </div>
-    <div class="form-group">
-      <button type="submit">Cập nhật</button>
-    </div>
-  </form>
 </div>

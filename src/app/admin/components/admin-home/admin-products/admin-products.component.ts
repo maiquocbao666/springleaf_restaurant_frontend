@@ -27,6 +27,8 @@ export class AdminProductsComponent {
   tableSizes: any = [5, 10, 15, 20];
   productsUrl = 'products';
   categoriesUrl = 'categories';
+  codeCache: string | null = null;
+  code: string = '';
 
   @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
   @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
@@ -140,7 +142,6 @@ export class AdminProductsComponent {
   openProductDetailModal(product: Product) {
     const modalRef = this.modalService.open(AdminProductDetailComponent, { size: 'lg' });
     modalRef.componentInstance.product = product;
-    // Subscribe to the emitted event
     modalRef.componentInstance.productSaved.subscribe(() => {
     });
   }
