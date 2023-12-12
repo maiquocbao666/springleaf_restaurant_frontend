@@ -185,28 +185,6 @@ export class UserRestaurantTableInfomationComponent {
     const outDateTimeStr = `${selectedDate} ${outTimeStr}`;
     const outDateTime = new Date(outDateTimeStr).getTime();
 
-    if (
-      (
-        (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 23:59:59`).getTime())
-        &&
-        (outDateTime >= new Date(`${selectedDate} 23:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 23:59:59`).getTime())
-      )
-      ||
-      (
-        (selectedTime >= new Date(`${selectedDate} 00:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 07:00:00`).getTime())
-        &&
-        (outDateTime >= new Date(`${selectedDate} 00:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 07:00:00`).getTime())
-      )
-    ) {
-      this.selectedTimeMessage = 'Thời gian này không được đặt';
-      this.selectedOutTimeMessage = 'Thời gian này không được đặt';
-      //this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
-      return;
-    } else {
-      this.selectedTimeMessage = '';
-      this.selectedOutTimeMessage = '';
-    }
-
     if (selectedDate === '' || selectedTimeStr === '' || outTimeStr === '') {
       this.selectedDateMessage = 'Mời chọn thời gian';
       this.selectedTimeMessage = 'Mời chọn thời gian';
@@ -215,6 +193,28 @@ export class UserRestaurantTableInfomationComponent {
       return;
     } else {
       this.selectedDateMessage = '';
+      this.selectedTimeMessage = '';
+      this.selectedOutTimeMessage = '';
+    }
+
+    if (
+      (
+        (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 23:59:59`).getTime())
+        ||
+        (outDateTime >= new Date(`${selectedDate} 23:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 23:59:59`).getTime())
+      )
+      ||
+      (
+        (selectedTime >= new Date(`${selectedDate} 00:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 07:00:00`).getTime())
+        ||
+        (outDateTime >= new Date(`${selectedDate} 00:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 07:00:00`).getTime())
+      )
+    ) {
+      this.selectedTimeMessage = 'Thời gian này không được đặt';
+      this.selectedOutTimeMessage = 'Thời gian này không được đặt';
+      //this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
+      return;
+    } else {
       this.selectedTimeMessage = '';
       this.selectedOutTimeMessage = '';
     }
