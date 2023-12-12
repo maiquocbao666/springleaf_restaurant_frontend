@@ -90,9 +90,8 @@
                 </div>
               </div>
               <div class="widget-content-right header-user-info ml-3">
-                <img class="small-round-image"
-                  src="https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg"
-                  alt="Small Image" />
+                <img class="small-round-image mr-2" [src]="'http://localhost:8080/public/getImage/' + user?.image!"
+                  #imagePreview />
               </div>
             </div>
           </div>

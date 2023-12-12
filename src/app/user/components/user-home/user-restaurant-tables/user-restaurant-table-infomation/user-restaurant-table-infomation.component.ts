@@ -44,7 +44,7 @@ export class UserRestaurantTableInfomationComponent {
     private modalService: NgbModal,
     private sweetAlertService: ToastService,
   ) {
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
     });
     this.reservationForm = this.formBuilder.group({

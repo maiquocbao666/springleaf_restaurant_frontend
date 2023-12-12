@@ -34,7 +34,7 @@ export abstract class BaseService<T> {
         this.initializeCache();
 
         this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {
-            console.log('WebSocket Connection State:', state);
+            //console.log('WebSocket Connection State:', state);
             if (state === 0) {
                 if (this.channel === 'public') {
                     this.subscribeToQueue();

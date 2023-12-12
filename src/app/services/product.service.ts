@@ -113,9 +113,9 @@ export class ProductService extends BaseService<Product> {
 
   }
 
-  getImagePath(imageName: string): Observable<Blob> {
-    return this.http.get(`apiGetUrl/${imageName}`, { responseType: 'blob' });
-  }
+  // getImagePath(imageName: string): Observable<Blob> {
+  //   return this.http.get(`apiGetUrl/${imageName}`, { responseType: 'blob' });
+  // }
 
   uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();

@@ -6,7 +6,8 @@
                 <i class="fas fa-map-marker-alt"></i>
             </div>
             <div class="address">
-                <a href="">288 An Khánh, Ninh Kiều, Cần Thơ</a>
+                <a href="" *ngIf="userRestaurant">{{ userRestaurant.restaurantName}}</a>
+                <a *ngIf="!userRestaurant" (click)="openUserRestaurant()">Bạn chưa chọn nhà hàng</a>
             </div>
         </div>
         <div class="right-content">
@@ -41,7 +42,7 @@
                     </li>
                 </ul> -->
                 <div class="address">
-                    <a href="">+0789829299</a>
+                    <a href="" *ngIf="userRestaurant">{{ userRestaurant.phone}}</a>
                 </div>
             </div>
         </div>
@@ -70,15 +71,13 @@
                                     </li>
                                     <li><a>MENU<i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
-                                            <li routerLinkActive="active" *ngFor="let category of categorys">
+                                            <li routerLinkActive="active" *ngFor="let category of categories">
                                                 <a [routerLink]="['/user/index/category', category.categoryId, 'products']">{{category.name}}</a>
                                             </li>
-                                            
+
                                         </ul>
                                     </li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a routerLink="/admin">TRANG QUẢN LÝ</a></li>
-                                    <li class="active" routerLinkActive="active"><a (click)="getHighestRole(['USER','ADMIN','MANAGER'])">CHECK</a>
-                                </li>
                                 </ul>
                             </nav>
                         </div>
@@ -101,22 +100,22 @@
                                     </button>
                                 </li>
                                 <li routerLinkActive="active" *ngIf="user">
-                                    <div class="mt-4" style="align-items: center;">
-                                        <img class="small-round-image"
-                                            src="https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg"
-                                            alt="Small Image" />
+                                    <div class="image" style="align-items: center;">
+                                        <img class="small-round-image mr-2"
+                                            [src]="'http://localhost:8080/public/getImage/' + user.image"
+                                            #imagePreview />
                                         <span>{{truncateString(user.fullName)}}</span>
                                     </div>
                                     <ul class="dropdown">
                                         <li routerLinkActive="active"><a class="nav-link"
-                                            (click)="openProfileModel()">Hồ sơ
-                                            cá nhân</a>
-                                    </li>
+                                                (click)="openProfileModel()">Hồ sơ
+                                                cá nhân</a>
+                                        </li>
                                         <li routerLinkActive="active"><a class="nav-link"
                                                 (click)="openUserPasswordModel()">Đổi mật khẩu
                                             </a>
                                         </li>
-                                        
+
                                         <li routerLinkActive="active"><a class="nav-link" (click)="logOut()">Đăng
                                                 xuất</a>
                                         </li>

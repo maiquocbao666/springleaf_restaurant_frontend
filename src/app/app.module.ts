@@ -105,6 +105,7 @@ import { UserReservationHistoriesComponent } from './user/components/user-home/u
 import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
 import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { AdminUsersDetailComponent } from './admin/components/admin-home/admin-users-detail/admin-users-detail.component';
 import { AdminGuardService } from './services/guard-url/admin-guard.service';
 
 @NgModule({
@@ -174,6 +175,7 @@ import { AdminGuardService } from './services/guard-url/admin-guard.service';
     AdminOrderThresholdDetailComponent,
     AdminStatisticalComponent,
     AdminBillsComponent,
+    AdminUsersDetailComponent,
 
 
     ChatComponent,

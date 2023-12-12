@@ -19,6 +19,16 @@ export class OrderService {
   ordersCache$ = this.ordersCacheSubject.asObservable();
 
   constructor(private apiService: ApiService) { }
+  
+  // Cache order cho từng user
+  setUserOrderCache(order: Order | null): void {
+    this.userOrderCacheSubject.next(order);
+  }
+  getUserOrderCache(): Observable<Order | null> {
+    return this.userOrderCache$;
+  }
+  // --------------------------------------------------------------
+
 
   get ordersCache(): Order[] {
     return this.ordersCacheSubject.value;
@@ -115,7 +125,7 @@ export class OrderService {
     return this.apiService.request<Order>('post', 'user/getOrderByUser', deliveryOrderId, customHeader)
       .pipe(
         tap(order => {
-          this.userOrderCacheSubject.next(order); // Cập nhật cache khi có dữ liệu mới
+          this.setUserOrderCache(order);
         })
       );
   }

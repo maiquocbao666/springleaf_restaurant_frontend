@@ -88,7 +88,11 @@ export class UserCartComponent implements OnInit {
         this.setCartInfomationArrays();
       }
     });
-    this.user = this.authService.getUserCache();
+    this.authService.getUserCache().subscribe(
+      (data) => {
+        this.user = data;
+      }
+    );
     this.initUserAddress();
   }
 

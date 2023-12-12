@@ -67,7 +67,11 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
     } else {
       console.error('No products found in local storage or the value is null.');
     }
-    this.user = this.authService.getUserCache();
+    this.authService.getUserCache().subscribe(
+      (data) => {
+        this.user = data;
+      }
+    );
     this.calculateTotalPrice();
     this.initUserAddress();
     this.deliveryOrderService.userCart$.subscribe(cart => {

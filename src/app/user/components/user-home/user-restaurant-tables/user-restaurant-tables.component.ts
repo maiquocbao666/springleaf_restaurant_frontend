@@ -16,6 +16,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.component';
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-user-table',
@@ -29,6 +30,7 @@ export class UserRestaurantTablesComponent {
   tableStatuses: TableStatus[] = [];
   tableTypes: TableType[] = [];
   restaurants: Restaurant[] = [];
+  user: User | null = null;
 
   constructor(
     private toastService: ToastService,
@@ -47,6 +49,11 @@ export class UserRestaurantTablesComponent {
   }
 
   ngOnInit(): void {
+    this.authenticationService.getUserCache().subscribe(
+      (cached: any | null) => {
+        this.user = cached;
+      }
+    );
     this.getRestaurantTables();
   }
 
@@ -94,7 +101,7 @@ export class UserRestaurantTablesComponent {
       //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
     } else {
       const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'lg' });
-      modalRef.componentInstance.userId = this.authenticationService.getUserCache()?.userId;
+      modalRef.componentInstance.userId = this.user?.userId;
     }
   }
 
@@ -107,7 +114,7 @@ export class UserRestaurantTablesComponent {
     let check = true;
     let reservationInUse: Reservation[] = []
 
-    this.reservationService.getReservationsInUseByUserId(this.authenticationService.getUserCache()?.userId!).subscribe(reservations => {
+    this.reservationService.getReservationsInUseByUserId(this.user?.userId!).subscribe(reservations => {
       if (reservations.length > 0) {
         reservationInUse = reservations;
 

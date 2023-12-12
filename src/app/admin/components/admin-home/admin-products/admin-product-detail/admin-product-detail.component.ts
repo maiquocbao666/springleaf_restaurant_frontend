@@ -24,9 +24,6 @@ export class AdminProductDetailComponent implements OnInit {
   categoriesUrl = 'categories';
   productsUrl = 'products';
 
-  @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
-  @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
-
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
@@ -66,21 +63,6 @@ export class AdminProductDetailComponent implements OnInit {
     );
   }
 
-  setValue() {
-    if (this.product) {
-      this.productForm.patchValue({
-        menuItemId: this.product.menuItemId,
-        name: this.product.name,
-        unitPrice: this.product.unitPrice,
-        description: this.product.description,
-        status: this.product.status,
-        categoryId: this.product.categoryId,
-        imageUrl: this.product.imageUrl
-      });
-
-      this.updateImagePreview();
-    }
-  }
   updateProduct(): void {
     this.isSubmitted = true;
     if (this.productForm.valid) {
@@ -110,6 +92,26 @@ export class AdminProductDetailComponent implements OnInit {
       Swal.fire('Lỗi', 'Vui lòng điền đầy đủ thông tin!', 'warning');
     }
   }
+  @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
+  @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
+
+  setValue() {
+    if (this.product) {
+      this.productForm.patchValue({
+        menuItemId: this.product.menuItemId,
+        name: this.product.name,
+        unitPrice: this.product.unitPrice,
+        description: this.product.description,
+        status: this.product.status,
+        categoryId: this.product.categoryId,
+        imageUrl: this.product.imageUrl
+      });
+
+      this.updateImagePreview(); // Gọi hàm cập nhật ảnh sau khi gán giá trị
+    }
+  }
+
+
   ngAfterViewInit() {
     this.imageUpload.nativeElement.addEventListener('change', (event) => {
       this.readImgUrlAndPreview(event.target!);
@@ -148,12 +150,19 @@ export class AdminProductDetailComponent implements OnInit {
         });
     }
   }
-
+  imageUrlValue: string = ''; 
   updateImagePreview() {
     const imageUrl = this.productForm.get('imageUrl')?.value;
-    alert(imageUrl)
-    if (imageUrl && this.imagePreview) {
-      this.imagePreview.nativeElement.src = 'http://localhost:8080/public/getImage/' + imageUrl;
+    if (imageUrl) {
+      this.imageUrlValue = 'http://localhost:8080/public/getImage/' + imageUrl;
+      console.log('Giá trị của imageUrlValue:', this.imageUrlValue); 
+    } else {
+      this.imageUrlValue = ''; 
     }
   }
+  
+
+
+
+
 }
