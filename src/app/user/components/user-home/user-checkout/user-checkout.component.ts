@@ -173,7 +173,8 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
   }
 
   payWithVNPay(): void {
-
+    this.orderTotal = 3000000;
+    this.orderInfo = '1';
     if (this.orderTotal && this.orderInfo) {
       this.vnpayService.submitOrder(this.orderTotal, this.orderInfo).subscribe({
         next: (data: any) => {
