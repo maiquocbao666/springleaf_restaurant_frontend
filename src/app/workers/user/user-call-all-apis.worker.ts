@@ -30,7 +30,6 @@ addEventListener('message', async (event) => {
                 checkTokenRespone: responseData[0],
             }
             postMessage(dataMap);
-            console.log('Data Map: ' + JSON.stringify(dataMap));
         } catch {
             // Xử lý lỗi nếu cần
         }
@@ -125,7 +124,6 @@ addEventListener('message', async (event) => {
                 configPasswordResponse: responseData[0],
             }
             postMessage(dataMap);
-            console.log(dataMap.configPasswordResponse)
         } catch {
 
         }
@@ -157,7 +155,6 @@ addEventListener('message', async (event) => {
                 changePasswordResponse: responseData[0],
             }
             postMessage(dataMap);
-            console.log(dataMap.changePasswordResponse)
         } catch {
 
         }
@@ -189,7 +186,6 @@ addEventListener('message', async (event) => {
                 forgotPasswordResponse: responseData[0],
             }
             postMessage(dataMap);
-            console.log(dataMap.forgotPasswordResponse)
         } catch {
 
         }

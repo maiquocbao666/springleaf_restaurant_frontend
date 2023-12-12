@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AdminGuardService } from './services/admin-guard.service';
+import { AdminGuardService } from './services/guard-url/admin-guard.service';
+import { ManagerGuardService } from './services/guard-url/manager-guard.service';
 
 const routes: Routes = [
 
@@ -13,14 +14,23 @@ const routes: Routes = [
       ),
     //component: UserHomeComponent
   },
+  { path: 'manager', redirectTo: '/manager/index', pathMatch: 'full' },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./admin/components/admin-home/admin-home.module').then( // đổi lại thành module của mnaager sau khi cập nhật
+        (m) => m.AdminHomeModule
+      ),
+    canActivate: [AdminGuardService],
+  },
   { path: 'admin', redirectTo: '/admin/index', pathMatch: 'full' },
   {
     path: '',
     loadChildren: () =>
       import('./admin/components/admin-home/admin-home.module').then(
-        (m) => m.AdminHomeModule
+        (m) => m.AdminHomeModule // đổi lại thành module của admin sau khi cập nhật
       ),
-    canActivate: [AdminGuardService],
+    canActivate: [ManagerGuardService],
   },
 
 ];

@@ -51,7 +51,7 @@ export class LoginComponent {
     })
     this.authService.setAccessCodeCacheData('');
     // Đăng ký để theo dõi sự thay đổi trong userCache từ AuthenticationService
-    this.authService.cachedData$.subscribe((user) => {
+    this.authService.getUserCache().subscribe((user) => {
       this.user = user;
     });
 

@@ -12,8 +12,10 @@ import { Restaurant } from 'src/app/interfaces/restaurant';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
+import { CategoryService } from 'src/app/services/category.service';
 import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { OrderService } from 'src/app/services/order.service';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 
@@ -27,14 +29,19 @@ export class UserHeaderComponent {
   navbarfixed: boolean = false; // Hiện header
   scrollCounter: number = 0;
   previousScrollY = 0;
+  // Dữ liệu ở component 
   user: User | null = null;
-  cartByUser: DeliveryOrder | null = null;
-  orderByUser: Order | null = null;
-  orderDetailByUser: CartDetail[] | null = null;
-  orderDetailCount: number | null = null;
+  cartByUser: DeliveryOrder | null = null; // Thông tin đặt hàng giỏ hàng
+  orderByUser: Order | null = null; // Thông tin order của giỏ hàng
+  orderDetailByUser: CartDetail[] | null = null; // Thông tin chi tiết của order giỏ hàng
+  orderDetailCount: number | null = null; // Đếm số lượng hàng có trong giỏ hàng
   isConfigUserRestaurant: boolean = true;
+  userRestaurant: Restaurant | null = null;
+  // Dữ liệu ở cache
   restaurants: Restaurant[] | null = null;
-  categorys: Category[] | null = null;
+  categories: Category[] | null = null;
+  roles: String[] | null = null;
+  isAdminHeader: boolean = false;
   constructor(
     private modalService: NgbModal,
     private authService: AuthenticationService,
@@ -45,117 +52,54 @@ export class UserHeaderComponent {
     private el: ElementRef,
     private http: HttpClient,
     private toastService: ToastService,
-
+    private restaurantService: RestaurantService,
+    private categoryService: CategoryService,
   ) {
-    const categoresString = localStorage.getItem('categories');
-    if (categoresString) {
-      const parsedCategories: Category[] = JSON.parse(categoresString);
-      this.categorys = parsedCategories;
-    } else {
-      console.error('No products found in local storage or the value is null.');
-    }
-    this.deliveryOrderService.userCart$.subscribe(cart => {
-      this.cartByUser = cart;
-    });
-    this.orderService.userOrderCache$.subscribe(order => {
-      this.orderByUser = order;
-    });
-    this.cartDetailService.orderDetails$.subscribe((orderDetails) => {
-      this.orderDetailByUser = orderDetails;
-      this.orderDetailCount = orderDetails?.length as number;
-    });
-
-  }
-
-  checkUserRestaurant() {
-    console.log('branch id: ', this.user?.restaurantBranchId);
-    if (this.user?.restaurantBranchId === null) {
-      // console.log('vô đây')
-      this.toastService.showConfirmAlert('Bạn chưa chọn chi nhánh', 'OK', 'warning')
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.openUserRestaurant();
-            console.log('ok');
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            console.log('cancel');
-          }
-        });
-    }
-  }
-
-  openLoginModal() {
-    const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
-  }
-
-  logOut() {
-    // Cập nhật userCache trước khi đăng xuất
-    this.authService.setUserCache(null);
-
-    this.authService.logout();
-  }
-
-  getUserCart() {
-    this.deliveryOrderService.getUserCart().subscribe({
-      next: (response) => {
-        console.log('GetUserOrder: ', response);
-        if (response) {
-          this.getUserOrder(this.cartByUser?.deliveryOrderId as number);
+    // const storedUser = sessionStorage.getItem('userCache');
+    // if(storedUser !== '' && storedUser){
+    //   this.user = JSON.parse(storedUser);
+    // }
+    
+    this.authService.getUserCache().subscribe(
+      (data : any | null) => {
+        console.log('Đang kiểm tra: ' +  JSON.stringify(data));
+        console.log('User trước khi gán: ' + this.user);
+        this.user = data;
+        console.log('User sau khi gán: ' + this.user);
+        
+        if (this.user != null) {
+          this.getUserDeliveryOrder();
+          this.checkUserRestaurant();
         }
-      },
-      error: (error) => {
-        console.error('Error fetching user order:', error);
-      }
     });
+    
   }
-
-  getUserOrder(deliveryOrderId: number) {
-    this.orderService.getUserOrder(deliveryOrderId).subscribe({
-      next: (response) => {
-        console.log('GetUserOrder: ', response);
-        if (response) {
-          this.getUserOrderDetail(this.orderByUser?.orderId as number);
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching user order:', error);
-      }
-    });
-  }
-
-
-  getUserOrderDetail(orderId: number) {
-    this.cartDetailService.getUserOrderDetail(orderId).subscribe({
-      next: (response) => {
-        console.log('GetUserOrder: ', response);
-      },
-      error: (error) => {
-        console.error('Error fetching user order:', error);
-      }
-    });
-  }
-
 
   ngOnInit(): void {
-    //this.user = this.authService.getUserCache(); 
+    this.getRestaurants();
+    this.getCategories();
     this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
-    this.authService.cachedData$.subscribe((data) => {
-      this.user = data;
-      console.log(this.user);
-      // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
-      if (this.user != null) {
-        this.getUserCart();
-        this.checkUserRestaurant();
+    
+    
+    this.authService.roleCacheData$.subscribe((data) => {
+      this.roles = data;
+      if (!this.roles) {
+        this.isAdminHeader = false;
+      }
+      if (this.roles && this.roles.length > 0) {
+        const isAdminOrManager = this.roles.includes('ADMIN') || this.roles.includes('MANAGER');
+
+        if (isAdminOrManager) {
+          this.isAdminHeader = true;
+        } else {
+          this.isAdminHeader = false;
+        }
+      } else {
+        this.isAdminHeader = false;
       }
     });
-    const restaurantsString = localStorage.getItem('restaurants');
-    if (restaurantsString) {
-      const parsedRestaurants: Restaurant[] = JSON.parse(restaurantsString);
-      this.restaurants = parsedRestaurants;
-      console.log('restaurant : ', this.restaurants)
-    } else {
-      console.error('No products found in local storage or the value is null.');
-    }
+
     window.onscroll = () => {
       const currentScrollPos = window.scrollY;
       if (prevScrollPos > currentScrollPos) {
@@ -165,23 +109,46 @@ export class UserHeaderComponent {
       }
       prevScrollPos = currentScrollPos;
     };
-
-
-
   }
 
-  openProfileModel() {
-    const modalRef = this.modalService.open(ProfileComponent, { size: 'lg' });
+  // Kiểm tra user có chọn nhà hàng chưa
+  checkUserRestaurant() {
+    if (this.user?.restaurantBranchId === null && this.isConfigUserRestaurant) {
+      this.toastService.showConfirmAlert('Bạn chưa chọn chi nhánh', '', 'warning')
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.openUserRestaurant();
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            this.isConfigUserRestaurant = false;
+          }
+        });
+    } else {
+      if (this.restaurants) {
+        for (const item of this.restaurants) {
+          if (item.restaurantId === this.user?.restaurantBranchId) {
+            this.userRestaurant = item;
+            break;
+          }
+        }
+      }
+    }
   }
 
-  openUserPasswordModel() {
-    const modalRef = this.modalService.open(UserPasswordComponent);
-    modalRef.componentInstance.selected = 'password';
-  }
-
-  openUserRestaurant() {
-    const modalRef = this.modalService.open(UserPasswordComponent);
-    modalRef.componentInstance.selected = 'restaurant';
+  logOut(): void {
+    this.authService.logout().subscribe({
+      next: (response) => {
+        console.log('Logout successful', response);
+        sessionStorage.removeItem('userCache');
+        this.authService.setUserCache(null);
+        this.authService.setRoleCache(null);
+        this.orderDetailCount = null;
+        this.toastService.showTimedAlert('Đăng xuất thành công', 'Hẹn gặp lại', 'success', 1000);
+      },
+      error: (error) => {
+        console.error('Logout failed', error);
+        this.toastService.showTimedAlert('Xảy ra lỗi', '', 'error', 1000);
+      }
+    });
   }
 
   truncateString(inputString: string): string {
@@ -213,6 +180,92 @@ export class UserHeaderComponent {
           console.error('Error', error);
         }
       });
+  }
+
+  // Get dữ liệu từ cache
+  getRestaurants(): void {
+    this.restaurantService.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
+  }
+
+  getCategories(): void {
+    this.categoryService.getCache().subscribe(
+      (cached: any[]) => {
+        this.categories = cached;
+      }
+    );
+  }
+
+  getUserDeliveryOrder(): void {
+    this.deliveryOrderService.getUserCartCache().subscribe(
+      (cached: any | null) => {
+        if (cached === null) {
+          console.log('Lấy dữ liệu Giỏ hàng mới từ API');
+          this.deliveryOrderService.getUserCart().subscribe();
+        } else {
+          console.log('Lấy dữ liệu từ cache');
+          this.cartByUser = cached;
+        }
+        this.getUserOrders();
+      }
+    );
+  }
+  
+
+  getUserOrders(): void {
+    this.orderService.getUserOrderCache().subscribe(
+    (cached: any | null) => {
+      if(cached === null && this.cartByUser !== null){
+        console.log('Lấy dữ liệu Order mới');
+        this.orderService.getUserOrder(this.cartByUser.deliveryOrderId as number).subscribe(
+          response => {
+            this.orderByUser = response;
+          }
+        );
+      }else{
+        console.log('Lấy dữ liệu từ cache');
+        this.orderByUser = cached;
+        this.getUserOrderDetails();
+      }
+      
+    })
+  }
+  
+  getUserOrderDetails(): void {
+    this.cartDetailService.getOrderDetailsCache().subscribe(
+      (cached: any[] | null) => {
+        if(cached === null && this.orderByUser !== null){
+          this.cartDetailService.getUserOrderDetail(this.orderByUser.orderId).subscribe();
+        }else{
+          this.orderDetailByUser = cached;
+          this.orderDetailCount = cached?.length as number;
+        }
+        
+      }
+    )
+  }
+
+  // Mở Model đến các component khác
+  // Profile
+  openProfileModel() {
+    const modalRef = this.modalService.open(ProfileComponent,{ size: 'lg' });
+  }
+
+  // Quên mật khẩu
+  openUserPasswordModel() {
+    const modalRef = this.modalService.open(UserPasswordComponent);
+    modalRef.componentInstance.selected = 'password';
+  }
+
+  openUserRestaurant() {
+    const modalRef = this.modalService.open(UserPasswordComponent);
+    modalRef.componentInstance.selected = 'restaurant';
+  }
+  openLoginModal() {
+    const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
   }
 
 }

@@ -87,6 +87,15 @@ export class UserService {
 
   }
 
+  updateRestaurant(updatedUserData: User) : Observable<any> {
+    const token = localStorage.getItem('access_token');
+    const url = `http://localhost:8080/auth/choose-restaurant/update`;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put(url, updatedUserData, { headers });
+
+  }
+
 
 
   uploadImage(file: File): Observable<any> {

@@ -67,7 +67,7 @@ export class AdminReservationsComponent {
       // Assuming the service emits Date objects
       this.currentDateTime$ = dateObject.toISOString();
     });
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
     });
     this.reservationForm = this.formBuilder.group({

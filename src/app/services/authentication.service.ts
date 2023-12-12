@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable} from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, catchError, of, switchMap} from 'rxjs';
 import { User } from '../interfaces/user';
 import { ToastService } from './toast.service';
 
@@ -10,8 +10,11 @@ import { ToastService } from './toast.service';
 export class AuthenticationService {
   //private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
   private apiUrl = 'http://localhost:8080/auth';
+  // User cache
   private userCache: User | null = null;
-  private cachedDataSubject = new BehaviorSubject<User | null>(null);
+  private userCachedDataSubject = new BehaviorSubject<User | null>(null);
+  userCache$: Observable<User | null> = this.userCachedDataSubject.asObservable();
+
   private listRole  : string[] | null = null;
   private listRoleDataSubject = new BehaviorSubject<String[] | null>(null);
   private accessCode  : string | null = null;
@@ -20,24 +23,39 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient,
     private sweetAlertService: ToastService,
-    
     ) {
-      
+    const storedUser = sessionStorage.getItem('userCache');
+    if (storedUser) {
+      this.userCache = JSON.parse(storedUser);
+      console.log(this.userCache);
+    }
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url));
-
   }
 
   // Đây là một observable để theo dõi sự thay đổi trong userCache
-  cachedData$: Observable<User | null> = this.cachedDataSubject.asObservable();
   roleCacheData$: Observable<String[] | null> = this.listRoleDataSubject.asObservable();
   accessCodeCacheData$: Observable<string | null> = this.accessCodeDataSubject.asObservable();
   //  ----------------------------------------------------------------------------------- 
-  setUserCache(user: User | null) {
+  // Getter & Setter cho user
+  setUserCache(user: User | null) : void {
+    this.userCachedDataSubject.next(user);
     this.userCache = user;
-    this.cachedDataSubject.next(user);
+    sessionStorage.setItem('userCache', JSON.stringify(user));
   }
-  getUserCache(): User | null {
+  getUserCache(): Observable<User | null> {
+    return this.userCache$;
+  }
+  getCache() {
+    console.log(this.userCache)
     return this.userCache;
+  }
+  // -----------------------------------------
+  setRoleCache(roles: string[] | null) {
+    this.listRole = roles;
+    this.listRoleDataSubject.next(roles);
+  }
+  getRoleCache(): string[] | null {
+    return this.listRole;
   }
   
   setAccessCodeCacheData(code: string) {
@@ -107,6 +125,7 @@ export class AuthenticationService {
         else {
           localStorage.setItem('access_token', data.loginResponse.access_token);
           localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
+          sessionStorage.setItem('accessToken', data.loginResponse.access_token);
           this.setUserCache(data.loginResponse.user);
           this.listRole = data.loginResponse.user.roleName;
           this.sweetAlertService.showTimedAlert('Đăng nhập thành công', '', 'success', 2000);
@@ -115,6 +134,7 @@ export class AuthenticationService {
       };
     });
   }
+ 
 
   configPassword(password: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
@@ -210,6 +230,7 @@ export class AuthenticationService {
 
         if (data.checkTokenRespone.error === 'Session has expired') {
           this.sweetAlertService.showTimedAlert('Phiên làm việc hết hạn', 'Vui lòng đăng nhập lại', 'error', 2000);
+          this.setUserCache(null);
           resolve(false);
 
         } else if (data.checkTokenRespone.error === 'Token was wrong') {
@@ -222,7 +243,7 @@ export class AuthenticationService {
           this.setUserCache(data.checkTokenRespone.user);
           this.listRole = data.checkTokenRespone.user.roleName;
           this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
-          this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 2000);
+          //this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 1000);
           resolve(true);
 
         }
@@ -240,16 +261,22 @@ export class AuthenticationService {
     });
   }
 
+  logout(): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+    if (!jwtToken) {
+      return of(null);
+    }
 
-  logout() {
-    console.log("logout")
-    localStorage.removeItem('access_token');
-    const token = localStorage.getItem('access_token');
-    
-    this.getDatasOfThisUserWorker.postMessage({
-      type: 'logout',
-      token
+    const customHeader = new HttpHeaders({
+      Authorization: `Bearer ${jwtToken}`,
     });
+
+    return this.http.post<any>('http://localhost:8080/auth2/logout', null, {
+      headers: customHeader,
+    });
+    // return this.http.post<any>('https://springleafrestaurantbackend.onrender.com/auth2/logout', null, {
+    //   headers: customHeader,
+    // });
   }
 
   

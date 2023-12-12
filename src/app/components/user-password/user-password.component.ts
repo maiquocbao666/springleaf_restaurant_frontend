@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { Restaurant } from 'src/app/interfaces/restaurant';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-profile',
@@ -15,6 +16,7 @@ export class UserPasswordComponent {
   @Input() selected: any;
   changePasswordForm: FormGroup;
   forgotPasswordForm: FormGroup;
+  chooseRestaurantFrom : FormGroup;
   user: User | null = null;
   password: string = '';
   isCheckPassword: boolean = false;
@@ -28,16 +30,10 @@ export class UserPasswordComponent {
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private sweetAlertService: ToastService,
+    private restaurantSerivce: RestaurantService,
     private userService: UserService,
   ) {
-    const restaurantsString = localStorage.getItem('restaurants');
-    if (restaurantsString) {
-      const parsedRestaurants: Restaurant[] = JSON.parse(restaurantsString);
-      this.restaurants = parsedRestaurants;
-      console.log('restaurant : ', this.restaurants)
-    } else {
-      console.error('No products found in local storage or the value is null.');
-    }
+   
     this.authService.setAccessCodeCacheData('');
     this.changePasswordForm = this.formBuilder.group({
       oldPassword: [null, [Validators.nullValidator]],
@@ -50,7 +46,14 @@ export class UserPasswordComponent {
       password: [null, [Validators.nullValidator]],
       repassword: [null, [Validators.nullValidator]],
     })
-    this.user = this.authService.getUserCache();
+    this.chooseRestaurantFrom = this.formBuilder.group({
+      selectedRestaurant: [null, Validators.required],
+    })
+    this.authService.getUserCache().subscribe(
+      (data) => {
+        this.user = data;
+      }
+    );
       
     this.authService.accessCodeCacheData$.subscribe((code) => {
       if (code != '' && code != null) {
@@ -62,8 +65,52 @@ export class UserPasswordComponent {
     })
   };
   ngOnInit() {
+    this.getRestaurants();
     console.log(this.selected);
   }
+
+  getRestaurants(): void {
+    this.restaurantSerivce.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
+  }
+
+  onSubmit() {
+    if (this.chooseRestaurantFrom.valid && this.user) {
+      const selectedRestaurantValue = this.chooseRestaurantFrom.value.selectedRestaurant;
+      console.log(selectedRestaurantValue);
+      
+      const updateUser: User = {
+        userId: this.user.userId,
+        username: this.user.username,
+        password: this.user.password,
+        fullName: this.user.fullName,
+        email: this.user.email,
+        address: this.user.address,
+        image: this.user.image,
+        managerId: this.user.managerId,
+        phone: this.user.phone,
+        restaurantBranchId: selectedRestaurantValue,
+        status: this.user.status
+      };
+  
+      this.userService.updateRestaurant(updateUser).subscribe({
+        next: (response) => {
+          this.sweetAlertService.showTimedAlert('Cập nhật thành công!', 'Chúc bạn có những trải nhiệm vui vẻ', 'success', 2000);
+          console.log('Update successful', response);
+          this.authService.setUserCache(response);
+        },
+        error: (error) => {
+          console.error('Update failed', error);
+          this.sweetAlertService.showTimedAlert('Cập nhật nhà hàng thất bại', 'Vui lòng liên hệ nhân viên quản lý', 'error', 1500);
+        }
+      });
+    }
+  }
+  
+  
 
   async configPassword() {
     const password = this.password;
@@ -113,6 +160,11 @@ export class UserPasswordComponent {
     // }
 
   }
+  // Trong component.ts
+onRestaurantChange() {
+  console.log('Selected Restaurant ID:', this.selectedRestaurant);
+}
+
 
   async changePassword() {
     const password = this.changePasswordForm.get('newPassword')?.value;

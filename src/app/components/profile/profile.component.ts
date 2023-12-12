@@ -69,7 +69,7 @@ export class ProfileComponent {
       districtChange: '',
       wardChange: '',
     });
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
     });
 
