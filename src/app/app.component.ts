@@ -178,6 +178,13 @@ export class AppComponent implements OnDestroy {
         console.log('Tự động đăng nhập')
       }
     }
+
+    // Lấy role Cache từ session storage
+    var userRoleSession = sessionStorage.getItem('userRoles');
+    console.log(userRoleSession)
+    if(userRoleSession !== '' && userRoleSession){
+      this.authentication.setRoleCache(JSON.parse(userRoleSession));
+    }
     this.getAllDatasFromLocalStorage();
     this.callAllApis();
     

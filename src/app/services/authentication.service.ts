@@ -53,6 +53,7 @@ export class AuthenticationService {
   setRoleCache(roles: string[] | null) {
     this.listRole = roles;
     this.listRoleDataSubject.next(roles);
+    sessionStorage.setItem('userRoles', JSON.stringify(roles));
   }
   getRoleCache(): string[] | null {
     return this.listRole;
@@ -241,8 +242,9 @@ export class AuthenticationService {
           localStorage.setItem('user_login_name', data.checkTokenRespone.user.fullName);
           localStorage.setItem('access_token', data.checkTokenRespone.access_token);
           this.setUserCache(data.checkTokenRespone.user);
-          this.listRole = data.checkTokenRespone.user.roleName;
-          this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
+          this.setRoleCache(data.checkTokenRespone.user.roleName);
+          // this.listRole = data.checkTokenRespone.user.roleName;
+          // this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
           //this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 1000);
           resolve(true);
 
