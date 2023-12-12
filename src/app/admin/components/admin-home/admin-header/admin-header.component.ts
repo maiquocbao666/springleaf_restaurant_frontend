@@ -15,7 +15,7 @@ export class AdminHeaderComponent {
 
   ) {
 
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
       console.log(this.user);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi

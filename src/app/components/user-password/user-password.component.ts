@@ -49,7 +49,11 @@ export class UserPasswordComponent {
     this.chooseRestaurantFrom = this.formBuilder.group({
       selectedRestaurant: [null, Validators.required],
     })
-    this.user = this.authService.getUserCache();
+    this.authService.getUserCache().subscribe(
+      (data) => {
+        this.user = data;
+      }
+    );
       
     this.authService.accessCodeCacheData$.subscribe((code) => {
       if (code != '' && code != null) {

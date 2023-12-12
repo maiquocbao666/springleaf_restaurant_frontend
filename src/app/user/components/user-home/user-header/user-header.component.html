@@ -7,7 +7,7 @@
             </div>
             <div class="address">
                 <a href="" *ngIf="userRestaurant">{{ userRestaurant.restaurantName}}</a>
-                <a href="" *ngIf="!userRestaurant">Bạn chưa chọn nhà hàng</a>
+                <a *ngIf="!userRestaurant" (click)="openUserRestaurant()">Bạn chưa chọn nhà hàng</a>
             </div>
         </div>
         <div class="right-content">
@@ -71,15 +71,13 @@
                                     </li>
                                     <li><a>MENU<i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
-                                            <li routerLinkActive="active" *ngFor="let category of categorys">
+                                            <li routerLinkActive="active" *ngFor="let category of categories">
                                                 <a [routerLink]="['/user/index/category', category.categoryId, 'products']">{{category.name}}</a>
                                             </li>
                                             
                                         </ul>
                                     </li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a routerLink="/admin">TRANG QUẢN LÝ</a></li>
-                                    <li class="active" routerLinkActive="active"><a (click)="getHighestRole(['USER','ADMIN','MANAGER'])">CHECK</a>
-                                </li>
                                 </ul>
                             </nav>
                         </div>

@@ -47,7 +47,7 @@ export class UserProductsComponent implements OnInit {
     private modalService: NgbModal,
     private toastService: ToastService,
   ) {
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
     });
     this.deliveryOrderService.userCart$.subscribe(cart => {

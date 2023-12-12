@@ -166,18 +166,21 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
-
+    
     var accessToken = localStorage.getItem('access_token');
-    console.log(accessToken);
-
-    if (accessToken != null && this.authentication.getUserCache() === null) {
-      this.authentication.checkUserByAccessToken(accessToken);
+    var userSession = sessionStorage.getItem('userCache');
+    console.log(userSession)
+    if(userSession !== '' && userSession){
+      this.authentication.setUserCache(JSON.parse(userSession));
+    }else{
+      if (accessToken != null) {
+        this.authentication.checkUserByAccessToken(accessToken);
+        console.log('Tự động đăng nhập')
+      }
     }
-
-
     this.getAllDatasFromLocalStorage();
     this.callAllApis();
-
+    
   }
 
   getAllDatasFromLocalStorage() {

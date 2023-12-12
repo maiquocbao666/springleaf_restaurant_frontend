@@ -33,6 +33,15 @@ export class CartDetailService extends BaseService<CartDetail> {
   apisUrl = 'cartDetails';
   cacheKey = 'cartDetails';
   apiUrl = 'cartDetail';
+  // ----------- Order Detail cho từng user ---------------
+  setOrderDetailsCache(orderDetails: CartDetail[] | null): void {
+    this.orderDetailsSubject.next(orderDetails);
+  }
+
+  getOrderDetailsCache(): Observable<CartDetail[] | null> {
+    return this.orderDetails$;
+  }
+
 
   //------------------------------------------------------------------
 
@@ -77,7 +86,7 @@ export class CartDetailService extends BaseService<CartDetail> {
   }
 
   setOrderDetails(orderDetails: CartDetail[] | null): void {
-    
+
     this.orderDetailsSubject.next(orderDetails);
   }
   getUserOrderDetail(orderId: number): Observable<CartDetail[] | null> {
@@ -94,7 +103,7 @@ export class CartDetailService extends BaseService<CartDetail> {
     const orderDetailsObservable = this.apiService.request<CartDetail[]>('post', 'user/getOrderDetailByUser', orderId, customHeader)
       .pipe(
         tap(orderDetails => {
-          this.orderDetailsSubject.next(orderDetails); // Thông báo cho subscribers khi có sự thay đổi
+          this.setOrderDetailsCache(orderDetails);
         })
       );
 
@@ -113,7 +122,5 @@ export class CartDetailService extends BaseService<CartDetail> {
     const url = `cartDetail/${id}`
     this.apiService.request<null>('delete', url, null, customHeader)
   }
-
-
 
 }
