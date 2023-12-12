@@ -55,10 +55,10 @@ export class UserHeaderComponent {
     private restaurantService: RestaurantService,
     private categoryService: CategoryService,
   ) {
-    const storedUser = sessionStorage.getItem('userCache');
-    if(storedUser !== '' && storedUser){
-      this.user = JSON.parse(storedUser);
-    }
+    // const storedUser = sessionStorage.getItem('userCache');
+    // if(storedUser !== '' && storedUser){
+    //   this.user = JSON.parse(storedUser);
+    // }
     
     this.authService.getUserCache().subscribe(
       (data : any | null) => {
@@ -138,12 +138,10 @@ export class UserHeaderComponent {
     this.authService.logout().subscribe({
       next: (response) => {
         console.log('Logout successful', response);
+        sessionStorage.removeItem('userCache');
         this.authService.setUserCache(null);
         this.authService.setRoleCache(null);
-        this.cartDetailService.setOrderDetails(null);
-        this.orderDetailCount = 0;
-        sessionStorage.setItem('userCache', '');
-        this.user = null;
+        this.orderDetailCount = null;
         this.toastService.showTimedAlert('Đăng xuất thành công', 'Hẹn gặp lại', 'success', 1000);
       },
       error: (error) => {
