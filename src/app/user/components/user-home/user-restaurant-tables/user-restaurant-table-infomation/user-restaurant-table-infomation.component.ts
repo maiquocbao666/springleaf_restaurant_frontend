@@ -26,8 +26,12 @@ export class UserRestaurantTableInfomationComponent {
   minDate!: string;
   maxDate!: string;
   isSearch = false;
+
+  // validate
   isTermsAccepted: boolean = false;
-  agreeToTerms: boolean = false;
+  selectedDateMessage = '';
+  selectedTimeMessage = '';
+  selectedOutTimeMessage = '';
 
 
   searchReservations: Reservation[] = [];
@@ -48,13 +52,23 @@ export class UserRestaurantTableInfomationComponent {
       this.user = data;
     });
     this.reservationForm = this.formBuilder.group({
-      selectedDate: [, [Validators.nullValidator]],
+      selectedDate: [, [Validators.required]],
       selectedTime: ['', [Validators.required]],
       outTime: ['', [Validators.required]],
       searchKeyWord: ['', Validators.nullValidator],
-      seatingCapacity: [1, Validators.nullValidator]
+      seatingCapacity: [1, Validators.required],
+      agree: [false, Validators.requiredTrue],
     });
+
+    this.reservationForm.get('agree')?.valueChanges.subscribe(
+      (value) => {
+        this.isTermsAccepted = value;
+        console.log(this.isTermsAccepted);
+      }
+    );
+
   }
+
 
   ngOnInit(): void {
     this.minDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')!;
@@ -152,6 +166,7 @@ export class UserRestaurantTableInfomationComponent {
   }
 
   addReservation() {
+
     // Cập nhật ngày min max
     this.updateMinMaxDate();
 
@@ -171,46 +186,76 @@ export class UserRestaurantTableInfomationComponent {
     const outDateTime = new Date(outDateTimeStr).getTime();
 
     if (
-      (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 23:59:59`).getTime())
-      &&
-      (outDateTime >= new Date(`${selectedDate} 23:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 23:59:59`).getTime()
+      (
+        (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 23:59:59`).getTime())
+        &&
+        (outDateTime >= new Date(`${selectedDate} 23:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 23:59:59`).getTime())
+      )
+      ||
+      (
+        (selectedTime >= new Date(`${selectedDate} 00:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 07:00:00`).getTime())
+        &&
+        (outDateTime >= new Date(`${selectedDate} 00:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 07:00:00`).getTime())
       )
     ) {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
+      this.selectedTimeMessage = 'Thời gian này không được đặt';
+      this.selectedOutTimeMessage = 'Thời gian này không được đặt';
+      //this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
       return;
+    } else {
+      this.selectedTimeMessage = '';
+      this.selectedOutTimeMessage = '';
     }
 
     if (selectedDate === '' || selectedTimeStr === '' || outTimeStr === '') {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Mời chọn thời gian', 'warning', 3000);
+      this.selectedDateMessage = 'Mời chọn thời gian';
+      this.selectedTimeMessage = 'Mời chọn thời gian';
+      this.selectedOutTimeMessage = 'Mời chọn thời gian';
+      //this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Mời chọn thời gian', 'warning', 3000);
       return;
+    } else {
+      this.selectedDateMessage = '';
+      this.selectedTimeMessage = '';
+      this.selectedOutTimeMessage = '';
     }
 
     // Nếu thời gian chọn = minDate hoặc maxDate
     if (!this.checkDate(selectedDate, this.minDate, this.maxDate)) {
 
       // Add 1 minute to the current time
-      const oneMinuteLater = new Date(new Date().getTime() + 60 * 1000).getTime(); // Thêm 1 phút
+      const fiveMinutesLater = new Date(new Date().getTime() + 60 * 1000 * 5).getTime(); // Thêm 1 phút
       const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000).getTime(); // Thêm 1 tiếng
 
-      if (selectedTime < oneMinuteLater) {
-        this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian đến phải lớn hơn hoặc bằng giờ hiện tại 1 phút', 'warning', 3000);
+      if (selectedTime < fiveMinutesLater) {
+        this.selectedTimeMessage = 'Thời gian đến phải lớn hơn hoặc bằng giờ hiện tại 5 phút';
+        //this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian đến phải lớn hơn hoặc bằng giờ hiện tại 5 phút', 'warning', 3000);
         return;
+      } else {
+        this.selectedTimeMessage = '';
       }
 
     }
 
-    const threeMinutesLater = new Date(new Date(selectedDateTimeStr).getTime() + 3 * 60 * 1000).getTime(); // Thêm 2 phút
-    const oneHourLater = new Date(new Date(selectedDateTimeStr).getTime() + 60 * 60 * 1000).getTime(); // Thêm 1 tiếng
+    const fiveMinutesLater = new Date(new Date(selectedDateTimeStr).getTime() + 5 * 60 * 1000).getTime(); // Thêm 2 phút
+    const twoHoursLater = new Date(new Date(selectedDateTimeStr).getTime() + 60 * 60 * 1000 * 2).getTime(); // Thêm 1 tiếng
     //console.log(selectedDateTimeStr, outDateTimeStr);
 
-    if (outDateTime < threeMinutesLater) {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian rời đi phải lớn hơn hoặc bằng thời gian đến 3 phút', 'warning', 3000);
+    if (outDateTime < fiveMinutesLater) {
+      this.selectedOutTimeMessage = 'Thời gian rời đi phải lớn hơn hoặc bằng thời gian đến 5 phút';
+      //this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian rời đi phải lớn hơn hoặc bằng thời gian đến 3 phút', 'warning', 3000);
       return;
+    } else {
+      this.selectedOutTimeMessage = '';
     }
 
     if (this.reservationService.isReservationsInTimeRangeByTableId(this.restaurantTable?.tableId!, selectedDateTimeStr, outDateTimeStr)) {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Khoảng thời gian này đã được sử dụng', 'warning', 3000);
+      this.selectedTimeMessage = 'Khoảng thời gian này đã được sử dụng';
+      this.selectedOutTimeMessage = 'Khoảng thời gian này đã được sử dụng';
+      //this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Khoảng thời gian này đã được sử dụng', 'warning', 3000);
       return;
+    } else {
+      this.selectedTimeMessage = '';
+      this.selectedOutTimeMessage = '';
     }
 
     // Tổng hợp ngày giờ lại
