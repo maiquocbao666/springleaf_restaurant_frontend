@@ -80,7 +80,7 @@
                 <tr>
                     <th class="text-center">Mã đặt bàn</th>
                     <th class="text-center">Mã bàn</th>
-                    <th class="text-center">Khách</th>
+                    <th class="text-center">Mã người dùng</th>
                     <th class="text-center">Ngày tới</th>
                     <th class="text-center">Giờ tới</th>
                     <th class="text-center">Giờ đi</th>
@@ -93,7 +93,7 @@
             <tbody>
                 <tr
                     *ngFor="let reservation of reservations | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                    <td class="text-center text-muted">RS{{ reservation.reservationId }}</td>
+                    <td class="text-center text-muted">{{ reservation.reservationId }}</td>
                     <td class="text-center text-muted">{{ reservation.restaurantTableId }}</td>
                     <td class="text-center text-muted">{{ reservation.userId }}</td>
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
