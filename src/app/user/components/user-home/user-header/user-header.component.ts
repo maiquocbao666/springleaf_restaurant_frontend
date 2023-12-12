@@ -73,15 +73,6 @@ export class UserHeaderComponent {
         }
     });
     
-  }
-
-  ngOnInit(): void {
-    this.getRestaurants();
-    this.getCategories();
-    this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
-    let prevScrollPos = window.scrollY;
-    
-    
     this.authService.roleCacheData$.subscribe((data) => {
       this.roles = data;
       if (!this.roles) {
@@ -99,6 +90,13 @@ export class UserHeaderComponent {
         this.isAdminHeader = false;
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.getRestaurants();
+    this.getCategories();
+    this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
+    let prevScrollPos = window.scrollY;
 
     window.onscroll = () => {
       const currentScrollPos = window.scrollY;
