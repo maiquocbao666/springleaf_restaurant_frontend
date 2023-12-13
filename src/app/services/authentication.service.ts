@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, of, switchMap} from 'rxjs';
 import { User } from '../interfaces/user';
 import { ToastService } from './toast.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient,
     private sweetAlertService: ToastService,
+    private cookieService: CookieService
     ) {
     const storedUser = sessionStorage.getItem('userCache');
     if (storedUser) {
@@ -101,7 +103,8 @@ export class AuthenticationService {
     return this.http.post(`${this.apiUrl}/register`, registerData);
   }
 
-  login(username: string, password: string): Promise<boolean> {
+  login(username: string, password: string, rememberMe: boolean): Promise<boolean> {
+    console.log('here auth' + rememberMe)
     return new Promise<boolean>((resolve, reject) => {
       const loginData = {
         userName: username,
@@ -124,11 +127,13 @@ export class AuthenticationService {
           resolve(false);
         }
         else {
+          localStorage.setItem('user_login_name', data.loginResponse.user.fullName);
           localStorage.setItem('access_token', data.loginResponse.access_token);
-          localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
-          sessionStorage.setItem('accessToken', data.loginResponse.access_token);
           this.setUserCache(data.loginResponse.user);
-          this.listRole = data.loginResponse.user.roleName;
+          this.setRoleCache(data.loginResponse.user.roleName);
+          if(rememberMe){
+            this.cookieService.set('access_token', data.loginResponse.access_token); // Lưu jwt cho lần đăng nhập sau
+          }
           this.sweetAlertService.showTimedAlert('Đăng nhập thành công', '', 'success', 2000);
           resolve(true);
         }

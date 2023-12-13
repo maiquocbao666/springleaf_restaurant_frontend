@@ -48,7 +48,17 @@
             <h1>Đăng nhập</h1>
 
             <input type="text" id="usernameLogin" placeholder="Enter Username" formControlName="username" />
+            <i *ngIf="loginForm.get('username')?.getError('message')" style="color: red;">
+                {{ loginForm.get('username')?.getError('message') }}
+            </i>
             <input type="password" id="passwordLogin" placeholder="Enter Password" formControlName="password" />
+            <i *ngIf="loginForm.get('password')?.getError('message')" style="color: red;">
+                {{ loginForm.get('password')?.getError('message') }}
+            </i>
+            <div>
+                <input type="checkbox" id="rememberMe" formControlName="rememberMe" />
+                <label for="rememberMe">Lưu tài khoản</label>
+              </div>
             <a (click)="openUserPasswordModel()">Quên mật khẩu?</a>
             <button type="submit" #signIn>Đăng nhập</button>
             <a class="google-a-button" href="http://localhost:8080/">

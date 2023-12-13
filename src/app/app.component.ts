@@ -36,6 +36,7 @@ import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
 import { OrderThresholdService } from "./services/order-threshold.service";
 import { DiscountService } from "./services/discount.service";
+import { CookieService } from "ngx-cookie-service";
 
 
 interface DataService<T> {
@@ -99,6 +100,7 @@ export class AppComponent implements OnDestroy {
     private tableTypesService: TableTypeService,
     private reservationStatusesService: ReservationStatusService,
     private discountsService : DiscountService,
+    private cookieService: CookieService,
   ) {
 
     window.addEventListener('storage', (event) => {
@@ -167,13 +169,14 @@ export class AppComponent implements OnDestroy {
 
   ngOnInit(): void {
     
-    var accessToken = localStorage.getItem('access_token');
-    var userSession = sessionStorage.getItem('userCache');
-    console.log(userSession)
+    //var accessToken = localStorage.getItem('access_token'); // lấy từ cookie
+    var accessToken = this.cookieService.get('access_token');
+    var userSession = sessionStorage.getItem('userCache'); // lấy từ sessionStorage
+    
     if(userSession !== '' && userSession){
       this.authentication.setUserCache(JSON.parse(userSession));
     }else{
-      if (accessToken != null) {
+      if (accessToken) {
         this.authentication.checkUserByAccessToken(accessToken);
         console.log('Tự động đăng nhập')
       }
