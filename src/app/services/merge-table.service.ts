@@ -109,4 +109,43 @@ export class MergeTableService extends BaseService<MergeTable> {
         return foundElement?.mergeTableId || '';
     }
 
+    findMergeTablesByMergeTableId(mergeTableId: string): Observable<MergeTable[]> {
+        if (!this.cache) {
+            return of([]);
+        }
+
+        // Find all MergeTable instances with the specified mergeTableId
+        const matchingMergeTables = this.cache.filter(mergeTable => mergeTable.mergeTableId === mergeTableId);
+
+        return of(matchingMergeTables);
+    }
+
+    updateStatusTablesByMergeTableId(mergeTableId: string, status: string): void {
+        if (!this.cache) {
+            return;
+        }
+    
+        const matchingMergeTables = this.cache.filter(mergeTable => mergeTable.mergeTableId === mergeTableId);
+    
+        // Update the status for each matching MergeTable
+        matchingMergeTables.forEach(mergeTable => {
+            mergeTable.status = status;
+        });
+    
+        // Update the backend for each matching MergeTable
+        matchingMergeTables.forEach(mergeTable => {
+            const updatedObject = { ...mergeTable, status: status };
+            this.update(updatedObject).subscribe(
+                updatedMergeTable => {
+                    // Handle the updated MergeTable if needed
+                    console.log('Status updated successfully:', updatedMergeTable);
+                },
+                error => {
+                    // Handle error if the update fails
+                    console.error('Error updating status:', error);
+                }
+            );
+        });
+    }
+
 }

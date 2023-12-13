@@ -1,2 +1,35 @@
-<p>admin-merge-tables works!</p>
+<h1>Gộp bàn</h1>
 
+<table class="table table-bordered">
+    <thead>
+        <th>Số thứ tự</th>
+        <th>Mã bàn</th>
+        <th>Mã gộp bàn</th>
+        <th>Trạng thái</th>
+        <th>Thời gian gộp</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let mergeTable of mergeTablesCache">
+            <td>{{ mergeTable.id }}</td>
+            <td [ngStyle]="{
+                'color': mergeTableColors[mergeTable.mergeTableId],
+                'font-weight': 'bold',
+              }">{{ mergeTable.tableId }}</td>
+            <td [ngStyle]="{
+                'color': mergeTableColors[mergeTable.mergeTableId],
+                'font-weight': 'bold',
+              }">{{ mergeTable.mergeTableId }}</td>
+            <td>{{ mergeTable.status }}</td>
+            <td>{{ mergeTable.mergeTime }}</td>
+            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Xác nhận đã gộp')">Xác nhận đã gộp</button></td>
+            <td><button>Xóa</button></td>
+            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Từ chối gộp')">Từ chối gộp</button></td>
+            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Đang chờ xác nhận')">Reset</button></td>
+            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Đã tách')">Đã tách</button></td>
+        </tr>
+    </tbody>
+</table>
