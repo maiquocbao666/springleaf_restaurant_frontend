@@ -138,6 +138,12 @@ const routes: Routes = [
         )
       },
       {
+        path: 'mergeTables',
+        loadChildren: () => import('./admin-merge-tables/admin-merge-tables.module').then(
+          (m) => m.AdminMergeTablesModule
+        )
+      },
+      {
         path: 'reservationStatuses',
         loadChildren: () => import('./admin-reservation-statuses/admin-reservation-statuses.module').then(
           (m) => m.AdminReservationStatusesModule
