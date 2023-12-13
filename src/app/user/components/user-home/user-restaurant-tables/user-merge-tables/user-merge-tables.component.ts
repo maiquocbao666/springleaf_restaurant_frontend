@@ -81,8 +81,12 @@ export class UserMergeTablesComponent {
   getMergeTable() {
     this.mergeTableService.getCache().subscribe(
       cached => {
-        this.mergeTablesCache = cached
-        //console.log(this.mergeTablesCache);
+        // Filter items with status 'Chờ xác nhận' or 'Đã gộp'
+        this.mergeTablesCache = cached.filter(mergeTable =>
+          mergeTable.status === 'Chờ xác nhận' || mergeTable.status === 'Đã gộp'
+        );
+  
+        // console.log(this.mergeTablesCache);
       }
     );
   }
@@ -105,11 +109,11 @@ export class UserMergeTablesComponent {
   }
 
   getClassForStatus(status: string): string {
-    if (status === 'Đang chờ xác nhận') {
+    if (status === 'Chờ xác nhận') {
       return 'badge badge-warning';
-    } else if (status === 'Đã sử dụng xong') {
+    } else if (status === 'Đã gộp') {
       return 'badge badge-success';
-    } else if (status === 'Đang sử dụng') {
+    } else if (status === 'Từ chối gộp') {
       return 'badge badge-danger';
     }
     return ''; // Hoặc class mặc định khác nếu cần
@@ -134,7 +138,7 @@ export class UserMergeTablesComponent {
       tableId: tableId,
       mergeTableId: this.mergeTableId,  // Sử dụng uuid để tạo mã định danh duy nhất
       mergeTime: this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss')!,
-      status: 'Đang chờ xác nhận',
+      status: 'Chờ xác nhận',
     };
 
     this.mergeTableService.add(mergeTable).subscribe(() => {

@@ -1,35 +1,86 @@
-<h1>Gộp bàn</h1>
+<div class="container">
+    <h1>Gộp bàn</h1>
 
-<table class="table table-bordered">
-    <thead>
-        <th>Số thứ tự</th>
-        <th>Mã bàn</th>
-        <th>Mã gộp bàn</th>
-        <th>Trạng thái</th>
-        <th>Thời gian gộp</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr *ngFor="let mergeTable of mergeTablesCache">
-            <td>{{ mergeTable.id }}</td>
-            <td [ngStyle]="{
+    <form [formGroup]="reservationForm">
+
+        <div class="col-lg-6 mb-3">
+            <button class="btn btn-primary" (click)="createMergeTableId()">Tạo mã gộp bàn: </button>
+            {{ mergeTableId }}
+            <button class="btn btn-primary" [disabled]="isResetDisabled" (click)="resetMergeTableId()">Đặt lại</button>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 mb-3">
+                <label for="mergeTableIdSelect">Hoặc chọn mã gộp bàn muốn gộp vào</label>
+                <select formControlName="mergeTableId" (change)="onMergeTableIdChange($event)" class="form-select"
+                    id="mergeTableIdSelect">
+                    <option *ngFor="let mergeTableId of mergeTableIds" [value]="mergeTableId">
+                        {{mergeTableId}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-lg-6 mb-3">
+                <label for="tableIdSelect">Chọn mã bàn muốn gộp vào</label>
+                <select formControlName="tableId" (change)="onTableIdChange($event)" class="form-select"
+                    id="tableIdSelect">
+                    <option *ngFor="let reservation of reservationsInUse" [value]="reservation.restaurantTableId">
+                        {{ reservation.restaurantTableId }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <p>Mã hiện đang chọn: {{ mergeTableId }}</p>
+        </div>
+
+        <div class="mb-3">
+            <button (click)="mergeTables()" class="btn btn-info">Gộp</button>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-responsive">
+        <thead>
+            <th>Số thứ tự</th>
+            <th>Mã bàn</th>
+            <th>Mã gộp bàn</th>
+            <th>Đổi riêng lẻ</th>
+            <th>Thời gian gộp</th>
+            <th>Đổi tất cả</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let mergeTable of mergeTablesCache">
+                <td>{{ mergeTable.id }}</td>
+                <td [ngStyle]="{
                 'color': mergeTableColors[mergeTable.mergeTableId],
                 'font-weight': 'bold',
               }">{{ mergeTable.tableId }}</td>
-            <td [ngStyle]="{
+                <td [ngStyle]="{
                 'color': mergeTableColors[mergeTable.mergeTableId],
                 'font-weight': 'bold',
               }">{{ mergeTable.mergeTableId }}</td>
-            <td>{{ mergeTable.status }}</td>
-            <td>{{ mergeTable.mergeTime }}</td>
-            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Xác nhận đã gộp')">Xác nhận đã gộp</button></td>
-            <td><button>Xóa</button></td>
-            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Từ chối gộp')">Từ chối gộp</button></td>
-            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Đang chờ xác nhận')">Reset</button></td>
-            <td><button (click)="changeMergeStatus(mergeTable.mergeTableId, 'Đã tách')">Đã tách</button></td>
-        </tr>
-    </tbody>
-</table>
+                <td>
+                    <select [(ngModel)]="mergeTable.status"
+                        (ngModelChange)="changeMergeStatusOne(mergeTable.id!, $event)" class="form-select">
+                        <option value="Đã gộp">Đã gộp</option>
+                        <option value="Từ chối gộp">Từ chối gộp</option>
+                        <option value="Chờ xác nhận">Chờ xác nhận</option>
+                        <option value="Đã tách">Đã tách</option>
+                    </select>
+                </td>
+                <td>{{ mergeTable.mergeTime }}</td>
+                <td>
+                    <select (change)="onStatusChange(mergeTable.mergeTableId, $event)" class="form-select">
+                        <option [value]="'Đã gộp'" [selected]="mergeTable.status === 'Đã gộp'">Đã gộp</option>
+                        <option [value]="'Từ chối gộp'" [selected]="mergeTable.status === 'Từ chối gộp'">Từ chối gộp
+                        </option>
+                        <option [value]="'Chờ xác nhận'" [selected]="mergeTable.status === 'Chờ xác nhận'">Chờ xác nhận
+                        </option>
+                        <option [value]="'Đã tách'" [selected]="mergeTable.status === 'Đã tách'">Đã tách</option>
+                    </select>
+                </td>
+                <td><button (click)="delete(mergeTable.id!)">Xóa</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

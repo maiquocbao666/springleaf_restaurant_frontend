@@ -8,40 +8,6 @@
 
     <div class="row">
         <div class="col-lg-12 mt-3">
-            <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">
-                Các bàn hiện đang gộp
-            </button>
-            <div class="collapse" id="collapseExample">
-                <!-- Bảng hiển thị thông tin các bàn gộp -->
-                <table class="table table-borderless table-striped table-hover mt-3">
-                    <!-- Đầu bảng -->
-                    <thead>
-                        <tr>
-                            <th class="text-center">Mã</th>
-                            <th class="text-center">Mã gộp bàn</th>
-                            <th class="text-center">Thời gian gộp</th>
-                            <th class="text-center">Trạng thái</th>
-                            <th class="text-center">Mã bàn</th>
-                        </tr>
-                    </thead>
-                    <!-- Thân bảng -->
-                    <tbody>
-                        <tr *ngFor="let mergeTableCache of mergeTablesCache">
-                            <td class="text-center text-muted">{{ mergeTableCache.id }}</td>
-                            <td class="text-center text-muted">{{ mergeTableCache.mergeTableId }}</td>
-                            <td class="text-center text-muted">{{ mergeTableCache.mergeTime }}</td>
-                            <!-- <td class="text-center text-muted">{{ mergeTableCache.status }}</td> -->
-                            <td class="text-center">
-                                <div [ngClass]="getClassForStatus(mergeTableCache.status)">
-                                    {{ mergeTableCache.status }}
-                                </div>
-                            </td>
-                            <td class="text-center text-muted">{{ mergeTableCache.tableId }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
             <!-- Bảng hiển thị các đặt bàn -->
             <div class="card mt-3">
@@ -67,12 +33,12 @@
         <div class="col-lg-12 mt-3">
             <form [formGroup]="reservationForm">
 
-                <div class="col-lg-6 mb-3">
+                <div>
                     <button class="btn btn-primary" (click)="createMergeTableId()">Tạo mã gộp bàn: </button>
                     {{ mergeTableId }}
-                    <button class="btn btn-primary" [disabled]="isResetDisabled"
-                        (click)="resetMergeTableId()">Đặt lại</button>
-                </div>
+                    <button class="btn btn-primary" [disabled]="isResetDisabled" (click)="resetMergeTableId()">Đặt
+                        lại</button>
+                </div> <br>
                 <div class="row">
                     <div class="col-lg-6 mb-3">
                         <label for="mergeTableIdSelect">Hoặc chọn mã gộp bàn muốn gộp vào</label>
@@ -105,25 +71,41 @@
             </form>
         </div>
 
-        <!-- Bảng hiển thị các bàn muốn gộp -->
-        <div class="col-lg-12">
-            <div>Bàn muốn gộp</div>
-            <table class="table table-borderless table-striped table-hover">
+        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">
+            Các bàn hiện đang gộp
+        </button>
+        <div class="collapse" id="collapseExample">
+            <!-- Bảng hiển thị thông tin các bàn gộp -->
+            <table class="table table-borderless table-striped table-hover mt-3">
+                <!-- Đầu bảng -->
                 <thead>
-                    <th class="text-center">Mã bàn</th>
-                    <th class="text-center">Mã gợp bàn</th>
-                    <th class="text-center">Thời gian gợp</th>
-                    <th class="text-center">Trạng thái</th>
+                    <tr>
+                        <th class="text-center">Mã</th>
+                        <th class="text-center">Mã gộp bàn</th>
+                        <th class="text-center">Thời gian gộp</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Mã bàn</th>
+                    </tr>
                 </thead>
+                <!-- Thân bảng -->
                 <tbody>
-                    <tr *ngFor="let tableToMerge of tablesToMerge">
-                        <td class="text-center">{{ tableToMerge.tableId }}</td>
-                        <td class="text-center">{{ tableToMerge.mergeTableId }}</td>
-                        <td class="text-center">{{ tableToMerge.mergeTime }}</td>
-                        <td class="text-center">{{ tableToMerge.status }}</td>
+                    <tr *ngFor="let mergeTableCache of mergeTablesCache">
+                        <td class="text-center text-muted">{{ mergeTableCache.id }}</td>
+                        <td class="text-center text-muted">{{ mergeTableCache.mergeTableId }}</td>
+                        <td class="text-center text-muted">{{ mergeTableCache.mergeTime }}</td>
+                        <!-- <td class="text-center text-muted">{{ mergeTableCache.status }}</td> -->
+                        <td class="text-center">
+                            <div [ngClass]="getClassForStatus(mergeTableCache.status)">
+                                {{ mergeTableCache.status }}
+                            </div>
+                        </td>
+                        <td class="text-center text-muted">{{ mergeTableCache.tableId }}</td>
+                        
                     </tr>
                 </tbody>
             </table>
         </div>
+
     </div>
 </div>
