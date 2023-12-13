@@ -176,6 +176,12 @@ export class AdminMergeTablesComponent {
     )
   }
 
+  getReservationIdByTableIdInUse(tableId: number): number {
+    const foundReservation = this.reservationsInUse.find(reservation => reservation.restaurantTableId === tableId);
+    console.log(foundReservation!.reservationId!);
+    return foundReservation!.reservationId!;
+  }
+
   mergeTables() {
     if (!this.mergeTableId) {
       this.sweetAlertService.showTimedAlert('Không thể gộp!', 'Mời chọn hoặc tạo id gộp bàn', 'error', 3000);
@@ -196,6 +202,7 @@ export class AdminMergeTablesComponent {
       mergeTableId: this.mergeTableId,  // Sử dụng uuid để tạo mã định danh duy nhất
       mergeTime: this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss')!,
       status: 'Chờ xác nhận',
+      reservationId: this.getReservationIdByTableIdInUse(+tableId),
     };
 
     this.mergeTableService.add(mergeTable).subscribe(() => {

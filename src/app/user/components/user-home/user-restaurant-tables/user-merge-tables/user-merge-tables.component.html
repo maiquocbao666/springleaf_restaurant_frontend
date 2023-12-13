@@ -81,27 +81,27 @@
                 <!-- Đầu bảng -->
                 <thead>
                     <tr>
-                        <th class="text-center">Mã</th>
+                        <th class="text-center">Số thứ tự</th>
+                        <th class="text-center">Mã bàn</th>
                         <th class="text-center">Mã gộp bàn</th>
+                        <th class="text-center">Mã đặt bàn</th>
                         <th class="text-center">Thời gian gộp</th>
                         <th class="text-center">Trạng thái</th>
-                        <th class="text-center">Mã bàn</th>
                     </tr>
                 </thead>
                 <!-- Thân bảng -->
                 <tbody>
                     <tr *ngFor="let mergeTableCache of mergeTablesCache">
                         <td class="text-center text-muted">{{ mergeTableCache.id }}</td>
+                        <td class="text-center text-muted">{{ mergeTableCache.tableId }}</td>
                         <td class="text-center text-muted">{{ mergeTableCache.mergeTableId }}</td>
+                        <td class="text-center text-muted">{{ mergeTableCache.reservationId }}</td>
                         <td class="text-center text-muted">{{ mergeTableCache.mergeTime }}</td>
-                        <!-- <td class="text-center text-muted">{{ mergeTableCache.status }}</td> -->
                         <td class="text-center">
                             <div [ngClass]="getClassForStatus(mergeTableCache.status)">
                                 {{ mergeTableCache.status }}
                             </div>
-                        </td>
-                        <td class="text-center text-muted">{{ mergeTableCache.tableId }}</td>
-                        
+                        </td>    
                     </tr>
                 </tbody>
             </table>

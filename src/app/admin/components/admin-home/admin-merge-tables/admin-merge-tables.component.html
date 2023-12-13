@@ -43,6 +43,7 @@
             <th>Số thứ tự</th>
             <th>Mã bàn</th>
             <th>Mã gộp bàn</th>
+            <th>Mã đặt bàn</th>
             <th>Đổi riêng lẻ</th>
             <th>Thời gian gộp</th>
             <th>Đổi tất cả</th>
@@ -59,8 +60,9 @@
                 'color': mergeTableColors[mergeTable.mergeTableId],
                 'font-weight': 'bold',
               }">{{ mergeTable.mergeTableId }}</td>
+                <td>{{ mergeTable.reservationId }}</td>
                 <td>
-                    <select [(ngModel)]="mergeTable.status"
+                    <select [disabled]="mergeTable.status === 'Đã tách'" [(ngModel)]="mergeTable.status"
                         (ngModelChange)="changeMergeStatusOne(mergeTable.id!, $event)" class="form-select">
                         <option value="Đã gộp">Đã gộp</option>
                         <option value="Từ chối gộp">Từ chối gộp</option>
@@ -70,7 +72,8 @@
                 </td>
                 <td>{{ mergeTable.mergeTime }}</td>
                 <td>
-                    <select (change)="onStatusChange(mergeTable.mergeTableId, $event)" class="form-select">
+                    <select [disabled]="mergeTable.status === 'Đã tách'"
+                        (change)="onStatusChange(mergeTable.mergeTableId, $event)" class="form-select">
                         <option [value]="'Đã gộp'" [selected]="mergeTable.status === 'Đã gộp'">Đã gộp</option>
                         <option [value]="'Từ chối gộp'" [selected]="mergeTable.status === 'Từ chối gộp'">Từ chối gộp
                         </option>

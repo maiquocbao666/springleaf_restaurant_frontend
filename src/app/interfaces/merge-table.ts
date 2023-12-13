@@ -4,4 +4,5 @@ export interface MergeTable {
     mergeTableId: string;
     mergeTime: string;
     status: string;
+    reservationId: number;
 }
