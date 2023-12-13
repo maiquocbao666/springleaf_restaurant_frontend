@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { Restaurant } from 'src/app/interfaces/restaurant';
@@ -13,10 +13,10 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-password.component.css']
 })
 export class UserPasswordComponent {
-  @Input() selected: any;
+  
   changePasswordForm: FormGroup;
   forgotPasswordForm: FormGroup;
-  chooseRestaurantFrom : FormGroup;
+  chooseRestaurantFrom: FormGroup;
   user: User | null = null;
   password: string = '';
   isCheckPassword: boolean = false;
@@ -25,6 +25,8 @@ export class UserPasswordComponent {
   selectedRestaurant: number | null = null;
   code: string = '';
   token: string = '';
+  isNewPasswordChange :boolean = false;
+  @Input() selected: any;
   constructor(
     private authService: AuthenticationService,
     public activeModal: NgbActiveModal,
@@ -33,11 +35,11 @@ export class UserPasswordComponent {
     private restaurantSerivce: RestaurantService,
     private userService: UserService,
   ) {
-   
+
     this.authService.setAccessCodeCacheData('');
     this.changePasswordForm = this.formBuilder.group({
       oldPassword: [null, [Validators.nullValidator]],
-      newPassword: [null, [Validators.nullValidator]],
+      newPassword: [null, this.customPasswordValidator],
       reNewPassword: [null, [Validators.nullValidator]],
     })
     this.forgotPasswordForm = this.formBuilder.group({
@@ -54,10 +56,9 @@ export class UserPasswordComponent {
         this.user = data;
       }
     );
-      
+
     this.authService.accessCodeCacheData$.subscribe((code) => {
       if (code != '' && code != null) {
-        console.log(code)
         this.codeCache = code.slice(-6);
         this.token = code.slice(0, -6);
         console.log(this.codeCache + 'token:  ' + this.token);
@@ -77,11 +78,12 @@ export class UserPasswordComponent {
     );
   }
 
+  //---------- Chọn nhà hàng------------//
   onSubmit() {
     if (this.chooseRestaurantFrom.valid && this.user) {
       const selectedRestaurantValue = this.chooseRestaurantFrom.value.selectedRestaurant;
       console.log(selectedRestaurantValue);
-      
+
       const updateUser: User = {
         userId: this.user.userId,
         username: this.user.username,
@@ -95,7 +97,7 @@ export class UserPasswordComponent {
         restaurantBranchId: selectedRestaurantValue,
         status: this.user.status
       };
-  
+
       this.userService.updateRestaurant(updateUser).subscribe({
         next: (response) => {
           this.sweetAlertService.showTimedAlert('Cập nhật thành công!', 'Chúc bạn có những trải nhiệm vui vẻ', 'success', 2000);
@@ -109,8 +111,8 @@ export class UserPasswordComponent {
       });
     }
   }
-  
-  
+
+
 
   async configPassword() {
     const password = this.password;
@@ -129,58 +131,27 @@ export class UserPasswordComponent {
     }
   }
 
-  changeUserRestaurant() {
-    console.log(this.selectedRestaurant);
-    // if (this.user && this.selectedRestaurant) {
-    //   const userUpdate: User = {
-    //     userId: this.user.userId,
-    //     fullName: this.user.fullName,
-    //     username: this.user.username,
-    //     password: this.user.password,
-    //     email: this.user.email,
-    //     address: this.user.address,
-    //     phone: this.user.phone,
-    //     restaurantBranchId: this.selectedRestaurant!,
-    //     image: this.user.image,
-    //     managerId: this.user.managerId,
-    //     status: this.user.status,
-    //   };
-    //   console.log(this.selectedRestaurant);
-    //   this.userService.updateProfile(userUpdate).subscribe(
-    //     () => {
-    //       this.authService.setUserCache(userUpdate);
-    //       this.sweetAlertService.showTimedAlert('Cập nhật thành công', '', 'success', 1500);
-    //       this.activeModal.close();
-    //     },
-    //     (error) => {
-    //       console.error('Error updating profile:', error);
-
-    //     }
-    //   );
-    // }
-
-  }
-  // Trong component.ts
-onRestaurantChange() {
-  console.log('Selected Restaurant ID:', this.selectedRestaurant);
-}
-
-
   async changePassword() {
     const password = this.changePasswordForm.get('newPassword')?.value;
-    try {
-      const changePasswordResult = await this.authService.changePassword(password);
+    const configPassword = this.changePasswordForm.get('reNewPassword')?.value;
+    if (password === configPassword) {
+      try {
+        const changePasswordResult = await this.authService.changePassword(password);
 
-      if (changePasswordResult === true) {
+        if (changePasswordResult === true) {
 
-        this.sweetAlertService.showTimedAlert('Đổi mật khẩu thành công!', '', 'success', 2000);
-        this.activeModal.close('Login Successful');
-      } else {
-        console.error('Xác nhận mật khẩu sai failed');
+          this.sweetAlertService.showTimedAlert('Đổi mật khẩu thành công!', '', 'success', 2000);
+          this.activeModal.close('Login Successful');
+        } else {
+          console.error('Xác nhận mật khẩu sai failed');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
       }
-    } catch (error) {
-      console.error('Error during login:', error);
+    } else {
+      this.sweetAlertService.showTimedAlert('Xác nhận mật khẩu thất bại', '', 'error', 1000);
     }
+
   }
 
   async getAccessCode() {
@@ -215,8 +186,35 @@ onRestaurantChange() {
     await this.authService.forgotPassword(password, token);
   }
 
+
+
+//----------------Valid---------------------//
+customPasswordValidator(control: AbstractControl) {
+  const password = control.value;
+  
+  if (!password) {
+    return { 'required': true, 'message': 'Mật khẩu không được để trống' };
+  }
+
+  if (password.length < 6) {
+    return { 'minLength': true, 'message': 'Mật khẩu phải ít nhất 6 ký tự' };
+  }
+
+  if (password.length > 12) {
+    return { 'maxLength': true, 'message': 'Mật khẩu tối đa 12 ký tự' };
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    return { 'uppercase': true, 'message': 'Mật khẩu phải có ký tự viết hoa' };
+  }
+
+  if (!/\d/.test(password)) {
+    return { 'digit': true, 'message': 'Mật khẩu phải ít nhất 1 ký tự số' };
+  }
+  return null;
 }
+//--------------END-Valid-------------------//
 
 
 
-
+}

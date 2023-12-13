@@ -36,7 +36,6 @@ addEventListener('message', async (event) => {
     };
     if (type === 'logout') {
         const  accessToken  = token;
-        console.log(token);
         try {
             const responses = await Promise.all([
                 fetch(`https://springleafrestaurantbackend.onrender.com/auth2/logout`, {
@@ -98,7 +97,6 @@ addEventListener('message', async (event) => {
     };
     if (type === 'config-password') {
         const accessToken = token;
-        console.log(token)
         try {
             const responses = await Promise.all([
                 fetch(`${domain}/config-password`, {
