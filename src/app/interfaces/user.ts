@@ -7,7 +7,6 @@ export interface User {
   email: string;
   address: string; 
   image: string;
-  managerId: number;
   restaurantBranchId: number; 
   status: boolean;
 }

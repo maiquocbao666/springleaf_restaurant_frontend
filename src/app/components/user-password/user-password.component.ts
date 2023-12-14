@@ -92,10 +92,9 @@ export class UserPasswordComponent {
         email: this.user.email,
         address: this.user.address,
         image: this.user.image,
-        managerId: this.user.managerId,
         phone: this.user.phone,
         restaurantBranchId: selectedRestaurantValue,
-        status: this.user.status
+        status: this.user.status,
       };
 
       this.userService.updateRestaurant(updateUser).subscribe({
