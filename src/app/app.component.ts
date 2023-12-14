@@ -37,6 +37,7 @@ import { TableTypeService } from "./services/table-type.service";
 import { OrderThresholdService } from "./services/order-threshold.service";
 import { DiscountService } from "./services/discount.service";
 import { CookieService } from "ngx-cookie-service";
+import { SwUpdate } from "@angular/service-worker";
 
 
 interface DataService<T> {
@@ -62,13 +63,13 @@ export class AppComponent implements OnDestroy {
   services: ServiceMap;
 
   constructor(
+    private swUpdate: SwUpdate,
     private authentication: AuthenticationService,
     private categoriesService: CategoryService,
     private productsService: ProductService,
     private cartsService: CartService,
     private cartDetailsService: CartDetailService,
     private ordersService: OrderService,
-
     private combosService: ComboService,
     private comboDetailService: ComboDetailService,
     private eventsService: EventService,
@@ -168,6 +169,14 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
+
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.available.subscribe(() => {
+        if (confirm('Có bản vá mới. Bạn có muốn tải lại ứng dụng không?')) {
+          window.location.reload();
+        }
+      });
+    }
     
     //var accessToken = localStorage.getItem('access_token'); // lấy từ cookie
     var accessToken = this.cookieService.get('access_token');

@@ -118,7 +118,7 @@ export class AdminCategoriesComponent {
     modalRef.componentInstance.category = category;
   }
 
-  searchCategories(event: any) {
+  search(event: any) {
     const keyword = event.target.value;
     if (keyword.trim() === '') {
       this.getCategories();
