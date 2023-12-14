@@ -66,14 +66,6 @@ export class IngredientService extends BaseService<Ingredient>  {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<Ingredient[]> {
-    return super.searchByName(term);
-  }
-
-  override sortEntities(entities: Ingredient[], field: keyof Ingredient, ascending: boolean): Observable<Ingredient[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //--------------------------------------------------------------------------------------------------------------------------
 
   // private isIngredientNameInCache(name: string): boolean {

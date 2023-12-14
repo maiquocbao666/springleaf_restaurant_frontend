@@ -194,5 +194,28 @@ export class AdminOrderThresholdsComponent {
     });
   }
 
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getOrderThresholds();
+    } else {
+      this.orderThresholdService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.orderThresholds = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof OrderThreshold;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
 
 }

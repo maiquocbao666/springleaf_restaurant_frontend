@@ -67,10 +67,6 @@ export class ReservationService extends BaseService<Reservation> {
         return super.delete(id);
     }
 
-    override sortEntities(entities: Reservation[], field: keyof Reservation, ascending: boolean): Observable<Reservation[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
-
     //--------------------------------------------------------------------------------------------------------------------
 
     getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {

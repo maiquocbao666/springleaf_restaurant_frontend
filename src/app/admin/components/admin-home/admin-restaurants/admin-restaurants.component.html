@@ -65,6 +65,17 @@
         </div>
     </div>
 
+    <p class="d-inline-flex gap-1">
+        <input type="text" (input)="changeSearchKeyWords($event)">
+        <select (change)="changeFieldName($event)">
+            <option value="">Chọn tên cột cần tìm</option>
+            <option value="restaurantId">Mã nhà hàng</option>
+            <option value="restaurantName">Tên nhà hàng</option>
+            <option value="address">Địa chỉ</option>
+            <option value="phone">Số điện thoại</option>
+            <option value="email">Email</option>
+        </select>
+    </p>
     <div class="table-responsive">
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>
@@ -80,7 +91,7 @@
             <tbody>
                 <tr
                     *ngFor="let restaurant of restaurants | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                    <td class="text-center text-muted">NH{{restaurant.restaurantId}}</td>
+                    <td class="text-center text-muted">{{restaurant.restaurantId}}</td>
                     <td class="text-center">{{restaurant.restaurantName}}</td>
                     <td class="text-center">{{restaurant.address}}</td>
                     <td class="text-center">{{restaurant.phone}}</td>

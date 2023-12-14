@@ -13,6 +13,7 @@
                 <label for="mergeTableIdSelect">Hoặc chọn mã gộp bàn muốn gộp vào</label>
                 <select formControlName="mergeTableId" (change)="onMergeTableIdChange($event)" class="form-select"
                     id="mergeTableIdSelect">
+                    <option value=""></option>
                     <option *ngFor="let mergeTableId of mergeTableIds" [value]="mergeTableId">
                         {{mergeTableId}}
                     </option>
@@ -23,6 +24,7 @@
                 <label for="tableIdSelect">Chọn mã bàn muốn gộp vào</label>
                 <select formControlName="tableId" (change)="onTableIdChange($event)" class="form-select"
                     id="tableIdSelect">
+                    <option value=""></option>
                     <option *ngFor="let reservation of reservationsInUse" [value]="reservation.restaurantTableId">
                         {{ reservation.restaurantTableId }}
                     </option>
@@ -38,6 +40,20 @@
         </div>
     </form>
 
+    Lưu ý: Thời gian tìm với định dạng là yyyy-MM-dd HH:mm:ss <br>
+    <p class="d-inline-flex gap-1 text-center">
+        <label>Tìm bất cứ thứ gì bạn nghĩ là có thể...</label>
+        <input type="text" (input)="changeSearchKeyWords($event)">
+        <select (change)="changeFieldName($event)">
+            <option value="">Chọn tên cột cần tìm</option>
+            <option value="id">Số thứ tự</option>
+            <option value="mergeTableId">Mã gộp bàn</option>
+            <option value="tableId">Mã bàn</option>
+            <option value="reservationId">Mã đặt bàn</option>
+            <option value="status">Trạng thái</option>
+            <option value="mergeTime">Thời gian gộp</option>
+        </select>
+    </p>
     <table class="table table-bordered table-responsive">
         <thead>
             <th>Số thứ tự</th>

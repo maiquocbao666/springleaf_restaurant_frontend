@@ -133,7 +133,7 @@ export class AdminReservationsComponent {
     }
 
     const currentTime = new Date();
-    const reservationTime = new Date(new Date(reservation.reservationDate).getTime() + 2 * 60 * 60 * 1000);
+    const reservationTime = new Date(new Date(reservation.outTime).getTime());
 
     const diff = reservationTime.getTime() - currentTime.getTime();
 
@@ -161,10 +161,31 @@ export class AdminReservationsComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  isSearching = false;
   getReservations(): void {
     this.reservationService.getCache().subscribe(
       (cached: Reservation[]) => {
-        this.reservations = cached;
+        if (this.isSearching === true) {
+          return;
+        }
+
+        // Sắp xếp theo giờ giảm dần
+        this.reservations = cached.sort((a, b) => {
+          const timeA = new Date(a.reservationDate).getTime();
+          const timeB = new Date(b.reservationDate).getTime();
+          return timeB - timeA;
+        });
+
+        // Sắp xếp theo trạng thái giảm dần (Đang sử dụng sau Đang đợi)
+        this.reservations = this.reservations.sort((a, b) => {
+          // Đặt bản ghi đang sử dụng lên sau bản ghi đang đợi
+          if (a.reservationStatusName === 'Đang sử dụng' && b.reservationStatusName === 'Đang đợi') {
+            return 1;
+          }
+          // Giữ nguyên thứ tự với các bản ghi khác
+          return 0;
+        });
+
         //this.dataSource = new MatTableDataSource(this.reservations);
         //this.dataSource.paginator = this.paginator;
         //this.dataSource.sort = this.sort;
@@ -324,6 +345,32 @@ export class AdminReservationsComponent {
           // Handle error if necessary
         }
       );
+  }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.isSearching = false;
+      this.getReservations();
+    } else {
+      this.reservationService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.isSearching = true;
+          this.reservations = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Reservation;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any) {
+    this.keywords = event.target.value;
+    this.search();
   }
 
   // getreservationById(): void {

@@ -131,4 +131,29 @@ export class AdminCombosComponent {
     modalRef.componentInstance.comboSaved.subscribe(() => {
     });
   }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getCombos();
+    } else {
+      this.comboService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.combos = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Combo;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

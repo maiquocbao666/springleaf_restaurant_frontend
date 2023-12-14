@@ -71,14 +71,6 @@ export class ProductService extends BaseService<Product> {
     return super.delete(id);
   }
 
-  override searchByKeywords(keyword: string): Observable<any[]> {
-    return super.searchByKeywords(keyword);
-  }
-
-  override sortEntities(entities: Product[], field: keyof Product, ascending: boolean): Observable<Product[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //-------------------------------------------------------------------------------------------------
 
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {

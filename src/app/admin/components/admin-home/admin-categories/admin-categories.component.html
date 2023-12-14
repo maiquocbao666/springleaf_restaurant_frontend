@@ -6,9 +6,6 @@
             Thêm loại
         </button>
     </p>
-    <p class="d-inline-flex gap-1">
-        <input type="text" (input)="search($event)">
-    </p>
     <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
             <option *ngFor="let size of tableSizes">
@@ -49,6 +46,17 @@
             </form>
         </div>
     </div>
+
+    <p class="d-inline-flex gap-1">
+        <input type="text" (input)="changeSearchKeyWords($event)">
+        <select (change)="changeFieldName($event)">
+            <option value="">Chọn tên cột cần tìm</option>
+            <option value="categoryId">Mã loại</option>
+            <option value="name">Tên loại</option>
+            <option value="active">Đang bán</option>
+            <option value="description">Mô tả</option>
+        </select>
+    </p>
     <div class="table-responsive">
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>

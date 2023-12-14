@@ -64,14 +64,6 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<OrderThreshold[]> {
-        return super.searchByName(term);
-    }
-
-    override sortEntities(entities: OrderThreshold[], field: keyof OrderThreshold, ascending: boolean): Observable<OrderThreshold[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
-
     //------------------------------------------------------------------------------------------------------
 
 }

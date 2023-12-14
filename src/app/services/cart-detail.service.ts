@@ -79,10 +79,6 @@ export class CartDetailService extends BaseService<CartDetail> {
     return super.delete(id);
   }
 
-  override sortEntities(entities: CartDetail[], field: keyof CartDetail, ascending: boolean): Observable<CartDetail[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //----------------------------------------------------------------------
 
   getOrderDetails(): Observable<CartDetail[] | null> {

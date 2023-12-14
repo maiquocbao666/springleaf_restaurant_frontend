@@ -25,8 +25,6 @@ export class AdminRestaurantsComponent {
   tableSize: number = 7;
   tableSizes: any = [5, 10, 15, 20];
 
-  restaurantsUrl = 'restaurants';
-
   constructor(
     private restaurantService: RestaurantService, // Đổi tên service nếu cần
     private route: ActivatedRoute,
@@ -133,6 +131,30 @@ export class AdminRestaurantsComponent {
           // Handle error if necessary
         }
       );
+  }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getRestaurants();
+    } else {
+      this.restaurantService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.restaurants = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Restaurant;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
   }
 
 }

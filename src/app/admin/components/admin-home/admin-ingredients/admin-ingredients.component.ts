@@ -19,8 +19,6 @@ export class AdminIngredientsComponent {
   fieldNames: string[] = [];
   ingredientsUrl = 'ingredients';
 
-  isSubmitted = false;
-
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -62,6 +60,7 @@ export class AdminIngredientsComponent {
     );
   }
 
+  isSubmitted = false;
   addIngredient(): void {
     this.isSubmitted = true;
     if (this.ingredientForm.valid) {
@@ -84,6 +83,7 @@ export class AdminIngredientsComponent {
     } else
       Swal.fire('Thất bại', 'Thêm thất bại!', 'warning');
   }
+
   deleteIngredient(ingredient: Ingredient): void {
     if (ingredient.ingredientId) {
       this.sweetAlertService.showConfirmAlert('Bạn có muốn xóa ' + ingredient.name, 'Không thể lưu lại!', 'warning')
@@ -113,17 +113,28 @@ export class AdminIngredientsComponent {
 
   }
 
-  searchIngredients(event: any) {
-    const keyword = event.target.value;
-    if (keyword.trim() === '') {
+  search() {
+    if (this.keywords.trim() === '') {
       this.getIngredients();
     } else {
-      this.ingredientService.searchByKeywords(keyword).subscribe(
+      this.ingredientService.searchByKeywords(this.keywords, this.fieldName).subscribe(
         (data) => {
           this.ingredients = data;
         }
       );
     }
+  }
+
+  fieldName!: keyof Ingredient;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
   }
 
   sort(field: keyof Ingredient, ascending: boolean): void {

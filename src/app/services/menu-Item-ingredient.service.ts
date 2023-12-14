@@ -64,14 +64,6 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<MenuItemIngredient[]> {
-        return super.searchByName(term);
-    }
-
-    override sortEntities(entities: MenuItemIngredient[], field: keyof MenuItemIngredient, ascending: boolean): Observable<MenuItemIngredient[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
-
     //------------------------------------------------------------------------------------------------
 
 

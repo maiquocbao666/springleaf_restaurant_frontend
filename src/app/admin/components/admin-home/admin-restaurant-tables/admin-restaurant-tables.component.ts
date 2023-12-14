@@ -204,4 +204,28 @@ export class AdminRestaurantTablesComponent {
     });
   }
 
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getRestaurantTables();
+    } else {
+      this.restaurantTableService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.restaurantTables = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof RestaurantTable;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

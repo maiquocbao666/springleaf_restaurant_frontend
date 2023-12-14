@@ -65,14 +65,6 @@ export class ReceiptService extends BaseService<Receipt> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<Receipt[]> {
-        return super.searchByName(term);
-    }
-
-    override sortEntities(entities: Receipt[], field: keyof Receipt, ascending: boolean): Observable<Receipt[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
-
     //-------------------------------------------------------------------------------------------------------
 
 }

@@ -64,14 +64,6 @@ export class SupplierService extends BaseService<Supplier>  {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<Supplier[]> {
-        return super.searchByName(term);
-    }
-
-    override sortEntities(entities: Supplier[], field: keyof Supplier, ascending: boolean): Observable<Supplier[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
-
     //--------------------------------------------------------------------------------------------------------
 
 

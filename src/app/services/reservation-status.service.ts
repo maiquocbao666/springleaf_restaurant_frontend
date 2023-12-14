@@ -78,10 +78,6 @@ export class ReservationStatusService extends BaseService<ReservationStatus> {
         return super.delete(id);
     }
 
-    override sortEntities(entities: ReservationStatus[], field: keyof ReservationStatus, ascending: boolean): Observable<ReservationStatus[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
-
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Hàm tùy chỉnh

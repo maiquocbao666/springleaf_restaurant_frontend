@@ -63,10 +63,6 @@ export class GoodsReceiptDetailService extends BaseService<GoodsReceiptDetail>  
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
-
-  override sortEntities(entities: GoodsReceiptDetail[], field: keyof GoodsReceiptDetail, ascending: boolean): Observable<GoodsReceiptDetail[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
   
   //-------------------------------------------------------------------------------------------------------------
 

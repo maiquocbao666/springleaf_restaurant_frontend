@@ -76,10 +76,6 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         return super.delete(id);
     }
 
-    override sortEntities(entities: RestaurantTable[], field: keyof RestaurantTable, ascending: boolean): Observable<RestaurantTable[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
-
     //-------------------------------------------------------------------------------------------------------------------
 
     private isNameInCache(name: string, idToExclude: number | null = null): boolean {
