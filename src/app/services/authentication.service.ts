@@ -81,7 +81,6 @@ export class AuthenticationService {
           resolve(false);
         } else {
           localStorage.setItem('access_code', data.accessCodeRespone);
-          console.log('Authentication service : ' + data.accessCodeRespone);
           this.accessCode = data.accessCodeRespone;
           this.accessCodeDataSubject.next(data.accessCodeRespone);
           this.sweetAlertService.showTimedAlert('Gửi mã xác nhận!', 'Vui lòng kiểm tra email.', 'success', 2000);
@@ -104,7 +103,7 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string, rememberMe: boolean): Promise<boolean> {
-    console.log('here auth' + rememberMe)
+    
     return new Promise<boolean>((resolve, reject) => {
       const loginData = {
         userName: username,
@@ -129,6 +128,7 @@ export class AuthenticationService {
         else {
           localStorage.setItem('user_login_name', data.loginResponse.user.fullName);
           localStorage.setItem('access_token', data.loginResponse.access_token);
+          sessionStorage.setItem('access_token', data.checkTokenRespone.access_token);
           this.setUserCache(data.loginResponse.user);
           this.setRoleCache(data.loginResponse.user.roleName);
           if(rememberMe){
@@ -144,7 +144,8 @@ export class AuthenticationService {
 
   configPassword(password: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const token = localStorage.getItem('access_token');
+      // const token = localStorage.getItem('access_token');
+      const token = sessionStorage.getItem('access_token');
       this.getDatasOfThisUserWorker.postMessage({
         type: 'config-password',
         password, token
@@ -172,7 +173,8 @@ export class AuthenticationService {
 
   changePassword(password: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const token = localStorage.getItem('access_token');
+      //const token = localStorage.getItem('access_token');
+      const token = sessionStorage.getItem('access_token');
       this.getDatasOfThisUserWorker.postMessage({
         type: 'change-password',
         password, token
@@ -246,6 +248,7 @@ export class AuthenticationService {
         else {
           localStorage.setItem('user_login_name', data.checkTokenRespone.user.fullName);
           localStorage.setItem('access_token', data.checkTokenRespone.access_token);
+          sessionStorage.setItem('access_token', data.checkTokenRespone.access_token);
           this.setUserCache(data.checkTokenRespone.user);
           this.setRoleCache(data.checkTokenRespone.user.roleName);
           // this.listRole = data.checkTokenRespone.user.roleName;
@@ -269,7 +272,8 @@ export class AuthenticationService {
   }
 
   logout(): Observable<any> {
-    const jwtToken = localStorage.getItem('access_token');
+    // const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }
