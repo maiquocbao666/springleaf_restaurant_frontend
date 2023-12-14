@@ -164,7 +164,7 @@ export class AdminProductsComponent {
     }
   }
 
-  
+
   selectedFile: File | undefined;
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0] as File;
@@ -183,5 +183,17 @@ export class AdminProductsComponent {
     }
   }
 
+  searchProducts(event: any) {
+    const keyword = event.target.value;
+    if (keyword.trim() === '') {
+      this.getProducts();
+    } else {
+      this.productService.searchByKeywords(keyword).subscribe(
+        (data) => {
+          this.products = data;
+        }
+      );
+    }
+  }
 
 }

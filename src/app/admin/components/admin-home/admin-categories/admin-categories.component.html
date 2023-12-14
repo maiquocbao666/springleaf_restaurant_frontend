@@ -6,6 +6,9 @@
             Thêm loại
         </button>
     </p>
+    <p class="d-inline-flex gap-1">
+        <input type="text" (input)="searchCategories($event)">
+    </p>
     <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
             <option *ngFor="let size of tableSizes">
@@ -50,22 +53,23 @@
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="text-center">Mã loại</th>
-                    <th class="text-center">Tên loại</th>
-                    <th class="text-center">Đang bán</th>
-                    <th class="text-center">Mô tả</th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sortCategories('categoryId', true)"></button> Mã loại <button class="fa fa-sort-down" (click)="sortCategories('categoryId', false)"></button></th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sortCategories('name', true)"></button> Tên loại <button class="fa fa-sort-down" (click)="sortCategories('name', false)"></button></th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sortCategories('active', true)"></button> Đang bán + (key words) <button class="fa fa-sort-down" (click)="sortCategories('active', false)"></button></th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sortCategories('description', true)"></button> Mô tả <button class="fa fa-sort-down" (click)="sortCategories('description', false)"></button></th>
                     <th class="text-center">Chức năng</th>
                 </tr>
             </thead>
             <tbody>
                 <tr
                     *ngFor="let category of categories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                    <td class="text-center text-muted">DM{{category.categoryId}}</td>
+                    <td class="text-center text-muted">{{category.categoryId}}</td>
                     <td class="text-center">{{category.name}}</td>
                     <td class="text-center">
                         <div [ngClass]="category.active ? 'badge badge-warning' : 'badge badge-danger'">
                             {{ category.active ? 'Có' : 'Không' }}
                         </div>
+                        ({{ category.active }})
                     </td>
                     <td class="text-center">{{ category.description.length > 30 ? category.description.slice(0, 30) +
                         '...' : category.description }}</td>

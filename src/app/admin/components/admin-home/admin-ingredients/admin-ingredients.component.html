@@ -6,6 +6,9 @@
             Thêm nguyên liệu
         </button>
     </p>
+    <p class="d-inline-flex gap-1">
+        <input type="text" (input)="searchIngredients($event)">
+    </p>
     <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
             <option *ngFor="let size of tableSizes">
@@ -67,7 +70,7 @@
             <tbody>
                 <tr
                     *ngFor="let ingredient of ingredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                    <td class="text-center text-muted">NL{{ingredient.ingredientId}}</td>
+                    <td class="text-center text-muted">{{ingredient.ingredientId}}</td>
                     <td class="text-center">{{ingredient.name}}</td>
                     <td class="text-center">{{ingredient.orderThreshold}}</td>
                     <td class="text-center">{{ ingredient.description.length > 30 ? ingredient.description.slice(0, 30)

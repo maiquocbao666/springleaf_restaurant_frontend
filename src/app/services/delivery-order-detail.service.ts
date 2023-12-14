@@ -65,6 +65,10 @@ export class DeliveryOrderDetailService extends BaseService<DeliveryOrderDetail>
     return super.delete(id);
   }
 
+  override sortEntities(entities: DeliveryOrderDetail[], field: keyof DeliveryOrderDetail, ascending: boolean): Observable<DeliveryOrderDetail[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //----------------------------------------------------------------------------
 
 }

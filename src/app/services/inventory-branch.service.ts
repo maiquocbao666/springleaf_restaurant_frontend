@@ -69,6 +69,10 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     return item.inventoryBranchId!;
   }
 
+  override sortEntities(entities: InventoryBranch[], field: keyof InventoryBranch, ascending: boolean): Observable<InventoryBranch[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //-------------------------------------------------------------------------------------------------------
 
 }

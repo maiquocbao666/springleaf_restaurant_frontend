@@ -79,6 +79,10 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
     return super.delete(id);
   }
 
+  override sortEntities(entities: DeliveryOrder[], field: keyof DeliveryOrder, ascending: boolean): Observable<DeliveryOrder[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   getUserCart(): Observable<DeliveryOrder | null> {
     const jwtToken = localStorage.getItem('access_token');
     if (!jwtToken) {

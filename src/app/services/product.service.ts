@@ -71,6 +71,10 @@ export class ProductService extends BaseService<Product> {
     return super.delete(id);
   }
 
+  override searchByKeywords(keyword: string): Observable<any[]> {
+    return super.searchByKeywords(keyword);
+  }
+
   //-------------------------------------------------------------------------------------------------
 
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {

@@ -60,6 +60,10 @@ export class DiscountService extends BaseService<Discount>  {
         return super.delete(id);
     }
 
+    override sortEntities(entities: Discount[], field: keyof Discount, ascending: boolean): Observable<Discount[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     getDiscountByName(discountCode: string, menuItemId: any[] = []) {
         const jwtToken = localStorage.getItem('access_token');
         if (!jwtToken) {

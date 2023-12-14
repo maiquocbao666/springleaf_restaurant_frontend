@@ -69,6 +69,10 @@ export class GoodsReceiptService extends BaseService<GoodsReceipt> {
         return super.searchByName(term);
     }
 
+    override sortEntities(entities: GoodsReceipt[], field: keyof GoodsReceipt, ascending: boolean): Observable<GoodsReceipt[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     //-------------------------------------------------------------------------------------------------
 
 }

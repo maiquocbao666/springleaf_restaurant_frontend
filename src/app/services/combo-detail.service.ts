@@ -65,6 +65,10 @@ export class ComboDetailService extends BaseService<ComboDetail> {
     return super.delete(id);
   }
 
+  override sortEntities(entities: ComboDetail[], field: keyof ComboDetail, ascending: boolean): Observable<ComboDetail[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //----------------------------------------------------------------------------------
 
 }

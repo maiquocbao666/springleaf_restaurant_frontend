@@ -66,6 +66,10 @@ export class ComboService extends BaseService<Combo> {
     return super.searchByName(term);
   }
 
+  override sortEntities(entities: Combo[], field: keyof Combo, ascending: boolean): Observable<Combo[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //----------------------------------------------------------------------------
 
 }

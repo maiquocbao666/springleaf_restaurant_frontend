@@ -167,4 +167,52 @@ export abstract class BaseService<T> {
         );
     }
 
+    searchByKeywords(keywords: string): Observable<T[]> {
+        if (!keywords.trim()) {
+            return of([]);
+        }
+
+        if (this.cache) {
+            const filtered = this.cache.filter((cache) => {
+                // Lặp qua tất cả các trường của đối tượng để tìm kiếm
+                for (const key in cache) {
+                    if (Object.prototype.hasOwnProperty.call(cache, key)) {
+                        const fieldValue = String(cache[key]).toLowerCase();
+                        if (fieldValue.includes(keywords.toLowerCase())) {
+                            return true; // Nếu tìm thấy từ khóa, trả về true
+                        }
+                    }
+                }
+                return false; // Nếu không tìm thấy từ khóa trong bất kỳ trường nào, trả về false
+            });
+
+            if (filtered) {
+                return of(filtered);
+            }
+        }
+
+        return of();
+    }
+
+    sortEntities(entities: T[], field: keyof T, ascending: boolean): Observable<T[]> {
+        const sortedEntities = entities.slice().sort((a, b) => {
+            let result: number;
+
+            const valueA = a[field] as string | number | boolean;
+            const valueB = b[field] as string | number | boolean;
+
+            if (valueA < valueB) {
+                result = -1;
+            } else if (valueA > valueB) {
+                result = 1;
+            } else {
+                result = 0;
+            }
+
+            return ascending ? result : -result; // Reverse the order for descending
+        });
+
+        return of(sortedEntities);
+    }
+
 }

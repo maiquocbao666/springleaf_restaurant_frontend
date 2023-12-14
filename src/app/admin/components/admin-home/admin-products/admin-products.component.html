@@ -6,6 +6,10 @@
       Thêm món
     </button>
   </p>
+  <p class="d-inline-flex gap-1 text-center">
+    <label>Tìm bất cứ thứ gì bạn nghĩ là có thể...</label>
+    <input type="text" (input)="searchProducts($event)">
+  </p>
   <!-- HTML file -->
   <p class="float-end">
     <select class="form-select" (change)="onTableSizeChange($event)">
@@ -91,7 +95,7 @@
           <th class="text-center">Tên món</th>
           <th class="text-center">Giá</th>
           <th class="text-center">Trạng thái</th>
-          <th class="text-center">Loại</th>
+          <th class="text-center">Loại + (Mã)</th>
           <th class="text-center">Mô tả</th>
           <th class="text-center">Ảnh</th>
           <th class="text-center">Chức năng</th>
@@ -100,7 +104,7 @@
       <tbody>
         <tr
           *ngFor="let product of products | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-          <td class="text-center text-muted">SP{{product.menuItemId}}</td>
+          <td class="text-center text-muted">{{product.menuItemId}}</td>
           <td class="text-center">{{product.name}}</td>
           <td class="text-center">{{ formatAmount(product.unitPrice) }}</td>
 
@@ -109,7 +113,7 @@
               {{ product.status ? 'Đang bán' : 'Không bán' }}
             </div>
           </td>
-          <td class="text-center">{{ getCategoryById(product.categoryId)?.name }}</td>
+          <td class="text-center">{{ getCategoryById(product.categoryId)?.name }} ({{ product.categoryId }})</td>
           <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 30) + '...' :
             product.description }}</td>
           <td class="text-center">

@@ -113,5 +113,17 @@ export class AdminIngredientsComponent {
 
   }
 
+  searchIngredients(event: any) {
+    const keyword = event.target.value;
+    if (keyword.trim() === '') {
+      this.getIngredients();
+    } else {
+      this.ingredientService.searchByKeywords(keyword).subscribe(
+        (data) => {
+          this.ingredients = data;
+        }
+      );
+    }
+  }
 
 }

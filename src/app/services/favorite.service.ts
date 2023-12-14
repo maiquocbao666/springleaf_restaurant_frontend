@@ -64,6 +64,10 @@ export class FavoriteService extends BaseService<Favorite> {
   override delete(id : number): Observable<any> {
     return super.delete(id);
   }
+
+  override sortEntities(entities: Favorite[], field: keyof Favorite, ascending: boolean): Observable<Favorite[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
   
   //----------------------------------------------------------------------------------------------------------------------
 

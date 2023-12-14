@@ -87,6 +87,10 @@ export class CartService extends BaseService<Cart> {
     return super.update(updated);
   }
 
+  override sortEntities(entities: Cart[], field: keyof Cart, ascending: boolean): Observable<Cart[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //----------------------------------------------------------------------------------------------  
 
   setProvinceData(provinceData: Province[]): void {

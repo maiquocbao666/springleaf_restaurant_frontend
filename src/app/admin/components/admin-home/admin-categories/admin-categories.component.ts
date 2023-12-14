@@ -25,8 +25,7 @@ export class AdminCategoriesComponent {
   category!: Category | null;
   categories: Category[] = [];
   categoryForm: FormGroup;
-
-  categoriesUrl = 'categories';
+  ascendingOrder = true; // Initial order
 
   constructor(
     private categoryService: CategoryService,
@@ -47,7 +46,7 @@ export class AdminCategoriesComponent {
   }
 
   ngOnInit(): void {
-    console.log("Init admin category component");
+    //console.log("Init admin category component");
     this.getCategories();
     this.categoryForm.get('active')?.setValue(true);
   }
@@ -114,7 +113,37 @@ export class AdminCategoriesComponent {
     }
   }
 
+  openCategoryDetailModal(category: Category) {
+    const modalRef = this.modalService.open(AdminCategoryDetailComponent, { size: 'lg' });
+    modalRef.componentInstance.category = category;
+  }
 
+  searchCategories(event: any) {
+    const keyword = event.target.value;
+    if (keyword.trim() === '') {
+      this.getCategories();
+    } else {
+      this.categoryService.searchByKeywords(keyword).subscribe(
+        (data) => {
+          this.categories = data;
+        }
+      );
+    }
+  }
+
+  sortCategories(field: keyof Category, ascending: boolean): void {
+    this.categoryService
+      .sortEntities(this.categories, field, ascending)
+      .subscribe(
+        (data) => {
+          this.categories = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
+  
   // getCategoryById(): void {
   //   const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
   //   this.categoryService.getCategoryById(id).subscribe(category => {
@@ -124,10 +153,5 @@ export class AdminCategoriesComponent {
   //     }
   //   });
   // }
-
-  openCategoryDetailModal(category: Category) {
-    const modalRef = this.modalService.open(AdminCategoryDetailComponent, { size: 'lg' });
-    modalRef.componentInstance.category = category;
-  }
 
 }
