@@ -173,7 +173,7 @@ export class AppComponent implements OnDestroy {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe(() => {
         if (confirm('Có bản vá mới. Bạn có muốn tải lại ứng dụng không?')) {
-          window.location.reload();
+          this.swUpdate.activateUpdate().then(() => document.location.reload());
         }
       });
     }
