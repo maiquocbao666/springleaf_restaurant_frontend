@@ -128,7 +128,7 @@ export class AuthenticationService {
         else {
           localStorage.setItem('user_login_name', data.loginResponse.user.fullName);
           localStorage.setItem('access_token', data.loginResponse.access_token);
-          sessionStorage.setItem('access_token', data.checkTokenRespone.access_token);
+          sessionStorage.setItem('access_token', data.loginResponse.access_token);
           this.setUserCache(data.loginResponse.user);
           this.setRoleCache(data.loginResponse.user.roleName);
           if(rememberMe){

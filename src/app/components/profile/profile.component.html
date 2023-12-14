@@ -34,6 +34,21 @@
               <label for="phone">Số điện thoại</label>
               <input type="text" id="phone" class="form-control" formControlName="phone" name="phone">
             </div>
+            <div class="col-md-6" class="form-label">
+              <label for="phone">Nhà hàng</label>
+              <select class="form-select" formControlName="selectedRestaurant" class="select">
+                  <option [ngValue]="null">Bạn chưa chọn nhà hàng</option>
+                  <option *ngFor="let restaurant of restaurants" [ngValue]="restaurant.restaurantId">
+                    {{ restaurant.restaurantName }}
+                  </option>
+                </select>
+            </div>
+            <div class="col-md-6">
+              <label for="userRole" class="form-label">Chức vụ: </label>
+              <span id="userRole" *ngIf="userRole === 'ADMIN'">  Quản trị viên</span>
+              <span id="userRole" *ngIf="userRole === 'MANAGER'">  Quản lý</span>
+              <span id="userRole" *ngIf="userRole === 'USER'">  Người dùng</span>
+            </div>
             <div class="col-md-6" class="form-label" *ngIf="showAddressInput">
               <label for="address">Địa chỉ <i class="fa fa-pen-to-square" (click)="toggleAddressInput()"></i></label>
               <input type="text" class="form-control" id="address" formControlName="address" name="address">

@@ -31,7 +31,7 @@ export class UserService {
   }
 
   gets(): Observable<User[]> {
-    const token = localStorage.getItem('access_token');
+    const token = sessionStorage.getItem('access_token');
     const url = 'http://localhost:8080/manager/users';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
@@ -42,7 +42,7 @@ export class UserService {
 
     return new Observable((observer) => {
 
-      const token = localStorage.getItem('access_token');
+      const token = sessionStorage.getItem('access_token');
 
       if (!token) {
 
@@ -79,7 +79,7 @@ export class UserService {
 
   updateProfile(updatedUserData: User): Observable<any> {
 
-    const token = localStorage.getItem('access_token');
+    const token = sessionStorage.getItem('access_token');
     const url = `http://localhost:8080/auth/your-profile/update`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
@@ -88,9 +88,10 @@ export class UserService {
   }
 
   updateRestaurant(updatedUserData: User) : Observable<any> {
-    const token = localStorage.getItem('access_token');
+    const token = sessionStorage.getItem('access_token');
     const url = `http://localhost:8080/auth/choose-restaurant/update`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
 
     return this.http.put(url, updatedUserData, { headers });
 
