@@ -84,7 +84,7 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   }
 
   getUserCart(): Observable<DeliveryOrder | null> {
-    const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }
