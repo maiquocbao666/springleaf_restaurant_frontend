@@ -118,4 +118,5 @@ export class AdminUsersComponent {
     modalRef.componentInstance.userSaved.subscribe(() => {
     });
   }
+
 }

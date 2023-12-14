@@ -126,4 +126,17 @@ export class AdminIngredientsComponent {
     }
   }
 
+  sort(field: keyof Ingredient, ascending: boolean): void {
+    this.ingredientService
+      .sortEntities(this.ingredients, field, ascending)
+      .subscribe(
+        (data) => {
+          this.ingredients = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
+
 }

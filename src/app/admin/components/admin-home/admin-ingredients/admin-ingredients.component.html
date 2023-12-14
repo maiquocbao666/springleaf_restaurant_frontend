@@ -60,10 +60,10 @@
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="text-center">Mã nguyên liệu</th>
-                    <th class="text-center">Tên nguyên liệu</th>
-                    <th class="text-center">Ngưỡng đặt</th>
-                    <th class="text-center">Mô tả</th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('ingredientId', true)"></button> Mã nguyên liệu <button class="fa fa-sort-down" (click)="sort('ingredientId', false)"></button></th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('name', true)"></button> Tên nguyên liệu <button class="fa fa-sort-down" (click)="sort('name', false)"></button></th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('orderThreshold', true)"></button> Ngưỡng đặt <button class="fa fa-sort-down" (click)="sort('orderThreshold', false)"></button></th>
+                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('description', true)"></button> Mô tả <button class="fa fa-sort-down" (click)="sort('description', false)"></button></th>
                     <th class="text-center">Chức năng</th>
                 </tr>
             </thead>

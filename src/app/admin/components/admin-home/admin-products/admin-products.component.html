@@ -91,12 +91,12 @@
     <table class="align-middle mb-0 table table-borderless table-striped table-hover">
       <thead>
         <tr>
-          <th class="text-center">Mã món</th>
-          <th class="text-center">Tên món</th>
-          <th class="text-center">Giá</th>
-          <th class="text-center">Trạng thái</th>
-          <th class="text-center">Loại + (Mã)</th>
-          <th class="text-center">Mô tả</th>
+          <th class="text-center"><button class="fa fa-sort-up" (click)="sort('menuItemId', true)"></button> Mã món <button class="fa fa-sort-down" (click)="sort('menuItemId', false)"></button></th>
+          <th class="text-center"><button class="fa fa-sort-up" (click)="sort('name', true)"></button> Tên món <button class="fa fa-sort-down" (click)="sort('name', false)"></button></th>
+          <th class="text-center"><button class="fa fa-sort-up" (click)="sort('unitPrice', true)"></button> Giá <button class="fa fa-sort-down" (click)="sort('unitPrice', false)"></button></th>
+          <th class="text-center"><button class="fa fa-sort-up" (click)="sort('status', true)"></button> Trạng thái <button class="fa fa-sort-down" (click)="sort('status', false)"></button></th>
+          <th class="text-center"><button class="fa fa-sort-up" (click)="sort('categoryId', true)"></button> Loại + (Mã) <button class="fa fa-sort-down" (click)="sort('categoryId', false)"></button></th>
+          <th class="text-center"><button class="fa fa-sort-up" (click)="sort('description', true)"></button> Mô tả <button class="fa fa-sort-down" (click)="sort('description', false)"></button></th>
           <th class="text-center">Ảnh</th>
           <th class="text-center">Chức năng</th>
         </tr>

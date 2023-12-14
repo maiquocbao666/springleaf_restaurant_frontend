@@ -68,6 +68,10 @@ export class RoleService extends BaseService<Role> {
         return super.searchByName(term);
     }
 
+    override sortEntities(entities: Role[], field: keyof Role, ascending: boolean): Observable<Role[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     //--------------------------------------------------------------------------------------------------------
 
     // private updateCache(updatedRole: Role): void {

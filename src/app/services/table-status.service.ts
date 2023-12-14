@@ -68,6 +68,10 @@ export class TableStatusService extends BaseService<TableStatus> {
         return super.searchByName(term);
     }
 
+    override sortEntities(entities: TableStatus[], field: keyof TableStatus, ascending: boolean): Observable<TableStatus[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     //----------------------------------------------------------------------------------------------------------------
 
 }

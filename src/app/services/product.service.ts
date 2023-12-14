@@ -75,6 +75,10 @@ export class ProductService extends BaseService<Product> {
     return super.searchByKeywords(keyword);
   }
 
+  override sortEntities(entities: Product[], field: keyof Product, ascending: boolean): Observable<Product[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //-------------------------------------------------------------------------------------------------
 
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {
@@ -93,7 +97,7 @@ export class ProductService extends BaseService<Product> {
         if (item.categoryId === categoryId) {
           item.status = status;
           this.update(item).subscribe(
-            () => {       
+            () => {
             },
             error => {
             }

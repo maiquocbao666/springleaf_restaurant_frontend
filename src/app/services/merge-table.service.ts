@@ -69,20 +69,24 @@ export class MergeTableService extends BaseService<MergeTable> {
         return super.searchByName(term);
     }
 
+    override sortEntities(entities: MergeTable[], field: keyof MergeTable, ascending: boolean): Observable<MergeTable[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     getUniqueMergeTableIds(): string[] {
         // Check if the cache is not available
         if (!this.cache) {
             return [];
         }
-    
+
         // Filter out mergeTable objects with status indicating they have been separated
         const filteredMergeTables = this.cache.filter(mergeTable => mergeTable.status !== 'Đã tách');
-    
+
         // Extract unique mergeTableIds from the filtered mergeTables
         const uniqueMergeTableIds = filteredMergeTables
             .map(mergeTable => mergeTable.mergeTableId)
             .filter((mergeTableId, index, array) => array.indexOf(mergeTableId) === index);
-    
+
         return uniqueMergeTableIds;
     }
 
@@ -104,12 +108,12 @@ export class MergeTableService extends BaseService<MergeTable> {
         if (!this.cache) {
             return '';
         }
-    
+
         const foundElement = this.cache.find(mergeTable =>
             mergeTable.tableId === tableId &&
             (mergeTable.status === "Chờ xác nhận" || mergeTable.status === "Đã gộp")
         );
-    
+
         return foundElement?.mergeTableId || '';
     }
 
@@ -128,14 +132,14 @@ export class MergeTableService extends BaseService<MergeTable> {
         if (!this.cache) {
             return;
         }
-    
+
         const matchingMergeTables = this.cache.filter(mergeTable => mergeTable.mergeTableId === mergeTableId);
-    
+
         // Update the status for each matching MergeTable
         matchingMergeTables.forEach(mergeTable => {
             mergeTable.status = status;
         });
-    
+
         // Update the backend for each matching MergeTable
         matchingMergeTables.forEach(mergeTable => {
             const updatedObject = { ...mergeTable, status: status };
@@ -155,27 +159,27 @@ export class MergeTableService extends BaseService<MergeTable> {
     deleteMergeTableByTableId(id: number, tableId: number): void {
         // Find the mergeTables in the cache or wherever you store your mergeTables
         const mergeTablesToDelete = this.cache.filter(
-          mt => mt.tableId === tableId && mt.status === 'Chờ xác nhận' && mt.id !== id
+            mt => mt.tableId === tableId && mt.status === 'Chờ xác nhận' && mt.id !== id
         );
-      
+
         mergeTablesToDelete.forEach(mergeTable => {
-          // Call the service to delete each mergeTable
-          this.delete(mergeTable.id!).subscribe(
-            () => {
-              // Handle successful deletion if needed
-              console.log('MergeTable deleted successfully:', mergeTable);
-            },
-            error => {
-              // Handle error if the deletion fails
-              console.error('Error deleting mergeTable:', error);
-            }
-          );
+            // Call the service to delete each mergeTable
+            this.delete(mergeTable.id!).subscribe(
+                () => {
+                    // Handle successful deletion if needed
+                    console.log('MergeTable deleted successfully:', mergeTable);
+                },
+                error => {
+                    // Handle error if the deletion fails
+                    console.error('Error deleting mergeTable:', error);
+                }
+            );
         });
-      
+
         if (mergeTablesToDelete.length === 0) {
-          console.warn(`No mergeTables found with tableId ${tableId} in "Chờ xác nhận" status.`);
+            console.warn(`No mergeTables found with tableId ${tableId} in "Chờ xác nhận" status.`);
         }
-      }
-      
+    }
+
 
 }

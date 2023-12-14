@@ -26,8 +26,8 @@ import { MatTableDataSource } from '@angular/material/table';
 export class AdminReservationsComponent {
   dataSource!: MatTableDataSource<Reservation>;
   selectedRow: any;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  //@ViewChild(MatPaginator) paginator!: MatPaginator;
+  //@ViewChild(MatSort) sort!: MatSort;
 
   numbersArray: number[] = [];
   restaurantIdsArray = Array.from({ length: 10 }, (_, index) => index + 1);
@@ -165,9 +165,9 @@ export class AdminReservationsComponent {
     this.reservationService.getCache().subscribe(
       (cached: Reservation[]) => {
         this.reservations = cached;
-        this.dataSource = new MatTableDataSource(this.reservations);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        //this.dataSource = new MatTableDataSource(this.reservations);
+        //this.dataSource.paginator = this.paginator;
+        //this.dataSource.sort = this.sort;
       },
       (error: any) => {
         console.error('Failed to fetch data', error);
@@ -311,6 +311,19 @@ export class AdminReservationsComponent {
         }
       }
     );
+  }
+
+  sort(field: keyof Reservation, ascending: boolean): void {
+    this.reservationService
+      .sortEntities(this.reservations, field, ascending)
+      .subscribe(
+        (data) => {
+          this.reservations = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
   }
 
   // getreservationById(): void {

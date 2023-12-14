@@ -69,6 +69,10 @@ export class PaymentService extends BaseService<Payment> {
     return super.searchByName(term);
   }
 
+  override sortEntities(entities: Payment[], field: keyof Payment, ascending: boolean): Observable<Payment[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //-----------------------------------------------------------------------------------------------------------
 
 }

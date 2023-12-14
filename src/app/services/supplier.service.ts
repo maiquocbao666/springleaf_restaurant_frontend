@@ -68,6 +68,10 @@ export class SupplierService extends BaseService<Supplier>  {
         return super.searchByName(term);
     }
 
+    override sortEntities(entities: Supplier[], field: keyof Supplier, ascending: boolean): Observable<Supplier[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     //--------------------------------------------------------------------------------------------------------
 
 

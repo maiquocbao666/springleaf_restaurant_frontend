@@ -34,7 +34,7 @@ export class AdminCategoriesComponent {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private sweetAlertService: ToastService,
-    private http : HttpClient,
+    private http: HttpClient,
 
   ) {
     this.categoryForm = new FormGroup({
@@ -79,7 +79,7 @@ export class AdminCategoriesComponent {
         active: active,
         description: description,
       };
-      
+
       this.categoryService.add(newCategory)
         .subscribe(() => {
           this.categoryForm.reset();
@@ -131,7 +131,7 @@ export class AdminCategoriesComponent {
     }
   }
 
-  sortCategories(field: keyof Category, ascending: boolean): void {
+  sort(field: keyof Category, ascending: boolean): void {
     this.categoryService
       .sortEntities(this.categories, field, ascending)
       .subscribe(
@@ -143,7 +143,7 @@ export class AdminCategoriesComponent {
         }
       );
   }
-  
+
   // getCategoryById(): void {
   //   const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
   //   this.categoryService.getCategoryById(id).subscribe(category => {

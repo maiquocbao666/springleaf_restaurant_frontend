@@ -196,4 +196,17 @@ export class AdminProductsComponent {
     }
   }
 
+  sort(field: keyof Product, ascending: boolean): void {
+    this.productService
+      .sortEntities(this.products, field, ascending)
+      .subscribe(
+        (data) => {
+          this.products = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
+
 }

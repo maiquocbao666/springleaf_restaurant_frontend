@@ -69,6 +69,10 @@ export class InventoryService extends BaseService<Inventory> {
         return super.searchByName(term);
     }
 
+    override sortEntities(entities: Inventory[], field: keyof Inventory, ascending: boolean): Observable<Inventory[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     //-----------------------------------------------------------------------------------------------------
 
 }

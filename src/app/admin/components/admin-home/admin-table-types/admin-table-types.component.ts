@@ -110,4 +110,17 @@ export class AdminTableTypesComponent {
     });
   }
 
+  sort(field: keyof TableType, ascending: boolean): void {
+    this.tableTypeService
+      .sortEntities(this.tableTypes, field, ascending)
+      .subscribe(
+        (data) => {
+          this.tableTypes = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
+
 }

@@ -69,6 +69,10 @@ export class RatingService extends BaseService<Rating> {
     return super.searchByName(term);
   }
 
+  override sortEntities(entities: Rating[], field: keyof Rating, ascending: boolean): Observable<Rating[]> {
+    return super.sortEntities(entities, field, ascending);
+  }
+
   //--------------------------------------------------------------------------------------------------
 
 }

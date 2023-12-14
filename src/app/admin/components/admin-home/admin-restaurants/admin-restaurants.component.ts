@@ -121,4 +121,18 @@ export class AdminRestaurantsComponent {
     modalRef.componentInstance.restaurantSaved.subscribe(() => {
     });
   }
+
+  sort(field: keyof Restaurant, ascending: boolean): void {
+    this.restaurantService
+      .sortEntities(this.restaurants, field, ascending)
+      .subscribe(
+        (data) => {
+          this.restaurants = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
+
 }

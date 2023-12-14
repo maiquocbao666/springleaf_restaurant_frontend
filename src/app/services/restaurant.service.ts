@@ -68,6 +68,10 @@ export class RestaurantService extends BaseService<Restaurant> {
         return super.searchByName(term);
     }
 
+    override sortEntities(entities: Restaurant[], field: keyof Restaurant, ascending: boolean): Observable<Restaurant[]> {
+        return super.sortEntities(entities, field, ascending);
+    }
+
     //----------------------------------------------------------------------------------------------------------------------------
 
     // private isInCache(name: string, idToExclude: number | null = null): boolean {
