@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
@@ -103,6 +104,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
 import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { AdminUsersDetailComponent } from './admin/components/admin-home/admin-users-detail/admin-users-detail.component';
+import { AdminGuardService } from './services/guard-url/admin-guard.service';
+import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-merge-tables/admin-merge-tables.component';
 
 @NgModule({
   declarations: [
@@ -171,7 +176,8 @@ import { UserMergeTablesComponent } from './user/components/user-home/user-resta
     AdminOrderThresholdDetailComponent,
     AdminStatisticalComponent,
     AdminBillsComponent,
-
+    AdminUsersDetailComponent,
+    AdminMergeTablesComponent,
 
     ChatComponent,
     LoginComponent,
@@ -191,6 +197,7 @@ import { UserMergeTablesComponent } from './user/components/user-home/user-resta
     ReactiveFormsModule,
     NgxPaginationModule,
     NgToastModule,
+    NgxChartsModule, // Thêm vào đây
     FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
@@ -210,6 +217,7 @@ import { UserMergeTablesComponent } from './user/components/user-home/user-resta
     MatSortModule,
     MatDialogModule,
     MatButtonModule,
+    MatSlideToggleModule,
 
   ],
   providers: [
@@ -223,6 +231,7 @@ import { UserMergeTablesComponent } from './user/components/user-home/user-resta
       provide: RxStompService2,
       useFactory: rxStompServiceFactory2,
     },
+    [AdminGuardService],
   ],
   bootstrap: [AppComponent],
 })

@@ -64,10 +64,6 @@ export class RestaurantService extends BaseService<Restaurant> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<Restaurant[]> {
-        return super.searchByName(term);
-    }
-
     //----------------------------------------------------------------------------------------------------------------------------
 
     // private isInCache(name: string, idToExclude: number | null = null): boolean {

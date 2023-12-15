@@ -1,3 +1,4 @@
+import { IngredientService } from 'src/app/services/ingredient.service';
 
 import { Component, OnDestroy } from "@angular/core";
 import { AuthenticationService } from "./services/authentication.service";
@@ -12,15 +13,16 @@ import { CartService } from "./services/cart.service";
 import { DeliveryOrderDetailService } from "./services/delivery-order-detail.service";
 import { DeliveryOrderStatusService } from "./services/delivery-order-status.service";
 import { DeliveryOrderService } from "./services/delivery-order.service";
+import { DiscountService } from "./services/discount.service";
 import { EventService } from "./services/event.service";
 import { FavoriteService } from "./services/favorite.service";
 import { GoodsReceiptDetailService } from "./services/goods-receipt-detail.service";
 import { GoodsReceiptService } from "./services/goods-receipt.service";
-import { IngredientService } from "./services/ingredient.service";
 import { InventoryBranchService } from "./services/inventory-branch.service";
 import { InventoryService } from "./services/inventory.service";
 import { MenuItemIngredientService } from "./services/menu-Item-ingredient.service";
 import { MergeTableService } from "./services/merge-table.service";
+import { OrderThresholdService } from "./services/order-threshold.service";
 import { OrderService } from "./services/order.service";
 import { PaymentService } from "./services/payment.service";
 import { ProductService } from "./services/product.service";
@@ -34,8 +36,7 @@ import { RestaurantService } from "./services/restaurant.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
-import { OrderThresholdService } from "./services/order-threshold.service";
-import { DiscountService } from "./services/discount.service";
+import { SwUpdate } from '@angular/service-worker';
 
 
 interface DataService<T> {
@@ -60,14 +61,17 @@ export class AppComponent implements OnDestroy {
   callAPIsWorker: Worker;
   services: ServiceMap;
 
+
+
   constructor(
+    private swUpdate: SwUpdate,
     private authentication: AuthenticationService,
     private categoriesService: CategoryService,
     private productsService: ProductService,
     private cartsService: CartService,
     private cartDetailsService: CartDetailService,
     private ordersService: OrderService,
-
+    private ingredientService: IngredientService,
     private combosService: ComboService,
     private comboDetailService: ComboDetailService,
     private eventsService: EventService,
@@ -98,7 +102,7 @@ export class AppComponent implements OnDestroy {
     private reservationsService: ReservationService,
     private tableTypesService: TableTypeService,
     private reservationStatusesService: ReservationStatusService,
-    private discountsService : DiscountService,
+    private discountsService: DiscountService,
   ) {
 
     window.addEventListener('storage', (event) => {
@@ -136,8 +140,6 @@ export class AppComponent implements OnDestroy {
       deliveryOrders: { cache: this.deliveryOrdersService.cache, localStorageKey: 'deliveryOrders' },
       deliveryOrderStatuses: { cache: this.deliveryOrderStatusesService.cache, localStorageKey: 'deliveryOrderStatuses' },
 
-      
-
       favorites: { cache: this.favoritesService.cache, localStorageKey: 'favorites' },
       inventories: { cache: this.inventoriesService.cache, localStorageKey: 'inventories' },
       inventoryBranches: { cache: this.inventoryBranchesService.cache, localStorageKey: 'inventoryBranches' },
@@ -156,7 +158,7 @@ export class AppComponent implements OnDestroy {
       reservations: { cache: this.reservationsService.cache, localStorageKey: 'reservations' },
       tableTypes: { cache: this.tableTypesService.cache, localStorageKey: 'tableTypes' },
       reservationStatuses: { cache: this.reservationStatusesService.cache, localStorageKey: 'reservationStatuses' },
-      discounts: { cache: this.discountsService.cache , localStorageKey : 'discounts'},
+      discounts: { cache: this.discountsService.cache, localStorageKey: 'discounts' },
 
     };
 
@@ -166,14 +168,25 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.checkThreshold();
     var accessToken = localStorage.getItem('access_token');
-    console.log(accessToken);
-    if (accessToken != null) {
-      this.authentication.checkUserByAccessToken(accessToken);
+    var userSession = sessionStorage.getItem('userCache');
+    console.log(userSession)
+    if (userSession !== '' && userSession) {
+      this.authentication.setUserCache(JSON.parse(userSession));
+    } else {
+      if (accessToken != null) {
+        this.authentication.checkUserByAccessToken(accessToken);
+        console.log('Tự động đăng nhập')
+      }
     }
 
-
+    // Lấy role Cache từ session storage
+    var userRoleSession = sessionStorage.getItem('userRoles');
+    console.log(userRoleSession)
+    if(userRoleSession !== '' && userRoleSession){
+      this.authentication.setRoleCache(JSON.parse(userRoleSession));
+    }
     this.getAllDatasFromLocalStorage();
     this.callAllApis();
 
@@ -239,5 +252,17 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.callAPIsWorker.terminate();
+  }
+
+  checkThreshold() {
+    this.ingredientService.checkThreshold().subscribe(
+      (data: any) => {
+
+        console.log(data);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 }

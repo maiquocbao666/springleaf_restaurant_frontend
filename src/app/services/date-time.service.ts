@@ -35,7 +35,7 @@ export class DateTimeService {
         private authService: AuthenticationService
     ) {
 
-        this.authService.cachedData$.subscribe((data) => {
+        this.authService.getUserCache().subscribe((data) => {
             this.user = data;
             console.log("Kết tối web socket datetime");
             this.rxStompService2.connectionState$.subscribe(state => {
@@ -90,7 +90,7 @@ export class DateTimeService {
     // }
 
     private subscribeToPrivate() {
-        this.authService.cachedData$.subscribe((data) => {
+        this.authService.getUserCache().subscribe((data) => {
             this.user = data;
             this.rxStompService2
                 .watch(`/${this.channel}/greetings/${this.user?.userId}`)

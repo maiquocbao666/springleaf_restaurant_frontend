@@ -13,6 +13,7 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
 
+  private userCart : DeliveryOrder | null = null;
   private userCartSubject = new BehaviorSubject<DeliveryOrder | null>(null);
   userCart$ = this.userCartSubject.asObservable();
 
@@ -30,6 +31,16 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   ) {
     super(apiService, rxStompService, sweetAlertService);
     this.subscribeToQueue();
+  }
+
+  // Hàm set để cập nhật giá trị của userCartSubject
+  setUserCartCache(cart: DeliveryOrder | null): void {
+    this.userCartSubject.next(cart);
+  }
+
+  // Hàm get để lấy giá trị hiện tại của userCartSubject
+  getUserCartCache(): Observable<DeliveryOrder | null> {
+    return this.userCart$;
   }
 
   //-----------------------------------------------------------------------------------------
@@ -69,7 +80,7 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   }
 
   getUserCart(): Observable<DeliveryOrder | null> {
-    const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }
@@ -81,10 +92,11 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
     return this.apiService.request<DeliveryOrder>('get', 'user/getCartByUser', null, customHeader)
       .pipe(
         tap(cart => {
-          this.userCartSubject.next(cart);
+          this.setUserCartCache(cart);
         })
       );
   }
+  
 
 
 }

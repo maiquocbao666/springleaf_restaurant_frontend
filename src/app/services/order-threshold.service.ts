@@ -64,10 +64,6 @@ export class OrderThresholdService extends BaseService<OrderThreshold> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<OrderThreshold[]> {
-        return super.searchByName(term);
-    }
-
     //------------------------------------------------------------------------------------------------------
 
 }

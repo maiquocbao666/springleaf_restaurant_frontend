@@ -65,10 +65,6 @@ export class PaymentService extends BaseService<Payment> {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<Payment[]> {
-    return super.searchByName(term);
-  }
-
   //-----------------------------------------------------------------------------------------------------------
 
 }

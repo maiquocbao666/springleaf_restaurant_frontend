@@ -65,10 +65,6 @@ export class ReceiptDetailService extends BaseService<ReceiptDetail> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<ReceiptDetail[]> {
-        return super.searchByName(term);
-    }
-
     //--------------------------------------------------------------------------------------------------------------
 
 }

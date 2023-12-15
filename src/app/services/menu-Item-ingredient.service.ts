@@ -64,11 +64,7 @@ export class MenuItemIngredientService extends BaseService<MenuItemIngredient> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<MenuItemIngredient[]> {
-        return super.searchByName(term);
-    }
-    
     //------------------------------------------------------------------------------------------------
 
-  
+
 }

@@ -6,7 +6,8 @@
                 <i class="fas fa-map-marker-alt"></i>
             </div>
             <div class="address">
-                <a href="">288 An Khánh, Ninh Kiều, Cần Thơ</a>
+                <a href="" *ngIf="userRestaurant">{{ userRestaurant.restaurantName}}</a>
+                <a *ngIf="!userRestaurant" (click)="openUserRestaurant()">Bạn chưa chọn nhà hàng</a>
             </div>
         </div>
         <div class="right-content">
@@ -40,6 +41,9 @@
                         <i (click)="openLoginModal()" class="fa fa-user" aria-hidden="true"></i>
                     </li>
                 </ul> -->
+                <div class="address">
+                    <a href="" *ngIf="userRestaurant">{{ userRestaurant.phone}}</a>
+                </div>
             </div>
         </div>
     </div>
@@ -51,8 +55,9 @@
                     <div class="col-lg-2 col-md-3 col-12">
                         <!-- Start Logo -->
                         <div class="logo">
-                            <a class="navbar-brand" routerLink="/user/index"><i class="fa-solid fa-seedling"></i>
-                                SPRINGLEAF</a>
+                            <a class="navbar-brand" routerLink="/user/index">
+                                <h3><i class="fa-solid fa-seedling"></i> SPRINGLEAF</h3>
+                            </a>
                         </div>
                         <!-- End Logo -->
                     </div>
@@ -61,40 +66,18 @@
                         <div class="main-menu">
                             <nav class="navigation">
                                 <ul class="nav menu">
-                                    <li class="active" routerLinkActive="active"><a routerLink="/user/index">Home</a>
+                                    <li class="active" routerLinkActive="active"><a routerLink="/user/index">TRANG
+                                            CHỦ</a>
                                     </li>
-                                    <li><a>Menu<i class="icofont-rounded-down"></i></a>
+                                    <li><a>MENU<i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
-                                            <!-- <li routerLinkActive="active"><a routerLink="/user/upload">Upload</a></li> -->
-                                            <!-- <li routerLinkActive="active">
-                                                <a routerLink="/user/inventoryBranches">InventoryBranch</a>
+                                            <li routerLinkActive="active" *ngFor="let category of categories">
+                                                <a [routerLink]="['/user/index/category', category.categoryId, 'products']">{{category.name}}</a>
                                             </li>
-                                            <li routerLinkActive="active"><a routerLink="/user/combo">Combo</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/chat">Chat</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/user/cart">Cart</a></li>
-                                            <li>
-                                                <a routerLink="/user/restaurant"
-                                                    routerLinkActive="active">Restaurant</a>
-                                            </li> -->
+
                                         </ul>
                                     </li>
-                                    <!-- <li><a href="#">Danh mục <i class="icofont-rounded-down"></i></a>
-                                        <ul class="dropdown">
-                                            <li routerLinkActive="active"><a routerLink="/user/upload">Upload</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/user/event">Event</a></li>
-                                            <li routerLinkActive="active">
-                                                <a routerLink="/user/inventoryBranches">InventoryBranch</a>
-                                            </li>
-                                            <li routerLinkActive="active"><a routerLink="/user/combo">Combo</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/chat">Chat</a></li>
-                                            <li routerLinkActive="active"><a routerLink="/user/cart">Cart</a></li>
-                                            <li>
-                                                <a routerLink="/user/restaurant"
-                                                    routerLinkActive="active">Restaurant</a>
-                                            </li>
-                                        </ul>
-                                    </li> -->
-                                    <li routerLinkActive="active"><a routerLink="/admin">Admin</a></li>
+                                    <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a routerLink="/admin/statistical">TRANG QUẢN LÝ</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -103,31 +86,38 @@
                     <div class="col-lg-4 col-12">
                         <nav class="navigation">
                             <ul class="nav menu-right">
+                                <li>
+                                    <button class="mt-3" routerLink="/user/table"> ĐẶT BÀN</button>
+                                </li>
                                 <li><button class="mt-3" routerLink="/user/cart">
                                         <i class="fa-solid fa-cart-shopping">
                                             <span
-                                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" *ngIf="orderDetailCount">
+                                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                *ngIf="orderDetailCount">
                                                 {{orderDetailCount}}
                                             </span>
                                         </i>
                                     </button>
                                 </li>
-                                <li>
-                                    <button class="mt-3" routerLink="/user/table"> Reservation</button>
-                                </li>
                                 <li routerLinkActive="active" *ngIf="user">
-                                        <img class="small-round-image"
-                                            src="https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg"
-                                            alt="Small Image" />
+                                    <div class="image" style="align-items: center;">
+                                        <img class="small-round-image mr-2"
+                                            [src]="'http://localhost:8080/public/getImage/' + user.image"
+                                            #imagePreview />
                                         <span>{{truncateString(user.fullName)}}</span>
+                                    </div>
                                     <ul class="dropdown">
                                         <li routerLinkActive="active"><a class="nav-link"
+                                                (click)="openProfileModel()">Hồ sơ
+                                                cá nhân</a>
+                                        </li>
+                                        <li routerLinkActive="active"><a class="nav-link"
                                                 (click)="openUserPasswordModel()">Đổi mật khẩu
-                                            </a></li>
-                                        <li routerLinkActive="active"><a class="nav-link" (click)="openProfileModel()">Hồ sơ
-                                                cá nhân</a></li>
-    
-                                        <li routerLinkActive="active"><a class="nav-link" (click)="logOut()">Đăng xuất</a>
+                                            </a>
+                                        </li>
+
+                                        <li routerLinkActive="active"><a class="nav-link" (click)="logOut()">Đăng
+                                                xuất</a>
                                         </li>
                                         <div class="nav-item" *ngIf="!user">
                                             <button (click)="openLoginModal()" class="mt-3">
@@ -142,7 +132,7 @@
                                 </li>
                             </ul>
                         </nav>
-                        
+
                     </div>
                 </div>
             </div>

@@ -90,9 +90,8 @@
                 </div>
               </div>
               <div class="widget-content-right header-user-info ml-3">
-                <img class="small-round-image"
-                  src="https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg"
-                  alt="Small Image" />
+                <img class="small-round-image mr-2" [src]="'http://localhost:8080/public/getImage/' + user?.image!"
+                  #imagePreview />
               </div>
             </div>
           </div>
@@ -268,9 +267,9 @@
                 Quản lý
                 <i class="fas fa-caret-right metismenu-state-icon "></i>
               </a>
-              <!-- <ul>
+              <ul>
                 <li>
-                  <a routerLink="/admin/user">
+                  <a routerLink="/admin/users">
                     <i class="metismenu-icon"></i>
                     Quản lý người dùng
                   </a>
@@ -287,7 +286,7 @@
                     </i>Quản quyền người dùng
                   </a>
                 </li>
-              </ul> -->
+              </ul>
             </li>
             <li class="app-sidebar__heading">Món ăn</li>
             <li>
@@ -341,6 +340,11 @@
                 <li>
                   <a routerLink="/admin/reservations">
                     <i class="metismenu-icon"></i>Quản lý đặt bàn
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/admin/mergeTables">
+                    <i class="metismenu-icon"></i>Quản lý gộp bàn
                   </a>
                 </li>
                 <li>
@@ -421,7 +425,6 @@
                 </li>
               </ul>
             </li>
-            <li class="app-sidebar__heading">PRO Version</li>
           </ul>
         </div>
       </div>

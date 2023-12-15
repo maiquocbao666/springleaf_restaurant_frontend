@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title">Product Detail</h4>
+    <h4 class="modal-title">Chi tiết sản phẩm</h4>
     <button type="button" class=" btn close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -7,40 +7,35 @@
 <main class="container">
     <!-- Left Column / Headphones Image -->
     <div class="left-column">
-        <img class="active" style="width: 90%;"
-            src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt="burger">
-        <img data-image="blue" src="https://designmodo.com/demo/product-page/images/blue.png" alt="">
-        <!-- <img data-image="red" class="active" src="https://designmodo.com/demo/product-page/images/red.png" alt=""> -->
+        <img class="active"  [src]="'http://localhost:8080/public/getImage/'+ product?.imageUrl"
+            alt="burger">
     </div>
 
 
     <!-- Right Column -->
     <div class="right-column">
-
         <!-- Product Description -->
         <div class="product-description">
             <h1>{{ product?.name }}</h1>
         </div>
         <!-- Product Configuration -->
         <div class="product-configuration">
-            <!-- Product Color -->
-            <p> {{ product?.description }}</p>
-
             <!-- Cable Configuration -->
             <div class="cable-config">
-                <span>Loại</span>
-                <div class="cable-choose">
-                    <button>{{ getCategoryById(product!.categoryId)?.name}}</button>
-                </div>
-
-                <a href="#">How to configurate your food</a>
+                <span>Loại : {{ getCategoryById(product!.categoryId)?.name}}</span>
+                <!-- <div class="cable-choose">
+                    <button></button>
+                </div> -->
+            </div>
+            <p>Mô tả: {{ product?.description }}</p>
+            <div class="cable-config">
+                <h6>Đơn giá: {{ formatAmount(product!.unitPrice) }}</h6>
             </div>
         </div>
 
         <!-- Product Pricing -->
         <div class="product-price">
-            <span> {{ formatAmount(product!.unitPrice) }}</span>
-            <a class="cart-btn" (click)="addToCart(product?.menuItemId)">Add to cart</a>
+            <button class="cart-btn" (click)="addToCart(product?.menuItemId)"><i class="fa fa-cart-shopping"></i> Thêm vào giỏ hàng</button>
         </div>
     </div>
 </main>

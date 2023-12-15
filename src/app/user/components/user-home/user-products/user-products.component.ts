@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +8,7 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { CategoryService } from 'src/app/services/category.service';
@@ -46,8 +48,9 @@ export class UserProductsComponent implements OnInit {
     private orderDetailService: CartDetailService,
     private modalService: NgbModal,
     private toastService: ToastService,
+    private apiService: ApiService,
   ) {
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
     });
     this.deliveryOrderService.userCart$.subscribe(cart => {
@@ -59,6 +62,17 @@ export class UserProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserLoggedIn().subscribe(
+      (userData) => {
+        // Xử lý thông tin người dùng đăng nhập ở đây
+        console.log('Thông tin người dùng đăng nhập:', userData);
+      },
+      (error) => {
+        // Xử lý khi có lỗi xảy ra khi lấy thông tin người dùng
+        console.error('Lỗi khi lấy thông tin người dùng:', error);
+      }
+    );
+
     this.getProducts();
     this.getCategories();
     this.route.paramMap.subscribe(paramMap => {
@@ -69,6 +83,19 @@ export class UserProductsComponent implements OnInit {
       }
     });
   }
+
+
+  // Hàm gửi yêu cầu lấy thông tin người đang đăng nhập
+  getUserLoggedIn(): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+
+    const customHeader1 = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+
+    return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
+  }
+
 
   filterProductsByCategoryId(categoryId: number): any[] {
     return this.products.filter(product => product.categoryId === categoryId);
@@ -81,6 +108,15 @@ export class UserProductsComponent implements OnInit {
     this.visibleProductCount -= 12; // Giảm số sản phẩm hiển thị đi 10
   }
 
+
+  // Trong file của bạn có thể thêm một hàm để giới hạn độ dài của chuỗi
+  truncateString(str: string, maxLength: number): string {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + '...'; // Trả về chuỗi được giới hạn độ dài
+    }
+    return str; // Trả về chuỗi ban đầu nếu không vượt quá độ dài tối đa
+  }
+
   getVisibleProducts(): Product[] {
     return this.products ? this.products.slice(0, this.visibleProductCount) : [];
   }
@@ -88,7 +124,7 @@ export class UserProductsComponent implements OnInit {
   getProducts(): void {
     this.productService.getCache().subscribe(
       (cached: any[]) => {
-        this.products = cached;
+        this.products = cached.filter(product => product.status === true);
       }
     );
   }
@@ -147,61 +183,26 @@ export class UserProductsComponent implements OnInit {
     }
   }
 
-
-
-
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
-  // addOrder(): void {
-  //   const orderDate = "2023-11-18";
-  //   const userId = this.user?.userId;
-  //   const staffId = userId;
-  //   const comboId = 1;
-  //   const status = false;
-  //   const deliveryOrderId = null;
-  //   const totalAmount = 50.0;
-
-
-  //   this.reservationService.getReservationId().subscribe(reservationId => {
-  //     if (!reservationId) {
-  //       this.toastService.showWarn('Bạn chưa đặt bàn!!!');
-  //       return; 
-  //     }
-  //     const newOrder: Order = {
-  //       orderId: 0,
-  //       combo: comboId!,
-  //       reservationId: reservationId!,
-  //       deliveryOrderId: deliveryOrderId!,
-  //       orderDate: orderDate,
-  //       totalAmount: totalAmount!,
-  //       staffId: staffId!, // Sử dụng staffId lấy được từ user
-  //       status: status
-  //     };
-
-  //     this.orderService.addOrder(newOrder).subscribe(
-  //       {
-  //         next: (addedOrder) => {
-  //           alert("Thành công")
-  //           this.toastService.showSuccess('Tạo order thành công!');
-  //         },
-  //         error: (error) => {
-  //           console.error('Error adding order:', error);
-
-  //         },
-  //         complete: () => {
-
-  //         }
-  //       }
-  //     );
-  //   });
-  // }
-
   openProductDetailModal(product: Product) {
     const modalRef = this.modalService.open(UserProductDetailComponent, { size: 'lg' });
     modalRef.componentInstance.product = product;
+  }
 
+  search(event: any) {
+    const keyword = event.target.value;
+    if (keyword.trim() === '') {
+      this.getProducts();
+    } else {
+      this.productService.searchByKeywords(keyword).subscribe(
+        (data) => {
+          this.products = data;
+        }
+      );
+    }
   }
 
 }

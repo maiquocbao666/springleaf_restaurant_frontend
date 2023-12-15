@@ -65,10 +65,6 @@ export class InventoryService extends BaseService<Inventory> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<Inventory[]> {
-        return super.searchByName(term);
-    }
-
     //-----------------------------------------------------------------------------------------------------
 
 }

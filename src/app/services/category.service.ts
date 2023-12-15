@@ -6,6 +6,7 @@ import { Category } from '../interfaces/category';
 
 import { Observable, of } from 'rxjs';
 import { BaseService } from './base-service';
+import { ProductService } from './product.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class CategoryService extends BaseService<Category> {
   constructor(
     apiService: ApiService,
     rxStompService: RxStompService,
-    sweetAlertService: ToastService
+    sweetAlertService: ToastService,
+    private productService: ProductService,
   ) {
     super(apiService, rxStompService, sweetAlertService);
     this.subscribeToQueue();
@@ -34,7 +36,7 @@ export class CategoryService extends BaseService<Category> {
   getItemId(item: Category): number {
     return item.categoryId!;
   }
-  
+
   getItemName(item: Category): string {
     return item.name;
   }
@@ -50,7 +52,7 @@ export class CategoryService extends BaseService<Category> {
   //--------------------------------------------------------------------------------
 
   override subscribeToQueue(): void {
-      super.subscribeToQueue();
+    super.subscribeToQueue();
   }
 
   override add(newObject: Category): Observable<Category> {
@@ -61,18 +63,26 @@ export class CategoryService extends BaseService<Category> {
   }
 
   override update(updateObject: Category): Observable<Category> {
-    if (this.isNameInCache(updateObject.name, updateObject.categoryId)) {
+    const isNameInCache = this.isNameInCache(updateObject.name, updateObject.categoryId);
+
+    if (isNameInCache) {
       return of();
     }
+
+    this.productService.updateProductsStatusByCategoryId(updateObject.categoryId!, updateObject.active);
+
     return super.update(updateObject);
   }
 
   override delete(id: number): Observable<any> {
-    return super.delete(id);
-  }
-
-  override searchByName(term: string): Observable<Category[]> {
-    return super.searchByName(term);
+    this.productService.getProductsByCategoryId(id).subscribe(productsWithCategory => {
+      if (productsWithCategory.length > 0) {
+        this.sweetAlertService.showTimedAlert(`Không thể xóa!`, '', 'error', 2000);
+      } else {
+        super.delete(id);
+      }
+    });
+    return of();
   }
 
   //---------------------------------------------------------------------------------------------------------

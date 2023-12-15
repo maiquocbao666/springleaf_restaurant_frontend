@@ -52,40 +52,27 @@
   <div class="row">
     <div class="col-lg-8">
       <div class="payment-method">
-        <h2>Sản phẩm</h2>
+        <h2>{{cartInfos.length}} Sản phẩm</h2>
         <hr>
         <div class="row">
-          <ul class="list-group">
-            <li class="d-flex align-items-center">
+          <ul class="list-group" >
+            <li class="d-flex align-items-center" *ngFor="let cart of cartInfos">
               <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt=""
                 width="100">
               <div class="d-flex flex-column ms-3 me-auto">
-                <span>Sản phẩm 1</span>
-                <span>Mô tả sản phẩm 1</span>
-                <span>Số lượng: 1</span>
+                <span>{{cart.menuItemName}}</span>
+                <!-- <span>Mô tả: {{cart.menuItem}}</span> -->
+                <span>Số lượng : {{cart.quantity}}</span>
               </div>
               <div>
-                <span>35.000 VND</span>
-              </div>
-            </li>
-            <hr>
-            <li class=" d-flex align-items-center">
-              <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt=""
-                width="100">
-              <div class="d-flex flex-column ms-3 me-auto">
-                <span>Sản phẩm 2</span>
-                <span>Mô tả sản phẩm 2</span>
-                <span>Số lượng: 1</span>
-              </div>
-              <div>
-                <span>35.000 VND</span>
+                <span>Tổng tiền: {{ formatAmount(cart.menuItemPrice * cart.quantity)}}</span>
               </div>
             </li>
             <hr>
           </ul>
         </div>
       </div>
-      <div class="submit-order-container">
+      <!-- <div class="submit-order-container">
         <div *ngIf="!submitted">
           <label for="orderTotal">Order Total:</label>
           <input type="number" id="orderTotal" [(ngModel)]="orderTotal" required>
@@ -98,14 +85,14 @@
           <h2>Payment Status</h2>
           <p>{{ paymentStatus }}</p>
         </div>
-      </div>
+      </div> -->
     </div>
     <!-- payment-form.component.html -->
 
     <!-- user-checkout.component.html -->
     <div class="col-lg-4">
       <div class="card address-card">
-        <h2>Đơn hàng (2 sản phẩm)</h2>
+        <h5>Phương thức thanh toán</h5>
         <hr>
         <div class="card-body ">
           <ul class="list-group">
@@ -118,38 +105,37 @@
               </label>
             </div>
             <!-- Phương thức thanh toán MoMo -->
-            <div class="payment-option">
+            <!-- <div class="payment-option">
               <input type="radio" id="momo" name="paymentMethod" value="momo" [(ngModel)]="selectedPaymentMethod">
               <label for="momo">
                 <img src="https://img.mservice.io/momo-payment/icon/images/logo512.png" alt="MoMo Logo" width="100px">
                 MoMo
               </label>
-            </div>
+            </div> -->
             <div class="payment-option">
-              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod">
+              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod"  (click)="calculateShipping(total || 0)">
               <label for="cod">
                 <img
                   src="https://cdn1.iconfinder.com/data/icons/marketplace-and-shipping-filled-outline/64/COD_cash_on_delivery_shipping_payment_delivery-512.png"
                   alt="cod Logo" width="100px">
-                COD
+                COD (Tính phí)
               </label>
             </div>
             <hr>
-            <!-- <b class="d-flex justify-content-end">Tổng tiền: 70. 000 VND</b> -->
-            <div class="input-container">
+            <!-- <div class="input-container">
               <input required="" placeholder="Add Vorcher" type="email">
               <button class="invite-btn" type="button">
                 Add
               </button>
             </div>
-            <hr>
+            <hr> -->
             <ul class="list-group">
               <li class="d-flex align-items-center">
                 <div class="d-flex flex-column ms-3 me-auto">
                   <span>Tạm tính</span>
                 </div>
                 <div>
-                  <span>35.000 VND</span>
+                  <span>{{ formatAmount(calculateTotalPrice()) }}</span>
                 </div>
               </li>
               <li class="d-flex align-items-center">
@@ -157,7 +143,7 @@
                   <span>Phí vận chuyển</span>
                 </div>
                 <div>
-                  <span>-</span>
+                  <span>{{ formatAmount(ship || 0) }}</span>
                 </div>
               </li>
               <hr>
@@ -166,7 +152,7 @@
                   <span>Tổng cộng</span>
                 </div>
                 <div>
-                  <h4 id="orderTotal" [(ngModel)]="orderTotal">70.000 VND</h4>
+                  <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ formatAmount(calculateFinalPrice(ship || 0)) }}</h4>
                 </div>
               </li>
             </ul>

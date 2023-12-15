@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
       console.log("Kết tối web socket");
       this.topicSubscription = this.rxStompService.connectionState$.subscribe(state => {

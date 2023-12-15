@@ -3,8 +3,8 @@
 addEventListener('message', async (event) => {
     const { type, loginData, token, tokenUser, email, password, typeCode } = event.data;
     console.log("Call all this User Apis Worker Works", type);
-    const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
-    //const domain = 'http://localhost:8080/auth';
+    //const domain = 'https://springleafrestaurantbackend.onrender.com/auth';
+    const domain = 'http://localhost:8080/auth';
     if (type === 'check_access_token') {
         const  accessToken  = token;
         try {
@@ -30,14 +30,12 @@ addEventListener('message', async (event) => {
                 checkTokenRespone: responseData[0],
             }
             postMessage(dataMap);
-            console.log('Data Map: ' + JSON.stringify(dataMap));
         } catch {
             // Xử lý lỗi nếu cần
         }
     };
     if (type === 'logout') {
         const  accessToken  = token;
-        console.log(token);
         try {
             const responses = await Promise.all([
                 fetch(`https://springleafrestaurantbackend.onrender.com/auth2/logout`, {
@@ -99,7 +97,6 @@ addEventListener('message', async (event) => {
     };
     if (type === 'config-password') {
         const accessToken = token;
-        console.log(token)
         try {
             const responses = await Promise.all([
                 fetch(`${domain}/config-password`, {
@@ -125,7 +122,6 @@ addEventListener('message', async (event) => {
                 configPasswordResponse: responseData[0],
             }
             postMessage(dataMap);
-            console.log(dataMap.configPasswordResponse)
         } catch {
 
         }
@@ -157,7 +153,6 @@ addEventListener('message', async (event) => {
                 changePasswordResponse: responseData[0],
             }
             postMessage(dataMap);
-            console.log(dataMap.changePasswordResponse)
         } catch {
 
         }
@@ -189,7 +184,6 @@ addEventListener('message', async (event) => {
                 forgotPasswordResponse: responseData[0],
             }
             postMessage(dataMap);
-            console.log(dataMap.forgotPasswordResponse)
         } catch {
 
         }
@@ -256,12 +250,12 @@ addEventListener('message', async (event) => {
         }
     }
     
-    if (type === 'cart') {
+    if (type === 'provinces') {
         const token = "d6f64767-329b-11ee-af43-6ead57e9219a";
         try {
             const responses = await Promise.all([
 
-                fetch(`${domain}/your-profile`, {
+                fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/province`, {
                     method: 'GET',
                     headers: {
                         'token': token,
@@ -283,7 +277,6 @@ addEventListener('message', async (event) => {
 
             }
             postMessage(dataMap);
-
         } catch {
 
         }

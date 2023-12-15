@@ -10,6 +10,13 @@ import { Product } from 'src/app/interfaces/product';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { DiscountService } from 'src/app/services/discount.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Province } from 'src/app/interfaces/address/Province';
+import { District } from 'src/app/interfaces/address/District';
+import { Ward } from 'src/app/interfaces/address/Ward';
+import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-user-cart',
@@ -20,21 +27,30 @@ export class UserCartComponent implements OnInit {
   cartDetails: CartDetail[] = [];
   Provinces: any = [];
   selectedProvince: number | null = null;
+  DisTrictsFromAPI: any = [];
   Districts: any = [];
   selectedDistrict: number | null = null;
   Wards: any = [];
   selectedWard: number | null = null;
+  shipFee: number | null = null;
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
   orderDetailByUser: CartDetail[] | null = null;
   products: Product[] | null = null;
   cartInformationArray: CartInfomation[] = [];
 
-  selectedItems: any[] = [];
+  selectedItems: CartInfomation[] = [];
   selectAllChecked = false;
   selections: { [key: string]: boolean } = {};
   discountCode: string = '';
   discountPrice: number | null = null;
+
+  userProvince: Province | null = null;
+  userDistrict: District | null = null;
+  userWard: Ward | null = null;
+  user: User | null = null;
+  ship: number | null = null;
+  finalPrice2 : number | null = null;
   constructor(
     private cartService: CartService,
     private deliveryOrderService: DeliveryOrderService,
@@ -42,8 +58,17 @@ export class UserCartComponent implements OnInit {
     private cartDetailService: CartDetailService,
     private toastService: ToastService,
     private discountService: DiscountService,
+    private authService: AuthenticationService,
+    private http: HttpClient,
+    private router: Router
   ) {
-
+    const provincesString = localStorage.getItem('Provinces');
+    if (provincesString) {
+      const parsedProvince: Province[] = JSON.parse(provincesString);
+      this.Provinces = parsedProvince;
+    } else {
+      console.error('No products found in local storage or the value is null.');
+    }
     const productsString = localStorage.getItem('products');
     if (productsString) {
       const parsedProducts: Product[] = JSON.parse(productsString);
@@ -63,8 +88,12 @@ export class UserCartComponent implements OnInit {
         this.setCartInfomationArrays();
       }
     });
-
-
+    this.authService.getUserCache().subscribe(
+      (data) => {
+        this.user = data;
+      }
+    );
+    this.initUserAddress();
   }
 
   ngOnInit(): void {
@@ -78,8 +107,53 @@ export class UserCartComponent implements OnInit {
     this.cartService.wardData$.subscribe(data => {
       this.Wards = Object.values(data);
     });
+
   }
 
+  initUserAddress() {
+    if (this.user) {
+      if (this.user.address) {
+        const address = this.user.address.toString();
+        const splittedStrings = address.split('-');
+        const addressWard = splittedStrings[0];
+        const addressDistrict = parseInt(splittedStrings[1], 10);
+        const addresssProvince = parseInt(splittedStrings[2], 10);
+
+        for (const province of this.Provinces) {
+          if (province.ProvinceID === addresssProvince) {
+            this.userProvince = province;
+            break;
+          }
+        }
+
+        if (this.userProvince) {
+          this.getDistrict(this.userProvince.ProvinceID).then(() => {
+            for (const district of this.Districts) {
+              if (district.DistrictID === addressDistrict) {
+                this.userDistrict = district;
+                if (this.userDistrict) {
+                  console.log('here')
+                  this.getWard(this.userDistrict.DistrictID).then(() => {
+                    for (const ward of this.Wards) {
+                      if (ward.WardCode === addressWard) {
+                        this.userWard = ward;
+                        break;
+                      }
+                    }
+                  });
+
+                }
+                break;
+
+              }
+            }
+          });
+        }
+      } else {
+      }
+
+    }
+  }
   @ViewChild('likeBtn') likeBtn!: ElementRef;
   @ViewChild('minusBtn') minusBtn!: ElementRef;
   @ViewChild('plusBtn') plusBtn!: ElementRef;
@@ -88,6 +162,10 @@ export class UserCartComponent implements OnInit {
     this.likeButtonHandler();
     this.minusButtonHandler();
     this.plusButtonHandler();
+  }
+
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
   setCartInfomationArrays() {
@@ -100,7 +178,7 @@ export class UserCartComponent implements OnInit {
           if (orderDetail.menuItemId === product.menuItemId) {
             const cartInfo: CartInfomation = {
               orderDetailId: orderDetail.orderDetailId,
-              order: orderDetail.order,
+              order: orderDetail.orderId,
               menuItem: orderDetail.menuItemId,
               quantity: orderDetail.quantity,
               menuItemPrice: product.unitPrice,
@@ -146,6 +224,14 @@ export class UserCartComponent implements OnInit {
       inputElement.value = cart.quantity.toString();
     } else {
       cart.quantity = newValue;
+      const cartDetail: CartDetail = {
+        orderDetailId: cart.orderDetailId,
+        orderId: cart.order,
+        menuItemId: cart.menuItem,
+        quantity: newValue
+      };
+      this.cartDetailService.update(cartDetail).subscribe();
+      this.cartDetailService.getUserOrderDetail(cart.order).subscribe();
     }
   }
 
@@ -166,11 +252,15 @@ export class UserCartComponent implements OnInit {
 
     if (index === -1) {
       this.selectedItems.push(cart);
+      console.log(this.selectedItems[0].menuItem);
     } else {
       this.selectedItems.splice(index, 1);
     }
 
-    this.selectAllChecked = this.cartInformationArray.length === this.selectedItems.length;
+    const anyUnchecked = this.cartInformationArray.some(cart => !this.selections[cart.menuItem]);
+
+    // Cập nhật giá trị của selectAllChecked dựa trên kết quả kiểm tra
+    this.selectAllChecked = !anyUnchecked;
   }
 
   calculateTotalPrice(): number {
@@ -179,15 +269,14 @@ export class UserCartComponent implements OnInit {
     for (const cart of this.selectedItems) {
       totalPrice += cart.menuItemPrice * cart.quantity;
     }
-
     return totalPrice;
   }
 
-  calculateFinalPrice(discount: number): number {
+  calculateFinalPrice(discount: number): any {
     const totalPrice = this.calculateTotalPrice();
     const finalPrice = totalPrice - discount;
-
-    return finalPrice >= 0 ? finalPrice : 0;
+    
+    return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
   }
 
   deleteCartDetail(cart: any): void {
@@ -233,27 +322,23 @@ export class UserCartComponent implements OnInit {
   }
 
   getDiscount() {
-    
     if (this.selectedItems.length > 0) {
       const listItemId: number[] = [];
-      for (const cart of this.selectedItems) {
-        listItemId.push(Number(cart.menuItemId as number));
-        console.log(cart.menuItemId);
-      }
-      console.log("CODE: ", listItemId);
+      this.selectedItems.forEach((item, index) => {
+        listItemId.push(Number(this.selectedItems[index].menuItem as number));
+      });
       if (this.discountCode != null) {
         this.discountService.getDiscountByName(this.discountCode, listItemId).subscribe({
           next: (response) => {
             if (response.message === "Discount is not valid") {
-              this.toastService.showTimedAlert('Mã giảm giá sai', '', 'error', 2000);
+              this.toastService.showTimedAlert('Mã giảm giá không tồn tại', '', 'error', 2000);
             }
             else if (response.message === "Discount is Experied") {
               this.toastService.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
             }
             else {
-              this.discountPrice = response.message;
+              this.discountPrice = Number(response.message);
               this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
-
             }
           },
           error: (error) => {
@@ -269,6 +354,15 @@ export class UserCartComponent implements OnInit {
     }
   }
 
+  checkout() {
+    if (this.selectedItems.length > 0) {
+      this.cartService.setCartData(this.selectedItems)
+      this.router.navigate(['/user/checkout'], { state: { cartInfos: this.selectedItems } });
+    } else {
+      this.toastService.showTimedAlert('Vui lòng chọn ít nhất 1 sản phẩm', '', 'info', 2000);
+    }
+  }
+
   onProvinceChange() {
     console.log('onProvinceChange called');
     if (typeof this.selectedProvince === 'number') {
@@ -281,9 +375,77 @@ export class UserCartComponent implements OnInit {
     console.log('onDistrictChange called');
     if (typeof this.selectedDistrict === 'number') {
       this.cartService.getWard(this.selectedDistrict);
+
     }
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
   }
+
+  
+  
+
+  public getDistrict(ProvinceId: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const token = 'd6f64767-329b-11ee-af43-6ead57e9219a';
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'token': token
+        })
+      };
+
+      const districtUrl = "https://online-gateway.ghn.vn/shiip/public-api/master-data/district";
+
+      const requestBody = {
+        province_id: ProvinceId
+      };
+
+      this.http.post<any>(districtUrl, requestBody, httpOptions).subscribe(response => {
+        if (response && response.data) {
+          this.Districts = response.data;
+          resolve();
+        } else {
+          console.error('Invalid response format');
+          reject('Invalid response format');
+        }
+      }, error => {
+        console.error('Error fetching districts:', error);
+        reject(error);
+      });
+    });
+  }
+
+  public getWard(selectedDistrictId: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const token = 'd6f64767-329b-11ee-af43-6ead57e9219a';
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'token': token
+        })
+      };
+
+      const requestBody = {
+        district_id: selectedDistrictId
+      };
+
+      const wardUrl = "https://online-gateway.ghn.vn/shiip/public-api/master-data/ward";
+
+      this.http.post<any>(wardUrl, requestBody, httpOptions).subscribe(response => {
+        if (response && response.data) {
+          this.Wards = response.data;
+          console.log(response)
+          resolve(); // Giải quyết Promise khi dữ liệu đã được lấy
+        } else {
+          console.error('Invalid response format');
+          reject('Invalid response format'); // Từ chối Promise nếu có lỗi định dạng phản hồi
+        }
+      }, error => {
+        console.error('Error fetching wards:', error);
+        reject(error); // Từ chối Promise nếu có lỗi
+      });
+    });
+  }
+
 }
 
 export interface CartInfomation {

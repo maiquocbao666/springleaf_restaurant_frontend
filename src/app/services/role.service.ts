@@ -64,10 +64,6 @@ export class RoleService extends BaseService<Role> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<Role[]> {
-        return super.searchByName(term);
-    }
-
     //--------------------------------------------------------------------------------------------------------
 
     // private updateCache(updatedRole: Role): void {

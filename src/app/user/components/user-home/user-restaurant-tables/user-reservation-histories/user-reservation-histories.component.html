@@ -1,48 +1,93 @@
-<div aria-hidden="true" class="body">
-  <div class="modal-dialog modal-dialog-centered modal-xl section-center mt-0 mb-0">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="input-group row">
-          <h3 class="col-lg-7 mb-0">Lịch sử đặt bàn</h3>
-          <!-- <input class="col-lg-5 input-search" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss"/> -->
+<div class="container">
+  <div class="modal-header">
+    <h3 class="col-lg-7 mb-0">Lịch sử đặt bàn</h3>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- <input class="col-lg-5 input-search" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss"/> -->
+  <div class="modal-content">
+    <div class="modal-body">
+      <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="text-center">Trạng thái</th>
+            <th class="text-center">Id đặt bàn</th>
+            <th class="text-center">Ngày giờ tới</th>
+            <th class="text-center">Ngày giờ đi</th>
+            <th class="text-center">Số lượng khách hàng</th>
+            <th class="text-center">Chức năng</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let thisUserReservation of thisUserReservations">
+            <td class="text-center">
+              <div [ngClass]="getClassForStatus(thisUserReservation.reservationStatusName)">
+                {{ thisUserReservation.reservationStatusName }}
+              </div>
+            </td>
+            <td class="text-center">{{ thisUserReservation.reservationId }}</td>
+            <td class="text-center">{{ thisUserReservation.reservationDate }}</td>
+            <td class="text-center">{{ thisUserReservation.outTime }}</td>
+            <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
+            <td>
+              <button class="btn btn-sm btn-primary">Đặt món</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      <button type="button" class="btn btn-primary">Lưu</button>
+    </div>
+  </div>
+
+
+  <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Lịch sử đặt bàn</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="card mb-grid">
-            <div class="table-responsive-md">
-              <table class="table table-actions table-hover mb-0">
-                <thead>
-                  <tr>
-                    <!-- <th>Id người dùng</th> -->
-                    <!-- <th>Id bàn</th> -->
-                    <th>Trạng thái</th>
-                    <th>Id đặt bàn</th>
-                    <th>Ngày giờ tới</th>
-                    <th>Ngày giờ đi</th>
-                    <th>Số lượng khách hàng</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let thisUserReservation of thisUserReservations">
-                    <!-- <td>{{ thisUserReservation.userId }}</td> -->
-                    <!-- <td>{{ thisUserReservation.restaurantTableId }}</td> -->
-                    <td>{{ thisUserReservation.reservationStatusName }}</td>
-                    <td>{{ thisUserReservation.reservationId }}</td>
-                    <td>{{ thisUserReservation.reservationDate }}</td>
-                    <td>{{ thisUserReservation.outTime }}</td>
-                    <td>{{ thisUserReservation.numberOfGuests }}</td>
-                    <td>
-                      <button class="btn btn-sm btn-primary">Đặt món</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div class="modal-body">
+          <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+              <tr>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Id đặt bàn</th>
+                <th class="text-center">Ngày giờ tới</th>
+                <th class="text-center">Ngày giờ đi</th>
+                <th class="text-center">Số lượng khách hàng</th>
+                <th class="text-center">Chức năng</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let thisUserReservation of thisUserReservations">
+                <td class="text-center">
+                  <div [ngClass]="getClassForStatus(thisUserReservation.reservationStatusName)">
+                    {{ thisUserReservation.reservationStatusName }}
+                  </div>
+                </td>
+                <td class="text-center">{{ thisUserReservation.reservationId }}</td>
+                <td class="text-center">{{ thisUserReservation.reservationDate }}</td>
+                <td class="text-center">{{ thisUserReservation.outTime }}</td>
+                <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary">Đặt món</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary">Lưu</button>
         </div>
       </div>
     </div>
   </div>
-</div>

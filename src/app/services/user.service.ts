@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { User } from '../interfaces/user';
-
+import { RxStompService } from '../rx-stomp.service';
+import { ToastService } from './toast.service';
 
 
 @Injectable({
@@ -16,40 +17,32 @@ export class UserService {
   usersCache: User[] | null = null;
 
   private profileSubject = new Subject<User>();
+  private apiPostUrl = 'http://localhost:8080/public/create/uploadImage';
 
   getDatasOfThisUserWorker: Worker;
 
-  constructor(private apiService: ApiService, private http: HttpClient) {
-
+  constructor(
+    private apiService: ApiService,
+    private rxStompService: RxStompService,
+    private sweetAlertService: ToastService,
+    private http: HttpClient,
+  ) {
     this.getDatasOfThisUserWorker = new Worker(new URL('../workers/user/user-call-all-apis.worker.ts', import.meta.url));
-
   }
 
-  getUsers(): Observable<User[]> {
+  gets(): Observable<User[]> {
+    const token = sessionStorage.getItem('access_token');
+    const url = 'http://localhost:8080/manager/users';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    if (this.usersCache) {
-
-      return of(this.usersCache);
-
-    }
-
-    const usersObservable = this.apiService.request<User[]>('get', this.usersUrl);
-
-    usersObservable.subscribe(data => {
-
-      this.usersCache = data;
-
-    });
-
-    return usersObservable;
-
+    return this.http.post<User[]>(url, null, { headers });
   }
 
   getProfile(): Observable<any> {
 
     return new Observable((observer) => {
 
-      const token = localStorage.getItem('access_token');
+      const token = sessionStorage.getItem('access_token');
 
       if (!token) {
 
@@ -84,17 +77,37 @@ export class UserService {
 
   }
 
-
   updateProfile(updatedUserData: User): Observable<any> {
 
-    const token = localStorage.getItem('access_token');
-    const url = `http://localhost:8080/api/auth/your-profile/update`;
+    const token = sessionStorage.getItem('access_token');
+    const url = `http://localhost:8080/auth/your-profile/update`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.put(url, updatedUserData, { headers });
 
   }
 
+  updateRestaurant(updatedUserData: User) : Observable<any> {
+    const token = sessionStorage.getItem('access_token');
+    const url = `http://localhost:8080/auth/choose-restaurant/update`;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+
+    return this.http.put(url, updatedUserData, { headers });
+
+  }
+
+
+
+  uploadImage(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+
+    return this.http.post<any>(this.apiPostUrl, formData, { headers: headers });
+  }
 
 
 }

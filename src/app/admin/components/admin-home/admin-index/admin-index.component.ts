@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { colorSets } from '@swimlane/ngx-charts';
 import { Bill } from 'src/app/interfaces/bill';
 import { BillDetail } from 'src/app/interfaces/bill-detail';
 import { Category } from 'src/app/interfaces/category';
@@ -24,6 +25,7 @@ import { StatisticsService } from 'src/app/services/statistical.service';
   templateUrl: './admin-index.component.html',
   styleUrls: ['./admin-index.component.css']
 })
+
 export class AdminIndexComponent {
   totalRevenue: number | undefined;
   statisticsData: any;
@@ -48,9 +50,31 @@ export class AdminIndexComponent {
   displayedColumns: string[] = ['name', 'description', 'unitPrice', 'imageUrl', 'status']; // Các cột bạn muốn hiển thị
   dataSource!: MatTableDataSource<Product>;
   selectedRow: any;
+  monthlyRevenue!: any[];
+  selectedYear!: number;
+  colorScheme: any; // Khai báo colorScheme
+
+  // monthlyRevenue: any;
+  // colorScheme = colorSets.find(s => s.name === 'cool');
+  // colorScheme: Color = colorSets.find(s => s.name === 'cool')?.colors! || [];
+  years: number[] = [];
+
+  // revenueData1: any[] = [
+  //   { name: 'Tháng 1', value: 5000 },
+  //   { name: 'Tháng 2', value: 8000 },
+  //   { name: 'Tháng 3', value: 6500 },
+
+  // ];
+  // scheme: Color = {
+  //   domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5'],
+  //   name: 'scheme',
+  //   selectable: true,
+  //   group: ScaleType.Ordinal
+  // };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
   constructor(
     private statisticsService: StatisticsService,
     private billService: BillService,
@@ -61,7 +85,8 @@ export class AdminIndexComponent {
     private dialog: MatDialog,
     private http: HttpClient,
     private categoryService: CategoryService,
-  ) { }
+
+  ) { this.colorScheme = colorSets.find(s => s.name === 'cool'); }
 
   ngOnInit(): void {
     this.getProducts();
@@ -70,12 +95,94 @@ export class AdminIndexComponent {
     this.getTop5OrderedItems();
     // this.fetchStatistics();
     this.fetchTotalRevenue();
+    this.populateYears();
+    this.selectedYear = new Date().getFullYear();
+    this.getRevenueByYear(this.selectedYear);
+    this.monthlyRevenue = this.formatDataForChart(this.monthlyRevenue);
+  }
+
+  formatDataForChart(data: any): any[] {
+    const formattedData: any[] = [];
+
+    // Lặp qua các tháng trong dữ liệu doanh thu
+    for (const month in data) {
+      if (data.hasOwnProperty(month)) {
+        const revenueForMonth = data[month]; // Lấy doanh thu của từng tháng
+
+        // Tạo một đối tượng mới thể hiện doanh thu của mỗi tháng
+        const formattedItem = {
+          name: this.getMonthName(Number(month)), // Tên tháng (có thể là tên tiếng Việt hoặc tiếng Anh)
+          value: revenueForMonth // Giá trị doanh thu của tháng
+        };
+
+        formattedData.push(formattedItem); // Thêm đối tượng vào mảng formattedData
+      }
+    }
+
+    return formattedData;
+  }
+
+  getMonthName(monthNumber: number): string {
+    const months = [
+      'Tháng 1',
+      'Tháng 2',
+      'Tháng 3',
+      'Tháng 4',
+      'Tháng 5',
+      'Tháng 6',
+      'Tháng 7',
+      'Tháng 8',
+      'Tháng 9',
+      'Tháng 10',
+      'Tháng 11',
+      'Tháng 12'
+    ];
+
+    // Kiểm tra xem số tháng có hợp lệ không (từ 1 đến 12)
+    if (monthNumber >= 1 && monthNumber <= 12) {
+      return months[monthNumber - 1]; // Trả về tên tháng từ mảng months
+    } else {
+      return 'Tháng không hợp lệ'; // Trả về thông báo nếu số tháng không hợp lệ
+    }
+  }
+
+
+  getRevenueByYear(year: number): void {
+    this.statisticsService.getMonthlyRevenueByYear(year)
+      .subscribe(data => {
+        this.monthlyRevenue = data;
+        this.monthlyRevenue = this.formatDataForChart(this.monthlyRevenue); // Gọi formatDataForChart ở đây
+        console.log('Monthly revenue:', this.monthlyRevenue);
+      }, error => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+  // getRevenueByYear(year: number): void {
+  //   this.statisticsService.getMonthlyRevenueByYear(year)
+  //     .subscribe(data => {
+  //       this.monthlyRevenue = data;
+  //       console.log('Monthly revenue:', this.monthlyRevenue);
+  //     }, error => {
+  //       console.error('Error fetching data:', error);
+  //     });
+  // }
+
+  onYearSelected(): void {
+    this.getRevenueByYear(this.selectedYear);
+  }
+
+  populateYears(): void {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2000; // Năm bắt đầu
+    for (let year = startYear; year <= currentYear; year++) {
+      this.years.push(year);
+    }
   }
 
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
-
 
   getCategories(): void {
     this.categoryService.getCache().subscribe(
@@ -118,20 +225,15 @@ export class AdminIndexComponent {
     if (reservation.reservationStatusName === "Đã sử dụng xong") {
       return "Hết giờ sử dụng";
     }
-
     const currentTime = new Date();
     const reservationTime = new Date(new Date(reservation.reservationDate).getTime() + 2 * 60 * 60 * 1000);
-
     const diff = reservationTime.getTime() - currentTime.getTime();
-
     const hours = Math.floor(diff / (60 * 60 * 1000));
     const minutes = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
     const seconds = Math.floor((diff % (60 * 1000)) / 1000);
-
     if (diff >= 0) {
       return hours + ':' + minutes + ':' + seconds;
     }
-
     return "Hết giờ sử dụng";
   }
 
@@ -145,7 +247,6 @@ export class AdminIndexComponent {
           console.error('Failed to get revenue data.', error);
         }
       );
-
       this.statisticsService.getBillsByTimeRange(this.startDate, this.endDate).subscribe(
         (billsData: Bill[]) => {
           this.billsData = billsData;
@@ -203,7 +304,5 @@ export class AdminIndexComponent {
     const found = this.products.find(data => data.menuItemId === id);
     return found || null;
   }
-
-
 
 }

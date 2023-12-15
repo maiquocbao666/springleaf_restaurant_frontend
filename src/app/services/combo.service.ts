@@ -62,10 +62,6 @@ export class ComboService extends BaseService<Combo> {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<Combo[]> {
-    return super.searchByName(term);
-  }
-
   //----------------------------------------------------------------------------
 
 }

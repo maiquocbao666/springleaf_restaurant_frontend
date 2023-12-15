@@ -66,14 +66,26 @@
       </form>
     </div>
   </div>
+
+  <p class="d-inline-flex gap-1 text-center">
+    <label>Tìm bất cứ thứ gì bạn nghĩ là có thể...</label>
+    <input type="text" (input)="changeSearchKeyWords($event)">
+    <select (change)="changeFieldName($event)">
+      <option value="">Chọn tên cột cần tìm</option>
+      <option value="inventoryBranchId">Mã chi nhánh kho</option>
+      <option value="ingredientId">Nguyên liệu</option>
+      <option value="supplierId">Nhà sản xuất</option>
+      <option value="restaurantId">Nhà hàng</option>
+    </select>
+  </p>
   <div class="table-responsive">
     <table class="align-middle mb-0 table table-borderless table-striped table-hover">
       <thead>
         <tr>
           <th class="text-center">Mã Chi nhánh kho</th>
-          <th class="text-center">Nguyên liệu</th>
-          <th class="text-center">Nhà sản xuất</th>
-          <th class="text-center">Nhà hàng</th>
+          <th class="text-center">Nguyên liệu + (Mã)</th>
+          <th class="text-center">Nhà sản xuất + (Mã)</th>
+          <th class="text-center">Nhà hàng + (Mã)</th>
           <th class="text-center">Chức năng</th>
         </tr>
       </thead>
@@ -81,9 +93,9 @@
         <tr
           *ngFor="let inventoryBranch of inventoryBranches| paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
           <td class="text-center text-muted">R{{inventoryBranch.inventoryBranchId}}</td>
-          <td class="text-center">{{ getIngredientById(inventoryBranch.ingredientId)?.name }}</td>
-          <td class="text-center text-muted">{{ getSupplierById(inventoryBranch.supplierId)?.supplierName }}</td>
-          <td class="text-center text-muted">{{ getRestaurantById(inventoryBranch.restaurantId)?.restaurantName }}</td>
+          <td class="text-center">{{ getIngredientById(inventoryBranch.ingredientId)?.name }} ({{ inventoryBranch.ingredientId }})</td>
+          <td class="text-center text-muted">{{ getSupplierById(inventoryBranch.supplierId)?.supplierName }} ({{ inventoryBranch.supplierId }})</td>
+          <td class="text-center text-muted">{{ getRestaurantById(inventoryBranch.restaurantId)?.restaurantName }} ({{ inventoryBranch.restaurantId }})</td>
 
           <td class="text-center">
             <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"

@@ -36,10 +36,14 @@ export class LoginComponent {
     private sweetAlertService: ToastService,
     private modalService: NgbModal,
     private deviceService: DeviceDetectorService) {
+    // Form đăng nhập
     this.loginForm = this.formBuilder.group({
-      username: [null, [Validators.nullValidator]],
-      password: [null, [Validators.nullValidator]],
-    })
+      username: [null, [this.custormValidatorUsernameLogin]],
+      password: [null, [this.customPasswordLoginValidator]],
+      rememberMe: [false]
+    });
+
+    // Form đăng ký
     this.registerForm = this.formBuilder.group({
       fullName: [null, [Validators.nullValidator]],
       username: [null, [Validators.nullValidator]],
@@ -51,7 +55,7 @@ export class LoginComponent {
     })
     this.authService.setAccessCodeCacheData('');
     // Đăng ký để theo dõi sự thay đổi trong userCache từ AuthenticationService
-    this.authService.cachedData$.subscribe((user) => {
+    this.authService.getUserCache().subscribe((user) => {
       this.user = user;
     });
 
@@ -64,11 +68,14 @@ export class LoginComponent {
       }
 
     })
+
     this.getBrowserInformation();
     this.getDatasOfThisUserWorker = new Worker(new URL('../../workers/user/user-call-all-apis.worker.ts', import.meta.url));
   }
 
   ngOnInit() {
+    // Kiểm tra nếu chưa lấy code xác nhận email không được nhập liệu
+    // Ngăn chặn việc spam API 
     this.registerForm.get('fullName')?.disable();
     this.registerForm.get('username')?.disable();
     this.registerForm.get('phone')?.disable();
@@ -78,14 +85,15 @@ export class LoginComponent {
   }
 
   getBrowserInformation() {
+    // Lấy thông tin của thiết bị đang sử dụng
     const deviceInfo = this.deviceService.getDeviceInfo();
-
-  console.log(deviceInfo.browser);   // Tên trình duyệt
-  console.log(deviceInfo.browser_version);  // Phiên bản trình duyệt
-  console.log(deviceInfo.os);  // Hệ điều hành
-  console.log(deviceInfo);
+    console.log(deviceInfo.browser);   // Tên trình duyệt
+    console.log(deviceInfo.browser_version);  // Phiên bản trình duyệt
+    console.log(deviceInfo.os);  // Hệ điều hành
+    console.log(deviceInfo);
   }
 
+  // Kiểm tra mã code đăng ký
   compareInputWithCodeCache(): boolean {
     if (this.code === this.codeCache) {
       this.sweetAlertService.showTimedAlert('Xác nhận thành công!', '', 'success', 2000);
@@ -101,7 +109,7 @@ export class LoginComponent {
     }
   }
 
-
+  // Kiểm tra xác nhận mật khẩu
   passwordMatchValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const password = control.get('password')?.value;
@@ -109,14 +117,7 @@ export class LoginComponent {
       return password === repassword ? null : { 'Xác nhận mật khẩu sai': true };
     };
   }
-  // modal open form 
-  onLoginTab(): void {
-    this.active = "login";
-  }
 
-  onRegisterTab(): void {
-    this.active = "register";
-  }
 
   async login() {
     this.loading = true;
@@ -125,11 +126,12 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
-
+      const rememberMe = this.loginForm.get('rememberMe')?.value;
       try {
-        const loginResult = await this.authService.login(username, password);
+        const loginResult = await this.authService.login(username, password, rememberMe);
 
         if (loginResult === true) {
+
           this.sweetAlertService.showTimedAlert('Đăng nhập thành công!', 'Chào mừng đăng nhập.', 'success', 2000);
           this.activeModal.close('Login Successful');
           this.loading = false;
@@ -148,9 +150,10 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
-    this.authService.loginWithGoogle();
+    this.authService.loginGoogle();
   }
 
+  // Lấy mã xác nhận đăng ký
   async getAccessCode() {
     const email = this.userEmail;
     const typeCode = 'register'
@@ -205,29 +208,12 @@ export class LoginComponent {
     }
   }
 
-  @ViewChild('container') container!: ElementRef;
-  @ViewChild('signIn') signInButton!: ElementRef;
-  @ViewChild('signUp') signUpButton!: ElementRef;
-
-  ngAfterViewInit() {
-    this.signUpButton.nativeElement.addEventListener('click', () => {
-      this.container.nativeElement.classList.add('right-panel-active');
-    });
-
-    this.signInButton.nativeElement.addEventListener('click', () => {
-      this.container.nativeElement.classList.remove('right-panel-active');
-    });
-  }
-
-  openUserPasswordModel() {
-    const modalRef = this.modalService.open(UserPasswordComponent);
-    modalRef.componentInstance.selected = 'forgot-password';
-  }
-
-  // Validator
+  //-------------------------Validator-----------------------------//
   upperCase(str: string): string {
     return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
+
+  //----Form đăng ký----//
   customFullNameValidator(control: AbstractControl) {
     const fullName = control.value;
     if (!fullName) {
@@ -245,6 +231,8 @@ export class LoginComponent {
 
     return true;
   }
+
+
   customPasswordValidator(control: AbstractControl) {
     const password = control.value;
     if (!password) {
@@ -267,5 +255,74 @@ export class LoginComponent {
       return { 'digit': true, 'message': 'Mật khẩu phải ít nhất 1 ký tự số' };
     }
     return null;
+  }
+
+  //----Form đăng nhập----//
+  custormValidatorUsernameLogin(control: AbstractControl) {
+    // const username = control.value;
+    // if (!username) {
+    //   return { 'required': true, 'message': 'Tài khoản không được để trống' };
+    // }
+
+    // if (username.length < 6) {
+    //   return { 'minLength': true, 'message': 'Tài khoản phải ít nhất 6 ký tự' };
+    // }
+
+    // if (username.length > 12) {
+    //   return { 'maxLength': true, 'message': 'Tài khoản tối đa 12 ký tự' };
+    // }
+    // const pattern = /^[a-zA-Z0-9]+$/;
+    // if (!pattern.test(username)) {
+    //   return { 'invalidUsername': true, 'message': 'Tài khoản không hợp lệ, chỉ cho phép chữ cái và số' };
+    // }
+    return null;
+  }
+  customPasswordLoginValidator(control: AbstractControl) {
+    // const password = control.value;
+    // if (!password) {
+    //   return { 'required': true, 'message': 'Mật khẩu không được để trống' };
+    // }
+
+    // if (password.length < 6) {
+    //   return { 'minLength': true, 'message': 'Mật khẩu phải ít nhất 6 ký tự' };
+    // }
+
+    // if (password.length > 12) {
+    //   return { 'maxLength': true, 'message': 'Mật khẩu tối đa 12 ký tự' };
+    // }
+    return null;
+  }
+
+  //---------------------------End validator----------------------------------------//
+
+  @ViewChild('container') container!: ElementRef;
+  @ViewChild('signIn') signInButton!: ElementRef;
+  @ViewChild('signUp') signUpButton!: ElementRef;
+
+  ngAfterViewInit() {
+    this.signUpButton.nativeElement.addEventListener('click', () => {
+      this.container.nativeElement.classList.add('right-panel-active');
+    });
+
+    this.signInButton.nativeElement.addEventListener('click', () => {
+      this.container.nativeElement.classList.remove('right-panel-active');
+    });
+  }
+
+  //--------------------------------- Bộ chuyển đổi giao diện --------------------------// 
+  // Mở form đăng nhập
+  onLoginTab(): void {
+    this.active = "login";
+  }
+
+  // Mở form đăng ký
+  onRegisterTab(): void {
+    this.active = "register";
+  }
+
+  // Chuyển sang component quên mật khẩu
+  openUserPasswordModel() {
+    const modalRef = this.modalService.open(UserPasswordComponent);
+    modalRef.componentInstance.selected = 'forgot-password';
   }
 }

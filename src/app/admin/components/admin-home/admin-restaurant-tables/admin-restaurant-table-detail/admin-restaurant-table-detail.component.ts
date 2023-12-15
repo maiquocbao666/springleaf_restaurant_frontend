@@ -71,6 +71,7 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
         restaurantId: this.restaurantTable.restaurantId,
         tableTypeId: this.restaurantTable.tableTypeId,
         tableStatusId: this.restaurantTable.tableStatusId,
+        description: this.restaurantTable.description,
       });
     }
   }
@@ -98,6 +99,7 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       }
     );
   }
+
   updateRestaurantTable(): void {
     this.isSubmitted = true;
   

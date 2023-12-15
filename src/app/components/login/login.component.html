@@ -5,37 +5,37 @@
         </a>
         <form (submit)="register()" [formGroup]="registerForm">
             <span style="color: red;" *ngIf="errorMessage"> {{ errorMessage }}</span>
-            <input type="text" id="email" placeholder="Enter your email" formControlName="email" name="email"
+            <input type="text" id="email" placeholder="Nhập Email" formControlName="email" name="email"
                 [(ngModel)]="userEmail" />
             <div class="row">
                 <div class="col-lg-12 d-flex ">
-                    <input class="col-9 custom" type="text" id="code" placeholder="Enter Code" formControlName="code"
+                    <input class="col-8 custom" type="text" id="code" placeholder="Nhập mã" formControlName="code"
                         name="code" [(ngModel)]="code" />
-                    <a class="col-3 btn-email" (click)="getAccessCode()" *ngIf="codeCache === null">Get</a>
-                    <a class="col-3 btn-email" (click)="compareInputWithCodeCache()" *ngIf="codeCache !== null"><i
+                    <a class="col-4 btn-email" (click)="getAccessCode()" *ngIf="codeCache === null">Gửi mã</a>
+                    <a class="col-4 btn-email" (click)="compareInputWithCodeCache()" *ngIf="codeCache !== null"><i
                             class="fa fa-check" aria-hidden="true" style="color: white;"></i></a>
                 </div>
             </div>
-            <input type="text" id="fullName" placeholder="Enter your full name" formControlName="fullName"
+            <input type="text" id="fullName" placeholder="Nhập vào học và tên" formControlName="fullName"
                 name="fullName" [attr.disabled]="compareInputWithCodeCache" />
             <i *ngIf="registerForm.get('fullName')?.getError('message')" style="color: red;">
                 {{ registerForm.get('fullName')?.getError('message') }}
             </i>
-            <input type="text" id="username" placeholder="Enter your username" formControlName="username"
+            <input type="text" id="username" placeholder="Nhập vào tên đăng nhập" formControlName="username"
                 name="username" [attr.disabled]="compareInputWithCodeCache" />
             <i *ngIf="registerForm.get('username')?.getError('message')" style="color: red;">
                 {{ registerForm.get('username')?.getError('message') }}
             </i>
-            <input type="text" id="phone" placeholder="Enter your phone number" formControlName="phone" name="phone" />
+            <input type="text" id="phone" placeholder="Nhập vào số điện thoại" formControlName="phone" name="phone" />
             <i *ngIf="registerForm.get('phone')?.getError('message')" style="color: red;">
                 {{ registerForm.get('phone')?.getError('message') }}
             </i>
-            <input type="password" id="password" placeholder="Enter Password" formControlName="password" name="password"
-                [attr.disabled]="compareInputWithCodeCache" />
+            <input type="password" id="password" placeholder="Nhập vào mật khẩu" formControlName="password"
+                name="password" [attr.disabled]="compareInputWithCodeCache" />
             <i *ngIf="registerForm.get('password')?.getError('message')" style="color: red;">
                 {{ registerForm.get('password')?.getError('message') }}
             </i>
-            <input type="password" id="repassword" placeholder="Enter Re-Password" formControlName="repassword"
+            <input type="password" id="repassword" placeholder="Nhập lại mật khẩu" formControlName="repassword"
                 name="repassword" [attr.disabled]="compareInputWithCodeCache" />
 
             <button type="submit" #signUp [disabled]="!compareInputWithCodeCache || registerForm.invalid">Đăng
@@ -48,11 +48,21 @@
             <h1>Đăng nhập</h1>
 
             <input type="text" id="usernameLogin" placeholder="Enter Username" formControlName="username" />
+            <i *ngIf="loginForm.get('username')?.getError('message')" style="color: red;">
+                {{ loginForm.get('username')?.getError('message') }}
+            </i>
             <input type="password" id="passwordLogin" placeholder="Enter Password" formControlName="password" />
-            <a (click)="openUserPasswordModel()">Forgot your password?</a>
-            <button type="submit" #signIn>Sign In</button>
+            <i *ngIf="loginForm.get('password')?.getError('message')" style="color: red;">
+                {{ loginForm.get('password')?.getError('message') }}
+            </i>
+            <div>
+                <input type="checkbox" id="rememberMe" formControlName="rememberMe" />
+                <label for="rememberMe">Lưu tài khoản</label>
+              </div>
+            <a (click)="openUserPasswordModel()">Quên mật khẩu?</a>
+            <button type="submit" #signIn>Đăng nhập</button>
             <a class="google-a-button" href="http://localhost:8080/">
-                LOGIN WITH GOOGLE <i class="fab fa-google-plus-g"></i>
+                Đăng nhập với <i class="fab fa-google-plus-g"></i>
             </a>
         </form>
     </div>

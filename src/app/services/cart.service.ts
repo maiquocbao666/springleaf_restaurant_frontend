@@ -8,6 +8,9 @@ import { Cart } from '../interfaces/cart';
 import { RxStompService } from '../rx-stomp.service';
 import { BaseService } from './base-service';
 import { ToastService } from './toast.service';
+import { Ward } from '../interfaces/address/Ward';
+import { District } from '../interfaces/address/District';
+import { Province } from '../interfaces/address/Province';
 
 @Injectable({
   providedIn: 'root'
@@ -41,12 +44,20 @@ export class CartService extends BaseService<Cart> {
   // District
   public districtDataSubject = new BehaviorSubject<District[]>([]);
   public districtData$: Observable<District[]> = this.districtDataSubject.asObservable();
+  // form API
+  public districtAPIDataSubject = new BehaviorSubject<District[]>([]);
+  public districtAPIData$: Observable<District[]> = this.districtAPIDataSubject.asObservable();
   // Ward
   public wardDataSubject = new BehaviorSubject<Ward[]>([]);
   public wardData$: Observable<Ward[]> = this.wardDataSubject.asObservable();
+  // from API
+  public wardAPIDataSubject = new BehaviorSubject<Ward[]>([]);
+  public wardAPIData$: Observable<Ward[]> = this.wardAPIDataSubject.asObservable();
 
   selectedProvinceId: number | null = null;
   selectedDistrictId: number | null = null;
+
+  cartInfo : any[] = [];
 
   //----------------------------------------------------------------------------------------------
 
@@ -86,7 +97,7 @@ export class CartService extends BaseService<Cart> {
 
   getProvince(): void {
 
-    this.getDatasOfThisUserWorker.postMessage({ type: 'cart' });
+    this.getDatasOfThisUserWorker.postMessage({ type: 'provinces' });
     this.getDatasOfThisUserWorker.onmessage = (event) => {
 
       const dataMap = event.data;
@@ -94,6 +105,7 @@ export class CartService extends BaseService<Cart> {
       if (dataMap && dataMap.provinceResponse) {
         const provinceData: Province[] = dataMap.provinceResponse;
         this.setProvinceData(provinceData);
+        localStorage.setItem('Provinces', JSON.stringify(dataMap.provinceResponse.data));
       }
 
     };
@@ -160,24 +172,16 @@ export class CartService extends BaseService<Cart> {
 
   }
 
+  
 
+  setCartData(cart : any[]){
+    this.cartInfo = cart;
+  }
+
+  getCartData() {
+    return this.cartInfo;
+  }
 
 }
-export interface Province {
-  ProvinceID: number;
-  ProvinceName: string;
-  CountryID: number;
-  Code: string;
-}
 
-export interface District {
-  DistrictID: number;
-  ProvinceID: number;
-  DistrictName: string;
-}
 
-export interface Ward {
-  WardCode: number;
-  DistrictID: number;
-  WardName: string;
-}

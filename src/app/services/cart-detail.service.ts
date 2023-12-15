@@ -13,10 +13,10 @@ import { ToastService } from './toast.service';
 })
 
 export class CartDetailService extends BaseService<CartDetail> {
-  
+
   private orderDetailsSubject = new BehaviorSubject<CartDetail[] | null>(null);
   orderDetails$: Observable<CartDetail[] | null> = this.orderDetailsSubject.asObservable();
-  
+
   //----------------------------------------------------------------
 
   constructor(
@@ -33,6 +33,15 @@ export class CartDetailService extends BaseService<CartDetail> {
   apisUrl = 'cartDetails';
   cacheKey = 'cartDetails';
   apiUrl = 'cartDetail';
+  // ----------- Order Detail cho từng user ---------------
+  setOrderDetailsCache(orderDetails: CartDetail[] | null): void {
+    this.orderDetailsSubject.next(orderDetails);
+  }
+
+  getOrderDetailsCache(): Observable<CartDetail[] | null> {
+    return this.orderDetails$;
+  }
+
 
   //------------------------------------------------------------------
 
@@ -65,20 +74,28 @@ export class CartDetailService extends BaseService<CartDetail> {
   override update(updated: CartDetail): Observable<any> {
     return super.update(updated);
   }
-  
-  override delete(id : number): Observable<any> {
+
+  override delete(id: number): Observable<any> {
     return super.delete(id);
   }
 
   //----------------------------------------------------------------------
 
+  getOrderDetails(): Observable<CartDetail[] | null> {
+    return this.orderDetailsSubject.asObservable();
+  }
+
+  setOrderDetails(orderDetails: CartDetail[] | null): void {
+
+    this.orderDetailsSubject.next(orderDetails);
+  }
   getUserOrderDetail(orderId: number): Observable<CartDetail[] | null> {
-    console.log(orderId);
-    const jwtToken = localStorage.getItem('access_token');
+
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }
-    
+
     const customHeader = new HttpHeaders({
       'Authorization': `Bearer ${jwtToken}`,
     });
@@ -86,26 +103,24 @@ export class CartDetailService extends BaseService<CartDetail> {
     const orderDetailsObservable = this.apiService.request<CartDetail[]>('post', 'user/getOrderDetailByUser', orderId, customHeader)
       .pipe(
         tap(orderDetails => {
-          this.orderDetailsSubject.next(orderDetails); // Thông báo cho subscribers khi có sự thay đổi
+          this.setOrderDetailsCache(orderDetails);
         })
       );
 
     return orderDetailsObservable;
   }
 
-  deleteDetail(id : number) : void{
-    const jwtToken = localStorage.getItem('access_token');
+  deleteDetail(id: number): void {
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
-       of(null);
+      of(null);
     }
-    
+
     const customHeader = new HttpHeaders({
       'Authorization': `Bearer ${jwtToken}`,
     });
     const url = `cartDetail/${id}`
     this.apiService.request<null>('delete', url, null, customHeader)
   }
-
-  
 
 }

@@ -8,6 +8,8 @@ import { CategoryService } from 'src/app/services/category.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { AdminCategoryDetailComponent } from './admin-category-detail/admin-category-detail.component';
+import { HttpClient } from '@angular/common/http';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-admin-categories',
@@ -24,8 +26,7 @@ export class AdminCategoriesComponent {
   category!: Category | null;
   categories: Category[] = [];
   categoryForm: FormGroup;
-
-  categoriesUrl = 'categories';
+  ascendingOrder = true; // Initial order
 
   constructor(
     private categoryService: CategoryService,
@@ -33,7 +34,8 @@ export class AdminCategoriesComponent {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private sweetAlertService: ToastService
+    private sweetAlertService: ToastService,
+    private http: HttpClient,
 
   ) {
     this.categoryForm = new FormGroup({
@@ -45,7 +47,7 @@ export class AdminCategoriesComponent {
   }
 
   ngOnInit(): void {
-    console.log("Init admin category component");
+    //console.log("Init admin category component");
     this.getCategories();
     this.categoryForm.get('active')?.setValue(true);
   }
@@ -112,6 +114,47 @@ export class AdminCategoriesComponent {
     }
   }
 
+  openCategoryDetailModal(category: Category) {
+    const modalRef = this.modalService.open(AdminCategoryDetailComponent, { size: 'lg' });
+    modalRef.componentInstance.category = category;
+  }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getCategories();
+    } else {
+      this.categoryService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.categories = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Category;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
+  sort(field: keyof Category, ascending: boolean): void {
+    this.categoryService
+      .sortEntities(this.categories, field, ascending)
+      .subscribe(
+        (data) => {
+          this.categories = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
 
   // getCategoryById(): void {
   //   const id = parseInt(this.route.snapshot.paramMap.get('id')!, 10);
@@ -122,10 +165,5 @@ export class AdminCategoriesComponent {
   //     }
   //   });
   // }
-
-  openCategoryDetailModal(category: Category) {
-    const modalRef = this.modalService.open(AdminCategoryDetailComponent, { size: 'lg' });
-    modalRef.componentInstance.category = category;
-  }
 
 }

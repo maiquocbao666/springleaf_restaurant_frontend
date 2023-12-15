@@ -110,4 +110,41 @@ export class AdminTableTypesComponent {
     });
   }
 
+  sort(field: keyof TableType, ascending: boolean): void {
+    this.tableTypeService
+      .sortEntities(this.tableTypes, field, ascending)
+      .subscribe(
+        (data) => {
+          this.tableTypes = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getTableTypes();
+    } else {
+      this.tableTypeService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.tableTypes = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof TableType;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

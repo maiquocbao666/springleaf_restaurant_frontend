@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -26,6 +27,9 @@ export class AdminProductsComponent {
   tableSizes: any = [5, 10, 15, 20];
   productsUrl = 'products';
   categoriesUrl = 'categories';
+  codeCache: string | null = null;
+  code: string = '';
+  
 
   @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
   @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
@@ -35,7 +39,8 @@ export class AdminProductsComponent {
     private categoryService: CategoryService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private sweetAlertService: ToastService
+    private sweetAlertService: ToastService,
+    private http: HttpClient
 
   ) {
     this.productForm = new FormGroup({
@@ -44,14 +49,13 @@ export class AdminProductsComponent {
       categoryId: new FormControl('', Validators.required),
       imageUrl: new FormControl('', Validators.required),
       description: new FormControl(''),
-      status: new FormControl(true) // Giả sử 'status' là bắt buộc, nếu không bắt buộc, hãy thêm Validators.required
+      status: new FormControl(true)
     });
   }
 
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
-
   ngOnInit(): void {
     this.getCategories();
     this.getProducts();
@@ -73,7 +77,6 @@ export class AdminProductsComponent {
       }
     );
   }
-
   getProducts(): void {
     this.productService.getCache().subscribe(
       (cached: any[]) => {
@@ -81,7 +84,6 @@ export class AdminProductsComponent {
       }
     );
   }
-
   getCategoryById(id: number): Category | null {
     const found = this.categories.find(data => data.categoryId === id);
     return found || null;
@@ -90,23 +92,21 @@ export class AdminProductsComponent {
   addProduct(): void {
     this.isSubmitted = true;
     if (this.productForm.valid) {
-      // Lấy giá trị từ các trường select
       const name = this.productForm.get('name')?.value;
       const unitPrice = this.productForm.get('unitPrice')?.value;
       const description = this.productForm.get('description')?.value;
       const status = this.productForm.get('status')?.value;
       const imageUrl = this.productForm.get('imageUrl')?.value;
-      // Thay đổi cách truy cập giá trị categoryId
       const categoryId = this.productForm.get('categoryId')?.value;
-      console.log("Giá trị đâu :" + name);
+      const imageFile = this.productForm.get('imageUrl')?.value;
+      const imageName = imageFile.split('\\').pop();
 
-      // Tạo một đối tượng Inventory và gán giá trị
       const newProduct: Product = {
         name: name,
         unitPrice: unitPrice,
         description: description,
         status: status,
-        imageUrl: imageUrl,
+        imageUrl: imageName,
         categoryId: categoryId,
       };
       this.productService.add(newProduct)
@@ -114,13 +114,13 @@ export class AdminProductsComponent {
           this.productForm.get('status')?.setValue(true);
           this.productForm.get('imageUrl')?.setValue(null);
           this.productForm.reset();
+          this.onUpload();
           this.sweetAlertService.showCustomAnimatedAlert('Thêm thành công', 'success', 'animated tada');
           this.isSubmitted = false;
-
-
         });
-    } else
+    } else {
       this.sweetAlertService.showCustomAnimatedAlert('Thất bại', 'warning', 'Thêm thất bại')
+    }
   }
 
   deleteProduct(product: Product): void {
@@ -138,22 +138,14 @@ export class AdminProductsComponent {
     } else {
       console.log('Không có mã món');
     }
-
   }
-
-
 
   openProductDetailModal(product: Product) {
     const modalRef = this.modalService.open(AdminProductDetailComponent, { size: 'lg' });
     modalRef.componentInstance.product = product;
-
-    // Subscribe to the emitted event
     modalRef.componentInstance.productSaved.subscribe(() => {
     });
-
   }
-
-
 
   ngAfterViewInit() {
     this.imageUpload.nativeElement.addEventListener('change', (event) => {
@@ -172,4 +164,61 @@ export class AdminProductsComponent {
       reader.readAsDataURL(fileInput.files[0]);
     }
   }
+
+
+  selectedFile: File | undefined;
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0] as File;
+  }
+
+  onUpload() {
+    if (this.selectedFile) {
+      this.productService.uploadImage(this.selectedFile)
+        .subscribe(response => {
+          // Xử lý phản hồi từ server nếu cần
+          console.log('Phản hồi từ server:', response);
+        }, error => {
+          // Xử lý lỗi nếu có
+          console.error('Lỗi khi tải lên:', error);
+        });
+    }
+  }
+
+  searchProducts() {
+    if (this.keywords.trim() === '') {
+      this.getProducts();
+    } else {
+      this.productService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.products = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Product;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.searchProducts();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.searchProducts();
+  }
+
+  sort(field: keyof Product, ascending: boolean): void {
+    this.productService
+      .sortEntities(this.products, field, ascending)
+      .subscribe(
+        (data) => {
+          this.products = data;
+        },
+        (error) => {
+          // Handle error if necessary
+        }
+      );
+  }
+
 }

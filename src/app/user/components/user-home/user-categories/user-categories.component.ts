@@ -10,8 +10,8 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class UserCategoriesComponent {
 
-  categoriesCache$!: Observable<Category[]>;
-  categories$!: Observable<Category[]>;
+  //categoriesCache$!: Observable<Category[]>;
+  categories: Category[] = [];
   searchTerms = new Subject<string>();
   showMore: boolean = false;
   isMobile: boolean = false;
@@ -45,39 +45,25 @@ export class UserCategoriesComponent {
   ngOnInit(): void {
     console.log("Init User Categories Component");
     this.getCategories();
-    // this.categories$ = this.searchTerms.pipe(
-
-    //   // ignore new term if same as previous term
-    //   distinctUntilChanged(),
-
-    //   // switch to new search observable each time the term changes
-    //   switchMap((categoryName: string) => this.categoryService.searchByName(categoryName)),
-    // );
-    //this.search("");
   }
 
-  // search(term: string): void {
-  //   if (term.trim() === "") {
-  //     // Nếu term trống, gán categories$ bằng một observable chứa danh sách categories
-  //     this.categories$ = this.categoryService.gets();
-  //     //this.categories$ = of([]);
-  //   } else {
-  //     // Nếu term không trống, kiểm tra xem term có trong tên các categories hay không
-  //     const searchTerm = term.toLowerCase(); // Chuyển đổi term thành chữ thường để so sánh không phân biệt hoa thường
-
-  //     this.categories$ = this.categoryService.gets().pipe(
-  //       // Sử dụng operator map để lọc các categories thỏa mãn điều kiện
-  //       map(categories => categories.filter(category => category.name.toLowerCase().includes(searchTerm)))
-  //     );
-
-  //     this.searchTerms.next(term);
-  //   }
-  // }
+  search(event: any) {
+    const keyword = event.target.value;
+    if (keyword.trim() === '') {
+      this.getCategories();
+    } else {
+      this.categoryService.searchByKeywords(keyword).subscribe(
+        (data) => {
+          this.categories = data;
+        }
+      );
+    }
+  }
 
   getCategories(): void {
     this.categoryService.getCache().subscribe(
-      (cached: any[]) => {
-        this.categories$ = of(cached);
+      (cached: Category[]) => {
+        this.categories = cached.filter(category => category.active === true);
       }
     );
   }

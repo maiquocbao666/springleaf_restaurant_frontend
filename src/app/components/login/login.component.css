@@ -237,16 +237,23 @@ input {
   /* Cân chỉnh khoảng cách từ phải trang */
 }
 
-.col-3 {
-  border-radius: 20px;
+.col-4 {
+  margin-left: 5px;
+  margin-bottom: 13px;
+  border-radius: 8px;
   border: 1px solid #75a418;
   background-color: #75a418;
   color: #FFFFFF;
-  padding: 10px 10px;
+  padding-top: 12px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* padding: 10px 10px; */
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: transform 80ms ease-in;
+  align-items: center;
+  
 }
 
 .row {

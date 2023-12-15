@@ -14,23 +14,21 @@ export class ApiService {
   private baseUrl = ''; // Thay đổi base URL của API của bạn
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {
-    this.authService.cachedData$.subscribe((data) => {
+    this.authService.getUserCache().subscribe((data) => {
       this.user = data;
-      console.log('API service: ' + this.user);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
     this.authService.roleCacheData$.subscribe((data) => {
       this.roles = data;
-      console.log('API service: ' + this.roles);
       // Cập nhật thông tin người dùng từ userCache khi có sự thay đổi
     });
   }
 
   setUrl(uri: string) {
 
-    //this.baseUrl = 'http://localhost:8080/public/' + uri;
-    //console.log('API Endpoint:', this.baseUrl);
-    this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
+    this.baseUrl = 'http://localhost:8080/public/' + uri;
+    console.log('API Endpoint:', this.baseUrl);
+    // this.baseUrl = 'https://springleafrestaurantbackend.onrender.com/public/' + uri;
 
     //this.baseUrl = 'http://localhost:8080/public/' + uri;
   }
@@ -74,9 +72,9 @@ export class ApiService {
         this.setUrl(`create/${endpoint}`);
 
         return this.http.post<T>(this.baseUrl, data, { headers }).pipe(
-          
+
           tap(response => {
-            
+
             console.log(response);
           }),
 
