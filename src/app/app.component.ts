@@ -168,7 +168,7 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
-    this.checkThreshold();
+    // this.checkThreshold();
     var accessToken = localStorage.getItem('access_token');
     var userSession = sessionStorage.getItem('userCache');
     console.log(userSession)
