@@ -173,9 +173,15 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
   }
 
   payWithVNPay(): void {
-    this.orderTotal = 3000000; // lấy dữ liệu động tổng tiền
-    this.orderInfo = '1'; // dữ liệu order detail
-    if (this.orderTotal && this.orderInfo) {
+    this.orderTotal = 0; // lấy dữ liệu động tổng tiền
+    this.orderInfo = this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
+    const cartDetail : CartDetail[] = [];
+    for(const cart of this.cartInfos){
+      this.orderTotal += cart.menuItemPrice*cart.quantity;
+      this.orderInfo += cart.orderDetailId + ",";
+    }
+    this.orderInfo = this.orderInfo.replace(/,$/, "");
+    if (this.orderTotal && this.orderInfo && this.orderByUser && cartDetail) {
       this.vnpayService.submitOrder(this.orderTotal, this.orderInfo).subscribe({
         next: (data: any) => {
           if (data.redirectUrl) {

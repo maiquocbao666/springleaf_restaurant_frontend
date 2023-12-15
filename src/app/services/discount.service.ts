@@ -65,7 +65,8 @@ export class DiscountService extends BaseService<Discount>  {
     }
 
     getDiscountByName(discountCode: string, menuItemId: any[] = []) {
-        const jwtToken = localStorage.getItem('access_token');
+        alert(discountCode);
+        const jwtToken = sessionStorage.getItem('access_token');
         if (!jwtToken) {
             return of(null);
         }

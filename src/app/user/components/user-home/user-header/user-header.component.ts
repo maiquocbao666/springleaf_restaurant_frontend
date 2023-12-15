@@ -220,6 +220,7 @@ export class UserHeaderComponent {
     );
   }
 
+  // Lấy dữ liệu cart 
   getUserDeliveryOrder(): void {
     this.deliveryOrderService.getUserCartCache().subscribe(
       (cached: any | null) => {
@@ -235,7 +236,7 @@ export class UserHeaderComponent {
     );
   }
   
-
+  // Lấy dữ liệu order
   getUserOrders(): void {
     this.orderService.getUserOrderCache().subscribe(
     (cached: any | null) => {
@@ -249,12 +250,15 @@ export class UserHeaderComponent {
       }else{
         console.log('Lấy dữ liệu từ cache');
         this.orderByUser = cached;
+      }
+      if(this.orderByUser){
         this.getUserOrderDetails();
       }
       
     })
+    
   }
-  
+  // Lấy dữ liệu order detail của cart
   getUserOrderDetails(): void {
     this.cartDetailService.getOrderDetailsCache().subscribe(
       (cached: any[] | null) => {
