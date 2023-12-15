@@ -192,7 +192,17 @@ export class UserProductsComponent implements OnInit {
     modalRef.componentInstance.product = product;
   }
 
-
-
+  search(event: any) {
+    const keyword = event.target.value;
+    if (keyword.trim() === '') {
+      this.getProducts();
+    } else {
+      this.productService.searchByKeywords(keyword).subscribe(
+        (data) => {
+          this.products = data;
+        }
+      );
+    }
+  }
 
 }

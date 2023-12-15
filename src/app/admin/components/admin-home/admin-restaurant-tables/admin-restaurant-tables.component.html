@@ -94,7 +94,19 @@
     </div>
   </div>
 
-
+  <p class="d-inline-flex gap-1 text-center">
+    <label>Tìm bất cứ thứ gì bạn nghĩ là có thể...</label>
+    <input type="text" (input)="changeSearchKeyWords($event)">
+    <select (change)="changeFieldName($event)">
+      <option value="">Chọn tên cột cần tìm</option>
+      <option value="tableId">Mã bàn</option>
+      <option value="tableName">Tên bàn</option>
+      <option value="seatingCapacity">Số khách tối đa</option>
+      <option value="restaurantId">Nhà hàng</option>
+      <option value="tableStatusId">Trạng thái</option>
+      <option value="tableTypeId">Kiểu bàn</option>
+    </select>
+  </p>
   <div class="table-responsive">
     <table class="align-middle mb-0 table table-borderless table-striped table-hover">
       <thead>
@@ -102,23 +114,27 @@
           <th class="text-center">Mã bàn</th>
           <th class="text-center">Tên bàn</th>
           <th class="text-center">Số khách tối đa</th>
-          <th class="text-center">Nhà hàng</th>
-          <th class="text-center">Trạng thái</th>
-          <th class="text-center">Kiểu bàn</th>
+          <th class="text-center">Nhà hàng + (Mã)</th>
+          <th class="text-center">Trạng thái + (Mã)</th>
+          <th class="text-center">Kiểu bàn + (Mã)</th>
           <th class="text-center">Chức năng</th>
         </tr>
       </thead>
       <tbody>
         <tr
           *ngFor="let restaurantTable of restaurantTables | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-          <td class="text-center text-muted">R{{restaurantTable.tableId}}</td>
-          <td class="text-center">{{restaurantTable.tableName}}</td>
+          <td class="text-center text-muted">{{restaurantTable.tableId}}</td>
+          <td class="text-center text-muted">{{restaurantTable.tableName}}</td>
           <td class="text-center text-muted">{{ restaurantTable.seatingCapacity }}</td>
-          <td class="text-center text-muted">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }}</td>
-          <td class="text-center text-muted">{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}
+          <td class="text-center text-muted">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }} ({{
+            restaurantTable.restaurantId }})
           </td>
-          <td class="text-center text-muted">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName }}</td>
-          <td class="text-center">
+          <td class="text-center text-muted">{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}
+            ({{ restaurantTable.tableStatusId }})
+          </td>
+          <td class="text-center text-muted">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName }} + ({{
+            restaurantTable.tableTypeId }})</td>
+          <td class="text-center text-muted">
             <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
               (click)="openRestaurantTableDetailModal(restaurantTable)"><i class="fa-solid fa-pen-to-square"></i></a>
             <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"

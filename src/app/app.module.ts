@@ -107,6 +107,7 @@ import { UserMergeTablesComponent } from './user/components/user-home/user-resta
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AdminUsersDetailComponent } from './admin/components/admin-home/admin-users-detail/admin-users-detail.component';
 import { AdminGuardService } from './services/guard-url/admin-guard.service';
+import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-merge-tables/admin-merge-tables.component';
 
 @NgModule({
   declarations: [
@@ -176,7 +177,7 @@ import { AdminGuardService } from './services/guard-url/admin-guard.service';
     AdminStatisticalComponent,
     AdminBillsComponent,
     AdminUsersDetailComponent,
-
+    AdminMergeTablesComponent,
 
     ChatComponent,
     LoginComponent,

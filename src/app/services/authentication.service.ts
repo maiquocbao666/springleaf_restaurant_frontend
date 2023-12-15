@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, of, switchMap} from 'rxjs';
 import { User } from '../interfaces/user';
 import { ToastService } from './toast.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient,
     private sweetAlertService: ToastService,
+    private cookieService: CookieService
     ) {
     const storedUser = sessionStorage.getItem('userCache');
     if (storedUser) {
@@ -53,6 +55,7 @@ export class AuthenticationService {
   setRoleCache(roles: string[] | null) {
     this.listRole = roles;
     this.listRoleDataSubject.next(roles);
+    sessionStorage.setItem('userRoles', JSON.stringify(roles));
   }
   getRoleCache(): string[] | null {
     return this.listRole;
@@ -78,7 +81,6 @@ export class AuthenticationService {
           resolve(false);
         } else {
           localStorage.setItem('access_code', data.accessCodeRespone);
-          console.log('Authentication service : ' + data.accessCodeRespone);
           this.accessCode = data.accessCodeRespone;
           this.accessCodeDataSubject.next(data.accessCodeRespone);
           this.sweetAlertService.showTimedAlert('Gửi mã xác nhận!', 'Vui lòng kiểm tra email.', 'success', 2000);
@@ -100,7 +102,8 @@ export class AuthenticationService {
     return this.http.post(`${this.apiUrl}/register`, registerData);
   }
 
-  login(username: string, password: string): Promise<boolean> {
+  login(username: string, password: string, rememberMe: boolean): Promise<boolean> {
+    
     return new Promise<boolean>((resolve, reject) => {
       const loginData = {
         userName: username,
@@ -123,11 +126,14 @@ export class AuthenticationService {
           resolve(false);
         }
         else {
+          localStorage.setItem('user_login_name', data.loginResponse.user.fullName);
           localStorage.setItem('access_token', data.loginResponse.access_token);
-          localStorage.setItem('user_login_name', data.loginResponse.user.lastName);
-          sessionStorage.setItem('accessToken', data.loginResponse.access_token);
+          sessionStorage.setItem('access_token', data.loginResponse.access_token);
           this.setUserCache(data.loginResponse.user);
-          this.listRole = data.loginResponse.user.roleName;
+          this.setRoleCache(data.loginResponse.user.roleName);
+          if(rememberMe){
+            this.cookieService.set('access_token', data.loginResponse.access_token); // Lưu jwt cho lần đăng nhập sau
+          }
           this.sweetAlertService.showTimedAlert('Đăng nhập thành công', '', 'success', 2000);
           resolve(true);
         }
@@ -138,7 +144,8 @@ export class AuthenticationService {
 
   configPassword(password: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const token = localStorage.getItem('access_token');
+      // const token = localStorage.getItem('access_token');
+      const token = sessionStorage.getItem('access_token');
       this.getDatasOfThisUserWorker.postMessage({
         type: 'config-password',
         password, token
@@ -166,7 +173,8 @@ export class AuthenticationService {
 
   changePassword(password: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const token = localStorage.getItem('access_token');
+      //const token = localStorage.getItem('access_token');
+      const token = sessionStorage.getItem('access_token');
       this.getDatasOfThisUserWorker.postMessage({
         type: 'change-password',
         password, token
@@ -240,9 +248,11 @@ export class AuthenticationService {
         else {
           localStorage.setItem('user_login_name', data.checkTokenRespone.user.fullName);
           localStorage.setItem('access_token', data.checkTokenRespone.access_token);
+          sessionStorage.setItem('access_token', data.checkTokenRespone.access_token);
           this.setUserCache(data.checkTokenRespone.user);
-          this.listRole = data.checkTokenRespone.user.roleName;
-          this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
+          this.setRoleCache(data.checkTokenRespone.user.roleName);
+          // this.listRole = data.checkTokenRespone.user.roleName;
+          // this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
           //this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 1000);
           resolve(true);
 
@@ -262,7 +272,8 @@ export class AuthenticationService {
   }
 
   logout(): Observable<any> {
-    const jwtToken = localStorage.getItem('access_token');
+    // const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }

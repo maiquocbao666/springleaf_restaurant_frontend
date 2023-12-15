@@ -36,6 +36,7 @@ import { RestaurantService } from "./services/restaurant.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
+import { SwUpdate } from '@angular/service-worker';
 
 
 interface DataService<T> {
@@ -63,6 +64,7 @@ export class AppComponent implements OnDestroy {
 
 
   constructor(
+    private swUpdate: SwUpdate,
     private authentication: AuthenticationService,
     private categoriesService: CategoryService,
     private productsService: ProductService,
@@ -177,6 +179,13 @@ export class AppComponent implements OnDestroy {
         this.authentication.checkUserByAccessToken(accessToken);
         console.log('Tự động đăng nhập')
       }
+    }
+
+    // Lấy role Cache từ session storage
+    var userRoleSession = sessionStorage.getItem('userRoles');
+    console.log(userRoleSession)
+    if(userRoleSession !== '' && userRoleSession){
+      this.authentication.setRoleCache(JSON.parse(userRoleSession));
     }
     this.getAllDatasFromLocalStorage();
     this.callAllApis();

@@ -64,10 +64,6 @@ export class SupplierService extends BaseService<Supplier>  {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<Supplier[]> {
-        return super.searchByName(term);
-    }
-
     //--------------------------------------------------------------------------------------------------------
 
 

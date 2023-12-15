@@ -5,9 +5,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { District } from 'src/app/interfaces/address/District';
 import { Province } from 'src/app/interfaces/address/Province';
 import { Ward } from 'src/app/interfaces/address/Ward';
+import { Restaurant } from 'src/app/interfaces/restaurant';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CartService } from 'src/app/services/cart.service';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 @Component({
@@ -37,6 +39,10 @@ export class ProfileComponent {
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
+  restaurants: Restaurant[] | null = null;
+  userRestaurant : Restaurant | null = null;
+  roles: String[] | null = null;
+  userRole : string | null = null;
 
   @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
   @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
@@ -48,6 +54,7 @@ export class ProfileComponent {
     private toastService: ToastService,
     private cartService: CartService,
     private authService: AuthenticationService,
+    private restaurantSerivce: RestaurantService,
     private http: HttpClient,
   ) {
     // Lấy danh sách Thành phố từ localstorage
@@ -65,13 +72,31 @@ export class ProfileComponent {
       phone: [null, [Validators.nullValidator]],
       address: [null, [Validators.nullValidator]],
       image: [null, [Validators.nullValidator]],
+      selectedRestaurant: [null, Validators.required],
       provinceChange: '',
       districtChange: '',
-      wardChange: '',
+      wardChange: ''
     });
+
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
     });
+    this.authService.roleCacheData$.subscribe((data) => {
+      this.roles = data;
+    });
+
+    if (this.roles && this.roles.length > 0) {
+      const predefinedRoles = ['USER', 'MANAGER', 'ADMIN'];
+
+      for (const role of predefinedRoles) {
+        if (this.roles.includes(role)) {
+          this.userRole = role;
+        } else {
+          break;
+        }
+      }
+      console.log(this.userRole);
+    }
 
     this.initUserAddress();
   }
@@ -98,7 +123,6 @@ export class ProfileComponent {
               if (district.DistrictID === addressDistrict) {
                 this.userDistrict = district;
                 if (this.userDistrict) {
-                  console.log('here')
                   this.getWard(this.userDistrict.DistrictID).then(() => {
                     for (const ward of this.Wards) {
                       if (ward.WardCode === addressWard) {
@@ -123,6 +147,7 @@ export class ProfileComponent {
   }
 
   ngOnInit() {
+    this.getRestaurants();
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.ProvincesAPI = Object.values(data);
@@ -133,39 +158,48 @@ export class ProfileComponent {
     this.cartService.wardData$.subscribe(data => {
       this.WardsFromAPI = Object.values(data);
     });
+    
+  }
+
+  getRestaurants(): void {
+    this.restaurantSerivce.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
   }
 
   setValue() {
     if (this.user) {
+      this.profileForm.patchValue({
+        fullName: this.user.fullName,
+        username: this.user.username,
+        password: this.user.password,
+        email: this.user.email,
+        phone: this.user.phone,
+        //image: this.user.image,
+        //selectedRestaurant : this.user.restaurantBranchId
+      });
       if (this.userProvince && this.userDistrict && this.userWard) {
         this.profileForm.patchValue({
-          fullName: this.user.fullName,
-          username: this.user.username,
-          password: this.user.password,
-          email: this.user.email,
-          phone: this.user.phone,
-          image: this.user.image,
-
           address: `${this.userProvince.ProvinceName} - ${this.userDistrict.DistrictName} - ${this.userWard.WardName}`,
         });
-      } else {
+      } if(this.userRestaurant){
         this.profileForm.patchValue({
-          fullName: this.user.fullName,
-          username: this.user.username,
-          password: this.user.password,
-          email: this.user.email,
-          phone: this.user.phone,
-          address: this.user.address,
-          image: this.user.image,
-
+          selectedRestaurant: `${this.userRestaurant.restaurantId}`,
         });
       }
-
     }
   }
 
   toggleAddressInput() {
-    this.setValue();
+    if (this.profileForm.get('provinceChange')?.value !== '' 
+      && this.profileForm.get('districtChange')?.value !== ''
+      && this.profileForm.get('wardChange')?.value !== '') {
+        this.profileForm.patchValue({
+          address: `${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
+        }); 
+    }
     this.showAddressInput = !this.showAddressInput;
   }
   CancelChangeAdress() {
@@ -177,19 +211,19 @@ export class ProfileComponent {
 
   onProvinceChange() {
     console.log('onProvinceChange called');
-    if (typeof this.selectedProvince === 'number') {
-      this.cartService.getDistrict(this.selectedProvince);
+    if (typeof this.profileForm.get('provinceChange')?.value === 'number') {
+      this.cartService.getDistrict(this.profileForm.get('provinceChange')?.value);
     }
-    console.log(this.selectedProvince); // In ra giá trị tỉnh/thành phố đã chọn
+    console.log(this.profileForm.get('provinceChange')?.value); // In ra giá trị tỉnh/thành phố đã chọn
   }
 
   onDistrictChange() {
     console.log('onDistrictChange called');
-    if (typeof this.selectedDistrict === 'number') {
-      this.cartService.getWard(this.selectedDistrict);
+    if (typeof this.profileForm.get('districtChange')?.value === 'number') {
+      this.cartService.getWard(this.profileForm.get('districtChange')?.value);
 
     }
-    console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
+    console.log(this.profileForm.get('districtChange')?.value); // In ra giá trị tỉnh/thành phố đã chọn
   }
 
   public getDistrict(ProvinceId: number): Promise<void> {
@@ -259,8 +293,10 @@ export class ProfileComponent {
 
   updateProfile() {
     let addressChange = '';
-    if (this.selectedDistrict !== null && this.selectedWard !== null) {
-      addressChange = `${this.selectedWard}-${this.selectedDistrict}-${this.selectedProvince}`;
+    if (this.profileForm.get('provinceChange')?.value !== '' 
+      && this.profileForm.get('districtChange')?.value !== ''
+      && this.profileForm.get('wardChange')?.value !== '') {
+      addressChange = `${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`;
     } else {
       addressChange = this.userData.address;
     }
@@ -273,13 +309,12 @@ export class ProfileComponent {
         email: this.profileForm.get('email')?.value,
         address: addressChange,
         phone: this.profileForm.get('phone')?.value,
-        restaurantBranchId: this.userData.restaurantBranchId,
-        // image: this.selectedFileName || this.profileForm.get('image')?.value,
-        image: this.profileForm.get('image')?.value || this.userData.image,
-        managerId: this.userData.managerId,
+        restaurantBranchId: this.profileForm.get('selectedRestaurant')?.value,
+        //image: this.profileForm.get('image')?.value || this.userData.image,
+        image: this.selectedFileName || this.profileForm.get('image')?.value,
         status: this.userData.status,
+       
       };
-      console.log("Tên ảnh nè" + userUpdate.image);
       this.userService.updateProfile(userUpdate).subscribe(
         () => {
           this.authService.setUserCache(userUpdate);

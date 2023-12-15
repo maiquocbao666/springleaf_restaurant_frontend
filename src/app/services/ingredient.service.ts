@@ -65,10 +65,6 @@ export class IngredientService extends BaseService<Ingredient>  {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<Ingredient[]> {
-    return super.searchByName(term);
-  }
-
   //--------------------------------------------------------------------------------------------------------------------------
 
   checkThreshold(): Observable<any> {

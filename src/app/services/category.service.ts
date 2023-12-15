@@ -85,10 +85,6 @@ export class CategoryService extends BaseService<Category> {
     return of();
   }
 
-  override searchByName(term: string): Observable<Category[]> {
-    return super.searchByName(term);
-  }
-
   //---------------------------------------------------------------------------------------------------------
 
   private isNameInCache(name: string, idToExclude: number | null = null): boolean {

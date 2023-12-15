@@ -114,4 +114,29 @@ export class AdminSuppliersComponent {
     });
 
   }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getSuppliers();
+    } else {
+      this.supplierService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.suppliers = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Supplier;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

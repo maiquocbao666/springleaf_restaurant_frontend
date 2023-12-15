@@ -71,7 +71,21 @@
             {{size}}
         </option>
     </select>
-    <input class="form-control col-4" formControlName=" searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss" />
+
+    Lưu ý: Thời gian thì phải tìm theo định dạng yyyy-MM-dd HH:mm:ss <br>
+    <p class="d-inline-flex gap-1">
+        <input type="text" placeholder="" (input)="changeSearchKeyWords($event)" />
+        <select (change)="changeFieldName($event)">
+            <option value="">Chọn tên cột cần tìm</option>
+            <option value="reservationId">Mã đặt bàn</option>
+            <option value="restaurantTableId">Mã bàn</option>
+            <option value="userId">Mã người dùng</option>
+            <option value="reservationDate">Thời gian tới</option>
+            <option value="outTime">Thời gian đi</option>
+            <option value="reservationStatusName">Trạng thái</option>
+            <option value="numberOfGuests">Số lượng khách hàng</option>
+        </select>
+    </p>
     <td>Ngày giờ hiện tại: {{currentDateTime$ | date: 'EEEE, MMMM d, y, HH:mm:ss a'}}</td>
 
     <div class="table-responsive">
@@ -80,7 +94,7 @@
                 <tr>
                     <th class="text-center">Mã đặt bàn</th>
                     <th class="text-center">Mã bàn</th>
-                    <th class="text-center">Khách</th>
+                    <th class="text-center">Mã người dùng</th>
                     <th class="text-center">Ngày tới</th>
                     <th class="text-center">Giờ tới</th>
                     <th class="text-center">Giờ đi</th>
@@ -93,7 +107,7 @@
             <tbody>
                 <tr
                     *ngFor="let reservation of reservations | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-                    <td class="text-center text-muted">RS{{ reservation.reservationId }}</td>
+                    <td class="text-center text-muted">{{ reservation.reservationId }}</td>
                     <td class="text-center text-muted">{{ reservation.restaurantTableId }}</td>
                     <td class="text-center text-muted">{{ reservation.userId }}</td>
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>

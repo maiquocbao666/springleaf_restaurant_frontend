@@ -65,10 +65,6 @@ export class RatingService extends BaseService<Rating> {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<Rating[]> {
-    return super.searchByName(term);
-  }
-
   //--------------------------------------------------------------------------------------------------
 
 }

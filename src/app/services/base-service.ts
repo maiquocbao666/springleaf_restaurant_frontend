@@ -135,14 +135,29 @@ export abstract class BaseService<T> {
         );
     }
 
-    searchByName(term: string): Observable<T[]> {
-        if (!term.trim()) {
+    searchByKeywords(keywords: string, searchField?: keyof T): Observable<T[]> {
+        if (!keywords.trim()) {
             return of([]);
         }
 
         if (this.cache) {
             const filtered = this.cache.filter((cache) => {
-                return this.getItemName(cache).toLowerCase().includes(term.toLowerCase());
+                // Nếu có trường tìm kiếm được chỉ định, thì chỉ tìm kiếm trong trường đó
+                if (searchField) {
+                    const fieldValue = String(cache[searchField]).toLowerCase();
+                    return fieldValue.includes(keywords.toLowerCase());
+                }
+
+                // Nếu không có trường tìm kiếm được chỉ định, thì tìm kiếm trong tất cả các trường
+                for (const key in cache) {
+                    if (Object.prototype.hasOwnProperty.call(cache, key)) {
+                        const fieldValue = String(cache[key]).toLowerCase();
+                        if (fieldValue.includes(keywords.toLowerCase())) {
+                            return true; // Nếu tìm thấy từ khóa, trả về true
+                        }
+                    }
+                }
+                return false; // Nếu không tìm thấy từ khóa trong bất kỳ trường nào, trả về false
             });
 
             if (filtered) {
@@ -150,21 +165,28 @@ export abstract class BaseService<T> {
             }
         }
 
-        return this.apiService.request('get', this.apisUrl).pipe(
-            tap({
-                next: (response: any) => {
-                    this.cache = response as T[];
-                },
-                error: (error: any) => {
-                    console.error(error);
-                },
-            }),
-            catchError((error: any) => {
-                console.error(error);
-                return of([]);
-            }),
-            map((response: any) => response as T[])
-        );
+        return of([]);
+    }
+
+    sortEntities(entities: T[], field: keyof T, ascending: boolean): Observable<T[]> {
+        const sortedEntities = entities.slice().sort((a, b) => {
+            let result: number;
+
+            const valueA = a[field] as string | number | boolean;
+            const valueB = b[field] as string | number | boolean;
+
+            if (valueA < valueB) {
+                result = -1;
+            } else if (valueA > valueB) {
+                result = 1;
+            } else {
+                result = 0;
+            }
+
+            return ascending ? result : -result; // Reverse the order for descending
+        });
+
+        return of(sortedEntities);
     }
 
 }

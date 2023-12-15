@@ -64,10 +64,6 @@ export class TableTypeService extends BaseService<TableType> {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<TableType[]> {
-    return super.searchByName(term);
-  }
-
   //----------------------------------------------------------------------------------------------------------------
 
 }

@@ -160,4 +160,29 @@ export class AdminInventoriesComponent {
     modalRef.componentInstance.inventorySaved.subscribe(() => {
     });
   }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getInventories();
+    } else {
+      this.inventoryService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.inventories = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Inventory;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

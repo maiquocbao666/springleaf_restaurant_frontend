@@ -1,17 +1,15 @@
 <div class="container">
     <div class="modal-header">
-        <h4 class="modal-title">Đặt bàn {{restaurantTable.tableName}}</h4> (Quý khách vui lòng không đặt bàn từ
-        23:00:00-23:59:59)
+        <h4 class="modal-title">Đặt bàn {{restaurantTable.tableName}}</h4>
         <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
-
-
-
+    <br>
+    <div>(Quý khách vui lòng <b>không</b> đặt bàn từ 23:00:00 - 23:59:59 và từ 00:00:00 - 07:00:00)</div>
+    <br>
     <div class="booking">
-        <form class="booking-form row" role="form" [formGroup]="reservationForm">
+        <form class="booking-form row" role="form" [formGroup]="reservationForm" (ngSubmit)="bookingTable()">
 
             <div class="col-lg-6 col-12">
                 <span class="form-label">Số khách</span>
@@ -25,31 +23,41 @@
                 <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate" [min]="minDate"
                     [max]="maxDate" required>
             </div>
+            <div style="color: red;">
+                {{ selectedDateMessage }}
+            </div>
 
             <div class="col-lg-6 col-12">
                 <span class="form-label">Thời gian tới</span>
                 <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime" required>
+            </div>
+            <div style="color: red;">
+                {{ selectedTimeMessage }}
             </div>
 
             <div class="col-lg-6 col-12">
                 <span class="form-label">Thời gian đi</span>
                 <input class="form-control" type="time" id="outTime" formControlName="outTime" required>
             </div>
+            <div style="color: red;">
+                {{ selectedOutTimeMessage }}
+            </div>
 
             <!-- <div class="col-lg-12 col-12 form-group">
                 <span class="form-label">Định dạng VN</span>
                 <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
             </div> -->
-            <mat-checkbox style="margin-top: 10px;" class="col-lg-6">
-                <a class="dieu-khoan" (click)="openTermsModal()"><i>i  </i>Đồng ý với điều khoản và chính sách đặt bàn</a>
+            <mat-checkbox class="col-lg-6" formControlName="agree">
+                <a class="dieu-khoan" (click)="openTermsModal()"><u>Tôi đã đọc và đồng ý với <b>Điều khoản và Chính
+                            sách</b> đặt bàn</u></a>
             </mat-checkbox>
             <div class=" d-flex col-lg-4 col-12 ms-auto">
-                <button type="submit" class="form-control submit-btn mr-2" (click)="bookingTable()">Đặt bàn</button>
+                <button type="submit" class="form-control submit-btn mr-2" [hidden]="!isTermsAccepted">Đặt bàn</button>
                 <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                     Lịch đã đặt
-                </button>   
-               
+                </button>
+
                 <!-- <button class="btn btn-primary" (click)="openTermsModal()">Điều khoản</button> -->
             </div>
         </form>
@@ -64,7 +72,7 @@
                             alt="search icon">
                         </svg>
                         <input formControlName="searchKeyWord" class="inputBox" id="inputBox" type="text"
-                            placeholder="Tìm theo ngày và giờ" (input)="onSearch()">
+                            placeholder="yyyy-MM-dd HH:mm:ss" (input)="onSearch()">
                     </div>
                 </div>
             </form>
@@ -131,118 +139,40 @@
 <!-- Điều khoản Modal -->
 <ng-template #termsModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Điều khoản và Điều kiện</h4>
+        <h4 class="modal-title">Điều khoản và Chính sách</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body" (scroll)="onScroll($event)">
 
-        Cọc 50k cho việc giữ bàn:
+        <h3>Điều khoản</h3>
+        1. Mỗi lần đặt bàn quý khách sẽ phải cọc 200.000đ <br>
+        2. Thời gian đến khi đặt bàn phải lớn hơn 45 phút tính từ thời gian đặt hiện tại hoặc đủ thời gian để cho quý khách đến nơi <br>
+        3. Quý khách phải lựa chọn thời gian phù hợp cho bữa ăn của mình <br>
+        4. Quý khách phải tự chịu trách nhiệm cho việc đặt bàn của mình <br>
+        5. Thời gian rời đi phải lớn hơn thời gian đến tối thiểu là 2 tiếng <br>
+        6. Quý khách vui lòng không đặt bàn trong khoảng thời gian từ 00:00:00 - 7:00:00 và từ 23:00:00 - 23:59:59 <br>
+        7. Nếu quý khách không có hóa đơn thì sẽ không hoàn trả tiền đặt cọc bàn <br>
+        8. Quý khách vui lòng tuân thủ khoảng thời gian mà mình đã chọn <br>
+        9. Nếu quý khách đã đặt bàn và không đến thì nhà hàng sẽ không hoàn trả tiền đặt cọc <br>
+        10. Quý khách vui lòng kiểm tra thật kỹ thời gian sử dụng bàn của mình khi đặt và thanh toán <br>
+        11. Nhà hàng sẽ không chịu bất kỳ trách nhiệm nào nếu sai sót đến từ phía của khách hàng <br> <br>
 
-        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
-        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
-        Quy định về hủy đặt bàn:
+        <h3>Chính sách</h3>
+        1. Tiền đặt cọc sẽ được hoàn trả nếu quý khách sử dụng bàn trong khoảng thời gian tối thiểu 75% mà mình đã đặt và sẽ được tặng kèm mã khuyến mãi cho lần sau <br>
+        2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các món mà quý khách đã đặt <br>
+        3. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu khi quý khách đến và không có bàn như đã đặt <br>
+        4. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món của nhà hàng và kèm theo 1 khoảng bồi thường <br>
 
-        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
-        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
-        mất cọc.
-        Hoàn trả cọc:
-
-        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
-        bàn.
-        Thông tin cá nhân:
-
-        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
-        Sự chấp nhận:
-
-        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
-        Cọc 50k cho việc giữ bàn:
-
-        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
-        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
-        Quy định về hủy đặt bàn:
-
-        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
-        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
-        mất cọc.
-        Hoàn trả cọc:
-
-        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
-        bàn.
-        Thông tin cá nhân:
-
-        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
-        Sự chấp nhận:
-
-        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
-        Cọc 50k cho việc giữ bàn:
-
-        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
-        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
-        Quy định về hủy đặt bàn:
-
-        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
-        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
-        mất cọc.
-        Hoàn trả cọc:
-
-        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
-        bàn.
-        Thông tin cá nhân:
-
-        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
-        Sự chấp nhận:
-
-        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
-        Cọc 50k cho việc giữ bàn:
-
-        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
-        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
-        Quy định về hủy đặt bàn:
-
-        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
-        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
-        mất cọc.
-        Hoàn trả cọc:
-
-        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
-        bàn.
-        Thông tin cá nhân:
-
-        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
-        Sự chấp nhận:
-
-        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
-        Cọc 50k cho việc giữ bàn:
-
-        Khi đặt bàn, một khoản cọc trị giá 50.000 VNĐ sẽ được yêu cầu để đảm bảo việc giữ bàn.
-        Khoản cọc này sẽ được hoàn trả hoặc được trừ vào hóa đơn khi khách hàng đến đúng giờ theo đặt bàn.
-        Quy định về hủy đặt bàn:
-
-        Trong trường hợp quý khách muốn hủy đặt bàn, vui lòng thông báo trước ít nhất 1 giờ trước thời gian đặt bàn.
-        Hủy đặt bàn sau thời gian quy định hoặc không xuất hiện vào thời gian đã đặt mà không thông báo trước sẽ dẫn đến
-        mất cọc.
-        Hoàn trả cọc:
-
-        Khoản cọc sẽ được hoàn trả hoặc trừ vào hóa đơn dựa trên việc khách hàng tuân thủ quy định về giữ bàn và hủy đặt
-        bàn.
-        Thông tin cá nhân:
-
-        Thông tin cá nhân của quý khách sẽ được sử dụng độc quyền để xác nhận và duy trì đặt bàn.
-        Sự chấp nhận:
-
-        Khi đặt bàn, quý khách xác nhận đã đọc và đồng ý với các điều khoản và điều kiện của nhà hàng.
-
-
-        <div class="form-check mt-3">
+        <!-- <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="confirmCheckbox" [(ngModel)]="isConfirmed">
             <label class="form-check-label" for="confirmCheckbox">
                 Tôi đã đọc và đồng ý với Điều khoản và Điều kiện
             </label>
-        </div>
+        </div> -->
     </div>
-    <div class="modal-footer">
+    <!-- <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Đóng</button>
         <button type="button" class="btn btn-primary" [disabled]="!isConfirmed" (click)="modal.close('Save click')">Đồng
             ý</button>
-    </div>
+    </div> -->
 </ng-template>
