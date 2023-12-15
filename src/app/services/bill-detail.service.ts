@@ -63,10 +63,6 @@ import { ToastService } from './toast.service';
     return super.delete(id);
   }
 
-  override sortEntities(entities: BillDetail[], field: keyof BillDetail, ascending: boolean): Observable<BillDetail[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //------------------------------------------------------------------------
   getBillDetailsByBillId(billId: number): Observable<BillDetail[]> {
     const url = `billDetails/${billId}/billDetails`;

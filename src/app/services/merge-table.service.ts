@@ -65,13 +65,7 @@ export class MergeTableService extends BaseService<MergeTable> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<MergeTable[]> {
-        return super.searchByName(term);
-    }
-
-    override sortEntities(entities: MergeTable[], field: keyof MergeTable, ascending: boolean): Observable<MergeTable[]> {
-        return super.sortEntities(entities, field, ascending);
-    }
+    //----------------------------------------------------------------------------------------------------------------
 
     getUniqueMergeTableIds(): string[] {
         // Check if the cache is not available

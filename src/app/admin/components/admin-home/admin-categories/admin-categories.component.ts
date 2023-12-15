@@ -9,6 +9,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { AdminCategoryDetailComponent } from './admin-category-detail/admin-category-detail.component';
 import { HttpClient } from '@angular/common/http';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-admin-categories',
@@ -118,17 +119,28 @@ export class AdminCategoriesComponent {
     modalRef.componentInstance.category = category;
   }
 
-  search(event: any) {
-    const keyword = event.target.value;
-    if (keyword.trim() === '') {
+  search() {
+    if (this.keywords.trim() === '') {
       this.getCategories();
     } else {
-      this.categoryService.searchByKeywords(keyword).subscribe(
+      this.categoryService.searchByKeywords(this.keywords, this.fieldName).subscribe(
         (data) => {
           this.categories = data;
         }
       );
     }
+  }
+
+  fieldName!: keyof Category;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
   }
 
   sort(field: keyof Category, ascending: boolean): void {

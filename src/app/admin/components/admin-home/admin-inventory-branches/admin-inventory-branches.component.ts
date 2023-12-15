@@ -23,7 +23,7 @@ export class AdminInventoryBranchesComponent {
   restaurants: Restaurant[] = [];
   suppliers: Supplier[] = [];
   inventoryBranchForm: FormGroup;
-  inventoryBranch: InventoryBranch | undefined;
+  inventoryBranch!: InventoryBranch;
   fieldNames: string[] = [];
   isSubmitted = false;
 
@@ -181,4 +181,29 @@ export class AdminInventoryBranchesComponent {
     modalRef.componentInstance.inventoryBranchSaved.subscribe(() => {
     });
   }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getInventoryBranches();
+    } else {
+      this.inventoryBranchService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.inventoryBranches = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof InventoryBranch;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

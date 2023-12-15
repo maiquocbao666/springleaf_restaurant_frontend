@@ -29,6 +29,7 @@ export class AdminProductsComponent {
   categoriesUrl = 'categories';
   codeCache: string | null = null;
   code: string = '';
+  
 
   @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
   @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
@@ -183,17 +184,28 @@ export class AdminProductsComponent {
     }
   }
 
-  searchProducts(event: any) {
-    const keyword = event.target.value;
-    if (keyword.trim() === '') {
+  searchProducts() {
+    if (this.keywords.trim() === '') {
       this.getProducts();
     } else {
-      this.productService.searchByKeywords(keyword).subscribe(
+      this.productService.searchByKeywords(this.keywords, this.fieldName).subscribe(
         (data) => {
           this.products = data;
         }
       );
     }
+  }
+
+  fieldName!: keyof Product;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.searchProducts();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.searchProducts();
   }
 
   sort(field: keyof Product, ascending: boolean): void {

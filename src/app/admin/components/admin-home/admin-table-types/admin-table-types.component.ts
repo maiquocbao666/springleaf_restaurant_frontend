@@ -123,4 +123,28 @@ export class AdminTableTypesComponent {
       );
   }
 
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getTableTypes();
+    } else {
+      this.tableTypeService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.tableTypes = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof TableType;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

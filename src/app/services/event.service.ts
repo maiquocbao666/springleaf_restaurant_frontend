@@ -63,10 +63,6 @@ export class EventService extends BaseService<Event> {
     return super.delete(id);
   }
 
-  override sortEntities(entities: Event[], field: keyof Event, ascending: boolean): Observable<Event[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //-----------------------------------------------------------------
 
   

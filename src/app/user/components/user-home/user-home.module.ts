@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { UserHomeRoutingModule } from './user-home-routing.module';
+import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
 
 @NgModule({
   imports: [
@@ -10,6 +11,8 @@ import { UserHomeRoutingModule } from './user-home-routing.module';
   ],
   declarations: [
 
+  
+    UserFavoritesComponent
   ]
 })
 export class UserHomeModule { }

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { Ingredient } from '../interfaces/ingredient';
-import { BehaviorSubject } from 'rxjs';
 import { RxStompService } from '../rx-stomp.service';
 import { BaseService } from './base-service';
 import { ToastService } from './toast.service';
@@ -66,15 +65,12 @@ export class IngredientService extends BaseService<Ingredient>  {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<Ingredient[]> {
-    return super.searchByName(term);
-  }
-
-  override sortEntities(entities: Ingredient[], field: keyof Ingredient, ascending: boolean): Observable<Ingredient[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //--------------------------------------------------------------------------------------------------------------------------
+
+  checkThreshold(): Observable<any> {
+    const checkThresholdUrl = 'checkThreshold';
+    return this.apiService.request<any>('get', checkThresholdUrl);
+  }
 
   // private isIngredientNameInCache(name: string): boolean {
   //   const isTrue = !!this.ingredientsCache?.find(ingredient => ingredient.name.toLowerCase() === name.toLowerCase());

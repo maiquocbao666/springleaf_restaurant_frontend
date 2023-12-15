@@ -64,14 +64,6 @@ export class TableTypeService extends BaseService<TableType> {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<TableType[]> {
-    return super.searchByName(term);
-  }
-
-  override sortEntities(entities: TableType[], field: keyof TableType, ascending: boolean): Observable<TableType[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //----------------------------------------------------------------------------------------------------------------
 
 }

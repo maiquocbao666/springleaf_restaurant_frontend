@@ -5,17 +5,13 @@
             aria-expanded="false" aria-controls="collapseExample">
             Thêm nguyên liệu
         </button>
-    </p>
-    <p class="d-inline-flex gap-1">
-        <input type="text" (input)="searchIngredients($event)">
-    </p>
-    <p class="float-end">
-        <select class="form-select" (change)="onTableSizeChange($event)">
+        <select class="form-select" (change)="onTableSizeChange($event)" style="width: 35px;">
             <option *ngFor="let size of tableSizes">
                 {{size}}
             </option>
         </select>
     </p>
+
     <div class="collapse pb-3" id="collapseExample">
         <div class="card card-body">
             <form [formGroup]="ingredientForm" (ngSubmit)="addIngredient()">
@@ -55,15 +51,31 @@
         </div>
     </div>
 
-
+    <p class="float-end">
+        <select (change)="changeFieldName($event)" class="form-select">
+            <option value="">Bộ lọc</option>
+            <option value="ingredientId">Mã nguyên liệu</option>
+            <option value="name">Tên nguyên liệu</option>
+            <option value="orderThreshold">Ngưỡng đặt</option>
+            <option value="description">Mô tả</option>
+        </select>
+    </p>
+    <p class="float-end">
+        <input type="text" (input)="changeSearchKeyWords($event)" class="input" placeholder="Nhập thông tin cần tìm..">
+    </p>
     <div class="table-responsive">
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('ingredientId', true)"></button> Mã nguyên liệu <button class="fa fa-sort-down" (click)="sort('ingredientId', false)"></button></th>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('name', true)"></button> Tên nguyên liệu <button class="fa fa-sort-down" (click)="sort('name', false)"></button></th>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('orderThreshold', true)"></button> Ngưỡng đặt <button class="fa fa-sort-down" (click)="sort('orderThreshold', false)"></button></th>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('description', true)"></button> Mô tả <button class="fa fa-sort-down" (click)="sort('description', false)"></button></th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('ingredientId', true)"></a> Mã nguyên
+                        liệu <a class="fa fa-sort-down" (click)="sort('ingredientId', false)"></a></th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('name', true)"></a> Tên nguyên liệu
+                        <a class="fa fa-sort-down" (click)="sort('name', false)"></a>
+                    </th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('orderThreshold', true)"></a> Ngưỡng
+                        đặt <a class="fa fa-sort-down" (click)="sort('orderThreshold', false)"></a></th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('description', true)"></a> Mô tả <a
+                            class="fa fa-sort-down" (click)="sort('description', false)"></a></th>
                     <th class="text-center">Chức năng</th>
                 </tr>
             </thead>

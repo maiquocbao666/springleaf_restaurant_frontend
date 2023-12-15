@@ -61,16 +61,8 @@ export class InventoryBranchService extends BaseService<InventoryBranch> {
     return super.delete(id);
   }
 
-  override searchByName(term: string): Observable<InventoryBranch[]> {
-    return super.searchByName(term);
-  }
-
   override getItemId(item: InventoryBranch): number {
     return item.inventoryBranchId!;
-  }
-
-  override sortEntities(entities: InventoryBranch[], field: keyof InventoryBranch, ascending: boolean): Observable<InventoryBranch[]> {
-    return super.sortEntities(entities, field, ascending);
   }
 
   //-------------------------------------------------------------------------------------------------------

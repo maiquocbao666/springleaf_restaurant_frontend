@@ -168,4 +168,29 @@ export class AdminMenuItemIngredientsComponent {
       this.getMenuItemIngredients(); // Có thể cần cập nhật lại danh sách sau khi lưu từ modal
     });
   }
+
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getMenuItemIngredients();
+    } else {
+      this.menuItemIngredientService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.menuItemIngredients = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof MenuItemIngredient;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }

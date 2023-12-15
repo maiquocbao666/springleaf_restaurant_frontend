@@ -5,6 +5,11 @@
             aria-expanded="false" aria-controls="collapseExample">
             Đặt bàn
         </button>
+        <select class="form-select" (change)="onTableSizeChange($event)" style="width: 35px;">
+            <option *ngFor="let size of tableSizes">
+                {{size}}
+            </option>
+        </select>
     </p>
 
     <div class="collapse pb-3" id="collapseExample">
@@ -66,14 +71,27 @@
             </form>
         </div>
     </div>
-    <select class="form-select col-4" (change)="onTableSizeChange($event)">
-        <option *ngFor="let size of tableSizes">
-            {{size}}
-        </option>
-    </select>
-    <input class="form-control col-4" formControlName=" searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss" />
-    <td>Ngày giờ hiện tại: {{currentDateTime$ | date: 'EEEE, MMMM d, y, HH:mm:ss a'}}</td>
 
+
+
+    <p class="float-end">
+        <select (change)="changeFieldName($event)" class="form-select">
+            <option value="">Bộ lọc</option>
+            <option value="reservationId">Mã đặt bàn</option>
+            <option value="restaurantTableId">Mã bàn</option>
+            <option value="userId">Mã người dùng</option>
+            <option value="reservationDate">Thời gian tới</option>
+            <option value="outTime">Thời gian đi</option>
+            <option value="reservationStatusName">Trạng thái</option>
+            <option value="numberOfGuests">Số lượng khách hàng</option>
+        </select>
+    </p>
+    <p class="float-end">
+        <input type="text" placeholder="" (input)="changeSearchKeyWords($event)" placeholder="Nhập thông tin cần tìm..."
+            class="input" />
+    </p>
+    <!-- <td>Ngày giờ hiện tại: {{currentDateTime$ | date: 'EEEE, MMMM d, y, HH:mm:ss a'}}</td>
+    Lưu ý: Thời gian thì phải tìm theo định dạng yyyy-MM-dd HH:mm:ss <br> -->
     <div class="table-responsive">
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>

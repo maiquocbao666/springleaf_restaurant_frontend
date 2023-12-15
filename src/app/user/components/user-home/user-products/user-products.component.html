@@ -1,4 +1,8 @@
-<input type="text" (input)="search($event)">
+<div class="float-right">
+    <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm món nào!">
+</div>
+
+
 <section id="our_menu" class="pt-5 pb-5">
     <div class="container">
         <a routerLink="/user/index">Hiển thị tất cả món</a>
@@ -26,9 +30,10 @@
                         </h3>
                         <div class="price">
                             <!-- <span>900.00 đ</span> -->
-                             {{ formatAmount(product.unitPrice ) }}
+                            {{ formatAmount(product.unitPrice ) }}
                         </div>
-                        <a class="add-to-cart" (click)="addToCart(product.menuItemId)"><i class="fa fa-cart-shopping"></i> Thêm vào giỏ </a>
+                        <a class="add-to-cart" (click)="addToCart(product.menuItemId)"><i
+                                class="fa fa-cart-shopping"></i> Thêm vào giỏ </a>
                     </div>
                 </div>
             </div>

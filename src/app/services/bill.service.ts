@@ -63,10 +63,6 @@ export class BillService extends BaseService<Bill> {
     return super.delete(id);
   }
 
-  override sortEntities(entities: Bill[], field: keyof Bill, ascending: boolean): Observable<Bill[]> {
-    return super.sortEntities(entities, field, ascending);
-  }
-
   //---------------------------------------------------------
 
 }

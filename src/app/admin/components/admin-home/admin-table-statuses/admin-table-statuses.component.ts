@@ -143,4 +143,28 @@ export class AdminTableStatusesComponent {
     });
   }
 
+  search() {
+    if (this.keywords.trim() === '') {
+      this.getTableStatuses();
+    } else {
+      this.tableStatusService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.tableStatuses = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof TableStatus;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any){
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }
