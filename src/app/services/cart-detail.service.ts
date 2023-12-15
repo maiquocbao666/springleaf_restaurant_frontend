@@ -91,7 +91,7 @@ export class CartDetailService extends BaseService<CartDetail> {
   }
   getUserOrderDetail(orderId: number): Observable<CartDetail[] | null> {
 
-    const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }
@@ -111,7 +111,7 @@ export class CartDetailService extends BaseService<CartDetail> {
   }
 
   deleteDetail(id: number): void {
-    const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       of(null);
     }

@@ -150,7 +150,7 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
-    this.authService.loginWithGoogle();
+    this.authService.loginGoogle();
   }
 
   // Lấy mã xác nhận đăng ký

@@ -65,7 +65,7 @@
                 <span>Số lượng : {{cart.quantity}}</span>
               </div>
               <div>
-                <span>Tổng tiền: {{cart.menuItemPrice * cart.quantity}}</span>
+                <span>Tổng tiền: {{ formatAmount(cart.menuItemPrice * cart.quantity)}}</span>
               </div>
             </li>
             <hr>
@@ -135,7 +135,7 @@
                   <span>Tạm tính</span>
                 </div>
                 <div>
-                  <span>{{ calculateTotalPrice() }}</span>
+                  <span>{{ formatAmount(calculateTotalPrice()) }}</span>
                 </div>
               </li>
               <li class="d-flex align-items-center">
@@ -143,7 +143,7 @@
                   <span>Phí vận chuyển</span>
                 </div>
                 <div>
-                  <span>{{ship}}</span>
+                  <span>{{ formatAmount(ship || 0) }}</span>
                 </div>
               </li>
               <hr>
@@ -152,7 +152,7 @@
                   <span>Tổng cộng</span>
                 </div>
                 <div>
-                  <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ calculateFinalPrice(ship || 0)}}</h4>
+                  <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ formatAmount(calculateFinalPrice(ship || 0)) }}</h4>
                 </div>
               </li>
             </ul>

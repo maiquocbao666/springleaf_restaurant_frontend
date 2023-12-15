@@ -337,7 +337,7 @@ export class UserCartComponent implements OnInit {
               this.toastService.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
             }
             else {
-              this.discountPrice = response.message;
+              this.discountPrice = Number(response.message);
               this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
             }
           },
