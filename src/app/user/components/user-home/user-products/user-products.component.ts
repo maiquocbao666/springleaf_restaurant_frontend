@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +8,7 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { CategoryService } from 'src/app/services/category.service';
@@ -46,6 +48,7 @@ export class UserProductsComponent implements OnInit {
     private orderDetailService: CartDetailService,
     private modalService: NgbModal,
     private toastService: ToastService,
+    private apiService: ApiService,
   ) {
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
@@ -59,6 +62,17 @@ export class UserProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserLoggedIn().subscribe(
+      (userData) => {
+        // Xử lý thông tin người dùng đăng nhập ở đây
+        console.log('Thông tin người dùng đăng nhập:', userData);
+      },
+      (error) => {
+        // Xử lý khi có lỗi xảy ra khi lấy thông tin người dùng
+        console.error('Lỗi khi lấy thông tin người dùng:', error);
+      }
+    );
+
     this.getProducts();
     this.getCategories();
     this.route.paramMap.subscribe(paramMap => {
@@ -69,6 +83,19 @@ export class UserProductsComponent implements OnInit {
       }
     });
   }
+
+
+  // Hàm gửi yêu cầu lấy thông tin người đang đăng nhập
+  getUserLoggedIn(): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+
+    const customHeader1 = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+
+    return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
+  }
+
 
   filterProductsByCategoryId(categoryId: number): any[] {
     return this.products.filter(product => product.categoryId === categoryId);

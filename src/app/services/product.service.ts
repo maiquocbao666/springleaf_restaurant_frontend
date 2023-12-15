@@ -113,6 +113,8 @@ export class ProductService extends BaseService<Product> {
 
   }
 
+ 
+
   // getImagePath(imageName: string): Observable<Blob> {
   //   return this.http.get(`apiGetUrl/${imageName}`, { responseType: 'blob' });
   // }
