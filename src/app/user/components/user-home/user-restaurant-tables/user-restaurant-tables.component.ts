@@ -57,15 +57,20 @@ export class UserRestaurantTablesComponent {
       }
     );
     this.getRestaurants();
-    if(this.restaurants[0].restaurantId){
-      this.restaurantId = this.restaurants[0].restaurantId;
+    if (this.user?.restaurantBranchId) {
+      this.restaurantId = this.user.restaurantBranchId;
+      alert(this.restaurantId);
+    } else {
+      if (this.restaurants[0].restaurantId) {
+        this.restaurantId = this.restaurants[0].restaurantId;
+      }
     }
-    if(this.restaurantId){
+    if (this.restaurantId) {
       this.getRestaurantTables(this.restaurantId, null);
     }
   }
 
-  getRestaurants(): void{
+  getRestaurants(): void {
     this.restaurantService.getCache().subscribe(
       cache => {
         this.restaurants = cache;

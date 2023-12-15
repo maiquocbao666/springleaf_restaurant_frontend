@@ -2,7 +2,7 @@
     <h1>ĐẶT BÀN</h1>
     <div>Chọn chi nhánh</div>
     <select (change)="getRestaurantTables(null, $event)">
-        <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId">{{ restaurant.restaurantName }}</option>
+        <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId" [selected]="restaurant.restaurantId === restaurantId">{{ restaurant.restaurantName }}</option>
     </select>
     <div class="container-xxl py-5">
         <div class="container">
