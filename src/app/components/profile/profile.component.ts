@@ -119,7 +119,6 @@ export class ProfileComponent {
       } else {
         this.setValue();
       }
-
     }
   }
 
@@ -313,7 +312,6 @@ export class ProfileComponent {
     }
   }
 
-
   selectedFileName: string | undefined;
   selectedFile: File | undefined;
   onFileSelected(event: any) {
@@ -322,7 +320,6 @@ export class ProfileComponent {
     this.profileForm.get('image')?.setValue(this.selectedFileName);
     console.log("Tên ảnh của bạn là" + this.selectedFileName)
   }
-
 
   onUpload() {
     if (this.selectedFile) {

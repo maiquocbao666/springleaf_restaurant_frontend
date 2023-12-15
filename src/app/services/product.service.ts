@@ -89,7 +89,7 @@ export class ProductService extends BaseService<Product> {
         if (item.categoryId === categoryId) {
           item.status = status;
           this.update(item).subscribe(
-            () => {       
+            () => {
             },
             error => {
             }
@@ -112,6 +112,8 @@ export class ProductService extends BaseService<Product> {
     return this.apiService.request<any>('post', url, null, customHeader);
 
   }
+
+ 
 
   // getImagePath(imageName: string): Observable<Blob> {
   //   return this.http.get(`apiGetUrl/${imageName}`, { responseType: 'blob' });

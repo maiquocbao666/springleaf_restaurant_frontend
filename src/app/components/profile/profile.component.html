@@ -60,13 +60,12 @@
               <div class="select-column">
                 <select class="form-select" formControlName="wardChange" [(ngModel)]="selectedWard" [disabled]="!Wards"
                   class="select">
-                  <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
+                  <option [ngValue]="null">Vui lòng chọn xã/phường</option>
                   <option *ngFor="let ward of WardsFromAPI[2]" [ngValue]="ward.WardCode">
                     {{ ward.WardName }}
                   </option>
                 </select>
               </div>
-
               <i class="fa-solid fa-check"
                 style="border: 1px solid #75a418; background-color: #75a418; padding: 5px 10px; border-radius: 10px; margin: 5px 5px;"
                 (click)="toggleAddressInput()">
