@@ -148,7 +148,8 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 
   calculateFinalPrice(shipFee: number): any {
     const totalPrice = this.calculateTotalPrice();
-    const finalPrice = totalPrice + shipFee;
+    const discount = Number(sessionStorage.getItem('discountPrice'));
+    const finalPrice = totalPrice + shipFee - discount;
     this.totalAndShip = finalPrice;
     return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
   };

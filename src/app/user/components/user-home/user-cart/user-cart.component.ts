@@ -97,6 +97,7 @@ export class UserCartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    sessionStorage.removeItem('discountPrice');
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.Provinces = Object.values(data);
@@ -338,7 +339,8 @@ export class UserCartComponent implements OnInit {
             }
             else {
               this.discountPrice = Number(response.message);
-              this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
+              sessionStorage.setItem('discountPrice', response.message);
+              this.toastService.showTimedAlert('Mã chính xác', '', 'success', 2000);
             }
           },
           error: (error) => {

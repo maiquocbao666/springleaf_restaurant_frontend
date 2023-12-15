@@ -99,6 +99,7 @@ export class UserHeaderComponent {
     });
     this.getRestaurants();
     this.getCategories();
+    this.checkUserRestaurant();
     this.renderer.setStyle(this.el.nativeElement.querySelector('#navbar'), 'transition', 'top 0.3s ease-in-out');
     let prevScrollPos = window.scrollY;
 
