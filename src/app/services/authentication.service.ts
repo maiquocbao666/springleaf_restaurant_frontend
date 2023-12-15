@@ -9,8 +9,8 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  //private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
-  private apiUrl = 'http://localhost:8080/auth';
+  private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
+  //private apiUrl = 'http://localhost:8080/auth';
   // User cache
   private userCache: User | null = null;
   private userCachedDataSubject = new BehaviorSubject<User | null>(null);
@@ -284,12 +284,12 @@ export class AuthenticationService {
       Authorization: `Bearer ${jwtToken}`,
     });
 
-    return this.http.post<any>('http://localhost:8080/auth2/logout', null, {
-      headers: customHeader,
-    });
-    // return this.http.post<any>('https://springleafrestaurantbackend.onrender.com/auth2/logout', null, {
+    // return this.http.post<any>('http://localhost:8080/auth2/logout', null, {
     //   headers: customHeader,
     // });
+    return this.http.post<any>('https://springleafrestaurantbackend.onrender.com/auth2/logout', null, {
+      headers: customHeader,
+    });
   }
 
   
