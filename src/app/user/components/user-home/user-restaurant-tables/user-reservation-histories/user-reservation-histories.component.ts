@@ -1,10 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, map } from 'rxjs';
 import { Product } from 'src/app/interfaces/product';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ReservationService } from 'src/app/services/reservation.service';
+import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-user-reservation-histories',
@@ -13,23 +18,32 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class UserReservationHistoriesComponent {
 
-  @Input() userId!: number;
+  //@Input() userId!: number;
   thisUserReservations!: Reservation[];
   products: Product[] = [];
   selections: { [key: string]: boolean } = {};
   selectedItems: any[] = [];
   selectReservation: number | null = null;
+  user: User | null = null;
+
   constructor(
     private reservationService: ReservationService,
     private productService: ProductService,
     private toastService: ToastService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private restaurantTableService: RestaurantTableService,
+    private userService: UserService,
+    private authenticationService: AuthenticationService,
   ) {
-
+    this.authenticationService.getUserCache().subscribe(
+      (cached: any | null) => {
+        this.user = cached;
+      }
+    );
   }
 
   ngOnInit(): void {
-    this.reservationService.getReservationsByUserId(this.userId).subscribe(
+    this.reservationService.getReservationsByUserId(this.user?.userId!).subscribe(
       cached => {
         this.thisUserReservations = cached;
       }
@@ -47,9 +61,9 @@ export class UserReservationHistoriesComponent {
   getClassForStatus(status: string): string {
     if (status === 'Đang đợi') {
       return 'badge badge-warning';
-    } else if (status === 'Đã sử dụng xong') {
-      return 'badge badge-success';
     } else if (status === 'Đang sử dụng') {
+      return 'badge badge-success';
+    } else if (status === 'Đã sử dụng xong') {
       return 'badge badge-danger';
     }
     return ''; // Hoặc class mặc định khác nếu cần
@@ -119,6 +133,13 @@ export class UserReservationHistoriesComponent {
     }
   }
 
+  findTableNameByTableId(tableId: number): string {
+    return this.restaurantTableService.findTableNameByTableId(tableId);
+  }
+
+  getUserNameById(id: number): string | undefined {
+    return this.userService.getUserNameById(id);
+  }
 
 }
 export interface OrderReservationInfomation {

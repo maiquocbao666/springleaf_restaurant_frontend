@@ -1,6 +1,6 @@
 <div class="container">
   <div class="modal-header">
-    <h3 class="col-lg-7 mb-0">Lịch sử đặt bàn</h3>
+    <h3 class="col-lg-7 mb-0">Lịch sử đặt bàn của {{ user?.fullName }}</h3>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -12,9 +12,11 @@
         <thead>
           <tr>
             <th class="text-center">Trạng thái</th>
-            <th class="text-center">Id đặt bàn</th>
-            <th class="text-center">Ngày giờ tới</th>
-            <th class="text-center">Ngày giờ đi</th>
+            <!-- <th class="text-center">Id đặt bàn</th> -->
+            <th class="text-center">Tên bàn</th>
+            <th class="text-center">Ngày tới</th>
+            <th class="text-center">Giờ tới</th>
+            <th class="text-center">Giờ đi</th>
             <th class="text-center">Số lượng khách hàng</th>
             <th class="text-center">Chức năng</th>
             <th></th>
@@ -27,9 +29,11 @@
                 {{ thisUserReservation.reservationStatusName }}
               </div>
             </td>
-            <td class="text-center">{{ thisUserReservation.reservationId }}</td>
-            <td class="text-center">{{ thisUserReservation.reservationDate }}</td>
-            <td class="text-center">{{ thisUserReservation.outTime }}</td>
+            <!-- <td class="text-center">{{ thisUserReservation.reservationId }}</td> -->
+            <td class="text-center">{{ findTableNameByTableId(thisUserReservation.restaurantTableId) }}</td>
+            <td class="text-center">{{ thisUserReservation.reservationDate | date:'yyyy-MM-dd' }}</td>
+            <td class="text-center">{{ thisUserReservation.reservationDate | date:'HH:mm:ss' }}</td>
+            <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td>
             <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
             <td>
               <button class="btn btn-sm btn-primary">Đặt món</button>
@@ -45,7 +49,7 @@
   </div>
 
 
-  <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
+  <!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -59,8 +63,9 @@
               <tr>
                 <th class="text-center">Trạng thái</th>
                 <th class="text-center">Id đặt bàn</th>
-                <th class="text-center">Ngày giờ tới</th>
-                <th class="text-center">Ngày giờ đi</th>
+                <th class="text-center">Ngày tới</th>
+                <th class="text-center">Giờ tới</th>
+                <th class="text-center">Giờ đi</th>
                 <th class="text-center">Số lượng khách hàng</th>
                 <th class="text-center">Chức năng</th>
                 <th></th>
@@ -74,8 +79,9 @@
                   </div>
                 </td>
                 <td class="text-center">{{ thisUserReservation.reservationId }}</td>
-                <td class="text-center">{{ thisUserReservation.reservationDate }}</td>
-                <td class="text-center">{{ thisUserReservation.outTime }}</td>
+                <td class="text-center">{{ thisUserReservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
+                <td class="text-center">{{ thisUserReservation.reservationDate | date: 'HH-mm-ss' }}</td>
+                <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td>
                 <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
                 <td>
                   <button class="btn btn-sm btn-primary">Đặt món</button>
@@ -90,4 +96,4 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->

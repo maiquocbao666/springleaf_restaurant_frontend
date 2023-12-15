@@ -32,6 +32,8 @@ export class UserRestaurantTablesComponent {
   restaurants: Restaurant[] = [];
   user: User | null = null;
 
+  restaurantId: number | null = null;
+
   constructor(
     private toastService: ToastService,
     private modalService: NgbModal,
@@ -54,15 +56,35 @@ export class UserRestaurantTablesComponent {
         this.user = cached;
       }
     );
-    this.getRestaurantTables();
+    this.getRestaurants();
+    if(this.restaurants[0].restaurantId){
+      this.restaurantId = this.restaurants[0].restaurantId;
+    }
+    if(this.restaurantId){
+      this.getRestaurantTables(this.restaurantId, null);
+    }
   }
 
+  getRestaurants(): void{
+    this.restaurantService.getCache().subscribe(
+      cache => {
+        this.restaurants = cache;
+      }
+    )
+  }
 
-
-  getRestaurantTables(): void {
+  getRestaurantTables(restaurantId?: number | null, event?: any | null): void {
     this.restaurantTableService.getCache().subscribe(
       (cached: any[]) => {
-        this.restaurantTables = cached;
+        if (restaurantId !== undefined && restaurantId !== null) {
+          this.restaurantTables = cached.filter(table => table.restaurantId === restaurantId);
+        } else if (event && event.target && event.target.value) {
+          const selectedRestaurantId = +event.target.value; // Convert to a number if needed
+          this.restaurantTables = cached.filter(table => table.restaurantId === selectedRestaurantId);
+        } else {
+          // Handle the case where neither restaurantId nor event is provided
+          this.restaurantTables = cached;
+        }
       }
     );
   }
@@ -86,12 +108,12 @@ export class UserRestaurantTablesComponent {
     if (!this.authenticationService.getUserCache()) {
       //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
     } else {
-      const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'lg' });
+      const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'xl', scrollable: true, centered: false });
       modalRef.componentInstance.restaurantTable = restaurantTable;
 
       // Subscribe to the emitted event
       modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
-        this.getRestaurantTables(); // Refresh data in the parent component
+        this.getRestaurantTables(this.restaurantId, null); // Refresh data in the parent component
       });
     }
   }
@@ -100,7 +122,7 @@ export class UserRestaurantTablesComponent {
     if (!this.authenticationService.getUserCache()) {
       //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
     } else {
-      const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'lg' });
+      const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'xl', centered: true, scrollable: false });
       modalRef.componentInstance.userId = this.user?.userId;
     }
   }

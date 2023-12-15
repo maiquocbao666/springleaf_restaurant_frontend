@@ -185,7 +185,7 @@ export class UserRestaurantTableInfomationComponent {
     const outDateTimeStr = `${selectedDate} ${outTimeStr}`;
     const outDateTime = new Date(outDateTimeStr).getTime();
 
-    if (selectedDate === '' || selectedTimeStr === '' || outTimeStr === '') {
+    if (!selectedDate || !this.reservationForm.valid || selectedTimeStr === '' || outTimeStr === '') {
       this.selectedDateMessage = 'Mời chọn thời gian';
       this.selectedTimeMessage = 'Mời chọn thời gian';
       this.selectedOutTimeMessage = 'Mời chọn thời gian';

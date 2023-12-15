@@ -22,43 +22,47 @@
                 <span class="form-label">Ngày tới</span>
                 <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate" [min]="minDate"
                     [max]="maxDate" required>
-            </div>
-            <div style="color: red;">
-                {{ selectedDateMessage }}
+                <div style="color: red; text-align: center;">
+                    {{ selectedDateMessage }}
+                </div>
             </div>
 
             <div class="col-lg-6 col-12">
                 <span class="form-label">Thời gian tới</span>
                 <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime" required>
-            </div>
-            <div style="color: red;">
-                {{ selectedTimeMessage }}
+                <div style="color: red; text-align: center;">
+                    {{ selectedTimeMessage }}
+                </div>
             </div>
 
             <div class="col-lg-6 col-12">
                 <span class="form-label">Thời gian đi</span>
                 <input class="form-control" type="time" id="outTime" formControlName="outTime" required>
-            </div>
-            <div style="color: red;">
-                {{ selectedOutTimeMessage }}
+                <div style="color: red; text-align: center;">
+                    {{ selectedOutTimeMessage }}
+                </div>
             </div>
 
             <!-- <div class="col-lg-12 col-12 form-group">
                 <span class="form-label">Định dạng VN</span>
                 <p>{{ reservationForm.get('selectedDate')?.value | date: 'dd-MM-yyyy' }}</p>
             </div> -->
-            <mat-checkbox class="col-lg-6" formControlName="agree">
-                <a class="dieu-khoan" (click)="openTermsModal()"><u>Tôi đã đọc và đồng ý với <b>Điều khoản và Chính
-                            sách</b> đặt bàn</u></a>
-            </mat-checkbox>
-            <div class=" d-flex col-lg-4 col-12 ms-auto">
-                <button type="submit" class="form-control submit-btn mr-2" [hidden]="!isTermsAccepted">Đặt bàn</button>
-                <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Lịch đã đặt
-                </button>
+            <div style="margin-top: 5px;">
+                <div class="col-lg-6">
+                    <input type="checkbox" formControlName="agree">
+                    <a class="dieu-khoan" (click)="openTermsModal()"><u>Tôi đã đọc và đồng ý với <b>Điều khoản và Chính
+                                sách</b> đặt bàn</u></a>
+                </div>
+                <div class=" d-flex col-lg-6 ms-auto" style="align-items: center;">
+                    <button type="submit" class="form-control submit-btn mr-2" [hidden]="!isTermsAccepted">Đặt
+                        bàn</button>
+                    <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        Thời gian đã được đặt
+                    </button>
 
-                <!-- <button class="btn btn-primary" (click)="openTermsModal()">Điều khoản</button> -->
+                    <!-- <button class="btn btn-primary" (click)="openTermsModal()">Điều khoản</button> -->
+                </div>
             </div>
         </form>
     </div>
@@ -80,17 +84,17 @@
                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">Ngày giờ tới</th>
+                            <th class="text-center">Ngày tới</th>
+                            <th class="text-center">Giờ tới</th>
                             <th class="text-center">Giờ đi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let reservation of searchReservations">
                             <!-- <td>{{ thisUserReservation.userId }}</td> -->
-                            <td class="text-center">{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }}
-                            </td>
+                            <td class="text-center">{{ reservation.reservationDate | date: 'yyyy-MM-dd' }}</td>
+                            <td class="text-center">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
                             <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -99,17 +103,16 @@
                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">Ngày giờ tới</th>
+                            <th class="text-center">Ngày tới</th>
+                            <th class="text-center">Giờ tới</th>
                             <th class="text-center">Giờ đi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let reservation of reservations">
-                            <!-- <td>{{ thisUserReservation.userId }}</td> -->
-                            <td class="text-center">{{ reservation.reservationDate | date: 'dd-MM-yyyy | HH:mm:ss' }}
-                            </td>
+                            <td class="text-center">{{ reservation.reservationDate | date: 'yyyy-MM-dd' }}</td>
+                            <td class="text-center">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
                             <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -146,7 +149,8 @@
 
         <h3>Điều khoản</h3>
         1. Mỗi lần đặt bàn quý khách sẽ phải cọc 200.000đ <br>
-        2. Thời gian đến khi đặt bàn phải lớn hơn 45 phút tính từ thời gian đặt hiện tại hoặc đủ thời gian để cho quý khách đến nơi <br>
+        2. Thời gian đến khi đặt bàn phải lớn hơn 45 phút tính từ thời gian đặt hiện tại hoặc đủ thời gian để cho quý
+        khách đến nơi <br>
         3. Quý khách phải lựa chọn thời gian phù hợp cho bữa ăn của mình <br>
         4. Quý khách phải tự chịu trách nhiệm cho việc đặt bàn của mình <br>
         5. Thời gian rời đi phải lớn hơn thời gian đến tối thiểu là 2 tiếng <br>
@@ -158,10 +162,14 @@
         11. Nhà hàng sẽ không chịu bất kỳ trách nhiệm nào nếu sai sót đến từ phía của khách hàng <br> <br>
 
         <h3>Chính sách</h3>
-        1. Tiền đặt cọc sẽ được hoàn trả nếu quý khách sử dụng bàn trong khoảng thời gian tối thiểu 75% mà mình đã đặt và sẽ được tặng kèm mã khuyến mãi cho lần sau <br>
-        2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các món mà quý khách đã đặt <br>
-        3. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu khi quý khách đến và không có bàn như đã đặt <br>
-        4. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món của nhà hàng và kèm theo 1 khoảng bồi thường <br>
+        1. Tiền đặt cọc sẽ được hoàn trả nếu quý khách sử dụng bàn trong khoảng thời gian tối thiểu 75% mà mình đã đặt
+        và sẽ được tặng kèm mã khuyến mãi cho lần sau <br>
+        2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các
+        món mà quý khách đã đặt <br>
+        3. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu khi quý khách đến và không có bàn
+        như đã đặt <br>
+        4. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món
+        của nhà hàng và kèm theo 1 khoảng bồi thường <br>
 
         <!-- <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="confirmCheckbox" [(ngModel)]="isConfirmed">

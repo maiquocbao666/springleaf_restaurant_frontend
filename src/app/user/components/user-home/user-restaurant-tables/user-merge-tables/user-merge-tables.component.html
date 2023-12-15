@@ -1,6 +1,6 @@
 <div class="container">
     <div class="modal-header">
-        <h4 class="modal-title">Các bàn bạn đang sử dụng</h4>
+        <h4 class="modal-title">Gộp bàn</h4>
         <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -8,21 +8,21 @@
 
     <div class="row">
         <div class="col-lg-12 mt-3">
-
+            Các bàn bạn đang sử dụng
             <!-- Bảng hiển thị các đặt bàn -->
             <div class="card mt-3">
                 <div class="card-body">
                     <table class="table table-borderless table-striped table-hover">
                         <thead>
                             <tr>
-                                <th class="text-center">Mã đặt bàn</th>
-                                <th class="text-center">Mã bàn</th>
+                                <!-- <th class="text-center">Mã đặt bàn</th> -->
+                                <th class="text-center">Tên bàn</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let reservation of reservationOfUser">
-                                <td class="text-center text-muted">{{ reservation.reservationId }}</td>
-                                <td class="text-center">{{ reservation.restaurantTableId }}</td>
+                                <!-- <td class="text-center text-muted">{{ reservation.reservationId }}</td> -->
+                                <td class="text-center">{{ getTableNameById(reservation.restaurantTableId) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -38,9 +38,12 @@
                     {{ mergeTableId }}
                     <button class="btn btn-primary" [disabled]="isResetDisabled" (click)="resetMergeTableId()">Đặt
                         lại</button>
+                        <div style="color: red;">
+                            {{ mergeTableIdMessage }}
+                        </div>
                 </div> <br>
                 <div class="row">
-                    <div class="col-lg-6 mb-3">
+                    <!-- <div class="col-lg-6 mb-3">
                         <label for="mergeTableIdSelect">Hoặc chọn mã gộp bàn muốn gộp vào</label>
                         <select formControlName="mergeTableId" (change)="onMergeTableIdChange($event)"
                             class="form-select" id="mergeTableIdSelect">
@@ -48,18 +51,36 @@
                                 {{mergeTableId}}
                             </option>
                         </select>
-                    </div>
+                    </div> -->
 
                     <div class="col-lg-6 mb-3">
-                        <label for="tableIdSelect">Chọn mã bàn muốn gộp vào</label>
-                        <select formControlName="tableId" (change)="onTableIdChange($event)" class="form-select"
+                        <label for="tableIdSelect">Chọn tên bàn muốn gộp</label>
+                        <select formControlName="tableIdMerge1" (change)="onTableIdChange($event)" class="form-select"
                             id="tableIdSelect">
                             <option *ngFor="let reservation of reservationsInUse"
                                 [value]="reservation.restaurantTableId">
-                                {{ reservation.restaurantTableId }}
+                                {{ getTableNameById(reservation.restaurantTableId) }}
                             </option>
                         </select>
+                        <div style="color: red;">
+                            {{ selectTableIdMessage }}
+                        </div>
                     </div>
+
+                    <div class="col-lg-6 mb-3">
+                        <label for="tableIdSelect">Chọn tên bàn muốn gộp</label>
+                        <select formControlName="tableIdMerge2" (change)="onTableIdChange($event)" class="form-select"
+                            id="tableIdSelect">
+                            <option *ngFor="let reservation of reservationsInUse"
+                                [value]="reservation.restaurantTableId">
+                                {{ getTableNameById(reservation.restaurantTableId) }}
+                            </option>
+                        </select>
+                        <div style="color: red;">
+                            {{ selectTableIdMessage }}
+                        </div>
+                    </div>
+
                 </div>
                 <div class="mb-3">
                     <p>Mã hiện đang chọn: {{ mergeTableId }}</p>
@@ -73,7 +94,7 @@
 
         <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
             aria-expanded="false" aria-controls="collapseExample">
-            Các bàn hiện đang gộp
+            Các bàn hiện đang gộp hoặc đang chờ xác nhận
         </button>
         <div class="collapse" id="collapseExample">
             <!-- Bảng hiển thị thông tin các bàn gộp -->
@@ -81,10 +102,10 @@
                 <!-- Đầu bảng -->
                 <thead>
                     <tr>
-                        <th class="text-center">Số thứ tự</th>
-                        <th class="text-center">Mã bàn</th>
-                        <th class="text-center">Mã gộp bàn</th>
-                        <th class="text-center">Mã đặt bàn</th>
+                        <!-- <th class="text-center">Số thứ tự</th> -->
+                        <!-- <th class="text-center">Tên bàn</th> -->
+                        <th class="text-center">Tên bàn</th>
+                        <!-- <th class="text-center">Mã đặt bàn</th> -->
                         <th class="text-center">Thời gian gộp</th>
                         <th class="text-center">Trạng thái</th>
                     </tr>
@@ -92,16 +113,16 @@
                 <!-- Thân bảng -->
                 <tbody>
                     <tr *ngFor="let mergeTableCache of mergeTablesCache">
-                        <td class="text-center text-muted">{{ mergeTableCache.id }}</td>
-                        <td class="text-center text-muted">{{ mergeTableCache.tableId }}</td>
+                        <!-- <td class="text-center text-muted">{{ mergeTableCache.id }}</td> -->
+                        <td class="text-center text-muted">{{ getTableNameById(mergeTableCache.tableId) }}</td>
                         <td class="text-center text-muted">{{ mergeTableCache.mergeTableId }}</td>
-                        <td class="text-center text-muted">{{ mergeTableCache.reservationId }}</td>
+                        <!-- <td class="text-center text-muted">{{ mergeTableCache.reservationId }}</td> -->
                         <td class="text-center text-muted">{{ mergeTableCache.mergeTime }}</td>
                         <td class="text-center">
                             <div [ngClass]="getClassForStatus(mergeTableCache.status)">
                                 {{ mergeTableCache.status }}
                             </div>
-                        </td>    
+                        </td>
                     </tr>
                 </tbody>
             </table>

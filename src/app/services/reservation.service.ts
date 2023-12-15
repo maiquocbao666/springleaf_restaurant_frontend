@@ -78,19 +78,32 @@ export class ReservationService extends BaseService<Reservation> {
             });
             return of(filteredReservations);
         }
-    
+
         return of([]);
     }
 
     getReservationsByUserId(userId: number): Observable<Reservation[]> {
-        if (this.cache) {
-            const filteredReservations = this.cache.filter(reservation => reservation.userId === userId);
-            return of(filteredReservations);
-        }
-
-        return of();
-
-    }
+        return this.cache$.pipe(
+          map(cache => {
+            if (cache) {
+              const filteredReservations = cache.filter(reservation => reservation.userId === userId);
+      
+              // Sắp xếp danh sách theo trạng thái (Đang đợi lên trên cùng)
+              const statusOrder: { [key: string]: number } = {
+                'Đang đợi': 1,
+                'Đang sử dụng': 2,
+                'Đã sử dụng xong': 3,
+              };
+      
+              filteredReservations.sort((a, b) => statusOrder[a.reservationStatusName] - statusOrder[b.reservationStatusName]);
+      
+              return filteredReservations;
+            } else {
+              return [];
+            }
+          })
+        );
+      }
 
     isTimeInRange(startTime: Date, endTime: Date, checkTime: Date): boolean {
         return checkTime.getTime() >= startTime.getTime() && checkTime.getTime() <= endTime.getTime();
@@ -100,19 +113,19 @@ export class ReservationService extends BaseService<Reservation> {
         return reservations.some(reservation =>
             reservation.restaurantTableId === tableId &&
             (this.isTimeInRange(new Date(reservation.reservationDate), new Date(reservation.outTime), startTime) ||
-            this.isTimeInRange(new Date(reservation.reservationDate), new Date(reservation.outTime), endTime))
+                this.isTimeInRange(new Date(reservation.reservationDate), new Date(reservation.outTime), endTime))
         );
     }
 
     isReservationsInTimeRangeByTableId(tableId: number, startTime: string, endTime: string): boolean {
         const startTimeDate = new Date(startTime);
         const endTimeDate = new Date(endTime);
-    
+
         if (this.cache) {
             const hasReservations = this.hasReservationInTimeRange(this.cache, tableId, startTimeDate, endTimeDate);
             return hasReservations;
         }
-    
+
         // If this.cache is falsy (e.g., undefined), return false
         return false;
     }
@@ -123,7 +136,8 @@ export class ReservationService extends BaseService<Reservation> {
             const filteredReservations = this.cache.filter(reservation =>
                 reservation.restaurantTableId === tableId &&
                 (reservation.reservationDate.toLowerCase().includes(lowerCaseKeyword) ||
-                reservation.outTime.toLowerCase().includes(lowerCaseKeyword))
+                    reservation.outTime.toLowerCase().includes(lowerCaseKeyword)) &&
+                (reservation.reservationStatusName === 'Đang đợi' || reservation.reservationStatusName === 'Đang sử dụng')
             );
             return of(filteredReservations);
         }
@@ -131,16 +145,16 @@ export class ReservationService extends BaseService<Reservation> {
         return of([]);
     }
 
-    order(productList : any[] , reservationId : number){
+    order(productList: any[], reservationId: number) {
         const jwtToken = localStorage.getItem('access_token');
-    if (!jwtToken) {
-      return of(null);
-    }
-  
-    const customHeader = new HttpHeaders({
-      'Authorization': `Bearer ${jwtToken}`,
-    });
-        return this.apiService.request<any>('post',`order/${reservationId}`, productList, customHeader);
+        if (!jwtToken) {
+            return of(null);
+        }
+
+        const customHeader = new HttpHeaders({
+            'Authorization': `Bearer ${jwtToken}`,
+        });
+        return this.apiService.request<any>('post', `order/${reservationId}`, productList, customHeader);
     }
 
     getReservationsInUseByUserId(userId: number): Observable<Reservation[]> {
@@ -154,7 +168,7 @@ export class ReservationService extends BaseService<Reservation> {
             );
             return of(reservationsInUse);
         }
-    
+
         return of([]);
     }
 
@@ -168,7 +182,7 @@ export class ReservationService extends BaseService<Reservation> {
             );
             return of(reservationsInUse);
         }
-    
+
         return of([]);
     }
 
