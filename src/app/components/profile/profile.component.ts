@@ -178,8 +178,8 @@ export class ProfileComponent {
         password: this.user.password,
         email: this.user.email,
         phone: this.user.phone,
-        //image: this.user.image,
-        //selectedRestaurant : this.user.restaurantBranchId
+        image: this.user.image,
+        selectedRestaurant : this.user.restaurantBranchId
       });
       if (this.userProvince && this.userDistrict && this.userWard) {
         this.profileForm.patchValue({
