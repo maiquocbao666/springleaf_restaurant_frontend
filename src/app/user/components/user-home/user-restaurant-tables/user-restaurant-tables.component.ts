@@ -59,7 +59,7 @@ export class UserRestaurantTablesComponent {
     this.getRestaurants();
     if (this.user?.restaurantBranchId) {
       this.restaurantId = this.user.restaurantBranchId;
-      alert(this.restaurantId);
+      //alert(this.restaurantId);
     } else {
       if (this.restaurants[0].restaurantId) {
         this.restaurantId = this.restaurants[0].restaurantId;
@@ -160,5 +160,7 @@ export class UserRestaurantTablesComponent {
       }
     });
   }
+
+  
 
 }

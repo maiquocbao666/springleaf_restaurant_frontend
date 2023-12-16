@@ -71,10 +71,8 @@ export class ReservationService extends BaseService<Reservation> {
 
     getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
         if (this.cache) {
-            const currentTime = new Date().getTime(); // Lấy thời điểm hiện tại và chuyển đổi thành định dạng yyyy-MM-dd HH:mm:ss
             const filteredReservations = this.cache.filter(reservation => {
-                const outTime = new Date(reservation.outTime).getTime(); // Giả sử có trường reservationTime trong model Reservation, bạn cần điều chỉnh tên trường này theo thực tế
-                return reservation.restaurantTableId === restaurantTableId && currentTime < outTime;
+                return reservation.restaurantTableId === restaurantTableId;
             });
             return of(filteredReservations);
         }
@@ -84,51 +82,57 @@ export class ReservationService extends BaseService<Reservation> {
 
     getReservationsByUserId(userId: number): Observable<Reservation[]> {
         return this.cache$.pipe(
-          map(cache => {
-            if (cache) {
-              const filteredReservations = cache.filter(reservation => reservation.userId === userId);
-      
-              // Sắp xếp danh sách theo trạng thái (Đang đợi lên trên cùng)
-              const statusOrder: { [key: string]: number } = {
-                'Đang đợi': 1,
-                'Đang sử dụng': 2,
-                'Đã sử dụng xong': 3,
-              };
-      
-              filteredReservations.sort((a, b) => statusOrder[a.reservationStatusName] - statusOrder[b.reservationStatusName]);
-      
-              return filteredReservations;
-            } else {
-              return [];
-            }
-          })
-        );
-      }
+            map(cache => {
+                if (cache) {
+                    const filteredReservations = cache.filter(reservation => reservation.userId === userId);
 
-    isTimeInRange(startTime: Date, endTime: Date, checkTime: Date): boolean {
-        return checkTime.getTime() >= startTime.getTime() && checkTime.getTime() <= endTime.getTime();
+                    // Sắp xếp danh sách theo trạng thái (Đang đợi lên trên cùng)
+                    const statusOrder: { [key: string]: number } = {
+                        'Đang đợi': 1,
+                        'Đang sử dụng': 2,
+                        'Đã sử dụng xong': 3,
+                    };
+
+                    filteredReservations.sort((a, b) => statusOrder[a.reservationStatusName] - statusOrder[b.reservationStatusName]);
+
+                    return filteredReservations;
+                } else {
+                    return [];
+                }
+            })
+        );
     }
 
-    hasReservationInTimeRange(reservations: Reservation[], tableId: number, startTime: Date, endTime: Date): boolean {
+    //-------------------------------------------------------------------------------------------------------------------------
+    //Kiểm tra xem có bàn nào trong khoảng thời gian trước thời gian đặt của ngày hay không?
+
+    isTimeInDayRange(startTime: Date, checkTime: Date): boolean {
+        const startOfDay = new Date(startTime);
+        startOfDay.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+        const checkTimeInMillis = checkTime.getTime();
+        return checkTimeInMillis >= startOfDay.getTime() && checkTimeInMillis <= startTime.getTime();
+    }
+
+    hasReservationInDayRange(reservations: Reservation[], tableId: number, startTime: Date): boolean {
         return reservations.some(reservation =>
             reservation.restaurantTableId === tableId &&
-            (this.isTimeInRange(new Date(reservation.reservationDate), new Date(reservation.outTime), startTime) ||
-                this.isTimeInRange(new Date(reservation.reservationDate), new Date(reservation.outTime), endTime))
+            this.isTimeInDayRange(new Date(reservation.reservationDate), startTime) &&
+            (reservation.reservationStatusName === 'Đang sử dụng' || reservation.reservationStatusName === 'Chưa tới' || reservation.reservationStatusName === 'Đang đợi')
         );
     }
 
-    isReservationsInTimeRangeByTableId(tableId: number, startTime: string, endTime: string): boolean {
+    isReservationsInDayRangeByTableId(tableId: number, startTime: string): boolean {
         const startTimeDate = new Date(startTime);
-        const endTimeDate = new Date(endTime);
 
         if (this.cache) {
-            const hasReservations = this.hasReservationInTimeRange(this.cache, tableId, startTimeDate, endTimeDate);
+            const hasReservations = this.hasReservationInDayRange(this.cache, tableId, startTimeDate);
             return hasReservations;
         }
 
-        // If this.cache is falsy (e.g., undefined), return false
         return false;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     searchReservations(tableId: number, keyword: string): Observable<Reservation[]> {
         if (this.cache) {
@@ -137,12 +141,12 @@ export class ReservationService extends BaseService<Reservation> {
                 reservation.restaurantTableId === tableId &&
                 (reservation.reservationDate.toLowerCase().includes(lowerCaseKeyword) ||
                     reservation.outTime.toLowerCase().includes(lowerCaseKeyword)) &&
-                (reservation.reservationStatusName === 'Đang đợi' || reservation.reservationStatusName === 'Đang sử dụng')
+                (reservation.reservationStatusName === 'Đang đợi' || reservation.reservationStatusName === 'Đang sử dụng' || reservation.reservationStatusName === 'Đang tới')
             );
             return of(filteredReservations);
         }
-    
-        return of([]);
+
+        return of();
     }
 
     order(productList: any[], reservationId: number) {
