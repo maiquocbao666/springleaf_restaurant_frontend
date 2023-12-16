@@ -8,6 +8,7 @@ import { RxStompService } from '../rx-stomp.service';
 import { ToastService } from './toast.service';
 import { HttpHeaders } from '@angular/common/http';
 import { Product } from '../interfaces/product';
+import { CartDetail } from '../interfaces/cart-detail';
 
 @Injectable({
     providedIn: 'root'
@@ -145,8 +146,8 @@ export class ReservationService extends BaseService<Reservation> {
         return of([]);
     }
 
-    order(productList: any[], reservationId: number) {
-        const jwtToken = localStorage.getItem('access_token');
+    order(productList: Product[], cartDetails : CartDetail[], reservationId: number) {
+        const jwtToken = sessionStorage.getItem('access_token');
         if (!jwtToken) {
             return of(null);
         }
@@ -154,7 +155,7 @@ export class ReservationService extends BaseService<Reservation> {
         const customHeader = new HttpHeaders({
             'Authorization': `Bearer ${jwtToken}`,
         });
-        return this.apiService.request<any>('post', `order/${reservationId}`, productList, customHeader);
+        return this.apiService.request<any>('post', `order/${reservationId}`, cartDetails, customHeader);
     }
 
     getReservationsInUseByUserId(userId: number): Observable<Reservation[]> {

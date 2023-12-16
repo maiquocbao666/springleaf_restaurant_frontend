@@ -203,12 +203,12 @@ export class UserRestaurantTableInfomationComponent {
         ||
         (outDateTime >= new Date(`${selectedDate} 23:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 23:59:59`).getTime())
       )
-      ||
-      (
-        (selectedTime >= new Date(`${selectedDate} 00:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 07:00:00`).getTime())
-        ||
-        (outDateTime >= new Date(`${selectedDate} 00:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 07:00:00`).getTime())
-      )
+      // ||
+      // (
+      //   (selectedTime >= new Date(`${selectedDate} 00:00:00`).getTime() && selectedTime <= new Date(`${selectedDate} 07:00:00`).getTime())
+      //   ||
+      //   (outDateTime >= new Date(`${selectedDate} 00:00:00`).getTime() && outDateTime <= new Date(`${selectedDate} 07:00:00`).getTime())
+      // )
     ) {
       this.selectedTimeMessage = 'Thời gian này không được đặt';
       this.selectedOutTimeMessage = 'Thời gian này không được đặt';
