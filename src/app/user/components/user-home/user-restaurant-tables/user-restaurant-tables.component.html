@@ -22,6 +22,9 @@
                         <div class="p-4">
                             <i class="fas fa-3x fa-table "></i>
                             <h5>{{ restaurantTable.tableName }}</h5>
+                            <div [ngClass]="getClassForStatus(getReservationByTableId(restaurantTable.tableId!))">
+                                {{ getReservationByTableId(restaurantTable.tableId!) }}
+                              </div>
                             <div>
                                 <span><i class="fa fa-user"></i>{{ restaurantTable.seatingCapacity }} người / bàn</span>
                             </div>

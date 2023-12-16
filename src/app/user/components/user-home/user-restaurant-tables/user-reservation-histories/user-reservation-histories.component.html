@@ -16,7 +16,7 @@
             <th class="text-center">Tên bàn</th>
             <th class="text-center">Ngày tới</th>
             <th class="text-center">Giờ tới</th>
-            <th class="text-center">Giờ đi</th>
+            <!-- <th class="text-center">Giờ đi</th> -->
             <th class="text-center">Số lượng khách hàng</th>
             <th class="text-center">Chức năng</th>
             <th></th>
@@ -33,7 +33,7 @@
             <td class="text-center">{{ findTableNameByTableId(thisUserReservation.restaurantTableId) }}</td>
             <td class="text-center">{{ thisUserReservation.reservationDate | date:'yyyy-MM-dd' }}</td>
             <td class="text-center">{{ thisUserReservation.reservationDate | date:'HH:mm:ss' }}</td>
-            <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td>
+            <!-- <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td> -->
             <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
             <td>
               <button class="btn btn-sm btn-primary">Đặt món</button>

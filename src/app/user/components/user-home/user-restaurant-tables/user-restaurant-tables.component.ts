@@ -17,6 +17,7 @@ import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { User } from 'src/app/interfaces/user';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-user-table',
@@ -161,6 +162,22 @@ export class UserRestaurantTablesComponent {
     });
   }
 
-  
+
+  getReservationByTableId(id: number): string {
+    const reservedTable = this.reservationService.getReservedByTableId(id);
+    if (reservedTable.length > 0) {
+      return "Đã được đặt";
+    }
+    return "Bàn trống"
+  }
+
+  getClassForStatus(status: string): string {
+    if (status === 'Bàn trống') {
+      return 'badge badge-success';
+    } else if (status === 'Đã được đặt') {
+      return 'badge badge-danger';
+    }
+    return '';
+  }
 
 }

@@ -59,14 +59,18 @@ export class UserReservationHistoriesComponent {
   }
 
   getClassForStatus(status: string): string {
-    if (status === 'Đang đợi') {
+    if (status === 'Chưa tới') {
+      return 'badge badge-info'; // or any other color you prefer for this status
+    } else if (status === 'Đang đợi') {
       return 'badge badge-warning';
     } else if (status === 'Đang sử dụng') {
       return 'badge badge-success';
-    } else if (status === 'Đã sử dụng xong') {
+    } else if (status === 'Hết thời gian đợi') {
       return 'badge badge-danger';
+    } else if (status === 'Đã sử dụng xong') {
+      return 'badge badge-secondary'; // or any other color you prefer for this status
     }
-    return ''; // Hoặc class mặc định khác nếu cần
+    return ''; // Default class or no class if status is not recognized
   }
 
 

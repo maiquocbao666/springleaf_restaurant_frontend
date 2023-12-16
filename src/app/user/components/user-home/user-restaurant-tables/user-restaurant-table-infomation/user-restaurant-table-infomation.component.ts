@@ -75,13 +75,24 @@ export class UserRestaurantTableInfomationComponent {
     this.maxDate = this.datePipe.transform(this.addDays(new Date(), 5), 'yyyy-MM-dd')!;
     this.reservationService.getCache().subscribe(
       (data) => {
+        console.log('Received data:', data);
+
         if (this.restaurantTable?.tableId) {
           this.reservations = data.filter(cache => {
-            return cache.reservationStatusName === "Đang đợi"
-              || cache.reservationStatusName === "Chưa tới"
-              || cache.reservationStatusName === "Đang sử dụng";
+            return (
+              (cache.reservationStatusName === "Đang đợi" ||
+                cache.reservationStatusName === "Chưa tới" ||
+                cache.reservationStatusName === "Đang sử dụng") &&
+              cache.restaurantTableId === this.restaurantTable.tableId
+            );
           });
         }
+      },
+      (error) => {
+        console.error('Error in subscription:', error);
+      },
+      () => {
+        console.log('Subscription completed.');
       }
     );
   }
@@ -139,14 +150,14 @@ export class UserRestaurantTableInfomationComponent {
     this.addReservation();
   }
 
-  getRervationsByTableId(id: number) {
-    this.reservationService.getReservationsByTableId(id).subscribe(
-      cached => {
-        this.reservations = cached;
-        //console.log(this.reservations);
-      }
-    );
-  }
+  // getRervationsByTableId(id: number) {
+  //   this.reservationService.getReservationsByTableId(id).subscribe(
+  //     cached => {
+  //       this.reservations = cached;
+  //       //console.log(this.reservations);
+  //     }
+  //   );
+  // }
 
   //-------------------------------------------------------------------------------------------------
 
@@ -190,8 +201,27 @@ export class UserRestaurantTableInfomationComponent {
     return true;
   }
 
-  checkIsReservateBefore(fullDateTime: string): boolean {
-    const check = this.reservationService.isReservationsInDayRangeByTableId(this.restaurantTable.tableId!, fullDateTime);
+  checkIsReservedBefore(fullDateTime: string, selectedDate: string): boolean {
+    const check = this.reservationService.isTableReserved(this.restaurantTable.tableId!, fullDateTime, selectedDate);
+    if (check) {
+      this.selectedDateMessage = "Đã có người đặt";
+      this.selectedTimeMessage = "Đã có người đặt";
+    } else {
+      this.selectedDateMessage = "";
+      this.selectedTimeMessage = "";
+    }
+    return check;
+  }
+
+  checkIsReservedAfter(fullDateTime: string, selectedDate: string): boolean {
+    const check = this.reservationService.isTableReserved1(this.restaurantTable.tableId!, fullDateTime, selectedDate);
+    if (check) {
+      this.selectedDateMessage = "Đã có người đặt";
+      this.selectedTimeMessage = "Đã có người đặt";
+    } else {
+      this.selectedDateMessage = "";
+      this.selectedTimeMessage = "";
+    }
     return check;
   }
 
@@ -298,8 +328,13 @@ export class UserRestaurantTableInfomationComponent {
 
     const fullDateTime = selectedDate + ' ' + selectedTimeStr;
 
-    const checkBefore = this.checkIsReservateBefore(fullDateTime);
+    const checkBefore = this.checkIsReservedBefore(fullDateTime, selectedDate);
     if (checkBefore) {
+      return false;
+    }
+
+    const checkAfter = this.checkIsReservedAfter(fullDateTime, selectedDate);
+    if (checkAfter) {
       return false;
     }
 
@@ -318,9 +353,9 @@ export class UserRestaurantTableInfomationComponent {
     const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
     const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
 
-    if (!this.checkAll()) {
-      return;
-    }
+    // if (!this.checkAll()) {
+    //   return;
+    // }
 
     const fullDateTime = selectedDate + ' ' + selectedTimeStr;
 

@@ -69,15 +69,19 @@ export class ReservationService extends BaseService<Reservation> {
 
     //--------------------------------------------------------------------------------------------------------------------
 
-    getReservationsByTableId(restaurantTableId: number): Observable<Reservation[]> {
+    getReservedByTableId(restaurantTableId: number): Reservation[] {
         if (this.cache) {
             const filteredReservations = this.cache.filter(reservation => {
-                return reservation.restaurantTableId === restaurantTableId;
+                return reservation.restaurantTableId === restaurantTableId && (
+                    reservation.reservationStatusName === "Chưa tới" ||
+                    reservation.reservationStatusName === "Đang đợi" ||
+                    reservation.reservationStatusName === "Đang sử dụng"
+                );
             });
-            return of(filteredReservations);
+            return filteredReservations;
         }
 
-        return of([]);
+        return [];
     }
 
     getReservationsByUserId(userId: number): Observable<Reservation[]> {
@@ -88,9 +92,11 @@ export class ReservationService extends BaseService<Reservation> {
 
                     // Sắp xếp danh sách theo trạng thái (Đang đợi lên trên cùng)
                     const statusOrder: { [key: string]: number } = {
-                        'Đang đợi': 1,
+                        'Đang đợi': 0,
+                        'Chưa tới': 1,
                         'Đang sử dụng': 2,
-                        'Đã sử dụng xong': 3,
+                        'Hết thời gian đợi': 3,
+                        'Đã sử dụng xong': 4,
                     };
 
                     filteredReservations.sort((a, b) => statusOrder[a.reservationStatusName] - statusOrder[b.reservationStatusName]);
@@ -106,33 +112,56 @@ export class ReservationService extends BaseService<Reservation> {
     //-------------------------------------------------------------------------------------------------------------------------
     //Kiểm tra xem có bàn nào trong khoảng thời gian trước thời gian đặt của ngày hay không?
 
-    isTimeInDayRange(startTime: Date, checkTime: Date): boolean {
-        const startOfDay = new Date(startTime);
-        startOfDay.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
-        const checkTimeInMillis = checkTime.getTime();
-        return checkTimeInMillis >= startOfDay.getTime() && checkTimeInMillis <= startTime.getTime();
+    isTableReserved(tableId: number, fullDateTime: string, selectedDate: string): boolean {
+        const findReservation = this.cache.filter(reservation =>
+            reservation.restaurantTableId === tableId &&
+            (reservation.reservationStatusName === 'Đang sử dụng' ||
+                reservation.reservationStatusName === 'Chưa tới' ||
+                reservation.reservationStatusName === 'Đang đợi') &&
+            this.isSameDate(new Date(reservation.reservationDate), new Date(fullDateTime)) &&
+            (new Date(reservation.reservationDate).getTime() < new Date(fullDateTime).getTime())
+        );
+
+        //console.log(findReservation);
+
+        if (findReservation.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    hasReservationInDayRange(reservations: Reservation[], tableId: number, startTime: Date): boolean {
-        return reservations.some(reservation =>
-            reservation.restaurantTableId === tableId &&
-            this.isTimeInDayRange(new Date(reservation.reservationDate), startTime) &&
-            (reservation.reservationStatusName === 'Đang sử dụng' || reservation.reservationStatusName === 'Chưa tới' || reservation.reservationStatusName === 'Đang đợi')
+    isSameDate(date1: Date, date2: Date): boolean {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
         );
     }
 
-    isReservationsInDayRangeByTableId(tableId: number, startTime: string): boolean {
-        const startTimeDate = new Date(startTime);
+    //------------------------------------------------------------------------------------------------------------------
+    // Kiểm tra xem có bàn nào đặt sau thời gian này hay không
+    
+    isTableReserved1(tableId: number, fullDateTime: string, selectedDate: string): boolean {
+        const findReservation = this.cache.filter(reservation =>
+            reservation.restaurantTableId === tableId &&
+            (reservation.reservationStatusName === 'Đang sử dụng' ||
+                reservation.reservationStatusName === 'Chưa tới' ||
+                reservation.reservationStatusName === 'Đang đợi') &&
+            this.isSameDate(new Date(reservation.reservationDate), new Date(fullDateTime)) &&
+            (new Date(fullDateTime).getTime() < new Date(reservation.reservationDate).getTime())
+        );
 
-        if (this.cache) {
-            const hasReservations = this.hasReservationInDayRange(this.cache, tableId, startTimeDate);
-            return hasReservations;
+        console.log(findReservation);
+
+        if (findReservation.length > 0) {
+            return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------
 
     searchReservations(tableId: number, keyword: string): Observable<Reservation[]> {
         if (this.cache) {
@@ -166,9 +195,9 @@ export class ReservationService extends BaseService<Reservation> {
             const currentTime = new Date().getTime();
             const reservationsInUse = this.cache.filter(reservation =>
                 reservation.userId === userId &&
-                reservation.reservationStatusName === 'Đang sử dụng' && // Thay 'in_use' bằng giá trị thực tế của trạng thái đang sử dụng
-                currentTime >= new Date(reservation.reservationDate).getTime() &&
-                currentTime <= new Date(reservation.outTime).getTime()
+                reservation.reservationStatusName === 'Đang sử dụng' //&& // Thay 'in_use' bằng giá trị thực tế của trạng thái đang sử dụng
+                // currentTime >= new Date(reservation.reservationDate).getTime() &&
+                // currentTime <= new Date(reservation.outTime).getTime()
             );
             return of(reservationsInUse);
         }
@@ -180,9 +209,9 @@ export class ReservationService extends BaseService<Reservation> {
         if (this.cache) {
             const currentTime = new Date().getTime();
             const reservationsInUse = this.cache.filter(reservation =>
-                reservation.reservationStatusName === 'Đang sử dụng' &&
-                currentTime >= new Date(reservation.reservationDate).getTime() &&
-                currentTime <= new Date(reservation.outTime).getTime()
+                reservation.reservationStatusName === 'Đang sử dụng' //&&
+                // currentTime >= new Date(reservation.reservationDate).getTime() &&
+                // currentTime <= new Date(reservation.outTime).getTime()
             );
             return of(reservationsInUse);
         }
