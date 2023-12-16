@@ -36,20 +36,49 @@
             <!-- <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td> -->
             <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
             <td>
-              <button class="btn btn-sm btn-primary">Đặt món</button>
+              <button class="btn btn-sm btn-primary" (click)="handleButtonClick(thisUserReservation.reservationId)">Đặt món</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-      <button type="button" class="btn btn-primary">Lưu</button>
-    </div>
   </div>
+  <h5>Lựa chọn món</h5>
+  <div class="modal-content">
+    <div class="modal-body">
+      <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td class="text-center">
+              <input type="checkbox" [(ngModel)]="selections[product.menuItemId!]" (click)="toggleSelection(product)">
+            </td>
+            <td class="text-center"><img [src]="product.imageUrl" alt="#"></td>
+            <td class="text-center">{{ product.name }}</td>
+            <td class="text-center"><input type="number"  (input)="updateQuantity($event, product)"></td>
+            <td class="text-center">{{ product.unitPrice }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="orderReservation()">Xác nhận</button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Đóng</button>
+    </div>
+</div>
 
 
-  <!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
+
+
+<!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

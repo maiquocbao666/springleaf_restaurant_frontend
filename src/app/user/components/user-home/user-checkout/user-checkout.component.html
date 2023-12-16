@@ -104,16 +104,8 @@
                   alt="VNPAY Logo" width="100px"> VNPAY
               </label>
             </div>
-            <!-- Phương thức thanh toán MoMo -->
-            <!-- <div class="payment-option">
-              <input type="radio" id="momo" name="paymentMethod" value="momo" [(ngModel)]="selectedPaymentMethod">
-              <label for="momo">
-                <img src="https://img.mservice.io/momo-payment/icon/images/logo512.png" alt="MoMo Logo" width="100px">
-                MoMo
-              </label>
-            </div> -->
             <div class="payment-option">
-              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod"  (click)="calculateShipping(total || 0)">
+              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod" (click)="getService()">
               <label for="cod">
                 <img
                   src="https://cdn1.iconfinder.com/data/icons/marketplace-and-shipping-filled-outline/64/COD_cash_on_delivery_shipping_payment_delivery-512.png"
@@ -122,13 +114,17 @@
               </label>
             </div>
             <hr>
-            <!-- <div class="input-container">
-              <input required="" placeholder="Add Vorcher" type="email">
-              <button class="invite-btn" type="button">
-                Add
-              </button>
-            </div>
-            <hr> -->
+            
+            <div class="select-column" *ngIf="selectedPaymentMethod === 'cod'">
+              <i >Vui lòng chọn phương thức vận chuyển</i>
+              <select class="select" [(ngModel)]="selectedService" (ngModelChange)="calculateShipping()" >
+                  <option [ngValue]="null">Phương thức vận chuyển</option>
+                  <option *ngFor="let s of service" [ngValue]="s.service_id">
+                      {{ s.short_name }}
+                  </option>
+              </select>
+          </div>
+          <hr>
             <ul class="list-group">
               <li class="d-flex align-items-center">
                 <div class="d-flex flex-column ms-3 me-auto">

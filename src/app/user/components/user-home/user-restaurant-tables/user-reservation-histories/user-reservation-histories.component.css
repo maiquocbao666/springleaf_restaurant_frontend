@@ -6,9 +6,29 @@ body {
     line-height: 1.5;
     color: #212529;
     text-align: left;
-    background-color: #f6f9fa
+    background-color: #f6f9fa;
+    height: 100%;
+}
+input[type="number"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table-container {
+    overflow-x: auto;
+    max-width: 100%; /* Chắc chắn rằng div không vượt quá kích thước của phần hiển thị */
+    height: 200px;
+  }
 .card {
     position: relative;
     display: -webkit-box;
@@ -93,57 +113,6 @@ body {
 
 .card-footer:last-child {
     border-radius: 0 0 -1px -1px
-}
-
-.card-header-tabs {
-    margin-bottom: -.75rem;
-    border-bottom: 0
-}
-
-.card-header-pills,
-.card-header-tabs {
-    margin-right: -.625rem;
-    margin-left: -.625rem
-}
-
-.card-img-overlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 1.25rem
-}
-
-.card-img {
-    width: 100%;
-    border-radius: -1px
-}
-
-.card-img-top {
-    width: 100%;
-    border-top-left-radius: -1px;
-    border-top-right-radius: -1px
-}
-
-.card-img-bottom {
-    width: 100%;
-    border-bottom-right-radius: -1px;
-    border-bottom-left-radius: -1px
-}
-
-.card-deck {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column
-}
-
-.card-deck .card {
-    margin-bottom: 15px
 }
 
 .input-search {

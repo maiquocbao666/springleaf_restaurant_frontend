@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, map } from 'rxjs';
+import { CartDetail } from 'src/app/interfaces/cart-detail';
 import { Product } from 'src/app/interfaces/product';
 import { Reservation } from 'src/app/interfaces/reservation';
 import { User } from 'src/app/interfaces/user';
@@ -18,13 +19,15 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserReservationHistoriesComponent {
 
-  //@Input() userId!: number;
   thisUserReservations!: Reservation[];
-  products: Product[] = [];
+  products: any[] = [];
   selections: { [key: string]: boolean } = {};
-  selectedItems: any[] = [];
+  selectedItems: Product[] = [];
+  cartDetails: CartDetail[] = [];
   selectReservation: number | null = null;
   user: User | null = null;
+  selectedUserReservation: any;
+  show: boolean = false;
 
   constructor(
     private reservationService: ReservationService,
@@ -48,14 +51,13 @@ export class UserReservationHistoriesComponent {
         this.thisUserReservations = cached;
       }
     )
-  }
 
-  showProductInfomation() {
     this.productService.getCache().subscribe(
       (cached: any[]) => {
         this.products = cached;
       }
     );
+    console.log('product' + this.products[0].menuItemId)
   }
 
   getClassForStatus(status: string): string {
@@ -74,15 +76,44 @@ export class UserReservationHistoriesComponent {
   }
 
 
-  toggleSelection(product: any): void {
-    const index = this.selectedItems.indexOf(product);
-    if (index === -1) {
-      this.selectedItems.push(product);
-      console.log("Thêm item: " + product.menuItem)
+  toggleSelection(product: Product): void {
+    if (this.show) {
+      const index = this.selectedItems.findIndex(item => item.menuItemId === product.menuItemId);
+
+      let cartDetail: CartDetail = {
+        orderDetailId: 1,
+        orderId: 1,
+        menuItemId: product.menuItemId as number,
+        quantity: 1
+      }
+      if (index === -1) {
+        this.selectedItems.push(product);
+        this.cartDetails.push(cartDetail);
+        console.log("Thêm item: " + product.menuItemId)
+      } else {
+        this.cartDetails.splice(index, 1);
+        console.log("Xóa item: " + product.menuItemId)
+        this.selectedItems.splice(index, 1);
+      }
+      console.log(this.selectedItems);
     } else {
-      console.log("Xóa item: " + product.menuItem)
-      this.selectedItems.splice(index, 1);
+      this.toastService.showTimedAlert('Vui lòng chọn 1 bàn', '', 'error', 1500);
     }
+  }
+
+  updateQuantity(event: Event, product: Product): void {
+    const target = event.target as HTMLInputElement;
+    console.log(target.value)
+    if (target && target.value !== null) {
+      const inputValue = target.value;
+      const index = this.cartDetails.findIndex(item => item.menuItemId === product.menuItemId);
+      if (index !== -1) {
+        this.cartDetails[index].quantity = Number(inputValue);
+        console.log("Cập nhật số lượng: " + this.cartDetails[index].quantity )
+      }
+    }
+    
+    console.log(this.cartDetails);
   }
 
   calculateTotalPrice(): number {
@@ -104,22 +135,24 @@ export class UserReservationHistoriesComponent {
 
   handleButtonClick(reservationId: number | undefined) {
     if (reservationId != null) {
-      this.setSelectReservation(reservationId);
-      this.showProductInfomation();
+      if (!this.selectReservation) {
+        this.selectReservation = reservationId;
+        this.show = true;
+      } else {
+        this.selectReservation = null;
+        this.show = false;
+      }
+      console.log(this.selectReservation)
+
     }
   }
 
-  setSelectReservation(reservationId: number) {
-    this.selectReservation = reservationId;
-    console.log(this.selectReservation)
-  }
 
   orderReservation() {
-    this.selectedItems;
     if (this.selectedItems.length <= 0) {
       this.toastService.showTimedAlert('Vui lòng chọn sản phẩm', '', 'error', 2000);
     } else {
-      this.reservationService.order(this.selectedItems, this.selectReservation as number)?.subscribe({
+      this.reservationService.order(this.selectedItems,this.cartDetails, this.selectReservation as number)?.subscribe({
         next: (response) => {
           if (response.message === 'Item was order') {
             this.toastService.showTimedAlert('Thêm thất bại', 'Bạn đã order món này rồi', 'error', 2000);

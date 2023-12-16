@@ -54,6 +54,9 @@
               <input type="text" class="form-control" id="address" formControlName="address" name="address">
             </div>
             <div class="col-md-6" *ngIf="!showAddressInput">
+              <div class="select-">
+                <input type="text" formControlName="addressHouse" placeholder="Nhập địa chỉ nhà">
+              </div>
               <div class="select-column">
                 <select class="form-select" formControlName="provinceChange" [(ngModel)]="selectedProvince"
                   (ngModelChange)="onProvinceChange()" class="select">

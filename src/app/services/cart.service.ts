@@ -11,6 +11,7 @@ import { ToastService } from './toast.service';
 import { Ward } from '../interfaces/address/Ward';
 import { District } from '../interfaces/address/District';
 import { Province } from '../interfaces/address/Province';
+import { Service } from '../interfaces/address/Service';
 
 @Injectable({
   providedIn: 'root'
@@ -171,8 +172,6 @@ export class CartService extends BaseService<Cart> {
     });
 
   }
-
-  
 
   setCartData(cart : any[]){
     this.cartInfo = cart;
