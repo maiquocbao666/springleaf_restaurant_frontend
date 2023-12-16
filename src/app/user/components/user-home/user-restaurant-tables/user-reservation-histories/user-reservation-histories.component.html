@@ -37,6 +37,7 @@
             <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
             <td>
               <button class="btn btn-sm btn-primary" (click)="handleButtonClick(thisUserReservation.reservationId)">Đặt món</button>
+              <button class="btn btn-sm btn-primary" (click)="handleCheckout(thisUserReservation.reservationId)">Thanh toán</button>
             </td>
           </tr>
         </tbody>

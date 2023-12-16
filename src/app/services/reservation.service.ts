@@ -9,6 +9,7 @@ import { ToastService } from './toast.service';
 import { HttpHeaders } from '@angular/common/http';
 import { Product } from '../interfaces/product';
 import { CartDetail } from '../interfaces/cart-detail';
+import { Order } from '../interfaces/order';
 
 @Injectable({
     providedIn: 'root'
@@ -189,6 +190,18 @@ export class ReservationService extends BaseService<Reservation> {
             'Authorization': `Bearer ${jwtToken}`,
         });
         return this.apiService.request<any>('post', `order/${reservationId}`, cartDetails, customHeader);
+    }
+
+    getOrderByReservationId(reservationId : number){
+        const jwtToken = sessionStorage.getItem('access_token');
+        if (!jwtToken) {
+            return of(null);
+        }
+
+        const customHeader = new HttpHeaders({
+            'Authorization': `Bearer ${jwtToken}`,
+        });
+        return this.apiService.request<any>('post', `getOrderByReservation`, reservationId, customHeader);
     }
 
     getReservationsInUseByUserId(userId: number): Observable<Reservation[]> {
