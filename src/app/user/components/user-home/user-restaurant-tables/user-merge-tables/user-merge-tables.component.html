@@ -33,7 +33,7 @@
         <div class="col-lg-12 mt-3">
             <form [formGroup]="reservationForm">
 
-                <div>
+                <!-- <div>
                     <button class="btn btn-primary" (click)="createMergeTableId()">Tạo mã gộp bàn: </button>
                     {{ mergeTableId }}
                     <button class="btn btn-primary" [disabled]="isResetDisabled" (click)="resetMergeTableId()">Đặt
@@ -41,7 +41,7 @@
                         <div style="color: red;">
                             {{ mergeTableIdMessage }}
                         </div>
-                </div> <br>
+                </div> <br> -->
                 <div class="row">
                     <!-- <div class="col-lg-6 mb-3">
                         <label for="mergeTableIdSelect">Hoặc chọn mã gộp bàn muốn gộp vào</label>
@@ -82,9 +82,9 @@
                     </div>
 
                 </div>
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <p>Mã hiện đang chọn: {{ mergeTableId }}</p>
-                </div>
+                </div> -->
 
                 <div class="mb-3">
                     <button (click)="mergeTables()" class="btn btn-info">Gộp</button>

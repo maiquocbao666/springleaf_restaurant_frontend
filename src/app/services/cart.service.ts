@@ -58,7 +58,7 @@ export class CartService extends BaseService<Cart> {
   selectedProvinceId: number | null = null;
   selectedDistrictId: number | null = null;
 
-  cartInfo : any[] = [];
+  cartInfo: any[] = [];
 
   //----------------------------------------------------------------------------------------------
 
@@ -73,12 +73,16 @@ export class CartService extends BaseService<Cart> {
   getObjectName(): string {
     return "Cart";
   }
-  
+
   getCache(): Observable<any[]> {
     return this.cache$;
   }
 
   //----------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newCart: Cart): Observable<Cart> {
     return super.add(newCart);
@@ -173,7 +177,7 @@ export class CartService extends BaseService<Cart> {
 
   }
 
-  setCartData(cart : any[]){
+  setCartData(cart: any[]) {
     this.cartInfo = cart;
   }
 

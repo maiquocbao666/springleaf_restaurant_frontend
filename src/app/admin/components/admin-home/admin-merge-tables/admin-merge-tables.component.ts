@@ -312,6 +312,7 @@ export class AdminMergeTablesComponent {
       this.addToMergeCache(null, tableId2);
     }
     if (check2 === 0) {
+      this.createMergeTableId();
       this.addToMergeCache(tableId1, tableId2);
     }
 
