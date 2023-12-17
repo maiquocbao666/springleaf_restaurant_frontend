@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build-prod": "ng build --configuration production"
+    "build-prod": "ng build --configuration production",
+    "product": "npx http-server -p 4200 -c-1 dist/springleaf_restaurant_frontend"
   },
   "private": true,
   "dependencies": {
