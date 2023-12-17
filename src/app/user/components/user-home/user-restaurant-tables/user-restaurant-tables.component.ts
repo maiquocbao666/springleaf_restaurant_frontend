@@ -112,7 +112,7 @@ export class UserRestaurantTablesComponent {
 
   openRestaurantTableInfomationModal(restaurantTable: RestaurantTable) {
     if (!this.authenticationService.getUserCache()) {
-      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
       const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'xl', scrollable: true, centered: false });
       modalRef.componentInstance.restaurantTable = restaurantTable;
@@ -126,7 +126,7 @@ export class UserRestaurantTablesComponent {
 
   openUserReservationHistoriesModal() {
     if (!this.authenticationService.getUserCache()) {
-      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
       const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'xl', centered: true, scrollable: false });
       modalRef.componentInstance.userId = this.user?.userId;

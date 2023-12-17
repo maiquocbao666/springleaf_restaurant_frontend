@@ -17,6 +17,8 @@ import { District } from 'src/app/interfaces/address/District';
 import { Ward } from 'src/app/interfaces/address/Ward';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserOrderHistoriesComponent } from '../user-header/user-order-histories/user-order-histories.component';
 
 @Component({
   selector: 'app-user-cart',
@@ -51,7 +53,7 @@ export class UserCartComponent implements OnInit {
   userWard: Ward | null = null;
   user: User | null = null;
   ship: number | null = null;
-  finalPrice2 : number | null = null;
+  finalPrice2: number | null = null;
   constructor(
     private cartService: CartService,
     private deliveryOrderService: DeliveryOrderService,
@@ -61,7 +63,8 @@ export class UserCartComponent implements OnInit {
     private discountService: DiscountService,
     private authService: AuthenticationService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal,
   ) {
     const provincesString = localStorage.getItem('Provinces');
     if (provincesString) {
@@ -277,7 +280,7 @@ export class UserCartComponent implements OnInit {
   calculateFinalPrice(discount: number): any {
     const totalPrice = this.calculateTotalPrice();
     const finalPrice = totalPrice - discount;
-    
+
     return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
   }
 
@@ -383,8 +386,8 @@ export class UserCartComponent implements OnInit {
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
   }
 
-  
-  
+
+
 
   public getDistrict(ProvinceId: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {

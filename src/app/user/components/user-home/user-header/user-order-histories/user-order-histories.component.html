@@ -1,0 +1,24 @@
+<table>
+    <thead>
+        <th>Order Id</th>
+        <th>Combo</th>
+        <th>Delivery Order Id</th>
+        <th>Order Date</th>
+        <th>Reservation Id</th>
+        <th>Staff Id</th>
+        <th>Order Status</th>
+        <th>Total Amount</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let order of orders">
+            <td>{{ order.orderId }}</td>
+            <td>{{ order.combo }}</td>
+            <td>{{ order.deliveryOrderId }}</td>
+            <td>{{ order.orderDate }}</td>
+            <td>{{ order.reservationId }}</td>
+            <td>{{ order.staffId }}</td>
+            <td> {{ order.status }}</td>
+            <td>{{ order.totalAmount }}</td>
+        </tr>
+    </tbody>
+</table>

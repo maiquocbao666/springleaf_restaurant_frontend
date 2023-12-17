@@ -108,6 +108,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AdminUsersDetailComponent } from './admin/components/admin-home/admin-users-detail/admin-users-detail.component';
 import { AdminGuardService } from './services/guard-url/admin-guard.service';
 import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-merge-tables/admin-merge-tables.component';
+import { UserOrderHistoriesComponent } from './user/components/user-home/user-header/user-order-histories/user-order-histories.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +133,7 @@ import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-m
     UserRestaurantTableInfomationComponent,
     UserReservationHistoriesComponent,
     UserMergeTablesComponent,
+    UserOrderHistoriesComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
@@ -200,10 +202,10 @@ import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-m
     NgxChartsModule, // Thêm vào đây
     FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: !isDevMode(),
+      enabled: true,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:50000'
     }),
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added

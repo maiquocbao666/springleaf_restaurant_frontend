@@ -20,6 +20,7 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
 
 @Component({
   selector: 'app-user-header',
@@ -58,6 +59,7 @@ export class UserHeaderComponent {
     private categoryService: CategoryService,
     private route: ActivatedRoute,
     private router : Router,
+    private sweetAlertService: ToastService,
   ) {
     
     this.authService.getUserCache().subscribe(
@@ -292,6 +294,20 @@ export class UserHeaderComponent {
   }
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
+  }
+
+  openOrderModal() {
+    if (!this.authService.getUserCache()) {
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
+    } else {
+      const modalRef = this.modalService.open(UserOrderHistoriesComponent, { size: 'xl', scrollable: false, centered: false });
+      modalRef.componentInstance.userId = this.authService.getCache()?.userId;
+
+      // Subscribe to the emitted event
+      modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
+        //this.getRestaurantTables(this.restaurantId, null); // Refresh data in the parent component
+      });
+    }
   }
 
 }

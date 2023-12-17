@@ -39,7 +39,7 @@ export class OrderService {
   }
 
   gets(): Observable<Order[]> {
-    if (this.ordersCache) {
+    if (this.ordersCache$) {
       return of(this.ordersCache);
     }
 
