@@ -45,6 +45,7 @@ export class UserCartComponent implements OnInit {
   discountCode: string = '';
   discountPrice: number | null = null;
 
+  userAddressHouse: string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
@@ -97,6 +98,7 @@ export class UserCartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    sessionStorage.removeItem('discountPrice');
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.Provinces = Object.values(data);
@@ -115,9 +117,11 @@ export class UserCartComponent implements OnInit {
       if (this.user.address) {
         const address = this.user.address.toString();
         const splittedStrings = address.split('-');
-        const addressWard = splittedStrings[0];
-        const addressDistrict = parseInt(splittedStrings[1], 10);
-        const addresssProvince = parseInt(splittedStrings[2], 10);
+        const addressHouse = splittedStrings[0];
+        this.userAddressHouse = addressHouse;
+        const addressWard = splittedStrings[1];
+        const addressDistrict = parseInt(splittedStrings[2], 10);
+        const addresssProvince = parseInt(splittedStrings[3], 10);
 
         for (const province of this.Provinces) {
           if (province.ProvinceID === addresssProvince) {
@@ -132,7 +136,6 @@ export class UserCartComponent implements OnInit {
               if (district.DistrictID === addressDistrict) {
                 this.userDistrict = district;
                 if (this.userDistrict) {
-                  console.log('here')
                   this.getWard(this.userDistrict.DistrictID).then(() => {
                     for (const ward of this.Wards) {
                       if (ward.WardCode === addressWard) {
@@ -151,7 +154,6 @@ export class UserCartComponent implements OnInit {
         }
       } else {
       }
-
     }
   }
   @ViewChild('likeBtn') likeBtn!: ElementRef;
@@ -338,7 +340,8 @@ export class UserCartComponent implements OnInit {
             }
             else {
               this.discountPrice = Number(response.message);
-              this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
+              sessionStorage.setItem('discountPrice', response.message);
+              this.toastService.showTimedAlert('Mã chính xác', '', 'success', 2000);
             }
           },
           error: (error) => {

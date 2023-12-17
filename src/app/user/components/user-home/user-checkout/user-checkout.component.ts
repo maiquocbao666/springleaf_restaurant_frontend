@@ -18,6 +18,7 @@ import { Observable, throwError } from 'rxjs';
 import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
+import { Service } from 'src/app/interfaces/address/Service';
 
 @Component({
   selector: 'app-user-checkout',
@@ -46,6 +47,8 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
   Wards: any = [];
   total : number | null = null;
   totalAndShip : number | null=null;
+  service: Service[] = [];
+  selectedService : number | null = null;
   constructor(
     private vnpayService: VNPayService,
     private router: Router,
@@ -74,6 +77,7 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
     );
     this.calculateTotalPrice();
     this.initUserAddress();
+    // this.getService();
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
     });
@@ -90,7 +94,9 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
     this.cartInfos = this.cartService.getCartData();
     console.log(this.cartInfos);
     this.calculateTotalPrice();
+    
     //this.calculateShipping();
+    alert('district: ' + this.userDistrict?.DistrictID)
   }
   initUserAddress() {
     if (this.user) {
@@ -148,7 +154,8 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 
   calculateFinalPrice(shipFee: number): any {
     const totalPrice = this.calculateTotalPrice();
-    const finalPrice = totalPrice + shipFee;
+    const discount = Number(sessionStorage.getItem('discountPrice'));
+    const finalPrice = totalPrice + shipFee - discount;
     this.totalAndShip = finalPrice;
     return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
   };
@@ -199,10 +206,13 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
     }
   }
 
-  calculateShipping(total : number): void {
+  calculateShipping(): void {
     const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee';
+    const total = this.calculateTotalPrice();
     const distristId = this.userDistrict?.DistrictID;
     const wardCode = String(this.userWard?.WardCode);
+    const selectedServiceId = this.selectedService;
+    console.log('total' + total + 'DISTRICT'+ distristId! + 'CODE' + wardCode + 'service ' + selectedServiceId)
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'token': 'd6f64767-329b-11ee-af43-6ead57e9219a',
@@ -210,12 +220,12 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
     });
   
     const shippingData = {
-      "service_id": 53320,
+      "service_id": selectedServiceId,
       "insurance_value": total,
       "coupon": null,
-      "from_district_id": 1572,
-      "to_district_id": distristId,
-      "to_ward_code": wardCode,
+      "from_district_id": 1710,
+      "to_district_id": 1710,
+      "to_ward_code": '1A1102',
       "weight": 1000,
       "length": 15,
       "width": 15,
@@ -238,7 +248,9 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
         },
         error: (error) => {
           console.error('Error calculating shipping fee:', error);
-          // Xử lý lỗi
+          if(error.error.code_message_value === "Không tìm thấy bảng giá hợp lệ"){
+            this.toast.showTimedAlert('Không tìm được bảng giá', 'Vui lòng thay đổi hình thức vận chuyển','error',1000);
+          }
           return; // Dừng hàm khi gặp lỗi
         }
       });
@@ -381,6 +393,39 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
       });
     });
   }
+
+  getService(){
+    const shop_id = 4421897;
+    const from_district = Number(this.userDistrict?.DistrictID);
+    const to_distrist = Number(this.userDistrict?.DistrictID);
+    const token = 'd6f64767-329b-11ee-af43-6ead57e9219a';
+
+    const httpOptions = {
+
+      headers: new HttpHeaders({
+        'token': token
+      })
+
+    };
+
+    const requestBody = {
+
+      shop_id : 4421872,
+      from_district : 1710,
+      to_district : 1710
+
+    };
+
+    const serviceUrl = "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services";
+
+    this.http.post<any>(serviceUrl, requestBody, httpOptions).subscribe(data => {
+
+      console.log(data);
+      this.service = data.data
+
+    });
+  }
+
   getUserCart() {
     this.deliveryOrderService.getUserCart().subscribe({
       next: (response) => {

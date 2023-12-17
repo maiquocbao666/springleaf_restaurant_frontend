@@ -62,16 +62,16 @@ export class UserProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUserLoggedIn().subscribe(
-      (userData) => {
-        // Xử lý thông tin người dùng đăng nhập ở đây
-        console.log('Thông tin người dùng đăng nhập:', userData);
-      },
-      (error) => {
-        // Xử lý khi có lỗi xảy ra khi lấy thông tin người dùng
-        console.error('Lỗi khi lấy thông tin người dùng:', error);
-      }
-    );
+    // this.getUserLoggedIn().subscribe(
+    //   (userData) => {
+    //     // Xử lý thông tin người dùng đăng nhập ở đây
+    //     console.log('Thông tin người dùng đăng nhập:', userData);
+    //   },
+    //   (error) => {
+    //     // Xử lý khi có lỗi xảy ra khi lấy thông tin người dùng
+    //     console.error('Lỗi khi lấy thông tin người dùng:', error);
+    //   }
+    // );
 
     this.getProducts();
     this.getCategories();
@@ -86,15 +86,15 @@ export class UserProductsComponent implements OnInit {
 
 
   // Hàm gửi yêu cầu lấy thông tin người đang đăng nhập
-  getUserLoggedIn(): Observable<any> {
-    const jwtToken = localStorage.getItem('access_token');
+  // getUserLoggedIn(): Observable<any> {
+  //   const jwtToken = localStorage.getItem('access_token');
 
-    const customHeader1 = new HttpHeaders({
-      'Authorization': `Bearer ${jwtToken}`,
-    });
+  //   const customHeader1 = new HttpHeaders({
+  //     'Authorization': `Bearer ${jwtToken}`,
+  //   });
 
-    return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
-  }
+  //   return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
+  // }
 
 
   filterProductsByCategoryId(categoryId: number): any[] {

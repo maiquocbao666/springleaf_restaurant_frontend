@@ -36,6 +36,7 @@ export class ProfileComponent {
   selectedWard: number | null = null;
   showAddressInput = true;
 
+  userAddressHouse: string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
@@ -66,6 +67,7 @@ export class ProfileComponent {
       console.error('No products found in local storage or the value is null.');
     }
     this.profileForm = this.formBuilder.group({
+      addressHouse: [null, [Validators.nullValidator]],
       fullName: [null, [Validators.nullValidator]],
       username: [null, [Validators.nullValidator]],
       email: [null, [Validators.nullValidator]],
@@ -106,9 +108,11 @@ export class ProfileComponent {
       if (this.user.address) {
         const address = this.user.address.toString();
         const splittedStrings = address.split('-');
-        const addressWard = splittedStrings[0];
-        const addressDistrict = parseInt(splittedStrings[1], 10);
-        const addresssProvince = parseInt(splittedStrings[2], 10);
+        const addressHouse = splittedStrings[0];
+        this.userAddressHouse = addressHouse;
+        const addressWard = splittedStrings[1];
+        const addressDistrict = parseInt(splittedStrings[2], 10);
+        const addresssProvince = parseInt(splittedStrings[3], 10);
 
         for (const province of this.Provinces) {
           if (province.ProvinceID === addresssProvince) {
@@ -172,17 +176,18 @@ export class ProfileComponent {
   setValue() {
     if (this.user) {
       this.profileForm.patchValue({
+        
         fullName: this.user.fullName,
         username: this.user.username,
         password: this.user.password,
         email: this.user.email,
         phone: this.user.phone,
-        //image: this.user.image,
-        //selectedRestaurant : this.user.restaurantBranchId
+        image: this.user.image,
+        selectedRestaurant : this.user.restaurantBranchId
       });
       if (this.userProvince && this.userDistrict && this.userWard) {
         this.profileForm.patchValue({
-          address: `${this.userProvince.ProvinceName} - ${this.userDistrict.DistrictName} - ${this.userWard.WardName}`,
+          address: `${this.userAddressHouse} - ${this.userProvince.ProvinceName} - ${this.userDistrict.DistrictName} - ${this.userWard.WardName}`,
         });
       } if(this.userRestaurant){
         this.profileForm.patchValue({
@@ -193,11 +198,13 @@ export class ProfileComponent {
   }
 
   toggleAddressInput() {
-    if (this.profileForm.get('provinceChange')?.value !== '' 
+    if (
+      this.profileForm.get('addressHouse')?.value !== null
+      && this.profileForm.get('provinceChange')?.value !== '' 
       && this.profileForm.get('districtChange')?.value !== ''
       && this.profileForm.get('wardChange')?.value !== '') {
         this.profileForm.patchValue({
-          address: `${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
+          address: `${this.profileForm.get('addressHouse')?.value} - ${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
         }); 
     }
     this.showAddressInput = !this.showAddressInput;
@@ -293,10 +300,12 @@ export class ProfileComponent {
 
   updateProfile() {
     let addressChange = '';
-    if (this.profileForm.get('provinceChange')?.value !== '' 
+    if (
+      this.profileForm.get('addressHouse')?.value !== null
+      && this.profileForm.get('provinceChange')?.value !== '' 
       && this.profileForm.get('districtChange')?.value !== ''
       && this.profileForm.get('wardChange')?.value !== '') {
-      addressChange = `${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`;
+      addressChange = `${this.profileForm.get('addressHouse')?.value} -${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`;
     } else {
       addressChange = this.userData.address;
     }

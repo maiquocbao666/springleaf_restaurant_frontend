@@ -5,13 +5,23 @@
             aria-expanded="false" aria-controls="collapseExample">
             Thêm loại
         </button>
-    </p>
-    <p class="float-end">
-        <select class="form-select" (change)="onTableSizeChange($event)">
+        <select class="form-select" (change)="onTableSizeChange($event)" style="width: 20px;">
             <option *ngFor="let size of tableSizes">
                 {{size}}
             </option>
         </select>
+    </p>
+    <p class="float-end">
+        <select (change)="changeFieldName($event)" class="form-select">
+            <option value="">Bộ lọc</option>
+            <option value="categoryId">Mã loại</option>
+            <option value="name">Tên loại</option>
+            <option value="active">Đang bán</option>
+            <option value="description">Mô tả</option>
+        </select>
+    </p>
+    <p class="float-end">
+        <input type="text" (input)="changeSearchKeyWords($event)" class="input" placeholder="Nhập thông tin cần tìm..">
     </p>
     <div class="collapse pb-3" id="collapseExample">
         <div class="card card-body">
@@ -47,24 +57,19 @@
         </div>
     </div>
 
-    <p class="d-inline-flex gap-1">
-        <input type="text" (input)="changeSearchKeyWords($event)">
-        <select (change)="changeFieldName($event)">
-            <option value="">Chọn tên cột cần tìm</option>
-            <option value="categoryId">Mã loại</option>
-            <option value="name">Tên loại</option>
-            <option value="active">Đang bán</option>
-            <option value="description">Mô tả</option>
-        </select>
-    </p>
+
     <div class="table-responsive">
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('categoryId', true)"></button> Mã loại <button class="fa fa-sort-down" (click)="sort('categoryId', false)"></button></th>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('name', true)"></button> Tên loại <button class="fa fa-sort-down" (click)="sort('name', false)"></button></th>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('active', true)"></button> Đang bán + (key words) <button class="fa fa-sort-down" (click)="sort('active', false)"></button></th>
-                    <th class="text-center"><button class="fa fa-sort-up" (click)="sort('description', true)"></button> Mô tả <button class="fa fa-sort-down" (click)="sort('description', false)"></button></th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('categoryId', true)"></a> Mã loại <a
+                            class="fa fa-sort-down" (click)="sort('categoryId', false)"></a></th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('name', true)"></a> Tên loại <a
+                            class="fa fa-sort-down" (click)="sort('name', false)"></a></th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('active', true)"></a> Đang bán + (key
+                        words) <a class="fa fa-sort-down" (click)="sort('active', false)"></a></th>
+                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('description', true)"></a> Mô tả <a
+                            class="fa fa-sort-down" (click)="sort('description', false)"></a></th>
                     <th class="text-center">Chức năng</th>
                 </tr>
             </thead>
