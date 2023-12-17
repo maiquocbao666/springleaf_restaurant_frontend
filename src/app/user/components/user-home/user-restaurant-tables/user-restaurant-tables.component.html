@@ -35,7 +35,7 @@
                             </p>
                             <p class="episode__type">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName}}
                             </p>
-                            <button class="watch-btn" (click)="openRestaurantTableInfomationModal(restaurantTable)">
+                            <button class="watch-btn" (click)="openRestaurantTableInfomationModal(restaurantTable)" [hidden]="getReservationByTableId(restaurantTable.tableId!) === 'Đã được đặt'">
                                 Đặt bàn
                             </button>
                         </div>
