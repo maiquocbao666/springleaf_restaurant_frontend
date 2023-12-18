@@ -376,45 +376,43 @@ import { DiscountService } from 'src/app/services/discount.service';
 
   payWithCOD(): void {
     console.log('Thanh toán bằng COD');
-    const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${jwtToken}`
     });
-
-    const listItem: CartDetail[] = [];
-    let totalAmount = this.totalAndShip;
-    this.cartInfos.forEach((item) => {
-      const cartDetail: CartDetail = {
-        orderDetailId: item.orderDetailId,
-        menuItemId: item.menuItem,
-        orderId: item.order,
-        quantity: item.quantity
-      }
-      
-      listItem.push(cartDetail);
-    });
+  
+    const listItem: CartDetail[] = this.cartInfos.map(item => ({
+      orderDetailId: item.orderDetailId,
+      menuItemId: item.menuItem,
+      orderId: item.order,
+      quantity: item.quantity
+    }));
+  
     const orderId = this.orderByUser?.orderId;
-    console.log(totalAmount)
-
-    this.http.post(`http://localhost:8080/public/checkout-cod/${orderId}/${totalAmount}`, listItem, { headers: headers })
+    const totalAmount = this.totalAndShip;
+  
+    // Chú ý: Kiểm tra xem this.discountCode có giá trị không trước khi sử dụng nó
+    const discountCode = this.discountCode ? `/${this.discountCode}` : '/noDiscount';
+  
+    this.http.post(`http://localhost:8080/public/checkout-cod/${orderId}/${totalAmount}${discountCode}`, listItem, { headers })
       .subscribe({
-        next: (response : any) => {
-          if(response.message === "Checkout success"){
-            this.toast.showTimedAlert('Thanh toán thành công','Cám ơn quý khách','success',1500);
+        next: (response: any) => {
+          if (response.message === 'Checkout success') {
+            this.toast.showTimedAlert('Thanh toán thành công', 'Cám ơn quý khách', 'success', 1500);
             this.getUserCart();
-          }
-          if(response === "Checkout failed"){
-            this.toast.showTimedAlert('Thanh toán thất bại','Vui lòng kiểm tra lại','error',1500);
+          } else if (response.message === 'Checkout failed') {
+            this.toast.showTimedAlert('Thanh toán thất bại', 'Vui lòng kiểm tra lại', 'error', 1500);
           }
           console.log('Response:', response);
         },
         error: (error) => {
-          // Handle error
+          // Xử lý lỗi
           console.error('Error:', error);
         }
       });
   }
+  
 
   public getDistrict(ProvinceId: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
