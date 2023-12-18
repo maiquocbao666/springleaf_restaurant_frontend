@@ -19,6 +19,8 @@ import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Service } from 'src/app/interfaces/address/Service';
+import { Restaurant } from 'src/app/interfaces/restaurant';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 
 @Component({
   selector: 'app-user-checkout',
@@ -39,6 +41,7 @@ import { Service } from 'src/app/interfaces/address/Service';
   cartByUser: DeliveryOrder | null = null;
   orderDetailByUser: CartDetail[] | null = null;
 
+  userAddressHouse : string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
@@ -49,6 +52,14 @@ import { Service } from 'src/app/interfaces/address/Service';
   totalAndShip : number | null=null;
   service: Service[] = [];
   selectedService : number | null = null;
+  // Địa chỉ nhà hàng của user
+  restaurants : Restaurant[] = []
+  userRestaurantAddress : string = '';
+  userRestaurantProvince: Province | null = null;
+  userRestaurantDistrict : District | null = null;
+  userRestaurantWard : Ward | null = null;
+
+  isCheckoutActive : boolean = false;
   constructor(
     private vnpayService: VNPayService,
     private router: Router,
@@ -59,6 +70,7 @@ import { Service } from 'src/app/interfaces/address/Service';
     private toast : ToastService,
     private deliveryOrderService : DeliveryOrderService,
     private cartDetailService : CartDetailService,
+    private restaurantSerivce : RestaurantService,
   ) {
     this.orderService.userOrderCache$.subscribe(order => {
       this.orderByUser = order;
@@ -91,21 +103,85 @@ import { Service } from 'src/app/interfaces/address/Service';
 
 
   ngOnInit(): void {
+    this.getRestaurants();
     this.cartInfos = this.cartService.getCartData();
     console.log(this.cartInfos);
     this.calculateTotalPrice();
+    this.initUserRestaurantAddress();
     
-    //this.calculateShipping();
-    alert('district: ' + this.userDistrict?.DistrictID)
   }
+
+  getRestaurants(): void {
+    this.restaurantSerivce.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
+  }
+
+  initUserRestaurantAddress(){
+    if(this.user){
+      var userRestaurantBrand : Restaurant | null = null;
+      for (const restaurant of this.restaurants) {
+        if (restaurant.restaurantId === this.user.restaurantBranchId) {
+          userRestaurantBrand = restaurant;
+      }
+      if(userRestaurantBrand){
+
+      
+          const address = userRestaurantBrand.address.toString();
+          const restaurantStrings = address.split('-');
+          const restaurantAddressHouse = restaurantStrings[0];
+          this.userRestaurantAddress = restaurantAddressHouse;
+          const restaurantAddressWard = restaurantStrings[1];
+          const restaurantAddressDistrict = parseInt(restaurantStrings[2], 10);
+          const restaurantAddresssProvince = parseInt(restaurantStrings[3], 10);
+          for (const province of this.Provinces) {
+            if (province.ProvinceID === restaurantAddresssProvince) {
+              this.userRestaurantProvince = province;
+              break;
+            }
+          }
+
+          if (this.userRestaurantProvince) {
+            this.getDistrict(this.userRestaurantProvince.ProvinceID).then(() => {
+              for (const district of this.Districts) {
+                if (district.DistrictID === restaurantAddressDistrict) {
+                  this.userRestaurantDistrict = district;
+                  if (this.userRestaurantDistrict) {
+                    console.log('here')
+                    this.getWard(this.userRestaurantDistrict.DistrictID).then(() => {
+                      for (const ward of this.Wards) {
+                        if (ward.WardCode === restaurantAddressWard) {
+                          this.userRestaurantWard = ward;
+                          break;
+                        }
+                      }
+                    });
+  
+                  }
+                  break;
+  
+                }
+              }
+            });
+          }
+
+        }
+      }
+    }
+  }
+
   initUserAddress() {
     if (this.user) {
-      if (this.user.address) {
+      if (this.user.address && this.user.restaurantBranchId) {
         const address = this.user.address.toString();
         const splittedStrings = address.split('-');
-        const addressWard = splittedStrings[0];
-        const addressDistrict = parseInt(splittedStrings[1], 10);
-        const addresssProvince = parseInt(splittedStrings[2], 10);
+        const addressHouse = splittedStrings[0];
+        this.userAddressHouse = addressHouse;
+        const addressWard = splittedStrings[1];
+        const addressDistrict = parseInt(splittedStrings[2], 10);
+        const addresssProvince = parseInt(splittedStrings[3], 10);
 
         for (const province of this.Provinces) {
           if (province.ProvinceID === addresssProvince) {
@@ -113,6 +189,8 @@ import { Service } from 'src/app/interfaces/address/Service';
             break;
           }
         }
+
+        
 
         if (this.userProvince) {
           this.getDistrict(this.userProvince.ProvinceID).then(() => {
@@ -137,6 +215,8 @@ import { Service } from 'src/app/interfaces/address/Service';
             }
           });
         }
+
+
       } else {
       }
 
@@ -209,10 +289,10 @@ import { Service } from 'src/app/interfaces/address/Service';
   calculateShipping(): void {
     const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee';
     const total = this.calculateTotalPrice();
-    const distristId = this.userDistrict?.DistrictID;
+    const formDistrict = this.userRestaurantDistrict?.DistrictID;
+    const toDistrict = this.userDistrict?.DistrictID;
     const wardCode = String(this.userWard?.WardCode);
     const selectedServiceId = this.selectedService;
-    console.log('total' + total + 'DISTRICT'+ distristId! + 'CODE' + wardCode + 'service ' + selectedServiceId)
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'token': 'd6f64767-329b-11ee-af43-6ead57e9219a',
@@ -223,9 +303,9 @@ import { Service } from 'src/app/interfaces/address/Service';
       "service_id": selectedServiceId,
       "insurance_value": total,
       "coupon": null,
-      "from_district_id": 1710,
-      "to_district_id": 1710,
-      "to_ward_code": '1A1102',
+      "from_district_id": formDistrict,
+      "to_district_id": toDistrict,
+      "to_ward_code": wardCode,
       "weight": 1000,
       "length": 15,
       "width": 15,
@@ -240,6 +320,7 @@ import { Service } from 'src/app/interfaces/address/Service';
             console.log('Shipping Fee:', response.data.total);
             // Xử lý response cần thiết
             this.ship = response.data.total;
+            this.isCheckoutActive = true;
             return;
           }else{
             return;
@@ -248,6 +329,7 @@ import { Service } from 'src/app/interfaces/address/Service';
         },
         error: (error) => {
           console.error('Error calculating shipping fee:', error);
+
           if(error.error.code_message_value === "Không tìm thấy bảng giá hợp lệ"){
             this.toast.showTimedAlert('Không tìm được bảng giá', 'Vui lòng thay đổi hình thức vận chuyển','error',1000);
           }
@@ -396,9 +478,10 @@ import { Service } from 'src/app/interfaces/address/Service';
 
   getService(){
     const shop_id = 4421897;
-    const from_district = Number(this.userDistrict?.DistrictID);
-    const to_distrist = Number(this.userDistrict?.DistrictID);
+    const from_district = this.userRestaurantDistrict?.DistrictID;
+    const to_distrist = this.userDistrict?.DistrictID;
     const token = 'd6f64767-329b-11ee-af43-6ead57e9219a';
+    console.log("FORM : " + from_district + " TO " + to_distrist)
 
     const httpOptions = {
 
@@ -410,9 +493,9 @@ import { Service } from 'src/app/interfaces/address/Service';
 
     const requestBody = {
 
-      shop_id : 4421872,
-      from_district : 1710,
-      to_district : 1710
+      "shop_id" : shop_id,
+      "from_district" : from_district,
+      "to_district" : to_distrist,
 
     };
 

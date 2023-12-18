@@ -153,7 +153,7 @@
               </li>
             </ul>
             <hr>
-            <button class="comic-button" (click)="processPayment()">Thanh toán</button>
+            <button class="comic-button" (click)="processPayment()" [disabled]="!isCheckoutActive">Thanh toán</button>
           </ul>
         </div>
       </div>

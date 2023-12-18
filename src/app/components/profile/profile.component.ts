@@ -35,11 +35,16 @@ export class ProfileComponent {
   Wards: any = [];
   selectedWard: number | null = null;
   showAddressInput = true;
-
+  // địa chỉ người dùng
   userAddressHouse: string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
+  // địa chỉ nhà hàng của người dùng
+  userRestaurantAddress : string = '';
+  userRestaurantProvince: Province | null = null;
+  userRestaurantDistrict : District | null = null;
+  userRestaurantWard : Ward | null = null;
   restaurants: Restaurant[] | null = null;
   userRestaurant : Restaurant | null = null;
   roles: String[] | null = null;
@@ -187,11 +192,11 @@ export class ProfileComponent {
       });
       if (this.userProvince && this.userDistrict && this.userWard) {
         this.profileForm.patchValue({
-          address: `${this.userAddressHouse} - ${this.userProvince.ProvinceName} - ${this.userDistrict.DistrictName} - ${this.userWard.WardName}`,
+          address: `${this.userAddressHouse} - ${this.userWard.WardName} - ${this.userDistrict.DistrictName} - ${this.userProvince.ProvinceName}`,
         });
       } if(this.userRestaurant){
         this.profileForm.patchValue({
-          selectedRestaurant: `${this.userRestaurant.restaurantId}`,
+          selectedRestaurant: `${this.userRestaurant.restaurantName}`,
         });
       }
     }
