@@ -58,20 +58,17 @@ export class UserHeaderComponent {
     private restaurantService: RestaurantService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
-    private router : Router,
+    private router: Router,
     private sweetAlertService: ToastService,
   ) {
-    
-    
     this.authService.getUserCache().subscribe(
-      (data : any | null) => {
+      (data: any | null) => {
         this.user = data;
-        if (this.user != null) {
+        if (data != null) {
           this.getUserDeliveryOrder();
           this.checkUserRestaurant();
         }
-    });
-    
+      });
     this.authService.roleCacheData$.subscribe((data) => {
       this.roles = data;
       if (!this.roles) {
@@ -90,17 +87,18 @@ export class UserHeaderComponent {
       }
     });
   }
-  
+
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
       // Xử lý dữ liệu ở đây
       console.log('Email:', email);
-      if(email){
+      if (email) {
         this.loginGoogleConfig(email);
       }
     });
+
     this.getRestaurants();
     this.getCategories();
     this.checkUserRestaurant();
@@ -175,7 +173,7 @@ export class UserHeaderComponent {
       }
     });
   }
-  
+
 
   truncateString(inputString: string): string {
     // Tìm vị trí của khoảng trắng đầu tiên từ bên phải
@@ -235,45 +233,53 @@ export class UserHeaderComponent {
         } else {
           console.log('Lấy dữ liệu từ cache');
           this.cartByUser = cached;
+          this.getUserOrders();
         }
-        this.getUserOrders();
+
       }
     );
   }
-  
+
   // Lấy dữ liệu order
   getUserOrders(): void {
+    alert(this.cartByUser?.deliveryOrderId);
+
     this.orderService.getUserOrderCache().subscribe(
-    (cached: any | null) => {
-      if(cached === null && this.cartByUser !== null){
-        console.log('Lấy dữ liệu Order mới');
-        this.orderService.getUserOrder(this.cartByUser.deliveryOrderId as number).subscribe(
-          response => {
-            this.orderByUser = response;
-          }
-        );
-      }else{
-        console.log('Lấy dữ liệu từ cache');
-        this.orderByUser = cached;
+      (cached: any | null) => {
+        if (cached === null && this.cartByUser) {
+          console.log('Lấy dữ liệu Order mới');
+          this.orderService.getUserOrder(this.cartByUser.deliveryOrderId as number).subscribe(
+            response => {
+              this.orderByUser = response;
+              console.log(response);
+            },
+            error => {
+              console.error('Error fetching user order:', error);
+            }
+          );
+        } else if(this.cartByUser){
+          console.log('Lấy dữ liệu từ cache' + this.orderByUser);
+          this.orderByUser = cached;
+          this.getUserOrderDetails();
+        }
+      },
+      error => {
+        console.error('Error fetching user order cache:', error);
       }
-      if(this.orderByUser){
-        this.getUserOrderDetails();
-      }
-      
-    })
-    
+    );
   }
+
   // Lấy dữ liệu order detail của cart
   getUserOrderDetails(): void {
     this.cartDetailService.getOrderDetailsCache().subscribe(
       (cached: any[] | null) => {
-        if(cached === null && this.orderByUser !== null){
+        if (cached === null && this.orderByUser !== null) {
           this.cartDetailService.getUserOrderDetail(this.orderByUser.orderId).subscribe();
-        }else{
+        } else {
           this.orderDetailByUser = cached;
           this.orderDetailCount = cached?.length as number;
         }
-        
+
       }
     )
   }
@@ -281,7 +287,7 @@ export class UserHeaderComponent {
   // Mở Model đến các component khác
   // Profile
   openProfileModel() {
-    const modalRef = this.modalService.open(ProfileComponent,{ size: 'lg' });
+    const modalRef = this.modalService.open(ProfileComponent, { size: 'lg' });
   }
 
   // Quên mật khẩu

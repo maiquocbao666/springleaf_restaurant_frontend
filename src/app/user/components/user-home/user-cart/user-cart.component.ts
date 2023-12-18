@@ -77,6 +77,11 @@ export class UserCartComponent implements OnInit {
     } else {
       console.error('No products found in local storage or the value is null.');
     }
+    
+    
+  }
+
+  ngOnInit(): void {
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
     });
@@ -95,9 +100,6 @@ export class UserCartComponent implements OnInit {
       }
     );
     this.initUserAddress();
-  }
-
-  ngOnInit(): void {
     sessionStorage.removeItem('discountPrice');
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {

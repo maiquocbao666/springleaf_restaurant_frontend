@@ -50,11 +50,11 @@ export class UserOrderHistoriesComponent {
   ngOnInit(): void {
 
     this.getRestaurants();
-    this.orderService.gets().subscribe(
-      data => {
-        this.orders = data;
-      }
-    )
+    // this.orderService.gets().subscribe(
+    //   data => {
+    //     this.orders = data;
+    //   }
+    // )
     this.deliveryOrderService.getAllUserCartByRestaurant().subscribe(
       (response) => {
         this.allCartByUser = response;

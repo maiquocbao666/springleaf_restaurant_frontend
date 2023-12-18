@@ -43,8 +43,8 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   }
 
   // Hàm get để lấy giá trị hiện tại của userCartSubject
-  getUserCartCache(): Observable<DeliveryOrder[] | null> {
-    return this.allUserCart$;
+  getUserCartCache(): Observable<DeliveryOrder | null> {
+    return this.userCart$;
   }
 
   // Hàm set để cập nhật giá trị của userCartSubject
@@ -53,8 +53,8 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   }
 
   // Hàm get để lấy giá trị hiện tại của userCartSubject
-  getAllUserCartCache(): Observable<DeliveryOrder | null> {
-    return this.userCart$;
+  getAllUserCartCache(): Observable<DeliveryOrder[] | null> {
+    return this.allUserCart$;
   }
 
   //-----------------------------------------------------------------------------------------
@@ -123,8 +123,8 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   
     return this.apiService.request<DeliveryOrder[]>('get', 'user/getAllCartByUser', null, customHeader)
       .pipe(
-        tap(cart => {
-          this.setUserCartCache(null);
+        tap(carts => {
+          this.setAllUserCartCache(carts);
         })
       );
   }
