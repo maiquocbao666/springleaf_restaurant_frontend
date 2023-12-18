@@ -6,7 +6,7 @@
                 <i class="fas fa-map-marker-alt"></i>
             </div>
             <div class="address">
-                <a href="" *ngIf="userRestaurant">{{ userRestaurant.restaurantName}}</a>
+                <a *ngIf="userRestaurant" (click)="openUserRestaurant()">{{ userRestaurant.restaurantName}}</a>
                 <a *ngIf="!userRestaurant" (click)="openUserRestaurant()">Bạn chưa chọn nhà hàng</a>
             </div>
         </div>
