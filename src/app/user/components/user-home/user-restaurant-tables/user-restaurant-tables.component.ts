@@ -74,7 +74,7 @@ export class UserRestaurantTablesComponent {
   getRestaurants(): void {
     this.restaurantService.getCache().subscribe(
       cache => {
-        this.restaurants = cache;
+        this.restaurants = cache.filter(data => data.statusId === "Đang hoạt động");
       }
     )
   }
@@ -83,10 +83,10 @@ export class UserRestaurantTablesComponent {
     this.restaurantTableService.getCache().subscribe(
       (cached: any[]) => {
         if (restaurantId !== undefined && restaurantId !== null) {
-          this.restaurantTables = cached.filter(table => table.restaurantId === restaurantId);
+          this.restaurantTables = cached.filter(table => table.restaurantId === restaurantId && table.tableStatusId === "Đang hoạt động" && this.restaurants.find(data => restaurantId === data.restaurantId)?.statusId === "Đang hoạt động");
         } else if (event && event.target && event.target.value) {
           const selectedRestaurantId = +event.target.value; // Convert to a number if needed
-          this.restaurantTables = cached.filter(table => table.restaurantId === selectedRestaurantId);
+          this.restaurantTables = cached.filter(table => table.restaurantId === selectedRestaurantId && table.tableStatusId === "Đang hoạt động" && this.restaurants.find(data => selectedRestaurantId === data.restaurantId)?.statusId === "Đang hoạt động");
         } else {
           // Handle the case where neither restaurantId nor event is provided
           this.restaurantTables = cached;

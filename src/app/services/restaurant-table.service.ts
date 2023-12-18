@@ -93,7 +93,7 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         return this.apiService.request<string>('post', 'reset/id', {});
     }
 
-    findTableByStatusId(tableStatusId: number): boolean {
+    findTableByStatusId(tableStatusId: string): boolean {
         return this.cache.some(restaurantTable => restaurantTable.tableStatusId === tableStatusId);
     }
 

@@ -38,7 +38,8 @@ export class AdminRestaurantsComponent {
       restaurantName: new FormControl('', Validators.required),
       address: new FormControl('', Validators.required),
       phone: new FormControl('', [Validators.required, Validators.pattern('^\\d{10,11}$')]),
-      email: new FormControl('', [Validators.required, Validators.email])
+      email: new FormControl('', [Validators.required, Validators.email]),
+      statusId: new FormControl('',[Validators.required]),
     });
 
   }
@@ -72,12 +73,14 @@ export class AdminRestaurantsComponent {
       const address = this.restaurantForm.get('address')?.value;
       const phone = this.restaurantForm.get('phone')?.value;
       const email = this.restaurantForm.get('email')?.value;
+      const statusId = this.restaurantForm.get('statusId')?.value;
 
       const newRestaurant: Restaurant = {
         restaurantName: restaurantName,
         address: address,
         phone: phone,
         email: email,
+        statusId: "Đang hoạt động"
       }
 
       this.restaurantService.add(newRestaurant)

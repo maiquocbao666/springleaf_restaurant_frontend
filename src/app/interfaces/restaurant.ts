@@ -4,4 +4,5 @@ export interface Restaurant {
     address: string;
     phone: string;
     email: string;
+    statusId: string;
 }
