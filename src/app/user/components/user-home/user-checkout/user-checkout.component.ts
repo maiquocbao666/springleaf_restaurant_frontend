@@ -21,6 +21,7 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Service } from 'src/app/interfaces/address/Service';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantService } from 'src/app/services/restaurant.service';
+import { DiscountService } from 'src/app/services/discount.service';
 
 @Component({
   selector: 'app-user-checkout',
@@ -58,7 +59,8 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
   userRestaurantProvince: Province | null = null;
   userRestaurantDistrict : District | null = null;
   userRestaurantWard : Ward | null = null;
-
+  discountCode : string = '';
+  discountPrice : number | null = null;
   isCheckoutActive : boolean = false;
   constructor(
     private vnpayService: VNPayService,
@@ -71,6 +73,7 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
     private deliveryOrderService : DeliveryOrderService,
     private cartDetailService : CartDetailService,
     private restaurantSerivce : RestaurantService,
+    private discountService : DiscountService,
   ) {
     this.orderService.userOrderCache$.subscribe(order => {
       this.orderByUser = order;
@@ -548,6 +551,35 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
       }
     });
   }
+
+  getDiscount() {
+    if(this.discountCode){
+      this.discountService.getDiscountByName(this.discountCode, this.calculateTotalPrice()).subscribe({
+        next: (response) => {
+          if (response.message === "Discount is not valid") {
+            this.toast.showTimedAlert('Mã giảm giá không tồn tại', '', 'error', 2000);
+          }
+          else if (response.message === "Discount has expired") {
+            this.toast.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
+          }
+          else if (response.message === "Discount has not start") {
+            this.toast.showTimedAlert('Chưa đến ngày sử dụng', '', 'error', 2000);
+          }
+          else {
+            this.discountPrice = Number(response.message);
+            sessionStorage.setItem('discountPrice', response.message);
+            this.toast.showTimedAlert('Mã chính xác', '', 'success', 2000);
+          }
+        },
+        error: (error) => {
+          this.toast.showTimedAlert('Thêm thất bại', error, 'error', 2000);
+        }
+      });
+    }else{
+      this.toast.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'error', 2000);
+    } 
+  }
+  
 }
 export interface CartInfomation {
   orderDetailId?: number;

@@ -44,8 +44,6 @@ export class UserCartComponent implements OnInit {
   selectedItems: CartInfomation[] = [];
   selectAllChecked = false;
   selections: { [key: string]: boolean } = {};
-  discountCode: string = '';
-  discountPrice: number | null = null;
 
   userAddressHouse: string = '';
   userProvince: Province | null = null;
@@ -277,12 +275,12 @@ export class UserCartComponent implements OnInit {
     return totalPrice;
   }
 
-  calculateFinalPrice(discount: number): any {
-    const totalPrice = this.calculateTotalPrice();
-    const finalPrice = totalPrice - discount;
+  // calculateFinalPrice(discount: number): any {
+  //   const totalPrice = this.calculateTotalPrice();
+  //   const finalPrice = totalPrice - discount;
 
-    return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
-  }
+  //   return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
+  // }
 
   deleteCartDetail(cart: any): void {
     const orderDetailId = cart.orderDetailId;
@@ -324,40 +322,6 @@ export class UserCartComponent implements OnInit {
 
       (input as HTMLInputElement).value = value.toString();
     });
-  }
-
-  getDiscount() {
-    if (this.selectedItems.length > 0) {
-      const listItemId: number[] = [];
-      this.selectedItems.forEach((item, index) => {
-        listItemId.push(Number(this.selectedItems[index].menuItem as number));
-      });
-      if (this.discountCode != null) {
-        this.discountService.getDiscountByName(this.discountCode, listItemId).subscribe({
-          next: (response) => {
-            if (response.message === "Discount is not valid") {
-              this.toastService.showTimedAlert('Mã giảm giá không tồn tại', '', 'error', 2000);
-            }
-            else if (response.message === "Discount is Experied") {
-              this.toastService.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
-            }
-            else {
-              this.discountPrice = Number(response.message);
-              sessionStorage.setItem('discountPrice', response.message);
-              this.toastService.showTimedAlert('Mã chính xác', '', 'success', 2000);
-            }
-          },
-          error: (error) => {
-            this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
-          }
-        });
-      } else {
-        this.toastService.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'info', 2000);
-      }
-
-    } else {
-      this.toastService.showTimedAlert('Vui lòng chọn sản phẩm trước', '', 'info', 2000);
-    }
   }
 
   checkout() {

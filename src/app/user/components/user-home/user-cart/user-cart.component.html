@@ -55,25 +55,9 @@
                 <div class="card-header">
                     <h5 class="card-title"><b>{{selectedItems.length}} Sản phẩm</b></h5>
                 </div>
-                <div class="card-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-lg-9">
-                                <div class="input-container">
-                                    <input [(ngModel)]="discountCode" placeholder="Khuyến mãi" class="input-field" type="text" name="discountCode">
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <button class="button" (click)="getDiscount()">Add</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ formatAmount(calculateTotalPrice()) }}</div>
-                        <div class="col-lg-12 col-sm-7 mb-2"><b>Giảm giá:</b> {{ formatAmount(discountPrice || 0) }}</div>
-                        <div class="col-lg-12 col-sm-7 mb-2"><b>Tổng tiền:</b> {{ formatAmount(calculateFinalPrice(discountPrice || 0)) }}</div>
                     </div>
                     <hr>
                     <div class="center text-center row">
