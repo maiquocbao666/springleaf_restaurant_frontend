@@ -5,16 +5,17 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="jumbotron text-center">
-                        <a href="">
-                            <h1 routerLink="/user/index">DANH SÁCH MÓN</h1>
+                        <a routerLink="/user/index">
+                            <h1>DANH SÁCH MÓN</h1>
                         </a>
+
                     </div>
                 </div>
             </div>
             <div class="text-center m-3">
                 <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm loại nào!">
             </div>
-            <div class="row">
+            <div class="row" *ngIf="!isMobile">
                 <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <ng-container *ngIf="categories">

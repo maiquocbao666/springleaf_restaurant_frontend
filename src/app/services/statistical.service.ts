@@ -41,10 +41,10 @@ export class StatisticsService {
     return this.apiService.request<Bill[]>('get', url);
   }
 
-  // getTotalAmount(){
-  //   const url = `totalRevenue`;
-  //   return this.apiService.request<any>('get', url);
-  // }
+  getCountOfPaidBills(): Observable<number> {
+    const url = `count-paid`;
+    return this.apiService.request<number>('get', url);
+  }
 
   getTotalRevenue(): Observable<number> {
     const url = `totalRevenue`;
@@ -56,4 +56,13 @@ export class StatisticsService {
     return this.apiService.request<any>('get', url);
   }
 
+  getMostOrderedItems(): Observable<any[]> {
+    const url = `most-ordered-items`;
+    return this.apiService.request<any[]>('get', url);
+  }
+
+  getCountRestaurant(): Observable<number[]> {
+    const url = `count`;
+    return this.apiService.request<number[]>('get', url);
+  }
 }

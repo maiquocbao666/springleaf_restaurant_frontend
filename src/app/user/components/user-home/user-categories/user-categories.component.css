@@ -106,7 +106,7 @@ a {
 }
 
 a:hover {
-  color: #75a418;
+  color: #0e1205;
   /* Màu khi hover vào liên kết */
 }
 
@@ -148,6 +148,8 @@ nav.category {
 .mobile-category-item {
   flex-shrink: 0;
   margin-right: 10px;
+  background-color: #75a418;
+  border-radius: 5px;
 }
 
 .mobile-category-list {
@@ -171,6 +173,7 @@ nav.category {
   height: var(--line-height);
   overflow: hidden;
   text-align: center;
+  color: white;
   width: 110px;
   display: block;
   border-radius: 5px;

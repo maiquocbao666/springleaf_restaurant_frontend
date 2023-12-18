@@ -35,6 +35,7 @@ addEventListener('message', async ({ data }) => {
                                 'tableStatuses',
                                 //'orderTypes',
                                 'payments',
+                                'inventoryBranchIngredients',
                                 'ratings',
                                 'receipts',
                                 'receiptDetails',

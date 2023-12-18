@@ -67,6 +67,9 @@ export class UserProductsComponent implements OnInit {
   ngOnInit(): void {
     // this.getUserLoggedIn().subscribe(
     //   (userData) => {
+    //     console.log('Thông tin người dùng đăng nhập:', userData);
+    //   },
+    //   (error) => {
     //     // Xử lý thông tin người dùng đăng nhập ở đây
     //     console.log('Thông tin người dùng đăng nhập:', userData);
     //   },

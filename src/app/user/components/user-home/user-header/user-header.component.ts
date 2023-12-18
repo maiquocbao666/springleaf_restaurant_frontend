@@ -62,6 +62,7 @@ export class UserHeaderComponent {
     private sweetAlertService: ToastService,
   ) {
     
+    
     this.authService.getUserCache().subscribe(
       (data : any | null) => {
         this.user = data;
@@ -89,6 +90,7 @@ export class UserHeaderComponent {
       }
     });
   }
+  
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {

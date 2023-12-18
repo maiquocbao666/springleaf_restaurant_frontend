@@ -12,35 +12,6 @@
         </div>
         <div class="right-content">
             <div class="support">
-                <!-- <ul class="nav menu">
-                    <li routerLinkActive="active" *ngIf="user">
-                        {{truncateString(user.fullName)}}
-                            <img class="small-round-image"
-                                src="https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg"
-                                alt="Small Image" />
-                        <i class="icofont-rounded-down"></i>
-                        <ul class="dropdown">
-                            <li routerLinkActive="active">
-                                <a class="nav-link" (click)="openUserPasswordModel()">
-                                    Đổi mật khẩu
-                                </a>
-                            </li>
-                            <li routerLinkActive="active">
-                                <a class="nav-link" (click)="openProfileModel()">
-                                    Hồ sơ cá nhân
-                                </a>
-                            </li>
-                            <li routerLinkActive="active">
-                                <a class="nav-link" (click)="logOut()">
-                                    Đăng xuất
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li *ngIf="!user">
-                        <i (click)="openLoginModal()" class="fa fa-user" aria-hidden="true"></i>
-                    </li>
-                </ul> -->
                 <div class="address">
                     <a href="" *ngIf="userRestaurant">{{ userRestaurant.phone}}</a>
                 </div>
@@ -72,11 +43,16 @@
                                     <li><a>MENU<i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
                                             <li routerLinkActive="active" *ngFor="let category of categories">
-                                                <a [routerLink]="['/user/index/category', category.categoryId, 'products']">{{category.name}}</a>
+                                                <a
+                                                    [routerLink]="['/user/index/category', category.categoryId, 'products']">{{category.name}}</a>
                                             </li>
 
                                         </ul>
                                     </li>
+                                    <li routerLinkActive="active"><a routerLink="/user/history">LỊCH SỦ ĐƠN HÀNG</a>
+                                    </li>
+                                    <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a
+                                            routerLink="/admin/index">TRANG QUẢN LÝ</a></li>
                                     <li routerLinkActive="active" ><a routerLink="/user/favorite">YÊU THÍCH</a></li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a routerLink="/admin/statistical">TRANG QUẢN LÝ</a></li>
                                 </ul>

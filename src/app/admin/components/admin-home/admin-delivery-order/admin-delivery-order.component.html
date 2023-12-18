@@ -1,0 +1,59 @@
+<div class="container">
+  <h1 class="text-center display-4">Đơn hàng</h1>
+  <!-- <p class="float-end">
+      <select class="form-select" (change)="onTableSizeChange($event)">
+          <option *ngFor="let size of tableSizes">
+              {{size}}
+          </option>
+      </select>
+  </p> -->
+  <div class="collapse pb-3" id="collapseExample">
+    <div class="card card-body">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">Mã đơn hàng </th>
+          <th class="text-center">Tên người dùng</th>
+          <th class="text-center">Địa chỉ</th>
+          <th class="text-center">Tổng tiền</th>
+          <th class="text-center">Mã đơn</th>
+          <th class="text-center">Ngày đặt</th>
+          <th class="text-center">Trạng thái</th>
+          <th class="text-center">Chức năng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let deli of deliveryOrders ">
+
+          <td class="text-center text-muted">VC{{deli.deliveryOrderId}}</td>
+          <td class="text-center">{{deli.user}}</td>
+          <td class="text-center">{{deli.deliveryAddress}}</td>
+          <td class="text-center">{{deli.totalAmount}}</td>
+          <td class="text-center">{{deli.order}}</td>
+          <td class="text-center">{{deli.orderDate | date: 'dd-MM-yyyy' }}</td>
+          <td class="text-center">
+            <div [ngClass]="deli.status ? 'badge badge-warning' : 'badge badge-danger'">
+              {{ deli.status ? 'Còn hạn' : 'Hết hạn' }}
+            </div>
+
+          </td>
+          <!-- <td class="text-center">
+            <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+              (click)="openDiscountDetailModal(discount)"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm" (click)="deleteDiscount(discount)"><i
+                class="fa-solid fa-trash"></i></a>
+          </td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <div class="text-center">
+    <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div> -->
+
+</div>

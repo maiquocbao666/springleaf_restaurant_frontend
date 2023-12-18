@@ -4,11 +4,11 @@
       <div class="card mb-3 widget-content bg-midnight-bloom">
         <div class="widget-content-wrapper text-white">
           <div class="widget-content-left">
-            <div class="widget-heading">Tổng nguyên liệu </div>
+            <div class="widget-heading">Nhà hàng: </div>
             <div class="widget-subheading"></div>
           </div>
           <div class="widget-content-right">
-            <div class="widget-numbers text-white"><span> 4</span></div>
+            <div class="widget-numbers text-white"><span>{{countRestaurant}}</span></div>
           </div>
         </div>
       </div>
@@ -17,11 +17,11 @@
       <div class="card mb-3 widget-content bg-arielle-smile">
         <div class="widget-content-wrapper text-white">
           <div class="widget-content-left">
-            <div class="widget-heading">Tổng đơn</div>
+            <div class="widget-heading">Tổng đơn hàng: </div>
             <div class="widget-subheading"></div>
           </div>
           <div class="widget-content-right">
-            <div class="widget-numbers text-white"><span> 15</span></div>
+            <div class="widget-numbers text-white"><span> {{ paidBillsCount }} đơn </span></div>
           </div>
         </div>
       </div>
@@ -39,127 +39,117 @@
         </div>
       </div>
     </div>
-
-    <div class="col-md-12 col-lg-12">
-      <div class="col-md-12 col-lg-12">
-        <!-- revenue-chart.component.html -->
-        <div class="chart-container">
-          <ngx-charts-bar-vertical [view]="[700, 400]" [scheme]="colorScheme" [results]="monthlyRevenue"
-            [gradient]="true" [xAxis]="true" [yAxis]="true" [legend]="true" [showXAxisLabel]="true"
-            [showYAxisLabel]="true" xAxisLabel="Tháng" yAxisLabel="Doanh thu">
-          </ngx-charts-bar-vertical>
-        </div>
-      </div>
+    <h1 class="text-center">Kiểm tra doanh thu theo năm</h1><br>
+    <div style="width: 120px;">
+      <label for="selectedYear">Chọn năm:</label>
+      <select id="selectedYear" [(ngModel)]="selectedYear" (change)="onYearSelected()" class="form-select">
+        <option *ngFor=" let year of years" [value]="year">{{ year }}</option>
+      </select>
     </div>
-    <div>
-      <div>
-        <h3 class="text-center">Kiểm tra doanh thu và hóa đơn</h3><br>
+    <div class="col-12">
+      <div class="chart-container">
+        <ngx-charts-bar-vertical [view]="[1200, 400]" [scheme]="colorScheme" [results]="monthlyRevenue"
+          [gradient]="true" [xAxis]="true" [yAxis]="true" [legend]="true" [showXAxisLabel]="true"
+          [showYAxisLabel]="true" xAxisLabel="Tháng" yAxisLabel="Doanh thu">
+        </ngx-charts-bar-vertical>
+      </div>
+    </div><br><br>
+
+    <h1 class="text-center">Kiểm tra hóa đơn theo ngày</h1><br>
+    <div class="row">
+      <div class="col-md-4">
         <label for="startDate">Ngày bắt đầu:</label>
         <input class="form-control" type="date" id="startDate" [(ngModel)]="startDate">
-
-        <label for="endDate">Ngày kết thúc:</label>
-        <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate">
-
-        <button class="btn btn-success m-3" (click)="getRevenueAndBills()">Kiểm tra</button>
       </div>
-      <table class="table">
+      <div class="col-md-4">
+        <label for="endDate">Ngày kết thúc:</label>
+        <input class="form-control" type="date" id="endDate" [(ngModel)]="endDate">
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-success mt-4" (click)="getRevenueAndBills();toggleTable()">Kiểm tra</button>
+      </div>
+    </div>
+    <table class="table" *ngIf="showTable">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Khách </th>
+          <th scope="col">Ngày </th>
+          <th scope="col">Tổng tiền</th>
+          <th scope="col">Phương thức thanh toán</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bill of billsData ">
+          <td> {{ bill.billId }}</td>
+          <td>{{bill.userId}}</td>
+          <td>{{bill.billTime | date: 'dd-MM-yyyy' }}</td>
+          <td>{{ formatAmount(bill.totalAmount) }}</td>
+          <td>{{ bill.paymentMethod === 0 ? 'COD' : 'VNPAY' }}</td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="col-3">
+      <label for="dateInput">Chọn ngày:</label>
+      <input class="form-control" type="date" id="dateInput" [(ngModel)]="selectedDate">
+      <button class="btn btn-primary m-3" (click)="getReservations()">Kiểm tra</button>
+    </div>
+
+    <div *ngIf="reservations.length > 0">
+      <h1>Các bàn được đặt trong ngày {{ selectedDate }}</h1>
+      <ul>
+
+        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+          <thead>
+            <tr>
+              <th class="text-center">Mã đặt bàn</th>
+              <th class="text-center">Mã bàn</th>
+              <th class="text-center">Khách</th>
+              <th class="text-center">Ngày tới</th>
+              <th class="text-center">Giờ tới</th>
+              <th class="text-center">Giờ đi</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Số lượng khách hàng</th>
+              <th class="text-center">Thời gian sử dụng còn lại</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reservation of reservations">
+              <td class="text-center text-muted">RS{{ reservation.reservationId }}</td>
+              <td class="text-center text-muted">{{ reservation.restaurantTableId }}</td>
+              <td class="text-center text-muted">{{ reservation.userId }}</td>
+              <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
+              <td class="text-center text-muted">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
+              <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
+              <td class="text-center text-muted">{{ reservation.reservationStatusName }}</td>
+              <td class="text-center text-muted">{{ reservation.numberOfGuests }}</td>
+              <td class="text-center text-muted">{{ (hoursUse(reservation)) }}</td>
+              <td class="text-center">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ul>
+    </div>
+    <h1 class="text-center">Món được mua nhiều</h1>
+    <div *ngIf="mostOrderedItems">
+      <table>
         <thead>
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Khách </th>
-            <th scope="col">Ngày </th>
-            <th scope="col">Tổng tiền</th>
-            <th scope="col">Phương thức thanh toán</th>
-            <th scope="col">Địa chỉ</th>
-            <th scope="col">Số tài khoản</th>
-
+            <th>Tên món</th>
+            <th>Số lần mua</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let bill of billsData">
-            <td> {{ bill.billId }}</td>
-            <td>{{bill.userId}}</td>
-            <td>{{bill.billTime}}</td>
-            <td>{{bill.totalAmount}}</td>
-            <td>{{bill.paymentMethod}}</td>
-            <td>{{bill.address}}</td>
-            <td>{{bill.bankNumber}}</td>
-
+          <tr *ngFor="let item of mostOrderedItems">
+            <td>{{ getProductById(item.menuItemId)?.name }}</td>
+            <td>{{ item.quantity }}</td>
           </tr>
         </tbody>
       </table>
-      <div *ngFor="let item of revenueData">
-        <!-- Hiển thị thông tin từ API về doanh thu -->
-        {{ item }}
-      </div>
-
-      <div>
-        <label for="dateInput">Chọn ngày:</label>
-        <input class="form-control" type="date" id="dateInput" [(ngModel)]="selectedDate">
-
-        <button class="btn btn-primary m-3" (click)="getReservations()">Kiểm tra</button>
-      </div>
+    </div>
 
 
-      <div>
-        <label for="selectedYear">Select a year:</label>
-        <select id="selectedYear" [(ngModel)]="selectedYear" (change)="onYearSelected()" class="form-select">
-          <option *ngFor=" let year of years" [value]="year">{{ year }}</option>
-        </select>
-      </div>
-
-
-
-
-
-
-
-
-
-      <div *ngIf="reservations.length > 0">
-        <h2>Các bàn được đặt trong ngày {{ selectedDate }}</h2>
-        <ul>
-
-          <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-            <thead>
-              <tr>
-                <th class="text-center">Mã đặt bàn</th>
-                <th class="text-center">Mã bàn</th>
-                <th class="text-center">Khách</th>
-                <th class="text-center">Ngày tới</th>
-                <th class="text-center">Giờ tới</th>
-                <th class="text-center">Giờ đi</th>
-                <th class="text-center">Trạng thái</th>
-                <th class="text-center">Số lượng khách hàng</th>
-                <th class="text-center">Thời gian sử dụng còn lại</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let reservation of reservations">
-                <td class="text-center text-muted">RS{{ reservation.reservationId }}</td>
-                <td class="text-center text-muted">{{ reservation.restaurantTableId }}</td>
-                <td class="text-center text-muted">{{ reservation.userId }}</td>
-                <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
-                <td class="text-center text-muted">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
-                <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
-                <td class="text-center text-muted">{{ reservation.reservationStatusName }}</td>
-                <td class="text-center text-muted">{{ reservation.numberOfGuests }}</td>
-                <td class="text-center text-muted">{{ (hoursUse(reservation)) }}</td>
-                <td class="text-center">
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </ul>
-      </div>
-      <h2>Số lượt mua sản phẩm</h2>
-      <ul>
-        <li *ngFor="let item of topItems; let i = index">
-          {{ i + 1 }}. {{ getProductById(item[0])?.name }} - mua {{ item[1] }} lần
-        </li>
-      </ul>
-      <!-- 
-    <ngx-charts-bar-vertical [view]="[700, 400]" [scheme]="scheme" [results]="revenueData1" [xAxis]="true"
-      [yAxis]="true" [legend]="true"></ngx-charts-bar-vertical> -->
   </div>
