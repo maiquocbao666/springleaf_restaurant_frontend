@@ -31,7 +31,12 @@ export class UserMergeTablesComponent {
 
   // Mã gộp bàn dùng để hiển thị bên select
   mergeTableIds: string[] = [];
-  isResetDisabled: boolean = false;
+  //isResetDisabled: boolean = false;
+
+  restaurants: Restaurant[] = [];
+  restaurantId: number | null = null;
+
+  selecRestaurantMessage = '';
 
   constructor(
     private reservationService: ReservationService,
@@ -47,13 +52,26 @@ export class UserMergeTablesComponent {
       tableIdMerge1: [, [Validators.required]],
       tableIdMerge2: [, [Validators.required]],
       mergeTableId: [, Validators.nullValidator],
+      restaurantId: [, Validators.required]
     });
   }
 
   ngOnInit(): void {
+    this.getRestaurants();
     this.getReservationInUse();
     this.getMergeTable();
     this.getMergeTableId();
+  }
+
+  getRestaurants() {
+    this.restaurantService.getCache().subscribe(
+      data => {
+        if(data.length > 0){
+          this.restaurants = data;
+          this.restaurantId = this.restaurants[0].restaurantId || null;
+        }
+      }
+    )
   }
 
   getMergeTableId() {
@@ -78,18 +96,30 @@ export class UserMergeTablesComponent {
   onTableIdChange(event: any) {
     const tableId1 = this.reservationForm.get("tableIdMerge1")?.value;
     const tableId2 = this.reservationForm.get("tableIdMerge2")?.value;
-  
+
     // Check if either tableId1 or tableId2 has a mergeTableId
     const mergeTableId1 = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+tableId1);
     const mergeTableId2 = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+tableId2);
-  
+
     if (mergeTableId1 !== '' || mergeTableId2 !== '') {
-      this.isResetDisabled = true;
+      //this.isResetDisabled = true;
       this.mergeTableId = mergeTableId1 !== '' ? mergeTableId1 : mergeTableId2;
     } else {
-      this.isResetDisabled = false;
+      //this.isResetDisabled = false;
       console.log("No mergeTableId found");
     }
+  }
+
+  onRestaurantIdChange(event: any) {
+    if (!event.target.value) {
+      this.selecRestaurantMessage = 'Mời chọn chi nhánh';
+      return;
+    } else {
+      this.restaurantId = Number(event.target.value); // Ensure it's a number
+      this.selecRestaurantMessage = '';
+    }
+    console.log('Updated restaurantId:', this.restaurantId);
+    this.getReservationInUse();
   }
 
   getMergeTable() {
@@ -108,18 +138,24 @@ export class UserMergeTablesComponent {
   getReservationInUse() {
     this.reservationService.getAllReservationsInUse().subscribe(
       cached => {
-        this.reservationsInUse = cached;
-        this.reservationForm.get("tableId")?.setValue(this.reservationsInUse[0].restaurantTableId);
-        const mergeTableId = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+this.reservationsInUse[0].restaurantTableId);
-        if (mergeTableId != '') {
-          this.isResetDisabled = true;
-          this.mergeTableId = mergeTableId;
-        } else {
-          this.isResetDisabled = false;
-          console.log(mergeTableId);
+        this.reservationsInUse = cached.filter(
+          data => this.restaurantTableService.getRestaurantIdByTableId(data.restaurantTableId) === this.restaurantId
+        );
+  
+        if (this.reservationsInUse.length > 0) {
+          // Assuming your reservationForm is correctly initialized
+          this.reservationForm.get("tableId")?.setValue(this.reservationsInUse[0].restaurantTableId);
+  
+          const mergeTableId = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+this.reservationsInUse[0].restaurantTableId);
+  
+          if (mergeTableId !== '') {
+            this.mergeTableId = mergeTableId;
+          } else {
+            console.log(mergeTableId);
+          }
         }
       }
-    )
+    );
   }
 
   getClassForStatus(status: string): string {
@@ -185,10 +221,10 @@ export class UserMergeTablesComponent {
   }
 
   addTableIdToMergeCache(tableId: number): void {
-    if(!this.mergeTableId){
+    if (!this.mergeTableId) {
       this.mergeTableIdMessage = "Mời tạo mã gộp";
       return;
-    } else{
+    } else {
       this.mergeTableIdMessage = "";
     }
     const mergeTable: MergeTable = {
@@ -201,11 +237,11 @@ export class UserMergeTablesComponent {
     this.mergeTableService.add(mergeTable).subscribe(() => {
       const mergeTableId = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+tableId);
       if (mergeTableId != '') {
-        this.isResetDisabled = true;
+        //this.isResetDisabled = true;
         this.mergeTableId = mergeTableId;
       } else {
-        this.isResetDisabled = false;
-        console.log(mergeTableId);
+        //this.isResetDisabled = false;
+        //console.log(mergeTableId);
       }
     });
   }
@@ -258,7 +294,7 @@ export class UserMergeTablesComponent {
     return this.restaurantTableService.findTableNameByTableId(id);
   }
 
-  getRestaurantNameByTableId(id: number): string | ''{
+  getRestaurantNameByTableId(id: number): string | '' {
     let restaurantId = this.restaurantTableService.getRestaurantIdByTableId(id);
     return this.restaurantService.getRestaurantNameById(restaurantId);
   }

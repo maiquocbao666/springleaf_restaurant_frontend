@@ -220,7 +220,7 @@ export class ReservationService extends BaseService<Reservation> {
     }
 
     getAllReservationsInUse(): Observable<Reservation[]> {
-        if (this.cache) {
+        if (this.cache$) {
             const currentTime = new Date().getTime();
             const reservationsInUse = this.cache.filter(reservation =>
                 reservation.reservationStatusName === 'Đang sử dụng' //&&

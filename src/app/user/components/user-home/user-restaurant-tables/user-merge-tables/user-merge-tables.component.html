@@ -11,7 +11,7 @@
             Các bàn bạn đang sử dụng
             <!-- Bảng hiển thị các đặt bàn -->
             <div class="card mt-3">
-                <div class="table-container">   
+                <div class="table-container">
                     <table class="table table-bordered table-striped table-hover">
                         <thead class="sticky-header">
                             <tr class="align-middle">
@@ -24,7 +24,8 @@
                             <tr *ngFor="let reservation of reservationOfUser">
                                 <!-- <td class="text-center text-muted">{{ reservation.reservationId }}</td> -->
                                 <td class="text-center">{{ getTableNameById(reservation.restaurantTableId) }}</td>
-                                <td class="text-center">{{ getRestaurantNameByTableId(reservation.restaurantTableId) }}</td>
+                                <td class="text-center">{{ getRestaurantNameByTableId(reservation.restaurantTableId) }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -54,6 +55,18 @@
                             </option>
                         </select>
                     </div> -->
+
+                    <div>
+                        Chọn chi nhánh
+                        <select (change)="onRestaurantIdChange($event)">
+                            <!-- <option value=-1>Mời chọn chi nhánh</option> -->
+                            <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId">{{
+                                restaurant.restaurantName }}</option>
+                        </select>
+                        <div style="color: red;">
+                            {{ selecRestaurantMessage }}
+                        </div>
+                    </div> <br>
 
                     <div class="col-lg-6 mb-3">
                         <label for="tableIdSelect">Chọn tên bàn muốn gộp</label>
