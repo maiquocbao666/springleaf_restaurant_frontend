@@ -44,8 +44,6 @@ export class UserCartComponent implements OnInit {
   selectedItems: CartInfomation[] = [];
   selectAllChecked = false;
   selections: { [key: string]: boolean } = {};
-  discountCode: string = '';
-  discountPrice: number | null = null;
 
   userAddressHouse: string = '';
   userProvince: Province | null = null;
@@ -277,11 +275,48 @@ export class UserCartComponent implements OnInit {
     return totalPrice;
   }
 
-  calculateFinalPrice(discount: number): any {
-    const totalPrice = this.calculateTotalPrice();
-    const finalPrice = totalPrice - discount;
+  // calculateFinalPrice(discount: number): any {
+  //   const totalPrice = this.calculateTotalPrice();
+  //   const finalPrice = totalPrice - discount;
 
-    return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
+  //   return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
+  // }
+
+  createDelivery() {
+    if (this.selectedItems.length > 0) {
+      const jwtToken = sessionStorage.getItem('access_token');
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
+      });
+      let listDetail : CartDetail[] =  [];
+      for(const item of this.selectedItems){
+        let cartDetail : CartDetail = {
+          orderDetailId : item.orderDetailId,
+          orderId : item.order,
+          menuItemId : item.menuItem,
+          quantity : item.quantity
+        }
+        listDetail.push(cartDetail);
+      }
+      this.http.post(`http://localhost:8080/public/config-user-cart`, listDetail, { headers })
+        .subscribe({
+          next: (response: any) => {
+            if (response.message === 'Success') {
+              this.toastService.showTimedAlert('Đặt hàng thành công', 'Cám ơn quý khách', 'success', 1500);
+            } else if (response.message === 'Failed') {
+              this.toastService.showTimedAlert('Đặt hàng thất bại', 'Vui lòng kiểm tra lại', 'error', 1500);
+            }
+            console.log('Response:', response);
+          },
+          error: (error) => {
+            // Xử lý lỗi
+            console.error('Error:', error);
+          }
+        });
+    } else {
+      this.toastService.showTimedAlert('Vui lòng chọn ít nhất 1 sản phẩm', '', 'info', 2000);
+    }
   }
 
   deleteCartDetail(cart: any): void {
@@ -326,40 +361,6 @@ export class UserCartComponent implements OnInit {
     });
   }
 
-  getDiscount() {
-    if (this.selectedItems.length > 0) {
-      const listItemId: number[] = [];
-      this.selectedItems.forEach((item, index) => {
-        listItemId.push(Number(this.selectedItems[index].menuItem as number));
-      });
-      if (this.discountCode != null) {
-        this.discountService.getDiscountByName(this.discountCode, listItemId).subscribe({
-          next: (response) => {
-            if (response.message === "Discount is not valid") {
-              this.toastService.showTimedAlert('Mã giảm giá không tồn tại', '', 'error', 2000);
-            }
-            else if (response.message === "Discount is Experied") {
-              this.toastService.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
-            }
-            else {
-              this.discountPrice = Number(response.message);
-              sessionStorage.setItem('discountPrice', response.message);
-              this.toastService.showTimedAlert('Mã chính xác', '', 'success', 2000);
-            }
-          },
-          error: (error) => {
-            this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
-          }
-        });
-      } else {
-        this.toastService.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'info', 2000);
-      }
-
-    } else {
-      this.toastService.showTimedAlert('Vui lòng chọn sản phẩm trước', '', 'info', 2000);
-    }
-  }
-
   checkout() {
     if (this.selectedItems.length > 0) {
       this.cartService.setCartData(this.selectedItems)
@@ -385,9 +386,6 @@ export class UserCartComponent implements OnInit {
     }
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
   }
-
-
-
 
   public getDistrict(ProvinceId: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {

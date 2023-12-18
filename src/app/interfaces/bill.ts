@@ -5,6 +5,6 @@ export interface Bill {
     billTime: string;
     totalAmount: number;
     paymentMethod: number;
-    address: number;
+    address: string;
     bankNumber: string;
 }
