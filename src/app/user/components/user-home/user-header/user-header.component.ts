@@ -242,8 +242,6 @@ export class UserHeaderComponent {
 
   // Lấy dữ liệu order
   getUserOrders(): void {
-    alert(this.cartByUser?.deliveryOrderId);
-
     this.orderService.getUserOrderCache().subscribe(
       (cached: any | null) => {
         if (cached === null && this.cartByUser) {

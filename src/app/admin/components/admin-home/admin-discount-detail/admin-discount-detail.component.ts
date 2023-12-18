@@ -79,6 +79,7 @@ export class AdminDiscountDetailComponent {
 
     if (this.discountForm.valid) {
       const updatedDiscount: Discount = {
+        userId : 0,
         discountId: +this.discountForm.get('discountId')?.value,
         limitValue: this.discountForm.get('limitValue')?.value,
         discountValue: +this.discountForm.get('discountValue')?.value,

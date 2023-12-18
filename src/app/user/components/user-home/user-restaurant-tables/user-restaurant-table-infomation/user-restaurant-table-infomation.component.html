@@ -7,7 +7,7 @@
     </div>
     <br>
     <div>Giờ hoạt động: 08:00:00 - 22:00:00</div>
-    <div>Quý khách vui lòng đặt trước 2 tiếng hiện tại và > 1 tiếng sau giờ hoạt động để được phục vụ tốt nhất</div>
+    <div>Quý khách vui lòng đặt trước 2 tiếng hiện tại và trước 1 tiếng sau giờ hoạt động để được phục vụ tốt nhất</div>
     <br>
     <div class="booking">
         <form class="booking-form row" role="form" [formGroup]="reservationForm" (ngSubmit)="bookingTable()">
@@ -63,8 +63,9 @@
                                 sách</b> đặt bàn</u></a>
                 </div>
                 <div class=" d-flex col-lg-6 ms-auto" style="align-items: center;">
-                    <button type="submit" class="form-control submit-btn mr-2" [hidden]="!isTermsAccepted">Đặt
-                        bàn</button>
+                    <button type="submit" class="form-control submit-btn mr-2" [hidden]="!isTermsAccepted">
+                        Đặt bàn
+                    </button>
                     <!-- <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                         Thời gian đã được đặt
@@ -140,21 +141,23 @@
     </div>
     <div class="modal-body" (scroll)="onScroll($event)">
 
-        <h3>Điều khoản</h3>
+        <h5>Điều khoản</h5>
+        <hr>
         1. Mỗi lần đặt bàn quý khách sẽ phải cọc 200.000đ <br>
         2. Thời gian đến khi đặt bàn phải lớn hơn 45 phút tính từ thời gian đặt hiện tại hoặc đủ thời gian để cho quý
         khách đến nơi <br>
         3. Quý khách phải lựa chọn thời gian phù hợp cho bữa ăn của mình <br>
         4. Quý khách phải tự chịu trách nhiệm cho việc đặt bàn của mình <br>
         5. Thời gian rời đi phải lớn hơn thời gian đến tối thiểu là 2 tiếng <br>
-        6. Quý khách vui lòng không đặt bàn trong khoảng thời gian từ 00:00:00 - 7:00:00 và từ 23:00:00 - 23:59:59 <br>
+        6. Quý khách vui lòng không đặt bàn trong khoảng thời gian từ 23:00:00 - 7:00:00<br>
         7. Nếu quý khách không có hóa đơn thì sẽ không hoàn trả tiền đặt cọc bàn <br>
         8. Quý khách vui lòng tuân thủ khoảng thời gian mà mình đã chọn <br>
         9. Nếu quý khách đã đặt bàn và không đến thì nhà hàng sẽ không hoàn trả tiền đặt cọc <br>
         10. Quý khách vui lòng kiểm tra thật kỹ thời gian sử dụng bàn của mình khi đặt và thanh toán <br>
         11. Nhà hàng sẽ không chịu bất kỳ trách nhiệm nào nếu sai sót đến từ phía của khách hàng <br> <br>
-
-        <h3>Chính sách</h3>
+        <hr>
+        <h5>Chính sách</h5>
+        <hr>
         1. Tiền đặt cọc sẽ được hoàn trả nếu quý khách sử dụng bàn trong khoảng thời gian tối thiểu 75% mà mình đã đặt
         và sẽ được tặng kèm mã khuyến mãi cho lần sau <br>
         2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các
@@ -163,6 +166,10 @@
         như đã đặt <br>
         4. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món
         của nhà hàng và kèm theo 1 khoảng bồi thường <br>
+        5. Nếu quý khách không thể đến trong khoảng thời gian đã đặt bàn nhưng có đặt món, nhà hàng sẽ hỗ trợ quý khách
+        có thể đến lấy những món đã đặt trước nhưng sẽ không hoàn trả tiền cọc <br>
+        <hr>
+        <h5>Cám ơn quý khách đã tin tưởng và lựa chọn nhà hàng của chúng tôi. Kính chào.</h5>
 
         <!-- <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="confirmCheckbox" [(ngModel)]="isConfirmed">

@@ -26,7 +26,7 @@ export class UserOrderHistoriesComponent {
   cartByUser: DeliveryOrder | null = null; // Thông tin đặt hàng giỏ hàng
   orderByUser: Order | null = null; // Thông tin order của giỏ hàng
   orderDetailByUser: CartDetail[] | null = null; // Thông tin chi tiết của order giỏ hàng
-  allCartByUser : DeliveryOrder[] | null = null;
+  allCartByUser: DeliveryOrder[] | null = null;
 
   restaurants: Restaurant[] | null = null;
   Provinces: any = [];
@@ -39,22 +39,16 @@ export class UserOrderHistoriesComponent {
     private orderService: OrderService,
     private deliveryOrderService: DeliveryOrderService,
     private cartDetailService: CartDetailService,
-    private restaurantService : RestaurantService,
-    private cartService : CartService,
-    private deliveryOrderStatusService : DeliveryOrderStatusService,
-    private http : HttpClient,
-  ){
+    private restaurantService: RestaurantService,
+    private cartService: CartService,
+    private deliveryOrderStatusService: DeliveryOrderStatusService,
+    private http: HttpClient,
+  ) {
 
   }
 
   ngOnInit(): void {
-
     this.getRestaurants();
-    // this.orderService.gets().subscribe(
-    //   data => {
-    //     this.orders = data;
-    //   }
-    // )
     this.deliveryOrderService.getAllUserCartByRestaurant().subscribe(
       (response) => {
         this.allCartByUser = response;
@@ -72,7 +66,7 @@ export class UserOrderHistoriesComponent {
     //     // Handle the error, e.g., show an error message to the user
     //   }
     // );
-    
+
 
     // this.orderService.getUserOrderCache().subscribe(
     //   (cached: any | null) => {
@@ -89,7 +83,7 @@ export class UserOrderHistoriesComponent {
     //     }
     //     if(this.orderByUser){
     //     }
-        
+
     //   });
 
     //   this.cartDetailService.getOrderDetailsCache().subscribe(
@@ -99,7 +93,7 @@ export class UserOrderHistoriesComponent {
     //       }else{
     //         this.orderDetailByUser = cached;
     //       }
-          
+
     //     }
     //   );
   }
@@ -192,4 +186,47 @@ export class UserOrderHistoriesComponent {
     });
   }
 
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+  }
+
+  validateQuantity(event: Event, cart: any): void {
+    const inputElement = event.target as HTMLInputElement;
+    const newValue = parseInt(inputElement.value, 10);
+    const limitProduct = 100; // Thay đổi lại sau khi xử lý ở backend lấy giá trị cho biến này
+    if (isNaN(newValue) || newValue < 1 || newValue > limitProduct) {
+      inputElement.value = cart.quantity.toString();
+    } else {
+      cart.quantity = newValue;
+      const cartDetail: CartDetail = {
+        orderDetailId: cart.orderDetailId,
+        orderId: cart.order,
+        menuItemId: cart.menuItem,
+        quantity: newValue
+      };
+      this.cartDetailService.update(cartDetail).subscribe();
+      this.cartDetailService.getUserOrderDetail(cart.order).subscribe();
+    }
+  }
+
+}
+
+export interface cartHistory {
+  // delivery order
+  deliveryOrderId?: number;
+  user: number;
+  deliveryAddress: string;
+  deliveryrestaurantId: number;
+  deliveryOrderTypeId: number;
+  deliveryOrderStatusId: number;
+  active: boolean;
+  // menu item
+  name: string;
+  unitPrice: number;
+  imageUrl: string;
+  // orderDetail
+  orderDetailId?: number;
+  orderId: number;
+  menuItemId: number;
+  quantity: number;
 }

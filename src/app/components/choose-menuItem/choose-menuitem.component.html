@@ -1,0 +1,63 @@
+
+<div class="container mt-5 col-12">
+    <h5 class="card-title mb-2">Chọn sản phẩm</h5>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table ">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Xóa</th>
+                        <th>Tổng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of products">
+                        <td> 
+                            <input type="checkbox" [(ngModel)]="selections[product.menuItemId!]" (click)="toggleSelection(product)">
+                        </td>
+                        <td><img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
+                                alt="">
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>
+                            <!-- <input type="number" [value]="product.quantity" (input)="validateQuantity($event, product)"> -->
+                        </td>
+                        <td>{{ formatAmount(product.unitPrice) }}</td>
+                        
+                        <td>{{ formatAmount(product.unitPrice )}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-12 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title"><b>{{selectedItems.length}} Sản phẩm</b></h5>
+                </div>
+                <div class="card-footer">
+                    <!-- <div class="row">
+                        <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ formatAmount(calculateTotalPrice()) }}</div>
+                    </div> -->
+                    <hr>
+                    
+                </div>
+                <div class="card-footer">
+                    <div class="center text-center row">
+                        <button class="learn-more" (click)="checkout()">
+                            <span aria-hidden="true" class="circle">
+                                <span class="icon arrow"></span>
+                            </span>
+                            <span class="button-text">Thanh toán</span>
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

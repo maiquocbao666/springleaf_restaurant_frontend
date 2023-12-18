@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ChooseMenuItemComponent } from 'src/app/components/choose-menuItem/choose-menuitem.component';
 import { Reservation } from 'src/app/interfaces/reservation';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
@@ -10,6 +11,7 @@ import { ReservationStatusService } from 'src/app/services/reservation-status.se
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-restaurant-table-infomation',
@@ -147,7 +149,15 @@ export class UserRestaurantTableInfomationComponent {
   }
 
   bookingTable(): void {
-    this.addReservation();
+    this.toastService.showConfirmAlert('Bạn có muốn đặt món trước không?', '', 'info')
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.openModelChooseMenuItem();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.addReservation();
+        }
+      });
+    
   }
 
   // getRervationsByTableId(id: number) {
@@ -367,6 +377,39 @@ export class UserRestaurantTableInfomationComponent {
 
   orderAfterReservation() {
 
+  }
+
+  openModelChooseMenuItem(){
+    this.updateMinMaxDate();
+
+    const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
+
+    // Ngày mà khách hàng chọn
+    const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
+    const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
+
+    // if (!this.checkAll()) {
+    //   return;
+    // }
+
+    const fullDateTime = selectedDate + ' ' + selectedTimeStr;
+    const newReservation: Reservation = {
+      restaurantTableId: this.restaurantTable?.tableId!,
+      userId: this.user?.userId!,
+      reservationDate: fullDateTime,
+      //outTime: outDateTimeString,
+      outTime: '',
+      numberOfGuests: seatingCapacity,
+      reservationStatusName: 'Chưa tới',
+    };
+
+    const modalRef = this.modalService.open(ChooseMenuItemComponent, {
+      size: 'xl', // xl là kích thước lớn hơn
+      centered: false, // Đặt modal ở giữa trang
+      scrollable: true, // Cho phép cuộn nếu modal quá lớn
+    });
+
+    modalRef.componentInstance.reservationOfUser = newReservation;
   }
 
 }

@@ -17,7 +17,6 @@ import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { User } from 'src/app/interfaces/user';
-import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-user-table',
@@ -36,10 +35,10 @@ export class UserRestaurantTablesComponent {
   restaurantId: number | null = null;
 
   constructor(
-    private toastService: ToastService,
+    
     private modalService: NgbModal,
     private modalService2: NgbModal,
-    private modalService3: NgbModal,
+    
     private restaurantTableService: RestaurantTableService,
     private tableStatusService: TableStatusService,
     private authenticationService: AuthenticationService,

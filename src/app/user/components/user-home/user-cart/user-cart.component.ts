@@ -61,7 +61,6 @@ export class UserCartComponent implements OnInit {
     private authService: AuthenticationService,
     private http: HttpClient,
     private router: Router,
-    private modalService: NgbModal,
   ) {
     const provincesString = localStorage.getItem('Provinces');
     if (provincesString) {

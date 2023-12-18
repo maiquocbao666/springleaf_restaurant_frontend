@@ -96,6 +96,7 @@ export class AdminDiscountsComponent {
       const active = this.discountForm.get('active')?.value;
 
       const newDiscount: Discount = {
+        userId: 0,
         limitValue: limitValue,
         discountValue: discountValue,
         startDate: startDate,
