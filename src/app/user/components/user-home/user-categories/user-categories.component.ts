@@ -45,6 +45,7 @@ export class UserCategoriesComponent {
   ngOnInit(): void {
     console.log("Init User Categories Component");
     this.getCategories();
+    this.checkScreenSize();
   }
 
   search(event: any) {

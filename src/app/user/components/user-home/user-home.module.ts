@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { UserHomeRoutingModule } from './user-home-routing.module';
 import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
+import { UserBillHistoriesComponent } from './user-bill-histories/user-bill-histories.component';
 
 @NgModule({
   imports: [
@@ -11,8 +12,7 @@ import { UserFavoritesComponent } from './user-favorites/user-favorites.componen
   ],
   declarations: [
 
-  
-    UserFavoritesComponent
+
   ]
 })
 export class UserHomeModule { }

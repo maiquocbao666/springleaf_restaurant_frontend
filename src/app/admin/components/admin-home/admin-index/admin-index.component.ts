@@ -53,24 +53,11 @@ export class AdminIndexComponent {
   monthlyRevenue!: any[];
   selectedYear!: number;
   colorScheme: any; // Khai báo colorScheme
-
-  // monthlyRevenue: any;
-  // colorScheme = colorSets.find(s => s.name === 'cool');
-  // colorScheme: Color = colorSets.find(s => s.name === 'cool')?.colors! || [];
+  paidBillsCount!: number;
   years: number[] = [];
+  mostOrderedItems!: any[];
+  showTable: boolean = false;
 
-  // revenueData1: any[] = [
-  //   { name: 'Tháng 1', value: 5000 },
-  //   { name: 'Tháng 2', value: 8000 },
-  //   { name: 'Tháng 3', value: 6500 },
-
-  // ];
-  // scheme: Color = {
-  //   domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5'],
-  //   name: 'scheme',
-  //   selectable: true,
-  //   group: ScaleType.Ordinal
-  // };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -91,14 +78,32 @@ export class AdminIndexComponent {
   ngOnInit(): void {
     this.getProducts();
     this.getCategories();
-    // this.getIngredients();
-    this.getTop5OrderedItems();
-    // this.fetchStatistics();
+    this.getNumberOfPaidBills();
     this.fetchTotalRevenue();
     this.populateYears();
     this.selectedYear = new Date().getFullYear();
     this.getRevenueByYear(this.selectedYear);
     this.monthlyRevenue = this.formatDataForChart(this.monthlyRevenue);
+
+    this.statisticsService.getMostOrderedItems().subscribe(
+      data => {
+        this.mostOrderedItems = this.transformData(data);
+      },
+      error => {
+        console.error(error);
+      }
+    );
+  }
+
+  // Trong component của bạn:
+  transformData(data: any[]): TransformedData[] {
+    const transformedData: TransformedData[] = [];
+    data.forEach(item => {
+      const menuItemId = Number(Object.keys(item)[0]); // Chuyển menuItemId thành kiểu số
+      const quantity = Number(Object.values(item)[0]); // Chuyển quantity thành kiểu số
+      transformedData.push({ menuItemId: menuItemId, quantity: quantity });
+    });
+    return transformedData;
   }
 
   formatDataForChart(data: any): any[] {
@@ -158,15 +163,14 @@ export class AdminIndexComponent {
       });
   }
 
-  // getRevenueByYear(year: number): void {
-  //   this.statisticsService.getMonthlyRevenueByYear(year)
-  //     .subscribe(data => {
-  //       this.monthlyRevenue = data;
-  //       console.log('Monthly revenue:', this.monthlyRevenue);
-  //     }, error => {
-  //       console.error('Error fetching data:', error);
-  //     });
-  // }
+  getNumberOfPaidBills(): void {
+    this.statisticsService.getCountOfPaidBills()
+      .subscribe(count => {
+        this.paidBillsCount = count;
+      });
+  }
+
+
 
   onYearSelected(): void {
     this.getRevenueByYear(this.selectedYear);
@@ -259,6 +263,9 @@ export class AdminIndexComponent {
       console.error('Please provide both start date and end date.');
     }
   }
+  toggleTable() {
+    this.showTable = !this.showTable; // Khi nhấn nút, giá trị của biến showTable sẽ đảo ngược (ẩn nếu đang hiển thị và hiển thị nếu đang ẩn)
+  }
 
   fetchTotalRevenue() {
     this.statisticsService.getTotalRevenue()
@@ -272,37 +279,19 @@ export class AdminIndexComponent {
       });
   }
 
-  fetchStatistics(): void {
-    this.loading = true;
-    this.error = undefined;
 
-    this.statisticsService.getStatistics().subscribe(
-      (data: any) => {
-        this.statisticsData = data;
-        this.loading = false;
-      },
-      (error: any) => {
-        this.error = 'Failed to fetch statistics. Please try again.';
-        this.loading = false;
-      }
-    );
-  }
 
-  getTop5OrderedItems() {
-    this.statisticsService.getTop5MostOrderedItems().subscribe(
-      (data: any) => {
-        this.topItems = data;
-        console.log(data);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
+
 
   getProductById(id: number): Product | null {
     const found = this.products.find(data => data.menuItemId === id);
     return found || null;
   }
 
+
+
+}
+interface TransformedData {
+  menuItemId: number;
+  quantity: number;
 }

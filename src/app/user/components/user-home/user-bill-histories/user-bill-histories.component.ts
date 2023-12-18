@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Bill } from 'src/app/interfaces/bill';
 import { BillDetail } from 'src/app/interfaces/bill-detail';
@@ -11,11 +11,11 @@ import { BillService } from 'src/app/services/bill.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
-  selector: 'app-admin-bills',
-  templateUrl: './admin-bills.component.html',
-  styleUrls: ['./admin-bills.component.css']
+  selector: 'app-user-bill-histories',
+  templateUrl: './user-bill-histories.component.html',
+  styleUrls: ['./user-bill-histories.component.css']
 })
-export class AdminBillsComponent {
+export class UserBillHistoriesComponent {
   bills: Bill[] = [];
   user: User[] = [];
   orders: Cart[] = [];
@@ -75,6 +75,11 @@ export class AdminBillsComponent {
       }
     );
   }
+
+
+
+  
+
   getBillDetails(billId: number): void {
     this.billDetailService.getBillDetailsByBillId(billId)
       .subscribe(
@@ -136,5 +141,4 @@ export class AdminBillsComponent {
     this.keywords = event.target.value;
     this.search();
   }
-
 }

@@ -60,6 +60,7 @@ export class UserHeaderComponent {
     //   this.user = JSON.parse(storedUser);
     // }
     
+    
     this.authService.getUserCache().subscribe(
       (data : any | null) => {
         console.log('Đang kiểm tra: ' +  JSON.stringify(data));
@@ -91,6 +92,7 @@ export class UserHeaderComponent {
       }
     });
   }
+  
 
   ngOnInit(): void {
     this.getRestaurants();

@@ -18,9 +18,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
@@ -101,13 +101,19 @@ import { UserRestaurantTableInfomationComponent } from './user/components/user-h
 
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
-import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
-import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
+import { AdminDiscountDetailComponent } from './admin/components/admin-home/admin-discount-detail/admin-discount-detail.component';
+import { AdminDiscountsComponent } from './admin/components/admin-home/admin-discounts/admin-discounts.component';
+import { AdminInventoryBranchIngredientDetailComponent } from './admin/components/admin-home/admin-inventory-branch-ingredients/admin-inventory-branch-ingredient-detail/admin-inventory-branch-ingredient-detail.component';
+import { AdminInventoryBranchIngredientsComponent } from './admin/components/admin-home/admin-inventory-branch-ingredients/admin-inventory-branch-ingredients.component';
+import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-merge-tables/admin-merge-tables.component';
 import { AdminUsersDetailComponent } from './admin/components/admin-home/admin-users-detail/admin-users-detail.component';
 import { AdminGuardService } from './services/guard-url/admin-guard.service';
-import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-merge-tables/admin-merge-tables.component';
+import { UserBillHistoriesComponent } from './user/components/user-home/user-bill-histories/user-bill-histories.component';
+import { UserFavoritesComponent } from './user/components/user-home/user-favorites/user-favorites.component';
+import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
+import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +138,8 @@ import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-m
     UserRestaurantTableInfomationComponent,
     UserReservationHistoriesComponent,
     UserMergeTablesComponent,
+    UserFavoritesComponent,
+    UserBillHistoriesComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
@@ -178,13 +186,17 @@ import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-m
     AdminBillsComponent,
     AdminUsersDetailComponent,
     AdminMergeTablesComponent,
-
+    AdminInventoryBranchIngredientsComponent,
+    AdminInventoryBranchIngredientDetailComponent,
+    AdminDiscountsComponent,
+    AdminDiscountDetailComponent,
     ChatComponent,
     LoginComponent,
     DateTimeComponent,
     ProfileComponent,
     UserPasswordComponent,
     UploadFileComponent,
+
 
   ],
   imports: [

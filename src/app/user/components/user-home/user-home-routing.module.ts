@@ -74,6 +74,12 @@ const routes: Routes = [
             .then(m => m.UserCheckoutModule),
       },
       {
+        path: 'user/history',
+        loadChildren: () =>
+          import('./user-bill-histories/user-bill-histories.module')
+            .then(m => m.UserBillHistoriesModule),
+      },
+      {
         path: 'user/product/detail',
         loadChildren: () =>
           import('./user-products/user-product-detail/user-product-detail.module')

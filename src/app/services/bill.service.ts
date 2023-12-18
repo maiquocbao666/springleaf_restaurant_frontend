@@ -65,4 +65,10 @@ export class BillService extends BaseService<Bill> {
 
   //---------------------------------------------------------
 
+  getLoggedInUserBills(): Observable<Bill[]> {
+    const url = `user/getBillByUser`;
+    return this.apiService.request<Bill[]>('get', url);
+  }
+
+
 }

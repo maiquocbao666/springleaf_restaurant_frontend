@@ -1,0 +1,116 @@
+<div class="container">
+  <h1 class="text-center display-4">Danh sách kho nguyên liệu</h1>
+  <p class="d-inline-flex gap-1">
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+      aria-expanded="false" aria-controls="collapseExample">
+      Thêm kho
+    </button>
+  </p>
+  <p class="float-end">
+    <select class="form-select" (change)="onTableSizeChange($event)">
+      <option *ngFor="let size of tableSizes">
+        {{size}}
+      </option>
+    </select>
+  </p>
+  <div class="collapse pb-3" id="collapseExample">
+    <div class="card card-body">
+
+      <form [formGroup]="inventoryBranchIngredientForm" (ngSubmit)="addInventoryBranchIngredient()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="inventoryBranchId" class="form-label">Chi nhánh<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="inventoryBranchId">
+              <option value="">Chọn chi nhánh</option>
+              <option *ngFor="let inventoryBranch of inventoryBranches" [value]="inventoryBranch.inventoryBranchId"> {{
+                inventoryBranch.inventoryBranchId }}
+              </option>
+            </select>
+            <div
+              *ngIf="inventoryBranchIngredientForm.get('inventoryBranchId')?.invalid && (inventoryBranchIngredientForm.get('inventoryBranchId')?.touched || isSubmitted)"
+              class="text-danger"> Không bỏ trống chi nhánh.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="inventoryId" class="form-label">Kho tổng<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="inventoryId">
+              <option value="">Chọn kho tổng</option>
+              <option *ngFor="let inventory of inventories " [value]="inventory.inventoryId">{{ inventory.inventoryId }}
+              </option>
+            </select>
+            <div
+              *ngIf="inventoryBranchIngredientForm.get('inventoryId')?.invalid && (inventoryBranchIngredientForm.get('inventoryId')?.touched || isSubmitted)"
+              class="text-danger"> Không bỏ trống kho.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="ingredientId" class="form-label">Nguyên liệu<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="ingredientId">
+              <option value="">Chọn nguyên liệu</option>
+              <option *ngFor="let ing of ingredients " [value]="ing.ingredientId">{{ ing.name }}</option>
+            </select>
+            <div
+              *ngIf="inventoryBranchIngredientForm.get('ingredientId')?.invalid && (inventoryBranchIngredientForm.get('ingredientId')?.touched || isSubmitted)"
+              class="text-danger"> Không bỏ trống nguyên liệu.
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="orderThreshold" class="form-label">Số lượng<span style="color: red;">(*)</span></label>
+            <input type="number" formControlName="quantity" class="form-control" id="quantity"
+              placeholder="Nhập số lượng">
+            <div
+              *ngIf="inventoryBranchIngredientForm.get('quantity')?.invalid && (inventoryBranchIngredientForm.get('quantity')?.touched || isSubmitted)"
+              class="text-danger">
+              <div *ngIf="inventoryBranchIngredientForm.get('quantity')?.hasError('nonNegative')">
+                Số không được âm
+              </div>
+              <div
+                *ngIf="inventoryBranchIngredientForm.get('quantity')?.hasError && !inventoryBranchIngredientForm.get('quantity')?.hasError('nonNegative')">
+                Chưa nhập ngưỡng
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <button type="submit">Lưu</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">Mã kho nguyên liệu</th>
+          <th class="text-center">Nguyên liệu</th>
+          <th class="text-center">Kho</th>
+          <th class="text-center">Chi nhánh</th>
+          <th class="text-center">Số lượng</th>
+          <th class="text-center">Chức năng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let inventoryBranchIngredient of inventoryBranchIngredients | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+          <td class="text-center text-muted">I{{inventoryBranchIngredient.inventoryBranchIngredientId}}</td>
+          <td class="text-center">{{ getIngredientById(inventoryBranchIngredient.ingredientId)?.name }}</td>
+          <td class="text-center text-muted">{{inventoryBranchIngredient.inventoryId}}</td>
+          <td class="text-center text-muted">{{inventoryBranchIngredient.inventoryBranchId}}</td>
+          <td class="text-center text-muted">{{inventoryBranchIngredient.quantity}}</td>
+          <td class="text-center">
+            <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
+              (click)="openInventoryDetailModal(inventoryBranchIngredient)"><i
+                class="fa-solid fa-pen-to-square"></i></a>
+            <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+              (click)="deleteInventoryBranchIngredient(inventoryBranchIngredient)"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center">
+    <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+
+</div>
