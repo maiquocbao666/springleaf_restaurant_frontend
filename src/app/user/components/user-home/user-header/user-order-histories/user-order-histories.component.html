@@ -1,24 +1,15 @@
 <table>
     <thead>
-        <th>Order Id</th>
-        <th>Combo</th>
-        <th>Delivery Order Id</th>
-        <th>Order Date</th>
-        <th>Reservation Id</th>
-        <th>Staff Id</th>
-        <th>Order Status</th>
-        <th>Total Amount</th>
+        <th>Đơn hàng</th>
+        <th>Địa chỉ</th>
+        <th>Trạng thái</th>
     </thead>
     <tbody>
-        <tr *ngFor="let order of orders">
-            <td>{{ order.orderId }}</td>
-            <td>{{ order.combo }}</td>
-            <td>{{ order.deliveryOrderId }}</td>
-            <td>{{ order.orderDate }}</td>
-            <td>{{ order.reservationId }}</td>
-            <td>{{ order.staffId }}</td>
-            <td> {{ order.status }}</td>
-            <td>{{ order.totalAmount }}</td>
+        <tr *ngFor="let order of allCartByUser">
+            <td>{{ order.user }}</td>
+            <td>{{ order.deliveryAddress }}</td>
+            <td *ngIf="order.deliveryOrderStatusId===1">Đang đặt</td>
+            <td><button>Hủy</button></td>
         </tr>
     </tbody>
 </table>

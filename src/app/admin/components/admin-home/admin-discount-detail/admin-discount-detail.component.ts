@@ -63,8 +63,7 @@ export class AdminDiscountDetailComponent {
     if (this.discount) {
       this.discountForm.patchValue({
         discountId: this.discount.discountId,
-        menuItemId: this.discount.menuItemId,
-        discountType: this.discount.discountType,
+        limitValue: this.discount.limitValue,
         discountValue: this.discount.discountValue,
         startDate: this.discount.startDate,
         endDate: this.discount.endDate,
@@ -81,8 +80,7 @@ export class AdminDiscountDetailComponent {
     if (this.discountForm.valid) {
       const updatedDiscount: Discount = {
         discountId: +this.discountForm.get('discountId')?.value,
-        menuItemId: +this.discountForm.get('menuItemId')?.value,
-        discountType: this.discountForm.get('discountType')?.value,
+        limitValue: this.discountForm.get('limitValue')?.value,
         discountValue: +this.discountForm.get('discountValue')?.value,
         startDate: this.discountForm.get('startDate')?.value,
         endDate: this.discountForm.get('endDate')?.value,

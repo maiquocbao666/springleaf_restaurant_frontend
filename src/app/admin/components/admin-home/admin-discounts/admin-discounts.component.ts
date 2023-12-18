@@ -36,8 +36,7 @@ export class AdminDiscountsComponent {
     private sweetAlertService: ToastService
   ) {
     this.discountForm = this.formBuilder.group({
-      menuItemId: ['', [Validators.required]],
-      discountType: ['', [Validators.required]],
+      limitValue: ['', [Validators.required]],
       discountValue: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -89,9 +88,7 @@ export class AdminDiscountsComponent {
   addDiscount(): void {
     this.isSubmitted = true;
     if (this.discountForm.valid) {
-
-      const menuItemId = this.discountForm.get('menuItemId')?.value;
-      const discountType = this.discountForm.get('discountType')?.value;
+      const limitValue = this.discountForm.get('limitValue')?.value;
       const discountValue = this.discountForm.get('discountValue')?.value;
       const startDate = this.discountForm.get('startDate')?.value;
       const endDate = this.discountForm.get('endDate')?.value;
@@ -99,8 +96,7 @@ export class AdminDiscountsComponent {
       const active = this.discountForm.get('active')?.value;
 
       const newDiscount: Discount = {
-        menuItemId: menuItemId,
-        discountType: discountType,
+        limitValue: limitValue,
         discountValue: discountValue,
         startDate: startDate,
         endDate: endDate,

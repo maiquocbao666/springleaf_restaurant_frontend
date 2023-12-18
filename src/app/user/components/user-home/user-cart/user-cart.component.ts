@@ -29,7 +29,6 @@ export class UserCartComponent implements OnInit {
   cartDetails: CartDetail[] = [];
   Provinces: any = [];
   selectedProvince: number | null = null;
-  DisTrictsFromAPI: any = [];
   Districts: any = [];
   selectedDistrict: number | null = null;
   Wards: any = [];

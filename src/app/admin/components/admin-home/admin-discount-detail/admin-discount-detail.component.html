@@ -8,17 +8,11 @@
 <form [formGroup]="discountForm" (ngSubmit)="updateDiscount()">
   <div class="row g-3">
     <div class="col-md-6">
-      <label for="menuItemId" class="form-label">Menu Item ID<span style="color: red;">(*)</span></label>
-      <select class="form-select" aria-label="Default select example" formControlName="menuItemId">
-        <!-- Options for menu item ID -->
-        <option value="">Chọn món</option>
-        <!-- Add options dynamically -->
-        <option *ngFor="let product of products" [value]="product.menuItemId"> {{
-          product.name }}
-        </option>
-      </select>
-      <div *ngIf="discountForm.get('menuItemId')?.invalid && (discountForm.get('menuItemId')?.touched || isSubmitted)"
-        class="text-danger">Chưa chọn món.
+      <label for="limitValue" class="form-label">Giá trị đơn hàng<span style="color: red;">(*)</span></label>
+      <input type="text" class="form-control" formControlName="limitValue" placeholder="Nhập kiểu giảm ...">
+      <div
+        *ngIf="discountForm.get('limitValue')?.invalid && (discountForm.get('limitValue')?.touched || isSubmitted)"
+        class="text-danger"> Vui lòng nhập giá trị đơn hàng.
       </div>
     </div>
 

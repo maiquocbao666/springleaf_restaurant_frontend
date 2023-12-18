@@ -17,6 +17,10 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   private userCartSubject = new BehaviorSubject<DeliveryOrder | null>(null);
   userCart$ = this.userCartSubject.asObservable();
 
+  private allUserCart : DeliveryOrder[] = [];
+  private allUserCartSubject = new BehaviorSubject<DeliveryOrder[] | null>(null);
+  allUserCart$ = this.allUserCartSubject.asObservable();
+
   
   apisUrl = 'deliveryOrders';
   cacheKey = 'deliveryOrders';
@@ -39,7 +43,17 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
   }
 
   // Hàm get để lấy giá trị hiện tại của userCartSubject
-  getUserCartCache(): Observable<DeliveryOrder | null> {
+  getUserCartCache(): Observable<DeliveryOrder[] | null> {
+    return this.allUserCart$;
+  }
+
+  // Hàm set để cập nhật giá trị của userCartSubject
+  setAllUserCartCache(cart: DeliveryOrder[] | null): void {
+    this.allUserCartSubject.next(cart);
+  }
+
+  // Hàm get để lấy giá trị hiện tại của userCartSubject
+  getAllUserCartCache(): Observable<DeliveryOrder | null> {
     return this.userCart$;
   }
 
@@ -93,6 +107,24 @@ export class DeliveryOrderService extends BaseService<DeliveryOrder>  {
       .pipe(
         tap(cart => {
           this.setUserCartCache(cart);
+        })
+      );
+  }
+
+  getAllUserCartByRestaurant(): Observable<DeliveryOrder[] | null> {
+    const jwtToken = sessionStorage.getItem('access_token');
+    if (!jwtToken) {
+      return of(null);
+    }
+  
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+  
+    return this.apiService.request<DeliveryOrder[]>('get', 'user/getAllCartByUser', null, customHeader)
+      .pipe(
+        tap(cart => {
+          this.setUserCartCache(null);
         })
       );
   }

@@ -6,27 +6,26 @@
       Thêm Mã giảm
     </button>
   </p>
-  <!-- <p class="float-end">
-      <select class="form-select" (change)="onTableSizeChange($event)">
-          <option *ngFor="let size of tableSizes">
-              {{size}}
-          </option>
-      </select>
-  </p> -->
   <div class="collapse pb-3" id="collapseExample">
     <div class="card card-body">
       <form [formGroup]="discountForm" (ngSubmit)="addDiscount()">
         <div class="row g-3">
           <div class="col-md-6">
-            <label for="menuItemId" class="form-label">Menu Item ID<span style="color: red;">(*)</span></label>
-            <select class="form-select" aria-label="Default select example" formControlName="menuItemId">
+            <label for="limitValue" class="form-label">Kiểu giảm<span style="color: red;">(*)</span></label>
+            <input type="text" class="form-control" formControlName="limitValue" placeholder="Nhập kiểu giảm ...">
+            <div
+              *ngIf="discountForm.get('limitValue')?.invalid && (discountForm.get('limitValue')?.touched || isSubmitted)"
+              class="text-danger"> Không bỏ trống giá trị đơn.
+            </div>
+            <!-- <label for="menuItemId" class="form-label">Menu Item ID<span style="color: red;">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" formControlName="menuItemId"> -->
               <!-- Options for menu item ID -->
-              <option value="">Chọn món</option>
+              <!-- <option value="">Chọn món</option> -->
               <!-- Add options dynamically -->
-              <option *ngFor="let product of products" [value]="product.menuItemId"> {{
+              <!-- <option *ngFor="let product of products" [value]="product.menuItemId"> {{
                 product.name }}
               </option>
-            </select>
+            </select> -->
             <div
               *ngIf="discountForm.get('menuItemId')?.invalid && (discountForm.get('menuItemId')?.touched || isSubmitted)"
               class="text-danger">Chưa chọn món.
@@ -112,10 +111,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let discount of discounts ">
-
           <td class="text-center text-muted">VC{{discount.discountId}}</td>
-          <td class="text-center">{{ getProductById(discount.menuItemId)?.name }}</td>
-          <td class="text-center">{{discount.discountType}}</td>
+          <td class="text-center">{{discount.limitValue}}</td>
           <td class="text-center"><i class="badge badge-info">{{discount.discountValue}}%</i></td>
           <td class="text-center">{{discount.startDate | date: 'dd-MM-yyyy' }}</td>
           <td class="text-center">{{discount.startDate | date: 'dd-MM-yyyy' }}</td>
