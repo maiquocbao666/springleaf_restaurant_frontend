@@ -44,6 +44,9 @@ export class AdminReservationsComponent {
 
   currentDateTime$: string = '';
 
+  selectedTimeMessage = '';
+  selectedDateMessage = '';
+
   reservationsUrl = 'reservations';
 
   minDate!: string;
@@ -225,102 +228,78 @@ export class AdminReservationsComponent {
     //console.log(this.maxDate);
   }
 
-  checkDate(selectedDate: string, minDate: string, maxDate: string): boolean {
+  checkDate(selectedDate: string, minDate: string): boolean {
 
-    const date1 = new Date(selectedDate);
-    const date2 = new Date(minDate);
-    const date3 = new Date(maxDate);
+    //const date1 = new Date(selectedDate + '00:00:00');
+    //const date2 = new Date(minDate + '00:00:00');
 
-    if (date1 > date2 && date1 < date3) {
+    if (selectedDate === minDate) {
       return true;
     } else {
       return false;
     }
+
   }
 
-  addReservation() {
-
-    if (!this.user) {
-      this.sweetAlertService.showTimedAlert('Mời đăng nhập!', 'Mời đăng nhập', 'error', 3000);
-      return;
+  check(selectedDate: string, selectedTime: string): boolean {
+    if (!selectedDate) {
+      this.selectedDateMessage = "Mời chọn ngày đến";
+      return false;
+    } else {
+      this.selectedDateMessage = "";
     }
-
-    // Cập nhật ngày min max
-    this.updateMinMaxDate();
-
-    const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
-
-    // Ngày mà khách hàng chọn
-    const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
-    let selectedTimeStr = this.reservationForm.get('selectedTime')?.value;
-    let outTimeStr = this.reservationForm.get('outTime')?.value;
-
-    // Thời gian tới
-    const selectedDateTimeStr = `${selectedDate} ${selectedTimeStr}`;
-    const selectedTime = new Date(selectedDateTimeStr).getTime();
-
-    // Thời gian rời đi
-    const outDateTimeStr = `${selectedDate} ${outTimeStr}`;
-    const outDateTime = new Date(outDateTimeStr).getTime();
-
-    // Kiểm tra nếu thời gian nằm trong khoảng từ 23:00 đến 23:59
-    if (selectedTime >= new Date(`${selectedDate} 23:00:00`).getTime()) {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian này không được đặt', 'warning', 3000);
-      return;
+    if (!selectedTime) {
+      this.selectedTimeMessage = "Mời chọn thời gian đến";
+      return false;
+    } else {
+      this.selectedTimeMessage = "";
     }
+    return true;
+  }
 
-    if (selectedDate === '' || selectedTimeStr === '' || outTimeStr === '') {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Mời chọn thời gian', 'warning', 3000);
-      return;
+  checkIsReservedBefore(fullDateTime: string, selectedDate: string): boolean {
+    const restaurantTableId = this.reservationForm.get('restaurantTableId')?.value;
+    const check = this.reservationService.isTableReserved(restaurantTableId, fullDateTime, selectedDate);
+    if (check) {
+      this.selectedDateMessage = "Đã có người đặt";
+      this.selectedTimeMessage = "Đã có người đặt";
+    } else {
+      this.selectedDateMessage = "";
+      this.selectedTimeMessage = "";
     }
+    return check;
+  }
 
-    // Nếu thời gian chọn = minDate hoặc maxDate
-    if (!this.checkDate(selectedDate, this.minDate, this.maxDate)) {
-
-      // Add 1 minute to the current time
-      const oneMinuteLater = new Date(new Date().getTime() + 60 * 1000).getTime(); // Thêm 1 phút
-      const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000).getTime(); // Thêm 1 tiếng
-
-      if (selectedTime < oneMinuteLater) {
-        this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian đến phải lớn hơn hoặc bằng giờ hiện tại 1 phút', 'warning', 3000);
-        return;
-      }
-
+  checkIsReservedAfter(fullDateTime: string, selectedDate: string): boolean {
+    const restaurantTableId = this.reservationForm.get('restaurantTableId')?.value;
+    const check = this.reservationService.isTableReserved1(restaurantTableId, fullDateTime, selectedDate);
+    if (check) {
+      this.selectedDateMessage = "Đã có người đặt";
+      this.selectedTimeMessage = "Đã có người đặt";
+    } else {
+      this.selectedDateMessage = "";
+      this.selectedTimeMessage = "";
     }
+    return check;
+  }
 
-    const oneMinuteLater = new Date(new Date(selectedDateTimeStr).getTime() + 2 * 60 * 1000).getTime(); // Thêm 2 phút
-    const oneHourLater = new Date(new Date(selectedDateTimeStr).getTime() + 60 * 60 * 1000).getTime(); // Thêm 1 tiếng
-    //console.log(selectedDateTimeStr, outDateTimeStr);
-
-    if (outDateTime < oneHourLater) {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Thời gian rời đi phải lớn hơn hoặc bằng thời gian đến 1 giờ', 'warning', 3000);
-      return;
-    }
-
-    if (this.reservationService.isReservationsInTimeRangeByTableId(0, selectedDateTimeStr, outDateTimeStr)) {
-      this.sweetAlertService.showTimedAlert('Cảnh báo!', 'Khoảng thời gian này đã được sử dụng', 'warning', 3000);
-      return;
-    }
-
-    // Tổng hợp ngày giờ lại
-    const dateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'yyyy-MM-dd')! : '') + (selectedTimeStr ? ' ' + selectedTimeStr + ':00' : '');
-    const outDateTimeString = (selectedDate ? this.datePipe.transform(selectedDate, 'yyyy-MM-dd')! : '') + (outTimeStr ? ' ' + outTimeStr + ':00' : '');
-
+  addToReservation(seatingCapacity: number, fullDateTime: string) {
+    const restaurantTableId = this.reservationForm.get('restaurantTableId')?.value;
     const newReservation: Reservation = {
-      restaurantTableId: this.reservationForm.get('restaurantTableId')?.value,
+      restaurantTableId: restaurantTableId,
       userId: this.user?.userId!,
-      reservationDate: dateTimeString,
-      outTime: outDateTimeString,
+      reservationDate: fullDateTime,
+      //outTime: outDateTimeString,
+      outTime: '',
       numberOfGuests: seatingCapacity,
-      reservationStatusName: 'Đang đợi',
+      reservationStatusName: 'Chưa tới',
     };
 
     let reservationsCache: Reservation[] = [];
-
     this.reservationService.add(newReservation).subscribe(
       {
         next: (addedReservation) => {
-          this.sweetAlertService.showTimedAlert('Chức mừng!', 'Bạn đã dặt bàn thành công', 'success', 3000);
+          this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
           reservationsCache.push(addedReservation);
           localStorage.setItem('reservations', JSON.stringify(reservationsCache));
         },
@@ -332,6 +311,115 @@ export class AdminReservationsComponent {
         }
       }
     );
+  }
+
+  checkAllowTime(selectedDate: string, selectedTime: string): boolean {
+
+    this.updateMinMaxDate();
+
+    const currentDateTime1 = new Date();
+
+    // Thời gian hiện tại
+    const formattedCurrentDateTime = this.datePipe.transform(currentDateTime1, 'yyyy-MM-dd HH:mm:ss');
+    //console.log(formattedCurrentDateTime);
+    const currentDateTime = new Date(formattedCurrentDateTime!).getTime();
+
+    const allowTimeString1 = selectedDate + ' ' + '07:59:59';
+    const allowTimeString2 = selectedDate + ' ' + '22:00:01';
+    const fullDateTimeString = selectedDate + ' ' + selectedTime;
+
+    //alert(fullDateTimeString);
+
+    // Thời gian mở cửa
+    const allowTime1 = new Date(allowTimeString1).getTime();
+    // Thời gian đóng cửa
+    const allowTime2 = new Date(allowTimeString2).getTime();
+    // Thời gian chọn
+    const fullDateTime = new Date(fullDateTimeString).getTime();
+
+    let isBefore2Hours1;
+    let isBefore2Hours2;
+
+    const isToday = this.checkDate(selectedDate, this.minDate);
+    console.log("Is today: " + isToday);
+    if (isToday) {
+      isBefore2Hours1 = (fullDateTime + 1000 * 60 * 60 * 2 > allowTime1 + 1000 * 60 * 60 * 1) && (currentDateTime + 1000 * 60 * 60 * 2 <= fullDateTime);
+      isBefore2Hours2 = (fullDateTime + 1000 * 60 * 60 * 2 < allowTime2) && (currentDateTime + 1000 * 60 * 60 * 2 <= fullDateTime);
+    } else {
+      isBefore2Hours1 = fullDateTime + 1000 * 60 * 60 * 2 > allowTime1 + 1000 * 60 * 60 * 1;
+      isBefore2Hours2 = fullDateTime + 1000 * 60 * 60 * 2 < allowTime2;
+    }
+
+    console.log(isBefore2Hours1);
+    console.log(isBefore2Hours2);
+
+    //Phải đặt trước thời gian mở cửa 2 tiếng và sau thời gian mở cửa 1 tiếng
+    if (isBefore2Hours1) {
+      // Phải đặt trước thời gian đóng cửa 2 tiếng
+      if (isBefore2Hours2) {
+        this.selectedTimeMessage = "";
+        return true;
+      } else {
+        this.selectedTimeMessage = "Phải đặt trước thời gian đóng cửa 2 tiếng hoặc trước thời gian tới 2 tiếng";
+        return false;
+      }
+    } else {
+      this.selectedTimeMessage = "Thời gian đến phải lớn hơn 2 tiếng so với hiện tại hoặc trong thời gian được phép đặt";
+      return false;
+    }
+
+  }
+
+  checkAll(): boolean {
+    // Ngày mà khách hàng chọn
+    const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
+    const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
+
+    const check = this.check(selectedDate, selectedTimeStr);
+    if (!check) {
+      return false;
+    }
+
+    const checkAllowTime = this.checkAllowTime(selectedDate, selectedTimeStr);
+    if (!checkAllowTime) {
+      return false;
+    }
+
+    const fullDateTime = selectedDate + ' ' + selectedTimeStr;
+
+    const checkBefore = this.checkIsReservedBefore(fullDateTime, selectedDate);
+    if (checkBefore) {
+      return false;
+    }
+
+    const checkAfter = this.checkIsReservedAfter(fullDateTime, selectedDate);
+    if (checkAfter) {
+      return false;
+    }
+
+    return true;
+
+  }
+
+  addReservation() {
+
+    // Cập nhật ngày min max
+    this.updateMinMaxDate();
+
+    const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
+
+    // Ngày mà khách hàng chọn
+    const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
+    const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
+
+    if (!this.checkAll()) {
+      return;
+    }
+
+    const fullDateTime = selectedDate + ' ' + selectedTimeStr;
+
+    this.addToReservation(seatingCapacity, fullDateTime);
+
   }
 
   sort(field: keyof Reservation, ascending: boolean): void {
@@ -371,6 +459,39 @@ export class AdminReservationsComponent {
   changeSearchKeyWords(event: any) {
     this.keywords = event.target.value;
     this.search();
+  }
+
+  getClassForStatus(status: string): string {
+    if (status === 'Chưa tới') {
+      return 'badge badge-info'; // or any other color you prefer for this status
+    } else if (status === 'Đang đợi') {
+      return 'badge badge-warning';
+    } else if (status === 'Đang sử dụng') {
+      return 'badge badge-success';
+    } else if (status === 'Hết thời gian đợi') {
+      return 'badge badge-danger';
+    } else if (status === 'Đã sử dụng xong') {
+      return 'badge badge-secondary'; // or any other color you prefer for this status
+    }
+    return ''; // Default class or no class if status is not recognized
+  }
+
+  changeStatusOne(id: number, newStatus: string): void {
+    // Find the mergeTable by ID in the cache or wherever you store your mergeTables
+    const reservationToUpdate = this.reservations.find(mt => mt.reservationId === id);
+
+    if (reservationToUpdate) {
+      // Update the status
+      reservationToUpdate.reservationStatusName = newStatus;
+      this.reservationService.update(reservationToUpdate).subscribe();
+    } else {
+      //console.warn(`MergeTable with ID ${id} not found.`);
+    }
+   
+  }
+
+  findTableNameByTableId(id: number): string{
+    return this.restaurantTableService.findTableNameByTableId(id);
   }
 
   // getreservationById(): void {

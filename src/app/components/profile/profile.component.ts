@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { District } from 'src/app/interfaces/address/District';
 import { Province } from 'src/app/interfaces/address/Province';
@@ -20,7 +20,6 @@ import { UserService } from 'src/app/services/user.service';
 export class ProfileComponent {
 
   @Input() userUpdate: User | undefined;
-  userData: any = {};
   profileForm: FormGroup;
 
   user: User | null = null;
@@ -35,14 +34,20 @@ export class ProfileComponent {
   Wards: any = [];
   selectedWard: number | null = null;
   showAddressInput = true;
-
+  // địa chỉ người dùng
+  userAddressHouse: string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
+  // địa chỉ nhà hàng của người dùng
+  userRestaurantAddress: string = '';
+  userRestaurantProvince: Province | null = null;
+  userRestaurantDistrict: District | null = null;
+  userRestaurantWard: Ward | null = null;
   restaurants: Restaurant[] | null = null;
-  userRestaurant : Restaurant | null = null;
+  userRestaurant: Restaurant | null = null;
   roles: String[] | null = null;
-  userRole : string | null = null;
+  userRole: string | null = null;
 
   @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
   @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
@@ -66,10 +71,11 @@ export class ProfileComponent {
       console.error('No products found in local storage or the value is null.');
     }
     this.profileForm = this.formBuilder.group({
-      fullName: [null, [Validators.nullValidator]],
+      addressHouse: [null, [Validators.nullValidator]],
+      fullName: [null, [this.customFullNameValidator]],
       username: [null, [Validators.nullValidator]],
-      email: [null, [Validators.nullValidator]],
-      phone: [null, [Validators.nullValidator]],
+      email: [null, [this.customEmailValidator]],
+      phone: [null, [this.customPhoneValidator]],
       address: [null, [Validators.nullValidator]],
       image: [null, [Validators.nullValidator]],
       selectedRestaurant: [null, Validators.required],
@@ -106,9 +112,11 @@ export class ProfileComponent {
       if (this.user.address) {
         const address = this.user.address.toString();
         const splittedStrings = address.split('-');
-        const addressWard = splittedStrings[0];
-        const addressDistrict = parseInt(splittedStrings[1], 10);
-        const addresssProvince = parseInt(splittedStrings[2], 10);
+        const addressHouse = splittedStrings[0];
+        this.userAddressHouse = addressHouse;
+        const addressWard = splittedStrings[1];
+        const addressDistrict = parseInt(splittedStrings[2], 10);
+        const addresssProvince = parseInt(splittedStrings[3], 10);
 
         for (const province of this.Provinces) {
           if (province.ProvinceID === addresssProvince) {
@@ -135,12 +143,15 @@ export class ProfileComponent {
 
                 }
                 break;
-
               }
             }
           });
         }
       } else {
+        this.userAddressHouse = '';
+        this.userProvince = null;
+        this.userDistrict = null;
+        this.userWard = null;
         this.setValue();
       }
     }
@@ -158,7 +169,7 @@ export class ProfileComponent {
     this.cartService.wardData$.subscribe(data => {
       this.WardsFromAPI = Object.values(data);
     });
-    
+
   }
 
   getRestaurants(): void {
@@ -177,28 +188,38 @@ export class ProfileComponent {
         password: this.user.password,
         email: this.user.email,
         phone: this.user.phone,
-        //image: this.user.image,
-        //selectedRestaurant : this.user.restaurantBranchId
+        image: this.user.image,
+        selectedRestaurant: this.user.restaurantBranchId
       });
       if (this.userProvince && this.userDistrict && this.userWard) {
         this.profileForm.patchValue({
-          address: `${this.userProvince.ProvinceName} - ${this.userDistrict.DistrictName} - ${this.userWard.WardName}`,
-        });
-      } if(this.userRestaurant){
-        this.profileForm.patchValue({
-          selectedRestaurant: `${this.userRestaurant.restaurantId}`,
+          address: `${this.userAddressHouse}, ${this.userWard.WardName}, ${this.userDistrict.DistrictName}, ${this.userProvince.ProvinceName}`,
         });
       }
+      if (!this.userProvince && !this.userDistrict && !this.userWard) {
+        this.profileForm.patchValue({
+          address: `Bạn chưa cập nhật địa chỉ`,
+        });
+      }
+
+      if (this.userRestaurant) {
+        this.profileForm.patchValue({
+          selectedRestaurant: `${this.userRestaurant.restaurantName}`,
+        });
+      }
+    this.updateImagePreview();
     }
   }
 
   toggleAddressInput() {
-    if (this.profileForm.get('provinceChange')?.value !== '' 
+    if (
+      this.profileForm.get('addressHouse')?.value !== null
+      && this.profileForm.get('provinceChange')?.value !== ''
       && this.profileForm.get('districtChange')?.value !== ''
       && this.profileForm.get('wardChange')?.value !== '') {
-        this.profileForm.patchValue({
-          address: `${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
-        }); 
+      this.profileForm.patchValue({
+        address: `${this.profileForm.get('addressHouse')?.value} - ${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
+      });
     }
     this.showAddressInput = !this.showAddressInput;
   }
@@ -292,40 +313,52 @@ export class ProfileComponent {
 
 
   updateProfile() {
-    let addressChange = '';
-    if (this.profileForm.get('provinceChange')?.value !== '' 
-      && this.profileForm.get('districtChange')?.value !== ''
-      && this.profileForm.get('wardChange')?.value !== '') {
-      addressChange = `${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`;
-    } else {
-      addressChange = this.userData.address;
-    }
-    if (this.userData) {
+    if (this.user && this.profileForm.valid) {
+      let addressChange = '';
+      if (
+        this.profileForm.get('addressHouse')?.value !== null
+        && this.profileForm.get('provinceChange')?.value !== ''
+        && this.profileForm.get('districtChange')?.value !== ''
+        && this.profileForm.get('wardChange')?.value !== '') {
+        addressChange = `${this.profileForm.get('addressHouse')?.value} -${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`;
+      } else {
+        addressChange = this.user.address;
+      }
       const userUpdate: User = {
-        userId: this.userData.userId,
+        userId: this.user.userId,
         fullName: this.profileForm.get('fullName')?.value,
-        username: this.userData.username,
-        password: this.userData.password,
+        username: this.user.username,
+        password: this.user.password,
         email: this.profileForm.get('email')?.value,
         address: addressChange,
         phone: this.profileForm.get('phone')?.value,
         restaurantBranchId: this.profileForm.get('selectedRestaurant')?.value,
-        //image: this.profileForm.get('image')?.value || this.userData.image,
-        image: this.selectedFileName || this.profileForm.get('image')?.value,
-        status: this.userData.status,
-       
+        image: this.profileForm.get('image')?.value || this.user.image,
+        //image: this.selectedFileName || this.profileForm.get('image')?.value,
+        status: this.user.status,
+
       };
-      this.userService.updateProfile(userUpdate).subscribe(
-        () => {
-          this.authService.setUserCache(userUpdate);
-          this.onUpload();
-          this.initUserAddress();
-          this.toastService.showTimedAlert('Cập nhật thành công', '', 'success', 1500)
-        },
-        (error) => {
-          console.error('Error updating profile:', error);
-        }
-      );
+      this.userService.updateProfile(userUpdate)
+        .subscribe(
+          (response) => {
+            if (response.error === 'Email cannot update') {
+              this.toastService.showTimedAlert('Email đã được sử dụng', '', 'error', 1500);
+            }
+            else if (response.error === 'Phone cannot update') {
+              this.toastService.showTimedAlert('Số điện thoại đã được sử dụng', '', 'error', 1500);
+            }
+            else {
+              // Update user cache and handle success
+              this.authService.setUserCache(response.user);
+              this.onUpload();
+              this.initUserAddress();
+              this.toastService.showTimedAlert('Cập nhật thành công', '', 'success', 1500);
+            }
+          },
+          (error) => {
+            console.error('Error updating profile:', error);
+          }
+        );
     }
   }
 
@@ -379,6 +412,64 @@ export class ProfileComponent {
       this.imageUrlValue = '';
     }
   }
+
+  customFullNameValidator(control: AbstractControl) {
+    const fullName = control.value;
+    if (!fullName) {
+      return { 'required': true, 'message': 'Họ tên không được để trống' };
+    }
+    if (fullName.length > 50) {
+      return { 'required': true, 'message': 'Họ tên quá dài' };
+    }
+    const specialCharacterRegex = /[^a-zA-ZÀ-ỹ ]/;
+
+    // Kiểm tra xem chuỗi có chứa ký tự đặc biệt không
+    if (specialCharacterRegex.test(fullName)) {
+      return { 'required': true, 'message': 'Không được chứa ký tự đặc biệt' };
+    }
+    if (/\d/.test(fullName)) {
+      return { 'required': true, 'message': 'Không được chứa số' };
+    }
+
+    return true;
+  }
+
+  customEmailValidator(control: AbstractControl) {
+    const email = control.value;
+
+    if (!email) {
+      return { 'required': true, 'message': 'Email không được để trống' };
+    }
+
+    // Sử dụng một biểu thức chính quy đơn giản để kiểm tra định dạng email
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailPattern.test(email)) {
+      return { 'required': true, 'message': 'Định dạng email không hợp lệ' };
+    }
+
+    return null;  // Trả về null nếu không có lỗi
+  }
+
+  customPhoneValidator(control: AbstractControl) {
+    const phone = control.value;
+
+    if (!phone) {
+      return { 'required': true, 'message': 'Số điện thoại không được để trống' };
+    }
+
+    // Kiểm tra xem số điện thoại có chứa ký tự không phải số không
+    if (/[^0-9]/.test(phone)) {
+      return { 'required': true, 'message': 'Số điện thoại không được chứa ký tự đặc biệt hoặc chữ' };
+    }
+
+    // Kiểm tra xem số điện thoại có đủ 11 số không
+    if (phone.length !== 10) {
+      return { 'required': true, 'message': 'Số điện thoại phải có đủ 11 số' };
+    }
+
+    return null; // Trả về null nếu không có lỗi
+  };
+
 }
 
 

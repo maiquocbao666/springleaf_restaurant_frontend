@@ -1,7 +1,7 @@
 
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -103,6 +103,7 @@ import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
+import { AdminDeliveryOrderComponent } from './admin/components/admin-home/admin-delivery-order/admin-delivery-order.component';
 import { AdminDiscountDetailComponent } from './admin/components/admin-home/admin-discount-detail/admin-discount-detail.component';
 import { AdminDiscountsComponent } from './admin/components/admin-home/admin-discounts/admin-discounts.component';
 import { AdminInventoryBranchIngredientDetailComponent } from './admin/components/admin-home/admin-inventory-branch-ingredients/admin-inventory-branch-ingredient-detail/admin-inventory-branch-ingredient-detail.component';
@@ -112,9 +113,9 @@ import { AdminUsersDetailComponent } from './admin/components/admin-home/admin-u
 import { AdminGuardService } from './services/guard-url/admin-guard.service';
 import { UserBillHistoriesComponent } from './user/components/user-home/user-bill-histories/user-bill-histories.component';
 import { UserFavoritesComponent } from './user/components/user-home/user-favorites/user-favorites.component';
+import { UserOrderHistoriesComponent } from './user/components/user-home/user-header/user-order-histories/user-order-histories.component';
 import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
 import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
-import { AdminDeliveryOrderComponent } from './admin/components/admin-home/admin-delivery-order/admin-delivery-order.component';
 
 @NgModule({
   declarations: [
@@ -141,6 +142,7 @@ import { AdminDeliveryOrderComponent } from './admin/components/admin-home/admin
     UserMergeTablesComponent,
     UserFavoritesComponent,
     UserBillHistoriesComponent,
+    UserOrderHistoriesComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
@@ -214,10 +216,10 @@ import { AdminDeliveryOrderComponent } from './admin/components/admin-home/admin
     NgxChartsModule, // Thêm vào đây
     FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: !isDevMode(),
+      enabled: true,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:50000'
     }),
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added

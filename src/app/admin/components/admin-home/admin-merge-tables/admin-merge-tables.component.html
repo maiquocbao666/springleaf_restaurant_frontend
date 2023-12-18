@@ -3,13 +3,16 @@
 
     <form [formGroup]="reservationForm">
 
-        <div class="col-lg-6 mb-3">
+        <!-- <div class="col-lg-6 mb-3">
             <button class="btn btn-primary" (click)="createMergeTableId()">Tạo mã gộp bàn: </button>
             {{ mergeTableId }}
             <button class="btn btn-primary" [disabled]="isResetDisabled" (click)="resetMergeTableId()">Đặt lại</button>
-        </div>
+            <div style="color: red;">
+                {{ mergeTableIdMessage }}
+            </div>
+        </div> -->
         <div class="row">
-            <div class="col-lg-6 mb-3">
+            <!-- <div class="col-lg-6 mb-3">
                 <label for="mergeTableIdSelect">Hoặc chọn mã gộp bàn muốn gộp vào</label>
                 <select formControlName="mergeTableId" (change)="onMergeTableIdChange($event)" class="form-select"
                     id="mergeTableIdSelect">
@@ -18,22 +21,37 @@
                         {{mergeTableId}}
                     </option>
                 </select>
+            </div> -->
+
+            <div class="col-lg-6 mb-3">
+                <label for="tableIdSelect">Chọn tên bàn muốn gộp vào</label>
+                <select formControlName="tableIdMerge1" (change)="onTableIdChange($event)" class="form-select"
+                    id="tableIdSelect">
+                    <option *ngFor="let reservation of reservationsInUse" [value]="reservation.restaurantTableId">
+                        {{ findTableNameByTableId(reservation.restaurantTableId) }}
+                    </option>
+                </select>
+                <div style="color: red;">
+                    {{ selectTableIdMessage }}
+                </div>
             </div>
 
             <div class="col-lg-6 mb-3">
-                <label for="tableIdSelect">Chọn mã bàn muốn gộp vào</label>
-                <select formControlName="tableId" (change)="onTableIdChange($event)" class="form-select"
+                <label for="tableIdSelect">Chọn tên bàn muốn gộp vào</label>
+                <select formControlName="tableIdMerge2" (change)="onTableIdChange($event)" class="form-select"
                     id="tableIdSelect">
-                    <option value=""></option>
                     <option *ngFor="let reservation of reservationsInUse" [value]="reservation.restaurantTableId">
-                        {{ reservation.restaurantTableId }}
+                        {{ findTableNameByTableId(reservation.restaurantTableId) }}
                     </option>
                 </select>
+                <div style="color: red;">
+                    {{ selectTableIdMessage }}
+                </div>
             </div>
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <p>Mã hiện đang chọn: {{ mergeTableId }}</p>
-        </div>
+        </div> -->
 
         <div class="mb-3">
             <button (click)="mergeTables()" class="btn btn-info">Gộp</button>

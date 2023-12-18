@@ -17,6 +17,7 @@ import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { User } from 'src/app/interfaces/user';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-user-table',
@@ -31,6 +32,8 @@ export class UserRestaurantTablesComponent {
   tableTypes: TableType[] = [];
   restaurants: Restaurant[] = [];
   user: User | null = null;
+
+  restaurantId: number | null = null;
 
   constructor(
     private toastService: ToastService,
@@ -54,15 +57,40 @@ export class UserRestaurantTablesComponent {
         this.user = cached;
       }
     );
-    this.getRestaurantTables();
+    this.getRestaurants();
+    if (this.user?.restaurantBranchId) {
+      this.restaurantId = this.user.restaurantBranchId;
+      //alert(this.restaurantId);
+    } else {
+      if (this.restaurants[0].restaurantId) {
+        this.restaurantId = this.restaurants[0].restaurantId;
+      }
+    }
+    if (this.restaurantId) {
+      this.getRestaurantTables(this.restaurantId, null);
+    }
   }
 
+  getRestaurants(): void {
+    this.restaurantService.getCache().subscribe(
+      cache => {
+        this.restaurants = cache;
+      }
+    )
+  }
 
-
-  getRestaurantTables(): void {
+  getRestaurantTables(restaurantId?: number | null, event?: any | null): void {
     this.restaurantTableService.getCache().subscribe(
       (cached: any[]) => {
-        this.restaurantTables = cached;
+        if (restaurantId !== undefined && restaurantId !== null) {
+          this.restaurantTables = cached.filter(table => table.restaurantId === restaurantId);
+        } else if (event && event.target && event.target.value) {
+          const selectedRestaurantId = +event.target.value; // Convert to a number if needed
+          this.restaurantTables = cached.filter(table => table.restaurantId === selectedRestaurantId);
+        } else {
+          // Handle the case where neither restaurantId nor event is provided
+          this.restaurantTables = cached;
+        }
       }
     );
   }
@@ -84,23 +112,23 @@ export class UserRestaurantTablesComponent {
 
   openRestaurantTableInfomationModal(restaurantTable: RestaurantTable) {
     if (!this.authenticationService.getUserCache()) {
-      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
-      const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'lg' });
+      const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'xl', scrollable: true, centered: false });
       modalRef.componentInstance.restaurantTable = restaurantTable;
 
       // Subscribe to the emitted event
       modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
-        this.getRestaurantTables(); // Refresh data in the parent component
+        this.getRestaurantTables(this.restaurantId, null); // Refresh data in the parent component
       });
     }
   }
 
   openUserReservationHistoriesModal() {
     if (!this.authenticationService.getUserCache()) {
-      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
-      const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'lg' });
+      const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'xl', centered: true, scrollable: false });
       modalRef.componentInstance.userId = this.user?.userId;
     }
   }
@@ -132,6 +160,24 @@ export class UserRestaurantTablesComponent {
         check = false;
       }
     });
+  }
+
+
+  getReservationByTableId(id: number): string {
+    const reservedTable = this.reservationService.getReservedByTableId(id);
+    if (reservedTable.length > 0) {
+      return "Đã được đặt";
+    }
+    return "Bàn trống"
+  }
+
+  getClassForStatus(status: string): string {
+    if (status === 'Bàn trống') {
+      return 'badge badge-success';
+    } else if (status === 'Đã được đặt') {
+      return 'badge badge-danger';
+    }
+    return '';
   }
 
 }

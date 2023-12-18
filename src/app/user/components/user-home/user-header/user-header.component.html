@@ -6,7 +6,7 @@
                 <i class="fas fa-map-marker-alt"></i>
             </div>
             <div class="address">
-                <a href="" *ngIf="userRestaurant">{{ userRestaurant.restaurantName}}</a>
+                <a *ngIf="userRestaurant" (click)="openUserRestaurant()">{{ userRestaurant.restaurantName}}</a>
                 <a *ngIf="!userRestaurant" (click)="openUserRestaurant()">Bạn chưa chọn nhà hàng</a>
             </div>
         </div>
@@ -53,6 +53,8 @@
                                     </li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a
                                             routerLink="/admin/index">TRANG QUẢN LÝ</a></li>
+                                    <li routerLinkActive="active" ><a routerLink="/user/favorite">YÊU THÍCH</a></li>
+                                    <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a routerLink="/admin/statistical">TRANG QUẢN LÝ</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -86,6 +88,9 @@
                                                 (click)="openProfileModel()">Hồ sơ
                                                 cá nhân</a>
                                         </li>
+                                        <li routerLinkActive="active"><a class="nav-link"
+                                            (click)="openOrderModal()">Lịch sử đơn hàng và đặt bàn</a>
+                                    </li>
                                         <li routerLinkActive="active"><a class="nav-link"
                                                 (click)="openUserPasswordModel()">Đổi mật khẩu
                                             </a>

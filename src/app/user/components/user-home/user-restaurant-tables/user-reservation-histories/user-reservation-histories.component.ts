@@ -1,10 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, map } from 'rxjs';
+import { CartDetail } from 'src/app/interfaces/cart-detail';
+import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { User } from 'src/app/interfaces/user';
+import { VNPayService } from 'src/app/services/VNpay.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ReservationService } from 'src/app/services/reservation.service';
+import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-reservation-histories',
@@ -13,58 +22,103 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class UserReservationHistoriesComponent {
 
-  @Input() userId!: number;
   thisUserReservations!: Reservation[];
-  products: Product[] = [];
+  products: any[] = [];
   selections: { [key: string]: boolean } = {};
-  selectedItems: any[] = [];
+  selectedItems: Product[] = [];
+  cartDetails: CartDetail[] = [];
   selectReservation: number | null = null;
+  user: User | null = null;
+  selectedUserReservation: any;
+  show: boolean = false;
+  paymentStatus: string | undefined;
+
   constructor(
     private reservationService: ReservationService,
     private productService: ProductService,
     private toastService: ToastService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private restaurantTableService: RestaurantTableService,
+    private userService: UserService,
+    private authenticationService: AuthenticationService,
+    private vnpayService: VNPayService,
   ) {
-
+    this.authenticationService.getUserCache().subscribe(
+      (cached: any | null) => {
+        this.user = cached;
+      }
+    );
   }
 
   ngOnInit(): void {
-    this.reservationService.getReservationsByUserId(this.userId).subscribe(
+    this.reservationService.getReservationsByUserId(this.user?.userId!).subscribe(
       cached => {
         this.thisUserReservations = cached;
       }
     )
-  }
 
-  showProductInfomation() {
     this.productService.getCache().subscribe(
       (cached: any[]) => {
         this.products = cached;
       }
     );
+    console.log('product' + this.products[0].menuItemId)
   }
 
   getClassForStatus(status: string): string {
-    if (status === 'Đang đợi') {
+    if (status === 'Chưa tới') {
+      return 'badge badge-info'; // or any other color you prefer for this status
+    } else if (status === 'Đang đợi') {
       return 'badge badge-warning';
-    } else if (status === 'Đã sử dụng xong') {
-      return 'badge badge-success';
     } else if (status === 'Đang sử dụng') {
+      return 'badge badge-success';
+    } else if (status === 'Hết thời gian đợi') {
       return 'badge badge-danger';
+    } else if (status === 'Đã sử dụng xong') {
+      return 'badge badge-secondary'; // or any other color you prefer for this status
     }
-    return ''; // Hoặc class mặc định khác nếu cần
+    return ''; // Default class or no class if status is not recognized
   }
 
 
-  toggleSelection(product: any): void {
-    const index = this.selectedItems.indexOf(product);
-    if (index === -1) {
-      this.selectedItems.push(product);
-      console.log("Thêm item: " + product.menuItem)
+  toggleSelection(product: Product): void {
+    if (this.show) {
+      const index = this.selectedItems.findIndex(item => item.menuItemId === product.menuItemId);
+
+      let cartDetail: CartDetail = {
+        orderDetailId: 1,
+        orderId: 1,
+        menuItemId: product.menuItemId as number,
+        quantity: 1
+      }
+      if (index === -1) {
+        this.selectedItems.push(product);
+        this.cartDetails.push(cartDetail);
+        console.log("Thêm item: " + product.menuItemId)
+      } else {
+        this.cartDetails.splice(index, 1);
+        console.log("Xóa item: " + product.menuItemId)
+        this.selectedItems.splice(index, 1);
+      }
+      console.log(this.selectedItems);
     } else {
-      console.log("Xóa item: " + product.menuItem)
-      this.selectedItems.splice(index, 1);
+      this.toastService.showTimedAlert('Vui lòng chọn 1 bàn', '', 'error', 1500);
     }
+  }
+
+  updateQuantity(event: Event, product: Product): void {
+    const target = event.target as HTMLInputElement;
+    console.log(target.value)
+    if (target && target.value !== null) {
+      const inputValue = target.value;
+      const index = this.cartDetails.findIndex(item => item.menuItemId === product.menuItemId);
+      if (index !== -1) {
+        this.cartDetails[index].quantity = Number(inputValue);
+        console.log("Cập nhật số lượng: " + this.cartDetails[index].quantity)
+      }
+    }
+
+    console.log(this.cartDetails);
   }
 
   calculateTotalPrice(): number {
@@ -86,22 +140,102 @@ export class UserReservationHistoriesComponent {
 
   handleButtonClick(reservationId: number | undefined) {
     if (reservationId != null) {
-      this.setSelectReservation(reservationId);
-      this.showProductInfomation();
+      if (!this.selectReservation) {
+        this.selectReservation = reservationId;
+        this.show = true;
+      } else {
+        this.selectReservation = null;
+        this.show = false;
+      }
+      console.log(this.selectReservation)
+
     }
   }
 
-  setSelectReservation(reservationId: number) {
-    this.selectReservation = reservationId;
-    console.log(this.selectReservation)
+  handleCheckout(reservationId: number | undefined) {
+    if (reservationId) {
+      console.log(this.selectReservation);
+      this.reservationService.getOrderByReservationId(reservationId)?.subscribe({
+        next: (response) => {
+          if (response) {
+            sessionStorage.setItem('orderIdByReservation', JSON.stringify(response[0].orderId));
+            sessionStorage.setItem('orderDetails_Reservation', JSON.stringify(response));
+            console.log('response' + (response));
+            let total_amount = 0;
+            if (this.products) {
+              for (const total of response) {
+                for (const product of this.products) {
+                  if (total.menuItemId === product.menuItemId) {
+                    total_amount += total.quantity * product.unitPrice;
+                  }
+                }
+              }
+            }
+            console.log('total' + (total_amount));
+            this.toastService.showConfirmAlert('Xác nhận thanh toán', '')
+              .then((result) => {
+                if (result.isConfirmed) {
+                  let orderInfo = sessionStorage.getItem('orderIdByReservation') + "," || ""; // dữ liệu order detail
+                  for (const cart of response) {
+                    orderInfo += cart.orderDetailId + ",";
+                  }
+                  orderInfo = orderInfo.replace(/,$/, "");
+                  if (total_amount && orderInfo) {
+                    this.vnpayService.submitOrder(total_amount, orderInfo).subscribe({
+                      next: (data: any) => {
+                        if (data.redirectUrl) {
+                          window.location.href = data.redirectUrl; // Chuyển hướng đến URL được trả về từ backend
+                          this.onGetPaymentStatus();
+                        } else {
+                          // Xử lý các trường hợp khác nếu cần
+                        }
+                      },
+                      error: (error: any) => {
+                        console.error('Failed to submit order. Please try again.', error);
+                      }
+                    });
+                    console.log('Thanh toán bằng VNPAY');
+                  }
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+                }
+              });
+          }
+        },
+        error: (error) => {
+          this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
+        }
+      });
+
+    }
   }
 
+  onGetPaymentStatus(): void {
+    this.vnpayService.getPaymentStatus().subscribe(
+      (data: any) => {
+        if (data.paymentStatus === 1) {
+          this.paymentStatus = 'Order success';
+          // Hiển thị thông tin thanh toán nếu cần
+          console.log('Order Info:', data.orderInfo);
+          console.log('Payment Time:', data.paymentTime);
+          console.log('Transaction ID:', data.transactionId);
+          console.log('Total Price:', data.totalPrice);
+        } else {
+          this.paymentStatus = 'Order failed';
+        }
+      },
+      (error: any) => {
+        console.error('Failed to get payment status. Please try again.', error);
+      }
+    );
+  }
+
+
   orderReservation() {
-    this.selectedItems;
     if (this.selectedItems.length <= 0) {
       this.toastService.showTimedAlert('Vui lòng chọn sản phẩm', '', 'error', 2000);
     } else {
-      this.reservationService.order(this.selectedItems, this.selectReservation as number)?.subscribe({
+      this.reservationService.order(this.selectedItems, this.cartDetails, this.selectReservation as number)?.subscribe({
         next: (response) => {
           if (response.message === 'Item was order') {
             this.toastService.showTimedAlert('Thêm thất bại', 'Bạn đã order món này rồi', 'error', 2000);
@@ -119,6 +253,13 @@ export class UserReservationHistoriesComponent {
     }
   }
 
+  findTableNameByTableId(tableId: number): string {
+    return this.restaurantTableService.findTableNameByTableId(tableId);
+  }
+
+  getUserNameById(id: number): string | undefined {
+    return this.userService.getUserNameById(id);
+  }
 
 }
 export interface OrderReservationInfomation {

@@ -50,7 +50,7 @@
                         </div>
 
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <span class="form-label">Định dạng VN</span>
@@ -63,7 +63,7 @@
                                 <input class="form-control" type="time" id="outTime" formControlName="outTime" required>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="text-center">
                         <button type="submit">Thêm</button>
                     </div>
@@ -97,14 +97,13 @@
             <thead>
                 <tr>
                     <th class="text-center">Mã đặt bàn</th>
-                    <th class="text-center">Mã bàn</th>
+                    <th class="text-center">Tên bàn</th>
                     <th class="text-center">Mã người dùng</th>
                     <th class="text-center">Ngày tới</th>
                     <th class="text-center">Giờ tới</th>
-                    <th class="text-center">Giờ đi</th>
+                    <!-- <th class="text-center">Giờ đi</th> -->
                     <th class="text-center">Trạng thái</th>
                     <th class="text-center">Số lượng khách hàng</th>
-                    <th class="text-center">Thời gian sử dụng còn lại</th>
                     <th class="text-center">Chức năng</th>
                 </tr>
             </thead>
@@ -112,14 +111,28 @@
                 <tr
                     *ngFor="let reservation of reservations | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
                     <td class="text-center text-muted">{{ reservation.reservationId }}</td>
-                    <td class="text-center text-muted">{{ reservation.restaurantTableId }}</td>
+                    <td class="text-center text-muted">{{ findTableNameByTableId(reservation.restaurantTableId) }}</td>
                     <td class="text-center text-muted">{{ reservation.userId }}</td>
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
-                    <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
-                    <td class="text-center text-muted">{{ reservation.reservationStatusName }}</td>
+                    <!-- <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td> -->
+                    <td class="text-center text-muted">
+                        <div [ngClass]="getClassForStatus(reservation.reservationStatusName)">
+                            <select [disabled]="reservation.reservationStatusName === 'Đã sử dụng xong'"
+                                [(ngModel)]="reservation.reservationStatusName"
+                                (ngModelChange)="changeStatusOne(reservation.reservationId!, $event)"
+                                class="form-select">
+                                <option value="Chưa tới">Chưa tới</option>
+                                <option value="Đang đợi">Đang đợi</option>
+                                <option value="Đang sử dụng">Đang sử dụng</option>
+                                <option value="Hết thời gian đợi">Hết thời gian đợi</option>
+                                <option value="Đã sử dụng xong">Đã sử dụng xong</option>
+                            </select>
+                        </div>
+
+                    </td>
                     <td class="text-center text-muted">{{ reservation.numberOfGuests }}</td>
-                    <td class="text-center text-muted">{{ (hoursUse(reservation)) }}</td>
+                    <!-- <td class="text-center text-muted">{{ (hoursUse(reservation)) }}</td> -->
                     <td class="text-center">
                         <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
                             (click)="deletereservation(reservation)"><i class="fa-solid fa-trash"></i></a>

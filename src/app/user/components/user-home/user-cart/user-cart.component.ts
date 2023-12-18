@@ -17,6 +17,8 @@ import { District } from 'src/app/interfaces/address/District';
 import { Ward } from 'src/app/interfaces/address/Ward';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserOrderHistoriesComponent } from '../user-header/user-order-histories/user-order-histories.component';
 
 @Component({
   selector: 'app-user-cart',
@@ -42,15 +44,14 @@ export class UserCartComponent implements OnInit {
   selectedItems: CartInfomation[] = [];
   selectAllChecked = false;
   selections: { [key: string]: boolean } = {};
-  discountCode: string = '';
-  discountPrice: number | null = null;
 
+  userAddressHouse: string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
   user: User | null = null;
   ship: number | null = null;
-  finalPrice2 : number | null = null;
+  finalPrice2: number | null = null;
   constructor(
     private cartService: CartService,
     private deliveryOrderService: DeliveryOrderService,
@@ -60,7 +61,8 @@ export class UserCartComponent implements OnInit {
     private discountService: DiscountService,
     private authService: AuthenticationService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal,
   ) {
     const provincesString = localStorage.getItem('Provinces');
     if (provincesString) {
@@ -97,6 +99,7 @@ export class UserCartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    sessionStorage.removeItem('discountPrice');
     this.cartService.getProvince();
     this.cartService.provinceData$.subscribe(data => {
       this.Provinces = Object.values(data);
@@ -115,9 +118,11 @@ export class UserCartComponent implements OnInit {
       if (this.user.address) {
         const address = this.user.address.toString();
         const splittedStrings = address.split('-');
-        const addressWard = splittedStrings[0];
-        const addressDistrict = parseInt(splittedStrings[1], 10);
-        const addresssProvince = parseInt(splittedStrings[2], 10);
+        const addressHouse = splittedStrings[0];
+        this.userAddressHouse = addressHouse;
+        const addressWard = splittedStrings[1];
+        const addressDistrict = parseInt(splittedStrings[2], 10);
+        const addresssProvince = parseInt(splittedStrings[3], 10);
 
         for (const province of this.Provinces) {
           if (province.ProvinceID === addresssProvince) {
@@ -132,7 +137,6 @@ export class UserCartComponent implements OnInit {
               if (district.DistrictID === addressDistrict) {
                 this.userDistrict = district;
                 if (this.userDistrict) {
-                  console.log('here')
                   this.getWard(this.userDistrict.DistrictID).then(() => {
                     for (const ward of this.Wards) {
                       if (ward.WardCode === addressWard) {
@@ -151,7 +155,6 @@ export class UserCartComponent implements OnInit {
         }
       } else {
       }
-
     }
   }
   @ViewChild('likeBtn') likeBtn!: ElementRef;
@@ -272,12 +275,12 @@ export class UserCartComponent implements OnInit {
     return totalPrice;
   }
 
-  calculateFinalPrice(discount: number): any {
-    const totalPrice = this.calculateTotalPrice();
-    const finalPrice = totalPrice - discount;
-    
-    return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
-  }
+  // calculateFinalPrice(discount: number): any {
+  //   const totalPrice = this.calculateTotalPrice();
+  //   const finalPrice = totalPrice - discount;
+
+  //   return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
+  // }
 
   deleteCartDetail(cart: any): void {
     const orderDetailId = cart.orderDetailId;
@@ -321,39 +324,6 @@ export class UserCartComponent implements OnInit {
     });
   }
 
-  getDiscount() {
-    if (this.selectedItems.length > 0) {
-      const listItemId: number[] = [];
-      this.selectedItems.forEach((item, index) => {
-        listItemId.push(Number(this.selectedItems[index].menuItem as number));
-      });
-      if (this.discountCode != null) {
-        this.discountService.getDiscountByName(this.discountCode, listItemId).subscribe({
-          next: (response) => {
-            if (response.message === "Discount is not valid") {
-              this.toastService.showTimedAlert('Mã giảm giá không tồn tại', '', 'error', 2000);
-            }
-            else if (response.message === "Discount is Experied") {
-              this.toastService.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
-            }
-            else {
-              this.discountPrice = response.message;
-              this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
-            }
-          },
-          error: (error) => {
-            this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
-          }
-        });
-      } else {
-        this.toastService.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'info', 2000);
-      }
-
-    } else {
-      this.toastService.showTimedAlert('Vui lòng chọn sản phẩm trước', '', 'info', 2000);
-    }
-  }
-
   checkout() {
     if (this.selectedItems.length > 0) {
       this.cartService.setCartData(this.selectedItems)
@@ -380,8 +350,8 @@ export class UserCartComponent implements OnInit {
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
   }
 
-  
-  
+
+
 
   public getDistrict(ProvinceId: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {

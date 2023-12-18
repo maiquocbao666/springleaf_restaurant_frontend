@@ -262,13 +262,15 @@ export class AuthenticationService {
     });
 
   }
+  loginGoogle(): Observable<any> {
+    const url = `${this.apiUrl}/login`;
+    return this.http.get<any>(url, {});
+  }
 
 
-
-  loginWithGoogle() {
-    this.getDatasOfThisUserWorker.postMessage({
-      type: 'login-with-google'
-    });
+  loginWithGoogle(email: string): Observable<any> {
+    const url = `${this.apiUrl}/login-with-google/${email}`;
+    return this.http.post<any>(url, {});
   }
 
   logout(): Observable<any> {

@@ -55,9 +55,9 @@
             <i *ngIf="loginForm.get('password')?.getError('message')" style="color: red;">
                 {{ loginForm.get('password')?.getError('message') }}
             </i>
-            <div>
-                <input type="checkbox" id="rememberMe" formControlName="rememberMe" />
-                <label for="rememberMe">Lưu tài khoản</label>
+            <div class="d-flex">
+                <input class="col-lg-1" type="checkbox" id="rememberMe" formControlName="rememberMe" />
+                <label class="col-lg-11" for="rememberMe">Lưu tài khoản</label>
               </div>
             <a (click)="openUserPasswordModel()">Quên mật khẩu?</a>
             <button type="submit" #signIn>Đăng nhập</button>

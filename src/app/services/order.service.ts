@@ -39,7 +39,7 @@ export class OrderService {
   }
 
   gets(): Observable<Order[]> {
-    if (this.ordersCache) {
+    if (this.ordersCache$) {
       return of(this.ordersCache);
     }
 
@@ -112,7 +112,7 @@ export class OrderService {
   }
 
   getUserOrder(deliveryOrder: number): Observable<Order | null> {
-    const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     const deliveryOrderId = deliveryOrder;
 
     if (!jwtToken) {

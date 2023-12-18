@@ -11,6 +11,7 @@ import { ToastService } from './toast.service';
 import { Ward } from '../interfaces/address/Ward';
 import { District } from '../interfaces/address/District';
 import { Province } from '../interfaces/address/Province';
+import { Service } from '../interfaces/address/Service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +58,7 @@ export class CartService extends BaseService<Cart> {
   selectedProvinceId: number | null = null;
   selectedDistrictId: number | null = null;
 
-  cartInfo : any[] = [];
+  cartInfo: any[] = [];
 
   //----------------------------------------------------------------------------------------------
 
@@ -72,12 +73,16 @@ export class CartService extends BaseService<Cart> {
   getObjectName(): string {
     return "Cart";
   }
-  
+
   getCache(): Observable<any[]> {
     return this.cache$;
   }
 
   //----------------------------------------------------------------------------------------------
+
+  override subscribeToQueue(): void {
+    super.subscribeToQueue();
+  }
 
   override add(newCart: Cart): Observable<Cart> {
     return super.add(newCart);
@@ -172,9 +177,7 @@ export class CartService extends BaseService<Cart> {
 
   }
 
-  
-
-  setCartData(cart : any[]){
+  setCartData(cart: any[]) {
     this.cartInfo = cart;
   }
 

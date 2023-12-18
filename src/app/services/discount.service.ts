@@ -60,8 +60,9 @@ export class DiscountService extends BaseService<Discount>  {
         return super.delete(id);
     }
 
-    getDiscountByName(discountCode: string, menuItemId: any[] = []) {
-        const jwtToken = localStorage.getItem('access_token');
+    getDiscountByName(discountCode: string, menuItemId: number) {
+        alert(discountCode);
+        const jwtToken = sessionStorage.getItem('access_token');
         if (!jwtToken) {
             return of(null);
         }

@@ -369,3 +369,14 @@ input {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.checkbox-container {
+  width: 100%;
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+/* Tùy chọn: Thêm padding hoặc margin cho khoảng cách giữa input và label */
+.checkbox-container input {
+  margin-right: 5px; /* Khoảng cách giữa input và label */
+}

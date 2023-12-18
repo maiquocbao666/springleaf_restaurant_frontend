@@ -1,19 +1,20 @@
 <div class="container">
     <h1>ĐẶT BÀN</h1>
+    <div>Chọn chi nhánh</div>
+    <select (change)="getRestaurantTables(null, $event)">
+        <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId" [selected]="restaurant.restaurantId === restaurantId">{{ restaurant.restaurantName }}</option>
+    </select>
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-4">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <h1>Danh sách bàn</h1>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <button class="watch-btn" (click)="openUserMergeTablesModal()">Gộp bàn</button>
                 </div>
-                <div class="col-lg-3">
-                    <button class="watch-btn" (click)="openUserReservationHistoriesModal()">Tách bàn</button>
-                </div>
-                <div class="col-lg-3">
-                    <button class="watch-btn" (click)="openUserReservationHistoriesModal()">Lịch đặt bàn</button>
+                <div class="col-lg-4">
+                    <button class="watch-btn" (click)="openUserReservationHistoriesModal()">Lịch sử đặt bàn</button>
                 </div>
                 <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s"
                     *ngFor="let restaurantTable of restaurantTables">
@@ -21,6 +22,9 @@
                         <div class="p-4">
                             <i class="fas fa-3x fa-table "></i>
                             <h5>{{ restaurantTable.tableName }}</h5>
+                            <div [ngClass]="getClassForStatus(getReservationByTableId(restaurantTable.tableId!))">
+                                {{ getReservationByTableId(restaurantTable.tableId!) }}
+                              </div>
                             <div>
                                 <span><i class="fa fa-user"></i>{{ restaurantTable.seatingCapacity }} người / bàn</span>
                             </div>
@@ -31,7 +35,7 @@
                             </p>
                             <p class="episode__type">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName}}
                             </p>
-                            <button class="watch-btn" (click)="openRestaurantTableInfomationModal(restaurantTable)">
+                            <button class="watch-btn" (click)="openRestaurantTableInfomationModal(restaurantTable)" [hidden]="getReservationByTableId(restaurantTable.tableId!) === 'Đã được đặt'">
                                 Đặt bàn
                             </button>
                         </div>

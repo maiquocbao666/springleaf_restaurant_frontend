@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { User } from '../interfaces/user';
 import { RxStompService } from '../rx-stomp.service';
@@ -87,17 +87,15 @@ export class UserService {
 
   }
 
-  updateRestaurant(updatedUserData: User) : Observable<any> {
+  updateRestaurant(updatedUserData: User): Observable<any> {
     const token = sessionStorage.getItem('access_token');
     const url = `http://localhost:8080/auth/choose-restaurant/update`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
+
 
     return this.http.put(url, updatedUserData, { headers });
 
   }
-
-
 
   uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
@@ -109,5 +107,18 @@ export class UserService {
     return this.http.post<any>(this.apiPostUrl, formData, { headers: headers });
   }
 
+  getUserNameById(id: number): string | undefined {
+    // Check if usersCache is available
+    if (this.usersCache) {
+      const cachedUser = this.usersCache.find(user => user.userId === id);
+  
+      // Return either the fullName or undefined
+      alert("bu");
+      return cachedUser?.fullName;
+    }
+  
+    // Return undefined if usersCache is not available
+    return undefined;
+  }
 
 }
