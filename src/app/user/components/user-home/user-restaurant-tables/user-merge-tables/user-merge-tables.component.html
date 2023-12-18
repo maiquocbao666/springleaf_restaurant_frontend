@@ -11,18 +11,20 @@
             Các bàn bạn đang sử dụng
             <!-- Bảng hiển thị các đặt bàn -->
             <div class="card mt-3">
-                <div class="card-body">
-                    <table class="table table-borderless table-striped table-hover">
-                        <thead>
-                            <tr>
+                <div class="table-container">   
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="sticky-header">
+                            <tr class="align-middle">
                                 <!-- <th class="text-center">Mã đặt bàn</th> -->
                                 <th class="text-center">Tên bàn</th>
+                                <th class="text-center">Chi nhánh</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let reservation of reservationOfUser">
                                 <!-- <td class="text-center text-muted">{{ reservation.reservationId }}</td> -->
                                 <td class="text-center">{{ getTableNameById(reservation.restaurantTableId) }}</td>
+                                <td class="text-center">{{ getRestaurantNameByTableId(reservation.restaurantTableId) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -96,16 +98,16 @@
             aria-expanded="false" aria-controls="collapseExample">
             Các bàn hiện đang gộp hoặc đang chờ xác nhận
         </button>
-        <div class="collapse" id="collapseExample">
+        <div class="table-container">
             <!-- Bảng hiển thị thông tin các bàn gộp -->
-            <table class="table table-borderless table-striped table-hover mt-3">
+            <table class="table table-bordered table-striped table-hover mt-3">
                 <!-- Đầu bảng -->
-                <thead>
-                    <tr>
+                <thead class="sticky-header">
+                    <tr class="align-middle">
                         <!-- <th class="text-center">Số thứ tự</th> -->
                         <!-- <th class="text-center">Tên bàn</th> -->
                         <th class="text-center">Tên bàn</th>
-                        <!-- <th class="text-center">Mã đặt bàn</th> -->
+                        <th class="text-center">Mã gộp bàn</th>
                         <th class="text-center">Thời gian gộp</th>
                         <th class="text-center">Trạng thái</th>
                     </tr>

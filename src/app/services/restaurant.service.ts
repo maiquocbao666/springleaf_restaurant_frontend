@@ -79,4 +79,12 @@ export class RestaurantService extends BaseService<Restaurant> {
     //     return isInCache || false;
     // }
 
+    getRestaurantNameById(id: number | null): string{
+        if(this.cache){  
+            return this.cache.find(data => data.restaurantId === id)?.restaurantName || '';
+        } else {
+            return '';
+        }
+    }
+
 }

@@ -4,9 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergeTable } from 'src/app/interfaces/merge-table';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { Restaurant } from 'src/app/interfaces/restaurant';
 import { MergeTableService } from 'src/app/services/merge-table.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
+import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -39,6 +41,7 @@ export class UserMergeTablesComponent {
     private sweetAlertService: ToastService,
     public activeModal: NgbActiveModal,
     public restaurantTableService: RestaurantTableService,
+    private restaurantService: RestaurantService,
   ) {
     this.reservationForm = this.formBuilder.group({
       tableIdMerge1: [, [Validators.required]],
@@ -132,7 +135,7 @@ export class UserMergeTablesComponent {
 
   getReservationIdByTableIdInUse(tableId: number): number {
     const foundReservation = this.reservationsInUse.find(reservation => reservation.restaurantTableId === tableId);
-    console.log(foundReservation!.reservationId!);
+    // console.log(foundReservation!.reservationId!);
     return foundReservation!.reservationId!;
   }
 
@@ -253,6 +256,11 @@ export class UserMergeTablesComponent {
 
   getTableNameById(id: number): string {
     return this.restaurantTableService.findTableNameByTableId(id);
+  }
+
+  getRestaurantNameByTableId(id: number): string | ''{
+    let restaurantId = this.restaurantTableService.getRestaurantIdByTableId(id);
+    return this.restaurantService.getRestaurantNameById(restaurantId);
   }
 
 }

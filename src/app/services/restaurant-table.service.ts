@@ -102,6 +102,11 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         return table ? table.tableName : ''; // Return tableName if found, otherwise an empty string
     }
 
+    getRestaurantIdByTableId(tableId: number): number | null {
+        const table = this.cache.find(data => data.tableId === tableId);
+        return table ? table.restaurantId : null; // Return tableName if found, otherwise an empty string
+    }
+
     checkStatus(restaurantTableId: number): boolean {
         return true;
     }
