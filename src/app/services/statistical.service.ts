@@ -61,4 +61,8 @@ export class StatisticsService {
     return this.apiService.request<any[]>('get', url);
   }
 
+  getCountRestaurant(): Observable<number[]> {
+    const url = `count`;
+    return this.apiService.request<number[]>('get', url);
+  }
 }

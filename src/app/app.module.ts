@@ -114,6 +114,7 @@ import { UserBillHistoriesComponent } from './user/components/user-home/user-bil
 import { UserFavoritesComponent } from './user/components/user-home/user-favorites/user-favorites.component';
 import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
 import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
+import { AdminDeliveryOrderComponent } from './admin/components/admin-home/admin-delivery-order/admin-delivery-order.component';
 
 @NgModule({
   declarations: [
@@ -190,6 +191,7 @@ import { UserReservationHistoriesComponent } from './user/components/user-home/u
     AdminInventoryBranchIngredientDetailComponent,
     AdminDiscountsComponent,
     AdminDiscountDetailComponent,
+    AdminDeliveryOrderComponent,
     ChatComponent,
     LoginComponent,
     DateTimeComponent,

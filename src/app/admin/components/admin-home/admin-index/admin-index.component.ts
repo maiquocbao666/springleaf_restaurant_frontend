@@ -56,6 +56,7 @@ export class AdminIndexComponent {
   paidBillsCount!: number;
   years: number[] = [];
   mostOrderedItems!: any[];
+  countRestaurant!: any[];
   showTable: boolean = false;
 
 
@@ -79,6 +80,7 @@ export class AdminIndexComponent {
     this.getProducts();
     this.getCategories();
     this.getNumberOfPaidBills();
+    this.getCountRestaurant();
     this.fetchTotalRevenue();
     this.populateYears();
     this.selectedYear = new Date().getFullYear();
@@ -93,6 +95,8 @@ export class AdminIndexComponent {
         console.error(error);
       }
     );
+
+
   }
 
   // Trong component của bạn:
@@ -169,7 +173,12 @@ export class AdminIndexComponent {
         this.paidBillsCount = count;
       });
   }
-
+  getCountRestaurant(): void {
+    this.statisticsService.getCountRestaurant()
+      .subscribe(count2 => {
+        this.countRestaurant = count2;
+      });
+  }
 
 
   onYearSelected(): void {
