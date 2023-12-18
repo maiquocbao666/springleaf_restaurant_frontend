@@ -375,7 +375,6 @@ import { DiscountService } from 'src/app/services/discount.service';
   }
 
   payWithCOD(): void {
-    console.log('Thanh toán bằng COD');
     const jwtToken = sessionStorage.getItem('access_token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -395,7 +394,7 @@ import { DiscountService } from 'src/app/services/discount.service';
     // Chú ý: Kiểm tra xem this.discountCode có giá trị không trước khi sử dụng nó
     const discountCode = this.discountCode ? `/${this.discountCode}` : '/noDiscount';
   
-    this.http.post(`http://localhost:8080/public/checkout-cod/${orderId}/${totalAmount}${discountCode}`, listItem, { headers })
+    this.http.post(`http://localhost:8080/public/checkout-cod/${orderId}/${totalAmount}${discountCode}/${this.cartByUser?.deliveryOrderId}`, listItem, { headers })
       .subscribe({
         next: (response: any) => {
           if (response.message === 'Checkout success') {

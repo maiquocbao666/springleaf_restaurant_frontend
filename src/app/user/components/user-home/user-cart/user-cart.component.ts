@@ -282,6 +282,43 @@ export class UserCartComponent implements OnInit {
   //   return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
   // }
 
+  createDelivery() {
+    if (this.selectedItems.length > 0) {
+      const jwtToken = sessionStorage.getItem('access_token');
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
+      });
+      let listDetail : CartDetail[] =  [];
+      for(const item of this.selectedItems){
+        let cartDetail : CartDetail = {
+          orderDetailId : item.orderDetailId,
+          orderId : item.order,
+          menuItemId : item.menuItem,
+          quantity : item.quantity
+        }
+        listDetail.push(cartDetail);
+      }
+      this.http.post(`http://localhost:8080/public/config-user-cart`, listDetail, { headers })
+        .subscribe({
+          next: (response: any) => {
+            if (response.message === 'Success') {
+              this.toastService.showTimedAlert('Đặt hàng thành công', 'Cám ơn quý khách', 'success', 1500);
+            } else if (response.message === 'Failed') {
+              this.toastService.showTimedAlert('Đặt hàng thất bại', 'Vui lòng kiểm tra lại', 'error', 1500);
+            }
+            console.log('Response:', response);
+          },
+          error: (error) => {
+            // Xử lý lỗi
+            console.error('Error:', error);
+          }
+        });
+    } else {
+      this.toastService.showTimedAlert('Vui lòng chọn ít nhất 1 sản phẩm', '', 'info', 2000);
+    }
+  }
+
   deleteCartDetail(cart: any): void {
     const orderDetailId = cart.orderDetailId;
     this.toastService.showConfirmAlert('Bạn chắc chắn xóa?', '', 'warning')
@@ -349,9 +386,6 @@ export class UserCartComponent implements OnInit {
     }
     console.log(this.selectedDistrict); // In ra giá trị tỉnh/thành phố đã chọn
   }
-
-
-
 
   public getDistrict(ProvinceId: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
