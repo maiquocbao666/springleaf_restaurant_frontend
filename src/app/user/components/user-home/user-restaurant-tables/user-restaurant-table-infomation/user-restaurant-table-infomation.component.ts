@@ -170,6 +170,7 @@ export class UserRestaurantTableInfomationComponent {
               } else if (result.dismiss === Swal.DismissReason.cancel) {
 
                 if (this.user) {
+                  //this.addReservation();
                   this.updateMinMaxDate();
 
                   const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
@@ -178,9 +179,9 @@ export class UserRestaurantTableInfomationComponent {
                   const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
                   const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
 
-                  if (!this.checkAll()) {
-                    return;
-                  }
+                  // if (!this.checkAll()) {
+                  //   return;
+                  // }
 
                   const fullDateTime = selectedDate + ' ' + selectedTimeStr;
                   const newReservation: Reservation = {
@@ -196,7 +197,6 @@ export class UserRestaurantTableInfomationComponent {
                     userPhone: this.user?.phone,
                     reservationDeposit: 200000 // thay thế bằng phí cọc
                   };
-
                   localStorage.setItem('await_new_reservation', JSON.stringify(newReservation));
                 }
                 this.payWithVNPay();
