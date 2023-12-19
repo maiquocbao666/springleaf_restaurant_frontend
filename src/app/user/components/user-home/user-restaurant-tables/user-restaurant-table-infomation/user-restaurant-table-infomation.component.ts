@@ -503,8 +503,8 @@ export class UserRestaurantTableInfomationComponent {
       numberOfGuests: seatingCapacity,
       reservationStatusName: 'Chưa tới',
       reservationOrderStatus: false,
-      username: '',
-      userPhone: '',
+      username: this.user?.fullName!,
+      userPhone: this.user?.phone!,
       reservationDeposit: 0 // thay thế bằng phí cọc
     };
 
