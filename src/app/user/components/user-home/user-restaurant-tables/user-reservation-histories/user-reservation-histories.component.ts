@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, map } from 'rxjs';
 import { CartDetail } from 'src/app/interfaces/cart-detail';
 import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
 import { VNPayService } from 'src/app/services/VNpay.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -14,6 +15,7 @@ import { RestaurantTableService } from 'src/app/services/restaurant-table.servic
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
+import { EditSeatingComponent } from './edit-seating/edit-seating.component';
 
 @Component({
   selector: 'app-user-reservation-histories',
@@ -33,6 +35,9 @@ export class UserReservationHistoriesComponent {
   show: boolean = false;
   paymentStatus: string | undefined;
 
+  restaurantTables: RestaurantTable[] = [];
+  reservations: Reservation[] = [];
+
   constructor(
     private reservationService: ReservationService,
     private productService: ProductService,
@@ -42,6 +47,7 @@ export class UserReservationHistoriesComponent {
     private userService: UserService,
     private authenticationService: AuthenticationService,
     private vnpayService: VNPayService,
+    private modalService: NgbModal,
   ) {
     this.authenticationService.getUserCache().subscribe(
       (cached: any | null) => {
@@ -62,7 +68,41 @@ export class UserReservationHistoriesComponent {
         this.products = cached;
       }
     );
+
+    this.getRestaurantTables();
+
     console.log('product' + this.products[0].menuItemId)
+  }
+
+  editSeatingCapacity(tableId: number, reservationId: number) {
+    //alert(reservationId);
+    const modalRef = this.modalService.open(EditSeatingComponent, { size: 'lg' });
+    modalRef.componentInstance.reservationId = reservationId;
+    modalRef.componentInstance.restaurantTable = this.restaurantTables.find(data => data.tableId === tableId);
+    // modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
+
+    // });
+    // modalRef.result.then((result) => {
+    //   if (result === 'Close after saving') {
+    //    // alert("bruh");
+    //   }
+    // });
+  }
+
+  getRestaurantTables() {
+    this.restaurantTableService.getCache().subscribe(
+      data => {
+        this.restaurantTables = data;
+      }
+    );
+  }
+
+  getReservations() {
+    this.reservationService.getCache().subscribe(
+      data => {
+        this.reservations = data;
+      }
+    );
   }
 
   getClassForStatus(status: string): string {

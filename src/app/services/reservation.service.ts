@@ -96,9 +96,10 @@ export class ReservationService extends BaseService<Reservation> {
                     const statusOrder: { [key: string]: number } = {
                         'Đang đợi': 0,
                         'Chưa tới': 1,
-                        'Đang sử dụng': 2,
-                        'Hết thời gian đợi': 3,
-                        'Đã sử dụng xong': 4,
+                        'Hết thời gian dùng': 2,
+                        'Đang sử dụng': 3,
+                        'Hết thời gian đợi': 4,
+                        'Đã sử dụng xong': 5,
                     };
 
                     filteredReservations.sort((a, b) => statusOrder[a.reservationStatusName] - statusOrder[b.reservationStatusName]);
@@ -238,6 +239,15 @@ export class ReservationService extends BaseService<Reservation> {
         }
 
         return of([]);
+    }
+
+    getReservationById(reservationId: number): Observable<Reservation> {
+        if(this.cache$){
+            const reservation = this.cache.find(data => data.reservationId === reservationId);
+            return of(reservation!);
+        } else {
+            return of();
+        }
     }
 
 }

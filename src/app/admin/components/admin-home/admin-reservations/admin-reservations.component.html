@@ -146,7 +146,7 @@
                 <tr>
                     <th class="text-center">Mã đặt bàn</th>
                     <th class="text-center">Tên bàn + (Mã)</th>
-                    <th class="text-center">Mã người dùng</th>
+                    <!-- <th class="text-center">Mã người dùng</th> -->
                     <th class="text-center">Ngày tới</th>
                     <th class="text-center">Thời gian tới</th>
                     <th class="text-center">Thời gian đi</th>
@@ -163,7 +163,7 @@
                     <td class="text-center text-muted">{{ reservation.reservationId }}</td>
                     <td class="text-center text-muted">{{ findTableNameByTableId(reservation.restaurantTableId) }} ({{
                         reservation.restaurantTableId }})</td>
-                    <td class="text-center text-muted">{{ reservation.userId }}</td>
+                    <!-- <td class="text-center text-muted">{{ reservation.userId }}</td> -->
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
                     <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
@@ -188,10 +188,10 @@
                     <!-- <td class="text-center text-muted">{{ (hoursUse(reservation)) }}</td> -->
                     <td class="text-center text-muted">{{ reservation.username }}</td>
                     <td class="text-center text-muted">{{ reservation.userPhone }}</td>
-                    <td class="text-center">
+                    <!-- <td class="text-center">
                         <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
                             (click)="deletereservation(reservation)"><i class="fa-solid fa-trash"></i></a>
-                    </td>
+                    </td> -->
                 </tr>
 
             </tbody>

@@ -18,6 +18,7 @@
             <th class="text-center">Giờ tới</th>
             <!-- <th class="text-center">Giờ đi</th> -->
             <th class="text-center">Số lượng khách hàng</th>
+            <th></th>
             <th class="text-center">Chức năng</th>
             <th></th>
           </tr>
@@ -35,10 +36,21 @@
             <td class="text-center">{{ thisUserReservation.reservationDate | date:'HH:mm:ss' }}</td>
             <!-- <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td> -->
             <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
+            <!-- <td class="text-center">
+              <select class="form-control" [(ngModel)]="thisUserReservation.numberOfGuests">
+                <option *ngFor="let seatingCapacity of getRestaurantTables(thisUserReservation.restaurantTableId)" [value]="seatingCapacity">
+                  {{ seatingCapacity }}
+                </option>
+              </select>
+            </td> -->
             <td>
-              <button class="btn btn-sm btn-primary" (click)="handleButtonClick(thisUserReservation.reservationId)">Đặt món</button>
-              <button class="btn btn-sm btn-primary" (click)="handleCheckout(thisUserReservation.reservationId)">Thanh toán</button>
+              <button class="btn btn-sm btn-primary" (click)="handleButtonClick(thisUserReservation.reservationId)">Đặt
+                món</button>
             </td>
+            <td><button class="btn btn-sm btn-primary" (click)="handleCheckout(thisUserReservation.reservationId)">Thanh
+                toán</button></td>
+            <td><button class="btn btn-sm btn-primary"
+                (click)="editSeatingCapacity(thisUserReservation.restaurantTableId, thisUserReservation.reservationId!)">Sửa số người</button></td>
           </tr>
         </tbody>
       </table>
@@ -64,7 +76,7 @@
             </td>
             <td class="text-center"><img [src]="product.imageUrl" alt="#"></td>
             <td class="text-center">{{ product.name }}</td>
-            <td class="text-center"><input type="number"  (input)="updateQuantity($event, product)"></td>
+            <td class="text-center"><input type="number" (input)="updateQuantity($event, product)"></td>
             <td class="text-center">{{ product.unitPrice }}</td>
           </tr>
         </tbody>
@@ -72,14 +84,14 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="orderReservation()">Xác nhận</button>
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Đóng</button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
     </div>
-</div>
+  </div>
 
 
 
 
-<!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
+  <!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

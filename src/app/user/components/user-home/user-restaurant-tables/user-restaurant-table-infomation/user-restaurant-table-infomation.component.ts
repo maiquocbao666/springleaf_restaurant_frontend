@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChooseMenuItemComponent } from 'src/app/components/choose-menuItem/choose-menuitem.component';
 import { Reservation } from 'src/app/interfaces/reservation';
@@ -56,6 +57,7 @@ export class UserRestaurantTableInfomationComponent {
     private modalService: NgbModal,
     private sweetAlertService: ToastService,
     private vnpayService: VNPayService,
+    private router: Router,
   ) {
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
@@ -179,9 +181,9 @@ export class UserRestaurantTableInfomationComponent {
                   const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
                   const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
 
-                  // if (!this.checkAll()) {
-                  //   return;
-                  // }
+                  if (!this.checkAll()) {
+                    return;
+                  }
 
                   const fullDateTime = selectedDate + ' ' + selectedTimeStr;
                   const newReservation: Reservation = {
@@ -189,7 +191,7 @@ export class UserRestaurantTableInfomationComponent {
                     userId: this.user?.userId!,
                     reservationDate: fullDateTime,
                     //outTime: outDateTimeString,
-                    outTime: '',
+                    outTime: this.outTime || '',
                     numberOfGuests: seatingCapacity,
                     reservationStatusName: 'Chưa tới',
                     reservationOrderStatus: false,
@@ -218,7 +220,7 @@ export class UserRestaurantTableInfomationComponent {
         if (data.redirectUrl) {
           window.location.href = data.redirectUrl;
         } else {
-          // Xử lý các trường hợp khác nếu cần
+          this.router.navigateByUrl("/user/table");
         }
       },
       error: (error: any) => {
