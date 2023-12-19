@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { UserHomeRoutingModule } from './user-home-routing.module';
-import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
-import { UserBillHistoriesComponent } from './user-bill-histories/user-bill-histories.component';
+import { EditSeatingComponent } from './user-restaurant-tables/user-reservation-histories/edit-seating/edit-seating.component';
 
 @NgModule({
   imports: [
@@ -11,8 +10,6 @@ import { UserBillHistoriesComponent } from './user-bill-histories/user-bill-hist
     UserHomeRoutingModule
   ],
   declarations: [
-
-
   ]
 })
 export class UserHomeModule { }

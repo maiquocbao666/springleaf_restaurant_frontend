@@ -89,7 +89,6 @@ export class AdminDiscountsComponent {
   addDiscount(): void {
     this.isSubmitted = true;
     if (this.discountForm.valid) {
-
       const limitValue = this.discountForm.get('limitValue')?.value;
       const discountValue = this.discountForm.get('discountValue')?.value;
       const startDate = this.discountForm.get('startDate')?.value;
@@ -98,6 +97,7 @@ export class AdminDiscountsComponent {
       const active = this.discountForm.get('active')?.value;
 
       const newDiscount: Discount = {
+        userId: 0,
         limitValue: limitValue,
         discountValue: discountValue,
         startDate: startDate,

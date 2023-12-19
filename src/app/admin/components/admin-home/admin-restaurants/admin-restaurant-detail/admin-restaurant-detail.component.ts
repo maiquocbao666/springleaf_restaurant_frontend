@@ -34,7 +34,8 @@ export class AdminRestaurantDetailComponent {
       restaurantName: ['', [Validators.required]],
       address: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern('^\\d{10,11}$')]],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      statusId: ['', [Validators.required]],
     });
   }
 
@@ -50,6 +51,7 @@ export class AdminRestaurantDetailComponent {
         address: this.restaurant.address,
         phone: this.restaurant.phone,
         email: this.restaurant.email,
+        statusId: this.restaurant.statusId,
       });
     }
   }
@@ -64,6 +66,7 @@ export class AdminRestaurantDetailComponent {
         address: this.restaurantForm.get('address')?.value,
         phone: this.restaurantForm.get('phone')?.value,
         email: this.restaurantForm.get('email')?.value,
+        statusId: this.restaurantForm.get('statusId')?.value,
       };
 
       this.restaurantService.update(updatedRestaurant).subscribe(

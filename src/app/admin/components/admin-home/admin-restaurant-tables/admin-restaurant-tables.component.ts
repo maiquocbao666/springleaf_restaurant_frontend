@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
@@ -53,9 +53,13 @@ export class AdminRestaurantTablesComponent {
       // tableId: new FormControl('', Validators.required),
       tableName: new FormControl('', Validators.required),
       tableTypeId: new FormControl('', Validators.required),
-      tableStatusId: new FormControl('', Validators.required),
+      tableStatusId: new FormControl(''),
       restaurantId: new FormControl('', Validators.required),
       seatingCapacity: new FormControl(1)
+    });
+
+    this.restaurantTableForm.patchValue({
+      tableStatusId: 'Đang hoạt động',
     });
 
   }
@@ -143,15 +147,15 @@ export class AdminRestaurantTablesComponent {
     if (this.restaurantTableForm.valid) {
       const tableName = this.restaurantTableForm.get('tableName')?.value?.trim() ?? '';
       const tableTypeId = this.restaurantTableForm.get('tableTypeId')?.value;
-      const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
       const restaurantId = this.restaurantTableForm.get('restaurantId')?.value;
+      const tableStatusId = this.restaurantTableForm.get('tableStatusId')?.value;
       const seatingCapacity = this.restaurantTableForm.get('seatingCapacity')?.value;
       const description = this.restaurantTableForm.get('description')?.value?.trim() ?? '';
 
     const newRestaurantTable: RestaurantTable = {
       tableName: tableName,
       tableTypeId: +tableTypeId,
-      tableStatusId: +tableStatusId,
+      tableStatusId: tableStatusId || 'Không hoạt động',
       restaurantId: +restaurantId,
       seatingCapacity: +seatingCapacity,
       description: description,

@@ -116,6 +116,8 @@ import { UserFavoritesComponent } from './user/components/user-home/user-favorit
 import { UserOrderHistoriesComponent } from './user/components/user-home/user-header/user-order-histories/user-order-histories.component';
 import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
 import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
+import { ChooseMenuItemComponent } from './components/choose-menuItem/choose-menuitem.component';
+import { EditSeatingComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/edit-seating/edit-seating.component';
 
 @NgModule({
   declarations: [
@@ -143,6 +145,7 @@ import { UserReservationHistoriesComponent } from './user/components/user-home/u
     UserFavoritesComponent,
     UserBillHistoriesComponent,
     UserOrderHistoriesComponent,
+    EditSeatingComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
@@ -200,7 +203,7 @@ import { UserReservationHistoriesComponent } from './user/components/user-home/u
     ProfileComponent,
     UserPasswordComponent,
     UploadFileComponent,
-
+    ChooseMenuItemComponent,
 
   ],
   imports: [
@@ -216,7 +219,7 @@ import { UserReservationHistoriesComponent } from './user/components/user-home/u
     NgxChartsModule, // Thêm vào đây
     FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: true,
+      enabled: false,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:50000'

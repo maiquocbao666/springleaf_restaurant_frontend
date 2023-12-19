@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
     <h1 class="text-center display-4">Danh sách đặt bàn</h1>
     <p class="d-inline-flex gap-1">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
@@ -15,6 +15,7 @@
     <div class="collapse pb-3" id="collapseExample">
         <div class="card card-body">
             <form [formGroup]="reservationForm" (ngSubmit)="addReservation()">
+                <div style="color: green;">Thời gian hoạt động từ 08:00:00 - 22:00:00</div> <br>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="exampleInputPassword1" class="form-label">Số lượng khách<span
@@ -27,29 +28,63 @@
                         <label for="unitPrice" class="form-label">Bàn<span style="color: red;">(*)</span></label>
                         <select class="form-control" formControlName="restaurantTableId"
                             (change)="changeSeatingCapacity($event)">
-                            <option *ngFor="let number of restaurantTables" [value]=number.tableId>{{ number.tableId }}
+                            <option *ngFor="let number of restaurantTables" [value]=number.tableId>{{ findTableNameByTableId(number.tableId!) }}
                             </option>
                         </select>
+                    </div>
 
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <span class="form-label">Ngày tới</span>
+                            <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate"
+                                [min]="minDate" [max]="maxDate" required (change)="checkAll()">
+                        </div>
+                        <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage2 !== ''">
+                            {{ warningMessage2 }} <br>
+                        </div>
+
+                        <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="selectedDateMessage !== ''">
+                            {{ selectedDateMessage }} <br>
+                        </div>
+
+                        <div [style.color]="'green'" [style.text-align]="'center'" *ngIf="warningMessage !== ''">
+                            {{ warningMessage }} <br>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <span class="form-label">Thời gian tới</span>
+                            <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime"
+                                required (change)="checkAll()">
+                        </div>
+                        <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage2 !== ''">
+                            {{ warningMessage2 }} <br>
+                        </div>
+
+                        <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="selectedTimeMessage !== ''">
+                            {{ selectedTimeMessage }} <br>
+                        </div>
+
+                        <div [style.color]="'green'" [style.text-align]="'center'" *ngIf="warningMessage !== ''">
+                            {{ warningMessage }} <br>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <span class="form-label">Ngày tới</span>
-                                <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate"
-                                    [min]="minDate" [max]="maxDate" required>
-                            </div>
+                        <div class="form-group">
+                            <span class="form-label">Tên khách hàng</span>
+                            <input class="form-control" formControlName="username" type="text">
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <span class="form-label">Thời gian tới</span>
-                                <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime"
-                                    required>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <span class="form-label">Số điện thoại</span>
+                            <input class="form-control" formControlName="userPhone" type="text">
+                        </div>
+                    </div>
+
                     <!-- <div class="col-md-6">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -73,7 +108,18 @@
     </div>
 
 
-
+    <!-- <p class="float-end">
+        <select (change)="changeFieldName($event)" class="form-select">
+            <option value="">Bộ lọc</option>
+            <option value="reservationId">Mã đặt bàn</option>
+            <option value="restaurantTableId">Mã bàn</option>
+            <option value="userId">Mã người dùng</option>
+            <option value="reservationDate">Thời gian tới</option>
+            <option value="outTime">Thời gian đi</option>
+            <option value="reservationStatusName">Trạng thái</option>
+            <option value="numberOfGuests">Số lượng khách hàng</option>
+        </select>
+    </p> -->
     <p class="float-end">
         <select (change)="changeFieldName($event)" class="form-select">
             <option value="">Bộ lọc</option>
@@ -84,6 +130,8 @@
             <option value="outTime">Thời gian đi</option>
             <option value="reservationStatusName">Trạng thái</option>
             <option value="numberOfGuests">Số lượng khách hàng</option>
+            <option value="username">Tên khách hàng</option>
+            <option value="userPhone">Số điện thoại</option>
         </select>
     </p>
     <p class="float-end">
@@ -97,28 +145,32 @@
             <thead>
                 <tr>
                     <th class="text-center">Mã đặt bàn</th>
-                    <th class="text-center">Tên bàn</th>
-                    <th class="text-center">Mã người dùng</th>
+                    <th class="text-center">Tên bàn + (Mã)</th>
+                    <!-- <th class="text-center">Mã người dùng</th> -->
                     <th class="text-center">Ngày tới</th>
-                    <th class="text-center">Giờ tới</th>
-                    <!-- <th class="text-center">Giờ đi</th> -->
+                    <th class="text-center">Thời gian tới</th>
+                    <th class="text-center">Thời gian đi</th>
                     <th class="text-center">Trạng thái</th>
                     <th class="text-center">Số lượng khách hàng</th>
-                    <th class="text-center">Chức năng</th>
+                    <th class="text-center">Tên Khách hàng</th>
+                    <th class="text-center">Số điện thoại</th>
+                    <!-- <th class="text-center">Chức năng</th> -->
                 </tr>
             </thead>
             <tbody>
                 <tr
                     *ngFor="let reservation of reservations | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
                     <td class="text-center text-muted">{{ reservation.reservationId }}</td>
-                    <td class="text-center text-muted">{{ findTableNameByTableId(reservation.restaurantTableId) }}</td>
-                    <td class="text-center text-muted">{{ reservation.userId }}</td>
+                    <td class="text-center text-muted">{{ findTableNameByTableId(reservation.restaurantTableId) }} ({{
+                        reservation.restaurantTableId }})</td>
+                    <!-- <td class="text-center text-muted">{{ reservation.userId }}</td> -->
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
                     <td class="text-center text-muted">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
-                    <!-- <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td> -->
+                    <td class="text-center text-muted">{{ reservation.outTime | date: 'HH:mm:ss' }}</td>
                     <td class="text-center text-muted">
                         <div [ngClass]="getClassForStatus(reservation.reservationStatusName)">
-                            <select [disabled]="reservation.reservationStatusName === 'Đã sử dụng xong'"
+                            <select
+                                [disabled]="reservation.reservationStatusName === 'Đã sử dụng xong' || reservation.reservationStatusName === 'Hết thời gian đợi'"
                                 [(ngModel)]="reservation.reservationStatusName"
                                 (ngModelChange)="changeStatusOne(reservation.reservationId!, $event)"
                                 class="form-select">
@@ -127,16 +179,19 @@
                                 <option value="Đang sử dụng">Đang sử dụng</option>
                                 <option value="Hết thời gian đợi">Hết thời gian đợi</option>
                                 <option value="Đã sử dụng xong">Đã sử dụng xong</option>
+                                <option value="Hết thời gian dùng">Hết thời gian dùng</option>
                             </select>
                         </div>
 
                     </td>
                     <td class="text-center text-muted">{{ reservation.numberOfGuests }}</td>
                     <!-- <td class="text-center text-muted">{{ (hoursUse(reservation)) }}</td> -->
-                    <td class="text-center">
+                    <td class="text-center text-muted">{{ reservation.username }}</td>
+                    <td class="text-center text-muted">{{ reservation.userPhone }}</td>
+                    <!-- <td class="text-center">
                         <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
                             (click)="deletereservation(reservation)"><i class="fa-solid fa-trash"></i></a>
-                    </td>
+                    </td> -->
                 </tr>
 
             </tbody>

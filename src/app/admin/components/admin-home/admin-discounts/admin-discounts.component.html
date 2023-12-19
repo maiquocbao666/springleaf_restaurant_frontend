@@ -6,18 +6,10 @@
       Thêm Mã giảm
     </button>
   </p>
-  <!-- <p class="float-end">
-      <select class="form-select" (change)="onTableSizeChange($event)">
-          <option *ngFor="let size of tableSizes">
-              {{size}}
-          </option>
-      </select>
-  </p> -->
   <div class="collapse pb-3" id="collapseExample">
     <div class="card card-body">
       <form [formGroup]="discountForm" (ngSubmit)="addDiscount()">
         <div class="row g-3">
-
 
           <div class="col-md-6">
             <label for="limitValue" class="form-label">Giá giảm<span style="color: red;">(*)</span></label>
@@ -97,7 +89,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let discount of discounts ">
-
           <td class="text-center text-muted">VC{{discount.discountId}}</td>
           <td class="text-center">{{discount.limitValue}}</td>
           <td class="text-center"><i class="badge badge-info">{{discount.discountValue}}%</i></td>

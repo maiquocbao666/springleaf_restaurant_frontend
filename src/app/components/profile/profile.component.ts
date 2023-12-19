@@ -347,11 +347,11 @@ export class ProfileComponent {
             else if (response.error === 'Phone cannot update') {
               this.toastService.showTimedAlert('Số điện thoại đã được sử dụng', '', 'error', 1500);
             }
-            else {
+            else if(response.user){
               // Update user cache and handle success
               this.authService.setUserCache(response.user);
-              this.onUpload();
               this.initUserAddress();
+              this.onUpload();
               this.toastService.showTimedAlert('Cập nhật thành công', '', 'success', 1500);
             }
           },

@@ -170,7 +170,7 @@ export class AppComponent implements OnDestroy {
 
   ngOnInit(): void {
     // this.checkThreshold();
-    var accessToken = localStorage.getItem('access_token');
+    var accessToken = sessionStorage.getItem('access_token');
     var userSession = sessionStorage.getItem('userCache');
     console.log(userSession)
     if (userSession !== '' && userSession) {
@@ -213,6 +213,24 @@ export class AppComponent implements OnDestroy {
       console.log("Lấy tất cả dữ liệu từ get-datas-from-local-storage.worker.ts thành công");
     };
   }
+
+  // deleteAllDatasFromLocalStorage() {
+  //   this.getDatasFromLocalStorageWorker.postMessage('start');
+  //   this.getDatasFromLocalStorageWorker.onmessage = ({ data }) => {
+
+  //     Object.keys(this.services).forEach((type: string) => {
+
+  //       const { cache, localStorageKey } = this.services[type];
+
+  //       if (localStorage.getItem(localStorageKey)) {
+  //         this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
+  //         //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
+  //         (this as any)[`${type}Service`][`cache`] = null;
+  //       }
+
+  //     });
+  //   };
+  // }
 
   callAllApis(): void {
     this.callAPIsWorker.postMessage('start');

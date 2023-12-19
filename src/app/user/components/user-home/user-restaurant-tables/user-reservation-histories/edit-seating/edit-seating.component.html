@@ -1,0 +1,4 @@
+<div>Chọn số lượng khách hàng</div>
+<select (change)="save($event)">
+    <option *ngFor="let number of getNumbersArray()" [value]="number">{{ number }}</option>
+</select>

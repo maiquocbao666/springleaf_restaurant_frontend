@@ -20,6 +20,7 @@
             <option value="address">Địa chỉ</option>
             <option value="phone">Số điện thoại</option>
             <option value="email">Email</option>
+            <option value="statusId">Trạng thái</option>
         </select>
     </p>
     <p class="float-end">
@@ -69,6 +70,12 @@
                             Email là bắt buộc.
                         </div>
                     </div>
+                    <!-- <div class="col-md-6">
+                        <select formControlName="statusId">
+                            <option value="Đang hoạt động">Đang hoạt động</option>
+                            <option value="Không hoạt động">Không hoạt động</option>
+                        </select>
+                    </div> -->
                     <div class="text-center">
                         <button type="submit">Lưu</button>
                     </div>
@@ -87,6 +94,7 @@
                     <th class="text-center">Địa chỉ</th>
                     <th class="text-center">Số điện thoại</th>
                     <th class="text-center">Email</th>
+                    <th class="text-center">Trạng thái</th>
                     <th class="text-center">Chức năng</th>
                 </tr>
             </thead>
@@ -98,11 +106,12 @@
                     <td class="text-center">{{restaurant.address}}</td>
                     <td class="text-center">{{restaurant.phone}}</td>
                     <td class="text-center">{{restaurant.email}}</td>
+                    <td class="text-center">{{restaurant.statusId}}</td>
                     <td class="text-center">
                         <a type="button" class="btn btn-primary m-2" (click)="openRestaurantDetailModal(restaurant)"><i
                                 class="fa-solid fa-pen-to-square"></i></a>
-                        <a type="button" class="btn btn-danger" (click)="deleteRestaurant(restaurant)"><i
-                                class="fa-solid fa-trash"></i></a>
+                        <!-- <a type="button" class="btn btn-danger" (click)="deleteRestaurant(restaurant)"><i
+                                class="fa-solid fa-trash"></i></a> -->
                     </td>
                 </tr>
             </tbody>
