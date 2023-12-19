@@ -90,7 +90,8 @@
         </tr>
       </tbody>
     </table>
-
+    
+    <h1 class="text-center mt-5">Bàn được đặt trong ngày</h1><br>
     <div class="col-3">
       <label for="dateInput">Chọn ngày:</label>
       <input class="form-control" type="date" id="dateInput" [(ngModel)]="selectedDate">
@@ -98,7 +99,7 @@
     </div>
 
     <div *ngIf="reservations.length > 0">
-      <h1>Các bàn được đặt trong ngày {{ selectedDate }}</h1>
+      <h1>Các bàn được đặt trong ngày {{ selectedDate | date: 'dd-MM-yyyy' }}</h1>
       <ul>
 
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">

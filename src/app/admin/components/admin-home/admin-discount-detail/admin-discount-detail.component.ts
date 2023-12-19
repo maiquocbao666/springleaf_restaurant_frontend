@@ -33,8 +33,7 @@ export class AdminDiscountDetailComponent {
   ) {
     this.discountForm = this.formBuilder.group({
       discountId: ['', [Validators.required]],
-      menuItemId: ['', [Validators.required]],
-      discountType: ['', [Validators.required]],
+      limitValue: ['', [Validators.required]],
       discountValue: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -63,8 +62,7 @@ export class AdminDiscountDetailComponent {
     if (this.discount) {
       this.discountForm.patchValue({
         discountId: this.discount.discountId,
-        menuItemId: this.discount.menuItemId,
-        discountType: this.discount.discountType,
+        limitValue: this.discount.limitValue,
         discountValue: this.discount.discountValue,
         startDate: this.discount.startDate,
         endDate: this.discount.endDate,
@@ -73,6 +71,7 @@ export class AdminDiscountDetailComponent {
       });
     }
   }
+
   updateDiscount(): void {
     // Đóng modal sau khi lưu
     this.activeModal.close('Close after saving');
@@ -81,11 +80,10 @@ export class AdminDiscountDetailComponent {
     if (this.discountForm.valid) {
       const updatedDiscount: Discount = {
         discountId: +this.discountForm.get('discountId')?.value,
-        menuItemId: +this.discountForm.get('menuItemId')?.value,
-        discountType: this.discountForm.get('discountType')?.value,
         discountValue: +this.discountForm.get('discountValue')?.value,
         startDate: this.discountForm.get('startDate')?.value,
         endDate: this.discountForm.get('endDate')?.value,
+        limitValue: this.discountForm.get('limitValue')?.value,
         discountCode: this.discountForm.get('discountCode')?.value,
         active: this.discountForm.get('active')?.value,
       };

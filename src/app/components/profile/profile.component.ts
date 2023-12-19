@@ -207,7 +207,7 @@ export class ProfileComponent {
           selectedRestaurant: `${this.userRestaurant.restaurantName}`,
         });
       }
-    this.updateImagePreview();
+      this.updateImagePreview();
     }
   }
 
@@ -333,11 +333,11 @@ export class ProfileComponent {
         address: addressChange,
         phone: this.profileForm.get('phone')?.value,
         restaurantBranchId: this.profileForm.get('selectedRestaurant')?.value,
-        image: this.profileForm.get('image')?.value || this.user.image,
-        //image: this.selectedFileName || this.profileForm.get('image')?.value,
+        // image: this.profileForm.get('image')?.value || this.user.image,
+        image: this.selectedFileName || this.profileForm.get('image')?.value,
         status: this.user.status,
-
       };
+      alert(userUpdate.image)
       this.userService.updateProfile(userUpdate)
         .subscribe(
           (response) => {

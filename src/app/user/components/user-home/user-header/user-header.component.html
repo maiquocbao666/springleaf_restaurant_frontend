@@ -49,12 +49,11 @@
 
                                         </ul>
                                     </li>
-                                    <li routerLinkActive="active"><a routerLink="/user/history">LỊCH SỦ ĐƠN HÀNG</a>
+                                    <li routerLinkActive="active"><a routerLink="/user/history">LỊCH SỬ ĐƠN HÀNG</a>
                                     </li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a
                                             routerLink="/admin/index">TRANG QUẢN LÝ</a></li>
-                                    <li routerLinkActive="active" ><a routerLink="/user/favorite">YÊU THÍCH</a></li>
-                                    <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a routerLink="/admin/statistical">TRANG QUẢN LÝ</a></li>
+                                    <!-- <li routerLinkActive="active"><a routerLink="/user/favorite">YÊU THÍCH</a></li> -->
                                 </ul>
                             </nav>
                         </div>
@@ -89,8 +88,8 @@
                                                 cá nhân</a>
                                         </li>
                                         <li routerLinkActive="active"><a class="nav-link"
-                                            (click)="openOrderModal()">Lịch sử đơn hàng và đặt bàn</a>
-                                    </li>
+                                                (click)="openOrderModal()">Lịch sử đơn hàng và đặt bàn</a>
+                                        </li>
                                         <li routerLinkActive="active"><a class="nav-link"
                                                 (click)="openUserPasswordModel()">Đổi mật khẩu
                                             </a>

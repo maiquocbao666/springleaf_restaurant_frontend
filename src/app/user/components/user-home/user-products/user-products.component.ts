@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
+import { Favorite } from 'src/app/interfaces/favorite';
 import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
@@ -13,12 +14,11 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
+import { FavoriteService } from 'src/app/services/favorite.service';
 import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
-import { FavoriteService } from 'src/app/services/favorite.service';
-import { Favorite } from 'src/app/interfaces/favorite';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -31,12 +31,11 @@ export class UserProductsComponent implements OnInit {
   products!: Product[];
   categories: Category[] = [];
   categoryId!: number; // Khởi tạo categoryId là undefined
-  visibleProductCount: number = 12; // Số sản phẩm ban đầu hiển thị
-  remainingProducts!: number;
   user: User | null = null;
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
-
+  visibleProductCount = 12; // Số sản phẩm ban đầu hiển thị
+  remainingProductsCount = 0; // Số sản phẩm còn lại
   categoriesUrl = 'categories';
   productsUrl = 'products';
 
@@ -51,7 +50,7 @@ export class UserProductsComponent implements OnInit {
     private modalService: NgbModal,
     private toastService: ToastService,
     private apiService: ApiService,
-    private favoriteService : FavoriteService
+    private favoriteService: FavoriteService
   ) {
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
@@ -65,20 +64,7 @@ export class UserProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.getUserLoggedIn().subscribe(
-    //   (userData) => {
-    //     console.log('Thông tin người dùng đăng nhập:', userData);
-    //   },
-    //   (error) => {
-    //     // Xử lý thông tin người dùng đăng nhập ở đây
-    //     console.log('Thông tin người dùng đăng nhập:', userData);
-    //   },
-    //   (error) => {
-    //     // Xử lý khi có lỗi xảy ra khi lấy thông tin người dùng
-    //     console.error('Lỗi khi lấy thông tin người dùng:', error);
-    //   }
-    // );
-
+    this.getUserLoggedIn()
     this.getProducts();
     this.getCategories();
     this.route.paramMap.subscribe(paramMap => {
@@ -92,27 +78,21 @@ export class UserProductsComponent implements OnInit {
 
 
   // Hàm gửi yêu cầu lấy thông tin người đang đăng nhập
-  // getUserLoggedIn(): Observable<any> {
-  //   const jwtToken = localStorage.getItem('access_token');
+  getUserLoggedIn(): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
 
-  //   const customHeader1 = new HttpHeaders({
-  //     'Authorization': `Bearer ${jwtToken}`,
-  //   });
+    const customHeader1 = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
 
-  //   return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
-  // }
+    return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
+  }
 
 
   filterProductsByCategoryId(categoryId: number): any[] {
     return this.products.filter(product => product.categoryId === categoryId);
   }
-  showMore(): void {
-    this.visibleProductCount += 12; // Tăng số sản phẩm hiển thị lên 10
-  }
 
-  showLess(): void {
-    this.visibleProductCount -= 12; // Giảm số sản phẩm hiển thị đi 10
-  }
 
 
   // Trong file của bạn có thể thêm một hàm để giới hạn độ dài của chuỗi
@@ -123,29 +103,49 @@ export class UserProductsComponent implements OnInit {
     return str; // Trả về chuỗi ban đầu nếu không vượt quá độ dài tối đa
   }
 
-  getVisibleProducts(): Product[] {
-    return this.products ? this.products.slice(0, this.visibleProductCount) : [];
+  // Lấy danh sách sản phẩm cần hiển thị
+  get visibleProducts(): Product[] {
+    return this.products.slice(0, this.visibleProductCount);
   }
+
+  // Cập nhật số lượng sản phẩm còn lại
+  updateVisibleProducts(): void {
+    this.remainingProductsCount = this.products.length - this.visibleProductCount;
+  }
+
+  // Hiển thị thêm sản phẩm khi nhấn nút "Show More"
+  showMore(): void {
+    this.visibleProductCount += 12; // Tăng số sản phẩm hiển thị lên 12
+    this.updateVisibleProducts();
+  }
+
+  // Hiển thị ít sản phẩm hơn khi nhấn nút "Show Less"
+  showLess(): void {
+    this.visibleProductCount -= 12; // Giảm số sản phẩm hiển thị đi 12
+    this.updateVisibleProducts();
+  }
+
 
   getProducts(): void {
     this.productService.getCache().subscribe(
       (cached: any[]) => {
         this.products = cached.filter(product => product.status === true);
+        this.updateVisibleProducts();
       }
     );
   }
 
-  favorite(product : Product) : void {
-    var favorite : Favorite = {
-      favoriteId : 1,
-      user : this.user?.userId as number,
-      menuItem : product.menuItemId as number,
-      favoriteDate : '1'
-    } 
+  favorite(product: Product): void {
+    var favorite: Favorite = {
+      favoriteId: 1,
+      user: this.user?.userId as number,
+      menuItem: product.menuItemId as number,
+      favoriteDate: '1'
+    }
     this.favoriteService.add(favorite).subscribe();
   }
 
-  unLikeProduct(favorite : Favorite): void {
+  unLikeProduct(favorite: Favorite): void {
     this.favoriteService.delete(favorite.favoriteId as number).subscribe();
   }
 
