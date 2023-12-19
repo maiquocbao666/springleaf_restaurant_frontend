@@ -180,9 +180,9 @@ export class AdminReservationsComponent {
           const statusOrder: { [key: string]: number } = {
             'Đang đợi': 0,
             'Chưa tới': 1,
-            'Hết thời gian đợi': 2,
+            'Hết thời gian dùng': 2,
             'Đang sử dụng': 3,
-            'Hết thời gian dùng': 4,
+            'Hết thời gian đợi': 4,
             'Đã sử dụng xong': 5,
           };
 
@@ -514,6 +514,8 @@ export class AdminReservationsComponent {
       return 'badge badge-danger';
     } else if (status === 'Đã sử dụng xong') {
       return 'badge badge-secondary'; // or any other color you prefer for this status
+    } else if (status === 'Hết thời gian dùng') {
+      return 'badge badge-primary'; // or any other color you prefer for this status
     }
     return ''; // Default class or no class if status is not recognized
   }

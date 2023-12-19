@@ -276,10 +276,10 @@ export class UserMergeTablesComponent {
       return;
     }
     if (check2 === 1) {
-      this.addToMergeCache(tableId1, null);
+      this.addToMergeCache(null, tableId2);
     }
     if (check2 === 2) {
-      this.addToMergeCache(null, tableId2);
+      this.addToMergeCache(tableId1, null);
     }
     if (check2 === 0) {
       this.createMergeTableId();
