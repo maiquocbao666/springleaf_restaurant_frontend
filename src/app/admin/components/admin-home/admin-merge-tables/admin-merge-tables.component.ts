@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergeTable } from 'src/app/interfaces/merge-table';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { Restaurant } from 'src/app/interfaces/restaurant';
 import { MergeTableService } from 'src/app/services/merge-table.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
@@ -32,6 +33,11 @@ export class AdminMergeTablesComponent {
   // // Mã gộp bàn dùng để hiển thị bên select
   mergeTableIds: string[] = [];
   isResetDisabled: boolean = false;
+
+  selecRestaurantMessage = '';
+  restaurants: Restaurant[] = [];
+
+  restaurantId: number | null = null;
 
   constructor(
     private reservationService: ReservationService,
@@ -78,16 +84,16 @@ export class AdminMergeTablesComponent {
   onTableIdChange(event: any) {
     const tableId1 = this.reservationForm.get("tableIdMerge1")?.value;
     const tableId2 = this.reservationForm.get("tableIdMerge2")?.value;
-  
+
     // Check if either tableId1 or tableId2 has a mergeTableId
     const mergeTableId1 = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+tableId1);
     const mergeTableId2 = this.mergeTableService.getMergeTableWithTableIdExistsInCache(+tableId2);
-  
+
     if (mergeTableId1 !== '' || mergeTableId2 !== '') {
-      this.isResetDisabled = true;
+      //this.isResetDisabled = true;
       this.mergeTableId = mergeTableId1 !== '' ? mergeTableId1 : mergeTableId2;
     } else {
-      this.isResetDisabled = false;
+      //this.isResetDisabled = false;
       console.log("No mergeTableId found");
     }
   }
@@ -306,10 +312,10 @@ export class AdminMergeTablesComponent {
       return;
     }
     if (check2 === 1) {
-      this.addToMergeCache(tableId1, null);
+      this.addToMergeCache(null, tableId2);
     }
     if (check2 === 2) {
-      this.addToMergeCache(null, tableId2);
+      this.addToMergeCache(tableId1, null);
     }
     if (check2 === 0) {
       this.createMergeTableId();
@@ -350,6 +356,18 @@ export class AdminMergeTablesComponent {
 
   findTableNameByTableId(tableId: number): string{
     return this.restaurantTableService.findTableNameByTableId(tableId);
+  }
+
+  onRestaurantIdChange(event: any) {
+    if (!event.target.value) {
+      this.selecRestaurantMessage = 'Mời chọn chi nhánh';
+      return;
+    } else {
+      this.restaurantId = Number(event.target.value); // Ensure it's a number
+      this.selecRestaurantMessage = '';
+    }
+    console.log('Updated restaurantId:', this.restaurantId);
+    this.getReservationInUse();
   }
 
 }
