@@ -6,8 +6,8 @@
         </button>
     </div>
     <br>
-    <div>Giờ hoạt động: 08:00:00 - 22:00:00</div>
-    <div>Quý khách vui lòng đặt trước 2 tiếng hiện tại và trước 1 tiếng sau giờ hoạt động để được phục vụ tốt nhất</div>
+    <div style="color: green;">Giờ hoạt động: 08:00:00 - 22:00:00</div>
+    <div style="color: green">Quý khách vui lòng đặt trước 2 tiếng hiện tại và trước 1 tiếng sau giờ hoạt động để được phục vụ tốt nhất</div>
     <br>
     <div class="booking">
         <form class="booking-form row" role="form" [formGroup]="reservationForm" (ngSubmit)="bookingTable()">
@@ -23,9 +23,15 @@
                 <span class="form-label">Ngày tới: </span>
                 <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate" [min]="minDate"
                     [max]="maxDate" required (change)="checkAll()">
-                <div style="color: red; text-align: center;">
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage2 !== ''">
                     {{ warningMessage2 }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="selectedDateMessage !== ''">
                     {{ selectedDateMessage }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage !== ''">
                     {{ warningMessage }} <br>
                 </div>
             </div>
@@ -34,9 +40,15 @@
                 <span class="form-label">Thời gian tới</span>
                 <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime"
                     (change)="checkAll()" required>
-                <div style="color: red; text-align: center;">
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage2 !== ''">
                     {{ warningMessage2 }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="selectedTimeMessage !== ''">
                     {{ selectedTimeMessage }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage !== ''">
                     {{ warningMessage }} <br>
                 </div>
             </div>
@@ -82,6 +94,7 @@
             </div>
         </form>
     </div>
+    <br>
     <div>
         <div class="card card-body">
             <h3>Lịch sử dụng bàn sắp tới của bàn này</h3>

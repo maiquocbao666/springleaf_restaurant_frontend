@@ -217,7 +217,7 @@ export class UserRestaurantTableInfomationComponent {
     } else {
       this.selectedDateMessage = "";
     }
-    if (!selectedTime) {
+    if (!selectedTime || selectedTime === ':00') {
       this.selectedTimeMessage = "Mời chọn thời gian đến";
       return false;
     } else {
@@ -251,7 +251,7 @@ export class UserRestaurantTableInfomationComponent {
 
       this.warningMessage = "Nếu đến vào thời gian này thì chỉ sử dụng được tới " + this.datePipe.transform(outTime, 'yyyy-MM-dd HH:mm:ss');
       if (fullDateTime1 > reservationDateTime) {
-        this.warningMessage2 = "Thời gian đến phải <= thời gian đến của người khác đặt 3 tiếng";
+        this.warningMessage2 = "Thời gian đến phải <= thời gian bên dưới 3 tiếng";
         return false;
       } else {
         this.warningMessage2 = '';

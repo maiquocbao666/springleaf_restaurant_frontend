@@ -15,7 +15,8 @@
                         </a>
                         <!-- <span class=" product-discount-label">-33%</span> -->
                         <ul class="product-links">
-                            <li><a data-tip="Add to Wishlist"><i class="fas fa-heart" (click)="favorite(product)"></i></a></li>
+                            <li><a data-tip="Add to Wishlist"><i class="fas fa-heart"
+                                        (click)="favorite(product)"></i></a></li>
                             <li><a (click)="openProductDetailModal(product)" data-tip="Quick View"><i
                                         class="fa fa-search"></i></a></li>
                         </ul>
@@ -35,10 +36,9 @@
                 </div>
             </div>
             <div class="text-center mb-5">
-                <button class="Btn" (click)="showMore()" *ngIf="remainingProducts && remainingProducts > 0">Show
-                    More</button>
-                <button class="Btn" (click)="showLess()" *ngIf="visibleProductCount > 12">Show
-                    Less</button>
+                <button class="Btn" (click)="showMore()" *ngIf="remainingProducts && remainingProducts > 0">Hiển thị
+                    thêm</button>
+                <button class="Btn" (click)="showLess()" *ngIf="visibleProductCount > 12">Ẩn bớt</button>
             </div>
         </div>
     </div>

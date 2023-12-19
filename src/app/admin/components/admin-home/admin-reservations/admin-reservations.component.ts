@@ -54,6 +54,10 @@ export class AdminReservationsComponent {
   isSearch = false;
   user: User | null = null;
 
+  outTime = '';
+  warningMessage = '';
+  warningMessage2 = '';
+
   reservationForm: FormGroup;
 
   constructor(
@@ -76,10 +80,12 @@ export class AdminReservationsComponent {
     this.reservationForm = this.formBuilder.group({
       selectedDate: [, [Validators.nullValidator]],
       selectedTime: ['', [Validators.required]],
-      outTime: ['', [Validators.required]],
+      //outTime: ['', [Validators.required]],
       searchKeyWord: ['', Validators.nullValidator],
       seatingCapacity: [1, Validators.nullValidator],
       restaurantTableId: [, Validators.nullValidator],
+      username: [''],
+      userPhone: [''],
     });
   }
 
@@ -89,6 +95,7 @@ export class AdminReservationsComponent {
     this.maxDate = this.datePipe.transform(this.addDays(new Date(), 5), 'yyyy-MM-dd')!;
     this.getReservations();
     this.getRestaurantTables();
+    this.checkAll();
   }
 
   getRestaurantTables() {
@@ -168,30 +175,39 @@ export class AdminReservationsComponent {
   getReservations(): void {
     this.reservationService.getCache().subscribe(
       (cached: Reservation[]) => {
-        if (this.isSearching === true) {
-          return;
+        if (!this.isSearching) {
+          // Sắp xếp danh sách theo trạng thái (Đang đợi lên trên cùng)
+          const statusOrder: { [key: string]: number } = {
+            'Đang đợi': 0,
+            'Chưa tới': 1,
+            'Hết thời gian đợi': 2,
+            'Đang sử dụng': 3,
+            'Hết thời gian dùng': 4,
+            'Đã sử dụng xong': 5,
+          };
+
+          // Sắp xếp theo giờ giảm dần
+          this.reservations = [...cached]; // Create a shallow copy
+          this.reservations.sort((a, b) => {
+            const timeA = new Date(a.reservationDate).getTime();
+            const timeB = new Date(b.reservationDate).getTime();
+            return timeB - timeA;
+          });
+
+          // Sắp xếp theo trạng thái giảm dần (Đang sử dụng sau Đang đợi)
+          this.reservations.sort((a, b) => {
+            if (statusOrder[a.reservationStatusName] === statusOrder[b.reservationStatusName]) {
+              // Đặt bản ghi đang sử dụng lên sau bản ghi đang đợi
+              if (a.reservationStatusName === 'Đang sử dụng' && b.reservationStatusName === 'Đang đợi') {
+                return 1;
+              }
+              // Giữ nguyên thứ tự với các bản ghi khác
+              return 0;
+            }
+            // Sắp xếp theo trạng thái
+            return statusOrder[a.reservationStatusName] - statusOrder[b.reservationStatusName];
+          });
         }
-
-        // Sắp xếp theo giờ giảm dần
-        this.reservations = cached.sort((a, b) => {
-          const timeA = new Date(a.reservationDate).getTime();
-          const timeB = new Date(b.reservationDate).getTime();
-          return timeB - timeA;
-        });
-
-        // Sắp xếp theo trạng thái giảm dần (Đang sử dụng sau Đang đợi)
-        this.reservations = this.reservations.sort((a, b) => {
-          // Đặt bản ghi đang sử dụng lên sau bản ghi đang đợi
-          if (a.reservationStatusName === 'Đang sử dụng' && b.reservationStatusName === 'Đang đợi') {
-            return 1;
-          }
-          // Giữ nguyên thứ tự với các bản ghi khác
-          return 0;
-        });
-
-        //this.dataSource = new MatTableDataSource(this.reservations);
-        //this.dataSource.paginator = this.paginator;
-        //this.dataSource.sort = this.sort;
       },
       (error: any) => {
         console.error('Failed to fetch data', error);
@@ -220,12 +236,12 @@ export class AdminReservationsComponent {
   updateMinMaxDate() {
     const currentDate = new Date();
     this.minDate = currentDate.toISOString().split('T')[0]; // Format as 'yyyy-MM-dd'
-    //console.log(this.minDate);
+    console.log("Min date: " + this.minDate);
 
     const maxDate = new Date();
     maxDate.setDate(maxDate.getDate() + 5);
     this.maxDate = maxDate.toISOString().split('T')[0]; // Format as 'yyyy-MM-dd'
-    //console.log(this.maxDate);
+    console.log(this.maxDate);
   }
 
   checkDate(selectedDate: string, minDate: string): boolean {
@@ -248,7 +264,7 @@ export class AdminReservationsComponent {
     } else {
       this.selectedDateMessage = "";
     }
-    if (!selectedTime) {
+    if (!selectedTime || selectedTime === ':00') {
       this.selectedTimeMessage = "Mời chọn thời gian đến";
       return false;
     } else {
@@ -274,28 +290,47 @@ export class AdminReservationsComponent {
     const restaurantTableId = this.reservationForm.get('restaurantTableId')?.value;
     const check = this.reservationService.isTableReservedAfter(restaurantTableId, fullDateTime, selectedDate);
     if (check.length > 0) {
-      this.selectedDateMessage = "Đã có người đặt";
-      this.selectedTimeMessage = "Đã có người đặt";
+      this.selectedDateMessage = "Đã có người đặt và tới lúc: " + check[0].reservationDate;
+      this.selectedTimeMessage = "Đã có người đặt và tới lúc: " + check[0].reservationDate;
+      const outTime = new Date(new Date(check[0].reservationDate).getTime() - 1000 * 60 * 15);
+
+      const fullDateTime1 = new Date(fullDateTime).getTime() + 1000 * 60 * 60 * 3;
+      const reservationDateTime = new Date(check[0].reservationDate).getTime();
+
+      this.warningMessage = "Nếu đến vào thời gian này thì chỉ sử dụng được tới " + this.datePipe.transform(outTime, 'yyyy-MM-dd HH:mm:ss');
+      if (fullDateTime1 > reservationDateTime) {
+        this.warningMessage2 = "Thời gian đến phải <= thời gian đến của người khác đặt 3 tiếng";
+        return false;
+      } else {
+        this.warningMessage2 = '';
+        this.outTime = this.datePipe.transform(outTime, 'yyyy-MM-dd HH:mm:ss') || '';
+        return true;
+      }
     } else {
       this.selectedDateMessage = "";
       this.selectedTimeMessage = "";
+      this.warningMessage = '';
+      this.warningMessage2 = '';
     }
-    return check.length > 0;
+    this.outTime = '';
+    this.warningMessage = '';
+    this.warningMessage2 = '';
+    return true;
   }
 
-  addToReservation(seatingCapacity: number, fullDateTime: string) {
+  addToReservation(seatingCapacity: number, fullDateTime: string, outTime?: string) {
     const restaurantTableId = this.reservationForm.get('restaurantTableId')?.value;
     const newReservation: Reservation = {
       restaurantTableId: restaurantTableId,
       userId: this.user?.userId!,
       reservationDate: fullDateTime,
       //outTime: outDateTimeString,
-      outTime: '',
+      outTime: outTime || '',
       numberOfGuests: seatingCapacity,
       reservationStatusName: 'Chưa tới',
-      reservationOrderStatus : false,   // Chỉnh sửa theo trạng thái order món
-      username : '',
-      userPhone : '',
+      reservationOrderStatus: false,
+      username: this.reservationForm.get('username')?.value,
+      userPhone: this.reservationForm.get('userPhone')?.value,
     };
 
     let reservationsCache: Reservation[] = [];
@@ -346,8 +381,8 @@ export class AdminReservationsComponent {
     const isToday = this.checkDate(selectedDate, this.minDate);
     console.log("Is today: " + isToday);
     if (isToday) {
-      isBefore2Hours1 = (fullDateTime + 1000 * 60 * 60 * 2 > allowTime1 + 1000 * 60 * 60 * 1) && (currentDateTime + 1000 * 60 * 60 * 2 <= fullDateTime);
-      isBefore2Hours2 = (fullDateTime + 1000 * 60 * 60 * 2 < allowTime2) && (currentDateTime + 1000 * 60 * 60 * 2 <= fullDateTime);
+      isBefore2Hours1 = (fullDateTime + 1000 * 60 * 60 * 2 > allowTime1 + 1000 * 60 * 60 * 1) && (currentDateTime <= fullDateTime);
+      isBefore2Hours2 = (fullDateTime + 1000 * 60 * 60 * 2 < allowTime2) && (currentDateTime <= fullDateTime);
     } else {
       isBefore2Hours1 = fullDateTime + 1000 * 60 * 60 * 2 > allowTime1 + 1000 * 60 * 60 * 1;
       isBefore2Hours2 = fullDateTime + 1000 * 60 * 60 * 2 < allowTime2;
@@ -363,11 +398,11 @@ export class AdminReservationsComponent {
         this.selectedTimeMessage = "";
         return true;
       } else {
-        this.selectedTimeMessage = "Phải đặt trước thời gian đóng cửa 2 tiếng hoặc trước thời gian tới 2 tiếng";
+        this.selectedTimeMessage = "Phải đặt trước thời gian đóng cửa 2 tiếng hoặc sau thời gian hiện tại";
         return false;
       }
     } else {
-      this.selectedTimeMessage = "Thời gian đến phải lớn hơn 2 tiếng so với hiện tại hoặc trong thời gian được phép đặt";
+      this.selectedTimeMessage = "Thời gian đến phải lớn hơn thời gian hiện tại hoặc trong thời gian được phép đặt";
       return false;
     }
 
@@ -396,9 +431,11 @@ export class AdminReservationsComponent {
     }
 
     const checkAfter = this.checkIsReservedAfter(fullDateTime, selectedDate);
-    if (checkAfter) {
+    if (!checkAfter) {
       return false;
     }
+
+    //alert("Thêm được");
 
     return true;
 
@@ -421,7 +458,9 @@ export class AdminReservationsComponent {
 
     const fullDateTime = selectedDate + ' ' + selectedTimeStr;
 
-    this.addToReservation(seatingCapacity, fullDateTime);
+    this.addToReservation(seatingCapacity, fullDateTime, this.outTime);
+
+    this.checkAll();
 
   }
 
@@ -490,10 +529,10 @@ export class AdminReservationsComponent {
     } else {
       //console.warn(`MergeTable with ID ${id} not found.`);
     }
-   
+
   }
 
-  findTableNameByTableId(id: number): string{
+  findTableNameByTableId(id: number): string {
     return this.restaurantTableService.findTableNameByTableId(id);
   }
 
