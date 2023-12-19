@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
 import { Reservation } from 'src/app/interfaces/reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-user-header',
@@ -95,15 +96,17 @@ export class UserHeaderComponent {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
-      const orderInfo = params['orderInfo'];
-      // Xử lý dữ liệu ở đây
-      console.log('Email:', email);
+      const orderInfo = params['CartPayment'];
+      const orderInfo2 = params['ReservationPaymentReservationOrderItem'];
+      
       if (email) {
         this.loginGoogleConfig(email);
       }
       if(orderInfo){
-        console.log(orderInfo);
         this.newReservationByRedirectUrl();
+      }
+      if(orderInfo){
+        this.newReservationOrderItemByRedirectUrl();
       }
     });
 
@@ -344,6 +347,42 @@ export class UserHeaderComponent {
         }
       }
     );
+  }
+
+  newReservationOrderItemByRedirectUrl() {
+    const reservation = JSON.parse(localStorage.getItem('new_reservation_orderItem')!);
+    const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
+  
+    if (reservation && orderDetail) {
+      let reservationsCache: Reservation[] = [];
+      this.reservationService.add(reservation).subscribe({
+        next: (addedReservation) => {
+          this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
+          reservationsCache = reservationsCache.concat(addedReservation);
+          const token = sessionStorage.getItem('access_token');
+          const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          });
+          const orderDetailObservable = 
+          this.http.post<any>(`http://localhost:8080/public/create/orderDetail/reservationOrder/${addedReservation.reservationId!}`, orderDetail, {headers : headers});
+  
+          forkJoin([orderDetailObservable]).subscribe({
+            next: ([orderDetailResponse]) => {
+              console.log('Order Detail Response:', orderDetailResponse);
+              localStorage.setItem('new_reservation_orderItem', JSON.stringify(reservationsCache));
+              localStorage.removeItem('new_orderDetail_by_reservation');
+            },
+            error: (error) => {
+              console.error('Error adding order detail:', error);
+            }
+          });
+        },
+        error: (error) => {
+          console.error('Error adding reservation:', error);
+        }
+      });
+    }
   }
 
 }

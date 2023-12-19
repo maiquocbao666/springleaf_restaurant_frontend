@@ -248,7 +248,6 @@ import { DiscountService } from 'src/app/services/discount.service';
   };
 
   changed(){
-    alert('alo')
     this.isCheckoutActive = true;
   }
 

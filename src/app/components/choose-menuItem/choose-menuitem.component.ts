@@ -9,6 +9,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { ReservationService } from "src/app/services/reservation.service";
 import { VNPayService } from "src/app/services/VNpay.service";
 import { OrderService } from "src/app/services/order.service";
+import { CartDetail } from "src/app/interfaces/cart-detail";
 
 @Component({
   selector: 'app-choosemenuitem',
@@ -21,8 +22,9 @@ export class ChooseMenuItemComponent {
   products: Product[] = [];
   selectedItems: MenuItemSelected[] = [];
   cartInformationArray: CartInfomation[] = [];
-  menuItemList : MenuItemSelected[] = [];
+  menuItemList: MenuItemSelected[] = [];
   selections: { [key: string]: boolean } = {};
+  selectedItem: CartDetail[] = [];
 
   quantities: { [key: number]: number } = {};
   constructor(
@@ -32,8 +34,8 @@ export class ChooseMenuItemComponent {
     private sweetAlertService: ToastService,
     private modalService: NgbModal,
     private reservationService: ReservationService,
-    private vnpayService : VNPayService,
-    private orderService : OrderService,
+    private vnpayService: VNPayService,
+    private orderService: OrderService,
   ) {
     const productsString = localStorage.getItem('products');
     if (productsString) {
@@ -53,7 +55,7 @@ export class ChooseMenuItemComponent {
     );
 
     this.orderService.gets();
-    
+
   }
 
   formatAmount(amount: number): string {
@@ -93,10 +95,9 @@ export class ChooseMenuItemComponent {
     } else {
       this.selectedItems.splice(index, 1);
     }
-
-    const anyUnchecked = this.cartInformationArray.some(cart => !this.selections[cart.menuItem]);
-
   }
+
+
 
   // Đặt bàn 
   // this.reservationService.add(newReservation).subscribe(
@@ -116,23 +117,73 @@ export class ChooseMenuItemComponent {
   // );
 
   checkout() {
-
+    this.payWithVNPay();
   }
 
   calculateTotalPrice(): number {
     let totalPrice = 0;
 
     for (const cart of this.selectedItems) {
-      totalPrice += cart.menuItemPrice * cart.quantity;
+      totalPrice += cart.unitPrice * cart.quantity;
     }
     return totalPrice;
   }
 
+  payWithVNPay(): void {
+    var orderTotal = 0;
+    var orderDetails : CartDetail[] = []
+    // Kiểm tra nếu selectedItems là mảng rỗng
+    if (this.selectedItems.length === 0) {
+      orderTotal = 200000;
+      this.reservationOfUser.reservationDeposit += 200000;
+    } else {
+      orderTotal = 50000;
+
+      for (const item of this.selectedItems) {
+        for (const product of this.products) {
+          // Kiểm tra item.menuItem và this.quantities[product.menuItemId] có giá trị và kiểu dữ liệu đúng không
+          if (item.menuItemId === product.menuItemId && this.quantities.hasOwnProperty(product.menuItemId) ) {
+            orderTotal += this.quantities[product.menuItemId] * product.unitPrice;
+            var orderDetail: CartDetail = {
+              menuItemId : product.menuItemId,
+              quantity : this.quantities[product.menuItemId],
+              orderId: 1,
+              orderDetailId : 1
+            }
+            orderDetails.push(orderDetail);
+          }
+        }
+      }
+
+      this.reservationOfUser.reservationDeposit = orderTotal;
+    }
+
+    // Lưu vào localStorage
+    localStorage.setItem('new_reservation_orderItem', JSON.stringify(this.reservationOfUser));
+    localStorage.setItem('new_orderDetail_by_reservation', JSON.stringify(orderDetails));
+
+    var orderInfo = 'ReservationPaymentReservationOrderItem'
+
+    this.vnpayService.submitOrder(orderTotal, orderInfo).subscribe({
+      next: (data: any) => {
+        if (data.redirectUrl) {
+          window.location.href = data.redirectUrl;
+        } else {
+          // Xử lý các trường hợp khác nếu cần
+        }
+      },
+      error: (error: any) => {
+        console.error('Failed to submit order. Please try again.', error);
+      }
+    });
+  }
+
+
   // payWithVNPay(): void {
   //   var orderTotal = 200; 
   //   this.orderInfo = this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
-    
-    
+
+
   //   this.orderInfo = this.orderInfo.replace(/,$/, "");
   //   if (this.orderTotal && this.orderInfo) {
   //     this.vnpayService.submitOrder(orderTotal, this.orderInfo).subscribe({
@@ -152,25 +203,7 @@ export class ChooseMenuItemComponent {
   //   }
   // }
 
-  // onGetPaymentStatus(): void {
-  //   this.vnpayService.getPaymentStatus().subscribe(
-  //     (data: any) => {
-  //       if (data.paymentStatus === 1) {
-  //         this.paymentStatus = 'Order success';
-  //         // Hiển thị thông tin thanh toán nếu cần
-  //         console.log('Order Info:', data.orderInfo);
-  //         console.log('Payment Time:', data.paymentTime);
-  //         console.log('Transaction ID:', data.transactionId);
-  //         console.log('Total Price:', data.totalPrice);
-  //       } else {
-  //         this.paymentStatus = 'Order failed';
-  //       }
-  //     },
-  //     (error: any) => {
-  //       console.error('Failed to get payment status. Please try again.', error);
-  //     }
-  //   );
-  // }
+
 
 
 }
@@ -187,9 +220,9 @@ export interface CartInfomation {
 }
 
 export interface MenuItemSelected {
-  menuItem: number;
+  menuItemId: number;
   quantity: number;
   menuItemName: string;
-  menuItemPrice: number;
+  unitPrice: number;
   menuItemImage: string;
 }
