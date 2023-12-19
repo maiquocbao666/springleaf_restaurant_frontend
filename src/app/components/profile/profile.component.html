@@ -26,7 +26,7 @@
               <input type="text" formControlName="fullName" class="form-control" id="unitPrice"
                 placeholder="Nhập họ và tên..">
               <i *ngIf="profileForm.get('fullName')?.getError('message')" style="color: red;">
-                  {{ profileForm.get('fullName')?.getError('message') }}
+                {{ profileForm.get('fullName')?.getError('message') }}
               </i>
             </div>
             <div class="col-md-6">
@@ -36,28 +36,28 @@
                 {{ profileForm.get('email')?.getError('message') }}
               </i>
             </div>
-            
+
             <div class="col-md-6" class="form-label">
               <label for="phone">Số điện thoại</label>
               <input type="text" id="phone" class="form-control" formControlName="phone" name="phone">
               <i *ngIf="profileForm.get('phone')?.getError('message')" style="color: red;">
                 {{ profileForm.get('phone')?.getError('message') }}
-            </i>
+              </i>
             </div>
             <div class="col-md-6" class="form-label">
               <label for="phone">Nhà hàng</label>
-              <select class="form-select" formControlName="selectedRestaurant" class="select">
-                  <option [ngValue]="null">Bạn chưa chọn nhà hàng</option>
-                  <option *ngFor="let restaurant of restaurants" [ngValue]="restaurant.restaurantId">
-                    {{ restaurant.restaurantName }}
-                  </option>
-                </select>
+              <select class="form-select" formControlName="selectedRestaurant">
+                <option [ngValue]="null">Bạn chưa chọn nhà hàng</option>
+                <option *ngFor="let restaurant of restaurants" [ngValue]="restaurant.restaurantId">
+                  {{ restaurant.restaurantName }}
+                </option>
+              </select>
             </div>
             <div class="col-md-6">
               <label for="userRole" class="form-label">Chức vụ: </label>
-              <span id="userRole" *ngIf="userRole === 'ADMIN'">  Quản trị viên</span>
-              <span id="userRole" *ngIf="userRole === 'MANAGER'">  Quản lý</span>
-              <span id="userRole" *ngIf="userRole === 'USER'">  Người dùng</span>
+              <span id="userRole" *ngIf="userRole === 'ADMIN'"> Quản trị viên</span>
+              <span id="userRole" *ngIf="userRole === 'MANAGER'"> Quản lý</span>
+              <span id="userRole" *ngIf="userRole === 'USER'"> Người dùng</span>
             </div>
             <div class="col-md-6" class="form-label" *ngIf="showAddressInput">
               <label for="address">Địa chỉ <i class="fa fa-pen-to-square" (click)="toggleAddressInput()"></i></label>

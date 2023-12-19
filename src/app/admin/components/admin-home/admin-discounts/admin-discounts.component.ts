@@ -55,6 +55,7 @@ export class AdminDiscountsComponent {
   }
 
 
+
   ngOnInit(): void {
     this.getDiscount();
     this.getProducts();

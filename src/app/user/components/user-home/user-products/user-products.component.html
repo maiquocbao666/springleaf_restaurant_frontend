@@ -1,45 +1,55 @@
-<div class="float-right">
-    <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm món nào!">
-</div>
+<div class="row">
+    <div class="float-right">
+        <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm món nào!">
+        <button routerLink="/user/index" class="btn ml-2"><b>TẤT CẢ MÓN</b></button>
+    </div>
 
-
-<section id="our_menu" class="pt-5 pb-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 mb-5 " *ngFor="let product of getVisibleProducts(); let i = index">
-                <div class="product-grid">
-                    <div class="product-image">
-                        <a href="#" class="image">
-                            <img class="pic-1" (click)="openProductDetailModal(product)"
-                                [src]="'http://localhost:8080/public/getImage/'+ product.imageUrl" alt="burger">
-                        </a>
-                        <!-- <span class=" product-discount-label">-33%</span> -->
-                        <ul class="product-links">
-                            <li><a data-tip="Add to Wishlist"><i class="fas fa-heart"
-                                        (click)="favorite(product)"></i></a></li>
-                            <li><a (click)="openProductDetailModal(product)" data-tip="Quick View"><i
-                                        class="fa fa-search"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="product-content">
-                        <h3 class="title">
-                            <a (click)="openProductDetailModal(product)">
-                                {{ truncateString(product.name, 20) }}
+    <section id="our_menu" class="pt-5 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-5 " *ngFor="let product of visibleProducts; let i = index">
+                    <div class="product-grid">
+                        <div class="product-image">
+                            <a href="#" class="image">
+                                <img class="pic-1" (click)="openProductDetailModal(product)"
+                                    [src]="'http://localhost:8080/public/getImage/'+ product.imageUrl" alt="burger">
                             </a>
-                        </h3>
-                        <div class="price">
-                            {{ formatAmount(product.unitPrice ) }}
+                            <!-- <span class=" product-discount-label">-33%</span> -->
+                            <ul class="product-links">
+                                <li><a data-tip="Add to Wishlist"><i class="fas fa-heart"
+                                            (click)="favorite(product)"></i></a></li>
+                                <li><a (click)="openProductDetailModal(product)" data-tip="Quick View"><i
+                                            class="fa fa-search"></i></a></li>
+                            </ul>
                         </div>
-                        <button class="add-to-cart" (click)="addToCart(product.menuItemId)"><i
-                                class="fa fa-cart-shopping"></i> Thêm vào giỏ </button>
+                        <div class="product-content">
+                            <h3 class="title" style="height: 30px;">
+                                <a (click)="openProductDetailModal(product)">
+                                    {{ truncateString(product.name, 20) }}
+                                </a>
+                            </h3>
+                            <div class="price">
+                                {{ formatAmount(product.unitPrice ) }}
+                            </div>
+                            <!-- <a class="add-to-cart" (click)="addToCart(product.menuItemId)"><i
+                                    class="fa fa-cart-shopping"></i> Thêm vào giỏ </a> -->
+                            <div data-tooltip="Mua ngay" (click)="addToCart(product.menuItemId)"
+                                class="button add-to-cart ml-2">
+                                <div class="button-wrapper">
+                                    <div class="text"> Thêm vào giỏ </div>
+                                    <span class="icon">
+                                        <i class="fa fa-cart-shopping"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="text-center mb-5">
-                <button class="Btn" (click)="showMore()" *ngIf="remainingProducts && remainingProducts > 0">Hiển thị
-                    thêm</button>
-                <button class="Btn" (click)="showLess()" *ngIf="visibleProductCount > 12">Ẩn bớt</button>
+                <div class="text-center mb-5">
+                    <button (click)="showMore()" *ngIf="remainingProductsCount > 0">Xem thêm</button>
+                    <button (click)="showLess()" *ngIf="visibleProducts.length > 12">Ẩn bớt</button>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>

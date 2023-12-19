@@ -10,34 +10,13 @@
     <div class="card card-body">
       <form [formGroup]="discountForm" (ngSubmit)="addDiscount()">
         <div class="row g-3">
-          <div class="col-md-6">
-            <label for="limitValue" class="form-label">Kiểu giảm<span style="color: red;">(*)</span></label>
-            <input type="text" class="form-control" formControlName="limitValue" placeholder="Nhập kiểu giảm ...">
-            <div
-              *ngIf="discountForm.get('limitValue')?.invalid && (discountForm.get('limitValue')?.touched || isSubmitted)"
-              class="text-danger"> Không bỏ trống giá trị đơn.
-            </div>
-            <!-- <label for="menuItemId" class="form-label">Menu Item ID<span style="color: red;">(*)</span></label>
-            <select class="form-select" aria-label="Default select example" formControlName="menuItemId"> -->
-              <!-- Options for menu item ID -->
-              <!-- <option value="">Chọn món</option> -->
-              <!-- Add options dynamically -->
-              <!-- <option *ngFor="let product of products" [value]="product.menuItemId"> {{
-                product.name }}
-              </option>
-            </select> -->
-            <div
-              *ngIf="discountForm.get('menuItemId')?.invalid && (discountForm.get('menuItemId')?.touched || isSubmitted)"
-              class="text-danger">Chưa chọn món.
-            </div>
-          </div>
 
           <div class="col-md-6">
-            <label for="discountType" class="form-label">Kiểu giảm<span style="color: red;">(*)</span></label>
-            <input type="text" class="form-control" formControlName="discountType" placeholder="Nhập kiểu giảm ...">
+            <label for="limitValue" class="form-label">Giá giảm<span style="color: red;">(*)</span></label>
+            <input type="text" class="form-control" formControlName="limitValue" placeholder="Nhập giá giảm ...">
             <div
-              *ngIf="discountForm.get('discountType')?.invalid && (discountForm.get('discountType')?.touched || isSubmitted)"
-              class="text-danger"> Không bỏ trống kiểu giảm.
+              *ngIf="discountForm.get('limitValue')?.invalid && (discountForm.get('limitValue')?.touched || isSubmitted)"
+              class="text-danger"> Không bỏ trống giá giảm.
             </div>
           </div>
 
@@ -99,8 +78,7 @@
       <thead>
         <tr>
           <th class="text-center">ID mã giảm</th>
-          <th class="text-center">Tên món</th>
-          <th class="text-center">Kiểu giảm giá</th>
+          <th class="text-center">Giới hạn</th>
           <th class="text-center">Giá giảm</th>
           <th class="text-center">Ngày bắt đầu</th>
           <th class="text-center">Ngày kết thúc</th>

@@ -19,6 +19,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { IngredientService } from 'src/app/services/ingredient.service';
 import { ProductService } from 'src/app/services/product.service';
 import { StatisticsService } from 'src/app/services/statistical.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-admin-index',
@@ -73,6 +74,8 @@ export class AdminIndexComponent {
     private dialog: MatDialog,
     private http: HttpClient,
     private categoryService: CategoryService,
+    private sweetAlertService: ToastService
+
 
   ) { this.colorScheme = colorSets.find(s => s.name === 'cool'); }
 
@@ -251,7 +254,7 @@ export class AdminIndexComponent {
   }
 
   getRevenueAndBills(): void {
-    if (this.startDate && this.endDate) {
+    if (this.checkDateValidity()) { // Thêm kiểm tra ngày hợp lệ ở đây
       this.statisticsService.getRevenueByTimeRange(this.startDate, this.endDate).subscribe(
         (revenueData: Object[]) => {
           this.revenueData = revenueData;
@@ -269,11 +272,19 @@ export class AdminIndexComponent {
         }
       );
     } else {
-      console.error('Please provide both start date and end date.');
+      this.sweetAlertService.fireAlert('Lỗi khi truy vấn!', 'Ngày bắt đầu phải lớn hơn ngày kết thúc', 'error');
+      return;
+      // Thực hiện các hành động khác khi ngày không hợp lệ (hiển thị thông báo, xử lý lỗi...)
     }
   }
+
   toggleTable() {
     this.showTable = !this.showTable; // Khi nhấn nút, giá trị của biến showTable sẽ đảo ngược (ẩn nếu đang hiển thị và hiển thị nếu đang ẩn)
+  }
+
+  checkDateValidity(): boolean {
+    // Kiểm tra nếu startDate và endDate không rỗng và startDate không lớn hơn endDate
+    return !!this.startDate && !!this.endDate && this.startDate <= this.endDate;
   }
 
   fetchTotalRevenue() {

@@ -5,72 +5,64 @@
 </div>
 <h1>Chi tiết</h1>
 <div class="container">
-<form [formGroup]="discountForm" (ngSubmit)="updateDiscount()">
-  <div class="row g-3">
-    <div class="col-md-6">
-      <label for="limitValue" class="form-label">Giá trị đơn hàng<span style="color: red;">(*)</span></label>
-      <input type="text" class="form-control" formControlName="limitValue" placeholder="Nhập kiểu giảm ...">
-      <div
-        *ngIf="discountForm.get('limitValue')?.invalid && (discountForm.get('limitValue')?.touched || isSubmitted)"
-        class="text-danger"> Vui lòng nhập giá trị đơn hàng.
+  <form [formGroup]="discountForm" (ngSubmit)="updateDiscount()">
+    <div class="row g-3">
+
+
+      <div class="col-md-6">
+        <label for="limitValue" class="form-label">Giá giảm<span style="color: red;">(*)</span></label>
+        <input type="text" class="form-control" formControlName="limitValue" placeholder="Nhập giá giảm ...">
+        <div *ngIf="discountForm.get('limitValue')?.invalid && (discountForm.get('limitValue')?.touched || isSubmitted)"
+          class="text-danger"> Không bỏ trống giá giảm.
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="discountValue" class="form-label">Phần trăm giảm <span style="color: red;">((Đơn vị
+            %)*)</span></label>
+        <input type="number" class="form-control" formControlName="discountValue" placeholder="Nhập kiểu giảm ...">
+        <div
+          *ngIf="discountForm.get('discountValue')?.invalid && (discountForm.get('discountValue')?.touched || isSubmitted)"
+          class="text-danger"> Không bỏ trống phần trăm giảm giá.
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="startDate" class="form-label">Ngày bắt đầu <span style="color: red;">(*)</span></label>
+        <input type="date" class="form-control" formControlName="startDate" placeholder="Chọn Ngày bắt đầu ...">
+        <div *ngIf="discountForm.get('startDate')?.invalid && (discountForm.get('startDate')?.touched || isSubmitted)"
+          class="text-danger"> Chưa chọn ngày bắt đầu
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="endDate" class="form-label">Ngày kết thúc <span style="color: red;">(*)</span></label>
+        <input type="date" class="form-control" formControlName="endDate" placeholder="Chọn Ngày kết thúc ...">
+        <div *ngIf="discountForm.get('endDate')?.invalid && (discountForm.get('endDate')?.touched || isSubmitted)"
+          class="text-danger"> Chưa chọn ngày kết thúc
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="discountCode" class="form-label">Mã code giảm giá <span style="color: red;">(*)</span></label>
+        <input type="text" class="form-control" formControlName="discountCode" placeholder="Nhập mã code giảm giá ...">
+        <div
+          *ngIf="discountForm.get('discountCode')?.invalid && (discountForm.get('discountCode')?.touched || isSubmitted)"
+          class="text-danger"> Chưa nhập mã code giảm giá
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label>Trạng thái <span style="color: red;">(*)</span> </label><br>
+        <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true"
+          [checked]="discountForm.get('active')?.value === true"> Còn hạn
+        <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false"
+          [checked]="discountForm.get('active')?.value === false"> Hết hạn
+      </div>
+
+      <div class="text-center">
+        <button type="submit">Thêm</button>
       </div>
     </div>
-
-    <div class="col-md-6">
-      <label for="discountType" class="form-label">Kiểu giảm<span style="color: red;">(*)</span></label>
-      <input type="text" class="form-control" formControlName="discountType" placeholder="Nhập kiểu giảm ...">
-      <div
-        *ngIf="discountForm.get('discountType')?.invalid && (discountForm.get('discountType')?.touched || isSubmitted)"
-        class="text-danger"> Không bỏ trống kiểu giảm.
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <label for="discountValue" class="form-label">Phần trăm giảm <span style="color: red;">((Đơn vị
-          %)*)</span></label>
-      <input type="number" class="form-control" formControlName="discountValue" placeholder="Nhập kiểu giảm ...">
-      <div
-        *ngIf="discountForm.get('discountValue')?.invalid && (discountForm.get('discountValue')?.touched || isSubmitted)"
-        class="text-danger"> Không bỏ trống phần trăm giảm giá.
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <label for="startDate" class="form-label">Ngày bắt đầu <span style="color: red;">(*)</span></label>
-      <input type="date" class="form-control" formControlName="startDate" placeholder="Chọn Ngày bắt đầu ...">
-      <div *ngIf="discountForm.get('startDate')?.invalid && (discountForm.get('startDate')?.touched || isSubmitted)"
-        class="text-danger"> Chưa chọn ngày bắt đầu
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <label for="endDate" class="form-label">Ngày kết thúc <span style="color: red;">(*)</span></label>
-      <input type="date" class="form-control" formControlName="endDate" placeholder="Chọn Ngày kết thúc ...">
-      <div *ngIf="discountForm.get('endDate')?.invalid && (discountForm.get('endDate')?.touched || isSubmitted)"
-        class="text-danger"> Chưa chọn ngày kết thúc
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <label for="discountCode" class="form-label">Mã code giảm giá <span style="color: red;">(*)</span></label>
-      <input type="text" class="form-control" formControlName="discountCode" placeholder="Nhập mã code giảm giá ...">
-      <div
-        *ngIf="discountForm.get('discountCode')?.invalid && (discountForm.get('discountCode')?.touched || isSubmitted)"
-        class="text-danger"> Chưa nhập mã code giảm giá
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <label>Trạng thái <span style="color: red;">(*)</span> </label><br>
-      <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true"
-        [checked]="discountForm.get('active')?.value === true"> Còn hạn
-      <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false"
-        [checked]="discountForm.get('active')?.value === false"> Hết hạn
-    </div>
-
-    <div class="text-center">
-      <button type="submit">Thêm</button>
-    </div>
-  </div>
-</form>
+  </form>
 </div>

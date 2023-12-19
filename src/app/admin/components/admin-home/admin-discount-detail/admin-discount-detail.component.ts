@@ -33,8 +33,7 @@ export class AdminDiscountDetailComponent {
   ) {
     this.discountForm = this.formBuilder.group({
       discountId: ['', [Validators.required]],
-      menuItemId: ['', [Validators.required]],
-      discountType: ['', [Validators.required]],
+      limitValue: ['', [Validators.required]],
       discountValue: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -72,6 +71,7 @@ export class AdminDiscountDetailComponent {
       });
     }
   }
+
   updateDiscount(): void {
     // Đóng modal sau khi lưu
     this.activeModal.close('Close after saving');
@@ -81,10 +81,10 @@ export class AdminDiscountDetailComponent {
       const updatedDiscount: Discount = {
         userId : 0,
         discountId: +this.discountForm.get('discountId')?.value,
-        limitValue: this.discountForm.get('limitValue')?.value,
         discountValue: +this.discountForm.get('discountValue')?.value,
         startDate: this.discountForm.get('startDate')?.value,
         endDate: this.discountForm.get('endDate')?.value,
+        limitValue: this.discountForm.get('limitValue')?.value,
         discountCode: this.discountForm.get('discountCode')?.value,
         active: this.discountForm.get('active')?.value,
       };
