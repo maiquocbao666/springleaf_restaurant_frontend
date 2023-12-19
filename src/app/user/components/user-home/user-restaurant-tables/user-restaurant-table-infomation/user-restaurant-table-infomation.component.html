@@ -24,7 +24,9 @@
                 <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate" [min]="minDate"
                     [max]="maxDate" required (change)="checkAll()">
                 <div style="color: red; text-align: center;">
-                    {{ selectedDateMessage }}
+                    {{ warningMessage2 }} <br>
+                    {{ selectedDateMessage }} <br>
+                    {{ warningMessage }} <br>
                 </div>
             </div>
 
@@ -33,13 +35,17 @@
                 <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime"
                     (change)="checkAll()" required>
                 <div style="color: red; text-align: center;">
-                    {{ selectedTimeMessage }}
+                    {{ warningMessage2 }} <br>
+                    {{ selectedTimeMessage }} <br>
+                    {{ warningMessage }} <br>
                 </div>
             </div>
 
             <div class="col-lg-6 col-12" *ngIf="reservationForm.get('selectedDate')?.value && 
            reservationForm.get('selectedTime')?.value && 
            reservationForm.get('seatingCapacity')?.value">
+
+                <br>
 
                 Năm {{ reservationForm.get('selectedDate')?.value | date: 'yyyy' }}
                 Tháng {{ reservationForm.get('selectedDate')?.value | date: 'MM' }}
@@ -95,9 +101,9 @@
                     <thead class="sticky-header">
                         <tr class="align-middle">
                             <th class="text-center">Ngày tới</th>
-                            <th class="text-center">Giờ tới</th>
+                            <th class="text-center">Thời gian tới</th>
                             <th class="text-center">Trạng thái</th>
-                            <!-- <th class="text-center">Giờ đi</th> -->
+                            <th class="text-center">Thời gian đi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,7 +112,7 @@
                             <td class="text-center">{{ reservation.reservationDate | date: 'yyyy-MM-dd' }}</td>
                             <td class="text-center">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
                             <td class="text-center">{{ reservation.reservationStatusName }}</td>
-                            <!-- <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td> -->
+                            <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -144,29 +150,31 @@
         <h5>Điều khoản</h5>
         <hr>
         1. Mỗi lần đặt bàn quý khách sẽ phải cọc 200.000đ <br>
-        2. Thời gian đến khi đặt bàn phải lớn hơn 45 phút tính từ thời gian đặt hiện tại hoặc đủ thời gian để cho quý
+        2. Thời gian đến khi đặt bàn phải lớn hơn 2 tiếng tính từ thời gian hiện tại hoặc đủ thời gian để cho quý
         khách đến nơi <br>
         3. Quý khách phải lựa chọn thời gian phù hợp cho bữa ăn của mình <br>
         4. Quý khách phải tự chịu trách nhiệm cho việc đặt bàn của mình <br>
-        5. Thời gian rời đi phải lớn hơn thời gian đến tối thiểu là 2 tiếng <br>
-        6. Quý khách vui lòng không đặt bàn trong khoảng thời gian từ 23:00:00 - 7:00:00<br>
+        5. Nếu quý khách đã đặt bàn và đã đặt món nếu đến sau thời gian tới 30p phải đặt lại bàn hoặc có thể đem thức ăn
+        về <br>
+        6. Quý khách vui lòng chỉ đặt bàn trong khoảng thời gian từ 8:00:00 - 22:00:00<br>
         7. Nếu quý khách không có hóa đơn thì sẽ không hoàn trả tiền đặt cọc bàn <br>
         8. Quý khách vui lòng tuân thủ khoảng thời gian mà mình đã chọn <br>
         9. Nếu quý khách đã đặt bàn và không đến thì nhà hàng sẽ không hoàn trả tiền đặt cọc <br>
         10. Quý khách vui lòng kiểm tra thật kỹ thời gian sử dụng bàn của mình khi đặt và thanh toán <br>
-        11. Nhà hàng sẽ không chịu bất kỳ trách nhiệm nào nếu sai sót đến từ phía của khách hàng <br> <br>
+        11. Nhà hàng sẽ không chịu bất kỳ trách nhiệm nào nếu sai sót đến từ phía của khách hàng <br>
+        12. Nếu bàn đã được đặt sau thời gian quý khách chọn và không có bàn nào đặt trước thời gian đến của quý khách,
+        quý khách vui lòng đặt thời gian đến cách 3 tiếng so với thời gian đến của bàn đã đặt sau thời gian của quý
+        khách đến và phải rời đi trước 15 phút trước khi bàn đặt trước với thời gian sau quý khách đến <br> <br>
         <hr>
         <h5>Chính sách</h5>
         <hr>
-        1. Tiền đặt cọc sẽ được hoàn trả nếu quý khách sử dụng bàn trong khoảng thời gian tối thiểu 75% mà mình đã đặt
-        và sẽ được tặng kèm mã khuyến mãi cho lần sau <br>
-        2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các
+        1. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các
         món mà quý khách đã đặt <br>
-        3. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu khi quý khách đến và không có bàn
+        2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu khi quý khách đến và không có bàn
         như đã đặt <br>
-        4. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món
+        3. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món
         của nhà hàng và kèm theo 1 khoảng bồi thường <br>
-        5. Nếu quý khách không thể đến trong khoảng thời gian đã đặt bàn nhưng có đặt món, nhà hàng sẽ hỗ trợ quý khách
+        4. Nếu quý khách không thể đến trong khoảng thời gian đã đặt bàn nhưng có đặt món, nhà hàng sẽ hỗ trợ quý khách
         có thể đến lấy những món đã đặt trước nhưng sẽ không hoàn trả tiền cọc <br>
         <hr>
         <h5>Cám ơn quý khách đã tin tưởng và lựa chọn nhà hàng của chúng tôi. Kính chào.</h5>

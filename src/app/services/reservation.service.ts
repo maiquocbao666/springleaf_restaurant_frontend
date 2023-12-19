@@ -114,23 +114,26 @@ export class ReservationService extends BaseService<Reservation> {
     //-------------------------------------------------------------------------------------------------------------------------
     //Kiểm tra xem có bàn nào trong khoảng thời gian trước thời gian đặt của ngày hay không?
 
-    isTableReserved(tableId: number, fullDateTime: string, selectedDate: string): boolean {
-        const findReservation = this.cache.filter(reservation =>
-            reservation.restaurantTableId === tableId &&
-            (reservation.reservationStatusName === 'Đang sử dụng' ||
-                reservation.reservationStatusName === 'Chưa tới' ||
-                reservation.reservationStatusName === 'Đang đợi') &&
-            this.isSameDate(new Date(reservation.reservationDate), new Date(fullDateTime)) &&
-            (new Date(reservation.reservationDate).getTime() < new Date(fullDateTime).getTime())
-        );
-
-        //console.log(findReservation);
-
-        if (findReservation.length > 0) {
-            return true;
-        } else {
-            return false;
+    isTableReservedBefore(tableId: number, fullDateTime: string, selectedDate: string): boolean {
+        if(this.cache$){
+            const findReservation = this.cache.filter(reservation =>
+                reservation.restaurantTableId === tableId &&
+                (reservation.reservationStatusName === 'Đang sử dụng' ||
+                    reservation.reservationStatusName === 'Chưa tới' ||
+                    reservation.reservationStatusName === 'Đang đợi') &&
+                this.isSameDate(new Date(reservation.reservationDate), new Date(fullDateTime)) &&
+                (new Date(reservation.reservationDate).getTime() < new Date(fullDateTime).getTime())
+            );
+    
+            //console.log(findReservation);
+    
+            if (findReservation.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
+        return false;
     }
 
     isSameDate(date1: Date, date2: Date): boolean {
@@ -144,22 +147,26 @@ export class ReservationService extends BaseService<Reservation> {
     //------------------------------------------------------------------------------------------------------------------
     // Kiểm tra xem có bàn nào đặt sau thời gian này hay không
     
-    isTableReserved1(tableId: number, fullDateTime: string, selectedDate: string): boolean {
+    isTableReservedAfter(tableId: number, fullDateTime: string, selectedDate: string): Reservation[] {
         const findReservation = this.cache.filter(reservation =>
             reservation.restaurantTableId === tableId &&
             (reservation.reservationStatusName === 'Đang sử dụng' ||
                 reservation.reservationStatusName === 'Chưa tới' ||
                 reservation.reservationStatusName === 'Đang đợi') &&
             this.isSameDate(new Date(reservation.reservationDate), new Date(fullDateTime)) &&
-            (new Date(fullDateTime).getTime() < new Date(reservation.reservationDate).getTime())
+            (new Date(fullDateTime).getTime() <= new Date(reservation.reservationDate).getTime())
         );
-
+    
+        // Sort reservations by reservation date and time
+        findReservation.sort((a, b) => new Date(a.reservationDate).getTime() - new Date(b.reservationDate).getTime());
+    
         console.log(findReservation);
-
+    
         if (findReservation.length > 0) {
-            return true;
+            // Return the earliest reservation
+            return findReservation;
         } else {
-            return false;
+            return [];
         }
     }
 

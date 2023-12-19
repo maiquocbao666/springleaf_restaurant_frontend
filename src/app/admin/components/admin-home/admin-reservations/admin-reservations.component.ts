@@ -259,7 +259,7 @@ export class AdminReservationsComponent {
 
   checkIsReservedBefore(fullDateTime: string, selectedDate: string): boolean {
     const restaurantTableId = this.reservationForm.get('restaurantTableId')?.value;
-    const check = this.reservationService.isTableReserved(restaurantTableId, fullDateTime, selectedDate);
+    const check = this.reservationService.isTableReservedBefore(restaurantTableId, fullDateTime, selectedDate);
     if (check) {
       this.selectedDateMessage = "Đã có người đặt";
       this.selectedTimeMessage = "Đã có người đặt";
@@ -272,15 +272,15 @@ export class AdminReservationsComponent {
 
   checkIsReservedAfter(fullDateTime: string, selectedDate: string): boolean {
     const restaurantTableId = this.reservationForm.get('restaurantTableId')?.value;
-    const check = this.reservationService.isTableReserved1(restaurantTableId, fullDateTime, selectedDate);
-    if (check) {
+    const check = this.reservationService.isTableReservedAfter(restaurantTableId, fullDateTime, selectedDate);
+    if (check.length > 0) {
       this.selectedDateMessage = "Đã có người đặt";
       this.selectedTimeMessage = "Đã có người đặt";
     } else {
       this.selectedDateMessage = "";
       this.selectedTimeMessage = "";
     }
-    return check;
+    return check.length > 0;
   }
 
   addToReservation(seatingCapacity: number, fullDateTime: string) {
