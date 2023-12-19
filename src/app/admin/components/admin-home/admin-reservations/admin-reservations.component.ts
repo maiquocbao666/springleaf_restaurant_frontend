@@ -296,6 +296,7 @@ export class AdminReservationsComponent {
       reservationOrderStatus : false,   // Chỉnh sửa theo trạng thái order món
       username : '',
       userPhone : '',
+      reservationDeposit : 0 // Thay thế bằng phí cọc
     };
 
     let reservationsCache: Reservation[] = [];
