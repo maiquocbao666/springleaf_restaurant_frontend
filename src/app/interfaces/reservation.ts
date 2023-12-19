@@ -9,4 +9,5 @@ export interface Reservation {
     reservationOrderStatus : boolean;
     username : string;
     userPhone : string;
+    reservationDeposit: number;
 }

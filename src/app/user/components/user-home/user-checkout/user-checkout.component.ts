@@ -247,6 +247,11 @@ import { DiscountService } from 'src/app/services/discount.service';
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
 
+  changed(){
+    alert('alo')
+    this.isCheckoutActive = true;
+  }
+
   processPayment(): void {
     // Kiểm tra xem phương thức thanh toán nào được chọn
     if (this.selectedPaymentMethod === 'vnpay') {
@@ -264,7 +269,7 @@ import { DiscountService } from 'src/app/services/discount.service';
 
   payWithVNPay(): void {
     this.orderTotal = 0; // lấy dữ liệu động tổng tiền
-    this.orderInfo = this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
+    this.orderInfo = 'CartPayment,' + this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
     const cartDetail : CartDetail[] = [];
     for(const cart of this.cartInfos){
       this.orderTotal += cart.menuItemPrice*cart.quantity;

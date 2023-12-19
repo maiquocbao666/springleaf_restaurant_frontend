@@ -45,7 +45,7 @@
             <ul class="list-group">
               <!-- Phương thức thanh toán VNPAY -->
               <div class="payment-option col-lg-6">
-                <input type="radio" id="vnpay" name="paymentMethod" value="vnpay" [(ngModel)]="selectedPaymentMethod">
+                <input type="radio" id="vnpay" name="paymentMethod" value="vnpay" [(ngModel)]="selectedPaymentMethod" (click)="changed()">
                 <label for="vnpay">
                   <img src="https://tse4.mm.bing.net/th?id=OIP.Jic8DogDMWbfEgp7wG6MhAAAAA&pid=Api&P=0&h=180"
                     alt="VNPAY Logo" width="100px"> VNPAY

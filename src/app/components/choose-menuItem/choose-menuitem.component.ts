@@ -7,6 +7,8 @@ import { ProductService } from "src/app/services/product.service";
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from 'src/app/services/toast.service';
 import { ReservationService } from "src/app/services/reservation.service";
+import { VNPayService } from "src/app/services/VNpay.service";
+import { OrderService } from "src/app/services/order.service";
 
 @Component({
   selector: 'app-choosemenuitem',
@@ -30,6 +32,8 @@ export class ChooseMenuItemComponent {
     private sweetAlertService: ToastService,
     private modalService: NgbModal,
     private reservationService: ReservationService,
+    private vnpayService : VNPayService,
+    private orderService : OrderService,
   ) {
     const productsString = localStorage.getItem('products');
     if (productsString) {
@@ -47,6 +51,8 @@ export class ChooseMenuItemComponent {
         this.user = data;
       }
     );
+
+    this.orderService.gets();
     
   }
 
@@ -121,6 +127,50 @@ export class ChooseMenuItemComponent {
     }
     return totalPrice;
   }
+
+  // payWithVNPay(): void {
+  //   var orderTotal = 200; 
+  //   this.orderInfo = this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
+    
+    
+  //   this.orderInfo = this.orderInfo.replace(/,$/, "");
+  //   if (this.orderTotal && this.orderInfo) {
+  //     this.vnpayService.submitOrder(orderTotal, this.orderInfo).subscribe({
+  //       next: (data: any) => {
+  //         if (data.redirectUrl) {
+  //           window.location.href = data.redirectUrl; // Chuyển hướng đến URL được trả về từ backend
+  //           this.onGetPaymentStatus();
+  //         } else {
+  //           // Xử lý các trường hợp khác nếu cần
+  //         }
+  //       },
+  //       error: (error: any) => {
+  //         console.error('Failed to submit order. Please try again.', error);
+  //       }
+  //     });
+  //     console.log('Thanh toán bằng VNPAY');
+  //   }
+  // }
+
+  // onGetPaymentStatus(): void {
+  //   this.vnpayService.getPaymentStatus().subscribe(
+  //     (data: any) => {
+  //       if (data.paymentStatus === 1) {
+  //         this.paymentStatus = 'Order success';
+  //         // Hiển thị thông tin thanh toán nếu cần
+  //         console.log('Order Info:', data.orderInfo);
+  //         console.log('Payment Time:', data.paymentTime);
+  //         console.log('Transaction ID:', data.transactionId);
+  //         console.log('Total Price:', data.totalPrice);
+  //       } else {
+  //         this.paymentStatus = 'Order failed';
+  //       }
+  //     },
+  //     (error: any) => {
+  //       console.error('Failed to get payment status. Please try again.', error);
+  //     }
+  //   );
+  // }
 
 
 }

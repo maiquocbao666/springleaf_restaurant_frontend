@@ -21,6 +21,8 @@ import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
+import { Reservation } from 'src/app/interfaces/reservation';
+import { ReservationService } from 'src/app/services/reservation.service';
 
 @Component({
   selector: 'app-user-header',
@@ -60,6 +62,7 @@ export class UserHeaderComponent {
     private route: ActivatedRoute,
     private router: Router,
     private sweetAlertService: ToastService,
+    private reservationService : ReservationService,
   ) {
     this.authService.getUserCache().subscribe(
       (data: any | null) => {
@@ -92,10 +95,15 @@ export class UserHeaderComponent {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
+      const orderInfo = params['orderInfo'];
       // Xử lý dữ liệu ở đây
       console.log('Email:', email);
       if (email) {
         this.loginGoogleConfig(email);
+      }
+      if(orderInfo){
+        console.log(orderInfo);
+        this.newReservationByRedirectUrl();
       }
     });
 
@@ -314,6 +322,28 @@ export class UserHeaderComponent {
         //this.getRestaurantTables(this.restaurantId, null); // Refresh data in the parent component
       });
     }
+  }
+
+  newReservationByRedirectUrl(){
+    var newReservation = JSON.parse(localStorage.getItem('await_new_reservation')!);
+
+    let reservationsCache: Reservation[] = [];
+    this.reservationService.add(newReservation).subscribe(
+      {
+        next: (addedReservation) => {
+          this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
+          reservationsCache.push(addedReservation);
+          localStorage.setItem('reservations', JSON.stringify(reservationsCache));
+          localStorage.removeItem('await_new_reservation');
+        },
+        error: (error) => {
+          console.error('Error adding reservation:', error);
+        },
+        complete: () => {
+          // Xử lý khi Observable hoàn thành (nếu cần)
+        }
+      }
+    );
   }
 
 }

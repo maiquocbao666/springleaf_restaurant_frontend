@@ -6,6 +6,7 @@ import { ChooseMenuItemComponent } from 'src/app/components/choose-menuItem/choo
 import { Reservation } from 'src/app/interfaces/reservation';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
+import { VNPayService } from 'src/app/services/VNpay.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ReservationStatusService } from 'src/app/services/reservation-status.service';
 import { ReservationService } from 'src/app/services/reservation.service';
@@ -38,6 +39,7 @@ export class UserRestaurantTableInfomationComponent {
   selectedOutTimeMessage = '';
   warningMessage = '';
   warningMessage2 = '';
+  paymentStatus: string | undefined;
 
 
   searchReservations: Reservation[] = [];
@@ -53,6 +55,7 @@ export class UserRestaurantTableInfomationComponent {
     private datePipe: DatePipe,
     private modalService: NgbModal,
     private sweetAlertService: ToastService,
+    private vnpayService: VNPayService,
   ) {
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
@@ -161,18 +164,67 @@ export class UserRestaurantTableInfomationComponent {
       .then((result) => {
         if (result.isConfirmed) {
           this.toastService.showConfirmAlert('Bạn có muốn đặt món trước không?', '', 'info')
-            .then((result) => {
-              if (result.isConfirmed) {
-                this.openModelChooseMenuItem();
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                this.addReservation();
-              }
-            });
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.openModelChooseMenuItem();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+          if (this.user) {
+            this.updateMinMaxDate();
+
+            const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
+
+            // Ngày mà khách hàng chọn
+            const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
+            const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
+
+            // if (!this.checkAll()) {
+            //   return;
+            // }
+
+            const fullDateTime = selectedDate + ' ' + selectedTimeStr;
+            const newReservation: Reservation = {
+              restaurantTableId: this.restaurantTable?.tableId!,
+              userId: this.user?.userId!,
+              reservationDate: fullDateTime,
+              //outTime: outDateTimeString,
+              outTime: '',
+              numberOfGuests: seatingCapacity,
+              reservationStatusName: 'Chưa tới',
+              reservationOrderStatus: false,
+              username: this.user?.fullName,
+              userPhone: this.user?.phone,
+              reservationDeposit: 200000 // thay thế bằng phí cọc
+            };
+
+            localStorage.setItem('await_new_reservation', JSON.stringify(newReservation));
+          }
+          this.payWithVNPay();
+        }
+      });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           return;
         }
       });
 
+  }
+
+  payWithVNPay(): void {
+    var orderTotal = 200000;
+    var orderInfo = 'ReservationPaymentReservationDeposit'
+
+    this.vnpayService.submitOrder(orderTotal, orderInfo).subscribe({
+      next: (data: any) => {
+        if (data.redirectUrl) {
+            window.location.href = data.redirectUrl;
+        } else {
+          // Xử lý các trường hợp khác nếu cần
+        }
+      },
+      error: (error: any) => {
+        console.error('Failed to submit order. Please try again.', error);
+      }
+    });
   }
 
   // getRervationsByTableId(id: number) {
@@ -271,35 +323,40 @@ export class UserRestaurantTableInfomationComponent {
   }
 
   addToReservation(seatingCapacity: number, fullDateTime: string, outTime?: string) {
-    const newReservation: Reservation = {
-      restaurantTableId: this.restaurantTable?.tableId!,
-      userId: this.user?.userId!,
-      reservationDate: fullDateTime,
-      //outTime: outDateTimeString,
-      outTime: outTime || '',
-      numberOfGuests: seatingCapacity,
-      reservationStatusName: 'Chưa tới',
-      reservationOrderStatus: false,
-      username: '',
-      userPhone: '',
-    };
+    if (this.user) {
+      const newReservation: Reservation = {
+        restaurantTableId: this.restaurantTable?.tableId!,
+        userId: this.user?.userId!,
+        reservationDate: fullDateTime,
+        //outTime: outDateTimeString,
+        outTime: outTime || '',
+        numberOfGuests: seatingCapacity,
+        reservationStatusName: 'Chưa tới',
+        reservationOrderStatus : false,
+        username: this.user?.fullName,
+        userPhone: this.user?.phone,
+        reservationDeposit: 200000 // thay thế bằng phí cọc
+      };
 
-    let reservationsCache: Reservation[] = [];
-    this.reservationService.add(newReservation).subscribe(
-      {
-        next: (addedReservation) => {
-          this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
-          reservationsCache.push(addedReservation);
-          localStorage.setItem('reservations', JSON.stringify(reservationsCache));
-        },
-        error: (error) => {
-          console.error('Error adding reservation:', error);
-        },
-        complete: () => {
-          // Xử lý khi Observable hoàn thành (nếu cần)
+      let reservationsCache: Reservation[] = [];
+      this.reservationService.add(newReservation).subscribe(
+        {
+          next: (addedReservation) => {
+            this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
+            reservationsCache.push(addedReservation);
+            localStorage.setItem('reservations', JSON.stringify(reservationsCache));
+            console.log('Thành công');
+          },
+          error: (error) => {
+            console.error('Error adding reservation:', error);
+          },
+          complete: () => {
+            // Xử lý khi Observable hoàn thành (nếu cần)
+          }
         }
-      }
-    );
+      );
+    }
+
   }
 
   checkAllowTime(selectedDate: string, selectedTime: string): boolean {
@@ -446,6 +503,7 @@ export class UserRestaurantTableInfomationComponent {
       reservationOrderStatus: false,
       username: '',
       userPhone: '',
+      reservationDeposit: 0 // thay thế bằng phí cọc
     };
 
     const modalRef = this.modalService.open(ChooseMenuItemComponent, {

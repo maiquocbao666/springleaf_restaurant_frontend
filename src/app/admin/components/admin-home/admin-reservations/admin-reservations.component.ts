@@ -331,6 +331,7 @@ export class AdminReservationsComponent {
       reservationOrderStatus: false,
       username: this.reservationForm.get('username')?.value,
       userPhone: this.reservationForm.get('userPhone')?.value,
+      reservationDeposit : 0 // Thay thế bằng phí cọc
     };
 
     let reservationsCache: Reservation[] = [];
