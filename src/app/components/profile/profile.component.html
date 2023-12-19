@@ -14,7 +14,7 @@
             <div class="file-wrapper">
               <input type="file" name="imageUpload" #imageUpload class="file-input" (change)="onFileSelected($event)" />
               <div class="file-preview-background">Upload Image</div>
-              <img [src]="'http://localhost:8080/public/getImage/' + profileForm.get('image')?.value" #imagePreview
+              <img [src]="'https://springleafrestaurantbackend.onrender.com/public/getImage/' + profileForm.get('image')?.value" #imagePreview
                 width="300px" class="file-preview" />
             </div>
           </div>
