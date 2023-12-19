@@ -51,11 +51,8 @@
       <div class="col-md-4">
         <label for="tableStatusId" class="form-label">Trạng thái bàn<span style="color: red;">(*)</span></label>
         <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
-          <option value>Chọn trạng thái</option>
-          <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{
-            tableStatus.tableStatusName
-            }}
-          </option>
+          <option value="Đang hoạt động" selected>Đang hoạt động</option>
+          <option value="Không hoạt động">Không hoạt động</option>
         </select>
         <div
           *ngIf="restaurantTableForm.get('tableStatusId')?.invalid && (restaurantTableForm.get('tableStatusId')?.touched || isSubmitted)"

@@ -116,25 +116,25 @@ export class AdminTableStatusesComponent {
 
   }
 
-  deleteTableStatus(tableStatus: TableStatus): void {
+  // deleteTableStatus(tableStatus: TableStatus): void {
 
-    if (tableStatus.tableStatusId) {
+  //   if (tableStatus.tableStatusId) {
 
-      if (this.restaurantTableService.findTableByStatusId(tableStatus?.tableStatusId)) {
-        console.log("Có bàn đang sử dụng status này, không thể xóa");
-        Swal.fire('Thất bại', 'Có bàn đang sử dụng trạng thái này, không thể xóa!', 'warning');
-        return;
-      }
+  //     if (this.restaurantTableService.findTableByStatusId(tableStatus?.tableStatusId)) {
+  //       console.log("Có bàn đang sử dụng status này, không thể xóa");
+  //       Swal.fire('Thất bại', 'Có bàn đang sử dụng trạng thái này, không thể xóa!', 'warning');
+  //       return;
+  //     }
 
-      this.tableStatuses = this.tableStatuses.filter(i => i !== tableStatus);
-      this.tableStatusService.delete(tableStatus.tableStatusId).subscribe();
-      this.sweetAlertService.showCustomAnimatedAlert('Thành công', 'success', 'Xóa ' + tableStatus.tableStatusName + ' Thành công')
+  //     this.tableStatuses = this.tableStatuses.filter(i => i !== tableStatus);
+  //     this.tableStatusService.delete(tableStatus.tableStatusId).subscribe();
+  //     this.sweetAlertService.showCustomAnimatedAlert('Thành công', 'success', 'Xóa ' + tableStatus.tableStatusName + ' Thành công')
 
-    } else {
-      console.log("Không có tableStautsId");
-    }
+  //   } else {
+  //     console.log("Không có tableStautsId");
+  //   }
 
-  }
+  // }
 
   openTableStatusDetailModal(tableStatus: TableStatus) {
     const modalRef = this.modalService.open(AdminTableStatusDetailComponent, { size: 'lg' });

@@ -9,6 +9,21 @@
   color: #fff;
 } */
 
-.container {
-  overflow-y: auto;
+.table-container {
+  padding-top: 0px;
+  max-height: 300px; /* Đặt chiều cao tối đa của bảng */
+  overflow-y: auto; /* Hiển thị thanh cuộn khi nội dung vượt quá chiều cao */
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  margin-top: 0px;
+  background-color: #fff; /* Đặt màu nền cho header */
+  z-index: 100; /* Đảm bảo header ở trên cùng */
+}
+
+/* Đặt chiều rộng tối đa của bảng để giữ header theo chiều ngang */
+.table-container table {
+  max-width: 100%;
 }

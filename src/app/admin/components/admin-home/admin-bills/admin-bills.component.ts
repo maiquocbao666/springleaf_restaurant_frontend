@@ -25,7 +25,10 @@ export class AdminBillsComponent {
   bill: Bill | undefined;
   fieldNames: string[] = [];
 
-
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 7;
+  tableSizes: any = [5, 10, 15, 20];
   billsUrl = 'bills';
   cartsUrl = 'carts';
   productsUrl = 'products';
@@ -51,6 +54,14 @@ export class AdminBillsComponent {
     this.getProducts();
   }
 
+  onTableDataChange(event: any) {
+    this.page = event;
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+  }
 
   getProductById(id: number): Product | null {
     const found = this.products.find(data => data.menuItemId === id);
@@ -75,6 +86,10 @@ export class AdminBillsComponent {
           console.error('Failed to get bill details.', error);
         }
       );
+  }
+
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
   getProducts(): void {

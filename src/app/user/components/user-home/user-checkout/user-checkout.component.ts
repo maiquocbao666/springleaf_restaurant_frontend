@@ -19,6 +19,9 @@ import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Service } from 'src/app/interfaces/address/Service';
+import { Restaurant } from 'src/app/interfaces/restaurant';
+import { RestaurantService } from 'src/app/services/restaurant.service';
+import { DiscountService } from 'src/app/services/discount.service';
 
 @Component({
   selector: 'app-user-checkout',
@@ -39,6 +42,7 @@ import { Service } from 'src/app/interfaces/address/Service';
   cartByUser: DeliveryOrder | null = null;
   orderDetailByUser: CartDetail[] | null = null;
 
+  userAddressHouse : string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
@@ -49,6 +53,15 @@ import { Service } from 'src/app/interfaces/address/Service';
   totalAndShip : number | null=null;
   service: Service[] = [];
   selectedService : number | null = null;
+  // Địa chỉ nhà hàng của user
+  restaurants : Restaurant[] = []
+  userRestaurantAddress : string = '';
+  userRestaurantProvince: Province | null = null;
+  userRestaurantDistrict : District | null = null;
+  userRestaurantWard : Ward | null = null;
+  discountCode : string = '';
+  discountPrice : number | null = null;
+  isCheckoutActive : boolean = false;
   constructor(
     private vnpayService: VNPayService,
     private router: Router,
@@ -59,6 +72,8 @@ import { Service } from 'src/app/interfaces/address/Service';
     private toast : ToastService,
     private deliveryOrderService : DeliveryOrderService,
     private cartDetailService : CartDetailService,
+    private restaurantSerivce : RestaurantService,
+    private discountService : DiscountService,
   ) {
     this.orderService.userOrderCache$.subscribe(order => {
       this.orderByUser = order;
@@ -91,21 +106,85 @@ import { Service } from 'src/app/interfaces/address/Service';
 
 
   ngOnInit(): void {
+    this.getRestaurants();
     this.cartInfos = this.cartService.getCartData();
     console.log(this.cartInfos);
     this.calculateTotalPrice();
+    this.initUserRestaurantAddress();
     
-    //this.calculateShipping();
-    alert('district: ' + this.userDistrict?.DistrictID)
   }
+
+  getRestaurants(): void {
+    this.restaurantSerivce.getCache().subscribe(
+      (cached: any[]) => {
+        this.restaurants = cached;
+      }
+    );
+  }
+
+  initUserRestaurantAddress(){
+    if(this.user){
+      var userRestaurantBrand : Restaurant | null = null;
+      for (const restaurant of this.restaurants) {
+        if (restaurant.restaurantId === this.user.restaurantBranchId) {
+          userRestaurantBrand = restaurant;
+      }
+      if(userRestaurantBrand){
+
+      
+          const address = userRestaurantBrand.address.toString();
+          const restaurantStrings = address.split('-');
+          const restaurantAddressHouse = restaurantStrings[0];
+          this.userRestaurantAddress = restaurantAddressHouse;
+          const restaurantAddressWard = restaurantStrings[1];
+          const restaurantAddressDistrict = parseInt(restaurantStrings[2], 10);
+          const restaurantAddresssProvince = parseInt(restaurantStrings[3], 10);
+          for (const province of this.Provinces) {
+            if (province.ProvinceID === restaurantAddresssProvince) {
+              this.userRestaurantProvince = province;
+              break;
+            }
+          }
+
+          if (this.userRestaurantProvince) {
+            this.getDistrict(this.userRestaurantProvince.ProvinceID).then(() => {
+              for (const district of this.Districts) {
+                if (district.DistrictID === restaurantAddressDistrict) {
+                  this.userRestaurantDistrict = district;
+                  if (this.userRestaurantDistrict) {
+                    console.log('here')
+                    this.getWard(this.userRestaurantDistrict.DistrictID).then(() => {
+                      for (const ward of this.Wards) {
+                        if (ward.WardCode === restaurantAddressWard) {
+                          this.userRestaurantWard = ward;
+                          break;
+                        }
+                      }
+                    });
+  
+                  }
+                  break;
+  
+                }
+              }
+            });
+          }
+
+        }
+      }
+    }
+  }
+
   initUserAddress() {
     if (this.user) {
-      if (this.user.address) {
+      if (this.user.address && this.user.restaurantBranchId) {
         const address = this.user.address.toString();
         const splittedStrings = address.split('-');
-        const addressWard = splittedStrings[0];
-        const addressDistrict = parseInt(splittedStrings[1], 10);
-        const addresssProvince = parseInt(splittedStrings[2], 10);
+        const addressHouse = splittedStrings[0];
+        this.userAddressHouse = addressHouse;
+        const addressWard = splittedStrings[1];
+        const addressDistrict = parseInt(splittedStrings[2], 10);
+        const addresssProvince = parseInt(splittedStrings[3], 10);
 
         for (const province of this.Provinces) {
           if (province.ProvinceID === addresssProvince) {
@@ -113,6 +192,8 @@ import { Service } from 'src/app/interfaces/address/Service';
             break;
           }
         }
+
+        
 
         if (this.userProvince) {
           this.getDistrict(this.userProvince.ProvinceID).then(() => {
@@ -137,6 +218,8 @@ import { Service } from 'src/app/interfaces/address/Service';
             }
           });
         }
+
+
       } else {
       }
 
@@ -164,6 +247,10 @@ import { Service } from 'src/app/interfaces/address/Service';
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
 
+  changed(){
+    this.isCheckoutActive = true;
+  }
+
   processPayment(): void {
     // Kiểm tra xem phương thức thanh toán nào được chọn
     if (this.selectedPaymentMethod === 'vnpay') {
@@ -181,7 +268,7 @@ import { Service } from 'src/app/interfaces/address/Service';
 
   payWithVNPay(): void {
     this.orderTotal = 0; // lấy dữ liệu động tổng tiền
-    this.orderInfo = this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
+    this.orderInfo = 'CartPayment,' + this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
     const cartDetail : CartDetail[] = [];
     for(const cart of this.cartInfos){
       this.orderTotal += cart.menuItemPrice*cart.quantity;
@@ -209,10 +296,10 @@ import { Service } from 'src/app/interfaces/address/Service';
   calculateShipping(): void {
     const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee';
     const total = this.calculateTotalPrice();
-    const distristId = this.userDistrict?.DistrictID;
+    const formDistrict = this.userRestaurantDistrict?.DistrictID;
+    const toDistrict = this.userDistrict?.DistrictID;
     const wardCode = String(this.userWard?.WardCode);
     const selectedServiceId = this.selectedService;
-    console.log('total' + total + 'DISTRICT'+ distristId! + 'CODE' + wardCode + 'service ' + selectedServiceId)
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'token': 'd6f64767-329b-11ee-af43-6ead57e9219a',
@@ -223,9 +310,9 @@ import { Service } from 'src/app/interfaces/address/Service';
       "service_id": selectedServiceId,
       "insurance_value": total,
       "coupon": null,
-      "from_district_id": 1710,
-      "to_district_id": 1710,
-      "to_ward_code": '1A1102',
+      "from_district_id": formDistrict,
+      "to_district_id": toDistrict,
+      "to_ward_code": wardCode,
       "weight": 1000,
       "length": 15,
       "width": 15,
@@ -240,6 +327,7 @@ import { Service } from 'src/app/interfaces/address/Service';
             console.log('Shipping Fee:', response.data.total);
             // Xử lý response cần thiết
             this.ship = response.data.total;
+            this.isCheckoutActive = true;
             return;
           }else{
             return;
@@ -248,6 +336,7 @@ import { Service } from 'src/app/interfaces/address/Service';
         },
         error: (error) => {
           console.error('Error calculating shipping fee:', error);
+
           if(error.error.code_message_value === "Không tìm thấy bảng giá hợp lệ"){
             this.toast.showTimedAlert('Không tìm được bảng giá', 'Vui lòng thay đổi hình thức vận chuyển','error',1000);
           }
@@ -290,46 +379,43 @@ import { Service } from 'src/app/interfaces/address/Service';
   }
 
   payWithCOD(): void {
-    console.log('Thanh toán bằng COD');
-    const jwtToken = localStorage.getItem('access_token');
+    const jwtToken = sessionStorage.getItem('access_token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${jwtToken}`
     });
-
-    const listItem: CartDetail[] = [];
-    let totalAmount = this.totalAndShip;
-    this.cartInfos.forEach((item) => {
-      const cartDetail: CartDetail = {
-        orderDetailId: item.orderDetailId,
-        menuItemId: item.menuItem,
-        orderId: item.order,
-        quantity: item.quantity
-      }
-      
-      listItem.push(cartDetail);
-    });
+  
+    const listItem: CartDetail[] = this.cartInfos.map(item => ({
+      orderDetailId: item.orderDetailId,
+      menuItemId: item.menuItem,
+      orderId: item.order,
+      quantity: item.quantity
+    }));
+  
     const orderId = this.orderByUser?.orderId;
-    console.log(totalAmount)
-
-    this.http.post(`http://localhost:8080/public/checkout-cod/${orderId}/${totalAmount}`, listItem, { headers: headers })
+    const totalAmount = this.totalAndShip;
+  
+    // Chú ý: Kiểm tra xem this.discountCode có giá trị không trước khi sử dụng nó
+    const discountCode = this.discountCode ? `/${this.discountCode}` : '/noDiscount';
+  
+    this.http.post(`http://localhost:8080/public/checkout-cod/${orderId}/${totalAmount}${discountCode}/${this.cartByUser?.deliveryOrderId}`, listItem, { headers })
       .subscribe({
-        next: (response : any) => {
-          if(response.message === "Checkout success"){
-            this.toast.showTimedAlert('Thanh toán thành công','Cám ơn quý khách','success',1500);
+        next: (response: any) => {
+          if (response.message === 'Checkout success') {
+            this.toast.showTimedAlert('Thanh toán thành công', 'Cám ơn quý khách', 'success', 1500);
             this.getUserCart();
-          }
-          if(response === "Checkout failed"){
-            this.toast.showTimedAlert('Thanh toán thất bại','Vui lòng kiểm tra lại','error',1500);
+          } else if (response.message === 'Checkout failed') {
+            this.toast.showTimedAlert('Thanh toán thất bại', 'Vui lòng kiểm tra lại', 'error', 1500);
           }
           console.log('Response:', response);
         },
         error: (error) => {
-          // Handle error
+          // Xử lý lỗi
           console.error('Error:', error);
         }
       });
   }
+  
 
   public getDistrict(ProvinceId: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -396,9 +482,10 @@ import { Service } from 'src/app/interfaces/address/Service';
 
   getService(){
     const shop_id = 4421897;
-    const from_district = Number(this.userDistrict?.DistrictID);
-    const to_distrist = Number(this.userDistrict?.DistrictID);
+    const from_district = this.userRestaurantDistrict?.DistrictID;
+    const to_distrist = this.userDistrict?.DistrictID;
     const token = 'd6f64767-329b-11ee-af43-6ead57e9219a';
+    console.log("FORM : " + from_district + " TO " + to_distrist)
 
     const httpOptions = {
 
@@ -410,9 +497,9 @@ import { Service } from 'src/app/interfaces/address/Service';
 
     const requestBody = {
 
-      shop_id : 4421872,
-      from_district : 1710,
-      to_district : 1710
+      "shop_id" : shop_id,
+      "from_district" : from_district,
+      "to_district" : to_distrist,
 
     };
 
@@ -465,6 +552,35 @@ import { Service } from 'src/app/interfaces/address/Service';
       }
     });
   }
+
+  getDiscount() {
+    if(this.discountCode){
+      this.discountService.getDiscountByName(this.discountCode, this.calculateTotalPrice()).subscribe({
+        next: (response) => {
+          if (response.message === "Discount is not valid") {
+            this.toast.showTimedAlert('Mã giảm giá không tồn tại', '', 'error', 2000);
+          }
+          else if (response.message === "Discount has expired") {
+            this.toast.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
+          }
+          else if (response.message === "Discount has not start") {
+            this.toast.showTimedAlert('Chưa đến ngày sử dụng', '', 'error', 2000);
+          }
+          else {
+            this.discountPrice = Number(response.message);
+            sessionStorage.setItem('discountPrice', response.message);
+            this.toast.showTimedAlert('Mã chính xác', '', 'success', 2000);
+          }
+        },
+        error: (error) => {
+          this.toast.showTimedAlert('Thêm thất bại', error, 'error', 2000);
+        }
+      });
+    }else{
+      this.toast.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'error', 2000);
+    } 
+  }
+  
 }
 export interface CartInfomation {
   orderDetailId?: number;

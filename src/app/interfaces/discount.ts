@@ -1,7 +1,7 @@
 export interface Discount {
     discountId?: number;
-    menuItemId: number;
-    discountType: string;
+    userId : number;
+    limitValue: number;
     discountValue: number;
     startDate: string;
     endDate: string;

@@ -1,103 +1,81 @@
 <div class="container mt-3">
-  <!-- <div class="md-stepper-horizontal orange">
-    <div class="md-step active done">
-      <div class="md-step-circle"><span>1</span></div>
-      <div class="md-step-title">Checkout</div>
-      <div class="md-step-bar-left"></div>
-      <div class="md-step-bar-right"></div>
-    </div>
-    <div class="md-step active editable">
-      <div class="md-step-circle"><span>2</span></div>
-      <div class="md-step-title">Shipping</div>
-      <div class="md-step-optional">Optional</div>
-      <div class="md-step-bar-left"></div>
-      <div class="md-step-bar-right"></div>
-    </div>
-    <div class="md-step active">
-      <div class="md-step-circle"><span>3</span></div>
-      <div class="md-step-title">Payment</div>
-      <div class="md-step-bar-left"></div>
-      <div class="md-step-bar-right"></div>
-    </div>
-    <div class="md-step">
-      <div class="md-step-circle"><span>4</span></div>
-      <div class="md-step-title">Review</div>
-      <div class="md-step-bar-left"></div>
-      <div class="md-step-bar-right"></div>
-    </div>
-  </div> -->
-
   <div class="row">
     <div class="card address-card mt-3">
       <div class="card-body d-flex align-items-center justify-content-between">
         <div>
-          <h2 class="card-title"><i class="fa-solid fa-location-dot"></i> Địa chỉ nhận hàng </h2>
+          <h6 class="card-title"><i class="fa-solid fa-location-dot"></i> Địa chỉ nhận hàng </h6>
           <p class="card-text"><b>Mai Vũ Luân</b> (+84) 702807905 <br>
             Hẻm 8 đường Trần Vĩnh Kiết, Phường An Bình, Quận Ninh Kiều, Cần Thơ
           </p>
         </div>
-        <div><button type="button" class="comic-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Thay
+        <!-- <div><button type="button" class="comic-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Thay
             đổi</button></div>
-      </div>
-    </div>
-
-  </div>
-
-
-  <div class="row">
-
-  </div>
-
-
-  <div class="row">
-    <div class="col-lg-8">
-      <div class="payment-method">
-        <h2>{{cartInfos.length}} Sản phẩm</h2>
-        <hr>
-        <div class="row">
-          <ul class="list-group" >
-            <li class="d-flex align-items-center" *ngFor="let cart of cartInfos">
-              <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt=""
-                width="100">
-              <div class="d-flex flex-column ms-3 me-auto">
-                <span>{{cart.menuItemName}}</span>
-                <!-- <span>Mô tả: {{cart.menuItem}}</span> -->
-                <span>Số lượng : {{cart.quantity}}</span>
-              </div>
-              <div>
-                <span>Tổng tiền: {{ formatAmount(cart.menuItemPrice * cart.quantity)}}</span>
-              </div>
-            </li>
-            <hr>
-          </ul>
-        </div>
-      </div>
-      <!-- <div class="submit-order-container">
-        <div *ngIf="!submitted">
-          <label for="orderTotal">Order Total:</label>
-          <input type="number" id="orderTotal" [(ngModel)]="orderTotal" required>
-
-          <label for="orderInfo">Order Info:</label>
-          <input type="text" id="orderInfo" [(ngModel)]="orderInfo" required>
-        </div>
-
-        <div *ngIf="submitted">
-          <h2>Payment Status</h2>
-          <p>{{ paymentStatus }}</p>
-        </div>
       </div> -->
+      </div>
     </div>
-    <!-- payment-form.component.html -->
 
-    <!-- user-checkout.component.html -->
-    <div class="col-lg-4">
-      <div class="card address-card">
-        <h5>Phương thức thanh toán</h5>
-        <hr>
-        <div class="card-body ">
-          <ul class="list-group">
-            <!-- Phương thức thanh toán VNPAY -->
-            <div class="payment-option">
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="payment-method">
+          <h2>{{cartInfos.length}} Sản phẩm</h2>
+          <hr>
+          <div class="row">
+            <ul class="list-group">
+              <li class="d-flex align-items-center" *ngFor="let cart of cartInfos">
+                <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt=""
+                  width="100">
+                <div class="d-flex flex-column ms-3 me-auto">
+                  <span>{{cart.menuItemName}}</span>
+                  <!-- <span>Mô tả: {{cart.menuItem}}</span> -->
+                  <span>Số lượng : {{cart.quantity}}</span>
+                </div>
+                <div>
+                  <span>Tổng tiền: {{ formatAmount(cart.menuItemPrice * cart.quantity)}}</span>
+                </div>
+              </li>
+              <hr>
+            </ul>
+          </div>
+        </div>
+        <div class="card address-card">
+          <h5>Phương thức thanh toán</h5>
+          <hr>
+          <div class="card-body row">
+            <ul class="list-group">
+              <!-- Phương thức thanh toán VNPAY -->
+              <div class="payment-option col-lg-6">
+                <input type="radio" id="vnpay" name="paymentMethod" value="vnpay" [(ngModel)]="selectedPaymentMethod" (click)="changed()">
+                <label for="vnpay">
+                  <img src="https://tse4.mm.bing.net/th?id=OIP.Jic8DogDMWbfEgp7wG6MhAAAAA&pid=Api&P=0&h=180"
+                    alt="VNPAY Logo" width="100px"> VNPAY
+                </label>
+              </div>
+              <div class="payment-option col-lg-6">
+                <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod"
+                  (click)="getService()">
+                <label for="cod">
+                  <img
+                    src="https://cdn1.iconfinder.com/data/icons/marketplace-and-shipping-filled-outline/64/COD_cash_on_delivery_shipping_payment_delivery-512.png"
+                    alt="cod Logo" width="100px">
+                  COD (Tính phí)
+                </label>
+              </div>
+              <hr>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card address-card">
+          <h5>Phương thức thanh toán</h5>
+          <hr>
+          <div class="card-body ">
+            <ul class="list-group">
+
+              <!-- <div class="payment-option">
               <input type="radio" id="vnpay" name="paymentMethod" value="vnpay" [(ngModel)]="selectedPaymentMethod">
               <label for="vnpay">
                 <img src="https://tse4.mm.bing.net/th?id=OIP.Jic8DogDMWbfEgp7wG6MhAAAAA&pid=Api&P=0&h=180"
@@ -113,167 +91,183 @@
                 COD (Tính phí)
               </label>
             </div>
-            <hr>
-            
-            <div class="select-column" *ngIf="selectedPaymentMethod === 'cod'">
-              <i >Vui lòng chọn phương thức vận chuyển</i>
-              <select class="select" [(ngModel)]="selectedService" (ngModelChange)="calculateShipping()" >
+            <hr> -->
+
+              <div class="select-column" *ngIf="selectedPaymentMethod === 'cod'">
+                <i>Vui lòng chọn phương thức vận chuyển</i>
+                <select class="select" [(ngModel)]="selectedService" (ngModelChange)="calculateShipping()">
                   <option [ngValue]="null">Phương thức vận chuyển</option>
                   <option *ngFor="let s of service" [ngValue]="s.service_id">
-                      {{ s.short_name }}
+                    {{ s.short_name }}
                   </option>
-              </select>
-          </div>
-          <hr>
-            <ul class="list-group">
-              <li class="d-flex align-items-center">
-                <div class="d-flex flex-column ms-3 me-auto">
-                  <span>Tạm tính</span>
-                </div>
-                <div>
-                  <span>{{ formatAmount(calculateTotalPrice()) }}</span>
-                </div>
-              </li>
-              <li class="d-flex align-items-center">
-                <div class="d-flex flex-column ms-3 me-auto">
-                  <span>Phí vận chuyển</span>
-                </div>
-                <div>
-                  <span>{{ formatAmount(ship || 0) }}</span>
-                </div>
-              </li>
+                </select>
+              </div>
               <hr>
-              <li class="d-flex align-items-center">
-                <div class="d-flex flex-column ms-3 me-auto">
-                  <span>Tổng cộng</span>
+              <ul class="list-group">
+                <li class="d-flex align-items-center">
+                  <div class="d-flex flex-column ms-3 me-auto">
+                    <span>Tạm tính</span>
+                  </div>
+                  <div>
+                    <span>{{ formatAmount(calculateTotalPrice()) }}</span>
+                  </div>
+                </li>
+                <li class="d-flex align-items-center">
+                  <div class="d-flex flex-column ms-3 me-auto">
+                    <span>Phí vận chuyển</span>
+                  </div>
+                  <div>
+                    <span>{{ formatAmount(ship || 0) }}</span>
+                  </div>
+                </li>
+                <hr>
+                <div class="card-body">
+                  <form>
+                    <div class="row">
+                      <div class="col-lg-9">
+                        <div class="input-container">
+                          <input [(ngModel)]="discountCode" placeholder="Khuyến mãi" class="input-field" type="text"
+                            name="discountCode">
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <button class="comic-button" (click)="getDiscount()">Add</button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-                <div>
-                  <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ formatAmount(calculateFinalPrice(ship || 0)) }}</h4>
-                </div>
-              </li>
+                <li class="d-flex align-items-center">
+                  <div class="d-flex flex-column ms-3 me-auto">
+                    <span *ngIf="!discountPrice">Tổng cộng</span>
+                    <span *ngIf="discountPrice">Tổng cộng ({{discountPrice*100/calculateTotalPrice()}} %)</span>
+                  </div>
+                  <div>
+                    <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ formatAmount(calculateFinalPrice(ship || 0)) }}</h4>
+                  </div>
+                </li>
+              </ul>
+              <hr>
+              <button class="comic-button" (click)="processPayment()" [disabled]="!isCheckoutActive">Thanh toán</button>
             </ul>
-            <hr>
-            <button class="comic-button" (click)="processPayment()">Thanh toán</button>
-          </ul>
+          </div>
         </div>
       </div>
+
     </div>
-
   </div>
-</div>
 
 
 
 
 
-<div *ngIf="paymentStatus">
-  <h2>Payment Status: {{ paymentStatus }}</h2>
-  <div *ngIf="paymentStatus === 'Order success'">
-    <table>
-      <tr>
-        <th>Order Info</th>
-        <th>Payment Time</th>
-        <th>Transaction ID</th>
-        <th>Total Price</th>
-      </tr>
-      <tr>
-        <td>{{ orderInfo }}</td>
-        <!-- <td>{{ paymentTime }}</td>
+  <div *ngIf="paymentStatus">
+    <h2>Payment Status: {{ paymentStatus }}</h2>
+    <div *ngIf="paymentStatus === 'Order success'">
+      <table>
+        <tr>
+          <th>Order Info</th>
+          <th>Payment Time</th>
+          <th>Transaction ID</th>
+          <th>Total Price</th>
+        </tr>
+        <tr>
+          <td>{{ orderInfo }}</td>
+          <!-- <td>{{ paymentTime }}</td>
         <td>{{ transactionId }}</td>
         <td>{{ totalPrice }}</td> -->
-      </tr>
-    </table>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-</div>
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+  </div>
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" style="width: 800px;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Địa chỉ</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form ng-submit="adddiachi()">
-          <div class="form-row">
-            <div class="col-md-16 mb-3">
-              <label for="fullname" class="form-label">Họ và tên</label>
-              <input type="text" class="form-control" id="fullname" placeholder="Nhập họ tên" value="" required>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="width: 800px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Địa chỉ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form ng-submit="adddiachi()">
+            <div class="form-row">
+              <div class="col-md-16 mb-3">
+                <label for="fullname" class="form-label">Họ và tên</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Nhập họ tên" value="" required>
+              </div>
+              <div class="col-md-12 mb-3">
+                <label for="sodienthoai" class="form-label">Số điện thoại</label>
+                <input type="tel" class="form-control" pattern="^(0[2-9])(\d{8})$" id="sodienthoai"
+                  placeholder="Số điện thoại" name="sdt" required>
+              </div>
             </div>
-            <div class="col-md-12 mb-3">
-              <label for="sodienthoai" class="form-label">Số điện thoại</label>
-              <input type="tel" class="form-control" pattern="^(0[2-9])(\d{8})$" id="sodienthoai"
-                placeholder="Số điện thoại" name="sdt" required>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="Addressdetail" class="form-label">Địa chỉ</label>
-            <input type="text" class="form-control" data-bs-toggle="collapse" href="#collapseExample"
-              aria-expanded="false" aria-controls="collapseExample" ng-model="result" id="result" required>
-            <div class="collapse" id="collapseExample">
-              <div class="card card-body">
-                <ul class="nav nav-tabs" id="diachi" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="nav-tinh-tab" data-bs-toggle="tab" data-bs-target="#nav-tinh"
-                      type="button" role="tab" aria-controls="nav-tinh" aria-selected="true">Tỉnh/Thành phố</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="nav-huyen-tab" data-bs-toggle="tab" data-bs-target="#nav-huyen"
-                      type="button" role="tab" aria-controls="nav-huyen" aria-selected="false">Quận/Huyện</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="nav-xa-tab" data-bs-toggle="tab" data-bs-target="#nav-xa" type="button"
-                      role="tab" aria-controls="nav-xa" aria-selected="false">Phường/Xã</button>
-                  </li>
-                </ul>
-                <div class="tab-content" id="nav-tabContent">
-                  <div class="tab-pane fade show active" id="nav-tinh" role="tabpanel" aria-labelledby="nav-tinh-tab">
-                    <div class="input-group mb-3">
-                      <select class="form-select" ng-model="selectedProvince"
-                        ng-options="item.ProvinceName for item in provinces" ng-change="onProvince()">
-                        <option selected value="">Chọn tỉnh thành phố</option>
-                      </select>
+            <div class="mb-3">
+              <label for="Addressdetail" class="form-label">Địa chỉ</label>
+              <input type="text" class="form-control" data-bs-toggle="collapse" href="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample" ng-model="result" id="result" required>
+              <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                  <ul class="nav nav-tabs" id="diachi" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="nav-tinh-tab" data-bs-toggle="tab" data-bs-target="#nav-tinh"
+                        type="button" role="tab" aria-controls="nav-tinh" aria-selected="true">Tỉnh/Thành phố</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="nav-huyen-tab" data-bs-toggle="tab" data-bs-target="#nav-huyen"
+                        type="button" role="tab" aria-controls="nav-huyen" aria-selected="false">Quận/Huyện</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="nav-xa-tab" data-bs-toggle="tab" data-bs-target="#nav-xa"
+                        type="button" role="tab" aria-controls="nav-xa" aria-selected="false">Phường/Xã</button>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-tinh" role="tabpanel" aria-labelledby="nav-tinh-tab">
+                      <div class="input-group mb-3">
+                        <select class="form-select" ng-model="selectedProvince"
+                          ng-options="item.ProvinceName for item in provinces" ng-change="onProvince()">
+                          <option selected value="">Chọn tỉnh thành phố</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                  <div class="tab-pane fade" id="nav-huyen" role="tabpanel" aria-labelledby="nav-huyen-tab">
-                    <div class="input-group mb-3">
-                      <select class="form-select" ng-model="selectedDistrict"
-                        ng-options="it.DistrictName for it in districts" ng-change="onDistrict()">
-                        <option selected value="">Chọn quận huyện</option>
-                      </select>
+                    <div class="tab-pane fade" id="nav-huyen" role="tabpanel" aria-labelledby="nav-huyen-tab">
+                      <div class="input-group mb-3">
+                        <select class="form-select" ng-model="selectedDistrict"
+                          ng-options="it.DistrictName for it in districts" ng-change="onDistrict()">
+                          <option selected value="">Chọn quận huyện</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                  <div class="tab-pane fade" id="nav-xa" role="tabpanel" aria-labelledby="nav-xa-tab">
-                    <div class="input-group mb-3">
-                      <select class="form-select" ng-model="selectedWard" ng-options="it.WardName for it in communes"
-                        ng-change="onWard()">
-                        <option selected value="">Chọn xã phường</option>
-                      </select>
+                    <div class="tab-pane fade" id="nav-xa" role="tabpanel" aria-labelledby="nav-xa-tab">
+                      <div class="input-group mb-3">
+                        <select class="form-select" ng-model="selectedWard" ng-options="it.WardName for it in communes"
+                          ng-change="onWard()">
+                          <option selected value="">Chọn xã phường</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="Addressdetail" class="form-label">Địa chỉ cụ thể</label>
-            <input type="text" class="form-control" id="Addressdetail" placeholder="Địa chỉ cụ thể" ng-model="diachict"
-              required>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="submit" class="btn btn-primary">Thêm</button>
-          </div>
-        </form>
+            <div class="mb-3">
+              <label for="Addressdetail" class="form-label">Địa chỉ cụ thể</label>
+              <input type="text" class="form-control" id="Addressdetail" placeholder="Địa chỉ cụ thể"
+                ng-model="diachict" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary">Thêm</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>

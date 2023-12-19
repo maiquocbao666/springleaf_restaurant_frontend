@@ -173,6 +173,26 @@ const routes: Routes = [
           (m) => m.AdminBillsModule
         )
       }
+      ,
+      {
+        path: 'inventoryBranchIngredients',
+        loadChildren: () => import('./admin-inventory-branch-ingredients/admin-inventory-branch-ingredient.module').then(
+          (m) => m.AdminInventoryBranchIngredientsModule
+        )
+      }
+      ,
+      {
+        path: 'discounts',
+        loadChildren: () => import('./admin-discounts/admin-discounts.module').then(
+          (m) => m.AdminDiscountsModule
+        )
+      },
+      {
+        path: 'deliveryOrders',
+        loadChildren: () => import('./admin-delivery-order/admin-delivery-order.module').then(
+          (m) => m.AdminDeliveryOrderModule
+        )
+      }
     ]
   },
 

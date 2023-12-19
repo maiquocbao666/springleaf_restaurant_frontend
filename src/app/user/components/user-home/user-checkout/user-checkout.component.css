@@ -225,14 +225,9 @@ td img {
   padding: 5px;
 }
 
-/* .list-group {
-  margin-bottom: 15px;
-  border: none;
-  box-shadow: 2px 2px 0px #e0dbdb;
-} */
-
-
-
+.list-group {
+  display: flex;
+}
 /* payment method  */
 .payment-option {
   display: flex;
@@ -340,4 +335,14 @@ li {
   pointer-events: none;
   background-color: gray;
   opacity: 0.5;
+}
+
+.select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    outline: none;
+    background-color: transparent;
 }

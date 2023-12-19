@@ -39,7 +39,7 @@ export class OrderService {
   }
 
   gets(): Observable<Order[]> {
-    if (this.ordersCache) {
+    if (this.ordersCache$) {
       return of(this.ordersCache);
     }
 
@@ -123,6 +123,25 @@ export class OrderService {
     });
 
     return this.apiService.request<Order>('post', 'user/getOrderByUser', deliveryOrderId, customHeader)
+      .pipe(
+        tap(order => {
+          this.setUserOrderCache(order);
+        })
+      );
+  }
+
+  getUserOrderByReservation(reservationId: number): Observable<Order | null> {
+    const jwtToken = sessionStorage.getItem('access_token');
+    const deliveryOrderId = reservationId;
+
+    if (!jwtToken) {
+      return of(null);
+    }
+    const customHeader = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+
+    return this.apiService.request<Order>('post', 'user/getOrderByUserReservation', deliveryOrderId, customHeader)
       .pipe(
         tap(order => {
           this.setUserOrderCache(order);

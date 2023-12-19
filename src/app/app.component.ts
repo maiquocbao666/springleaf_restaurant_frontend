@@ -6,6 +6,7 @@ import { CategoryService } from "./services/category.service";
 import { ComboDetailService } from "./services/combo-detail.service";
 import { ComboService } from "./services/combo.service";
 // import { DeliveryDetailService } from "./services/delivery-detail.service";
+import { SwUpdate } from '@angular/service-worker';
 import { BillDetailService } from "./services/bill-detail.service";
 import { BillService } from "./services/bill.service";
 import { CartDetailService } from "./services/cart-detail.service";
@@ -20,6 +21,7 @@ import { GoodsReceiptDetailService } from "./services/goods-receipt-detail.servi
 import { GoodsReceiptService } from "./services/goods-receipt.service";
 import { InventoryBranchService } from "./services/inventory-branch.service";
 import { InventoryService } from "./services/inventory.service";
+import { InventoryBranchIngredientService } from './services/inventoryBranchIngredient.service';
 import { MenuItemIngredientService } from "./services/menu-Item-ingredient.service";
 import { MergeTableService } from "./services/merge-table.service";
 import { OrderThresholdService } from "./services/order-threshold.service";
@@ -36,7 +38,6 @@ import { RestaurantService } from "./services/restaurant.service";
 import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
-import { SwUpdate } from '@angular/service-worker';
 
 
 interface DataService<T> {
@@ -94,6 +95,7 @@ export class AppComponent implements OnDestroy {
     private menuItemIngredientsService: MenuItemIngredientService,
     private orderThresholdsService: OrderThresholdService,
     private mergeTablesService: MergeTableService,
+    private inventoryBranchIngredientsService: InventoryBranchIngredientService,
     //private orderTypesService: OrderTypeService,
     private paymentsService: PaymentService,
     private ratingsService: RatingService,
@@ -146,11 +148,8 @@ export class AppComponent implements OnDestroy {
 
       menuItemIngredients: { cache: this.menuItemIngredientsService.cache, localStorageKey: 'menuItemIngredients' },
       orderThresholds: { cache: this.orderThresholdsService.cache, localStorageKey: 'orderThresholds' },
-
       mergeTables: { cache: this.mergeTablesService.cache, localStorageKey: 'mergeTables' },
-
       // orderTypes: { cache: this.orderTypesService.orderTypesCache, localStorageKey: 'orderTypes' },
-
       payments: { cache: this.paymentsService.cache, localStorageKey: 'payments' },
       ratings: { cache: this.ratingsService.cache, localStorageKey: 'ratings' },
       receipts: { cache: this.receiptsService.cache, localStorageKey: 'receipts' },
@@ -159,6 +158,8 @@ export class AppComponent implements OnDestroy {
       tableTypes: { cache: this.tableTypesService.cache, localStorageKey: 'tableTypes' },
       reservationStatuses: { cache: this.reservationStatusesService.cache, localStorageKey: 'reservationStatuses' },
       discounts: { cache: this.discountsService.cache, localStorageKey: 'discounts' },
+      inventoryBranchIngredients: { cache: this.inventoryBranchIngredientsService.cache, localStorageKey: 'inventoryBranchIngredients' }
+
 
     };
 
@@ -169,7 +170,7 @@ export class AppComponent implements OnDestroy {
 
   ngOnInit(): void {
     // this.checkThreshold();
-    var accessToken = localStorage.getItem('access_token');
+    var accessToken = sessionStorage.getItem('access_token');
     var userSession = sessionStorage.getItem('userCache');
     console.log(userSession)
     if (userSession !== '' && userSession) {
@@ -184,7 +185,7 @@ export class AppComponent implements OnDestroy {
     // Lấy role Cache từ session storage
     var userRoleSession = sessionStorage.getItem('userRoles');
     console.log(userRoleSession)
-    if(userRoleSession !== '' && userRoleSession){
+    if (userRoleSession !== '' && userRoleSession) {
       this.authentication.setRoleCache(JSON.parse(userRoleSession));
     }
     this.getAllDatasFromLocalStorage();
@@ -212,6 +213,24 @@ export class AppComponent implements OnDestroy {
       console.log("Lấy tất cả dữ liệu từ get-datas-from-local-storage.worker.ts thành công");
     };
   }
+
+  // deleteAllDatasFromLocalStorage() {
+  //   this.getDatasFromLocalStorageWorker.postMessage('start');
+  //   this.getDatasFromLocalStorageWorker.onmessage = ({ data }) => {
+
+  //     Object.keys(this.services).forEach((type: string) => {
+
+  //       const { cache, localStorageKey } = this.services[type];
+
+  //       if (localStorage.getItem(localStorageKey)) {
+  //         this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
+  //         //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
+  //         (this as any)[`${type}Service`][`cache`] = null;
+  //       }
+
+  //     });
+  //   };
+  // }
 
   callAllApis(): void {
     this.callAPIsWorker.postMessage('start');

@@ -251,9 +251,6 @@ export class AuthenticationService {
           sessionStorage.setItem('access_token', data.checkTokenRespone.access_token);
           this.setUserCache(data.checkTokenRespone.user);
           this.setRoleCache(data.checkTokenRespone.user.roleName);
-          // this.listRole = data.checkTokenRespone.user.roleName;
-          // this.listRoleDataSubject.next(data.checkTokenRespone.user.roleName);
-          //this.sweetAlertService.showTimedAlert('Tự động đăng nhập', '', 'success', 1000);
           resolve(true);
 
         }

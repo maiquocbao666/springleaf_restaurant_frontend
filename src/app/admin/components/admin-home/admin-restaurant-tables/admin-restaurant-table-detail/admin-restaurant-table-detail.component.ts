@@ -48,10 +48,10 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       tableId: ['', [Validators.required]],
       tableName: ['', [Validators.required]],
       tableTypeId: ['', [Validators.required]],
-      tableStatusId: ['', [Validators.required]],
+      tableStatusId: [],
       restaurantId: ['', [Validators.required]],
       seatingCapacity: [1, [Validators.nullValidator]],
-      description: ['', [Validators.required]]
+      description: ['']
     });
   }
 
@@ -107,7 +107,7 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       const updatedRestaurantTable: RestaurantTable = {
         tableId: +this.restaurantTableForm.get('tableId')?.value,
         tableName: this.restaurantTableForm.get('tableName')?.value,
-        tableStatusId: +this.restaurantTableForm.get('tableStatusId')?.value,
+        tableStatusId: this.restaurantTableForm.get('tableStatusId')?.value,
         tableTypeId: +this.restaurantTableForm.get('tableTypeId')?.value,
         restaurantId: +this.restaurantTableForm.get('restaurantId')?.value,
         seatingCapacity: +this.restaurantTableForm.get('seatingCapacity')?.value,

@@ -17,6 +17,8 @@ import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
+import { FavoriteService } from 'src/app/services/favorite.service';
+import { Favorite } from 'src/app/interfaces/favorite';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -49,6 +51,7 @@ export class UserProductsComponent implements OnInit {
     private modalService: NgbModal,
     private toastService: ToastService,
     private apiService: ApiService,
+    private favoriteService : FavoriteService
   ) {
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
@@ -64,6 +67,9 @@ export class UserProductsComponent implements OnInit {
   ngOnInit(): void {
     // this.getUserLoggedIn().subscribe(
     //   (userData) => {
+    //     console.log('Thông tin người dùng đăng nhập:', userData);
+    //   },
+    //   (error) => {
     //     // Xử lý thông tin người dùng đăng nhập ở đây
     //     console.log('Thông tin người dùng đăng nhập:', userData);
     //   },
@@ -127,6 +133,20 @@ export class UserProductsComponent implements OnInit {
         this.products = cached.filter(product => product.status === true);
       }
     );
+  }
+
+  favorite(product : Product) : void {
+    var favorite : Favorite = {
+      favoriteId : 1,
+      user : this.user?.userId as number,
+      menuItem : product.menuItemId as number,
+      favoriteDate : '1'
+    } 
+    this.favoriteService.add(favorite).subscribe();
+  }
+
+  unLikeProduct(favorite : Favorite): void {
+    this.favoriteService.delete(favorite.favoriteId as number).subscribe();
   }
 
   getCategoryById(id: number): Category | null {

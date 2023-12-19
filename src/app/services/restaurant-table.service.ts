@@ -93,13 +93,18 @@ export class RestaurantTableService extends BaseService<RestaurantTable>  {
         return this.apiService.request<string>('post', 'reset/id', {});
     }
 
-    findTableByStatusId(tableStatusId: number): boolean {
+    findTableByStatusId(tableStatusId: string): boolean {
         return this.cache.some(restaurantTable => restaurantTable.tableStatusId === tableStatusId);
     }
 
     findTableNameByTableId(tableId: number): string {
         const table = this.cache.find(data => data.tableId === tableId);
         return table ? table.tableName : ''; // Return tableName if found, otherwise an empty string
+    }
+
+    getRestaurantIdByTableId(tableId: number): number | null {
+        const table = this.cache.find(data => data.tableId === tableId);
+        return table ? table.restaurantId : null; // Return tableName if found, otherwise an empty string
     }
 
     checkStatus(restaurantTableId: number): boolean {

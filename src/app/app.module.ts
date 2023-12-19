@@ -1,7 +1,7 @@
 
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -18,9 +18,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { UserCartComponent } from './user/components/user-home/user-cart/user-cart.component';
 import { UserCategoriesComponent } from './user/components/user-home/user-categories/user-categories.component';
@@ -101,13 +101,23 @@ import { UserRestaurantTableInfomationComponent } from './user/components/user-h
 
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
-import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
-import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { AdminBillsComponent } from './admin/components/admin-home/admin-bills/admin-bills.component';
+import { AdminDeliveryOrderComponent } from './admin/components/admin-home/admin-delivery-order/admin-delivery-order.component';
+import { AdminDiscountDetailComponent } from './admin/components/admin-home/admin-discount-detail/admin-discount-detail.component';
+import { AdminDiscountsComponent } from './admin/components/admin-home/admin-discounts/admin-discounts.component';
+import { AdminInventoryBranchIngredientDetailComponent } from './admin/components/admin-home/admin-inventory-branch-ingredients/admin-inventory-branch-ingredient-detail/admin-inventory-branch-ingredient-detail.component';
+import { AdminInventoryBranchIngredientsComponent } from './admin/components/admin-home/admin-inventory-branch-ingredients/admin-inventory-branch-ingredients.component';
+import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-merge-tables/admin-merge-tables.component';
 import { AdminUsersDetailComponent } from './admin/components/admin-home/admin-users-detail/admin-users-detail.component';
 import { AdminGuardService } from './services/guard-url/admin-guard.service';
-import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-merge-tables/admin-merge-tables.component';
+import { UserBillHistoriesComponent } from './user/components/user-home/user-bill-histories/user-bill-histories.component';
+import { UserFavoritesComponent } from './user/components/user-home/user-favorites/user-favorites.component';
+import { UserOrderHistoriesComponent } from './user/components/user-home/user-header/user-order-histories/user-order-histories.component';
+import { UserMergeTablesComponent } from './user/components/user-home/user-restaurant-tables/user-merge-tables/user-merge-tables.component';
+import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
+import { ChooseMenuItemComponent } from './components/choose-menuItem/choose-menuitem.component';
+import { EditSeatingComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/edit-seating/edit-seating.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +142,10 @@ import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-m
     UserRestaurantTableInfomationComponent,
     UserReservationHistoriesComponent,
     UserMergeTablesComponent,
+    UserFavoritesComponent,
+    UserBillHistoriesComponent,
+    UserOrderHistoriesComponent,
+    EditSeatingComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
@@ -178,13 +192,18 @@ import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-m
     AdminBillsComponent,
     AdminUsersDetailComponent,
     AdminMergeTablesComponent,
-
+    AdminInventoryBranchIngredientsComponent,
+    AdminInventoryBranchIngredientDetailComponent,
+    AdminDiscountsComponent,
+    AdminDiscountDetailComponent,
+    AdminDeliveryOrderComponent,
     ChatComponent,
     LoginComponent,
     DateTimeComponent,
     ProfileComponent,
     UserPasswordComponent,
     UploadFileComponent,
+    ChooseMenuItemComponent,
 
   ],
   imports: [
@@ -200,10 +219,10 @@ import { AdminMergeTablesComponent } from './admin/components/admin-home/admin-m
     NgxChartsModule, // Thêm vào đây
     FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: !isDevMode(),
+      enabled: false,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:50000'
     }),
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added

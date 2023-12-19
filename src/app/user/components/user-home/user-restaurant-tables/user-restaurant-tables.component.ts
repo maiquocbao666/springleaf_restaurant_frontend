@@ -17,7 +17,6 @@ import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
 import { User } from 'src/app/interfaces/user';
-import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-user-table',
@@ -36,10 +35,10 @@ export class UserRestaurantTablesComponent {
   restaurantId: number | null = null;
 
   constructor(
-    private toastService: ToastService,
+    
     private modalService: NgbModal,
     private modalService2: NgbModal,
-    private modalService3: NgbModal,
+    
     private restaurantTableService: RestaurantTableService,
     private tableStatusService: TableStatusService,
     private authenticationService: AuthenticationService,
@@ -74,7 +73,7 @@ export class UserRestaurantTablesComponent {
   getRestaurants(): void {
     this.restaurantService.getCache().subscribe(
       cache => {
-        this.restaurants = cache;
+        this.restaurants = cache.filter(data => data.statusId === "Đang hoạt động");
       }
     )
   }
@@ -83,10 +82,10 @@ export class UserRestaurantTablesComponent {
     this.restaurantTableService.getCache().subscribe(
       (cached: any[]) => {
         if (restaurantId !== undefined && restaurantId !== null) {
-          this.restaurantTables = cached.filter(table => table.restaurantId === restaurantId);
+          this.restaurantTables = cached.filter(table => table.restaurantId === restaurantId && table.tableStatusId === "Đang hoạt động" && this.restaurants.find(data => restaurantId === data.restaurantId)?.statusId === "Đang hoạt động");
         } else if (event && event.target && event.target.value) {
           const selectedRestaurantId = +event.target.value; // Convert to a number if needed
-          this.restaurantTables = cached.filter(table => table.restaurantId === selectedRestaurantId);
+          this.restaurantTables = cached.filter(table => table.restaurantId === selectedRestaurantId && table.tableStatusId === "Đang hoạt động" && this.restaurants.find(data => selectedRestaurantId === data.restaurantId)?.statusId === "Đang hoạt động");
         } else {
           // Handle the case where neither restaurantId nor event is provided
           this.restaurantTables = cached;
@@ -112,7 +111,7 @@ export class UserRestaurantTablesComponent {
 
   openRestaurantTableInfomationModal(restaurantTable: RestaurantTable) {
     if (!this.authenticationService.getUserCache()) {
-      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
       const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'xl', scrollable: true, centered: false });
       modalRef.componentInstance.restaurantTable = restaurantTable;
@@ -126,7 +125,7 @@ export class UserRestaurantTablesComponent {
 
   openUserReservationHistoriesModal() {
     if (!this.authenticationService.getUserCache()) {
-      //this.toastService.showError("Đặt bàn thất bại mời đăng nhập");
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
       const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'xl', centered: true, scrollable: false });
       modalRef.componentInstance.userId = this.user?.userId;

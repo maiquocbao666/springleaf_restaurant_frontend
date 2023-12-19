@@ -73,11 +73,8 @@
           <div class="col-md-4">
             <label for="tableStatusId" class="form-label">Trạng thái bàn<span style="color: red;">(*)</span></label>
             <select class="form-select" aria-label="Default select example" formControlName="tableStatusId">
-              <option value>Chọn trạng thái</option>
-              <option *ngFor="let tableStatus of tableStatuses" [value]="tableStatus.tableStatusId"> {{
-                tableStatus.tableStatusName
-                }}
-              </option>
+              <option value="Đang hoạt động" [attr.selected]="restaurantTableForm.get('tableStatusId')?.value === 'Đang hoạt động' ? true : null">Đang hoạt động</option>
+              <option value="Không hoạt động" [attr.selected]="restaurantTableForm.get('tableStatusId')?.value === 'Không hoạt động' ? true : null">Không hoạt động</option>
             </select>
             <div
               *ngIf="restaurantTableForm.get('tableStatusId')?.invalid && (restaurantTableForm.get('tableStatusId')?.touched || isSubmitted)"
@@ -95,7 +92,7 @@
 
           <div class="col-md-4">
             <label class="form-label">Mô tả</label> <br>
-            <textarea cols="27" rows="4" formControlName="description"></textarea>
+            <textarea cols="39" rows="4" formControlName="description"></textarea>
           </div>
 
           <div class="text-center">
@@ -113,7 +110,7 @@
           <th class="text-center">Tên bàn</th>
           <th class="text-center">Số khách tối đa</th>
           <th class="text-center">Nhà hàng + (Mã)</th>
-          <th class="text-center">Trạng thái + (Mã)</th>
+          <th class="text-center">Trạng thái</th>
           <th class="text-center">Kiểu bàn + (Mã)</th>
           <th class="text-center">Chức năng</th>
         </tr>
@@ -127,16 +124,15 @@
           <td class="text-center text-muted">{{ getRestaurantById(restaurantTable.restaurantId)?.restaurantName }} ({{
             restaurantTable.restaurantId }})
           </td>
-          <td class="text-center text-muted">{{ getTableStatusById(restaurantTable.tableStatusId)?.tableStatusName }}
-            ({{ restaurantTable.tableStatusId }})
+          <td class="text-center text-muted">{{ restaurantTable.tableStatusId }}
           </td>
-          <td class="text-center text-muted">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName }} + ({{
+          <td class="text-center text-muted">{{ getTableTypeById(restaurantTable.tableTypeId)?.tableTypeName }} ({{
             restaurantTable.tableTypeId }})</td>
           <td class="text-center text-muted">
             <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
               (click)="openRestaurantTableDetailModal(restaurantTable)"><i class="fa-solid fa-pen-to-square"></i></a>
-            <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
-              (click)="deleteTable(restaurantTable)"><i class="fa-solid fa-trash"></i></a>
+            <!-- <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
+              (click)="deleteTable(restaurantTable)"><i class="fa-solid fa-trash"></i></a> -->
           </td>
         </tr>
       </tbody>

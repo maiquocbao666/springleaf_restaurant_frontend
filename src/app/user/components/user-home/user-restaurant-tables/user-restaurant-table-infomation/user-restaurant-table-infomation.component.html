@@ -6,8 +6,8 @@
         </button>
     </div>
     <br>
-    <div>Giờ hoạt động: 08:00:00 - 22:00:00</div>
-    <div>Quý khách vui lòng đặt trước 2 tiếng hiện tại và > 1 tiếng sau giờ hoạt động để được phục vụ tốt nhất</div>
+    <div style="color: green;">Giờ hoạt động: 08:00:00 - 22:00:00</div>
+    <div style="color: green">Quý khách vui lòng đặt sau 2 tiếng so với hiện tại và trước 1 tiếng sau giờ hoạt động để được phục vụ tốt nhất</div>
     <br>
     <div class="booking">
         <form class="booking-form row" role="form" [formGroup]="reservationForm" (ngSubmit)="bookingTable()">
@@ -23,8 +23,16 @@
                 <span class="form-label">Ngày tới: </span>
                 <input class="form-control" type="date" id="selectedDate" formControlName="selectedDate" [min]="minDate"
                     [max]="maxDate" required (change)="checkAll()">
-                <div style="color: red; text-align: center;">
-                    {{ selectedDateMessage }}
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage2 !== ''">
+                    {{ warningMessage2 }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="selectedDateMessage !== ''">
+                    {{ selectedDateMessage }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage !== ''">
+                    {{ warningMessage }} <br>
                 </div>
             </div>
 
@@ -32,14 +40,24 @@
                 <span class="form-label">Thời gian tới</span>
                 <input class="form-control" type="time" id="selectedTime" formControlName="selectedTime"
                     (change)="checkAll()" required>
-                <div style="color: red; text-align: center;">
-                    {{ selectedTimeMessage }}
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage2 !== ''">
+                    {{ warningMessage2 }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="selectedTimeMessage !== ''">
+                    {{ selectedTimeMessage }} <br>
+                </div>
+
+                <div [style.color]="'red'" [style.text-align]="'center'" *ngIf="warningMessage !== ''">
+                    {{ warningMessage }} <br>
                 </div>
             </div>
 
             <div class="col-lg-6 col-12" *ngIf="reservationForm.get('selectedDate')?.value && 
            reservationForm.get('selectedTime')?.value && 
            reservationForm.get('seatingCapacity')?.value">
+
+                <br>
 
                 Năm {{ reservationForm.get('selectedDate')?.value | date: 'yyyy' }}
                 Tháng {{ reservationForm.get('selectedDate')?.value | date: 'MM' }}
@@ -63,8 +81,9 @@
                                 sách</b> đặt bàn</u></a>
                 </div>
                 <div class=" d-flex col-lg-6 ms-auto" style="align-items: center;">
-                    <button type="submit" class="form-control submit-btn mr-2" [hidden]="!isTermsAccepted">Đặt
-                        bàn</button>
+                    <button type="submit" class="form-control submit-btn mr-2" [hidden]="!isTermsAccepted">
+                        Đặt bàn
+                    </button>
                     <!-- <button class="form-control submit-btn" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                         Thời gian đã được đặt
@@ -75,10 +94,11 @@
             </div>
         </form>
     </div>
+    <br>
     <div>
         <div class="card card-body">
             <h3>Lịch sử dụng bàn sắp tới của bàn này</h3>
-            <form [formGroup]="reservationForm">
+            <!-- <form [formGroup]="reservationForm">
                 <div class="col-lg-6 input-group">
                     <div class="inputBox_container">
                         <svg class="search_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
@@ -88,15 +108,15 @@
                             placeholder="yyyy-MM-dd HH:mm:ss" (input)="onSearch()">
                     </div>
                 </div>
-            </form> <br>
+            </form> <br> -->
             <div class="table-container">
                 <table class="table table-bordered table-striped table-hover" border="1">
                     <thead class="sticky-header">
                         <tr class="align-middle">
                             <th class="text-center">Ngày tới</th>
-                            <th class="text-center">Giờ tới</th>
+                            <th class="text-center">Thời gian tới</th>
                             <th class="text-center">Trạng thái</th>
-                            <!-- <th class="text-center">Giờ đi</th> -->
+                            <th class="text-center">Thời gian đi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,7 +125,7 @@
                             <td class="text-center">{{ reservation.reservationDate | date: 'yyyy-MM-dd' }}</td>
                             <td class="text-center">{{ reservation.reservationDate | date: 'HH:mm:ss' }}</td>
                             <td class="text-center">{{ reservation.reservationStatusName }}</td>
-                            <!-- <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td> -->
+                            <td class="text-center">{{reservation.outTime | date: 'HH:mm:ss' }} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -140,29 +160,37 @@
     </div>
     <div class="modal-body" (scroll)="onScroll($event)">
 
-        <h3>Điều khoản</h3>
+        <h5>Điều khoản</h5>
+        <hr>
         1. Mỗi lần đặt bàn quý khách sẽ phải cọc 200.000đ <br>
-        2. Thời gian đến khi đặt bàn phải lớn hơn 45 phút tính từ thời gian đặt hiện tại hoặc đủ thời gian để cho quý
+        2. Thời gian đến khi đặt bàn phải lớn hơn 2 tiếng tính từ thời gian hiện tại hoặc đủ thời gian để cho quý
         khách đến nơi <br>
         3. Quý khách phải lựa chọn thời gian phù hợp cho bữa ăn của mình <br>
         4. Quý khách phải tự chịu trách nhiệm cho việc đặt bàn của mình <br>
-        5. Thời gian rời đi phải lớn hơn thời gian đến tối thiểu là 2 tiếng <br>
-        6. Quý khách vui lòng không đặt bàn trong khoảng thời gian từ 00:00:00 - 7:00:00 và từ 23:00:00 - 23:59:59 <br>
+        5. Nếu quý khách đã đặt bàn và đã đặt món nếu đến sau thời gian tới 30p phải đặt lại bàn hoặc có thể đem thức ăn
+        về <br>
+        6. Quý khách vui lòng chỉ đặt bàn trong khoảng thời gian từ 8:00:00 - 22:00:00<br>
         7. Nếu quý khách không có hóa đơn thì sẽ không hoàn trả tiền đặt cọc bàn <br>
         8. Quý khách vui lòng tuân thủ khoảng thời gian mà mình đã chọn <br>
         9. Nếu quý khách đã đặt bàn và không đến thì nhà hàng sẽ không hoàn trả tiền đặt cọc <br>
         10. Quý khách vui lòng kiểm tra thật kỹ thời gian sử dụng bàn của mình khi đặt và thanh toán <br>
-        11. Nhà hàng sẽ không chịu bất kỳ trách nhiệm nào nếu sai sót đến từ phía của khách hàng <br> <br>
-
-        <h3>Chính sách</h3>
-        1. Tiền đặt cọc sẽ được hoàn trả nếu quý khách sử dụng bàn trong khoảng thời gian tối thiểu 75% mà mình đã đặt
-        và sẽ được tặng kèm mã khuyến mãi cho lần sau <br>
-        2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các
+        11. Nhà hàng sẽ không chịu bất kỳ trách nhiệm nào nếu sai sót đến từ phía của khách hàng <br>
+        12. Nếu bàn đã được đặt sau thời gian quý khách chọn và không có bàn nào đặt trước thời gian đến của quý khách,
+        quý khách vui lòng đặt thời gian đến cách 3 tiếng so với thời gian đến của bàn đã đặt sau thời gian của quý
+        khách đến và phải rời đi trước 15 phút trước khi bàn đặt trước với thời gian sau quý khách đến <br> <br>
+        <hr>
+        <h5>Chính sách</h5>
+        <hr>
+        1. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu nhà hàng không chuẩn bị đầy đủ các
         món mà quý khách đã đặt <br>
-        3. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu khi quý khách đến và không có bàn
+        2. Tiền đặt cọc sẽ được hoàn trả kèm theo 1 khoảng bồi thường từ nhà hàng nếu khi quý khách đến và không có bàn
         như đã đặt <br>
-        4. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món
+        3. Nhà hàng sẽ hoàn trả toàn bộ tiền cọc và tiền đặt món nếu có sai sót gì đến từ hệ thống đặt bàn và đặt món
         của nhà hàng và kèm theo 1 khoảng bồi thường <br>
+        4. Nếu quý khách không thể đến trong khoảng thời gian đã đặt bàn nhưng có đặt món, nhà hàng sẽ hỗ trợ quý khách
+        có thể đến lấy những món đã đặt trước nhưng sẽ không hoàn trả tiền cọc <br>
+        <hr>
+        <h5>Cám ơn quý khách đã tin tưởng và lựa chọn nhà hàng của chúng tôi. Kính chào.</h5>
 
         <!-- <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="confirmCheckbox" [(ngModel)]="isConfirmed">

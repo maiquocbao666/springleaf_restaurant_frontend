@@ -20,6 +20,10 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
+import { Reservation } from 'src/app/interfaces/reservation';
+import { ReservationService } from 'src/app/services/reservation.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-user-header',
@@ -57,18 +61,18 @@ export class UserHeaderComponent {
     private restaurantService: RestaurantService,
     private categoryService: CategoryService,
     private route: ActivatedRoute,
-    private router : Router,
+    private router: Router,
+    private sweetAlertService: ToastService,
+    private reservationService : ReservationService,
   ) {
-    
     this.authService.getUserCache().subscribe(
-      (data : any | null) => {
+      (data: any | null) => {
         this.user = data;
-        if (this.user != null) {
+        if (data != null) {
           this.getUserDeliveryOrder();
           this.checkUserRestaurant();
         }
-    });
-    
+      });
     this.authService.roleCacheData$.subscribe((data) => {
       this.roles = data;
       if (!this.roles) {
@@ -88,15 +92,24 @@ export class UserHeaderComponent {
     });
   }
 
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
-      // Xử lý dữ liệu ở đây
-      console.log('Email:', email);
-      if(email){
+      const orderInfo = params['CartPayment'];
+      const orderInfo2 = params['ReservationPaymentReservationOrderItem'];
+      
+      if (email) {
         this.loginGoogleConfig(email);
       }
+      if(orderInfo){
+        this.newReservationByRedirectUrl();
+      }
+      if(orderInfo){
+        this.newReservationOrderItemByRedirectUrl();
+      }
     });
+
     this.getRestaurants();
     this.getCategories();
     this.checkUserRestaurant();
@@ -171,7 +184,7 @@ export class UserHeaderComponent {
       }
     });
   }
-  
+
 
   truncateString(inputString: string): string {
     // Tìm vị trí của khoảng trắng đầu tiên từ bên phải
@@ -231,45 +244,51 @@ export class UserHeaderComponent {
         } else {
           console.log('Lấy dữ liệu từ cache');
           this.cartByUser = cached;
+          this.getUserOrders();
         }
-        this.getUserOrders();
+
       }
     );
   }
-  
+
   // Lấy dữ liệu order
   getUserOrders(): void {
     this.orderService.getUserOrderCache().subscribe(
-    (cached: any | null) => {
-      if(cached === null && this.cartByUser !== null){
-        console.log('Lấy dữ liệu Order mới');
-        this.orderService.getUserOrder(this.cartByUser.deliveryOrderId as number).subscribe(
-          response => {
-            this.orderByUser = response;
-          }
-        );
-      }else{
-        console.log('Lấy dữ liệu từ cache');
-        this.orderByUser = cached;
+      (cached: any | null) => {
+        if (cached === null && this.cartByUser) {
+          console.log('Lấy dữ liệu Order mới');
+          this.orderService.getUserOrder(this.cartByUser.deliveryOrderId as number).subscribe(
+            response => {
+              this.orderByUser = response;
+              console.log(response);
+            },
+            error => {
+              console.error('Error fetching user order:', error);
+            }
+          );
+        } else if(this.cartByUser){
+          console.log('Lấy dữ liệu từ cache' + this.orderByUser);
+          this.orderByUser = cached;
+          this.getUserOrderDetails();
+        }
+      },
+      error => {
+        console.error('Error fetching user order cache:', error);
       }
-      if(this.orderByUser){
-        this.getUserOrderDetails();
-      }
-      
-    })
-    
+    );
   }
+
   // Lấy dữ liệu order detail của cart
   getUserOrderDetails(): void {
     this.cartDetailService.getOrderDetailsCache().subscribe(
       (cached: any[] | null) => {
-        if(cached === null && this.orderByUser !== null){
+        if (cached === null && this.orderByUser !== null) {
           this.cartDetailService.getUserOrderDetail(this.orderByUser.orderId).subscribe();
-        }else{
+        } else {
           this.orderDetailByUser = cached;
           this.orderDetailCount = cached?.length as number;
         }
-        
+
       }
     )
   }
@@ -277,7 +296,7 @@ export class UserHeaderComponent {
   // Mở Model đến các component khác
   // Profile
   openProfileModel() {
-    const modalRef = this.modalService.open(ProfileComponent,{ size: 'lg' });
+    const modalRef = this.modalService.open(ProfileComponent, { size: 'lg' });
   }
 
   // Quên mật khẩu
@@ -292,6 +311,78 @@ export class UserHeaderComponent {
   }
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
+  }
+
+  openOrderModal() {
+    if (!this.authService.getUserCache()) {
+      this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
+    } else {
+      const modalRef = this.modalService.open(UserOrderHistoriesComponent, { size: 'xl', scrollable: false, centered: false });
+      modalRef.componentInstance.userId = this.authService.getCache()?.userId;
+
+      // Subscribe to the emitted event
+      modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
+        //this.getRestaurantTables(this.restaurantId, null); // Refresh data in the parent component
+      });
+    }
+  }
+
+  newReservationByRedirectUrl(){
+    var newReservation = JSON.parse(localStorage.getItem('await_new_reservation')!);
+
+    let reservationsCache: Reservation[] = [];
+    this.reservationService.add(newReservation).subscribe(
+      {
+        next: (addedReservation) => {
+          this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
+          reservationsCache.push(addedReservation);
+          localStorage.setItem('reservations', JSON.stringify(reservationsCache));
+          localStorage.removeItem('await_new_reservation');
+        },
+        error: (error) => {
+          console.error('Error adding reservation:', error);
+        },
+        complete: () => {
+          // Xử lý khi Observable hoàn thành (nếu cần)
+        }
+      }
+    );
+  }
+
+  newReservationOrderItemByRedirectUrl() {
+    const reservation = JSON.parse(localStorage.getItem('new_reservation_orderItem')!);
+    const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
+  
+    if (reservation && orderDetail) {
+      let reservationsCache: Reservation[] = [];
+      this.reservationService.add(reservation).subscribe({
+        next: (addedReservation) => {
+          this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
+          reservationsCache = reservationsCache.concat(addedReservation);
+          const token = sessionStorage.getItem('access_token');
+          const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          });
+          const orderDetailObservable = 
+          this.http.post<any>(`http://localhost:8080/public/create/orderDetail/reservationOrder/${addedReservation.reservationId!}`, orderDetail, {headers : headers});
+  
+          forkJoin([orderDetailObservable]).subscribe({
+            next: ([orderDetailResponse]) => {
+              console.log('Order Detail Response:', orderDetailResponse);
+              localStorage.setItem('new_reservation_orderItem', JSON.stringify(reservationsCache));
+              localStorage.removeItem('new_orderDetail_by_reservation');
+            },
+            error: (error) => {
+              console.error('Error adding order detail:', error);
+            }
+          });
+        },
+        error: (error) => {
+          console.error('Error adding reservation:', error);
+        }
+      });
+    }
   }
 
 }
