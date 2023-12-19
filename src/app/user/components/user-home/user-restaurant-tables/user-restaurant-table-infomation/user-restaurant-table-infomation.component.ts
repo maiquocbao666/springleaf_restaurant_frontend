@@ -164,44 +164,44 @@ export class UserRestaurantTableInfomationComponent {
       .then((result) => {
         if (result.isConfirmed) {
           this.toastService.showConfirmAlert('Bạn có muốn đặt món trước không?', '', 'info')
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.openModelChooseMenuItem();
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            .then((result) => {
+              if (result.isConfirmed) {
+                this.openModelChooseMenuItem();
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
 
-          if (this.user) {
-            this.updateMinMaxDate();
+                if (this.user) {
+                  this.updateMinMaxDate();
 
-            const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
+                  const seatingCapacity = this.reservationForm.get('seatingCapacity')?.value;
 
-            // Ngày mà khách hàng chọn
-            const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
-            const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
+                  // Ngày mà khách hàng chọn
+                  const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
+                  const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
 
-            // if (!this.checkAll()) {
-            //   return;
-            // }
+                  if (!this.checkAll()) {
+                    return;
+                  }
 
-            const fullDateTime = selectedDate + ' ' + selectedTimeStr;
-            const newReservation: Reservation = {
-              restaurantTableId: this.restaurantTable?.tableId!,
-              userId: this.user?.userId!,
-              reservationDate: fullDateTime,
-              //outTime: outDateTimeString,
-              outTime: '',
-              numberOfGuests: seatingCapacity,
-              reservationStatusName: 'Chưa tới',
-              reservationOrderStatus: false,
-              username: this.user?.fullName,
-              userPhone: this.user?.phone,
-              reservationDeposit: 200000 // thay thế bằng phí cọc
-            };
+                  const fullDateTime = selectedDate + ' ' + selectedTimeStr;
+                  const newReservation: Reservation = {
+                    restaurantTableId: this.restaurantTable?.tableId!,
+                    userId: this.user?.userId!,
+                    reservationDate: fullDateTime,
+                    //outTime: outDateTimeString,
+                    outTime: '',
+                    numberOfGuests: seatingCapacity,
+                    reservationStatusName: 'Chưa tới',
+                    reservationOrderStatus: false,
+                    username: this.user?.fullName,
+                    userPhone: this.user?.phone,
+                    reservationDeposit: 200000 // thay thế bằng phí cọc
+                  };
 
-            localStorage.setItem('await_new_reservation', JSON.stringify(newReservation));
-          }
-          this.payWithVNPay();
-        }
-      });
+                  localStorage.setItem('await_new_reservation', JSON.stringify(newReservation));
+                }
+                this.payWithVNPay();
+              }
+            });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           return;
         }
@@ -216,7 +216,7 @@ export class UserRestaurantTableInfomationComponent {
     this.vnpayService.submitOrder(orderTotal, orderInfo).subscribe({
       next: (data: any) => {
         if (data.redirectUrl) {
-            window.location.href = data.redirectUrl;
+          window.location.href = data.redirectUrl;
         } else {
           // Xử lý các trường hợp khác nếu cần
         }
@@ -332,7 +332,7 @@ export class UserRestaurantTableInfomationComponent {
         outTime: outTime || '',
         numberOfGuests: seatingCapacity,
         reservationStatusName: 'Chưa tới',
-        reservationOrderStatus : false,
+        reservationOrderStatus: false,
         username: this.user?.fullName,
         userPhone: this.user?.phone,
         reservationDeposit: 200000 // thay thế bằng phí cọc
