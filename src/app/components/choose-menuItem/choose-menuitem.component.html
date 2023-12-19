@@ -25,11 +25,11 @@
                         </td>
                         <td>{{ product.name }}</td>
                         <td>
-                            <!-- <input type="number" [value]="product.quantity" (input)="validateQuantity($event, product)"> -->
+                            <input type="number" [(ngModel)]="quantities[product.menuItemId!]" (input)="updateQuantity(product, $event)">
                         </td>
                         <td>{{ formatAmount(product.unitPrice) }}</td>
                         
-                        <td>{{ formatAmount(product.unitPrice )}}</td>
+                        <td>{{ formatAmount(product.unitPrice)}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -40,9 +40,9 @@
                     <h5 class="card-title"><b>{{selectedItems.length}} Sản phẩm</b></h5>
                 </div>
                 <div class="card-footer">
-                    <!-- <div class="row">
+                    <div class="row">
                         <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ formatAmount(calculateTotalPrice()) }}</div>
-                    </div> -->
+                    </div>
                     <hr>
                     
                 </div>

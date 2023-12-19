@@ -293,6 +293,9 @@ export class AdminReservationsComponent {
       outTime: '',
       numberOfGuests: seatingCapacity,
       reservationStatusName: 'Chưa tới',
+      reservationOrderStatus : false,   // Chỉnh sửa theo trạng thái order món
+      username : '',
+      userPhone : '',
     };
 
     let reservationsCache: Reservation[] = [];

@@ -6,4 +6,7 @@ export interface Reservation {
     outTime: string;
     numberOfGuests: number;
     reservationStatusName: string;
+    reservationOrderStatus : boolean;
+    username : string;
+    userPhone : string;
 }

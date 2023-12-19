@@ -17,9 +17,12 @@ export class ChooseMenuItemComponent {
   @Input() reservationOfUser!: Reservation;
   user: User | null = null;
   products: Product[] = [];
-  selectedItems: CartInfomation[] = [];
+  selectedItems: MenuItemSelected[] = [];
   cartInformationArray: CartInfomation[] = [];
+  menuItemList : MenuItemSelected[] = [];
   selections: { [key: string]: boolean } = {};
+
+  quantities: { [key: number]: number } = {};
   constructor(
     private authService: AuthenticationService,
     private productService: ProductService,
@@ -45,7 +48,6 @@ export class ChooseMenuItemComponent {
       }
     );
     
-
   }
 
   formatAmount(amount: number): string {
@@ -71,19 +73,22 @@ export class ChooseMenuItemComponent {
     }
   }
 
+  updateQuantity(product: any, event: any): void {
+    this.quantities[product.menuItemId] = event.target.value;
+    console.log(this.quantities);
+  }
+
   toggleSelection(cart: any): void {
     const index = this.selectedItems.indexOf(cart);
 
     if (index === -1) {
       this.selectedItems.push(cart);
-      console.log(this.selectedItems[0].menuItem);
+      console.log(this.selectedItems);
     } else {
       this.selectedItems.splice(index, 1);
     }
 
     const anyUnchecked = this.cartInformationArray.some(cart => !this.selections[cart.menuItem]);
-
-    // Cập nhật giá trị của selectAllChecked dựa trên kết quả kiểm tra
 
   }
 
@@ -104,11 +109,20 @@ export class ChooseMenuItemComponent {
   //   }
   // );
 
-  checkout(){
-    
+  checkout() {
+
   }
 
-  
+  calculateTotalPrice(): number {
+    let totalPrice = 0;
+
+    for (const cart of this.selectedItems) {
+      totalPrice += cart.menuItemPrice * cart.quantity;
+    }
+    return totalPrice;
+  }
+
+
 }
 
 export interface CartInfomation {
@@ -120,4 +134,12 @@ export interface CartInfomation {
   menuItemPrice: number;
   menuItemImage: string;
   menuItemQuantity: number
+}
+
+export interface MenuItemSelected {
+  menuItem: number;
+  quantity: number;
+  menuItemName: string;
+  menuItemPrice: number;
+  menuItemImage: string;
 }

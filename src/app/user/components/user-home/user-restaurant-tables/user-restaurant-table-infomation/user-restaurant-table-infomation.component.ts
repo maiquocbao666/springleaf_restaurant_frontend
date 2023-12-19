@@ -77,7 +77,7 @@ export class UserRestaurantTableInfomationComponent {
     this.maxDate = this.datePipe.transform(this.addDays(new Date(), 5), 'yyyy-MM-dd')!;
     this.reservationService.getCache().subscribe(
       (data) => {
-        console.log('Received data:', data);
+        //console.log('Received data:', data);
 
         if (this.restaurantTable?.tableId) {
           this.reservations = data.filter(cache => {
@@ -244,6 +244,9 @@ export class UserRestaurantTableInfomationComponent {
       outTime: '',
       numberOfGuests: seatingCapacity,
       reservationStatusName: 'Chưa tới',
+      reservationOrderStatus : false,
+      username : '',
+      userPhone : '',
     };
 
     let reservationsCache: Reservation[] = [];
@@ -401,6 +404,9 @@ export class UserRestaurantTableInfomationComponent {
       outTime: '',
       numberOfGuests: seatingCapacity,
       reservationStatusName: 'Chưa tới',
+      reservationOrderStatus : false,
+      username : '',
+      userPhone : '',
     };
 
     const modalRef = this.modalService.open(ChooseMenuItemComponent, {
