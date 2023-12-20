@@ -11,7 +11,7 @@ import { CartDetail } from '../interfaces/cart-detail';
 export class VNPayService {
 
   private submitOrderUrl = 'submitOrder';
-  private getPaymentStatusUrl = 'http://localhost:8080/public/vnpay-payment';
+  private getPaymentStatusUrl = 'https://springleafrestaurantbackend.onrender.com/public/vnpay-payment';
 
   constructor(private apiService: ApiService) { }
 
