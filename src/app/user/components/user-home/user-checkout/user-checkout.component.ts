@@ -200,7 +200,6 @@ import { DiscountService } from 'src/app/services/discount.service';
               if (district.DistrictID === addressDistrict) {
                 this.userDistrict = district;
                 if (this.userDistrict) {
-                  console.log('here')
                   this.getWard(this.userDistrict.DistrictID).then(() => {
                     for (const ward of this.Wards) {
                       if (ward.WardCode === addressWard) {
@@ -484,7 +483,6 @@ import { DiscountService } from 'src/app/services/discount.service';
     const from_district = this.userRestaurantDistrict?.DistrictID;
     const to_distrist = this.userDistrict?.DistrictID;
     const token = 'd6f64767-329b-11ee-af43-6ead57e9219a';
-    console.log("FORM : " + from_district + " TO " + to_distrist)
 
     const httpOptions = {
 

@@ -259,7 +259,7 @@ export class LoginComponent {
 
   //----Form đăng nhập----//
   custormValidatorUsernameLogin(control: AbstractControl) {
-    // const username = control.value;
+    const username = control.value;
     // if (!username) {
     //   return { 'required': true, 'message': 'Tài khoản không được để trống' };
     // }

@@ -338,6 +338,7 @@ export class UserHeaderComponent {
           reservationsCache.push(addedReservation);
           localStorage.setItem('reservations', JSON.stringify(reservationsCache));
           localStorage.removeItem('await_new_reservation');
+          this.router.navigate(['/user/index']);
         },
         error: (error) => {
           console.error('Error adding reservation:', error);
@@ -362,6 +363,7 @@ export class UserHeaderComponent {
           reservationsCache.push(addedReservation);
           localStorage.setItem('reservations', JSON.stringify(reservationsCache));
           localStorage.removeItem('await_new_reservation');
+          this.router.navigate(['/user/index']);
         },
         error: (error) => {
           console.error('Error adding reservation:', error);
