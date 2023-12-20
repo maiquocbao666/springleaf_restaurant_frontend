@@ -77,7 +77,7 @@ export class ProfileComponent {
       email: [null, [this.customEmailValidator]],
       phone: [null, [this.customPhoneValidator]],
       address: [null, [Validators.nullValidator]],
-      image: [null, [Validators.nullValidator]],
+      imageUrl: ['', [Validators.required]],
       selectedRestaurant: [null, Validators.required],
       provinceChange: '',
       districtChange: '',
@@ -188,9 +188,10 @@ export class ProfileComponent {
         password: this.user.password,
         email: this.user.email,
         phone: this.user.phone,
-        image: this.user.image,
+        
         selectedRestaurant: this.user.restaurantBranchId
       });
+      
       if (this.userProvince && this.userDistrict && this.userWard) {
         this.profileForm.patchValue({
           address: `${this.userAddressHouse}, ${this.userWard.WardName}, ${this.userDistrict.DistrictName}, ${this.userProvince.ProvinceName}`,
@@ -207,8 +208,12 @@ export class ProfileComponent {
           selectedRestaurant: `${this.userRestaurant.restaurantName}`,
         });
       }
-      this.updateImagePreview();
+      this.profileForm.patchValue({
+        imageUrl: this.user.image,
+      });
+      
     }
+    this.updateImagePreview();
   }
 
   toggleAddressInput() {
@@ -218,7 +223,7 @@ export class ProfileComponent {
       && this.profileForm.get('districtChange')?.value !== ''
       && this.profileForm.get('wardChange')?.value !== '') {
       this.profileForm.patchValue({
-        address: `${this.profileForm.get('addressHouse')?.value} - ${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
+        address: `${this.profileForm.get('addressHouse')?.value}-${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
       });
     }
     this.showAddressInput = !this.showAddressInput;
@@ -334,10 +339,9 @@ export class ProfileComponent {
         phone: this.profileForm.get('phone')?.value,
         restaurantBranchId: this.profileForm.get('selectedRestaurant')?.value,
         // image: this.profileForm.get('image')?.value || this.user.image,
-        image: this.selectedFileName || this.profileForm.get('image')?.value,
+        image: this.selectedFileName || this.profileForm.get('imageUrl')?.value,
         status: this.user.status,
       };
-      alert(userUpdate.image)
       this.userService.updateProfile(userUpdate)
         .subscribe(
           (response) => {
@@ -381,11 +385,12 @@ export class ProfileComponent {
   }
 
   selectedFileName: string | undefined;
+
   selectedFile: File | undefined;
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0] as File;
     this.selectedFileName = this.selectedFile?.name;
-    this.profileForm.get('image')?.setValue(this.selectedFileName);
+    this.profileForm.get('imageUrl')?.setValue(this.selectedFileName);
     console.log("Tên ảnh của bạn là" + this.selectedFileName)
   }
 
@@ -404,7 +409,7 @@ export class ProfileComponent {
 
   imageUrlValue: string = '';
   updateImagePreview() {
-    const imageUrl = this.profileForm.get('image')?.value;
+    const imageUrl = this.profileForm.get('imageUrl')?.value;
     if (imageUrl) {
       this.imageUrlValue = 'http://localhost:8080/public/getImage/' + imageUrl;
       console.log('Giá trị của imageUrlValue:', this.imageUrlValue);

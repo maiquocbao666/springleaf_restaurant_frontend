@@ -27,8 +27,8 @@
                         <td> 
                             <input type="checkbox" [(ngModel)]="selections[cart.menuItem]" (click)="toggleSelection(cart)">
                         </td>
-                        <td><img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
-                                alt="">
+                        <td><img [src]="'http://localhost:8080/public/getImage/' + cart.menuItemImage" #imagePreview
+                            width="100px" class="file-preview" />
                         </td>
                         <td>{{ cart.menuItemName }}</td>
                         <td>

@@ -108,7 +108,6 @@ import { DiscountService } from 'src/app/services/discount.service';
   ngOnInit(): void {
     this.getRestaurants();
     this.cartInfos = this.cartService.getCartData();
-    console.log(this.cartInfos);
     this.calculateTotalPrice();
     this.initUserRestaurantAddress();
     

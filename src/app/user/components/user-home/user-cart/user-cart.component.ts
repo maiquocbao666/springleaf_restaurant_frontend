@@ -41,7 +41,7 @@ export class UserCartComponent implements OnInit {
   cartInformationArray: CartInfomation[] = [];
 
   selectedItems: CartInfomation[] = [];
-  selectAllChecked = false;
+  selectAllChecked : boolean = false;
   selections: { [key: string]: boolean } = {};
 
   userAddressHouse: string = '';
@@ -242,6 +242,7 @@ export class UserCartComponent implements OnInit {
     this.selectAllChecked = !this.selectAllChecked;
     if (this.selectAllChecked) {
       this.selectedItems = this.cartInformationArray; // check lại lỗi này
+      
     } else {
       this.selectedItems = [];
     }
@@ -255,15 +256,22 @@ export class UserCartComponent implements OnInit {
 
     if (index === -1) {
       this.selectedItems.push(cart);
-      console.log(this.selectedItems[0].menuItem);
     } else {
+      this.selections[cart.menuItem] = false;
       this.selectedItems.splice(index, 1);
     }
 
-    const anyUnchecked = this.cartInformationArray.some(cart => !this.selections[cart.menuItem]);
-
-    // Cập nhật giá trị của selectAllChecked dựa trên kết quả kiểm tra
-    this.selectAllChecked = !anyUnchecked;
+    
+    if (this.cartInformationArray.length === 1) {
+      this.selectAllChecked = !this.selectAllChecked;
+    } 
+    else if(this.cartInformationArray.length === this.selectedItems.length){
+      this.selectAllChecked = true;
+    }else if(this.cartInformationArray.length !== this.selectedItems.length){
+      this.selectAllChecked = false;
+    }
+    
+    
   }
 
   calculateTotalPrice(): number {

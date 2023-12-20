@@ -1,4 +1,4 @@
-<table>
+<!-- <table>
     <thead>
         <th>Đơn hàng</th>
         <th>Địa chỉ</th>
@@ -12,15 +12,16 @@
             <td><button>Hủy</button></td>
         </tr>
     </tbody>
-</table>
+</table> -->
 
 <div class="container">
     <h5 class="card-title mb-5">Theo dõi đơn hàng của bạn</h5>
     <div class="accordion accordion-flush" id="accordionFlushExample">
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-              <h5 class="card-title m-2">Đơn hàng</h5>
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" 
+            *ngFor="let order of allCartByUser">
+              <h5 class="card-title m-2">{{ order.user }}{{ order.deliveryAddress }}</h5><span *ngIf="order.deliveryOrderStatusId===1">Đang đặt</span>
             </button>
           </h2>
           <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -60,7 +61,7 @@
 </div>
 
 
-<div class="container mt-5 col-12">
+<!-- <div class="container mt-5 col-12">
     <h5 class="card-title">Theo dõi đơn hàng của bạn</h5>
     <div class="row">
         <div class="col-lg-12">
@@ -87,9 +88,9 @@
                                 alt="">
                         </td>
                         <td></td>
-                        <td>
+                        <td> -->
                             <!-- <input type="number" [value]="" (input)="validateQuantity($event, cart)"> -->
-                        </td>
+                        <!-- </td>
                         <td> </td>
                         <td>
                             <button class="btn" (click)="0">
@@ -111,7 +112,7 @@
                 
                 <div class="card-footer">
                     
-                    <div class="center text-center row">
+                    <div class="center text-center row"> -->
                         <!-- <div class="select-container">
                             <div class="select-column">
                                 <select [(ngModel)]="selectedProvince" (ngModelChange)="onProvinceChange()" class="select">
@@ -138,7 +139,7 @@
                                 </select>
                             </div>
                         </div> -->
-                    </div>
+                    <!-- </div>
                 </div>
                 <div class="card-footer">
                     <div class="center text-center row">
@@ -161,4 +162,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
