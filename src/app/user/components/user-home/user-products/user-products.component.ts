@@ -64,7 +64,7 @@ export class UserProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUserLoggedIn()
+    //this.getUserLoggedIn()
     this.getProducts();
     this.getCategories();
     this.route.paramMap.subscribe(paramMap => {
@@ -78,15 +78,15 @@ export class UserProductsComponent implements OnInit {
 
 
   // Hàm gửi yêu cầu lấy thông tin người đang đăng nhập
-  getUserLoggedIn(): Observable<any> {
-    const jwtToken = localStorage.getItem('access_token');
+  // getUserLoggedIn(): Observable<any> {
+  //   const jwtToken = localStorage.getItem('access_token');
 
-    const customHeader1 = new HttpHeaders({
-      'Authorization': `Bearer ${jwtToken}`,
-    });
+  //   const customHeader1 = new HttpHeaders({
+  //     'Authorization': `Bearer ${jwtToken}`,
+  //   });
 
-    return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
-  }
+  //   return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
+  // }
 
 
   filterProductsByCategoryId(categoryId: number): any[] {
