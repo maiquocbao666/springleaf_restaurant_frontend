@@ -57,15 +57,15 @@ export class UserOrderHistoriesComponent {
         console.error("Error fetching user cart:", error);
       }
     );
-    // this.deliveryOrderService.allUserCart$.subscribe(
-    //   (response) => {
-    //     this.allCartByUser = response;
-    //   },
-    //   (error) => {
-    //     console.error("Error fetching user cart:", error);
-    //     // Handle the error, e.g., show an error message to the user
-    //   }
-    // );
+    this.deliveryOrderService.allUserCart$.subscribe(
+      (response) => {
+        this.allCartByUser = response;
+      },
+      (error) => {
+        console.error("Error fetching user cart:", error);
+        // Handle the error, e.g., show an error message to the user
+      }
+    );
 
 
     // this.orderService.getUserOrderCache().subscribe(

@@ -100,7 +100,7 @@ export class UserPasswordComponent {
       this.userService.updateRestaurant(updateUser).subscribe({
         next: (response) => {
           this.sweetAlertService.showTimedAlert('Cập nhật thành công!', 'Chúc bạn có những trải nhiệm vui vẻ', 'success', 2000);
-          console.log('Update successful', response);
+          
           this.authService.setUserCache(response);
           this.activeModal.close();
         },

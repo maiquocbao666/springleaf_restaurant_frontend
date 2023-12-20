@@ -4,8 +4,8 @@
       <div class="card-body d-flex align-items-center justify-content-between">
         <div>
           <h6 class="card-title"><i class="fa-solid fa-location-dot"></i> Địa chỉ nhận hàng </h6>
-          <p class="card-text"><b>Mai Vũ Luân</b> (+84) 702807905 <br>
-            Hẻm 8 đường Trần Vĩnh Kiết, Phường An Bình, Quận Ninh Kiều, Cần Thơ
+          <p class="card-text"><b>{{user?.fullName}}</b> {{user?.phone}} <br>
+            {{userAddressHouse}}, {{userRestaurantWard?.WardName}}, {{userDistrict?.DistrictName}}, {{userProvince?.ProvinceName}}
           </p>
         </div>
         <!-- <div><button type="button" class="comic-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Thay
@@ -23,8 +23,8 @@
           <div class="row">
             <ul class="list-group">
               <li class="d-flex align-items-center" *ngFor="let cart of cartInfos">
-                <img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg" alt=""
-                  width="100">
+                <img [src]="'http://localhost:8080/public/getImage/' + cart.menuItemImage" #imagePreview
+              width="100px" class="file-preview" />
                 <div class="d-flex flex-column ms-3 me-auto">
                   <span>{{cart.menuItemName}}</span>
                   <!-- <span>Mô tả: {{cart.menuItem}}</span> -->

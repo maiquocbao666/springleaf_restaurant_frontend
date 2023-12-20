@@ -63,7 +63,7 @@ export class UserHeaderComponent {
     private route: ActivatedRoute,
     private router: Router,
     private sweetAlertService: ToastService,
-    private reservationService : ReservationService,
+    private reservationService: ReservationService,
   ) {
     this.authService.getUserCache().subscribe(
       (data: any | null) => {
@@ -98,14 +98,14 @@ export class UserHeaderComponent {
       const email = params['email'];
       const orderInfo = params['CartPayment'];
       const orderInfo2 = params['ReservationPaymentReservationOrderItem'];
-      
+
       if (email) {
         this.loginGoogleConfig(email);
       }
-      if(orderInfo){
+      if (orderInfo) {
         this.newReservationByRedirectUrl();
       }
-      if(orderInfo){
+      if (orderInfo) {
         this.newReservationOrderItemByRedirectUrl();
       }
     });
@@ -266,7 +266,7 @@ export class UserHeaderComponent {
               console.error('Error fetching user order:', error);
             }
           );
-        } else if(this.cartByUser){
+        } else if (this.cartByUser) {
           console.log('Lấy dữ liệu từ cache' + this.orderByUser);
           this.orderByUser = cached;
           this.getUserOrderDetails();
@@ -327,7 +327,7 @@ export class UserHeaderComponent {
     }
   }
 
-  newReservationByRedirectUrl(){
+  newReservationByRedirectUrl() {
     var newReservation = JSON.parse(localStorage.getItem('await_new_reservation')!);
 
     let reservationsCache: Reservation[] = [];
@@ -352,37 +352,44 @@ export class UserHeaderComponent {
   newReservationOrderItemByRedirectUrl() {
     const reservation = JSON.parse(localStorage.getItem('new_reservation_orderItem')!);
     const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
-  
-    if (reservation && orderDetail) {
-      let reservationsCache: Reservation[] = [];
-      this.reservationService.add(reservation).subscribe({
+
+    let reservationsCache: Reservation[] = [];
+    this.reservationService.add(reservation).subscribe(
+      {
         next: (addedReservation) => {
           this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
-          reservationsCache = reservationsCache.concat(addedReservation);
-          const token = sessionStorage.getItem('access_token');
-          const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          });
-          const orderDetailObservable = 
-          this.http.post<any>(`http://localhost:8080/public/create/orderDetail/reservationOrder/${addedReservation.reservationId!}`, orderDetail, {headers : headers});
-  
-          forkJoin([orderDetailObservable]).subscribe({
-            next: ([orderDetailResponse]) => {
-              console.log('Order Detail Response:', orderDetailResponse);
-              localStorage.setItem('new_reservation_orderItem', JSON.stringify(reservationsCache));
-              localStorage.removeItem('new_orderDetail_by_reservation');
-            },
-            error: (error) => {
-              console.error('Error adding order detail:', error);
-            }
-          });
+          this.newOrderItemByRedirectUrl(addedReservation.reservationId!);
+          reservationsCache.push(addedReservation);
+          localStorage.setItem('reservations', JSON.stringify(reservationsCache));
+          localStorage.removeItem('await_new_reservation');
         },
         error: (error) => {
           console.error('Error adding reservation:', error);
+        },
+        complete: () => {
+          // Xử lý khi Observable hoàn thành (nếu cần)
         }
-      });
-    }
+      }
+    );
   }
+
+  newOrderItemByRedirectUrl(reservationId: number) {
+    const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
+    const token = sessionStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    });
+
+    const orderDetailObservable = this.http.post<any>(
+      `http://localhost:8080/public/create/orderDetail/reservationOrder/${reservationId}`,
+      orderDetail,
+      { headers: headers }
+    );
+
+    return orderDetailObservable;
+  }
+
+
 
 }
