@@ -1,6 +1,6 @@
 import { IngredientService } from 'src/app/services/ingredient.service';
 
-import { Component, OnDestroy } from "@angular/core";
+import { Component, ElementRef, HostListener, OnDestroy, ViewChild } from "@angular/core";
 import { AuthenticationService } from "./services/authentication.service";
 import { CategoryService } from "./services/category.service";
 import { ComboDetailService } from "./services/combo-detail.service";
@@ -54,234 +54,86 @@ interface ServiceMap {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent {
 
   title = 'springleaf_restaurant';
-  dataLoaded = false;
-  getDatasFromLocalStorageWorker: Worker;
-  callAPIsWorker: Worker;
-  services: ServiceMap;
+  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+  private context!: CanvasRenderingContext2D | null;
 
+  circles: { x: number; y: number; dx: number; dy: number; radius: number }[] = [];
 
-
-  constructor(
-    private swUpdate: SwUpdate,
-    private authentication: AuthenticationService,
-    private categoriesService: CategoryService,
-    private productsService: ProductService,
-    private cartsService: CartService,
-    private cartDetailsService: CartDetailService,
-    private ordersService: OrderService,
-    private ingredientService: IngredientService,
-    private combosService: ComboService,
-    private comboDetailService: ComboDetailService,
-    private eventsService: EventService,
-    private restaurantTablesService: RestaurantTableService,
-    private restaurantsService: RestaurantService,
-    private suppliersService: SupplierService,
-    private tableStatusesService: TableStatusService,
-    private ingredientsService: IngredientService,
-    private billsService: BillService,
-    private billDetailsService: BillDetailService,
-    private comboDetailsService: ComboDetailService,
-    private goodsReceiptsService: GoodsReceiptService,
-    private goodsReceiptDetailsService: GoodsReceiptDetailService,
-    private deliveryOrdersService: DeliveryOrderService,
-    private deliveryOrderStatusesService: DeliveryOrderStatusService,
-    private deliveryOrderDetailsService: DeliveryOrderDetailService,
-    private favoritesService: FavoriteService,
-    private inventoriesService: InventoryService,
-    private inventoryBranchesService: InventoryBranchService,
-    private menuItemIngredientsService: MenuItemIngredientService,
-    private orderThresholdsService: OrderThresholdService,
-    private mergeTablesService: MergeTableService,
-    private inventoryBranchIngredientsService: InventoryBranchIngredientService,
-    //private orderTypesService: OrderTypeService,
-    private paymentsService: PaymentService,
-    private ratingsService: RatingService,
-    private receiptsService: ReceiptService,
-    private receiptDetailsService: ReceiptDetailService,
-    private reservationsService: ReservationService,
-    private tableTypesService: TableTypeService,
-    private reservationStatusesService: ReservationStatusService,
-    private discountsService: DiscountService,
-  ) {
-
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
-
-    this.services = {
-      categories: { cache: this.categoriesService.cache, localStorageKey: 'categories' },
-
-      products: { cache: this.productsService.cache, localStorageKey: 'products' },
-
-      cartDetails: { cache: this.cartDetailsService.cache, localStorageKey: 'cartDetails' },
-      carts: { cache: this.cartsService.cache, localStorageKey: 'carts' },
-
-      combos: { cache: this.combosService.cache, localStorageKey: 'combos' },
-      events: { cache: this.eventsService.cache, localStorageKey: 'events' },
-
-      restaurantTables: { cache: this.restaurantTablesService.cache, localStorageKey: 'restaurantTables' },
-      restaurants: { cache: this.restaurantsService.cache, localStorageKey: 'restaurants' },
-
-      suppliers: { cache: this.suppliersService.cache, localStorageKey: 'suppliers' },
-
-      tableStatuses: { cache: this.tableStatusesService.cache, localStorageKey: 'tableStatuses' },
-
-      ingredients: { cache: this.ingredientsService.cache, localStorageKey: 'ingredients' },
-      bills: { cache: this.billsService.cache, localStorageKey: 'bills' },
-      billDetails: { cache: this.billDetailsService.cache, localStorageKey: 'billDetails' },
-      comboDetails: { cache: this.comboDetailsService.cache, localStorageKey: 'comboDetails' },
-
-      goodsReceipts: { cache: this.goodsReceiptsService.cache, localStorageKey: ' goodsReceipts' },
-      // goodsReceiptDetailss: { cache: this.goodsReceiptDetailsService.cache, localStorageKey: 'goodsReceiptDetailss' },
-
-      deliveryOrders: { cache: this.deliveryOrdersService.cache, localStorageKey: 'deliveryOrders' },
-      deliveryOrderStatuses: { cache: this.deliveryOrderStatusesService.cache, localStorageKey: 'deliveryOrderStatuses' },
-
-      favorites: { cache: this.favoritesService.cache, localStorageKey: 'favorites' },
-      inventories: { cache: this.inventoriesService.cache, localStorageKey: 'inventories' },
-      inventoryBranches: { cache: this.inventoryBranchesService.cache, localStorageKey: 'inventoryBranches' },
-
-      menuItemIngredients: { cache: this.menuItemIngredientsService.cache, localStorageKey: 'menuItemIngredients' },
-      orderThresholds: { cache: this.orderThresholdsService.cache, localStorageKey: 'orderThresholds' },
-      mergeTables: { cache: this.mergeTablesService.cache, localStorageKey: 'mergeTables' },
-      // orderTypes: { cache: this.orderTypesService.orderTypesCache, localStorageKey: 'orderTypes' },
-      payments: { cache: this.paymentsService.cache, localStorageKey: 'payments' },
-      ratings: { cache: this.ratingsService.cache, localStorageKey: 'ratings' },
-      receipts: { cache: this.receiptsService.cache, localStorageKey: 'receipts' },
-      receiptDetails: { cache: this.receiptDetailsService.cache, localStorageKey: 'receiptDetails' },
-      reservations: { cache: this.reservationsService.cache, localStorageKey: 'reservations' },
-      tableTypes: { cache: this.tableTypesService.cache, localStorageKey: 'tableTypes' },
-      reservationStatuses: { cache: this.reservationStatusesService.cache, localStorageKey: 'reservationStatuses' },
-      discounts: { cache: this.discountsService.cache, localStorageKey: 'discounts' },
-      inventoryBranchIngredients: { cache: this.inventoryBranchIngredientsService.cache, localStorageKey: 'inventoryBranchIngredients' }
-
-
-    };
-
-    this.getDatasFromLocalStorageWorker = new Worker(new URL('./workers/get-datas-from-local-storage.worker', import.meta.url));
-    this.callAPIsWorker = new Worker(new URL('./workers/call-apis.worker', import.meta.url));
-
+  mouse = {
+    x: 0,
+    y: 0,
   }
 
-  ngOnInit(): void {
-    // this.checkThreshold();
-    var accessToken = sessionStorage.getItem('access_token');
-    var userSession = sessionStorage.getItem('userCache');
-    console.log(userSession)
-    if (userSession !== '' && userSession) {
-      this.authentication.setUserCache(JSON.parse(userSession));
-    } else {
-      if (accessToken != null) {
-        this.authentication.checkUserByAccessToken(accessToken);
-        console.log('Tự động đăng nhập')
-      }
-    }
-
-    // Lấy role Cache từ session storage
-    var userRoleSession = sessionStorage.getItem('userRoles');
-    console.log(userRoleSession)
-    if (userRoleSession !== '' && userRoleSession) {
-      this.authentication.setRoleCache(JSON.parse(userRoleSession));
-    }
-    this.getAllDatasFromLocalStorage();
-    this.callAllApis();
-
+  @HostListener('document:mousemove', ['$event'])
+  handleMouseMove(event: MouseEvent): void {
+    //console.log('Mouse moved', event);
+    this.mouse.x = event.x;
+    this.mouse.y = event.y;
   }
 
-  getAllDatasFromLocalStorage() {
-    this.getDatasFromLocalStorageWorker.postMessage('start');
-    this.getDatasFromLocalStorageWorker.onmessage = ({ data }) => {
+  ngAfterViewInit(): void {
+    this.canvas.nativeElement.width = 1872 - 20;
+    this.canvas.nativeElement.height = 924 - 20;
 
-      Object.keys(this.services).forEach((type: string) => {
+    this.context = this.canvas.nativeElement.getContext('2d');
 
-        const { cache, localStorageKey } = this.services[type];
+    // Create initial circles
+    for (let i = 0; i < 100; i++) {
+      this.circles.push({
+        x: Math.random() * (1872 - 20),
+        y: Math.random() * (924 - 20),
+        dx: (Math.random() - 0.5) * 8,
+        dy: (Math.random() - 0.5) * 8,
+        radius: 30
+      });
+    }
 
-        if (localStorage.getItem(localStorageKey)) {
-          this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
-          //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
-          (this as any)[`${type}Service`][`cache`] = this.services[type].cache;
-          //console.log(`[get-datas-from-local-storage.worker.ts] Received ${type}:`, this.services[type].cache);
+    this.animate();
+  }
+
+  
+
+  circle(x: number, y: number, radius: number): void {
+    if (this.context) {
+      this.context.beginPath();
+      this.context.arc(x, y, radius, 0, Math.PI * 2, false);
+      this.context.strokeStyle = 'blue';
+      this.context.stroke();
+      this.context.fill();
+    }
+  }
+
+  animate(): void {
+    requestAnimationFrame(this.animate.bind(this));
+
+    if (this.context) {
+      this.context.clearRect(0, 0, 1872 - 20, 924 - 20);
+
+      // Update and draw each circle
+      this.circles.forEach(circle => {
+        this.circle(circle.x, circle.y, circle.radius);
+
+        if (circle.x + circle.radius > this.canvas.nativeElement.width || circle.x - circle.radius < 0) {
+          circle.dx = -circle.dx;
+        }
+        if (circle.y + circle.radius > this.canvas.nativeElement.height || circle.y - circle.radius < 0) {
+          circle.dy = -circle.dy;
+        }
+
+        circle.x += circle.dx;
+        circle.y += circle.dy;
+
+        if(this.mouse.x - circle.x < 50 && this.mouse.x - circle.x > -50 && this.mouse.y - circle.y < 50 && this.mouse.y - circle.y > -50){
+          circle.radius += 1;
+        } else if (circle.radius > 2){
+          circle.radius -= 1;
         }
 
       });
-      this.dataLoaded = true;
-      console.log("Lấy tất cả dữ liệu từ get-datas-from-local-storage.worker.ts thành công");
-    };
+    }
   }
 
-  // deleteAllDatasFromLocalStorage() {
-  //   this.getDatasFromLocalStorageWorker.postMessage('start');
-  //   this.getDatasFromLocalStorageWorker.onmessage = ({ data }) => {
-
-  //     Object.keys(this.services).forEach((type: string) => {
-
-  //       const { cache, localStorageKey } = this.services[type];
-
-  //       if (localStorage.getItem(localStorageKey)) {
-  //         this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
-  //         //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
-  //         (this as any)[`${type}Service`][`cache`] = null;
-  //       }
-
-  //     });
-  //   };
-  // }
-
-  callAllApis(): void {
-    this.callAPIsWorker.postMessage('start');
-    this.callAPIsWorker.onmessage = ({ data }) => {
-      Object.keys(this.services).forEach((type: string) => {
-
-        const { cache, localStorageKey } = this.services[type];
-
-        if (JSON.stringify(JSON.parse(localStorage.getItem(localStorageKey) || 'null')) === JSON.stringify(data[type])) {
-          // Cập nhật từ Local Storage
-          this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
-          // console.log(`Lấy dữ liệu ${type} từ Local Storage`);
-          //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
-        } else {
-          // Cập nhật từ dữ liệu API và lưu vào Local Storage
-
-          if (data[type] === null) {
-            console.log(`Không gọi được api ${type} hoặc là đang offline`)
-          } else {
-            this.services[type].cache = data[type];
-            localStorage.setItem(localStorageKey, JSON.stringify(data[type]));
-            // Cập nhật từ dữ liệu API và lưu vào Cookie
-            //console.log(`Lấy dữ liệu ${type} từ API`);
-          }
-
-        }
-        //}
-
-        // Cập nhật dữ liệu vào caches tương ứng sử dụng dynamic property
-        (this as any)[`${type}Service`][`cache`] = this.services[type].cache;
-
-        //console.log(`Received ${type}:`, this.services[type].cache);
-      });
-
-      this.dataLoaded = true;
-    };
-  }
-
-  ngOnDestroy(): void {
-    this.callAPIsWorker.terminate();
-  }
-
-  checkThreshold() {
-    this.ingredientService.checkThreshold().subscribe(
-      (data: any) => {
-
-        console.log(data);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
 }
