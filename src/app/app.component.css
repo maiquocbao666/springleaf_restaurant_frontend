@@ -1,4 +1,4 @@
-.container {
+/* .container {
   position: absolute;
   width: 100px;
   height: 100px;
@@ -123,4 +123,89 @@
   75% {
     transform: translate(0, -50px)
   }
+} */
+
+.wrapper {
+  height: 150px;
+  width: 125px;
+  position: relative;
+  perspective: 500px;
+  transform: rotateX(-45deg);
+}
+
+.wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid #61412D;
+  transform: rotateX(-45deg);
+}
+
+.door {
+  background-color: #61412D;
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  transform: rotateX(-45deg);
+}
+
+#left-door {
+  top: 0;
+  left: 0;
+  border-right: 1px solid black;
+  transition: transform 0.5s;
+  transform-origin: left;
+  transform: rotateX(-45deg) rotateY(140deg);
+}
+
+#right-door {
+  top: 0;
+  right: 0;
+  border-left: 1px solid black;
+  transition: transform 0.5s;
+  transform-origin: right;
+  transform: rotateX(-45deg) rotateY(-140deg);
+}
+
+.shape {
+  border: 2px solid black;
+  width: 50px;
+  height: 65px;
+  transform: rotateX(-45deg);
+}
+
+.knob {
+  background-color: #D7DADE;
+  width: 5px;
+  height: 25px;
+  position: absolute;
+  transform: rotateX(-45deg);
+}
+
+#left-knob {
+  top: 50%;
+  right: 5px;
+  transform: rotateX(-45deg);
+}
+
+#right-knob {
+  top: 50%;
+  left: 5px;
+  transform: rotateX(-45deg);
+}
+
+/* Door Swing Effect */
+.wrapper:hover #left-door {
+  transform: rotateX(-45deg) rotateY(140deg);
+}
+
+.wrapper:hover #right-door {
+  transform: rotateX(-45deg) rotateY(-140deg);
 }

@@ -40,14 +40,14 @@ import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
 
 
-interface DataService<T> {
-  cache: T[] | null;
-  localStorageKey: string;
-}
+// interface DataService<T> {
+//   cache: T[] | null;
+//   localStorageKey: string;
+// }
 
-interface ServiceMap {
-  [key: string]: DataService<any>;
-}
+// interface ServiceMap {
+//   [key: string]: DataService<any>;
+// }
 
 @Component({
   selector: 'app-root',
@@ -56,84 +56,84 @@ interface ServiceMap {
 })
 export class AppComponent {
 
-  title = 'springleaf_restaurant';
-  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
-  private context!: CanvasRenderingContext2D | null;
+  //   title = 'springleaf_restaurant';
+  //   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+  //   private context!: CanvasRenderingContext2D | null;
 
-  circles: { x: number; y: number; dx: number; dy: number; radius: number }[] = [];
+  //   circles: { x: number; y: number; dx: number; dy: number; radius: number }[] = [];
 
-  mouse = {
-    x: 0,
-    y: 0,
-  }
+  //   mouse = {
+  //     x: 0,
+  //     y: 0,
+  //   }
 
-  @HostListener('document:mousemove', ['$event'])
-  handleMouseMove(event: MouseEvent): void {
-    //console.log('Mouse moved', event);
-    this.mouse.x = event.x;
-    this.mouse.y = event.y;
-  }
+  //   @HostListener('document:mousemove', ['$event'])
+  //   handleMouseMove(event: MouseEvent): void {
+  //     //console.log('Mouse moved', event);
+  //     this.mouse.x = event.x;
+  //     this.mouse.y = event.y;
+  //   }
 
-  ngAfterViewInit(): void {
-    this.canvas.nativeElement.width = 1872 - 20;
-    this.canvas.nativeElement.height = 924 - 20;
+  //   ngAfterViewInit(): void {
+  //     this.canvas.nativeElement.width = 1872 - 20;
+  //     this.canvas.nativeElement.height = 924 - 20;
 
-    this.context = this.canvas.nativeElement.getContext('2d');
+  //     this.context = this.canvas.nativeElement.getContext('2d');
 
-    // Create initial circles
-    for (let i = 0; i < 100; i++) {
-      this.circles.push({
-        x: Math.random() * (1872 - 20),
-        y: Math.random() * (924 - 20),
-        dx: (Math.random() - 0.5) * 8,
-        dy: (Math.random() - 0.5) * 8,
-        radius: 30
-      });
-    }
+  //     // Create initial circles
+  //     for (let i = 0; i < 100; i++) {
+  //       this.circles.push({
+  //         x: Math.random() * (1872 - 20),
+  //         y: Math.random() * (924 - 20),
+  //         dx: (Math.random() - 0.5) * 8,
+  //         dy: (Math.random() - 0.5) * 8,
+  //         radius: 30
+  //       });
+  //     }
 
-    this.animate();
-  }
+  //     this.animate();
+  //   }
 
-  
 
-  circle(x: number, y: number, radius: number): void {
-    if (this.context) {
-      this.context.beginPath();
-      this.context.arc(x, y, radius, 0, Math.PI * 2, false);
-      this.context.strokeStyle = 'blue';
-      this.context.stroke();
-      this.context.fill();
-    }
-  }
 
-  animate(): void {
-    requestAnimationFrame(this.animate.bind(this));
+  //   circle(x: number, y: number, radius: number): void {
+  //     if (this.context) {
+  //       this.context.beginPath();
+  //       this.context.arc(x, y, radius, 0, Math.PI * 2, false);
+  //       this.context.strokeStyle = 'blue';
+  //       this.context.stroke();
+  //       this.context.fill();
+  //     }
+  //   }
 
-    if (this.context) {
-      this.context.clearRect(0, 0, 1872 - 20, 924 - 20);
+  //   animate(): void {
+  //     requestAnimationFrame(this.animate.bind(this));
 
-      // Update and draw each circle
-      this.circles.forEach(circle => {
-        this.circle(circle.x, circle.y, circle.radius);
+  //     if (this.context) {
+  //       this.context.clearRect(0, 0, 1872 - 20, 924 - 20);
 
-        if (circle.x + circle.radius > this.canvas.nativeElement.width || circle.x - circle.radius < 0) {
-          circle.dx = -circle.dx;
-        }
-        if (circle.y + circle.radius > this.canvas.nativeElement.height || circle.y - circle.radius < 0) {
-          circle.dy = -circle.dy;
-        }
+  //       // Update and draw each circle
+  //       this.circles.forEach(circle => {
+  //         this.circle(circle.x, circle.y, circle.radius);
 
-        circle.x += circle.dx;
-        circle.y += circle.dy;
+  //         if (circle.x + circle.radius > this.canvas.nativeElement.width || circle.x - circle.radius < 0) {
+  //           circle.dx = -circle.dx;
+  //         }
+  //         if (circle.y + circle.radius > this.canvas.nativeElement.height || circle.y - circle.radius < 0) {
+  //           circle.dy = -circle.dy;
+  //         }
 
-        if(this.mouse.x - circle.x < 50 && this.mouse.x - circle.x > -50 && this.mouse.y - circle.y < 50 && this.mouse.y - circle.y > -50){
-          circle.radius += 1;
-        } else if (circle.radius > 2){
-          circle.radius -= 1;
-        }
+  //         circle.x += circle.dx;
+  //         circle.y += circle.dy;
 
-      });
-    }
-  }
+  //         if(this.mouse.x - circle.x < 50 && this.mouse.x - circle.x > -50 && this.mouse.y - circle.y < 50 && this.mouse.y - circle.y > -50){
+  //           circle.radius += 1;
+  //         } else if (circle.radius > 2){
+  //           circle.radius -= 1;
+  //         }
+
+  //       });
+  //     }
+  //   }
 
 }
