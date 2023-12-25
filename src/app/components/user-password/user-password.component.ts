@@ -67,7 +67,6 @@ export class UserPasswordComponent {
   };
   ngOnInit() {
     this.getRestaurants();
-    console.log(this.selected);
   }
 
   getRestaurants(): void {

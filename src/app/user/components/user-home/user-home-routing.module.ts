@@ -86,10 +86,10 @@ const routes: Routes = [
             .then(m => m.UserProductDetailModule),
       },
       {
-        path: 'user/upload',
+        path: 'user/location',
         loadChildren: () =>
-          import('../../../components/upload-file/upload-file.module')
-            .then(m => m.UploadFileModule),
+          import('../../../components/location-restaurant/location-restaurant.module')
+            .then(m => m.LocationRestaurantModule),
       },
     ]
   },

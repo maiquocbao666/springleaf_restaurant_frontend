@@ -118,6 +118,7 @@ import { UserMergeTablesComponent } from './user/components/user-home/user-resta
 import { UserReservationHistoriesComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/user-reservation-histories.component';
 import { ChooseMenuItemComponent } from './components/choose-menuItem/choose-menuitem.component';
 import { EditSeatingComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/edit-seating/edit-seating.component';
+import { LocationRestaurantComponent } from './components/location-restaurant/location-restaurant.component';
 
 @NgModule({
   declarations: [
@@ -204,6 +205,7 @@ import { EditSeatingComponent } from './user/components/user-home/user-restauran
     UserPasswordComponent,
     UploadFileComponent,
     ChooseMenuItemComponent,
+    LocationRestaurantComponent,
 
   ],
   imports: [

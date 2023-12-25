@@ -24,6 +24,7 @@ import { UserOrderHistoriesComponent } from './user-order-histories/user-order-h
 import { Reservation } from 'src/app/interfaces/reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { forkJoin } from 'rxjs';
+import { LocationRestaurantComponent } from 'src/app/components/location-restaurant/location-restaurant.component';
 
 @Component({
   selector: 'app-user-header',
@@ -306,7 +307,7 @@ export class UserHeaderComponent {
   }
 
   openUserRestaurant() {
-    const modalRef = this.modalService.open(UserPasswordComponent);
+    const modalRef = this.modalService.open(LocationRestaurantComponent, { size: 'lg' });
     modalRef.componentInstance.selected = 'restaurant';
   }
   openLoginModal() {
