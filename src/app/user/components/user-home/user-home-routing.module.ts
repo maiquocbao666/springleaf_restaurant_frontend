@@ -91,6 +91,12 @@ const routes: Routes = [
           import('../../../components/location-restaurant/location-restaurant.module')
             .then(m => m.LocationRestaurantModule),
       },
+      {
+        path: 'user/about',
+        loadChildren: () =>
+          import('./user-about/user-about.module')
+            .then(m => m.UserAboutModule),
+      },
     ]
   },
 

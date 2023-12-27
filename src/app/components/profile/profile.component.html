@@ -39,7 +39,7 @@
             </div>
 
             <div class="col-md-6" class="form-label">
-              <label for="phone">Số điện thoại</label>
+              <label for="phone">Số điện thoại</label><span style="color: red;">(*)</span>
               <input type="text" id="phone" class="form-control" formControlName="phone" name="phone">
               <i *ngIf="profileForm.get('phone')?.getError('message')" style="color: red;">
                 {{ profileForm.get('phone')?.getError('message') }}

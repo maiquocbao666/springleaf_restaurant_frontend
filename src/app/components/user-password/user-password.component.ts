@@ -16,7 +16,6 @@ export class UserPasswordComponent {
   
   changePasswordForm: FormGroup;
   forgotPasswordForm: FormGroup;
-  chooseRestaurantFrom: FormGroup;
   user: User | null = null;
   password: string = '';
   isCheckPassword: boolean = false;
@@ -48,9 +47,6 @@ export class UserPasswordComponent {
       password: [null, [Validators.nullValidator]],
       repassword: [null, [Validators.nullValidator]],
     })
-    this.chooseRestaurantFrom = this.formBuilder.group({
-      selectedRestaurant: [null, Validators.required],
-    })
     this.authService.getUserCache().subscribe(
       (data) => {
         this.user = data;
@@ -76,42 +72,6 @@ export class UserPasswordComponent {
       }
     );
   }
-
-  //---------- Chọn nhà hàng------------//
-  onSubmit() {
-    if (this.chooseRestaurantFrom.valid && this.user) {
-      const selectedRestaurantValue = this.chooseRestaurantFrom.value.selectedRestaurant;
-      console.log(selectedRestaurantValue);
-
-      const updateUser: User = {
-        userId: this.user.userId,
-        username: this.user.username,
-        password: this.user.password,
-        fullName: this.user.fullName,
-        email: this.user.email,
-        address: this.user.address,
-        image: this.user.image,
-        phone: this.user.phone,
-        restaurantBranchId: selectedRestaurantValue,
-        status: this.user.status,
-      };
-
-      this.userService.updateRestaurant(updateUser).subscribe({
-        next: (response) => {
-          this.sweetAlertService.showTimedAlert('Cập nhật thành công!', 'Chúc bạn có những trải nhiệm vui vẻ', 'success', 2000);
-          
-          this.authService.setUserCache(response);
-          this.activeModal.close();
-        },
-        error: (error) => {
-          console.error('Update failed', error);
-          this.sweetAlertService.showTimedAlert('Cập nhật nhà hàng thất bại', 'Vui lòng liên hệ nhân viên quản lý', 'error', 1500);
-        }
-      });
-    }
-  }
-
-
 
   async configPassword() {
     const password = this.password;

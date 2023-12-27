@@ -23,7 +23,6 @@ import { Router } from '@angular/router';
 import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
 import { Reservation } from 'src/app/interfaces/reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
-import { forkJoin } from 'rxjs';
 import { LocationRestaurantComponent } from 'src/app/components/location-restaurant/location-restaurant.component';
 
 @Component({
@@ -97,18 +96,18 @@ export class UserHeaderComponent {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
-      const orderInfo = params['CartPayment'];
-      const orderInfo2 = params['ReservationPaymentReservationOrderItem'];
+      const orderInfo = params['ReservationPaymentReservationDeposit'];
+      //const orderInfo2 = params['ReservationPaymentReservationOrderItem'];
 
       if (email) {
         this.loginGoogleConfig(email);
       }
-      if (orderInfo) {
+      else if (orderInfo) {
         this.newReservationByRedirectUrl();
       }
-      if (orderInfo) {
-        this.newReservationOrderItemByRedirectUrl();
-      }
+      // if (orderInfo2) {
+      //   this.newReservationOrderItemByRedirectUrl();
+      // }
     });
 
     this.getRestaurants();
@@ -154,7 +153,6 @@ export class UserHeaderComponent {
   logOut(): void {
     this.authService.logout().subscribe({
       next: (response) => {
-        console.log('Logout successful', response);
         sessionStorage.removeItem('userCache');
         this.authService.setUserCache(null);
         this.authService.setRoleCache(null);
@@ -171,11 +169,9 @@ export class UserHeaderComponent {
   loginGoogleConfig(email: string): void {
     this.authService.loginWithGoogle(email).subscribe({
       next: (response) => {
-        console.log('Login Response:', response);
         sessionStorage.setItem('access_token', response.access_token);
         this.authService.setUserCache(response.user);
         this.authService.setRoleCache(response.user.roleName);
-        console.log(response.user.roleName);
         this.toastService.showTimedAlert('Đăng nhập thành công', '', 'success', 1000);
         this.router.navigate(['/user/index']);
       },

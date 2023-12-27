@@ -32,6 +32,10 @@ export class LocationRestaurantComponent {
     })
   }
 
+  ngOnInit() {
+    this.getRestaurants();
+  }
+
   getRestaurants(): void {
     this.restaurantSerivce.getCache().subscribe(
       (cached: any[]) => {
