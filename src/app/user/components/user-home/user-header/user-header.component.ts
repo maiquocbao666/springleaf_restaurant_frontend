@@ -96,18 +96,17 @@ export class UserHeaderComponent {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
-      const orderInfo = params['ReservationPaymentReservationDeposit'];
-      //const orderInfo2 = params['ReservationPaymentReservationOrderItem'];
+      const orderInfo = params['orderInfo'];
 
       if (email) {
         this.loginGoogleConfig(email);
       }
-      else if (orderInfo) {
+      else if (orderInfo === "ReservationPaymentReservationDeposit") {
         this.newReservationByRedirectUrl();
       }
-      // if (orderInfo2) {
-      //   this.newReservationOrderItemByRedirectUrl();
-      // }
+      if (orderInfo === "ReservationPaymentReservationOrderItem") {
+        this.newReservationOrderItemByRedirectUrl();
+      }
     });
 
     this.getRestaurants();
