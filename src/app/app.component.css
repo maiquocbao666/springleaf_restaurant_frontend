@@ -209,3 +209,8 @@
 .wrapper:hover #right-door {
   transform: rotateX(-45deg) rotateY(-140deg);
 }
+
+.full{
+  width: 50vw;
+  height: 50vh;
+}
