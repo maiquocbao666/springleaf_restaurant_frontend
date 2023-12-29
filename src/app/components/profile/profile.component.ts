@@ -160,15 +160,15 @@ export class ProfileComponent {
   ngOnInit() {
     this.getRestaurants();
     this.cartService.getProvince();
-    this.cartService.provinceData$.subscribe(data => {
-      this.ProvincesAPI = Object.values(data);
-    });
-    this.cartService.districtData$.subscribe(data => {
-      this.DisTrictsFromAPI = Object.values(data);
-    });
-    this.cartService.wardData$.subscribe(data => {
-      this.WardsFromAPI = Object.values(data);
-    });
+    // this.cartService.provinceData$.subscribe(data => {
+    //   this.ProvincesAPI = Object.values(data);
+    // });
+    // this.cartService.districtData$.subscribe(data => {
+    //   this.DisTrictsFromAPI = Object.values(data);
+    // });
+    // this.cartService.wardData$.subscribe(data => {
+    //   this.WardsFromAPI = Object.values(data);
+    // });
 
   }
 
@@ -222,6 +222,7 @@ export class ProfileComponent {
       && this.profileForm.get('provinceChange')?.value !== ''
       && this.profileForm.get('districtChange')?.value !== ''
       && this.profileForm.get('wardChange')?.value !== '') {
+        
       this.profileForm.patchValue({
         address: `${this.profileForm.get('addressHouse')?.value}-${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
       });

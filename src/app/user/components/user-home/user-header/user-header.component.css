@@ -548,11 +548,13 @@ button:active {
 
 .location-icon,
 .support-icon {
+
 	margin-right: 10px;
 }
 
 .location-icon i,
 .support-icon i {
+	
 	font-size: 18px;
 	color: #f4f4f4;
 }
@@ -594,15 +596,18 @@ button:active {
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0px);
+	text-decoration: none;
 }
 
 .header .nav-top li .dropdown li {
 	float: none;
 	margin: 0;
 	border-bottom: 1px dashed #eee;
+	text-decoration: none;
 }
 
 .header .nav-top li .dropdown li:last-child {
+	text-decoration: none;
 	border: none;
 }
 

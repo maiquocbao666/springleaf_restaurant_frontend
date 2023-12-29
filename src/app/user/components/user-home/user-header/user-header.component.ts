@@ -83,6 +83,7 @@ export class UserHeaderComponent {
 
         if (isAdminOrManager) {
           this.isAdminHeader = true;
+          
         } else {
           this.isAdminHeader = false;
         }

@@ -13,10 +13,10 @@
         <div class="right-content">
             <div class="support">
                 <ul class="nav-top menu-right menu">
-                    <li class="active" routerLinkActive="active" *ngIf="user">
-                        <div class="support-icon" style="align-items: center;">
-                            <span>{{truncateString(user.fullName)}}</span>
-                        </div>
+                    <li class="active" routerLinkActive="active" *ngIf="user"><a>{{truncateString(user.fullName)}}</a>
+                        <!-- <div class="support-icon" style="align-items: center;">
+                            
+                        </div> -->
                         <ul class="dropdown">
                             <li routerLinkActive="active"><a class="nav-link" (click)="openProfileModel()">Hồ sơ
                                     cá nhân</a>
@@ -34,20 +34,21 @@
                             </li>
                         </ul>
                     </li>
-                    <li *ngIf="!user">
-                        <i class="fa fa-user support-icon" aria-hidden="true" (click)="openLoginModal()">
+                    <div *ngIf="!user">
+                        <a (click)="openLoginModal()">
+                            <i class="fa fa-user support-icon" aria-hidden="true"></i>
                             Đăng ký / Đăng nhập
-                        </i>
-                    </li>
+                        </a>
+                    </div>
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="header-inner">
+    <div class="header-inner" style="margin-left: 0px; margin-right: 0px; padding: 0px;">
         <div class="container">
             <div class="inner">
-                <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                <div class="row" >
                     <div class="col-lg-2 col-md-2 col-12">
                         <!-- Start Logo -->
                         <div class="logo">
@@ -65,7 +66,7 @@
                                     <li class="active" routerLinkActive="active"><a routerLink="/user/index">TRANG
                                             CHỦ</a>
                                     </li>
-                                    <li><a>MENU<i class="icofont-rounded-down"></i></a>
+                                    <li><a>THỰC ĐƠN<i class="icofont-rounded-down"></i></a>
                                         <ul class="dropdown">
                                             <li routerLinkActive="active" *ngFor="let category of categories">
                                                 <a
@@ -74,13 +75,12 @@
 
                                         </ul>
                                     </li>
-                                    <li routerLinkActive="active"><a routerLink="/user/history">DỊCH VỤ</a>
+                                    <!-- <li routerLinkActive="active"><a routerLink="/user/history">DỊCH VỤ</a> -->
                                     <li routerLinkActive="active"><a routerLink="/user/about">ABOUT</a>
                                     <li routerLinkActive="active"><a routerLink="/user/location">CỬA HÀNG</a>
                                     </li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a
                                             routerLink="/admin/index">TRANG QUẢN LÝ</a></li>
-                                    <!-- <li routerLinkActive="active"><a routerLink="/user/favorite">YÊU THÍCH</a></li> -->
                                 </ul>
                             </nav>
                         </div>
@@ -89,9 +89,6 @@
                     <div class="col-lg-3 col-12">
                         <nav class="navigation">
                             <ul class="nav menu-right">
-                                <li>
-                                    <button class="mt-3" routerLink="/user/table"> ĐẶT BÀN</button>
-                                </li>
                                 <li><button class="mt-3" routerLink="/user/cart">
                                         <i class="fa-solid fa-cart-shopping">
                                             <span
@@ -101,6 +98,9 @@
                                             </span>
                                         </i>
                                     </button>
+                                </li>
+                                <li>
+                                    <button class="mt-3" routerLink="/user/table"> ĐẶT BÀN</button>
                                 </li>
                                 <!-- <li routerLinkActive="active" *ngIf="user">
                                     <div class="image" style="align-items: center;">
