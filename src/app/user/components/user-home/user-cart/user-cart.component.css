@@ -10,22 +10,6 @@ input[type="number"] {
     border-radius: 4px;
 }
 
-/* 
-.card,
-table {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6);
-} */
-
-
-
-.like {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
-
 .container {
     display: block;
     position: relative;
@@ -406,5 +390,10 @@ button:active .button-text {
     background-color: #75a418;
     color:  #fff;
     box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.7);
-    
+}
+
+.cart-table{
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }

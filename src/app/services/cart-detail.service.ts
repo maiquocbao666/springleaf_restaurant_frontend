@@ -3,7 +3,7 @@ import { Observable, of, tap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { CartDetail } from '../interfaces/cart-detail';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { RxStompService } from '../rx-stomp.service';
 import { BaseService } from './base-service';
 import { ToastService } from './toast.service';
@@ -90,23 +90,19 @@ export class CartDetailService extends BaseService<CartDetail> {
     this.orderDetailsSubject.next(orderDetails);
   }
   getUserOrderDetail(orderId: number): Observable<CartDetail[] | null> {
-
     const jwtToken = sessionStorage.getItem('access_token');
     if (!jwtToken) {
       return of(null);
     }
-
     const customHeader = new HttpHeaders({
       'Authorization': `Bearer ${jwtToken}`,
     });
-
     const orderDetailsObservable = this.apiService.request<CartDetail[]>('post', 'user/getOrderDetailByUser', orderId, customHeader)
       .pipe(
         tap(orderDetails => {
           this.setOrderDetailsCache(orderDetails);
         })
       );
-
     return orderDetailsObservable;
   }
 
@@ -115,7 +111,6 @@ export class CartDetailService extends BaseService<CartDetail> {
     if (!jwtToken) {
       of(null);
     }
-
     const customHeader = new HttpHeaders({
       'Authorization': `Bearer ${jwtToken}`,
     });

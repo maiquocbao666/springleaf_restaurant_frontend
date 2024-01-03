@@ -40,7 +40,7 @@ export class UserHeaderComponent {
   cartByUser: DeliveryOrder | null = null; // Thông tin đặt hàng giỏ hàng
   orderByUser: Order | null = null; // Thông tin order của giỏ hàng
   orderDetailByUser: CartDetail[] | null = null; // Thông tin chi tiết của order giỏ hàng
-  orderDetailCount: number | null = null; // Đếm số lượng hàng có trong giỏ hàng
+  orderDetailCount: number = 0; // Đếm số lượng hàng có trong giỏ hàng
   isConfigUserRestaurant: boolean = true;
   userRestaurant: Restaurant | null = null;
   // Dữ liệu ở cache
@@ -156,7 +156,7 @@ export class UserHeaderComponent {
         sessionStorage.removeItem('userCache');
         this.authService.setUserCache(null);
         this.authService.setRoleCache(null);
-        this.orderDetailCount = null;
+        this.orderDetailCount = 0;
         this.toastService.showTimedAlert('Đăng xuất thành công', 'Hẹn gặp lại', 'success', 1000);
       },
       error: (error) => {
@@ -277,13 +277,19 @@ export class UserHeaderComponent {
 
   // Lấy dữ liệu order detail của cart
   getUserOrderDetails(): void {
+    
     this.cartDetailService.getOrderDetailsCache().subscribe(
       (cached: any[] | null) => {
         if (cached === null && this.orderByUser !== null) {
           this.cartDetailService.getUserOrderDetail(this.orderByUser.orderId).subscribe();
         } else {
+          this.orderDetailCount = 0;
           this.orderDetailByUser = cached;
-          this.orderDetailCount = cached?.length as number;
+          //this.orderDetailCount = cached?.length as number;
+          for(let count of this.orderDetailByUser!){
+            this.orderDetailCount += count?.quantity as number;
+          }
+          
         }
 
       }
