@@ -1,10 +1,10 @@
-
 <div class="container mt-5 col-12">
-    <h1 class="m-2">Giỏ hàng</h1>
+    <h1 class="m-2" *ngIf="cartInformationArray && cartInformationArray.length > 0">Giỏ hàng của bạn</h1>
     <div class="row">
         <div class="col-lg-12" *ngIf="!cartInformationArray || cartInformationArray.length === 0">
-            <div class="card-header">
+            <div class="card-no-product">
                 <h5 class="card-title"><b>Hiện tại không có sản phẩm trong giỏ hàng</b></h5>
+                <button class="btn-back-index" [routerLink]="['/user/index']">Quay lại mua sắm</button>
             </div>
         </div>
         <div class="col-lg-12" *ngIf="cartInformationArray && cartInformationArray.length > 0">
@@ -24,11 +24,12 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let cart of cartInformationArray">
-                        <td> 
-                            <input type="checkbox" [(ngModel)]="selections[cart.menuItem]" (click)="toggleSelection(cart)">
+                        <td>
+                            <input type="checkbox" [(ngModel)]="selections[cart.menuItem]"
+                                (click)="toggleSelection(cart)">
                         </td>
                         <td><img [src]="'http://localhost:8080/public/getImage/' + cart.menuItemImage" #imagePreview
-                            width="100px" class="file-preview" />
+                                width="100px" class="file-preview" />
                         </td>
                         <td>{{ cart.menuItemName }}</td>
                         <td>
@@ -45,49 +46,22 @@
                                 </svg>
                             </button>
                         </td>
-                        <td>{{ formatAmount(cart.menuItemPrice  * cart.quantity)}}</td>
+                        <td>{{ formatAmount(cart.menuItemPrice * cart.quantity)}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-12 mb-3">
+        <div class="col-lg-12 mb-3" *ngIf="cartInformationArray && cartInformationArray.length > 0">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title"><b>{{selectedItems.length}} Sản phẩm</b></h5>
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ formatAmount(calculateTotalPrice()) }}</div>
+                        <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ formatAmount(calculateTotalPrice()) }}
+                        </div>
                     </div>
                     <hr>
-                    <div class="center text-center row">
-                        <!-- <div class="select-container">
-                            <div class="select-column">
-                                <select [(ngModel)]="selectedProvince" (ngModelChange)="onProvinceChange()" class="select">
-                                    <option [ngValue]="null">Vui lòng chọn tỉnh/thành phố</option>
-                                    <option *ngFor="let province of Provinces[2]" [ngValue]="province.ProvinceID">
-                                        {{ province.ProvinceName }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="select-column">
-                                <select [(ngModel)]="selectedDistrict" [disabled]="!Districts" (ngModelChange)="onDistrictChange()" class="select">
-                                    <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
-                                    <option *ngFor="let district of Districts[2]" [ngValue]="district.DistrictID">
-                                        {{ district.DistrictName }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="select-column">
-                                <select [(ngModel)]="selectedWard" [disabled]="!Wards" class="select">
-                                    <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
-                                    <option *ngFor="let ward of Wards[2]" [ngValue]="ward.WardCode">
-                                        {{ ward.WardName }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div> -->
-                    </div>
                 </div>
                 <div class="card-footer">
                     <div class="center text-center row">

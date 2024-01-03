@@ -1,0 +1,23 @@
+<div class="container no-margin-padding">
+    <div class="location">
+        
+        <form class="form-location" [formGroup]="chooseRestaurantFrom" (ngSubmit)="onSubmit()">
+            <h3>Chọn nhà hàng</h3>
+            <div class="select-column">
+                <select formControlName="selectedRestaurant" class="select" class="form-control mb-3">
+                    <option [ngValue]="null">Vui lòng chọn nhà hàng</option>
+
+                    <option [disabled]="restaurant.statusId === 'Không hoạt động'"
+                        *ngFor="let restaurant of restaurants" [ngValue]="restaurant.restaurantId">
+                        {{ restaurant.restaurantName }} {{ restaurant.statusId === 'Không hoạt động' ? '(Đang bảo trì)'
+                        : ''}}
+                </select>
+                <div *ngIf="chooseRestaurantFrom.get('selectedRestaurant')?.invalid && (chooseRestaurantFrom.get('selectedRestaurant')?.touched )"
+                    class="text-danger">
+                    Vui lòng chọn một chi nhánh
+                </div>
+            </div>
+            <button type="submit">Đồng ý</button>
+        </form>
+    </div>
+</div>

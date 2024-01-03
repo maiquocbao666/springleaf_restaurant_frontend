@@ -1,17 +1,17 @@
-.menu_tab {
+/* .menu_tab {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   padding: 10px 0;
   gap: 10px;
-}
+} */
 
-.nav-item {
-  flex: 0 0 calc(25% - 10px);
+/* .nav-item {
+  flex: 0 0 calc(25% - 10px); */
   /* Hiển thị 4 sản phẩm trên mỗi hàng */
-  max-width: calc(25% - 10px);
+  /* max-width: calc(25% - 10px); */
   /* Hiển thị 4 sản phẩm trên mỗi hàng */
-}
+/* }
 
 
 .nav-link {
@@ -68,73 +68,71 @@
   top: 90%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
+} */
 
 
-.carousel-control-prev,
+/* .carousel-control-prev,
 .carousel-control-next {
-  background-color: #75a418;
+  background-color: #75a418; */
   /* Thay đổi màu sắc tại đây */
-  width: 50px;
+  /* width: 50px; */
   /* Điều chỉnh chiều rộng */
-  height: 50px;
+  /* height: 50px; */
   /* Điều chỉnh chiều cao */
-  border-radius: 50%;
+  /* border-radius: 50%; */
   /* Làm tròn góc */
-  opacity: 0.8;
+  /* opacity: 0.8; */
   /* Điều chỉnh độ mờ */
-  transition: opacity 0.3s ease;
+  /* transition: opacity 0.3s ease; */
   /* Hiệu ứng khi hover */
-}
+/* } */
 
-.carousel-control-prev:hover,
+/* .carousel-control-prev:hover,
 .carousel-control-next:hover {
   opacity: 1;
-  /* Điều chỉnh độ mờ khi hover */
-}
+} */
 
 
 
 
 
-a {
+/* a {
   text-decoration: none;
   color: var(--p-color);
-  /* font-family: 'Playfair Display', serif; */
   font-family: BrandonText, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   font-size: larger;
-}
-
+} */
+/* 
 a:hover {
   color: #0e1205;
-  /* Màu khi hover vào liên kết */
-}
+  Màu khi hover vào liên kết
+} */
 
 /* Định dạng liên kết danh sách */
-.list-group a {
+/* .list-group a {
   display: block;
   padding: 3px;
   text-decoration: none;
   color: #333;
-  transition: transform 0.3s;
+  transition: transform 0.3s; */
   /* Thêm hiệu ứng chuyển động cho văn bản */
-}
+/* } */
 
 /* Hiệu ứng khi hover vào liên kết */
-.list-group a:hover {
-  transform: scale(1.1);
+/* .list-group a:hover {
+  transform: scale(1.1); */
   /* Phóng to văn bản khi di chuột vào */
-}
+/* } */
 
 /* Định dạng toàn bộ nav */
-nav.category {
-  background-color: #333;
+/* nav.category {
+  background-color: #333; */
   /* Màu nền */
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); */
   /* Đổ bóng */
-  color: #fff;
+  /* color: #fff; */
   /* Màu chữ */
-}
+/* }
 
 .list-group {
   text-align: center;
@@ -189,11 +187,11 @@ nav.category {
   background-image: linear-gradient(to right, rgb(205 231 38 / 12%), #75a418);
   border-radius: .3rem;
 
-}
+} */
 
 
 /* From uiverse.io by @alexruix */
-.input {
+/* .input {
   line-height: 28px;
   border: 2px solid transparent;
   border-bottom-color: #777;
@@ -219,4 +217,83 @@ input:hover {
 .input:focus::placeholder {
   opacity: 0;
   transition: opacity .3s;
+} */
+
+/* Nè */
+.container{
+  margin-top: 50px;
+}
+
+h1,
+h2 {
+  font-family: 'Dancing Script', cursive;
+}
+
+.food_section .filters_menu {
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  list-style-type: none;
+  margin: 45px 0 20px 0;
+}
+
+.food_section .filters_menu li {
+  margin-right: 5px;
+  padding: 7px 25px;
+  cursor: pointer;
+  border-radius: 25px;
+  border: 1px solid #75a418;
+}
+
+.food_section .filters_menu li.active {
+  background-color: #75a418;
+  color: #ffffff;
+}
+
+.food_section .filters_menu li:hover {
+  background-color: #75a418;
+  color: #ffffff;
+  border: none;
+}
+
+.heading_container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.heading_container h2 {
+  position: relative;
+  margin-bottom: 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.heading_container h2 span {
+  color: #ffbe33;
+}
+
+.heading_container p {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.heading_container.heading_center {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
 }

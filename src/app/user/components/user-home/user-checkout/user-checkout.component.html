@@ -4,13 +4,14 @@
       <div class="card-body d-flex align-items-center justify-content-between">
         <div>
           <h6 class="card-title"><i class="fa-solid fa-location-dot"></i> Địa chỉ nhận hàng </h6>
-          <p class="card-text"><b>{{user?.fullName}}</b> {{user?.phone}} <br>
-            {{userAddressHouse}}, {{userRestaurantWard?.WardName}}, {{userDistrict?.DistrictName}}, {{userProvince?.ProvinceName}}
+          <p class="card-text"><b>Người nhận: </b>{{user?.fullName}}<br>
+            <b>Số điện thoại: </b> {{user?.phone}} <br>
+            <b>Địa chỉ nhận hàng:</b> {{userAddressHouse}}, {{userWard?.WardName}}, {{userDistrict?.DistrictName}}, {{userProvince?.ProvinceName}}
           </p>
         </div>
-        <!-- <div><button type="button" class="comic-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Thay
+        <div><button type="button" class="comic-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Thay
             đổi</button></div>
-      </div> -->
+      </div>
       </div>
     </div>
 
@@ -27,7 +28,6 @@
               width="100px" class="file-preview" />
                 <div class="d-flex flex-column ms-3 me-auto">
                   <span>{{cart.menuItemName}}</span>
-                  <!-- <span>Mô tả: {{cart.menuItem}}</span> -->
                   <span>Số lượng : {{cart.quantity}}</span>
                 </div>
                 <div>
@@ -44,14 +44,14 @@
           <div class="card-body row">
             <ul class="list-group">
               <!-- Phương thức thanh toán VNPAY -->
-              <div class="payment-option col-lg-6">
+              <div class="payment-option col-lg-5">
                 <input type="radio" id="vnpay" name="paymentMethod" value="vnpay" [(ngModel)]="selectedPaymentMethod" (click)="changed()">
                 <label for="vnpay">
                   <img src="https://tse4.mm.bing.net/th?id=OIP.Jic8DogDMWbfEgp7wG6MhAAAAA&pid=Api&P=0&h=180"
                     alt="VNPAY Logo" width="100px"> VNPAY
                 </label>
               </div>
-              <div class="payment-option col-lg-6">
+              <div class="payment-option col-lg-5">
                 <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod"
                   (click)="getService()">
                 <label for="cod">
@@ -61,40 +61,17 @@
                   COD (Tính phí)
                 </label>
               </div>
-              <hr>
             </ul>
-
           </div>
         </div>
       </div>
 
       <div class="col-lg-4">
         <div class="card address-card">
-          <h5>Phương thức thanh toán</h5>
-          <hr>
           <div class="card-body ">
             <ul class="list-group">
-
-              <!-- <div class="payment-option">
-              <input type="radio" id="vnpay" name="paymentMethod" value="vnpay" [(ngModel)]="selectedPaymentMethod">
-              <label for="vnpay">
-                <img src="https://tse4.mm.bing.net/th?id=OIP.Jic8DogDMWbfEgp7wG6MhAAAAA&pid=Api&P=0&h=180"
-                  alt="VNPAY Logo" width="100px"> VNPAY
-              </label>
-            </div>
-            <div class="payment-option">
-              <input type="radio" id="cod" name="paymentMethod" value="cod" [(ngModel)]="selectedPaymentMethod" (click)="getService()">
-              <label for="cod">
-                <img
-                  src="https://cdn1.iconfinder.com/data/icons/marketplace-and-shipping-filled-outline/64/COD_cash_on_delivery_shipping_payment_delivery-512.png"
-                  alt="cod Logo" width="100px">
-                COD (Tính phí)
-              </label>
-            </div>
-            <hr> -->
-
               <div class="select-column" *ngIf="selectedPaymentMethod === 'cod'">
-                <i>Vui lòng chọn phương thức vận chuyển</i>
+                <i style="color: red; font-size: 13px;">Vui lòng chọn phương thức vận chuyển</i>
                 <select class="select" [(ngModel)]="selectedService" (ngModelChange)="calculateShipping()">
                   <option [ngValue]="null">Phương thức vận chuyển</option>
                   <option *ngFor="let s of service" [ngValue]="s.service_id">
@@ -102,7 +79,7 @@
                   </option>
                 </select>
               </div>
-              <hr>
+              <hr *ngIf="selectedPaymentMethod === 'cod'">
               <ul class="list-group">
                 <li class="d-flex align-items-center">
                   <div class="d-flex flex-column ms-3 me-auto">

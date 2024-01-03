@@ -1,26 +1,40 @@
+<div class="container">
+    <div class="right-menu">
+      <div class="logo-image">
+        <i class="fa-solid fa-seedling"></i> <b> SPRINGLEAF</b>
+      </div>
+    </div>
+    <div class="left-menu">
+      <div class="avatar">
+        <img class="small-round-image mr-2" [src]="'http://localhost:8080/public/getImage/' + user?.image!"
+                  #imagePreview />
+      </div>
+    </div>
+</div>
+
 <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
   <div class="app-header header-shadow">
     <div class="app-header__logo">
       <!-- <div class="logo-src"></div> -->
       <i class="fa-solid fa-seedling"></i> <b> SPRINGLEAF</b>
       <div class="header__pane ml-auto">
-        <div>
+        <!-- <div>
           <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
             <span class="hamburger-box">
               <span class="hamburger-inner"></span>
             </span>
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="app-header__mobile-menu">
-      <div>
+      <!-- <div>
         <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
           <span class="hamburger-box">
             <span class="hamburger-inner"></span>
           </span>
         </button>
-      </div>
+      </div> -->
     </div>
     <div class="app-header__menu">
       <span>
@@ -33,32 +47,20 @@
     </div>
     <div class="app-header__content">
       <div class="app-header-left">
-        <div class="search-wrapper">
+        <!-- <div class="search-wrapper">
           <div class="input-holder">
             <input type="text" class="search-input" placeholder="Type to search">
             <button class="search-icon"><span></span></button>
           </div>
           <button class="close"></button>
-        </div>
+        </div> -->
         <ul class="header-menu nav">
           <li class="nav-item">
             <a routerLink="/user/index" class="nav-link">
-              <i class="nav-link-icon fa fa-database"> </i>
+              <!-- <i class="nav-link-icon fa fa-database"> </i> -->
               Trang bán hàng
             </a>
           </li>
-          <!-- <li class="btn-group nav-item">
-            <a href="javascript:void(0);" class="nav-link">
-              <i class="nav-link-icon fa fa-edit"></i>
-              Projects
-            </a>
-          </li>
-          <li class="dropdown nav-item">
-            <a href="javascript:void(0);" class="nav-link">
-              <i class="nav-link-icon fa fa-cog"></i>
-              Settings
-            </a>
-          </li> -->
         </ul>
       </div>
       <div class="app-header-right">
@@ -74,10 +76,6 @@
                   <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                     <button type="button" tabindex="0" class="dropdown-item" (click)="logOut()">Đăng xuất</button>
                     <button type="button" tabindex="0" class="dropdown-item">Settings</button>
-                    <!-- <h6 tabindex="-1" class="dropdown-header">Header</h6>
-                    <button type="button" tabindex="0" class="dropdown-item">Actions</button>
-                    <div tabindex="-1" class="dropdown-divider"></div>
-                    <button type="button" tabindex="0" class="dropdown-item">Dividers</button> -->
                   </div>
                 </div>
               </div>
@@ -99,125 +97,7 @@
       </div>
     </div>
   </div>
-  <div class="ui-theme-settings">
-    <!-- <button type="button" id="TooltipDemo" class="btn-open-options btn btn-warning">
-      <i class="fa fa-cog fa-w-16 fa-spin fa-2x"></i>
-    </button> -->
-    <div class="theme-settings__inner">
-      <div class="scrollbar-container">
-        <div class="theme-settings__options-wrapper">
-          <h3 class="themeoptions-heading">Layout Options
-          </h3>
-          <div class="p-3">
-            <ul class="list-group">
-              <li class="list-group-item">
-                <div class="widget-content p-0">
-                  <div class="widget-content-wrapper">
-                    <div class="widget-content-left mr-3">
-                      <div class="switch has-switch switch-container-class" data-class="fixed-header">
-                        <div class="switch-animate switch-on">
-                          <input type="checkbox" checked data-toggle="toggle" data-onstyle="success">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="widget-content-left">
-                      <div class="widget-heading">Fixed Header
-                      </div>
-                      <div class="widget-subheading">Makes the header top fixed, always visible!
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="widget-content p-0">
-                  <div class="widget-content-wrapper">
-                    <div class="widget-content-left mr-3">
-                      <div class="switch has-switch switch-container-class" data-class="fixed-sidebar">
-                        <div class="switch-animate switch-on">
-                          <input type="checkbox" checked data-toggle="toggle" data-onstyle="success">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="widget-content-left">
-                      <div class="widget-heading">Fixed Sidebar
-                      </div>
-                      <div class="widget-subheading">Makes the sidebar left fixed, always visible!
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="widget-content p-0">
-                  <div class="widget-content-wrapper">
-                    <div class="widget-content-left mr-3">
-                      <div class="switch has-switch switch-container-class" data-class="fixed-footer">
-                        <div class="switch-animate switch-off">
-                          <input type="checkbox" data-toggle="toggle" data-onstyle="success">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="widget-content-left">
-                      <div class="widget-heading">Fixed Footer
-                      </div>
-                      <div class="widget-subheading">Makes the app footer bottom fixed, always visible!
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <h3 class="themeoptions-heading">
-            <div>
-              Header Options
-            </div>
-            <button type="button"
-              class="btn-pill btn-shadow btn-wide ml-auto btn btn-focus btn-sm switch-header-cs-class" data-class="">
-              Restore Default
-            </button>
-          </h3>
-
-          <h3 class="themeoptions-heading">
-            <div>Sidebar Options</div>
-            <button type="button"
-              class="btn-pill btn-shadow btn-wide ml-auto btn btn-focus btn-sm switch-sidebar-cs-class" data-class="">
-              Restore Default
-            </button>
-          </h3>
-
-          <h3 class="themeoptions-heading">
-            <div>Main Content Options</div>
-            <button type="button" class="btn-pill btn-shadow btn-wide ml-auto active btn btn-focus btn-sm">Restore
-              Default
-            </button>
-          </h3>
-          <div class="p-3">
-            <ul class="list-group">
-              <li class="list-group-item">
-                <h5 class="pb-2">Page Section Tabs
-                </h5>
-                <div class="theme-settings-swatches">
-                  <div role="group" class="mt-2 btn-group">
-                    <button type="button" class="btn-wide btn-shadow btn-primary btn btn-secondary switch-theme-class"
-                      data-class="body-tabs-line">
-                      Line
-                    </button>
-                    <button type="button"
-                      class="btn-wide btn-shadow btn-primary active btn btn-secondary switch-theme-class"
-                      data-class="body-tabs-shadow">
-                      Shadow
-                    </button>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  
   <div class="app-main">
     <div class="app-sidebar sidebar-shadow">
       <div class="app-header__logo">
@@ -347,11 +227,6 @@
                     <i class="metismenu-icon"></i>Quản lý gộp bàn
                   </a>
                 </li>
-                <!-- <li>
-                  <a routerLink="/admin/tableStatuses">
-                    <i class="metismenu-icon"></i>Quản lý trạng thái bàn
-                  </a>
-                </li> -->
                 <li>
                   <a routerLink="/admin/restaurantTables">
                     <i class="metismenu-icon"></i>Quản lý Bàn
@@ -379,13 +254,6 @@
                 </li>
               </ul>
             </li>
-            <!-- <li class="app-sidebar__heading">Báo cáo</li>
-            <li>
-              <a routerLink="/admin/receipts">
-                <i class="metismenu-icon"></i>
-                <i class="fa-solid fa-wallet metismenu-icon"></i>Hóa đơn nhập hàng
-              </a>
-            </li> -->
             <li class="app-sidebar__heading">Kho</li>
             <li>
               <a routerLink="/admin/menuItemIngredients">
