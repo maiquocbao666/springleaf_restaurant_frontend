@@ -1,4 +1,3 @@
-
 /* CSS cho input number */
 input[type="number"] {
     -webkit-appearance: textfield;
@@ -378,4 +377,34 @@ button:hover .button-text {
 
 button:active .button-text {
     color: rgba(255, 255, 255, 0.459);
+}
+
+.card-no-product {
+    width: 100%;
+    height: 400px;
+    justify-content: space-between;
+    padding-top: 180px;
+    padding-left: 350px;
+    border: 1px solid #ccc;
+    margin: 20px 0px;
+}
+
+.btn-back-index {
+    padding: 10px 20px;
+    border: 1px solid #75a418;
+    margin-top: 30px;
+    border-radius: 5px;
+    color: #75a418;
+    font-weight: 500;
+    font-size: 18px;
+    margin-left: 100px;
+    transition: all 0.3s ease;
+}
+
+.btn-back-index:hover {
+    border: 1px solid #75a418;
+    background-color: #75a418;
+    color:  #fff;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.7);
+    
 }

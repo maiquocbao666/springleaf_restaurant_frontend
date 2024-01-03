@@ -49,7 +49,6 @@ export class UserProductsComponent implements OnInit {
     private orderDetailService: CartDetailService,
     private modalService: NgbModal,
     private toastService: ToastService,
-    private apiService: ApiService,
     private favoriteService: FavoriteService
   ) {
     this.authService.getUserCache().subscribe((data) => {

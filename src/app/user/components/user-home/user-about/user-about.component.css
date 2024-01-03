@@ -1,13 +1,16 @@
 h1, h2, h3, .h1, .h2, .h3 {
     font-weight: 400 !important;
-    font-family: 'Playball', cursive !important;
+    font-family: 'Dancing Script', cursive;
+    color: #FFFFFF;
 }
 
 h4, h5, h6, .h4, .h5, .h6 {
     font-weight: 600 !important;
-    font-family: 'Playball', sans-serif !important;
+    font-family: 'Dancing Script', cursive;
 }
-
+.contact-us {
+    color: #d4a762;
+}
 .my-6 {
     margin-top: 6rem;
     margin-bottom: 6rem;
@@ -29,7 +32,7 @@ h4, h5, h6, .h4, .h5, .h6 {
 
 .btn.btn-primary:hover {
     background: #ccc !important;
-    color: var(--bs-primary) !important;
+    color: #d4a762 !important;
 }
 
 .btn {

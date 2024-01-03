@@ -49,6 +49,10 @@ export class ProfileComponent {
   roles: String[] | null = null;
   userRole: string | null = null;
 
+  userProvinceChange : Province | null = null;
+      userDistrictChange : District | null = null;
+      userWardChange : Ward | null = null;
+
   @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;
   @ViewChild('imagePreview') imagePreview!: ElementRef<HTMLImageElement>;
 
@@ -160,15 +164,15 @@ export class ProfileComponent {
   ngOnInit() {
     this.getRestaurants();
     this.cartService.getProvince();
-    // this.cartService.provinceData$.subscribe(data => {
-    //   this.ProvincesAPI = Object.values(data);
-    // });
-    // this.cartService.districtData$.subscribe(data => {
-    //   this.DisTrictsFromAPI = Object.values(data);
-    // });
-    // this.cartService.wardData$.subscribe(data => {
-    //   this.WardsFromAPI = Object.values(data);
-    // });
+    this.cartService.provinceData$.subscribe(data => {
+      this.ProvincesAPI = Object.values(data);
+    });
+    this.cartService.districtData$.subscribe(data => {
+      this.DisTrictsFromAPI = Object.values(data);
+    });
+    this.cartService.wardData$.subscribe(data => {
+      this.WardsFromAPI = Object.values(data);
+    });
 
   }
 
@@ -216,19 +220,45 @@ export class ProfileComponent {
     this.updateImagePreview();
   }
 
-  toggleAddressInput() {
+  async toggleAddressInput() {
     if (
       this.profileForm.get('addressHouse')?.value !== null
       && this.profileForm.get('provinceChange')?.value !== ''
       && this.profileForm.get('districtChange')?.value !== ''
-      && this.profileForm.get('wardChange')?.value !== '') {
-        
+      && this.profileForm.get('wardChange')?.value !== ''
+    ) {
+      for (const province of this.Provinces) {
+        if (province.ProvinceID === this.profileForm.get('provinceChange')?.value) {
+          this.userProvinceChange = province;
+          if (this.userProvinceChange) {
+            await this.getDistrict(this.userProvinceChange.ProvinceID);
+            for (const district of this.Districts) {
+              if (district.DistrictID === this.profileForm.get('districtChange')?.value) {
+                this.userDistrictChange = district;
+                if (this.userDistrictChange) {
+                  await this.getWard(this.userDistrictChange.DistrictID);
+                  for (const ward of this.Wards) {
+                    if (ward.WardCode === this.profileForm.get('wardChange')?.value) {
+                      this.userWardChange = ward;
+                      break;
+                    }
+                  }
+                }
+                break;
+              }
+            }
+          }
+          break;
+        }
+      }
+  
       this.profileForm.patchValue({
-        address: `${this.profileForm.get('addressHouse')?.value}-${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`,
+        address: `${this.profileForm.get('addressHouse')?.value}-${this.userWardChange?.WardName}-${this.userDistrictChange?.DistrictName}-${this.userProvinceChange?.ProvinceName}`,
       });
     }
     this.showAddressInput = !this.showAddressInput;
   }
+  
   CancelChangeAdress() {
     this.initUserAddress();
     this.showAddressInput = !this.showAddressInput;
@@ -240,6 +270,7 @@ export class ProfileComponent {
     console.log('onProvinceChange called');
     if (typeof this.profileForm.get('provinceChange')?.value === 'number') {
       this.cartService.getDistrict(this.profileForm.get('provinceChange')?.value);
+      
     }
     console.log(this.profileForm.get('provinceChange')?.value); // In ra giá trị tỉnh/thành phố đã chọn
   }
@@ -248,7 +279,6 @@ export class ProfileComponent {
     console.log('onDistrictChange called');
     if (typeof this.profileForm.get('districtChange')?.value === 'number') {
       this.cartService.getWard(this.profileForm.get('districtChange')?.value);
-
     }
     console.log(this.profileForm.get('districtChange')?.value); // In ra giá trị tỉnh/thành phố đã chọn
   }
@@ -326,7 +356,7 @@ export class ProfileComponent {
         && this.profileForm.get('provinceChange')?.value !== ''
         && this.profileForm.get('districtChange')?.value !== ''
         && this.profileForm.get('wardChange')?.value !== '') {
-        addressChange = `${this.profileForm.get('addressHouse')?.value} -${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`;
+        addressChange = `${this.profileForm.get('addressHouse')?.value}-${this.profileForm.get('wardChange')?.value}-${this.profileForm.get('districtChange')?.value}-${this.profileForm.get('provinceChange')?.value}`;
       } else {
         addressChange = this.user.address;
       }

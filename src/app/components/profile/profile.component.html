@@ -1,8 +1,8 @@
 <div class="modal-header">
   <h4 class="modal-title">Hồ sơ cá nhân</h4>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+  <a class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
-  </button>
+  </a>
 </div>
 <div class="modal-body">
   <div class="container">
@@ -13,16 +13,16 @@
             <label for="imageUpload" class="file-label">Chọn ảnh<span style="color: red;">(*)</span></label>
             <div class="file-wrapper">
               <input type="file" name="imageUpload" #imageUpload formControlName="imageUrl" class="file-input"
-               (change)="onFileSelected($event)" />
+                (change)="onFileSelected($event)" />
               <div class="file-preview-background">Upload Image</div>
               <img [src]="'http://localhost:8080/public/getImage/' + profileForm.get('imageUrl')?.value" #imagePreview
-              width="200px" class="file-preview" />
+                width="200px" class="file-preview" />
             </div>
           </div>
         </div>
         <div class="col-md-8">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" style="margin-top: 10px;">
               <label for="fullName" class="form-label">Họ và tên<span style="color: red;">(*)</span></label>
               <input type="text" formControlName="fullName" class="form-control" id="unitPrice"
                 placeholder="Nhập họ và tên..">
@@ -30,7 +30,7 @@
                 {{ profileForm.get('fullName')?.getError('message') }}
               </i>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" style="margin-top: 10px;">
               <label for="email" class="form-label">Email<span style="color: red;">(*)</span></label>
               <input type="text" id="email" class="form-control" formControlName="email" name="email">
               <i *ngIf="profileForm.get('email')?.getError('message')" style="color: red;">
@@ -38,37 +38,37 @@
               </i>
             </div>
 
-            <div class="col-md-6" class="form-label">
-              <label for="phone">Số điện thoại</label><span style="color: red;">(*)</span>
+            <div class="col-md-6" style="margin-top: 10px;">
+              <label for="phone" class="form-label">Số điện thoại</label><span style="color: red;">(*)</span>
               <input type="text" id="phone" class="form-control" formControlName="phone" name="phone">
               <i *ngIf="profileForm.get('phone')?.getError('message')" style="color: red;">
                 {{ profileForm.get('phone')?.getError('message') }}
               </i>
             </div>
-            <div class="col-md-6" class="form-label">
-              <label for="phone">Nhà hàng</label>
+            <div class="col-md-6" style="margin-top: 10px;">
+              <label for="phone" class="form-label">Nhà hàng</label>
               <select class="form-select" formControlName="selectedRestaurant">
-                <option [ngValue]="null">Bạn chưa chọn nhà hàng</option>
+                <option [ngValue]="null">Vui lòng chọn nhà hàng</option>
                 <option *ngFor="let restaurant of restaurants" [ngValue]="restaurant.restaurantId">
                   {{ restaurant.restaurantName }}
                 </option>
               </select>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" style="margin-top: 10px;">
               <label for="userRole" class="form-label">Chức vụ: </label>
               <span id="userRole" *ngIf="userRole === 'ADMIN'"> Quản trị viên</span>
               <span id="userRole" *ngIf="userRole === 'MANAGER'"> Quản lý</span>
               <span id="userRole" *ngIf="userRole === 'USER'"> Người dùng</span>
             </div>
-            <div class="col-md-6" class="form-label" *ngIf="showAddressInput">
+            <div class="col-md-12" *ngIf="showAddressInput">
               <label for="address">Địa chỉ <i class="fa fa-pen-to-square" (click)="toggleAddressInput()"></i></label>
               <input type="text" class="form-control" id="address" formControlName="address" name="address">
             </div>
-            <div class="col-md-6" *ngIf="!showAddressInput">
-              <div class="select-">
-                <input type="text" formControlName="addressHouse" placeholder="Nhập địa chỉ nhà">
+            <div class="col-md-12 row" *ngIf="!showAddressInput">
+              <div class="select-column col-md-6" style="margin-top: 10px;">
+                <input type="text" class="form-control" formControlName="addressHouse" placeholder="Nhập địa chỉ nhà">
               </div>
-              <div class="select-column">
+              <div class="select-column col-md-6" style="margin-top: 10px;">
                 <select class="form-select" formControlName="provinceChange" [(ngModel)]="selectedProvince"
                   (ngModelChange)="onProvinceChange()" class="select">
                   <option [ngValue]="null">Vui lòng chọn tỉnh/thành phố</option>
@@ -77,7 +77,8 @@
                   </option>
                 </select>
               </div>
-              <div class="select-column">
+
+              <div class="select-column col-md-6" style="margin-top: 10px;">
                 <select class="form-select" formControlName="districtChange" [(ngModel)]="selectedDistrict"
                   [disabled]="!Districts" (ngModelChange)="onDistrictChange()" class="select">
                   <option [ngValue]="null">Vui lòng chọn quận/huyện</option>
@@ -86,7 +87,7 @@
                   </option>
                 </select>
               </div>
-              <div class="select-column">
+              <div class="select-column col-md-6" style="margin-top: 10px;">
                 <select class="form-select" formControlName="wardChange" [(ngModel)]="selectedWard" [disabled]="!Wards"
                   class="select">
                   <option [ngValue]="null">Vui lòng chọn xã/phường</option>
@@ -95,14 +96,16 @@
                   </option>
                 </select>
               </div>
-              <i class="fa-solid fa-check"
-                style="border: 1px solid #75a418; background-color: #75a418; padding: 5px 10px; border-radius: 10px; margin: 5px 5px;"
-                (click)="toggleAddressInput()">
-              </i>
-              <i class="fa-solid fa-x"
-                style="border: 1px solid #b91b06; background-color: #b91b06; padding: 5px 10px; border-radius: 10px; margin: 5px 5px;"
-                (click)="CancelChangeAdress()">
-              </i>
+              <div class="select-column col-md-2 icheck">
+                <i class="fa-solid fa-check "
+                  (click)="toggleAddressInput()">
+                </i>
+              </div>
+              <div class="select-column col-md-2 icancel">
+                <i class="fa-solid fa-x"
+                  (click)="CancelChangeAdress()">
+                </i>
+              </div>
             </div>
           </div>
         </div>
