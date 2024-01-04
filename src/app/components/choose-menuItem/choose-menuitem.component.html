@@ -1,63 +1,51 @@
-<div class="card-footer">
-    <div class="center text-center row">
+<div class="modal-header">
+    <h4 class="modal-title">Đặt món</h4>
+    <a class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </a>
+</div>
+<div class="row-container">
+    <div class="row-item checkbox"><input type="checkbox" /></div>
+    <div class="row-item image">Hình ảnh</div>
+    <div class="row-item name">Tên</div>
+    <div class="row-item unit-price">Đơn giá</div>
+    <div class="row-item quantity">SL</div>
+    <div class="row-item total-price">Thành tiền</div>
+</div>
+<div class="scroll-container">
+    <div class="row-body" *ngFor="let product of products">
+        <div class="row-item checkbox"><input type="checkbox" [(ngModel)]="selections[product.menuItemId!]"
+                (click)="toggleSelection(product)"></div>
+        <div class="row-item image"><img [src]="'http://localhost:8080/public/getImage/' + product.imageUrl"
+                #imagePreview width="100px" class="file-preview" /></div>
+        <div class="row-item name">{{ product.name }}</div>
+        <div class="row-item unit-price">{{ formatAmount(product.unitPrice) }}</div>
+        <div class="row-item quantity"><input type="number" [(ngModel)]="quantities[product.menuItemId!]"
+                (input)="updateQuantity(product, $event)"></div>
+        <div class="row-item total-price">{{ formatAmount(product.unitPrice*quantities[product.menuItemId!])}}</div>
+    </div>
+</div>
+<div class="row-footer">
+    <div class="order-info">
+        <div class="total-item">
+            <h5>Tổng: {{selectedItems.length}} món</h5>
+        </div>
+        <div class="total-price-footer">
+            <h6>Tạm tính: {{ formatAmount(finalPrice()) }}</h6>
+        </div>
+        <div class="price-service">
+            <h6>Phí dịch vụ: {{ formatAmount(50000) }}</h6>
+        </div>
+        <div class="final-price">
+            <h6>Tổng cộng: {{ formatAmount(50000 + finalPrice()) }}</h6>
+        </div>
+    </div>
+    <div class="order-button">
         <button class="learn-more" (click)="checkout()">
             <span aria-hidden="true" class="circle">
                 <span class="icon arrow"></span>
             </span>
             <span class="button-text">Thanh toán</span>
         </button>
-    </div>
-    
-</div>
-<div class="container mt-5 col-12">
-    <h5 class="card-title mb-2">Chọn sản phẩm</h5>
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table ">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Hình ảnh</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Số lượng</th>
-                        <th>Đơn giá</th>
-                        <th>Xóa</th>
-                        <th>Tổng</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let product of products">
-                        <td> 
-                            <input type="checkbox" [(ngModel)]="selections[product.menuItemId!]" (click)="toggleSelection(product)">
-                        </td>
-                        <td><img src="https://static.kfcvietnam.com.vn/images/items/lg/SALAD-HAT-GA-VIEN.jpg?v=gzNOBg"
-                                alt="">
-                        </td>
-                        <td>{{ product.name }}</td>
-                        <td>
-                            <input type="number" [(ngModel)]="quantities[product.menuItemId!]" (input)="updateQuantity(product, $event)">
-                        </td>
-                        <td>{{ formatAmount(product.unitPrice) }}</td>
-                        
-                        <td>{{ formatAmount(product.unitPrice)}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-lg-12 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title"><b>{{selectedItems.length}} Sản phẩm</b></h5>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-lg-12 col-sm-7 mb-2"><b>Tạm tính:</b> {{ formatAmount(calculateTotalPrice()) }}</div>
-                    </div>
-                    <hr>
-                    
-                </div>
-                
-            </div>
-        </div>
     </div>
 </div>
