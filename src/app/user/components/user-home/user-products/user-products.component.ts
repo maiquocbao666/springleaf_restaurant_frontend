@@ -63,7 +63,6 @@ export class UserProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.getUserLoggedIn()
     this.getProducts();
     this.getCategories();
     this.route.paramMap.subscribe(paramMap => {
@@ -76,23 +75,9 @@ export class UserProductsComponent implements OnInit {
   }
 
 
-  // Hàm gửi yêu cầu lấy thông tin người đang đăng nhập
-  // getUserLoggedIn(): Observable<any> {
-  //   const jwtToken = localStorage.getItem('access_token');
-
-  //   const customHeader1 = new HttpHeaders({
-  //     'Authorization': `Bearer ${jwtToken}`,
-  //   });
-
-  //   return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
-  // }
-
-
   filterProductsByCategoryId(categoryId: number): any[] {
     return this.products.filter(product => product.categoryId === categoryId);
   }
-
-
 
   // Trong file của bạn có thể thêm một hàm để giới hạn độ dài của chuỗi
   truncateString(str: string, maxLength: number): string {
@@ -182,10 +167,8 @@ export class UserProductsComponent implements OnInit {
             this.toastService.showTimedAlert('Không thể đặt hàng', '', 'error', 2000);
           }
           else if (response.message === "MenuItem in cart") {
-            this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
-          }
-          else if (response.message === "Item in cart") {
-            this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
+            this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
+            this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
           }
           else {
             this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();

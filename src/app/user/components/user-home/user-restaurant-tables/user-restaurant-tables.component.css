@@ -9,12 +9,14 @@
   color: #fff;
 }
 
+.about-div{
+  background: url("https://drive.google.com/uc?id=1pHJLyXqr8qcZCwXBOgsbs4Yx17sAyzfc");
+}
 
 h1 {
-  font: 700 36px 'Oswald', sans-serif;
-  text-align: center;
-  color: #000;
-  padding-top: 5px;
+  font-weight: 400 !important;
+  font-family: 'Dancing Script', cursive;
+  color: #FFFFFF;
 }
 
 .service-item i {
@@ -35,3 +37,4 @@ h1 {
 .service-item i {
   justify-content: center;
 }
+

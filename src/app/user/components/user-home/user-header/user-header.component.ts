@@ -40,7 +40,7 @@ export class UserHeaderComponent {
   cartByUser: DeliveryOrder | null = null; // Thông tin đặt hàng giỏ hàng
   orderByUser: Order | null = null; // Thông tin order của giỏ hàng
   orderDetailByUser: CartDetail[] | null = null; // Thông tin chi tiết của order giỏ hàng
-  orderDetailCount: number | null = null; // Đếm số lượng hàng có trong giỏ hàng
+  orderDetailCount: number = 0; // Đếm số lượng hàng có trong giỏ hàng
   isConfigUserRestaurant: boolean = true;
   userRestaurant: Restaurant | null = null;
   // Dữ liệu ở cache
@@ -156,7 +156,7 @@ export class UserHeaderComponent {
         sessionStorage.removeItem('userCache');
         this.authService.setUserCache(null);
         this.authService.setRoleCache(null);
-        this.orderDetailCount = null;
+        this.orderDetailCount = 0;
         this.toastService.showTimedAlert('Đăng xuất thành công', 'Hẹn gặp lại', 'success', 1000);
       },
       error: (error) => {
@@ -277,13 +277,19 @@ export class UserHeaderComponent {
 
   // Lấy dữ liệu order detail của cart
   getUserOrderDetails(): void {
+    
     this.cartDetailService.getOrderDetailsCache().subscribe(
       (cached: any[] | null) => {
         if (cached === null && this.orderByUser !== null) {
           this.cartDetailService.getUserOrderDetail(this.orderByUser.orderId).subscribe();
         } else {
+          this.orderDetailCount = 0;
           this.orderDetailByUser = cached;
-          this.orderDetailCount = cached?.length as number;
+          //this.orderDetailCount = cached?.length as number;
+          for(let count of this.orderDetailByUser!){
+            this.orderDetailCount += count?.quantity as number;
+          }
+          
         }
 
       }
@@ -349,14 +355,14 @@ export class UserHeaderComponent {
 
   newReservationOrderItemByRedirectUrl() {
     const reservation = JSON.parse(localStorage.getItem('new_reservation_orderItem')!);
-    const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
 
     let reservationsCache: Reservation[] = [];
     this.reservationService.add(reservation).subscribe(
       {
         next: (addedReservation) => {
           this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
-          this.newOrderItemByRedirectUrl(addedReservation.reservationId!);
+          this.newOrderItemByRedirectUrl(addedReservation.reservationId!).subscribe();
+          alert(addedReservation.reservationId!);
           reservationsCache.push(addedReservation);
           localStorage.setItem('reservations', JSON.stringify(reservationsCache));
           localStorage.removeItem('await_new_reservation');
@@ -373,6 +379,7 @@ export class UserHeaderComponent {
   }
 
   newOrderItemByRedirectUrl(reservationId: number) {
+    alert('đã gọi');
     const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
     const token = sessionStorage.getItem('access_token');
     const headers = new HttpHeaders({

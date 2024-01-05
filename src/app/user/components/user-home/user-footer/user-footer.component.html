@@ -6,10 +6,14 @@
       <div class="col-sm-12 col-md-6">
         <h6>Nhà hàng springleaf</h6>
         <p class="text-justify" style="color:#fff;
-        font-size: 15px;" *ngFor="let restaurant of restaurants"><i>Địa chỉ: </i> {{restaurant.address}}</p>
+        font-size: 15px;" *ngFor="let item of restaurantDetailAddress"><i>Địa chỉ:
+            {{item.restaurantAddr}}, {{item.restaurantWard}}, {{item.restaurantDistrict}}, {{item.restaurantProvince}}
+          </i>
+        </p>
       </div>
       <div class="col-xs-6 col-md-3">
-        <img style="width: 200px; margin-bottom: 15px;" class="img-responsive" src="https://jollibee.com.vn/media/wysiwyg/delivery-lg_1.png" alt="">
+        <img style="width: 200px; margin-bottom: 15px;" class="img-responsive"
+          src="https://jollibee.com.vn/media/wysiwyg/delivery-lg_1.png" alt="">
         <ul class="footer-links">
           <li><a href="http://scanfcode.com/category/c-language/">Liên hệ</a></li>
           <li><a href="http://scanfcode.com/category/front-end-development/">Về nhà hàng</a></li>
@@ -27,5 +31,3 @@
     </div>
   </div>
 </footer>
-
-

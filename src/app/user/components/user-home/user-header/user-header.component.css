@@ -559,6 +559,10 @@ button:active {
 	color: #f4f4f4;
 }
 
+.support ul li{
+	list-style-type: none;
+}
+
 .topnav a {
 	color: #FFFF;
 }

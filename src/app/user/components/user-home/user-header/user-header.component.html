@@ -13,10 +13,8 @@
         <div class="right-content">
             <div class="support">
                 <ul class="nav-top menu-right menu">
-                    <li class="active" routerLinkActive="active" *ngIf="user"><a>{{truncateString(user.fullName)}}</a>
-                        <!-- <div class="support-icon" style="align-items: center;">
-                            
-                        </div> -->
+                    <li class="active" routerLinkActive="active" *ngIf="user">
+                        <a>Xin chào, {{truncateString(user.fullName)}}</a>
                         <ul class="dropdown">
                             <li routerLinkActive="active"><a class="nav-link" (click)="openProfileModel()">Hồ sơ
                                     cá nhân</a>

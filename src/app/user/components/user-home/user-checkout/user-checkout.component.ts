@@ -13,8 +13,6 @@ import { User } from 'src/app/interfaces/user';
 import { Province } from 'src/app/interfaces/address/Province';
 import { District } from 'src/app/interfaces/address/District';
 import { Ward } from 'src/app/interfaces/address/Ward';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
 import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
@@ -29,6 +27,9 @@ import { DiscountService } from 'src/app/services/discount.service';
   styleUrls: ['./user-checkout.component.css']
 
 }) export class UserCheckoutComponent {
+  apiUrl = 'http://localhost:8080/public';
+
+
   orderTotal: number | undefined;
   orderInfo: string | undefined;
   submitted = false;
@@ -37,43 +38,43 @@ import { DiscountService } from 'src/app/services/discount.service';
   selectedPaymentMethod: string | undefined;
   cartInfos: CartInfomation[] = [];
   orderByUser: Order | null = null;
-  ship : number | null = null;
-  user : User | null = null;
+  ship: number | null = null;
+  user: User | null = null;
   cartByUser: DeliveryOrder | null = null;
   orderDetailByUser: CartDetail[] | null = null;
 
-  userAddressHouse : string = '';
+  userAddressHouse: string = '';
   userProvince: Province | null = null;
   userDistrict: District | null = null;
   userWard: Ward | null = null;
   Provinces: any = [];
   Districts: any = [];
   Wards: any = [];
-  total : number | null = null;
-  totalAndShip : number | null=null;
+  total: number | null = null;
+  totalAndShip: number | null = null;
   service: Service[] = [];
-  selectedService : number | null = null;
+  selectedService: number | null = null;
   // Địa chỉ nhà hàng của user
-  restaurants : Restaurant[] = []
-  userRestaurantAddress : string = '';
+  restaurants: Restaurant[] = []
+  userRestaurantAddress: string = '';
   userRestaurantProvince: Province | null = null;
-  userRestaurantDistrict : District | null = null;
-  userRestaurantWard : Ward | null = null;
-  discountCode : string = '';
-  discountPrice : number | null = null;
-  isCheckoutActive : boolean = false;
+  userRestaurantDistrict: District | null = null;
+  userRestaurantWard: Ward | null = null;
+  discountCode: string = '';
+  discountPrice: number | null = null;
+  isCheckoutActive: boolean = false;
   constructor(
     private vnpayService: VNPayService,
     private router: Router,
     private cartService: CartService,
     private orderService: OrderService,
     private http: HttpClient,
-    private authService : AuthenticationService,
-    private toast : ToastService,
-    private deliveryOrderService : DeliveryOrderService,
-    private cartDetailService : CartDetailService,
-    private restaurantSerivce : RestaurantService,
-    private discountService : DiscountService,
+    private authService: AuthenticationService,
+    private toast: ToastService,
+    private deliveryOrderService: DeliveryOrderService,
+    private cartDetailService: CartDetailService,
+    private restaurantSerivce: RestaurantService,
+    private discountService: DiscountService,
   ) {
     this.orderService.userOrderCache$.subscribe(order => {
       this.orderByUser = order;
@@ -92,7 +93,6 @@ import { DiscountService } from 'src/app/services/discount.service';
     );
     this.calculateTotalPrice();
     this.initUserAddress();
-    // this.getService();
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
     });
@@ -110,7 +110,7 @@ import { DiscountService } from 'src/app/services/discount.service';
     this.cartInfos = this.cartService.getCartData();
     this.calculateTotalPrice();
     this.initUserRestaurantAddress();
-    
+    //this.getService();
   }
 
   getRestaurants(): void {
@@ -121,16 +121,14 @@ import { DiscountService } from 'src/app/services/discount.service';
     );
   }
 
-  initUserRestaurantAddress(){
-    if(this.user){
-      var userRestaurantBrand : Restaurant | null = null;
+  async initUserRestaurantAddress() {
+    if (this.user) {
+      var userRestaurantBrand: Restaurant | null = null;
       for (const restaurant of this.restaurants) {
         if (restaurant.restaurantId === this.user.restaurantBranchId) {
           userRestaurantBrand = restaurant;
-      }
-      if(userRestaurantBrand){
-
-      
+        }
+        if (userRestaurantBrand) {
           const address = userRestaurantBrand.address.toString();
           const restaurantStrings = address.split('-');
           const restaurantAddressHouse = restaurantStrings[0];
@@ -160,15 +158,12 @@ import { DiscountService } from 'src/app/services/discount.service';
                         }
                       }
                     });
-  
                   }
                   break;
-  
                 }
               }
             });
           }
-
         }
       }
     }
@@ -191,9 +186,6 @@ import { DiscountService } from 'src/app/services/discount.service';
             break;
           }
         }
-
-        
-
         if (this.userProvince) {
           this.getDistrict(this.userProvince.ProvinceID).then(() => {
             for (const district of this.Districts) {
@@ -208,26 +200,20 @@ import { DiscountService } from 'src/app/services/discount.service';
                       }
                     }
                   });
-
                 }
                 break;
-
               }
             }
           });
         }
-
-
-      } else {
-      }
-
+      } else {}
     }
   }
   calculateTotalPrice(): number {
     let totalPrice = 0;
 
     this.cartInfos.forEach((item) => {
-      totalPrice += item.quantity*item.menuItemPrice;
+      totalPrice += item.quantity * item.menuItemPrice;
     });
     this.total = totalPrice;
     return totalPrice;
@@ -245,31 +231,26 @@ import { DiscountService } from 'src/app/services/discount.service';
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
 
-  changed(){
-    this.isCheckoutActive = true;
-  }
+  // changed() {
+  //   this.isCheckoutActive = true;
+  // }
 
   processPayment(): void {
-    // Kiểm tra xem phương thức thanh toán nào được chọn
     if (this.selectedPaymentMethod === 'vnpay') {
       this.payWithVNPay();
-    } else if (this.selectedPaymentMethod === 'momo') {
-      this.payWithMoMo();
     } else if (this.selectedPaymentMethod === 'cod') {
       this.payWithCOD();
     } else {
-      // Xử lý nếu không chọn phương thức thanh toán
-      Swal.fire('Bạn chưa chọn phương thức thanh toán', 'vui lòng chọn!', 'info');
-      console.error('Vui lòng chọn phương thức thanh toán.');
+      Swal.fire('Vui lòng chọn phương thức thanh toán','', 'info');
     }
   }
 
   payWithVNPay(): void {
     this.orderTotal = 0; // lấy dữ liệu động tổng tiền
-    this.orderInfo = 'CartPayment,' + this.orderByUser?.orderId?.toString() +"," || ""; // dữ liệu order detail
-    const cartDetail : CartDetail[] = [];
-    for(const cart of this.cartInfos){
-      this.orderTotal += cart.menuItemPrice*cart.quantity;
+    this.orderInfo = 'CartPayment,' + this.orderByUser?.orderId?.toString() + "," || ""; // dữ liệu order detail
+    const cartDetail: CartDetail[] = [];
+    for (const cart of this.cartInfos) {
+      this.orderTotal += cart.menuItemPrice * cart.quantity;
       this.orderInfo += cart.orderDetailId + ",";
     }
     this.orderInfo = this.orderInfo.replace(/,$/, "");
@@ -287,7 +268,6 @@ import { DiscountService } from 'src/app/services/discount.service';
           console.error('Failed to submit order. Please try again.', error);
         }
       });
-      console.log('Thanh toán bằng VNPAY');
     }
   }
 
@@ -303,7 +283,7 @@ import { DiscountService } from 'src/app/services/discount.service';
       'token': 'd6f64767-329b-11ee-af43-6ead57e9219a',
       'shop_id': 4421897,
     });
-  
+
     const shippingData = {
       "service_id": selectedServiceId,
       "insurance_value": total,
@@ -316,34 +296,34 @@ import { DiscountService } from 'src/app/services/discount.service';
       "width": 15,
       "height": 15,
     };
-    
-  
+
+
     this.http.post<any>(apiUrl, shippingData, { headers })
       .subscribe({
         next: (response) => {
-          if(response && response.code === 200){
+          if (response && response.code === 200) {
             console.log('Shipping Fee:', response.data.total);
             // Xử lý response cần thiết
             this.ship = response.data.total;
             this.isCheckoutActive = true;
             return;
-          }else{
+          } else {
             return;
           }
-          
+
         },
         error: (error) => {
           console.error('Error calculating shipping fee:', error);
 
-          if(error.error.code_message_value === "Không tìm thấy bảng giá hợp lệ"){
-            this.toast.showTimedAlert('Không tìm được bảng giá', 'Vui lòng thay đổi hình thức vận chuyển','error',1000);
+          if (error.error.code_message_value === "Không tìm thấy bảng giá hợp lệ") {
+            this.toast.showTimedAlert('Không tìm được bảng giá', 'Vui lòng thay đổi hình thức vận chuyển', 'error', 1000);
           }
           return; // Dừng hàm khi gặp lỗi
         }
       });
-  } 
+  }
 
-  
+
 
   // Sử dụng Router để điều hướng tới URL trả về từ backend
   redirectToPayment(): void {
@@ -372,31 +352,27 @@ import { DiscountService } from 'src/app/services/discount.service';
     );
   }
 
-  payWithMoMo(): void {
-    console.log('Thanh toán bằng MoMo');
-  }
-
   payWithCOD(): void {
     const jwtToken = sessionStorage.getItem('access_token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${jwtToken}`
     });
-  
+
     const listItem: CartDetail[] = this.cartInfos.map(item => ({
       orderDetailId: item.orderDetailId,
       menuItemId: item.menuItem,
       orderId: item.order,
       quantity: item.quantity
     }));
-  
+
     const orderId = this.orderByUser?.orderId;
     const totalAmount = this.totalAndShip;
-  
+
     // Chú ý: Kiểm tra xem this.discountCode có giá trị không trước khi sử dụng nó
     const discountCode = this.discountCode ? `/${this.discountCode}` : '/noDiscount';
-  
-    this.http.post(`http://localhost:8080/public/checkout-cod/${orderId}/${totalAmount}${discountCode}/${this.cartByUser?.deliveryOrderId}`, listItem, { headers })
+
+    this.http.post(`${this.apiUrl}/checkout-cod/${orderId}/${totalAmount}${discountCode}/${this.cartByUser?.deliveryOrderId}`, listItem, { headers })
       .subscribe({
         next: (response: any) => {
           if (response.message === 'Checkout success') {
@@ -413,7 +389,7 @@ import { DiscountService } from 'src/app/services/discount.service';
         }
       });
   }
-  
+
 
   public getDistrict(ProvinceId: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -478,7 +454,7 @@ import { DiscountService } from 'src/app/services/discount.service';
     });
   }
 
-  getService(){
+  getService() {
     const shop_id = 4421897;
     const from_district = this.userRestaurantDistrict?.DistrictID;
     const to_distrist = this.userDistrict?.DistrictID;
@@ -494,55 +470,52 @@ import { DiscountService } from 'src/app/services/discount.service';
 
     const requestBody = {
 
-      "shop_id" : shop_id,
-      "from_district" : from_district,
-      "to_district" : to_distrist,
+      "shop_id": shop_id,
+      "from_district": from_district,
+      "to_district": to_distrist,
 
     };
 
     const serviceUrl = "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services";
 
     this.http.post<any>(serviceUrl, requestBody, httpOptions).subscribe(data => {
-
-      console.log(data);
       this.service = data.data
-
     });
   }
 
   getUserCart() {
     this.deliveryOrderService.getUserCart().subscribe({
       next: (response) => {
-          console.log('GetUserOrder: ', response);
-          if(response){
-            this.getUserOrder(this.cartByUser?.deliveryOrderId as number);
-          }
+        console.log('GetUserOrder: ', response);
+        if (response) {
+          this.getUserOrder(this.cartByUser?.deliveryOrderId as number);
+        }
       },
       error: (error) => {
         console.error('Error fetching user order:', error);
       }
     });
   }
-  
+
   getUserOrder(deliveryOrderId: number) {
     this.orderService.getUserOrder(deliveryOrderId).subscribe({
       next: (response) => {
-          console.log('GetUserOrder: ', response);
-          if(response){
-            this.getUserOrderDetail(this.orderByUser?.orderId as number);
-          }
+        console.log('GetUserOrder: ', response);
+        if (response) {
+          this.getUserOrderDetail(this.orderByUser?.orderId as number);
+        }
       },
       error: (error) => {
         console.error('Error fetching user order:', error);
       }
     });
   }
-  
-  
+
+
   getUserOrderDetail(orderId: number) {
     this.cartDetailService.getUserOrderDetail(orderId).subscribe({
       next: (response) => {
-          console.log('GetUserOrder: ', response);
+        console.log('GetUserOrder: ', response);
       },
       error: (error) => {
         console.error('Error fetching user order:', error);
@@ -551,7 +524,7 @@ import { DiscountService } from 'src/app/services/discount.service';
   }
 
   getDiscount() {
-    if(this.discountCode){
+    if (this.discountCode) {
       this.discountService.getDiscountByName(this.discountCode, this.calculateTotalPrice()).subscribe({
         next: (response) => {
           if (response.message === "Discount is not valid") {
@@ -573,11 +546,11 @@ import { DiscountService } from 'src/app/services/discount.service';
           this.toast.showTimedAlert('Thêm thất bại', error, 'error', 2000);
         }
       });
-    }else{
+    } else {
       this.toast.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'error', 2000);
-    } 
+    }
   }
-  
+
 }
 export interface CartInfomation {
   orderDetailId?: number;
