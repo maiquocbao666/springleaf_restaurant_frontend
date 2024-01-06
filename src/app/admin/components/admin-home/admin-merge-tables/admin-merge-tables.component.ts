@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergeTable } from 'src/app/interfaces/merge-table';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { MergeTableService } from 'src/app/services/merge-table.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
@@ -33,6 +35,8 @@ export class AdminMergeTablesComponent {
   mergeTableIds: string[] = [];
   isResetDisabled: boolean = false;
 
+  user: User | null = null;
+
   constructor(
     private reservationService: ReservationService,
     private formBuilder: FormBuilder,
@@ -40,12 +44,16 @@ export class AdminMergeTablesComponent {
     private datePipe: DatePipe,
     private sweetAlertService: ToastService,
     private restaurantTableService: RestaurantTableService,
+    private authService: AuthenticationService,
     //public activeModal: NgbActiveModal
   ) {
     this.reservationForm = this.formBuilder.group({
       tableIdMerge1: [, [Validators.nullValidator]],
       tableIdMerge2: [, [Validators.nullValidator]],
       mergeTableId: [, Validators.nullValidator],
+    });
+    this.authService.getUserCache().subscribe((data) => {
+      this.user = data;
     });
   }
 
@@ -101,7 +109,7 @@ export class AdminMergeTablesComponent {
   getMergeTables() {
     this.mergeTableService.getCache().subscribe(
       cached => {
-        this.mergeTablesCache = cached;
+        this.mergeTablesCache = cached.filter(mergeTable => this.restaurantTableService.getRestaurantIdByTableId(mergeTable.tableId) === this.user?.restaurantBranchId);
 
         // Generate and store colors based on mergeTableId
         this.mergeTablesCache.forEach(mergeTable => {

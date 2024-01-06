@@ -34,7 +34,7 @@ export class AdminRestaurantsComponent {
 
   ) {
     this.restaurantForm = new FormGroup({
-      // restaurantId: new FormControl('', Validators.required),
+      //restaurantId: new FormControl('', Validators.required),
       restaurantName: new FormControl('', Validators.required),
       address: new FormControl('', Validators.required),
       phone: new FormControl('', [Validators.required, Validators.pattern('^\\d{10,11}$')]),

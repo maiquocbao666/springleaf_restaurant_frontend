@@ -68,7 +68,6 @@ export class AdminRestaurantTablesComponent {
 
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
-      //alert(this.user?.restaurantBranchId);
     });
 
   }
@@ -94,7 +93,7 @@ export class AdminRestaurantTablesComponent {
   getRestaurantTables(): void {
     this.restaurantTableService.getCache().subscribe(
       (cached: any[]) => {
-        this.restaurantTables = cached.filter(table => table.restaurantId = this.user?.restaurantBranchId);
+        this.restaurantTables = cached.filter(table => table.restaurantId === this.user?.restaurantBranchId);
       }
     );
   }
@@ -210,10 +209,9 @@ export class AdminRestaurantTablesComponent {
     modalRef.componentInstance.restaurantTableSaved.subscribe(() => {
 
     });
+    this.getRestaurantTables();
     modalRef.result.then((result) => {
-      if (result === 'Close after saving') {
-
-      }
+      
     });
   }
 

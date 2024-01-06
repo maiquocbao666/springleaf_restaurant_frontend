@@ -1,4 +1,5 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Loader } from '@googlemaps/js-api-loader'
 
 @Component({
   selector: 'app-restaurant-address',
@@ -53,6 +54,7 @@ export class RestaurantAddressComponent {
     this.map?.setCenter(centerLatLng);
   }
 
+  //Thay đổi tọa độ
   target() {
     const centerLatLng = new google.maps.LatLng(10.25495094762458, 105.9632437480188);
     this.map?.setCenter(centerLatLng);

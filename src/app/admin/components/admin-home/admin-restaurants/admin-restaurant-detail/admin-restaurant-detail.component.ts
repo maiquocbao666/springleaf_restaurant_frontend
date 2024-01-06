@@ -24,11 +24,6 @@ export class AdminRestaurantDetailComponent {
     public activeModal: NgbActiveModal,
     private modalService: NgbModal,
   ) {
-    window.addEventListener('storage', (event) => {
-      if (event.key && event.oldValue !== null) {
-        localStorage.setItem(event.key, event.oldValue);
-      }
-    });
     this.restaurantForm = this.formBuilder.group({
       restaurantId: ['', [Validators.required]],
       restaurantName: ['', [Validators.required]],

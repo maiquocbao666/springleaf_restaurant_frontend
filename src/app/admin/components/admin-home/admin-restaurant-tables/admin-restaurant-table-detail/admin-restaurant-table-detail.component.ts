@@ -5,6 +5,8 @@ import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
 import { TableType } from 'src/app/interfaces/table-type';
+import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { TableStatusService } from 'src/app/services/table-status.service';
@@ -25,7 +27,7 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
   fieldNames: string[] = [];
   restaurantTableForm: FormGroup;
   isSubmitted = false;
-
+  user: User | null = null;
 
   restaurantTablesUrl = 'restaurantTables';
   tableTypesUrl = 'tableTypes';
@@ -42,7 +44,8 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     public activeModal: NgbActiveModal,
-    private zone: NgZone
+    private zone: NgZone,
+    private authService: AuthenticationService,
   ) {
     this.restaurantTableForm = this.formBuilder.group({
       tableId: ['', [Validators.required]],
@@ -52,6 +55,9 @@ export class AdminRestaurantTableDetailComponent implements OnInit {
       restaurantId: ['', [Validators.required]],
       seatingCapacity: [1, [Validators.nullValidator]],
       description: ['']
+    });
+    this.authService.getUserCache().subscribe((data) => {
+      this.user = data;
     });
   }
 

@@ -187,8 +187,7 @@ export class AdminReservationsComponent {
           };
 
           // Sắp xếp theo giờ giảm dần
-          this.reservations = cached.filter(reservation => this.restaurantTableService.getRestaurantIdByTableId(reservation.restaurantTableId) === this.user?.restaurantBranchId
-          );
+          this.reservations = cached.filter(reservation => this.restaurantTableService.getRestaurantIdByTableId(reservation.restaurantTableId) === this.user?.restaurantBranchId);
           this.reservations.sort((a, b) => {
             const timeA = new Date(a.reservationDate).getTime();
             const timeB = new Date(b.reservationDate).getTime();
