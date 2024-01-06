@@ -43,9 +43,9 @@ export class RoleFunctionService extends BaseService<RoleFunction> {
         return super.delete(id);
     }
 
-    override searchByName(term: string): Observable<RoleFunction[]> {
-        return super.searchByName(term);
-    }
+    // override searchByName(term: string): Observable<RoleFunction[]> {
+    //     return super.searchByName(term);
+    // }
 
     override getItemId(item: RoleFunction): number {
         return item.roleFunctionId!;

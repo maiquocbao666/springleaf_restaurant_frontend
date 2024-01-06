@@ -226,10 +226,10 @@ import { RestaurantAddressComponent } from './user/components/user-home/restaura
     NgxChartsModule, // Thêm vào đây
     FlexLayoutModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: false,
+      enabled: true,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:50000'
+      registrationStrategy: 'registerWhenStable:30000'
     }),
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added

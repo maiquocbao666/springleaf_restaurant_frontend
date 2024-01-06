@@ -17,7 +17,7 @@ export class UserService {
   usersCache: User[] | null = null;
 
   private profileSubject = new Subject<User>();
-  private apiPostUrl = 'http://localhost:8080/public/create/uploadImage';
+  private apiPostUrl = 'https://springleafrestaurantbackend.onrender.com/public/create/uploadImage';
 
   getDatasOfThisUserWorker: Worker;
 
@@ -32,7 +32,7 @@ export class UserService {
 
   gets(): Observable<User[]> {
     const token = sessionStorage.getItem('access_token');
-    const url = 'http://localhost:8080/manager/users';
+    const url = 'https://springleafrestaurantbackend.onrender.com/manager/users';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.post<User[]>(url, null, { headers });
@@ -80,7 +80,7 @@ export class UserService {
   updateProfile(updatedUserData: User): Observable<any> {
 
     const token = sessionStorage.getItem('access_token');
-    const url = `http://localhost:8080/auth/your-profile/update`;
+    const url = `https://springleafrestaurantbackend.onrender.com/auth/your-profile/update`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.put(url, updatedUserData, { headers });
@@ -89,7 +89,7 @@ export class UserService {
 
   updateRestaurant(updatedUserData: User): Observable<any> {
     const token = sessionStorage.getItem('access_token');
-    const url = `http://localhost:8080/auth/choose-restaurant/update`;
+    const url = `https://springleafrestaurantbackend.onrender.com/auth/choose-restaurant/update`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
 

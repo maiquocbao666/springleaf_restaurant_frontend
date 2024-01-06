@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Renderer2 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+import { LocationRestaurantComponent } from 'src/app/components/location-restaurant/location-restaurant.component';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { ProfileComponent } from 'src/app/components/profile/profile.component';
 import { UserPasswordComponent } from 'src/app/components/user-password/user-password.component';
@@ -9,21 +11,20 @@ import { CartDetail } from 'src/app/interfaces/cart-detail';
 import { Category } from 'src/app/interfaces/category';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Order } from 'src/app/interfaces/order';
+import { Reservation } from 'src/app/interfaces/reservation';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { User } from 'src/app/interfaces/user';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CartDetailService } from 'src/app/services/cart-detail.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { DeliveryOrderService } from 'src/app/services/delivery-order.service';
 import { OrderService } from 'src/app/services/order.service';
+import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
 import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
-import { Reservation } from 'src/app/interfaces/reservation';
-import { ReservationService } from 'src/app/services/reservation.service';
-import { LocationRestaurantComponent } from 'src/app/components/location-restaurant/location-restaurant.component';
 
 @Component({
   selector: 'app-user-header',
@@ -64,6 +65,7 @@ export class UserHeaderComponent {
     private router: Router,
     private sweetAlertService: ToastService,
     private reservationService: ReservationService,
+    private apiService: ApiService
   ) {
     this.authService.getUserCache().subscribe(
       (data: any | null) => {
@@ -83,7 +85,7 @@ export class UserHeaderComponent {
 
         if (isAdminOrManager) {
           this.isAdminHeader = true;
-          
+
         } else {
           this.isAdminHeader = false;
         }
@@ -95,6 +97,15 @@ export class UserHeaderComponent {
 
 
   ngOnInit(): void {
+    this.getUserLoggedIn().subscribe(
+      (userData) => {
+        console.log('Thông tin người dùng đăng nhập:', userData);
+      },
+      (error) => {
+        console.error('Lỗi khi lấy thông tin người dùng:', error);
+      }
+    );
+
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
       const orderInfo = params['orderInfo'];
@@ -125,6 +136,18 @@ export class UserHeaderComponent {
       }
       prevScrollPos = currentScrollPos;
     };
+  }
+
+
+  // Hàm gửi yêu cầu lấy thông tin người đang đăng nhập và kiểm tra số lượng nguyên liệu
+  getUserLoggedIn(): Observable<any> {
+    const jwtToken = localStorage.getItem('access_token');
+
+    const customHeader1 = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+
+    return this.apiService.request<any>('get', 'user/getLoggedInUser', null, customHeader1);
   }
 
   // Kiểm tra user có chọn nhà hàng chưa
@@ -277,7 +300,7 @@ export class UserHeaderComponent {
 
   // Lấy dữ liệu order detail của cart
   getUserOrderDetails(): void {
-    
+
     this.cartDetailService.getOrderDetailsCache().subscribe(
       (cached: any[] | null) => {
         if (cached === null && this.orderByUser !== null) {
@@ -286,10 +309,10 @@ export class UserHeaderComponent {
           this.orderDetailCount = 0;
           this.orderDetailByUser = cached;
           //this.orderDetailCount = cached?.length as number;
-          for(let count of this.orderDetailByUser!){
+          for (let count of this.orderDetailByUser!) {
             this.orderDetailCount += count?.quantity as number;
           }
-          
+
         }
 
       }
@@ -312,6 +335,7 @@ export class UserHeaderComponent {
     const modalRef = this.modalService.open(LocationRestaurantComponent, { size: 'lg' });
     modalRef.componentInstance.selected = 'restaurant';
   }
+
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
   }

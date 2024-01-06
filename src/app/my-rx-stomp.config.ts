@@ -2,7 +2,7 @@ import { RxStompConfig } from '@stomp/rx-stomp';
 
 export const myRxStompConfig: RxStompConfig = {
   // Which server?
-  brokerURL: 'ws://localhost:8080/public/socket',
+  brokerURL: 'wss://springleafrestaurantbackend.onrender.com/public/socket',
 
   // Headers
   // Typical keys: login, passcode, host
@@ -31,7 +31,7 @@ export const myRxStompConfig: RxStompConfig = {
 
 export const myRxStompConfig2: RxStompConfig = {
   // Which server?
-  brokerURL: 'ws://localhost:8080/public/socket2',
+  brokerURL: 'wss://springleafrestaurantbackend.onrender.com/public/socket2',
 
   // Headers
   // Typical keys: login, passcode, host

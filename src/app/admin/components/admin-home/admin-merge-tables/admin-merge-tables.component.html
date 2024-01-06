@@ -23,6 +23,18 @@
                 </select>
             </div> -->
 
+            <div>
+                Chọn chi nhánh
+                <select (change)="onRestaurantIdChange($event)">
+                    <!-- <option value=-1>Mời chọn chi nhánh</option> -->
+                    <option *ngFor="let restaurant of restaurants" [value]="restaurant.restaurantId">{{
+                        restaurant.restaurantName }}</option>
+                </select>
+                <div style="color: red;">
+                    {{ selecRestaurantMessage }}
+                </div>
+            </div> <br>
+
             <div class="col-lg-6 mb-3">
                 <label for="tableIdSelect">Chọn tên bàn muốn gộp vào</label>
                 <select formControlName="tableIdMerge1" (change)="onTableIdChange($event)" class="form-select"
@@ -75,7 +87,7 @@
     <table class="table table-bordered table-responsive">
         <thead>
             <th>Số thứ tự</th>
-            <th>Mã bàn</th>
+            <th>Tên bàn + (Mã)</th>
             <th>Mã gộp bàn</th>
             <th>Mã đặt bàn</th>
             <th>Đổi riêng lẻ</th>
@@ -89,7 +101,7 @@
                 <td [ngStyle]="{
                 'color': mergeTableColors[mergeTable.mergeTableId],
                 'font-weight': 'bold',
-              }">{{ mergeTable.tableId }}</td>
+              }">{{ findTableNameByTableId(mergeTable.tableId) }}  ({{ mergeTable.tableId }})</td>
                 <td [ngStyle]="{
                 'color': mergeTableColors[mergeTable.mergeTableId],
                 'font-weight': 'bold',
