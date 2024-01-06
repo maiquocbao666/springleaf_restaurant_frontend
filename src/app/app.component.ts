@@ -160,7 +160,6 @@ export class AppComponent implements OnDestroy {
       discounts: { cache: this.discountsService.cache, localStorageKey: 'discounts' },
       inventoryBranchIngredients: { cache: this.inventoryBranchIngredientsService.cache, localStorageKey: 'inventoryBranchIngredients' }
 
-
     };
 
     this.getDatasFromLocalStorageWorker = new Worker(new URL('./workers/get-datas-from-local-storage.worker', import.meta.url));

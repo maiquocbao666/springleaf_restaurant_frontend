@@ -119,6 +119,7 @@ import { UserReservationHistoriesComponent } from './user/components/user-home/u
 import { ChooseMenuItemComponent } from './components/choose-menuItem/choose-menuitem.component';
 import { EditSeatingComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/edit-seating/edit-seating.component';
 import { LocationRestaurantComponent } from './components/location-restaurant/location-restaurant.component';
+import { OrdersComponent } from './admin/components/admin-home/orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -198,6 +199,8 @@ import { LocationRestaurantComponent } from './components/location-restaurant/lo
     AdminDiscountsComponent,
     AdminDiscountDetailComponent,
     AdminDeliveryOrderComponent,
+    OrdersComponent,
+
     ChatComponent,
     LoginComponent,
     DateTimeComponent,

@@ -43,7 +43,7 @@ addEventListener('message', async ({ data }) => {
                                 'tableTypes',
                                 'bills',
                                 'billDetails',
-                                //'carts',
+                                'carts',
                         ];
 
                         const responses = await Promise.all(endpoints.map(async (endpoint) => {
