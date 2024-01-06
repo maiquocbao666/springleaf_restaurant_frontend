@@ -187,7 +187,8 @@ export class AdminReservationsComponent {
           };
 
           // Sắp xếp theo giờ giảm dần
-          this.reservations = [...cached]; // Create a shallow copy
+          this.reservations = cached.filter(reservation => this.restaurantTableService.getRestaurantIdByTableId(reservation.restaurantTableId) === this.user?.restaurantBranchId
+          );
           this.reservations.sort((a, b) => {
             const timeA = new Date(a.reservationDate).getTime();
             const timeB = new Date(b.reservationDate).getTime();
@@ -331,7 +332,7 @@ export class AdminReservationsComponent {
       reservationOrderStatus: false,
       username: this.reservationForm.get('username')?.value,
       userPhone: this.reservationForm.get('userPhone')?.value,
-      reservationDeposit : 0 // Thay thế bằng phí cọc
+      reservationDeposit: 0 // Thay thế bằng phí cọc
     };
 
     let reservationsCache: Reservation[] = [];

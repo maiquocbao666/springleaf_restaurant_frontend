@@ -84,8 +84,9 @@
                         </div>
                         ({{ category.active }})
                     </td>
-                    <td class="text-center">{{ category.description.length > 30 ? category.description.slice(0, 30) +
-                        '...' : category.description }}</td>
+                    <!-- <td class="text-center">{{ category.description.length > 30 ? category.description.slice(0, 30) +
+                        '...' : category.description }}</td> -->
+                        <td class="text-center">{{ category.description }}</td>
                     <td class="text-center">
                         <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
                             (click)="openCategoryDetailModal(category)"><i class="fa-solid fa-pen-to-square"></i></a>

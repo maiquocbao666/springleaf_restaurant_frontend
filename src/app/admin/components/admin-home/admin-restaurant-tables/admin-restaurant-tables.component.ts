@@ -11,6 +11,8 @@ import { TableStatusService } from 'src/app/services/table-status.service';
 import { TableTypeService } from 'src/app/services/table-type.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { AdminRestaurantTableDetailComponent } from './admin-restaurant-table-detail/admin-restaurant-table-detail.component';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-admin-restaurant-tables',
@@ -27,6 +29,7 @@ export class AdminRestaurantTablesComponent {
   fieldNames: string[] = [];
   restaurantTableForm: FormGroup;
   isSubmitted = false;
+  user: User | null = null;
 
 
   restaurantTablesUrl = 'restaurantTables';
@@ -46,7 +49,8 @@ export class AdminRestaurantTablesComponent {
     private restaurantService: RestaurantService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private sweetAlertService: ToastService
+    private sweetAlertService: ToastService,
+    private authService: AuthenticationService,
 
   ) {
     this.restaurantTableForm = new FormGroup({
@@ -60,6 +64,11 @@ export class AdminRestaurantTablesComponent {
 
     this.restaurantTableForm.patchValue({
       tableStatusId: 'Đang hoạt động',
+    });
+
+    this.authService.getUserCache().subscribe((data) => {
+      this.user = data;
+      //alert(this.user?.restaurantBranchId);
     });
 
   }
@@ -85,7 +94,7 @@ export class AdminRestaurantTablesComponent {
   getRestaurantTables(): void {
     this.restaurantTableService.getCache().subscribe(
       (cached: any[]) => {
-        this.restaurantTables = cached;
+        this.restaurantTables = cached.filter(table => table.restaurantId = this.user?.restaurantBranchId);
       }
     );
   }
@@ -156,7 +165,7 @@ export class AdminRestaurantTablesComponent {
       tableName: tableName,
       tableTypeId: +tableTypeId,
       tableStatusId: tableStatusId || 'Không hoạt động',
-      restaurantId: +restaurantId,
+      restaurantId: this.user?.restaurantBranchId || +restaurantId,
       seatingCapacity: +seatingCapacity,
       description: description,
     };

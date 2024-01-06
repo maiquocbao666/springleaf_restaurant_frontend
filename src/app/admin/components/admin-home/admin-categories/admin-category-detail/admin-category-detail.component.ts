@@ -27,7 +27,7 @@ export class AdminCategoryDetailComponent implements OnInit {
       id: [, [Validators.nullValidator]],
       name: ['', [Validators.required]],
       active: [false, [Validators.required]], // Giả sử giá trị active ban đầu là false
-      description: ['', [Validators.nullValidator]],
+      description: [''],
     });
   }
 

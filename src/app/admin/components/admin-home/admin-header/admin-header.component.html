@@ -1,15 +1,15 @@
 <div class="container">
-    <div class="right-menu">
-      <div class="logo-image">
-        <i class="fa-solid fa-seedling"></i> <b> SPRINGLEAF</b>
-      </div>
+  <div class="right-menu">
+    <div class="logo-image">
+      <i class="fa-solid fa-seedling"></i> <b> SPRINGLEAF</b>
     </div>
-    <div class="left-menu">
-      <div class="avatar">
-        <img class="small-round-image mr-2" [src]="'http://localhost:8080/public/getImage/' + user?.image!"
-                  #imagePreview />
-      </div>
+  </div>
+  <div class="left-menu">
+    <div class="avatar">
+      <img class="small-round-image mr-2" [src]="'http://localhost:8080/public/getImage/' + user?.image!"
+        #imagePreview />
     </div>
+  </div>
 </div>
 
 <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -97,7 +97,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="app-main">
     <div class="app-sidebar sidebar-shadow">
       <div class="app-header__logo">
@@ -148,7 +148,7 @@
                 <i class="fas fa-caret-right metismenu-state-icon "></i>
               </a>
               <ul>
-                <!-- <li>
+                <li>
                   <a routerLink="/admin/users">
                     <i class="metismenu-icon"></i>
                     Quản lý người dùng
@@ -165,7 +165,7 @@
                     <i class="metismenu-icon">
                     </i>Quản quyền người dùng
                   </a>
-                </li> -->
+                </li>
               </ul>
             </li>
             <li class="app-sidebar__heading">Món ăn</li>
@@ -279,7 +279,7 @@
             </li>
             <li class="app-sidebar__heading">Đơn hàng</li>
             <li>
-              <a>
+              <a routerLink="/admin/orders">
                 <i class="fa-solid fa-file-invoice metismenu-icon"></i>
                 Quản lý đơn hàng
                 <i class="fas fa-caret-right metismenu-state-icon "></i>
