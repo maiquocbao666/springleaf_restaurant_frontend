@@ -487,9 +487,9 @@ export class UserRestaurantTableInfomationComponent {
     const selectedDate = this.reservationForm.get('selectedDate')?.value; // yyyy-MM-dd
     const selectedTimeStr = this.reservationForm.get('selectedTime')?.value + ':00';
 
-    if (!this.checkAll()) {
-      return;
-    }
+    // if (!this.checkAll()) {
+    //   return;
+    // }
 
     const fullDateTime = selectedDate + ' ' + selectedTimeStr;
     const newReservation: Reservation = {

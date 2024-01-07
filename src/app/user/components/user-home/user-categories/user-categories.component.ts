@@ -55,7 +55,7 @@ export class UserCategoriesComponent {
     } else {
       this.categoryService.searchByKeywords(keyword).subscribe(
         (data) => {
-          this.categories = data;
+          this.categories = data.filter(data => data.active === true);
         }
       );
     }

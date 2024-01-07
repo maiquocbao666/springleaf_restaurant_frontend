@@ -201,7 +201,7 @@ export class UserProductsComponent implements OnInit {
     } else {
       this.productService.searchByKeywords(keyword).subscribe(
         (data) => {
-          this.products = data;
+          this.products = data.filter(data => data.status === true);
         }
       );
     }

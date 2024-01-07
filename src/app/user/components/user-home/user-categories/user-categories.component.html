@@ -67,6 +67,7 @@
                     DANH SÁCH MÓN
                 </h2>
             </div>
+            <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm loại nào!">
             <ul class="filters_menu" *ngFor="let chunk of chunkArray(categories, 4); let i = index"
                 [class.active]=" i===0">
                 <li class="active" (click)="getCategories()">All</li>
