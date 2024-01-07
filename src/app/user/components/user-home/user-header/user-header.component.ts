@@ -386,7 +386,7 @@ export class UserHeaderComponent {
         next: (addedReservation) => {
           this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
           this.newOrderItemByRedirectUrl(addedReservation.reservationId!).subscribe();
-          alert(addedReservation.reservationId!);
+          //alert(addedReservation.reservationId!);
           reservationsCache.push(addedReservation);
           localStorage.setItem('reservations', JSON.stringify(reservationsCache));
           localStorage.removeItem('await_new_reservation');
@@ -403,7 +403,7 @@ export class UserHeaderComponent {
   }
 
   newOrderItemByRedirectUrl(reservationId: number) {
-    alert('đã gọi');
+    //alert('đã gọi');
     const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
     const token = sessionStorage.getItem('access_token');
     const headers = new HttpHeaders({

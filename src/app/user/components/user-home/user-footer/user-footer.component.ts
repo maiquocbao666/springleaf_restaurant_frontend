@@ -90,9 +90,9 @@ export class UserFooterComponent {
           });
           if (addressDistrict) {
             await this.getWard(addressDistrict).then(() => {
-              alert(addressWard)
+              //alert(addressWard)
               for (const ward of this.Wards) {
-                if (ward.WardCode.toString()  === addressWard.toString() ) {
+                if (ward.WardCode.toString() === addressWard.toString()) {
                   wardRestaurant = ward.WardName;
                   break;
                 }

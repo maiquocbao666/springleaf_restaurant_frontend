@@ -1,7 +1,14 @@
 <!-- <p>restaurant-address works!</p> -->
 <div class="row">
     <div class="col-md-3">
-        <button (click)="target()">Target</button>
+        <ul>
+            <li>
+                <a href="#" (click)="target($event, 10.799512, 106.641350)">Trường chinh</a>
+            </li>
+            <li>
+                <a href="#" (click)="target($event, 10.785162, 106.642029)">EC Âu Cơ</a>
+            </li>
+        </ul>
     </div>
     <div class="col-md-9">
         <div class="full" id="map">

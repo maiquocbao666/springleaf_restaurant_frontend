@@ -22,7 +22,7 @@ export class RestaurantAddressComponent {
 
       if (mapElement) {
         this.map = new google.maps.Map(mapElement, {
-          center: { lat: 10.25495094762458, lng: 105.9632437480188 },
+          center: { lat: 10.799512, lng: 106.641350 },
           zoom: 20,
           styles: [],
         });
@@ -49,14 +49,16 @@ export class RestaurantAddressComponent {
     }
 
     // Hiển thị thông báo với tọa độ đã click
-    alert(`Clicked LatLng: ${clickedLatLng.lat()}, ${clickedLatLng.lng()}`);
+    //  alert(`Clicked LatLng: ${clickedLatLng.lat()}, ${clickedLatLng.lng()}`);
     const centerLatLng = new google.maps.LatLng(clickedLatLng.lat(), clickedLatLng.lng());
     this.map?.setCenter(centerLatLng);
   }
 
   //Thay đổi tọa độ
-  target() {
-    const centerLatLng = new google.maps.LatLng(10.25495094762458, 105.9632437480188);
+  // 10.799512, 106.641350
+  target(event: any, lat: number, lng: number) {
+    event.preventDefault();
+    const centerLatLng = new google.maps.LatLng(lat, lng);
     this.map?.setCenter(centerLatLng);
   }
 

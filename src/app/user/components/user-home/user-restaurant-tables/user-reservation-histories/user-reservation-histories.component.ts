@@ -301,6 +301,33 @@ export class UserReservationHistoriesComponent {
     return this.userService.getUserNameById(id);
   }
 
+  isSearching = false;
+  search() {
+    if (this.keywords.trim() === '') {
+      this.isSearching = false;
+      this.getReservations();
+    } else {
+      this.reservationService.searchByKeywords(this.keywords, this.fieldName).subscribe(
+        (data) => {
+          this.isSearching = true;
+          this.reservations = data;
+        }
+      );
+    }
+  }
+
+  fieldName!: keyof Reservation;
+  changeFieldName(event: any) {
+    this.fieldName = event.target.value;
+    this.search();
+  }
+
+  keywords = '';
+  changeSearchKeyWords(event: any) {
+    this.keywords = event.target.value;
+    this.search();
+  }
+
 }
 export interface OrderReservationInfomation {
   orderDetailId?: number;

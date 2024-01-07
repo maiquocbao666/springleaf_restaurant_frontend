@@ -110,7 +110,7 @@ export class UserRestaurantTablesComponent {
   }
 
   openRestaurantTableInfomationModal(restaurantTable: RestaurantTable) {
-    if (!this.authenticationService.getUserCache()) {
+    if (this.authenticationService.getUserCache() === null) {
       this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
       const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'xl', scrollable: true, centered: false });

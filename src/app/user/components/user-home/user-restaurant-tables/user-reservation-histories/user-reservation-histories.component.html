@@ -6,6 +6,10 @@
     </button>
   </div>
   <!-- <input class="col-lg-5 input-search" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss"/> -->
+  <p class="float-end">
+    <input type="text" placeholder="" (input)="changeSearchKeyWords($event)" placeholder="Nhập thông tin cần tìm..."
+      class="input" />
+  </p>
   <div class="modal-content">
     <div class="modal-body">
       <table class="align-middle mb-0 table table-borderless table-striped table-hover">
@@ -18,9 +22,7 @@
             <th class="text-center">Giờ tới</th>
             <!-- <th class="text-center">Giờ đi</th> -->
             <th class="text-center">Số lượng khách hàng</th>
-            <th></th>
             <th class="text-center">Chức năng</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -49,14 +51,15 @@
             </td>
             <td><button class="btn btn-sm btn-primary" (click)="handleCheckout(thisUserReservation.reservationId)">Thanh
                 toán</button></td>
-            <td><button class="btn btn-sm btn-primary"
-                (click)="editSeatingCapacity(thisUserReservation.restaurantTableId, thisUserReservation.reservationId!)">Sửa số người</button></td>
+            <!-- <td><button class="btn btn-sm btn-primary"
+                (click)="editSeatingCapacity(thisUserReservation.restaurantTableId, thisUserReservation.reservationId!)">Sửa
+                số người</button></td> -->
           </tr>
         </tbody>
       </table>
     </div>
 
-  <!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
+    <!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
