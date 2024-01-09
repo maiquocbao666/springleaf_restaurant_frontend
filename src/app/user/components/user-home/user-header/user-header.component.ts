@@ -108,6 +108,10 @@ export class UserHeaderComponent {
       if (orderInfo === "ReservationPaymentReservationOrderItem") {
         this.newReservationOrderItemByRedirectUrl();
       }
+      if (orderInfo && orderInfo.includes("CartPayment")) {
+        // Điều kiện kiểm tra thành công, xử lý logic của bạn ở đây
+        this.toastService.showTimedAlert('Thanh toán thành công', '', 'success', 1000);
+      }
     });
 
     this.getRestaurants();

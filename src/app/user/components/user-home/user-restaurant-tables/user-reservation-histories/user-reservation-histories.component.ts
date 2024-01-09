@@ -16,6 +16,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 import { EditSeatingComponent } from './edit-seating/edit-seating.component';
+import { ChooseMenuItemComponent } from 'src/app/components/choose-menuItem/choose-menuitem.component';
 
 @Component({
   selector: 'app-user-reservation-histories',
@@ -181,14 +182,12 @@ export class UserReservationHistoriesComponent {
   handleButtonClick(reservationId: number | undefined) {
     if (reservationId != null) {
       if (!this.selectReservation) {
-        this.selectReservation = reservationId;
-        this.show = true;
-      } else {
-        this.selectReservation = null;
-        this.show = false;
+        const modalRef = this.modalService.open(ChooseMenuItemComponent, {
+          size: 'xl', // xl là kích thước lớn hơn
+          centered: false, // Đặt modal ở giữa trang
+          scrollable: true, // Cho phép cuộn nếu modal quá lớn
+        });
       }
-      console.log(this.selectReservation)
-
     }
   }
 

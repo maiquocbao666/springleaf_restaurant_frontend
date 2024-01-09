@@ -6,7 +6,6 @@ import { Ward } from 'src/app/interfaces/address/Ward';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-user-footer',
@@ -90,7 +89,6 @@ export class UserFooterComponent {
           });
           if (addressDistrict) {
             await this.getWard(addressDistrict).then(() => {
-              alert(addressWard)
               for (const ward of this.Wards) {
                 if (ward.WardCode.toString()  === addressWard.toString() ) {
                   wardRestaurant = ward.WardName;

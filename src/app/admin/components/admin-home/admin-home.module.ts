@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AdminHomeRoutingModule } from './admin-home-routing.module';
 import { AdminDeliveryOrderComponent } from './admin-delivery-order/admin-delivery-order.component';
+import { AdminDeliveryOrderHistoryComponent } from './admin-delivery-order-history/admin-delivery-order-history.component';
 
 @NgModule({
 
@@ -11,6 +12,8 @@ import { AdminDeliveryOrderComponent } from './admin-delivery-order/admin-delive
   ],
   declarations: [
   
+  
+    AdminDeliveryOrderHistoryComponent
   ],
 
 })
