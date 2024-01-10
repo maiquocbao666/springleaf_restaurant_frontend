@@ -32,7 +32,6 @@ export class UserPasswordComponent {
     private formBuilder: FormBuilder,
     private sweetAlertService: ToastService,
     private restaurantSerivce: RestaurantService,
-    private userService: UserService,
   ) {
 
     this.authService.setAccessCodeCacheData('');

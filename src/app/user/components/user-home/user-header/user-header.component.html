@@ -16,19 +16,19 @@
                     <li class="active" routerLinkActive="active" *ngIf="user">
                         <a>Xin chào, {{truncateString(user.fullName)}}</a>
                         <ul class="dropdown">
-                            <li routerLinkActive="active"><a class="nav-link" (click)="openProfileModel()">Hồ sơ
-                                    cá nhân</a>
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="openProfileModel()">Hồ sơ cá nhân</a>
                             </li>
-                            <li routerLinkActive="active"><a class="nav-link" (click)="openOrderModal()">Lịch sử đơn
-                                    hàng và đặt bàn</a>
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="openOrderModal()">Ví voucher</a>
                             </li>
-                            <li routerLinkActive="active"><a class="nav-link" (click)="openUserPasswordModel()">Đổi mật
-                                    khẩu
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="openUserPasswordModel()">Đổi mật khẩu
                                 </a>
                             </li>
 
-                            <li routerLinkActive="active"><a class="nav-link" (click)="logOut()">Đăng
-                                    xuất</a>
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="logOut()">Đăng xuất</a>
                             </li>
                         </ul>
                     </li>
@@ -75,7 +75,8 @@
                                     </li>
                                     <!-- <li routerLinkActive="active"><a routerLink="/user/history">DỊCH VỤ</a> -->
                                     <li routerLinkActive="active"><a routerLink="/user/about">ABOUT</a>
-                                    <li routerLinkActive="active"><a routerLink="/user/location">CỬA HÀNG</a>
+                                    <!-- <li routerLinkActive="active"><a (click)="openBillInfoModal()">CỬA HÀNG</a> -->
+                                        <!-- <a routerLink="/user/location">CỬA HÀNG</a> -->
                                     </li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a
                                             routerLink="/admin/index">TRANG QUẢN LÝ</a></li>

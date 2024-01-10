@@ -24,6 +24,7 @@ import { UserOrderHistoriesComponent } from './user-order-histories/user-order-h
 import { Reservation } from 'src/app/interfaces/reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { LocationRestaurantComponent } from 'src/app/components/location-restaurant/location-restaurant.component';
+import { BillInfoComponent } from 'src/app/components/bill-info/bill-info.component';
 
 @Component({
   selector: 'app-user-header',
@@ -72,7 +73,7 @@ export class UserHeaderComponent {
           this.getUserDeliveryOrder();
           this.checkUserRestaurant();
         }
-      });
+    });
     this.authService.roleCacheData$.subscribe((data) => {
       this.roles = data;
       if (!this.roles) {
@@ -98,19 +99,21 @@ export class UserHeaderComponent {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
       const orderInfo = params['orderInfo'];
+      const totalPrice = params['totalPrice']
 
       if (email) {
         this.loginGoogleConfig(email);
       }
       else if (orderInfo === "ReservationPaymentReservationDeposit") {
         this.newReservationByRedirectUrl();
+        this.openBillInfoModal("ReservationPaymentReservationDeposit", totalPrice);
       }
       if (orderInfo === "ReservationPaymentReservationOrderItem") {
         this.newReservationOrderItemByRedirectUrl();
+        this.openBillInfoModal("ReservationPaymentReservationOrderItem", totalPrice);
       }
       if (orderInfo && orderInfo.includes("CartPayment")) {
-        // Điều kiện kiểm tra thành công, xử lý logic của bạn ở đây
-        this.toastService.showTimedAlert('Thanh toán thành công', '', 'success', 1000);
+        this.openBillInfoModal("CartPayment", totalPrice);
       }
     });
 
@@ -316,8 +319,30 @@ export class UserHeaderComponent {
     const modalRef = this.modalService.open(LocationRestaurantComponent, { size: 'lg' });
     modalRef.componentInstance.selected = 'restaurant';
   }
+
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
+  }
+
+  openBillInfoModal(
+    info : string,
+    totalPrice: number
+    ){
+    const modalRef = this.modalService.open(BillInfoComponent, { size: 'lg' });
+    if(info === 'ReservationPaymentReservationDeposit'){
+      modalRef.componentInstance.selected = 'ReservationPaymentReservationDeposit';
+      modalRef.componentInstance.totalPrice = totalPrice;
+    }
+    if(info === 'ReservationPaymentReservationOrderItem'){
+      modalRef.componentInstance.selected = 'ReservationPaymentReservationOrderItem';
+      modalRef.componentInstance.totalPrice = totalPrice;
+    }
+    if(info === 'CartPayment'){
+      modalRef.componentInstance.selected = 'CartPayment';
+      modalRef.componentInstance.totalPrice = totalPrice;
+    }
+
+    
   }
 
   openOrderModal() {
@@ -345,7 +370,7 @@ export class UserHeaderComponent {
           reservationsCache.push(addedReservation);
           localStorage.setItem('reservations', JSON.stringify(reservationsCache));
           localStorage.removeItem('await_new_reservation');
-          this.router.navigate(['/user/index']);
+          //this.router.navigate(['/user/index']);
         },
         error: (error) => {
           console.error('Error adding reservation:', error);
@@ -366,11 +391,10 @@ export class UserHeaderComponent {
         next: (addedReservation) => {
           this.sweetAlertService.showTimedAlert('Chúc mừng!', 'Bạn đã đặt bàn thành công', 'success', 3000);
           this.newOrderItemByRedirectUrl(addedReservation.reservationId!).subscribe();
-          alert(addedReservation.reservationId!);
           reservationsCache.push(addedReservation);
           localStorage.setItem('reservations', JSON.stringify(reservationsCache));
           localStorage.removeItem('await_new_reservation');
-          this.router.navigate(['/user/index']);
+          //this.router.navigate(['/user/index']);
         },
         error: (error) => {
           console.error('Error adding reservation:', error);
@@ -383,7 +407,6 @@ export class UserHeaderComponent {
   }
 
   newOrderItemByRedirectUrl(reservationId: number) {
-    alert('đã gọi');
     const orderDetail = JSON.parse(localStorage.getItem('new_orderDetail_by_reservation')!);
     const token = sessionStorage.getItem('access_token');
     const headers = new HttpHeaders({

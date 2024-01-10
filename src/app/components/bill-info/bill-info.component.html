@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <a class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </a>
+</div>
+<div class="bill-container">
+    <div class="bill-header">
+        <div class="row-item image"><img [src]="'http://localhost:8080/public/getImage/vnpay.png'"
+            #imagePreview width="80px" class="file-preview" /></div>
+        <h4>Thanh toán thành công</h4>
+        <div class="bill-body">
+            <h6 class="bill-title">Thông tin hóa đơn</h6>
+            <div class="bill-info">
+                <div class="bill-price">
+                    <div>
+                        <b>{{billInfo}}</b>
+                    </div>
+                    <div>
+                        <b>Tổng tiền: </b> {{formatAmount(billPrice/100)}}
+                    </div>
+                    <div>
+                        <b>Thời gian thanh toán: </b>{{getCurrentTimeFormatted()}}
+                    </div>
+                </div>
+                <div class="bill-transasion">
+                    <div >
+                        <b>Người thanh toán:  {{user!.fullName}}</b>
+                    </div>
+                    <div>
+                        Thông tin chi tiết: <br>
+                        {{billDetail}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bill-footer">
+            <div>
+                <h6>Cám ơn quý khách</h6>
+                <button>Quay về trang chủ</button>
+            </div>
+        </div>
+    </div>
+</div>

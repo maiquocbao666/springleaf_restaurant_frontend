@@ -100,21 +100,35 @@
     <table class="align-middle mb-0 table table-borderless table-striped table-hover">
       <thead>
         <tr>
-          <th class="text-center"><a class="fa fa-sort-up" (click)="sort('menuItemId', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('menuItemId', false)"></a>Mã món
+          <th class="text-center">
+            <!-- <a class="fa fa-sort-up" (click)="sort('menuItemId', true)"></a>
+            <a class="fa fa-sort-down" (click)="sort('menuItemId', false)"></a> -->
+            Mã món
           </th>
-          <th class="text-center"><a class="fa fa-sort-up" (click)="sort('name', true)"></a> <a class="fa fa-sort-down"
-              (click)="sort('name', false)"></a>Tên món </th>
-          <th class="text-center"><a class="fa fa-sort-up" (click)="sort('unitPrice', true)"></a> <a
-              class="fa fa-sort-down" (click)="sort('unitPrice', false)"></a>Giá</th>
-          <th class="text-center"><abbr class="fa fa-sort-up" (click)="sort('status', true)"></abbr>
-            <a class="fa fa-sort-down" (click)="sort('status', false)"></a>Trạng thái
+          <th class="text-center">
+            <!-- <a class="fa fa-sort-up" (click)="sort('name', true)"></a>
+            <a class="fa fa-sort-down" (click)="sort('name', false)"></a> -->
+            Tên món 
           </th>
-          <th class="text-center"><a class="fa fa-sort-up" (click)="sort('categoryId', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('categoryId', false)"></a>Loại + (Mã)
+          <th class="text-center">
+            <!-- <a class="fa fa-sort-up" (click)="sort('unitPrice', true)"></a> 
+            <a class="fa fa-sort-down" (click)="sort('unitPrice', false)"></a> -->
+            Giá
           </th>
-          <th class="text-center"><a class="fa fa-sort-up" (click)="sort('description', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('description', false)"></a>Mô tả
+          <th class="text-center">
+            <!-- <a class="fa fa-sort-up" (click)="sort('status', true)"></a>
+            <a class="fa fa-sort-down" (click)="sort('status', false)"></a> -->
+            Trạng thái
+          </th>
+          <th class="text-center">
+            <!-- <a class="fa fa-sort-up" (click)="sort('categoryId', true)"></a>
+            <a class="fa fa-sort-down" (click)="sort('categoryId', false)"></a> -->
+            Loại
+          </th>
+          <th class="text-center">
+            <!-- <a class="fa fa-sort-up" (click)="sort('description', true)"></a>
+            <a class="fa fa-sort-down" (click)="sort('description', false)"></a> -->
+            Mô tả
           </th>
           <th class="text-center">Ảnh</th>
           <th class="text-center">Chức năng</th>
@@ -132,7 +146,9 @@
               {{ product.status ? 'Đang bán' : 'Không bán' }}
             </div>
           </td>
-          <td class="text-center">{{ getCategoryById(product.categoryId)?.name }} ({{ product.categoryId }})</td>
+          <td class="text-center">{{ getCategoryById(product.categoryId)?.name }}
+             <!-- ({{ product.categoryId }}) -->
+            </td>
           <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 30) + '...' :
             product.description }}</td>
           <td class="text-center">
