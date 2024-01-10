@@ -198,6 +198,12 @@ const routes: Routes = [
         loadChildren: () => import('./orders/orders.module').then(
           (m) => m.OrdersModule
         )
+      },
+      {
+        path: 'diagram',
+        loadChildren: () => import('./admin-restaurant-diagram/admin-restaurant-diagram.module').then(
+          (m) => m.AdminRestaurantDiagramModule
+        )
       }
     ]
   },
