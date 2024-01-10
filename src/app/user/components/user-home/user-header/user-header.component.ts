@@ -25,9 +25,6 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
-import { Reservation } from 'src/app/interfaces/reservation';
-import { ReservationService } from 'src/app/services/reservation.service';
-import { LocationRestaurantComponent } from 'src/app/components/location-restaurant/location-restaurant.component';
 import { BillInfoComponent } from 'src/app/components/bill-info/bill-info.component';
 
 @Component({
