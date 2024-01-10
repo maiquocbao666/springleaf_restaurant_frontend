@@ -20,8 +20,10 @@
                 #imagePreview width="100px" class="file-preview" /></div>
         <div class="row-item name">{{ product.name }}</div>
         <div class="row-item unit-price">{{ formatAmount(product.unitPrice) }}</div>
-        <div class="row-item quantity"><input [min]='1' [value]="1" type="number" [(ngModel)]="quantities[product.menuItemId!]"
-                (input)="updateQuantity(product, $event)"></div>
+        <div class="row-item quantity">
+            <input type="number" [(ngModel)]="quantities[product.menuItemId!]"
+                (input)="updateQuantity(product, $event)">
+            </div>
         <div class="row-item total-price">{{ formatAmount(product.unitPrice*quantities[product.menuItemId!])}}</div>
     </div>
 </div>

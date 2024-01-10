@@ -30,6 +30,9 @@ export class LocationRestaurantComponent {
     this.chooseRestaurantFrom = this.formBuilder.group({
       selectedRestaurant: [null, Validators.required],
     })
+    this.authService.getUserCache().subscribe((data) => {
+      this.user = data;
+    });
   }
 
   ngOnInit() {

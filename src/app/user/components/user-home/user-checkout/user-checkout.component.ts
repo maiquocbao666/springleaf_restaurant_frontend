@@ -534,12 +534,12 @@ import { DiscountService } from 'src/app/services/discount.service';
             this.toast.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
           }
           else if (response.message === "Discount has not start") {
-            this.toast.showTimedAlert('Chưa đến ngày sử dụng', '', 'error', 2000);
+            this.toast.showTimedAlert('Chưa đến ngày sử dụng', '', 'info', 2000);
           }
           else {
             this.discountPrice = Number(response.message);
             sessionStorage.setItem('discountPrice', response.message);
-            this.toast.showTimedAlert('Mã chính xác', '', 'success', 2000);
+            this.toast.showTimedAlert('Áp dụng thành công', '', 'success', 1500);
           }
         },
         error: (error) => {

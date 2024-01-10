@@ -46,6 +46,7 @@ export class ChooseMenuItemComponent {
     } else {
       console.error('No products found in local storage or the value is null.');
     }
+    
   }
 
   ngOninit() {
@@ -57,7 +58,6 @@ export class ChooseMenuItemComponent {
     );
 
     this.orderService.gets();
-
   }
 
   @ViewChild('imageUpload') imageUpload!: ElementRef<HTMLInputElement>;

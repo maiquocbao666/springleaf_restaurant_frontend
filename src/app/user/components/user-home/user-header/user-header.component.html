@@ -16,19 +16,19 @@
                     <li class="active" routerLinkActive="active" *ngIf="user">
                         <a>Xin chào, {{truncateString(user.fullName)}}</a>
                         <ul class="dropdown">
-                            <li routerLinkActive="active"><a class="nav-link" (click)="openProfileModel()">Hồ sơ
-                                    cá nhân</a>
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="openProfileModel()">Hồ sơ cá nhân</a>
                             </li>
-                            <li routerLinkActive="active"><a class="nav-link" (click)="openOrderModal()">Lịch sử đơn
-                                    hàng và đặt bàn</a>
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="openOrderModal()">Ví voucher</a>
                             </li>
-                            <li routerLinkActive="active"><a class="nav-link" (click)="openUserPasswordModel()">Đổi mật
-                                    khẩu
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="openUserPasswordModel()">Đổi mật khẩu
                                 </a>
                             </li>
 
-                            <li routerLinkActive="active"><a class="nav-link" (click)="logOut()">Đăng
-                                    xuất</a>
+                            <li routerLinkActive="active">
+                                <a class="nav-link" (click)="logOut()">Đăng xuất</a>
                             </li>
                         </ul>
                     </li>
