@@ -1,41 +1,59 @@
 <div class="modal-header">
     <h4 class="modal-title">Chi tiết sản phẩm</h4>
-    <button type="button" class=" btn close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <a class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
-    </button>
+    </a>
 </div>
-<main class="container">
-    <!-- Left Column / Headphones Image -->
-    <div class="left-column">
-        <img class="active"  [src]="'http://localhost:8080/public/getImage/'+ product?.imageUrl"
-            alt="burger">
-    </div>
-
-
-    <!-- Right Column -->
-    <div class="right-column">
-        <!-- Product Description -->
-        <div class="product-description">
-            <h1>{{ product?.name }}</h1>
+<div class="container">
+    <div class="row-container">
+        <div class="left-column wow bounceInUp" data-wow-delay="0.1s">
+            <img [src]="'http://localhost:8080/public/getImage/' + product?.imageUrl" #imagePreview
+                class="file-preview img-fluid" />
         </div>
-        <!-- Product Configuration -->
-        <div class="product-configuration">
-            <!-- Cable Configuration -->
-            <div class="cable-config">
-                <span>Loại : {{ getCategoryById(product!.categoryId)?.name}}</span>
-                <!-- <div class="cable-choose">
-                    <button></button>
-                </div> -->
+        <div class="right-column">
+            <div class="product-description">
+                <h5>{{ product?.name }}</h5>
             </div>
-            <p>Mô tả: {{ product?.description }}</p>
-            <div class="cable-config">
-                <h6>Đơn giá: {{ formatAmount(product!.unitPrice) }}</h6>
+            <hr>
+            <div class="product-configuration">
+                <div class="cable-config">
+                    <span>Loại : {{ getCategoryById(product!.categoryId)?.name}}</span>
+                </div>
+                <div class="cable-config">
+                    <p>Mô tả: {{ product?.description }}</p>
+                </div>
+                <div class="cable-config">
+                    <h6>Đơn giá: {{ formatAmount(product!.unitPrice) }}</h6>
+                </div>
             </div>
-        </div>
-
-        <!-- Product Pricing -->
-        <div class="product-price">
-            <button class="cart-btn" (click)="addToCart(product?.menuItemId)"><i class="fa fa-cart-shopping"></i> Thêm vào giỏ hàng</button>
+            <div class="product-price">
+                <button class="cart-btn" (click)="addToCart(product?.menuItemId)"><i class="fa fa-cart-shopping"></i>
+                    Thêm vào giỏ hàng
+                </button>
+                <i class="fa-solid fa-heart like-icon"></i>
+            </div>
         </div>
     </div>
-</main>
+    <hr>
+    <div class="footer-title">
+        <h5>Sản phẩm tương tự</h5>
+    </div>
+    <div class="row-footer" *ngIf="productsWithCategory.length > 0">
+        <div class="footer-item" *ngFor="let pro of productsWithCategory.slice(0, 3)">
+            <img [src]="'http://localhost:8080/public/getImage/' + pro?.imageUrl" #imagePreview
+                class="file-preview img-fluid" />
+            <div class="footer-product-name">
+                <b>{{pro?.name}}</b>
+            </div>
+            <div class="footer-product-price">
+                <span>{{formatAmount(pro!.unitPrice)}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row-footer" *ngIf="productsWithCategory.length === 0">
+        <div class="footer-no-product">
+            Không có sản phẩm tương tự
+        </div>
+    </div>
+
+</div>

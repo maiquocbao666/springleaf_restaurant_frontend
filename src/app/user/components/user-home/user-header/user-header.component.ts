@@ -25,6 +25,7 @@ import { Reservation } from 'src/app/interfaces/reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { LocationRestaurantComponent } from 'src/app/components/location-restaurant/location-restaurant.component';
 import { BillInfoComponent } from 'src/app/components/bill-info/bill-info.component';
+import { UserVoucherComponent } from 'src/app/components/user-voucher/user-voucher.component';
 
 @Component({
   selector: 'app-user-header',
@@ -322,6 +323,10 @@ export class UserHeaderComponent {
 
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
+  }
+
+  openUserVoucherModal() {
+    const modalRef = this.modalService.open(UserVoucherComponent, { size: 'lg' });
   }
 
   openBillInfoModal(

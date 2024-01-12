@@ -132,6 +132,7 @@ input:hover {
   padding: .2rem 1rem;
   border-radius: 1rem;
   border-color: #7a9cc6;
+  margin-right: 5px;
 }
 
 .input::placeholder {
@@ -141,4 +142,19 @@ input:hover {
 .input:focus::placeholder {
   opacity: 0;
   transition: opacity .3s;
+}
+
+.float-end{
+  display: flex;
+  margin: 0px 15px;
+}
+
+.float-end i{
+  padding-right: 10px;
+  padding-top: 10px;
+  flex-basis: calc(10%);
+}
+
+.float-end ::selection{
+  flex-basis: calc(90%);
 }
