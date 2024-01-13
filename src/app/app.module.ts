@@ -122,6 +122,7 @@ import { LocationRestaurantComponent } from './components/location-restaurant/lo
 import { OrdersComponent } from './admin/components/admin-home/orders/orders.component';
 import { RestaurantAddressComponent } from './user/components/user-home/restaurant-address/restaurant-address.component';
 
+import { UserVoucherComponent } from './components/user-voucher/user-voucher.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -211,6 +212,7 @@ import { RestaurantAddressComponent } from './user/components/user-home/restaura
     UploadFileComponent,
     ChooseMenuItemComponent,
     LocationRestaurantComponent,
+    UserVoucherComponent
 
   ],
   imports: [

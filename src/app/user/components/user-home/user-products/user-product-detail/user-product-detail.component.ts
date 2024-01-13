@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 import { Category } from 'src/app/interfaces/category';
 import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Order } from 'src/app/interfaces/order';
@@ -27,6 +26,7 @@ export class UserProductDetailComponent {
   fieldNames: string[] = [];
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
+  productsWithCategory : Product[] = [];
 
   constructor(
     private orderService: OrderService,
@@ -60,6 +60,8 @@ export class UserProductDetailComponent {
     this.getCategories();
     this.getProducts();
     this.setValue();
+    this.getProductsWithCategory();
+    console.log(this.productsWithCategory)
   }
 
   getCategories(): void {
@@ -77,6 +79,16 @@ export class UserProductDetailComponent {
     );
   }
 
+  getProductsWithCategory(){
+    if(this.products && this.product){
+      for(let pro of this.products){
+        if(pro.categoryId === this.product.categoryId && pro.menuItemId !== this.product.menuItemId){
+          this.productsWithCategory.push(pro);
+        }
+      }
+    }
+  }
+
   formatAmount(amount: number): string {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
@@ -85,6 +97,7 @@ export class UserProductDetailComponent {
     const found = this.categories.find(data => data.categoryId === id);
     return found || null;
   }
+
   setValue() {
     if (this.product) {
       this.productForm.patchValue({
@@ -99,6 +112,7 @@ export class UserProductDetailComponent {
 
     }
   }
+
   addToCart(productId: number | undefined) {
     if (productId) {
       const deliveryOrderId = this.cartByUser?.deliveryOrderId as number;
@@ -113,10 +127,7 @@ export class UserProductDetailComponent {
             this.toastService.showTimedAlert('Không thể đặt hàng', '', 'error', 2000);
           }
           else if (response.message === "MenuItem in cart") {
-            this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
-          }
-          else if(response.message === "Item in cart") {
-            this.toastService.showTimedAlert('Sản phẩm đã có trong giỏ hàng', '', 'error', 2000);
+            this.toastService.showTimedAlert('Thêm thành công', '', 'error', 2000);
           }
           else {
             this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();

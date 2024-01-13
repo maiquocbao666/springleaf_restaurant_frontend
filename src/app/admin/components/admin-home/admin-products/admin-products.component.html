@@ -1,19 +1,20 @@
 <div class="container">
-  <h1 class="text-center display-4">Danh sách món </h1>
+  <h3 class="text-center">Danh sách món </h3>
   <p class="d-inline-flex gap-1">
     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
       aria-expanded="false" aria-controls="collapseExample">
       Thêm món
     </button>
-    <select class="form-select" (change)="onTableSizeChange($event)" style="width: 35px;">
+    <!-- <select class="form-select" (change)="onTableSizeChange($event)" style="width: 35px;">
       <option *ngFor="let size of tableSizes">
         {{size}}
       </option>
-    </select>
+    </select> -->
   </p>
   <p class="float-end">
+    <i class="fa-solid fa-filter"></i>
     <select (change)="changeFieldName($event)" class="form-select">
-      <option value="">Bộ lọc</option>
+      <option value="">Lọc theo</option>
       <option value="menuItemId">Mã món</option>
       <option value="name">Tên món</option>
       <option value="unitPrice">Giá</option>
@@ -24,7 +25,8 @@
 
   </p>
   <p class="float-end">
-    <input type="text" (input)="changeSearchKeyWords($event)" class="input" placeholder="Nhập thông tin cần tìm!">
+    <input type="text" (input)="changeSearchKeyWords($event)" class="input" placeholder="Tìm theo">
+    <i class="fa-solid fa-magnifying-glass" style="margin-right: 5px;"></i>
   </p>
   <!-- HTML file -->
 

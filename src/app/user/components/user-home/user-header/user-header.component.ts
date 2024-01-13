@@ -26,6 +26,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 import { UserOrderHistoriesComponent } from './user-order-histories/user-order-histories.component';
 import { BillInfoComponent } from 'src/app/components/bill-info/bill-info.component';
+import { UserVoucherComponent } from 'src/app/components/user-voucher/user-voucher.component';
 
 @Component({
   selector: 'app-user-header',
@@ -345,6 +346,10 @@ export class UserHeaderComponent {
 
   openLoginModal() {
     const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
+  }
+
+  openUserVoucherModal() {
+    const modalRef = this.modalService.open(UserVoucherComponent, { size: 'lg' });
   }
 
   openBillInfoModal(

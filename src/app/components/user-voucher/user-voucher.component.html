@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <h4 class="modal-title">Ví Voucher của bạn</h4>
+    <a class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </a>
+</div>
+<div class="scroll-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4" >
+                <div class="row-container" *ngFor="let discount of discounts">
+                    <div class="row-item image">{{discount.discountCode}}</div>
+                    <div class="row-item name">{{discount.discountValue}} %</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

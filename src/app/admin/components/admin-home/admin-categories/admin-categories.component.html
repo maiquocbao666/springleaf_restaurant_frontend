@@ -62,14 +62,18 @@
         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
             <thead>
                 <tr>
-                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('categoryId', true)"></a> Mã loại <a
-                            class="fa fa-sort-down" (click)="sort('categoryId', false)"></a></th>
-                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('name', true)"></a> Tên loại <a
-                            class="fa fa-sort-down" (click)="sort('name', false)"></a></th>
-                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('active', true)"></a> Đang bán + (key
-                        words) <a class="fa fa-sort-down" (click)="sort('active', false)"></a></th>
-                    <th class="text-center"><a class="fa fa-sort-up" (click)="sort('description', true)"></a> Mô tả <a
-                            class="fa fa-sort-down" (click)="sort('description', false)"></a></th>
+                    <th class="text-center">
+                        Mã loại 
+                    </th>
+                    <th class="text-center">
+                        Tên loại 
+                    </th>
+                    <th class="text-center">
+                         Đang bán
+                    </th>
+                    <th class="text-center">
+                        Mô tả 
+                    </th>
                     <th class="text-center">Chức năng</th>
                 </tr>
             </thead>
@@ -82,7 +86,6 @@
                         <div [ngClass]="category.active ? 'badge badge-warning' : 'badge badge-danger'">
                             {{ category.active ? 'Có' : 'Không' }}
                         </div>
-                        ({{ category.active }})
                     </td>
                     <!-- <td class="text-center">{{ category.description.length > 30 ? category.description.slice(0, 30) +
                         '...' : category.description }}</td> -->
