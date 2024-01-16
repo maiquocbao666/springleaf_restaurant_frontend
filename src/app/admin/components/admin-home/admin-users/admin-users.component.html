@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <h1 class="text-center display-4">Danh sách người dùng</h1>
     <p class="d-inline-flex gap-1">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
@@ -6,7 +6,7 @@
             Thêm người dùng
         </button>
     </p>
-    <!-- HTML file -->
+    
     <p class="float-end">
         <select class="form-select" (change)="onTableSizeChange($event)">
             <option *ngFor="let size of tableSizes">
@@ -83,36 +83,6 @@
                             Mật khẩu là bắt buộc.
                         </div>
                     </div>
-                    <!-- <div class="col-md-4">
-              <div class="form-group__file">
-                <label for="imageUpload" class="file-label">Chọn ảnh<span style="color: red;">(*)</span></label>
-                <div class="file-wrapper">
-                  <input type="file" name="imageUpload" #imageUpload formControlName="imageUrl" class="file-input"
-                    (change)="onFileSelected($event)" />
-                  <div class="file-preview-background">Upload Image</div>
-                  <img src="" #imagePreview width="200px" class="file-preview" />
-                </div>
-              </div>
-              <div *ngIf="userForm.get('imageUrl')?.invalid && (userForm.get('imageUrl')?.touched || isSubmitted)"
-                class="text-danger">
-                Vui lòng chọn ảnh.
-              </div>
-            </div> -->
-                    <!-- <div class="col-md-4">
-                        <label for="exampleInputPassword1" class="form-label">Mô tả</label>
-                        <textarea class="form-control" formControlName="description" id="" cols="10" rows="10"
-                            placeholder="Nhập mô tả..."></textarea>
-                    </div>
-                    <div class="col-md-4">
-                        <label>Đang bán <span style="color: red;">(*)</span> </label><br>
-                        <input id="categoryActiveYes" formControlName="status" type="radio" [value]="true"
-                            [checked]="productForm.get('status')?.value === true"> Có
-                        <input id="categoryActiveNo" formControlName="status" type="radio" [value]="false"
-                            [checked]="productForm.get('status')?.value === false"> Không
-                    </div>
-                    <div class="text-center">
-                        <button type="submit">Thêm</button>
-                    </div> -->
                 </div>
             </form>
         </div>
@@ -150,8 +120,6 @@
                     <td class="text-center">
                         <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
                             (click)="openProductDetailModal(user)"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <!-- <a type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm"
-                            (click)="deleteProduct(product)"><i class="fa-solid fa-trash"></i></a> -->
                     </td>
                 </tr>
             </tbody>
@@ -162,4 +130,164 @@
             (pageChange)="onTableDataChange($event)"></pagination-controls>
     </div>
 
+</div> -->
+
+
+
+<div class="main-body">
+    <div class="page-wrapper">
+        <div class="page-header">
+            <h5 class="page-title">Quản lý người dùng</h5>
+        </div>
+
+        <div class="page-body">
+            <p class="d-inline-flex gap-1">
+                <button class="btn waves-effect waves-light btn-primary btn-outline-primary pb-2"
+                    data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                    aria-controls="collapseExample">
+                    <i class="fa fa-user"></i>
+                    Thêm người dùng
+                </button>
+            </p>
+            <!-- HTML file -->
+            <p class="float-end">
+                <select class="form-select" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </p>
+            <div class="collapse pb-3" id="collapseExample">
+                <div class="card card-body">
+                    <form [formGroup]="userForm" (submit)="register()">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="exampleInputPassword1" class="form-label">Họ và tên:<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="fullName" class="form-control"
+                                    placeholder="Nhập họ và tên..." >
+                                <div *ngIf="userForm.get('fullName')?.invalid && (userForm.get('fullName')?.touched || isSubmitted)"
+                                    class="text-danger"> Không bỏ trống họ và tên.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="username" class="form-label">Tên đăng nhập<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="username" class="form-control" id="username"
+                                    placeholder="Nhập tên đăng nhập..." >
+                                <div *ngIf="userForm.get('username')?.invalid && (userForm.get('username')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Không bỏ trống tài khoản.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="email" class="form-label">Emai<span style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="email" class="form-control" id="email"
+                                    placeholder="Nhập email..." >
+                                <div *ngIf="userForm.get('email')?.invalid && (userForm.get('email')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Không bỏ trống Emai.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="phone" class="form-label">Số điện thoại<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="phone" class="form-control" id="phone"
+                                    placeholder="Nhập số điện thoại..." >
+                                <div *ngIf="userForm.get('phone')?.invalid && (userForm.get('phone')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Số điện thoại là bắt buộc.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="password" class="form-label">Mật khẩu<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="password" formControlName="password" class="form-control" id="password"
+                                    placeholder="Nhập mật khẩu..." >
+                                <div *ngIf="userForm.get('password')?.invalid && (userForm.get('password')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Mật khẩu là bắt buộc.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="repassword" class="form-label">Nhập lại mật khẩu<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="password" formControlName="repassword" class="form-control" id="repassword"
+                                    placeholder="Nhập lại mật khẩu..." >
+                                <div *ngIf="userForm.get('repassword')?.invalid && (userForm.get('repassword')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Mật khẩu là bắt buộc.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-btn">
+                            <button class="btn waves-effect waves-light btn-success btn-outline-success pb-2">
+                                <i class="fa fa-check"></i>
+                                Thêm quyền
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Page-body start -->
+        <div class="page-body">
+            <!-- Hover table card start -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Danh sách người dùng</h5>
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Ảnh</th>
+                                    <th>Họ tên</th>
+                                    <th>Tài khoản</th>
+                                    <th>SĐT</th>
+                                    <th>Email</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let user of users | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                                    <td scope="row">
+                                        <img class="d-flex align-self-center img-radius" alt="#"
+                                            [src]="'http://localhost:8080/public/getImage/' + user.image"
+                                            style="width: 50px;">
+                                    </td>
+                                    <td style="text-align: center;">{{user.fullName}}</td>
+                                    <td style="text-align: center;">{{user.username}}</td>
+                                    <td style="text-align: center;">{{user.phone}}</td>
+                                    <td style="text-align: center;">{{user.email}}</td>
+                                    <td style="text-align: center;" *ngIf="user.address !== '' && user.address !== null">{{user.address}}</td>
+                                    <td style="text-align: center;" *ngIf="user.address === '' || user.address === null">
+                                        Trống
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <div style="padding: 10px 15px;"
+                                            [ngClass]="user.status ? 'badge badge-success' : 'badge badge-danger'">
+                                            {{ user.status ? 'Hoạt động' : 'Khóa' }}
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <i class="fa fa fa-wrench" (click)="openProductDetailModal(user)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+        </div>
+        <!-- Page-body end -->
+    </div>
 </div>

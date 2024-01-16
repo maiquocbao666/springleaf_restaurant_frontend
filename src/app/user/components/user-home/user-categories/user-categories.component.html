@@ -1,63 +1,5 @@
 <app-user-banner></app-user-banner>
-<!-- <div class="container">
-    <section id="our_menu" our_menu class="pt-5 pb-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="jumbotron text-center">
-                        <a routerLink="/user/index">
-                            <h1>DANH SÁCH MÓN</h1>
-                        </a>
 
-                    </div>
-                </div>
-            </div>
-            <div class="text-center m-3">
-                <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm loại nào!">
-            </div>
-            <div class="row" *ngIf="!isMobile">
-                <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <ng-container *ngIf="categories">
-                            <div *ngFor="let chunk of chunkArray(categories, 4); let i = index"
-                                class="carousel-item text-center" [class.active]=" i===0">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-2" *ngFor="let category of chunk">
-                                        <a class="nav-link"
-                                            [routerLink]="['/user/index/category', category.categoryId, 'products']"
-                                            role="tab">
-                                            {{ category.name }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
-            <nav class="mobile-category" *ngIf="isMobile">
-                <ul class="mobile-category-list">
-                    <li class="mobile-category-item" *ngFor="let category of categories">
-                        <a [routerLink]="['/user/index/category', category.categoryId, 'products']"
-                            class="mobile-category-link"> {{ category.name }}</a>
-                    </li>
-                </ul>
-            </nav>
-            <hr>
-        </div>
-        <router-outlet></router-outlet>
-    </section>
-</div> -->
 
 <div class="container">
     <section class="food_section layout_padding-bottom">
@@ -67,7 +9,7 @@
                     DANH SÁCH MÓN
                 </h2>
             </div>
-            <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm loại nào!">
+            <!-- <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm loại nào!"> -->
             <ul class="filters_menu" *ngFor="let chunk of chunkArray(categories, 4); let i = index"
                 [class.active]=" i===0">
                 <li class="active" (click)="getCategories()">All</li>

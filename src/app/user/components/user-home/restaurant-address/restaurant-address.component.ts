@@ -1,5 +1,5 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
-import { Loader } from '@googlemaps/js-api-loader'
+//import { Loader } from '@googlemaps/js-api-loader'
 
 @Component({
   selector: 'app-restaurant-address',
@@ -8,58 +8,58 @@ import { Loader } from '@googlemaps/js-api-loader'
 })
 export class RestaurantAddressComponent {
 
-  private map: google.maps.Map | undefined;
+  // private map: google.maps.Map | undefined;
 
-  constructor(private renderer: Renderer2, private el: ElementRef) { }
+  // constructor(private renderer: Renderer2, private el: ElementRef) { }
 
-  ngOnInit(): void {
-    let loader = new Loader({
-      apiKey: 'AIzaSyA2RgLSEt0AMVaW-Vj5ehMd60ItXkXsvEs',
-    });
+  // ngOnInit(): void {
+  //   let loader = new Loader({
+  //     apiKey: 'AIzaSyA2RgLSEt0AMVaW-Vj5ehMd60ItXkXsvEs',
+  //   });
 
-    loader.load().then(() => {
-      const mapElement = this.renderer.selectRootElement('#map');
+  //   loader.load().then(() => {
+  //     const mapElement = this.renderer.selectRootElement('#map');
 
-      if (mapElement) {
-        this.map = new google.maps.Map(mapElement, {
-          center: { lat: 10.799512, lng: 106.641350 },
-          zoom: 20,
-          styles: [],
-        });
+  //     if (mapElement) {
+  //       this.map = new google.maps.Map(mapElement, {
+  //         center: { lat: 10.799512, lng: 106.641350 },
+  //         zoom: 20,
+  //         styles: [],
+  //       });
 
-        // Thêm sự kiện click cho bản đồ
-        // this.map.addListener('click', (event: google.maps.KmlMouseEvent) => {
-        //   this.handleMapClick(event);
-        // });
-      } else {
-        console.error('Map element not found.');
-      }
-    });
-  }
+  //       // Thêm sự kiện click cho bản đồ
+  //       // this.map.addListener('click', (event: google.maps.KmlMouseEvent) => {
+  //       //   this.handleMapClick(event);
+  //       // });
+  //     } else {
+  //       console.error('Map element not found.');
+  //     }
+  //   });
+  // }
 
-  // Xử lý sự kiện click trên bản đồ
-  private handleMapClick(event: google.maps.KmlMouseEvent): void {
-    // Lấy tọa độ từ sự kiện
-    const clickedLatLng = event.latLng;
+  // // Xử lý sự kiện click trên bản đồ
+  // private handleMapClick(event: google.maps.KmlMouseEvent): void {
+  //   // Lấy tọa độ từ sự kiện
+  //   const clickedLatLng = event.latLng;
 
-    console.log(clickedLatLng);
+  //   console.log(clickedLatLng);
 
-    if (!clickedLatLng) {
-      return;
-    }
+  //   if (!clickedLatLng) {
+  //     return;
+  //   }
 
-    // Hiển thị thông báo với tọa độ đã click
-    //  alert(`Clicked LatLng: ${clickedLatLng.lat()}, ${clickedLatLng.lng()}`);
-    const centerLatLng = new google.maps.LatLng(clickedLatLng.lat(), clickedLatLng.lng());
-    this.map?.setCenter(centerLatLng);
-  }
+  //   // Hiển thị thông báo với tọa độ đã click
+  //   //  alert(`Clicked LatLng: ${clickedLatLng.lat()}, ${clickedLatLng.lng()}`);
+  //   const centerLatLng = new google.maps.LatLng(clickedLatLng.lat(), clickedLatLng.lng());
+  //   this.map?.setCenter(centerLatLng);
+  // }
 
-  //Thay đổi tọa độ
-  // 10.799512, 106.641350
-  target(event: any, lat: number, lng: number) {
-    event.preventDefault();
-    const centerLatLng = new google.maps.LatLng(lat, lng);
-    this.map?.setCenter(centerLatLng);
-  }
+  // //Thay đổi tọa độ
+  // // 10.799512, 106.641350
+  // target(event: any, lat: number, lng: number) {
+  //   event.preventDefault();
+  //   const centerLatLng = new google.maps.LatLng(lat, lng);
+  //   this.map?.setCenter(centerLatLng);
+  // }
 
 }

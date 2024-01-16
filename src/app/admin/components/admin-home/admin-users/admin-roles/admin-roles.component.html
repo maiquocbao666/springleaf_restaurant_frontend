@@ -1,0 +1,90 @@
+<div class="main-body">
+    <div class="page-wrapper">
+        <div class="page-header">
+            <h5 class="page-title">Quản lý quyền</h5>
+        </div>
+
+        <div class="page-body">
+            <p class="d-inline-flex gap-1">
+                <button class="btn waves-effect waves-light btn-primary btn-outline-primary pb-2"
+                    data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                    aria-controls="collapseExample">
+                    <i class="fa fa-user"></i>
+                    Thêm quyền
+                </button>
+            </p>
+            <div class="collapse pb-3" id="collapseExample">
+                <div class="card card-body">
+                    <form [formGroup]="roleForm">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="exampleInputPassword1" class="form-label">Tên quyền:<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="roleName" class="form-control"
+                                    placeholder="Nhập tên quyền..." >
+                                <div *ngIf="roleForm.get('roleName')?.invalid && (roleForm.get('roleName')?.touched || isSubmitted)"
+                                    class="text-danger"> Không bỏ trống tên quyền
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Mô tả<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="description" class="form-control" id="description"
+                                    placeholder="Nhập mô tả quyền..." >
+                                <div *ngIf="roleForm.get('description')?.invalid && (roleForm.get('description')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Mô tả bắt buộc phải có
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-btn">
+                            <button class="btn waves-effect waves-light btn-success btn-outline-success pb-2">
+                                <i class="fa fa-check"></i>
+                                Thêm quyền
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Page-body start -->
+        <div class="page-body">
+            <!-- Hover table card start -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Danh sách người dùng</h5>
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên quyền</th>
+                                    <th>Mô tả</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let role of roles">
+                                    <td scope="row">
+                                        {{role.roleId}}
+                                    </td>
+                                    <td>{{role.roleName}}</td>
+                                    <td style="text-align: right;">
+                                        <i class="fa fa fa-wrench"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+        </div>
+        <!-- Page-body end -->
+    </div>
+</div>

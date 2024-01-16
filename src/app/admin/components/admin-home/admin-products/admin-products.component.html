@@ -1,15 +1,10 @@
-<div class="container">
+<!-- <div class="container">
   <h3 class="text-center">Danh sách món </h3>
   <p class="d-inline-flex gap-1">
     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
       aria-expanded="false" aria-controls="collapseExample">
       Thêm món
     </button>
-    <!-- <select class="form-select" (change)="onTableSizeChange($event)" style="width: 35px;">
-      <option *ngFor="let size of tableSizes">
-        {{size}}
-      </option>
-    </select> -->
   </p>
   <p class="float-end">
     <i class="fa-solid fa-filter"></i>
@@ -28,8 +23,7 @@
     <input type="text" (input)="changeSearchKeyWords($event)" class="input" placeholder="Tìm theo">
     <i class="fa-solid fa-magnifying-glass" style="margin-right: 5px;"></i>
   </p>
-  <!-- HTML file -->
-
+  
   <div class="collapse pb-3" id="collapseExample">
     <div class="card card-body">
       <form [formGroup]="productForm" (ngSubmit)="addProduct()">
@@ -103,33 +97,21 @@
       <thead>
         <tr>
           <th class="text-center">
-            <!-- <a class="fa fa-sort-up" (click)="sort('menuItemId', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('menuItemId', false)"></a> -->
             Mã món
           </th>
           <th class="text-center">
-            <!-- <a class="fa fa-sort-up" (click)="sort('name', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('name', false)"></a> -->
             Tên món 
           </th>
           <th class="text-center">
-            <!-- <a class="fa fa-sort-up" (click)="sort('unitPrice', true)"></a> 
-            <a class="fa fa-sort-down" (click)="sort('unitPrice', false)"></a> -->
             Giá
           </th>
           <th class="text-center">
-            <!-- <a class="fa fa-sort-up" (click)="sort('status', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('status', false)"></a> -->
             Trạng thái
           </th>
           <th class="text-center">
-            <!-- <a class="fa fa-sort-up" (click)="sort('categoryId', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('categoryId', false)"></a> -->
             Loại
           </th>
           <th class="text-center">
-            <!-- <a class="fa fa-sort-up" (click)="sort('description', true)"></a>
-            <a class="fa fa-sort-down" (click)="sort('description', false)"></a> -->
             Mô tả
           </th>
           <th class="text-center">Ảnh</th>
@@ -149,7 +131,7 @@
             </div>
           </td>
           <td class="text-center">{{ getCategoryById(product.categoryId)?.name }}
-             <!-- ({{ product.categoryId }}) -->
+             
             </td>
           <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 30) + '...' :
             product.description }}</td>
@@ -173,4 +155,195 @@
   </div>
 
 
+</div> -->
+
+<!-- ------------------------------------------ -->
+
+<div class="main-body">
+  <div class="page-wrapper">
+    <div class="page-header">
+      <h5 class="page-title">Quản lý sản phẩm</h5>
+    </div>
+
+    <div class="page-body">
+      <p class="d-inline-flex gap-1">
+        <button class="btn waves-effect waves-light btn-primary btn-outline-primary pb-2" data-bs-toggle="collapse"
+          data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          <i class="fa fa-user"></i>
+          Thêm sản phẩm
+        </button>
+      </p>
+      <p class="float-end">
+        <i class="fa-solid fa-filter"></i>
+        <select (change)="changeFieldName($event)" class="form-select">
+          <option value="">Lọc theo</option>
+          <option value="menuItemId">Mã món</option>
+          <option value="name">Tên món</option>
+          <option value="unitPrice">Giá</option>
+          <option value="status">Trạng thái</option>
+          <option value="categoryId">Loại</option>
+          <option value="description">Mô tả</option>
+        </select>
+
+      </p>
+      <p class="float-end">
+        <input type="text" (input)="changeSearchKeyWords($event)" class="input" placeholder="Tìm theo">
+        <i class="fa-solid fa-magnifying-glass" style="margin-right: 5px;"></i>
+      </p>
+      <!-- HTML file -->
+      <p class="float-end">
+        <select class="form-select" (change)="onTableSizeChange($event)">
+          <option *ngFor="let size of tableSizes">
+            {{size}}
+          </option>
+        </select>
+      </p>
+      <div class="collapse pb-3" id="collapseExample">
+        <div class="card card-body">
+          <form [formGroup]="productForm" (ngSubmit)="addProduct()">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label for="exampleInputPassword1" class="form-label">Tên sản phẩm<span
+                    style="color: red;">(*)</span></label>
+                <input type="text" formControlName="name" class="form-control" placeholder="Nhập tên sản phẩm...">
+                <div *ngIf="productForm.get('name')?.invalid && (productForm.get('name')?.touched || isSubmitted)"
+                  class="text-danger"> Không bỏ trống tên món.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="unitPrice" class="form-label">Giá<span style="color: red;">(*)</span></label>
+                <input type="number" formControlName="unitPrice" class="form-control" id="unitPrice"
+                  placeholder="Nhập giá">
+                <div
+                  *ngIf="productForm.get('unitPrice')?.invalid && (productForm.get('unitPrice')?.touched || isSubmitted)"
+                  class="text-danger">
+                  Giá là bắt buộc.
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label for="categoryId" class="form-label">Loại<span style="color: red;">(*)</span></label>
+                <select class="form-select" formControlName="categoryId" id="categoryId">
+                  <option value="">--Chọn loại-- </option>
+                  <option *ngFor="let category of categories" [value]="category.categoryId"> {{ category.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="productForm.get('categoryId')?.invalid && (productForm.get('categoryId')?.touched || isSubmitted)"
+                  class="text-danger">
+                  Loại là bắt buộc.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group__file">
+                  <label for="imageUpload" class="file-label">Chọn ảnh<span style="color: red;">(*)</span></label>
+                  <div class="file-wrapper">
+                    <input type="file" name="imageUpload" #imageUpload formControlName="imageUrl" class="file-input"
+                      (change)="onFileSelected($event)" />
+                    <div class="file-preview-background">Upload Image</div>
+                    <img src="" #imagePreview width="200px" class="file-preview" />
+                  </div>
+                </div>
+                <div
+                  *ngIf="productForm.get('imageUrl')?.invalid && (productForm.get('imageUrl')?.touched || isSubmitted)"
+                  class="text-danger">
+                  Vui lòng chọn ảnh.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="exampleInputPassword1" class="form-label">Mô tả</label>
+                <textarea class="form-control" formControlName="description" id="" cols="10" rows="10"
+                  placeholder="Nhập mô tả..."></textarea>
+              </div>
+              <div class="col-md-4">
+                <label>Đang bán <span style="color: red;">(*)</span> </label><br>
+                <input id="categoryActiveYes" formControlName="status" type="radio" [value]="true"
+                  [checked]="productForm.get('status')?.value === true"> Có
+                <input id="categoryActiveNo" formControlName="status" type="radio" [value]="false"
+                  [checked]="productForm.get('status')?.value === false"> Không
+              </div>
+              <div class="submit-btn">
+                <button class="btn waves-effect waves-light btn-success btn-outline-success pb-2">
+                  <i class="fa fa-check"></i>
+                  Thêm quyền
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Page-body start -->
+    <div class="page-body">
+      <!-- Hover table card start -->
+      <div class="card">
+        <div class="card-header">
+          <h5>Danh sách người dùng</h5>
+        </div>
+        <div class="card-block table-border-style">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center">Ảnh</th>
+                  <th class="text-center">
+                    Tên món
+                  </th>
+                  <th class="text-center">
+                    Giá
+                  </th>
+
+                  <th class="text-center">
+                    Loại
+                  </th>
+                  <th class="text-center">
+                    Mô tả
+                  </th>
+                  <th class="text-center">
+                    Trạng thái
+                  </th>
+                  <th class="text-center">Chức năng</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tbody>
+                <tr
+                  *ngFor="let product of products | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                  <td class="text-center">
+                    <img alt="Hình ảnh sản phẩm" [src]="'http://localhost:8080/public/getImage/' + product.imageUrl"
+                      style="width: 50px; height: 50px;">
+                  </td>
+                  <td class="text-center">{{product.name}}</td>
+                  <td class="text-center">{{ formatAmount(product.unitPrice) }}</td>
+                  <td class="text-center">{{ getCategoryById(product.categoryId)?.name }}
+                  </td>
+                  <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 30) + '...' :
+                    product.description }}
+                  </td>
+                  <td class="text-center">
+                    <div style="padding: 10px 15px; align-items: center;"
+                      [ngClass]="product.status ? 'badge badge-success' : 'badge badge-danger'">
+                      {{ product.status ? 'Đang bán' : 'Không bán' }}
+                    </div>
+                  </td>
+
+                  <td class="text-center">
+                    <button id="PopoverCustomT-1" class="btn waves-effect waves-light btn-info btn-outline-info mr-2 align-items-center"
+                      (click)="openProductDetailModal(product)"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button id="PopoverCustomT-1" class="btn waves-effect waves-light btn-danger btn-outline-danger"
+                      (click)="deleteProduct(product)"><i class="fa-solid fa-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
+    <!-- Page-body end -->
+  </div>
 </div>

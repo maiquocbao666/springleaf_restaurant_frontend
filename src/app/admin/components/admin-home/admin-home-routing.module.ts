@@ -29,6 +29,19 @@ const routes: Routes = [
             (m) => m.AdminUsersModule
           ),
       },
+      
+      {
+        path: 'roles',
+        loadChildren: () => import('./admin-users/admin-roles/admin-roles.module').then(
+          (m) => m.AdminRolesModule
+        )
+      },
+      {
+        path: 'userRoles',
+        loadChildren: () => import('./admin-users/admin-user-roles/admin-user-roles.module').then(
+          (m) => m.AdminUserRolesModule
+        )
+      },
       {
         path: 'suppliers',
         loadChildren: () =>

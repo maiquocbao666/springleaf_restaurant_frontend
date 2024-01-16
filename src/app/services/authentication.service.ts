@@ -102,6 +102,18 @@ export class AuthenticationService {
     return this.http.post(`${this.apiUrl}/register`, registerData);
   }
 
+  register2(fullName: string, username: string, password: string, phone: string, email: string): Observable<any> {
+    const registerData = {
+      fullName: fullName,
+      username: username,
+      password: password,
+      phone: phone,
+      email: email,
+      image : null
+    };
+    return this.http.post(`http://localhost:8080/auth/register2`, registerData);
+  }
+
   login(username: string, password: string, rememberMe: boolean): Promise<boolean> {
     
     return new Promise<boolean>((resolve, reject) => {

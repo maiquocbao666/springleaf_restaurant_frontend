@@ -1,4 +1,3 @@
-
 <section class="food_section layout_padding-bottom">
     <div class="container">
         <input type="text" (input)="search($event)" class="input" placeholder="Bạn tìm món nào!">
@@ -9,8 +8,7 @@
                         <div>
                             <div class="img-box">
                                 <img class="pic-1" (click)="openProductDetailModal(product)"
-                    [src]="'http://localhost:8080/public/getImage/'+ product.imageUrl" alt="burger">
-                                <!-- <img src="https://drive.google.com/uc?id=1oF0zWPY6HhNWw1ikHF6vOq54ra8HfTle" alt=""> -->
+                                    [src]="'http://localhost:8080/public/getImage/'+ product.imageUrl" alt="burger">
                             </div>
                             <div class="detail-box">
                                 <h5 (click)="openProductDetailModal(product)">
@@ -62,7 +60,7 @@
         <div class="btn-box">
             <a (click)="showMore()" *ngIf="remainingProductsCount > 0">Xem thêm</a>
             <a (click)="showLess()" *ngIf="visibleProducts.length > 12">Ẩn bớt</a>
-          </div>
+        </div>
     </div>
 
 </section>

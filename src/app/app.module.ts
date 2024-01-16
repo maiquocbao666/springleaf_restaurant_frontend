@@ -124,6 +124,8 @@ import { RestaurantAddressComponent } from './user/components/user-home/restaura
 
 import { UserVoucherComponent } from './components/user-voucher/user-voucher.component';
 import { UserDiscountsComponent } from './user/components/user-home/user-discounts/user-discounts.component';
+import { AdminUserRolesComponent } from './admin/components/admin-home/admin-users/admin-user-roles/admin-user-roles.component';
+import { AdminRolesComponent } from './admin/components/admin-home/admin-users/admin-roles/admin-roles.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -204,6 +206,8 @@ import { UserDiscountsComponent } from './user/components/user-home/user-discoun
     AdminDiscountsComponent,
     AdminDiscountDetailComponent,
     AdminDeliveryOrderComponent,
+    AdminUserRolesComponent,
+    AdminRolesComponent,
     OrdersComponent,
 
     ChatComponent,

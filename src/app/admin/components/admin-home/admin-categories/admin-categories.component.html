@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <h1 class="text-center display-4">Danh sách loại</h1>
     <p class="d-inline-flex gap-1">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
@@ -87,8 +87,7 @@
                             {{ category.active ? 'Có' : 'Không' }}
                         </div>
                     </td>
-                    <!-- <td class="text-center">{{ category.description.length > 30 ? category.description.slice(0, 30) +
-                        '...' : category.description }}</td> -->
+                    
                         <td class="text-center">{{ category.description }}</td>
                     <td class="text-center">
                         <a type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm m-2"
@@ -103,5 +102,115 @@
     <div class="text-center">
         <pagination-controls previousLabel="Lùi" nextLabel="Tới"
             (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
+</div> -->
+
+<div class="main-body">
+    <div class="page-wrapper">
+        <div class="page-header">
+            <h5 class="page-title">Quản lý loại</h5>
+        </div>
+
+        <div class="page-body">
+            <p class="d-inline-flex gap-1">
+                <button class="btn waves-effect waves-light btn-primary btn-outline-primary pb-2"
+                    data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                    aria-controls="collapseExample">
+                    <i class="fa fa-user"></i>
+                    Thêm loại
+                </button>
+            </p>
+            <div class="collapse pb-3" id="collapseExample">
+                <div class="card card-body">
+                    <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="categoryName" class="form-label">Tên loại<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="name" class="form-control"
+                                    placeholder="Nhập tên danh mục...">
+                                <div *ngIf="categoryForm.get('name')?.invalid && (categoryForm.get('name')?.touched || isSubmitted)"
+                                    class="text-danger"> Không bỏ trống tên loại.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="categoryDescription" class="form-label">Mô tả</label>
+                                <textarea class="form-control" formControlName="description" id="" cols="10" rows="10"
+                                    placeholder="Nhập mô tả..."></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="categoryActive" class="form-label">Đang bán<span
+                                        style="color: red;">(*)</span></label><br>
+                                <input id="categoryActiveYes" formControlName="active" type="radio" [value]="true">
+                                <label for="categoryActiveYes" style="margin: 0px 5px;">Có</label>
+                                <input id="categoryActiveNo" formControlName="active" type="radio" [value]="false">
+                                <label for="categoryActiveNo" style="margin: 0px 5px;">Không</label>
+                            </div>
+                        </div>
+                        <div class="submit-btn">
+                            <button class="btn waves-effect waves-light btn-success btn-outline-success pb-2">
+                                <i class="fa fa-check"></i>
+                                Đồng ý
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Page-body start -->
+        <div class="page-body">
+            <!-- Hover table card start -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Danh sách loại</h5>
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Tên loại 
+                                    </th>
+                                    <th>
+                                        Mô tả 
+                                    </th>
+                                    <th>
+                                         Đang bán
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let category of categories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                                    <td scope="row">
+                                        {{category.name}}
+                                    </td>
+                                    <td>{{category.description}}</td>
+                                    <td>
+                                        <div style="padding: 10px 15px; align-items: center;"
+                                         [ngClass]="category.active ? 'badge badge-warning' : 'badge badge-danger'">
+                                            {{ category.active ? 'Có' : 'Không' }}
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <i class="fa fa fa-wrench edit-bu" (click)="openCategoryDetailModal(category)"></i>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <i class="fa-solid fa-trash delete-bu" (click)="deleteCategory(category)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+        </div>
+        <!-- Page-body end -->
     </div>
 </div>
