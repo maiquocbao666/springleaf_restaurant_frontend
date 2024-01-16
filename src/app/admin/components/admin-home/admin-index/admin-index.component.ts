@@ -13,6 +13,8 @@ import { Ingredient } from 'src/app/interfaces/ingredient';
 import { MenuItemIngredient } from 'src/app/interfaces/menu-item-ingredient';
 import { Product } from 'src/app/interfaces/product';
 import { Reservation } from 'src/app/interfaces/reservation';
+import { Role } from 'src/app/interfaces/role';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { BillDetailService } from 'src/app/services/bill-detail.service';
 import { BillService } from 'src/app/services/bill.service';
 import { CategoryService } from 'src/app/services/category.service';
@@ -59,6 +61,10 @@ export class AdminIndexComponent {
   mostOrderedItems!: any[];
   countRestaurant!: any[];
   showTable: boolean = false;
+  userRoles: String = '';
+
+  productsBestBuy: ProductBest[] | null = null;
+  products2 : Product[] = [];
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -66,18 +72,25 @@ export class AdminIndexComponent {
 
   constructor(
     private statisticsService: StatisticsService,
-    private billService: BillService,
-    private billDetailService: BillDetailService,
-    private modalService: NgbModal,
     private productService: ProductService,
-    private ingredientService: IngredientService,
-    private dialog: MatDialog,
-    private http: HttpClient,
     private categoryService: CategoryService,
-    private sweetAlertService: ToastService
+    private sweetAlertService: ToastService,
+    private authService: AuthenticationService,
 
-
-  ) { this.colorScheme = colorSets.find(s => s.name === 'cool'); }
+  ) { 
+    this.colorScheme = colorSets.find(s => s.name === 'cool'); 
+    this.statisticsService.getMostOrderedItems().subscribe(
+      data => {
+        this.mostOrderedItems = this.transformData(data);
+        
+      }
+      ,
+      error => {
+        console.error(error);
+      }
+    );
+    
+  }
 
   ngOnInit(): void {
     this.getProducts();
@@ -89,17 +102,7 @@ export class AdminIndexComponent {
     this.selectedYear = new Date().getFullYear();
     this.getRevenueByYear(this.selectedYear);
     this.monthlyRevenue = this.formatDataForChart(this.monthlyRevenue);
-
-    this.statisticsService.getMostOrderedItems().subscribe(
-      data => {
-        this.mostOrderedItems = this.transformData(data);
-      },
-      error => {
-        console.error(error);
-      }
-    );
-
-
+    this.checkRoles();
   }
 
   // Trong component của bạn:
@@ -308,10 +311,65 @@ export class AdminIndexComponent {
     return found || null;
   }
 
+  checkRoles(): void {
+
+    this.authService.roleCacheData$.subscribe((data) => {
+      console.log(data);
+      if(data){
+        const predefinedRoles = ['USER', 'MANAGER', 'ADMIN'];
+        for (const role of predefinedRoles) {
+          if (data.includes(role)) {
+            this.userRoles = role;
+            
+          } else {
+            // Nếu không tìm thấy, thoát vòng lặp
+            break;
+          }
+        }
+
+      }
+      console.log(this.userRoles);
+    });
+
+    // if (!this.roles) {
+    //   this.sweetAlertService.showTimedAlert('403', 'Bạn không có quyền truy cập', 'error', 1500);
+    // }
+
+    // // Ensure that this.roles is not null before using the includes method
+    // if (this.roles && this.roles.length > 0) {
+    //   const predefinedRoles = ['USER', 'MANAGER', 'ADMIN'];
+    //   let foundRole: string | null = null;
+
+    //   for (const role of predefinedRoles) {
+    //     if (this.roles.includes(role)) {
+    //       foundRole = role;
+    //       console.log(foundRole);
+    //     } else {
+    //       // Nếu không tìm thấy, thoát vòng lặp
+    //       break;
+    //     }
+    //   }
+    // } else {
+    //   // Handle the case where this.roles is null or empty
+    //   this.sweetAlertService.showTimedAlert('403', 'Bạn không có quyền truy cập', 'error', 1500);
+    // }
+  }
+
 
 
 }
 interface TransformedData {
   menuItemId: number;
   quantity: number;
+}
+
+export interface ProductBest{
+  menuItemId?: number;
+    name: string;
+    description: string;
+    unitPrice: number;
+    imageUrl: string;
+    categoryId: number;
+    status: boolean;
+    quantityBuy: number;
 }

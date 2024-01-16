@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { VNPayService } from 'src/app/services/VNpay.service';
 import { CartService } from 'src/app/services/cart.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -20,6 +21,7 @@ import { Service } from 'src/app/interfaces/address/Service';
 import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { DiscountService } from 'src/app/services/discount.service';
+import { Discount } from 'src/app/interfaces/discount';
 
 @Component({
   selector: 'app-user-checkout',
@@ -63,6 +65,7 @@ import { DiscountService } from 'src/app/services/discount.service';
   discountCode: string = '';
   discountPrice: number | null = null;
   isCheckoutActive: boolean = false;
+  discounts: Discount[] = [];
   constructor(
     private vnpayService: VNPayService,
     private router: Router,
@@ -110,7 +113,7 @@ import { DiscountService } from 'src/app/services/discount.service';
     this.cartInfos = this.cartService.getCartData();
     this.calculateTotalPrice();
     this.initUserRestaurantAddress();
-    //this.getService();
+    this.getVoucher();
   }
 
   getRestaurants(): void {
@@ -206,7 +209,7 @@ import { DiscountService } from 'src/app/services/discount.service';
             }
           });
         }
-      } else {}
+      } else { }
     }
   }
   calculateTotalPrice(): number {
@@ -222,7 +225,7 @@ import { DiscountService } from 'src/app/services/discount.service';
   calculateFinalPrice(shipFee: number): any {
     const totalPrice = this.calculateTotalPrice();
     const discount = Number(sessionStorage.getItem('discountPrice'));
-    const finalPrice = totalPrice + shipFee - discount;
+    const finalPrice = totalPrice + shipFee - ((totalPrice*discount)/100);
     this.totalAndShip = finalPrice;
     return finalPrice >= 0 ? this.formatAmount(finalPrice) : 0;
   };
@@ -231,17 +234,13 @@ import { DiscountService } from 'src/app/services/discount.service';
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
 
-  // changed() {
-  //   this.isCheckoutActive = true;
-  // }
-
   processPayment(): void {
     if (this.selectedPaymentMethod === 'vnpay') {
       this.payWithVNPay();
     } else if (this.selectedPaymentMethod === 'cod') {
       this.payWithCOD();
     } else {
-      Swal.fire('Vui lòng chọn phương thức thanh toán','', 'info');
+      Swal.fire('Vui lòng chọn phương thức thanh toán', '', 'info');
     }
   }
 
@@ -260,9 +259,7 @@ import { DiscountService } from 'src/app/services/discount.service';
           if (data.redirectUrl) {
             window.location.href = data.redirectUrl; // Chuyển hướng đến URL được trả về từ backend
             this.onGetPaymentStatus();
-          } else {
-            // Xử lý các trường hợp khác nếu cần
-          }
+          } else {}
         },
         error: (error: any) => {
           console.error('Failed to submit order. Please try again.', error);
@@ -523,6 +520,84 @@ import { DiscountService } from 'src/app/services/discount.service';
     });
   }
 
+  getVoucher() {
+    this.discountService.getCache().subscribe(
+      (cached: Discount[]) => {
+        this.discounts = cached.filter(discount => discount.userId === this.user?.userId);
+      }
+    );
+  }
+
+  formatDate(dateString: string): string {
+    const parts = dateString.split('-');
+    const year = parts[0];
+    const month = parts[1];
+    const day = parts[2];
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return formattedDate;
+  }
+
+  checkDiscount() : void  {
+    
+    let check = true;
+    let datePipe = new DatePipe('en-US');
+    let currentDate = new Date();
+    let dateNow = datePipe.transform(currentDate, 'dd-MM-yyyy');
+    // tách thành kiểu number
+    let parts = dateNow!.split('-');
+    const day: number = Number(parts[0]);
+    const month: number = Number(parts[1]);
+    const year: number = Number(parts[2]);
+  
+    if (this.discountCode) {
+      for (let discount of this.discounts) {
+        if (discount.discountCode === this.discountCode) {
+          if (discount.limitValue > this.calculateTotalPrice()) {
+            this.toast.showTimedAlert('Hóa đơn không đủ', 'Áp dụng mã giảm giá không thành công', 'error', 1000);
+            check = false;
+            console.log('Hóa đơn không đủ')
+          }
+  
+          // Ngày bắt đầu
+          let start = discount.startDate.split('-');
+          let startDay = parseInt(start[2], 10);
+          let startMonth = parseInt(start[1], 10);
+          let startYear = parseInt(start[0], 10);
+  
+          // Ngày kết thúc
+          let end = discount.endDate.split('-');
+          let endDay = parseInt(end[2], 10);
+          let endMonth = parseInt(end[1], 10);
+          let endYear = parseInt(end[0], 10);
+  
+          // Kiểm tra thời gian
+          if (startYear > year || 
+            (startYear === year && startMonth > month) || 
+            (startYear === year && startMonth === month && startDay > day)) {
+            this.toast.showTimedAlert('Mã giảm giá chưa có hiệu lực', '', 'error', 2000);
+            check = false;
+          }
+  
+          if (endYear < year || 
+            (endYear === year && endMonth < month) || 
+            (endYear === year && endMonth === month && endDay < day)) {
+            this.toast.showTimedAlert('Mã giảm giá đã hết hạn', '', 'error', 2000);
+            check = false;
+          }
+          this.discountPrice = Number(discount.discountValue);
+          sessionStorage.setItem('discountPrice', JSON.stringify(this.discountPrice));
+          check; // Nếu đến đây, mã giảm giá là hợp lệ
+        }
+      }
+    } else {
+      this.toast.showTimedAlert('Vui lòng nhập mã giảm giá', '', 'info', 1000);
+    }
+    
+    
+  }
+  
+
   getDiscount() {
     if (this.discountCode) {
       this.discountService.getDiscountByName(this.discountCode, this.calculateTotalPrice()).subscribe({
@@ -561,4 +636,10 @@ export interface CartInfomation {
   menuItemPrice: number;
   menuItemImage: string;
   menuItemQuantity: number
+}
+
+export interface Date {
+  day: number;
+  month: number;
+  year: number;
 }

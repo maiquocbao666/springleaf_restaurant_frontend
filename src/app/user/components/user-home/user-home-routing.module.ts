@@ -97,6 +97,12 @@ const routes: Routes = [
           import('./user-about/user-about.module')
             .then(m => m.UserAboutModule),
       },
+      {
+        path: 'user/discounts',
+        loadChildren: () =>
+          import('./user-discounts/user-discounts.module')
+            .then(m => m.UserDiscountsModule),
+      },
     ]
   },
 

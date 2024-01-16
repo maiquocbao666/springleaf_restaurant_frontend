@@ -9,9 +9,7 @@ import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { User } from 'src/app/interfaces/user';
 import { VNPayService } from 'src/app/services/VNpay.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ReservationStatusService } from 'src/app/services/reservation-status.service';
 import { ReservationService } from 'src/app/services/reservation.service';
-import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
 import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 

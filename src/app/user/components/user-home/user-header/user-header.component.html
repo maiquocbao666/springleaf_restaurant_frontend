@@ -51,7 +51,7 @@
                         <!-- Start Logo -->
                         <div class="logo">
                             <a class="navbar-brand" routerLink="/user/index">
-                                <h5><i class="fa-solid fa-seedling"></i> SPRINGLEAF</h5>
+                                <h5 style="font-family: 'Dancing Script', cursive;"><i class="fa-solid fa-seedling"></i> SPRINGLEAF</h5>
                             </a>
                         </div>
                         <!-- End Logo -->
@@ -64,7 +64,7 @@
                                     <li class="active" routerLinkActive="active"><a routerLink="/user/index">TRANG
                                             CHỦ</a>
                                     </li>
-                                    <li><a>THỰC ĐƠN<i class="icofont-rounded-down"></i></a>
+                                    <li><a>THỰC ĐƠN</a>
                                         <ul class="dropdown">
                                             <li routerLinkActive="active" *ngFor="let category of categories">
                                                 <a
@@ -73,10 +73,19 @@
 
                                         </ul>
                                     </li>
-                                    <!-- <li routerLinkActive="active"><a routerLink="/user/history">DỊCH VỤ</a> -->
-                                    <li routerLinkActive="active"><a routerLink="/user/about">ABOUT</a>
-                                    <!-- <li routerLinkActive="active"><a (click)="openBillInfoModal()">CỬA HÀNG</a> -->
-                                        <!-- <a routerLink="/user/location">CỬA HÀNG</a> -->
+                                    <li>
+                                        <a>NHÀ HÀNG</a>
+                                        <ul class="dropdown" *ngIf="user?.restaurantBranchId">
+                                            <li routerLinkActive="active">
+                                                <a routerLink="/user/about">Về nhà hàng</a>
+                                            </li>
+                                            <li routerLinkActive="active">
+                                                <a routerLink="/user/discounts">Khuyến mãi</a>
+                                            </li>
+                                            <li routerLinkActive="active">
+                                                <a routerLink="/user/about">Liên hệ</a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     <li routerLinkActive="active" *ngIf="isAdminHeader?.valueOf()"><a
                                             routerLink="/admin/index">TRANG QUẢN LÝ</a></li>

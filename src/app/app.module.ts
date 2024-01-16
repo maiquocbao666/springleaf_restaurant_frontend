@@ -120,6 +120,7 @@ import { ChooseMenuItemComponent } from './components/choose-menuItem/choose-men
 import { EditSeatingComponent } from './user/components/user-home/user-restaurant-tables/user-reservation-histories/edit-seating/edit-seating.component';
 import { LocationRestaurantComponent } from './components/location-restaurant/location-restaurant.component';
 import { UserVoucherComponent } from './components/user-voucher/user-voucher.component';
+import { UserDiscountsComponent } from './user/components/user-home/user-discounts/user-discounts.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -147,6 +148,7 @@ import { UserVoucherComponent } from './components/user-voucher/user-voucher.com
     UserBillHistoriesComponent,
     UserOrderHistoriesComponent,
     EditSeatingComponent,
+    UserDiscountsComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,
