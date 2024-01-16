@@ -43,6 +43,18 @@ a {
   margin: 15px 0;
 }
 
+.fotgot-button :hover{
+  cursor: pointer;
+  color: #75a418;
+  font-size: 20px;
+}
+
+.fotgot-button:focus{
+  cursor: pointer;
+  color: #75a418;
+  font-size: 20px;
+}
+
 button {
   border-radius: 20px;
   border: 1px solid #75a418;

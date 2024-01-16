@@ -123,6 +123,7 @@ import { OrdersComponent } from './admin/components/admin-home/orders/orders.com
 import { RestaurantAddressComponent } from './user/components/user-home/restaurant-address/restaurant-address.component';
 
 import { UserVoucherComponent } from './components/user-voucher/user-voucher.component';
+import { UserDiscountsComponent } from './user/components/user-home/user-discounts/user-discounts.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -151,6 +152,7 @@ import { UserVoucherComponent } from './components/user-voucher/user-voucher.com
     UserOrderHistoriesComponent,
     EditSeatingComponent,
     RestaurantAddressComponent,
+    UserDiscountsComponent,
 
     AdminHeaderComponent,
     AdminProductsComponent,

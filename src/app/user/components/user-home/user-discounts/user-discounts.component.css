@@ -1,0 +1,160 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap");
+
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3 {
+    font-weight: 400 !important;
+    font-family: 'Dancing Script', cursive;
+    color: #FFFFFF;
+}
+
+h4,
+h6,
+.h4,
+.h6 {
+    font-weight: 600 !important;
+    font-family: 'Dancing Script', cursive;
+}
+
+.my-6 {
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+}
+
+.py-6 {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+.wow,
+.animated {
+    animation-duration: 2s !important;
+}
+
+.card-no-product {
+    width: 100%;
+    height: 400px;
+    justify-content: space-between;
+    padding-top: 180px;
+    padding-left: 350px;
+    border: 1px solid #ccc;
+    margin: 20px 0px;
+}
+
+.btn-back-index {
+    padding: 10px 20px;
+    border: 1px solid #75a418;
+    margin-top: 30px;
+    border-radius: 5px;
+    color: #75a418;
+    font-weight: 500;
+    font-size: 18px;
+    margin-left: 100px;
+    transition: all 0.3s ease;
+}
+
+.btn-back-index:hover {
+    border: 1px solid #75a418;
+    background-color: #75a418;
+    color: #fff;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.7);
+}
+
+.offer_section {
+    position: relative;
+    padding-top: 45px;
+}
+
+.offer_section .box {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: 45px;
+    border-radius: 5px;
+    padding: 20px 15px;
+    background-color: #222831;
+    color: #ffffff;
+}
+
+.offer_section .box .img-box {
+    width: 175px;
+    min-width: 175px;
+    height: 175px;
+    margin-right: 15px;
+    position: relative;
+    -webkit-transition: all 0.1 0.5s;
+    transition: all 0.1 0.5s;
+    border-radius: 100%;
+    border: 5px solid #ffbe33;
+    overflow: hidden;
+}
+
+.offer_section .box .img-box img {
+    width: 100%;
+    -webkit-transition: all .2s;
+    transition: all .2s;
+}
+
+.offer_section .box .detail-box h5 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    margin: 0;
+}
+
+.offer_section .box .detail-box h6 {
+    font-family: 'Dancing Script', cursive;
+    margin: 10px 0;
+}
+
+.offer_section .box .detail-box h6 span {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.offer_section .box .detail-box a {
+    display: inline-block;
+    padding: 10px 30px;
+    background-color: #ffbe33;
+    color: #ffffff;
+    border-radius: 45px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    border: none;
+}
+
+.offer_section .box .detail-box a:hover {
+    background-color: #e69c00;
+}
+
+.offer_section .box .detail-box a svg {
+    width: 18px;
+    height: auto;
+    fill: #ffffff;
+}
+
+.offer_section .box:hover .img-box img {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.layout_padding-bottom {
+    padding-bottom: 90px;
+}
+
+.offer-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    padding: 20px 10px;
+    border: 3px dotted #75a418;
+    background-color: #add361;
+}
+
+.offer-title i{
+    margin-right: 10px; 
+}

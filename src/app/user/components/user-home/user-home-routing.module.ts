@@ -103,6 +103,12 @@ const routes: Routes = [
           import('./restaurant-address/restaurant-address.module')
             .then(m => m.RestaurantAddressModule),
       },
+      {
+        path: 'user/discounts',
+        loadChildren: () =>
+          import('./user-discounts/user-discounts.module')
+            .then(m => m.UserDiscountsModule),
+      },
     ]
   },
 

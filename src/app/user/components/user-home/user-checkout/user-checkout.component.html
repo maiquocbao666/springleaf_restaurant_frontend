@@ -105,6 +105,14 @@
                     <span>{{ formatAmount(ship || 0) }}</span>
                   </div>
                 </li>
+                <li class="d-flex align-items-center" *ngIf="discountPrice">
+                  <div class="d-flex flex-column ms-3 me-auto">
+                    <span>Giảm giá</span>
+                  </div>
+                  <div>
+                    <span>{{formatAmount((calculateTotalPrice()*discountPrice)/100)}} </span>
+                  </div>
+                </li>
                 <hr>
                 <div class="card-body">
                   <form>
@@ -116,7 +124,7 @@
                         </div>
                       </div>
                       <div class="col-lg-3">
-                        <button class="comic-button" (click)="getDiscount()">Add</button>
+                        <button class="comic-button" (click)="checkDiscount()">Add</button>
                       </div>
                     </div>
                   </form>
@@ -124,7 +132,7 @@
                 <li class="d-flex align-items-center">
                   <div class="d-flex flex-column ms-3 me-auto">
                     <span *ngIf="!discountPrice">Tổng cộng</span>
-                    <span *ngIf="discountPrice">Tổng cộng ({{discountPrice*100/calculateTotalPrice()}} %)</span>
+                    <span *ngIf="discountPrice">Tổng cộng ({{discountPrice}} %)</span>
                   </div>
                   <div>
                     <h4 id="orderTotal" [(ngModel)]="orderTotal">{{ formatAmount(calculateFinalPrice(ship || 0)) }}</h4>

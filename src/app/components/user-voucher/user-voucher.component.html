@@ -5,15 +5,31 @@
     </a>
 </div>
 <div class="scroll-container">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4" >
-                <div class="row-container" *ngFor="let discount of discounts">
-                    <div class="row-item image">{{discount.discountCode}}</div>
-                    <div class="row-item name">{{discount.discountValue}} %</div>
+    <div class="row-container">
+        <div class="row-body" *ngFor="let discount of discounts">
+            <div class="discount-left">
+                <div class="discount-code">
+                    {{discount.discountCode}}
+                </div>
+                <div class="discount-limit">
+                    Tối thiểu: {{formatAmount(discount.limitValue)}}
+                </div>
+                <div class="discount-date">
+                    Từ: {{formatDate(discount.startDate)}}
+                </div>
+                <div class="discount-date">
+                    Đến: {{formatDate(discount.endDate)}}
                 </div>
             </div>
-            
+            <div class="discount-right">
+                <div>
+                    <b>Giảm giá</b>
+                </div>
+                <div class="discount-value">
+                    {{discount.discountValue}}%
+                </div>
+            </div>
         </div>
     </div>
+    
 </div>

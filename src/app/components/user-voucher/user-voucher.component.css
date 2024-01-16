@@ -123,10 +123,8 @@ button:active .button-text {
 
 .scroll-container {
     max-height: 450px;
-    /* Adjust the max-height as needed */
     overflow-y: auto;
     border: 1px solid #ccc;
-    /* Optional: Add a border for visual clarity */
 }
 
 .row-container {
@@ -144,78 +142,45 @@ button:active .button-text {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin: 0;
+    margin: 10px 20px;
+    padding: 15px;
     border-bottom: 1px solid #ccc;
+    border: 2px dotted #555555;
+    transition: transform 0.3s ease;
 }
 
-/* Remove right margin from the last item to prevent overflow */
-.row-item:last-child {
-    margin-right: 0;
+.row-body:hover {
+    transform: scale(1.05); 
+    border: 2px solid #000;
+    background-color: aquamarine;
 }
 
-.checkbox {
-    flex-basis: calc(5%);
+.discount-left{
+    flex-basis: calc(70%);
     box-sizing: border-box;
-    text-align: center;
-    padding: 20px 0px;
+    font-size: 25px;
+    color: #555555;
 }
 
-.image {
-    flex-basis: calc(10%);
+.discount-right{
+    flex-basis: calc(30%);
     box-sizing: border-box;
-    padding: 20px;
-    text-align: center;
+    color: red;
+    text-align: right;
 }
 
-.name {
-    flex-basis: calc(35%);
-    box-sizing: border-box;
-    padding: 20px;
-    text-align: center;
-
+.discount-value{
+    font-size: 50px;
+    text-align: right;
 }
 
-.unit-price {
-    flex-basis: calc(20%);
-    box-sizing: border-box;
-    padding: 20px;
-    text-align: center;
+.discount-date{
+    font-size: 13px;
+    color: #000;
 }
 
-.quantity {
-    flex-basis: calc(5%);
-    box-sizing: border-box;
-    text-align: center;
-    padding: 20px 0px;
+.discount-limit{
+    font-size: 18px;
+    color: #000;
 }
 
-.total-price {
-    flex-basis: calc(25%);
-    box-sizing: border-box;
-    padding: 20px;
-    text-align: center;
-}
-
-.row-footer{
-    display: flex;
-    justify-content: left;
-    width: 100%;
-    margin: 0;
-    border-bottom: 1px solid #ccc;
-    padding-top: 5px;
-}
-
-.order-info{
-    flex-basis: calc(50%);
-    box-sizing: border-box;
-    text-align: left;
-    padding-left: 20px;
-    padding-top: 5px;
-}
-
-.order-button{
-    flex-basis: calc(50%);
-    box-sizing: border-box;
-    text-align: left;
-}
-    

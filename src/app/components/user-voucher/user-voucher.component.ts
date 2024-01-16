@@ -29,14 +29,30 @@ export class UserVoucherComponent {
     ngOnInit(): void {
         this.getVoucher();
         console.log(this.discounts);
-      }
+    }
     
-      getVoucher() {
-        this.discountService.getCache().subscribe(
-          (cached: Discount[]) => {
-            // Lọc danh sách theo userId
-            this.discounts = cached.filter(discount => discount.userId === this.user?.userId);
-          }
-        );
-      }
+    getVoucher() {
+      this.discountService.getCache().subscribe(
+        (cached: Discount[]) => {
+          this.discounts = cached.filter(discount => discount.userId === this.user?.userId);
+        }
+      );
+    }
+
+    formatDate(dateString: string): string {
+      // Tách ngày, tháng và năm từ chuỗi
+      const parts = dateString.split('-');
+      const year = parts[0];
+      const month = parts[1];
+      const day = parts[2];
+    
+      // Định dạng lại chuỗi thành "dd-mm-yyyy"
+      const formattedDate = `${day}-${month}-${year}`;
+    
+      return formattedDate;
+    }
+
+    formatAmount(amount: number): string {
+      return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    }
 }

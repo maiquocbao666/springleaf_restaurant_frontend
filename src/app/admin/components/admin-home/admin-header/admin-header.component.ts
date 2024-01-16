@@ -9,6 +9,7 @@ declare var $: any;
 })
 export class AdminHeaderComponent {
   user: User | null = null;
+  userRoles : String = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -22,6 +23,10 @@ export class AdminHeaderComponent {
       if (this.user != null) {
       }
     });
+  }
+
+  ngOnInit() : void {
+    this.checkRoles();
   }
 
   toggleNav() {
@@ -50,6 +55,27 @@ export class AdminHeaderComponent {
       // Trường hợp không có khoảng trắng
       return inputString;
     }
+  }
+
+  checkRoles(): void {
+
+    this.authService.roleCacheData$.subscribe((data) => {
+      console.log(data);
+      if(data){
+        const predefinedRoles = ['USER', 'MANAGER', 'ADMIN'];
+        for (const role of predefinedRoles) {
+          if (data.includes(role)) {
+            this.userRoles = role;
+            
+          } else {
+            // Nếu không tìm thấy, thoát vòng lặp
+            break;
+          }
+        }
+
+      }
+      console.log(this.userRoles);
+    });
   }
 }
 

@@ -22,7 +22,6 @@ export class AdminGuardService implements CanActivate {
 
     this.authService.roleCacheData$.subscribe((data) => {
       this.roles = data;
-      console.log(this.roles);
     });
 
     if (!this.roles) {
