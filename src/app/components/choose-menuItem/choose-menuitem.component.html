@@ -12,21 +12,7 @@
     <div class="row-item quantity">SL</div>
     <div class="row-item total-price">Thành tiền</div>
 </div>
-<div class="scroll-container">
-    <div class="row-body" *ngFor="let product of products">
-        <div class="row-item checkbox"><input type="checkbox" [(ngModel)]="selections[product.menuItemId!]"
-                (click)="toggleSelection(product)"></div>
-        <div class="row-item image"><img [src]="'http://localhost:8080/public/getImage/' + product.imageUrl"
-                #imagePreview width="100px" class="file-preview" /></div>
-        <div class="row-item name">{{ product.name }}</div>
-        <div class="row-item unit-price">{{ formatAmount(product.unitPrice) }}</div>
-        <div class="row-item quantity">
-            <input type="number" [(ngModel)]="quantities[product.menuItemId!]"
-                (input)="updateQuantity(product, $event)">
-            </div>
-        <div class="row-item total-price">{{ formatAmount(product.unitPrice*quantities[product.menuItemId!])}}</div>
-    </div>
-</div>
+
 <div class="row-footer">
     <div class="order-info">
         <div class="total-item">

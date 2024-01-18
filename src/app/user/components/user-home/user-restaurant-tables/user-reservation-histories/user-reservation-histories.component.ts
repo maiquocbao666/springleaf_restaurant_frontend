@@ -335,6 +335,19 @@ export class UserReservationHistoriesComponent {
     this.search();
   }
 
+  openModelChooseMenuItem(reservation : Reservation) {
+
+
+    const modalRef = this.modalService.open(ChooseMenuItemComponent, {
+      size: 'xl', // xl là kích thước lớn hơn
+      centered: false, // Đặt modal ở giữa trang
+      scrollable: true, // Cho phép cuộn nếu modal quá lớn
+    });
+
+    modalRef.componentInstance.reservationOfUser = reservation;
+
+  }
+
 }
 export interface OrderReservationInfomation {
   orderDetailId?: number;

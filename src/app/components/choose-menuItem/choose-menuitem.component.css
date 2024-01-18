@@ -218,4 +218,18 @@ button:active .button-text {
     box-sizing: border-box;
     text-align: left;
 }
+
+.modal-header{
+    height: 60px;
+    padding: 0px 10px;
+  }
+  
+  .close span{
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .close span:hover{
+    color: red;
+    transform: scale(1.1);
+  }
     

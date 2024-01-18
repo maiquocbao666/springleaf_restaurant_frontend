@@ -317,7 +317,7 @@
                   <td class="text-center">{{ formatAmount(product.unitPrice) }}</td>
                   <td class="text-center">{{ getCategoryById(product.categoryId)?.name }}
                   </td>
-                  <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 30) + '...' :
+                  <td class="text-center">{{ product.description.length > 0 ? product.description.slice(0, 10) + '...' :
                     product.description }}
                   </td>
                   <td class="text-center">

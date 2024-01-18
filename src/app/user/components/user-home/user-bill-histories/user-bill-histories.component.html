@@ -32,54 +32,44 @@
 
 
 
-<div class="container">
-  <h1 class="text-center display-4">Lịch sử đơn hàng</h1>
-  <p class="float-end">
-    <select class="form-select" (change)="onTableSizeChange($event)">
-      <option *ngFor="let size of tableSizes">
-        {{size}}
-      </option>
-    </select>
-  </p>
+  <div class="container">
+    <h1 class="text-center display-4">Lịch sử đơn hàng</h1>
+    <p class="float-end">
+      <select class="form-select" (change)="onTableSizeChange($event)">
+        <option *ngFor="let size of tableSizes">
+          {{size}}
+        </option>
+      </select>
+    </p>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Ngày đặt</th>
+            <th scope="col">Tổng giá tiền</th>
+            <th scope="col">Phương thức thanh toán</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let bill of billInfo | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+            <!-- <td>{{bill.billId}}</td> -->
+            <td>{{bill.billTime | date: 'dd-MM-yyyy'}}</td>
+            <td>{{ formatAmount(bill.totalAmount) }}</td>
+            <td *ngIf="bill.paymentMethod === 1">COD</td>
+            <td *ngIf="bill.paymentMethod !== 1">Chuyển khoản</td>
+            <td>
+              <button type="button" class="btn btn-outline-primary"
+                (click)="openModal(content, bill.billId!)">Xem</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center">
+      <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+    </div>
 
-
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">User </th>
-          <th scope="col">Date </th>
-          <th scope="col">totalAmount</th>
-          <th scope="col">paymentMethod</th>
-          <!-- <th scope="col">address</th>
-          <th scope="col">bankNumber</th> -->
-          <th scope="col">Chức năng</th>
-
-
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let bill of bills | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
-          <td> {{ bill.billId }}</td>
-          <td>{{bill.userId}}</td>
-          <td>{{bill.billTime | date: 'dd-MM-yyyy'}}</td>
-          <td>{{ formatAmount(bill.totalAmount) }}</td>
-          <td>{{bill.paymentMethod}}</td>
-          <!-- <td>{{bill.address}}</td> -->
-          <!-- <td>{{bill.bankNumber}}</td> -->
-          <td>
-            <button type="button" class="btn btn-outline-primary"
-              (click)="openModal(content, bill.billId!)">Xem</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
-  <div class="text-center">
-    <pagination-controls previousLabel="Lùi" nextLabel="Tới"
-      (pageChange)="onTableDataChange($event)"></pagination-controls>
-  </div>
-
-</div>
