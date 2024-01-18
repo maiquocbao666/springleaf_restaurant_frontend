@@ -16,8 +16,8 @@
                             class="fa fa-check" aria-hidden="true" style="color: white;"></i></a>
                 </div>
             </div>
-            <input type="text" id="fullName" placeholder="Nhập vào học và tên" formControlName="fullName"
-                name="fullName" [attr.disabled]="compareInputWithCodeCache" />
+            <input type="text" id="fullName" placeholder="Nhập vào họ và tên" formControlName="fullName" name="fullName"
+                [attr.disabled]="compareInputWithCodeCache" />
             <i *ngIf="registerForm.get('fullName')?.getError('message')" style="color: red;">
                 {{ registerForm.get('fullName')?.getError('message') }}
             </i>
@@ -58,7 +58,7 @@
             <div class="d-flex">
                 <input class="col-lg-1" type="checkbox" id="rememberMe" formControlName="rememberMe" />
                 <label class="col-lg-11" for="rememberMe">Lưu tài khoản</label>
-              </div>
+            </div>
             <a class="fotgot-button" (click)="openUserPasswordModel()">Quên mật khẩu?</a>
             <button type="submit" #signIn>Đăng nhập</button>
             <a class="google-a-button" href="http://localhost:8080/">
