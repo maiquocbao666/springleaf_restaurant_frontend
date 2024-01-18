@@ -6,6 +6,7 @@ import { BillDetail } from 'src/app/interfaces/bill-detail';
 import { Cart } from 'src/app/interfaces/cart';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { BillDetailService } from 'src/app/services/bill-detail.service';
 import { BillService } from 'src/app/services/bill.service';
 import { ProductService } from 'src/app/services/product.service';
@@ -17,13 +18,14 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class UserBillHistoriesComponent {
   bills: Bill[] = [];
-  user: User[] = [];
+  user: User | undefined;
   orders: Cart[] = [];
   billForm: FormGroup;
   billDetails: BillDetail[] = [];
   products: Product[] = [];
   bill: Bill | undefined;
   fieldNames: string[] = [];
+  billInfo : BillInfo[] = [];
 
   page: number = 1;
   count: number = 0;
@@ -39,7 +41,8 @@ export class UserBillHistoriesComponent {
     private billDetailService: BillDetailService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private authService: AuthenticationService,
 
   ) {
     this.billForm = this.formBuilder.group({
@@ -47,6 +50,11 @@ export class UserBillHistoriesComponent {
       ingredientId: ['', [Validators.required]],
       supplierId: ['', [Validators.required]]
     });
+
+    this.authService.getUserCache().subscribe(
+      (data: any | null) => {
+        this.user = data;
+      });
   }
 
   ngOnInit(): void {
@@ -71,14 +79,24 @@ export class UserBillHistoriesComponent {
   getBills(): void {
     this.billService.getCache().subscribe(
       (cached: any[]) => {
-        this.bills = cached;
+        this.bills = cached.filter(bill => bill.userId === this.user?.userId);
+        for(let bill of this.bills){
+          let newInfo : BillInfo = {
+            billId : bill.billId,
+            bankNumber : bill.bankNumber,
+            billTime : bill.billTime,
+            orderId : bill.orderId,
+            address : bill.address,
+            paymentMethod : bill.paymentMethod,
+            totalAmount : bill.totalAmount,
+            userId : bill.userId,
+            userName : this.user?.fullName!
+          }
+          this.billInfo.push(newInfo);
+        }
       }
     );
   }
-
-
-
-
 
   getBillDetails(billId: number): void {
     this.billDetailService.getBillDetailsByBillId(billId)
@@ -141,4 +159,16 @@ export class UserBillHistoriesComponent {
     this.keywords = event.target.value;
     this.search();
   }
+}
+
+export interface BillInfo {
+  billId?: number;
+  userId: number;
+  orderId: number;
+  billTime: string;
+  totalAmount: number;
+  paymentMethod: number;
+  address: string;
+  bankNumber: string;
+  userName : string;
 }

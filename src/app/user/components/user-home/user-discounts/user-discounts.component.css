@@ -44,6 +44,20 @@ h6,
     margin: 20px 0px;
 }
 
+.voucher-card-title{
+    width: 100%;
+    height: 100px;
+    justify-content: space-between;
+    text-align: center;
+    padding-top: 50px;
+    border: 1px solid #ccc;
+    margin: 20px 0px;
+}
+
+.voucher-card-title h5{
+    text-align: center;
+}
+
 .btn-back-index {
     padding: 10px 20px;
     border: 1px solid #75a418;
@@ -158,3 +172,67 @@ h6,
 .offer-title i{
     margin-right: 10px; 
 }
+
+/* Discoutn */
+.row-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    color: #fffcfc;
+}
+
+.row-body {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 20px;
+    padding: 15px;
+    border-bottom: 1px solid #fff;
+    border: 2px dotted #555555;
+    transition: transform 0.3s ease;
+}
+
+.discount-left{
+    flex-basis: calc(70%);
+    box-sizing: border-box;
+    font-size: 25px;
+    color: #555555;
+}
+
+.discount-right{
+    flex-basis: calc(30%);
+    box-sizing: border-box;
+    color: red;
+    text-align: right;
+}
+
+.discount-value{
+    font-size: 50px;
+    text-align: right;
+}
+
+.discount-date{
+    font-size: 13px;
+    color: #000;
+}
+
+.discount-limit{
+    font-size: 18px;
+    color: #000;
+}
+
+.discount-right a {
+    padding: 10px 20px;
+    background-color: #ffbe33;
+    border-radius: 5%;
+    border: 1px solid #e69c00;
+    color: #fff;
+}
+
+.discount-right a:hover {
+    background-color: #ca8f10;
+}
+

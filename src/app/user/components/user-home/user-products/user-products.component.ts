@@ -33,7 +33,8 @@ export class UserProductsComponent implements OnInit {
 
   categories$!: Observable<Category[]>;
   products!: Product[];
-  productDiscounts! : ProductDiscount[];
+  productDiscounts!: ProductDiscount[];
+  productFinal! : DiscountProductInfo2[];
   categories: Category[] = [];
   categoryId!: number; // Khởi tạo categoryId là undefined
   user: User | null = null;
@@ -55,11 +56,11 @@ export class UserProductsComponent implements OnInit {
     private modalService: NgbModal,
     private toastService: ToastService,
     private favoriteService: FavoriteService,
-    private productDiscountService : ProductDiscountService
+    private productDiscountService: ProductDiscountService
   ) {
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
-      this.getProductDiscount();
+      
     });
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
@@ -79,6 +80,41 @@ export class UserProductsComponent implements OnInit {
         this.getProductsByCategoryId();
       }
     });
+    this.getProductDiscount();
+    const productsString = localStorage.getItem('products');
+    if (productsString) {
+      const parsedProducts: Product[] = JSON.parse(productsString);
+      console.log(this.productDiscounts);
+      //console.log( parsedProducts);
+      if(parsedProducts && this.productDiscounts){
+        this.productFinal = [];
+        for(let x of this.productDiscounts){
+          for(let y of parsedProducts){
+            if(x.menuItemId === y.menuItemId){
+              const newPro : DiscountProductInfo2 = {
+                productDiscountId : x.productDiscountId,
+                menuItemId : y.menuItemId,
+                categoryId : y.categoryId,
+                description : y.description,
+                imageUrl : y.imageUrl,
+                productName : y.name,
+                discountValue : x.discountValue,
+                unitPrice : y.unitPrice,
+                startDate : x.startDate,
+                endDate : x.endDate,
+                active : x.active,
+                restaurantId : this.user?.restaurantBranchId!,
+              }
+              this.productFinal.push(newPro);
+            }
+          }
+        }
+        console.log(this.productFinal)
+      }
+    } else {
+      console.error('No products found in local storage or the value is null.');
+    }
+    
   }
 
 
@@ -124,13 +160,13 @@ export class UserProductsComponent implements OnInit {
         this.updateVisibleProducts();
       }
     );
+    
   }
 
-  getProductDiscount() : void {
+  getProductDiscount(): void {
     this.productDiscountService.getCache().subscribe(
-      (cached: any[]) =>{
+      (cached: any[]) => {
         this.productDiscounts = cached.filter(productDiscount => productDiscount.restaurantId === this.user?.restaurantBranchId);
-        
       }
     )
   }
@@ -166,16 +202,16 @@ export class UserProductsComponent implements OnInit {
     this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
     if (this.categoryId) {
       this.products = this.products.filter(data => data.categoryId === this.categoryId);
-      
+
     }
   }
 
   addToCart(productId: number | undefined) {
-    if(this.user){
+    if (this.user) {
       if (productId) {
         const deliveryOrderId = this.cartByUser?.deliveryOrderId as number;
         const orderId = this.orderByUser?.orderId as number;
-  
+
         this.productService.addToCart(productId, deliveryOrderId, orderId).subscribe({
           next: (response) => {
             if (response.message === "User not found") {
@@ -191,7 +227,7 @@ export class UserProductsComponent implements OnInit {
             else {
               this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
               this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
-  
+
             }
           },
           error: (error) => {
@@ -201,17 +237,17 @@ export class UserProductsComponent implements OnInit {
       } else {
         console.error("Product ID is undefined. Cannot add to cart.");
       }
-    }else{
+    } else {
       this.toastService.showConfirmAlert('Vui lòng đăng nhập?', '', 'warning')
-      .then((result) => {
-        if (result.isConfirmed) {
-          
-            const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
-          
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
+        .then((result) => {
+          if (result.isConfirmed) {
 
-        }
-      });
+            const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
+
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+          }
+        });
     }
   }
 
@@ -237,6 +273,21 @@ export class UserProductsComponent implements OnInit {
     }
   }
 
+}
+
+export interface DiscountProductInfo2{
+  productDiscountId?  : number;
+  menuItemId : number;
+  restaurantId : number;
+  discountValue : number;
+  categoryId : number;
+  startDate : string;
+  endDate : string ;
+  active : boolean ;
+  productName : string;
+  imageUrl : string;
+  unitPrice : number;
+  description : string;
 }
 
 
