@@ -15,7 +15,7 @@
             </p>
             <div class="collapse pb-3" id="collapseExample">
                 <div class="card card-body">
-                    <form [formGroup]="roleForm">
+                    <form [formGroup]="roleForm" (ngSubmit)="addRole()">
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <label for="exampleInputPassword1" class="form-label">Tên quyền:<span
@@ -52,7 +52,7 @@
             <!-- Hover table card start -->
             <div class="card">
                 <div class="card-header">
-                    <h5>Danh sách người dùng</h5>
+                    <h5>Danh sách quyền</h5>
                 </div>
                 <div class="card-block table-border-style">
                     <div class="table-responsive">
@@ -71,6 +71,7 @@
                                         {{role.roleId}}
                                     </td>
                                     <td>{{role.roleName}}</td>
+                                    <td>{{role.description}}</td>
                                     <td style="text-align: right;">
                                         <i class="fa fa fa-wrench"></i>
                                     </td>

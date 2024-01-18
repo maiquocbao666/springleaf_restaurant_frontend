@@ -126,6 +126,7 @@ import { UserVoucherComponent } from './components/user-voucher/user-voucher.com
 import { UserDiscountsComponent } from './user/components/user-home/user-discounts/user-discounts.component';
 import { AdminUserRolesComponent } from './admin/components/admin-home/admin-users/admin-user-roles/admin-user-roles.component';
 import { AdminRolesComponent } from './admin/components/admin-home/admin-users/admin-roles/admin-roles.component';
+import { AdminProductDiscountsComponent } from './admin/components/admin-home/admin-products/admin-product-discount/admin-product-discounts.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -208,6 +209,7 @@ import { AdminRolesComponent } from './admin/components/admin-home/admin-users/a
     AdminDeliveryOrderComponent,
     AdminUserRolesComponent,
     AdminRolesComponent,
+    AdminProductDiscountsComponent,
     OrdersComponent,
 
     ChatComponent,

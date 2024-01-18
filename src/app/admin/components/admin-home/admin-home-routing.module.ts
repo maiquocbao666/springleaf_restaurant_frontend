@@ -78,6 +78,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'product-discounts',
+        loadChildren: () =>
+          import('./admin-products/admin-product-discount/admin-product-discounts.module').then(
+            (m) => m.AdminProductDiscountsModule
+          ),
+      },
+      {
         path: 'tableStatuses',
         loadChildren: () =>
           import('./admin-table-statuses/admin-table-statuses.module').then(

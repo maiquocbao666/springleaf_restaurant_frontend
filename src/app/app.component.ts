@@ -39,6 +39,7 @@ import { SupplierService } from "./services/supplier.service";
 import { TableStatusService } from "./services/table-status.service";
 import { TableTypeService } from "./services/table-type.service";
 import { RoleService } from './services/role.service';
+import { ProductDiscountService } from './services/product-discount.service';
 
 
 interface DataService<T> {
@@ -107,6 +108,7 @@ export class AppComponent implements OnDestroy {
     private reservationStatusesService: ReservationStatusService,
     private discountsService: DiscountService,
     private rolesService : RoleService,
+    private productDiscountsService : ProductDiscountService,
   ) {
 
     window.addEventListener('storage', (event) => {
@@ -162,6 +164,8 @@ export class AppComponent implements OnDestroy {
       discounts: { cache: this.discountsService.cache, localStorageKey: 'discounts' },
       inventoryBranchIngredients: { cache: this.inventoryBranchIngredientsService.cache, localStorageKey: 'inventoryBranchIngredients' },
       roles: { cache: this.rolesService.cache, localStorageKey: 'roles' },
+      productDiscounts : {cache: this.productDiscountsService.cache , localStorageKey : 'productDiscounts'},
+      
     };
 
     this.getDatasFromLocalStorageWorker = new Worker(new URL('./workers/get-datas-from-local-storage.worker', import.meta.url));
@@ -215,23 +219,6 @@ export class AppComponent implements OnDestroy {
     };
   }
 
-  // deleteAllDatasFromLocalStorage() {
-  //   this.getDatasFromLocalStorageWorker.postMessage('start');
-  //   this.getDatasFromLocalStorageWorker.onmessage = ({ data }) => {
-
-  //     Object.keys(this.services).forEach((type: string) => {
-
-  //       const { cache, localStorageKey } = this.services[type];
-
-  //       if (localStorage.getItem(localStorageKey)) {
-  //         this.services[type].cache = JSON.parse(localStorage.getItem(localStorageKey) || 'null');
-  //         //console.log(`Lấy dữ liệu ${type} từ Local Storage`);
-  //         (this as any)[`${type}Service`][`cache`] = null;
-  //       }
-
-  //     });
-  //   };
-  // }
 
   callAllApis(): void {
     this.callAPIsWorker.postMessage('start');

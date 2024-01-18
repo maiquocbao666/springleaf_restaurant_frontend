@@ -56,6 +56,26 @@ export class AdminRolesComponent {
         this.page = 1;
     }
 
+    addRole(): void {
+        this.isSubmitted = true;
+        if (this.roleForm.valid) {
+            const roleName = this.roleForm.get('roleName')?.value;
+            const description = this.roleForm.get('description')?.value;
+
+            const newRole: Role = {
+                roleName : roleName,
+                description : description
+            };
+            this.roleService.add(newRole)
+                .subscribe(role => {
+                    this.sweetAlertService.showCustomAnimatedAlert('Thêm thành công', 'success', 'animated tada');
+                    this.isSubmitted = false;
+                });
+        } else {
+            this.sweetAlertService.showCustomAnimatedAlert('Thất bại', 'warning', 'Thêm thất bại')
+        }
+    }
+
     
 
 }

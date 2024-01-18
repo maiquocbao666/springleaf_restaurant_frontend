@@ -7,6 +7,8 @@ import { RestaurantService } from 'src/app/services/restaurant.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Discount } from 'src/app/interfaces/discount';
+import { Product } from 'src/app/interfaces/product';
 
 @Component({
   selector: 'app-location-restaurant',
@@ -16,6 +18,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class LocationRestaurantComponent {
 
   restaurants: Restaurant[] | null = null;
+  discounts : Discount[] = [];
+  products : Product[] = [];
 
   chooseRestaurantFrom: FormGroup;
   user: User | null = null;
@@ -26,7 +30,7 @@ export class LocationRestaurantComponent {
     private formBuilder: FormBuilder,
     private authService: AuthenticationService,
     public activeModal: NgbActiveModal,
-  ){
+  ) {
     this.chooseRestaurantFrom = this.formBuilder.group({
       selectedRestaurant: [null, Validators.required],
     })
@@ -37,6 +41,21 @@ export class LocationRestaurantComponent {
 
   ngOnInit() {
     this.getRestaurants();
+    const productsString = localStorage.getItem('products');
+    if (productsString) {
+      const parsedProducts: Product[] = JSON.parse(productsString);
+      this.products = parsedProducts;
+    } else {
+      console.error('No products found in local storage or the value is null.');
+    }
+    const discountsString = localStorage.getItem('discounts');
+    if (discountsString) {
+      const parsedDiscounts: Discount[] = JSON.parse(discountsString);
+      this.discounts = parsedDiscounts;
+    } else {
+      console.error('No products found in local storage or the value is null.');
+    }
+    console.log(this.products! , this.discounts!)
   }
 
   getRestaurants(): void {
@@ -67,7 +86,7 @@ export class LocationRestaurantComponent {
       this.userService.updateRestaurant(updateUser).subscribe({
         next: (response) => {
           this.sweetAlertService.showTimedAlert('Cập nhật thành công!', 'Chúc bạn có những trải nhiệm vui vẻ', 'success', 2000);
-          
+
           this.authService.setUserCache(response);
           this.activeModal.close();
         },

@@ -9,8 +9,8 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
-  //private apiUrl = 'http://localhost:8080/auth';
+  //private apiUrl = 'https://springleafrestaurantbackend.onrender.com/auth'; // Thay thế bằng URL của Spring Boot API
+  private apiUrl = 'http://localhost:8080/auth';
   // User cache
   private userCache: User | null = null;
   private userCachedDataSubject = new BehaviorSubject<User | null>(null);

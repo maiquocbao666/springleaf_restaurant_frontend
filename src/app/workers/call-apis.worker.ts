@@ -10,6 +10,7 @@ addEventListener('message', async ({ data }) => {
                                 'categories',
                                 'combos',
                                 'comboDetails',
+                                'productDiscounts',
                                 //'deliveries',
                                 //'deliveryDetails',
                                 'deliveryOrders',

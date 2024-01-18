@@ -1,0 +1,145 @@
+<div class="main-body">
+    <div class="page-wrapper">
+        <div class="page-header">
+            <h5 class="page-title">Quản lý giảm giá sản phẩm</h5>
+        </div>
+
+        <div class="page-body">
+            <p class="d-inline-flex gap-1">
+                <button class="btn waves-effect waves-light btn-primary btn-outline-primary pb-2"
+                    data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                    aria-controls="collapseExample">
+                    <i class="fa fa-user"></i>
+                    Thêm giảm giá
+                </button>
+            </p>
+            <!-- HTML file -->
+            <p class="float-end">
+                <select class="form-select" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </p>
+            <div class="collapse pb-3" id="collapseExample">
+                <div class="card card-body">
+                    <form [formGroup]="productDiscountForm" (ngSubmit)="addProductDiscount()">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="discountValue" class="form-label">Giá trị giảm (%)<span
+                                        style="color: red;">(*)</span></label>
+                                <input type="text" formControlName="discountValue" class="form-control"
+                                    id="discountValue" placeholder="Nhập giá trị giảm">
+                                <div *ngIf="productForm.get('discountValue')?.invalid && (productForm.get('discountValue')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Giá trị giảm là bắt buộc.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="menuItemId" class="form-label">Loại<span
+                                        style="color: red;">(*)</span></label>
+                                <select class="form-select" formControlName="menuItemId" id="menuItemId">
+                                    <option value="">--Chọn sản phẩm-- </option>
+                                    <option *ngFor="let product of products" [value]="product.menuItemId"> {{
+                                        product.name }}
+                                    </option>
+                                </select>
+                                <div *ngIf="productForm.get('menuItem')?.invalid && (productForm.get('menuItem')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Sản phẩm là bắt buộc
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày bắt đầu: </label>
+                                <input class="form-control" type="date" id="startDate" formControlName="startDate">
+
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày kết thúc: </label>
+                                <input class="form-control" type="date" id="endDate" formControlName="endDate">
+
+                            </div>
+                            <div class="submit-btn">
+                                <button class="btn waves-effect waves-light btn-success btn-outline-success pb-2">
+                                    <i class="fa fa-check"></i>
+                                    Thêm
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Page-body start -->
+        <div class="page-body">
+            <!-- Hover table card start -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Danh sách sản phẩm giảm giá</h5>
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Ảnh</th>
+                                    <th class="text-center">
+                                        Tên món
+                                    </th>
+                                    <th class="text-center">
+                                        Giá
+                                    </th>
+
+                                    <th class="text-center">
+                                        Giảm
+                                    </th>
+                                    <th class="text-center">
+                                        Trạng thái
+                                    </th>
+                                    <th class="text-center">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tbody>
+                                <tr
+                                    *ngFor="let product of discountInfo | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                                    <td class="text-center">
+                                        <img alt="Hình ảnh sản phẩm"
+                                            [src]="'http://localhost:8080/public/getImage/' + product.imageUrl"
+                                            style="width: 50px; height: 50px;">
+                                    </td>
+                                    <td class="text-center">{{product.productName}}</td>
+                                    <td class="text-center">{{ formatAmount(product.unitPrice) }}</td>
+                                    <td class="text-center">{{product.discountValue}}%</td>
+                                    <td class="text-center">
+                                        <div style="padding: 10px 15px; align-items: center;"
+                                            [ngClass]="product.active ? 'badge badge-success' : 'badge badge-danger'">
+                                            {{ product.active ? 'Đang bán' : 'Không bán' }}
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <button id="PopoverCustomT-1"
+                                            class="btn waves-effect waves-light btn-info btn-outline-info mr-2 align-items-center"
+                                            ><i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button id="PopoverCustomT-1"
+                                            class="btn waves-effect waves-light btn-danger btn-outline-danger"
+                                            (click)="deleteProductDiscount(product)"><i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <pagination-controls previousLabel="Lùi" nextLabel="Tới"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+        </div>
+        <!-- Page-body end -->
+    </div>
+</div>
