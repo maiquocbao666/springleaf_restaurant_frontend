@@ -72,9 +72,10 @@
 
     Lưu ý: Thời gian tìm với định dạng là yyyy-MM-dd HH:mm:ss <br>
     <p class="d-inline-flex gap-1 text-center">
-        <label>Tìm bất cứ thứ gì bạn nghĩ là có thể...</label>
-        <input type="text" (input)="changeSearchKeyWords($event)">
-        <select (change)="changeFieldName($event)">
+        <input type="text" (input)="changeSearchKeyWords($event)" class="input" placeholder="Bạn tìm gì...">
+        <i class="fa-solid fa-magnifying-glass"
+            style="display: flex; align-items: center; justify-content: center; margin-right: 5px;"></i>
+        <select (change)="changeFieldName($event)" class="input">
             <option value="">Chọn tên cột cần tìm</option>
             <option value="id">Số thứ tự</option>
             <option value="mergeTableId">Mã gộp bàn</option>
@@ -101,7 +102,7 @@
                 <td [ngStyle]="{
                 'color': mergeTableColors[mergeTable.mergeTableId],
                 'font-weight': 'bold',
-              }">{{ findTableNameByTableId(mergeTable.tableId) }}  ({{ mergeTable.tableId }})</td>
+              }">{{ findTableNameByTableId(mergeTable.tableId) }} ({{ mergeTable.tableId }})</td>
                 <td [ngStyle]="{
                 'color': mergeTableColors[mergeTable.mergeTableId],
                 'font-weight': 'bold',
