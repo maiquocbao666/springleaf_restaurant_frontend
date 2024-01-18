@@ -78,13 +78,13 @@ export class AdminUsersComponent {
       code: [null, [Validators.nullValidator]],
     });
 
-    const provincesString = localStorage.getItem('Provinces');
-    if (provincesString) {
-      const parsedProvince: Province[] = JSON.parse(provincesString);
-      this.Provinces = parsedProvince;
-    } else {
-      console.error('No products found in local storage or the value is null.');
-    }
+    // const provincesString = localStorage.getItem('Provinces');
+    // if (provincesString) {
+    //   const parsedProvince: Province[] = JSON.parse(provincesString);
+    //   this.Provinces = parsedProvince;
+    // } else {
+    //   console.error('No products found in local storage or the value is null.');
+    // }
   }
 
   ngOnInit(): void {

@@ -19,6 +19,10 @@ import { OrderService } from 'src/app/services/order.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
+import { ProductDiscountService } from 'src/app/services/product-discount.service';
+import { ProductDiscount } from 'src/app/interfaces/product-discounts';
+import Swal from 'sweetalert2';
+import { LoginComponent } from 'src/app/components/login/login.component';
 declare var $: any;
 @Component({
   selector: 'app-user-products',
@@ -29,6 +33,7 @@ export class UserProductsComponent implements OnInit {
 
   categories$!: Observable<Category[]>;
   products!: Product[];
+  productDiscounts! : ProductDiscount[];
   categories: Category[] = [];
   categoryId!: number; // Khởi tạo categoryId là undefined
   user: User | null = null;
@@ -49,10 +54,12 @@ export class UserProductsComponent implements OnInit {
     private orderDetailService: CartDetailService,
     private modalService: NgbModal,
     private toastService: ToastService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private productDiscountService : ProductDiscountService
   ) {
     this.authService.getUserCache().subscribe((data) => {
       this.user = data;
+      this.getProductDiscount();
     });
     this.deliveryOrderService.userCart$.subscribe(cart => {
       this.cartByUser = cart;
@@ -119,6 +126,15 @@ export class UserProductsComponent implements OnInit {
     );
   }
 
+  getProductDiscount() : void {
+    this.productDiscountService.getCache().subscribe(
+      (cached: any[]) =>{
+        this.productDiscounts = cached.filter(productDiscount => productDiscount.restaurantId === this.user?.restaurantBranchId);
+        
+      }
+    )
+  }
+
   favorite(product: Product): void {
     var favorite: Favorite = {
       favoriteId: 1,
@@ -150,38 +166,52 @@ export class UserProductsComponent implements OnInit {
     this.products = JSON.parse(localStorage.getItem(this.productsUrl) || 'null');
     if (this.categoryId) {
       this.products = this.products.filter(data => data.categoryId === this.categoryId);
+      
     }
   }
 
   addToCart(productId: number | undefined) {
-    if (productId) {
-      const deliveryOrderId = this.cartByUser?.deliveryOrderId as number;
-      const orderId = this.orderByUser?.orderId as number;
+    if(this.user){
+      if (productId) {
+        const deliveryOrderId = this.cartByUser?.deliveryOrderId as number;
+        const orderId = this.orderByUser?.orderId as number;
+  
+        this.productService.addToCart(productId, deliveryOrderId, orderId).subscribe({
+          next: (response) => {
+            if (response.message === "User not found") {
+              this.toastService.showTimedAlert('Sai user', '', 'error', 2000);
+            }
+            else if (response.message === "Type not found") {
+              this.toastService.showTimedAlert('Không thể đặt hàng', '', 'error', 2000);
+            }
+            else if (response.message === "MenuItem in cart") {
+              this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
+              this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
+            }
+            else {
+              this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
+              this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
+  
+            }
+          },
+          error: (error) => {
+            this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
+          }
+        });
+      } else {
+        console.error("Product ID is undefined. Cannot add to cart.");
+      }
+    }else{
+      this.toastService.showConfirmAlert('Vui lòng đăng nhập?', '', 'warning')
+      .then((result) => {
+        if (result.isConfirmed) {
+          
+            const modalRef = this.modalService.open(LoginComponent, { size: 'lg' });
+          
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
 
-      this.productService.addToCart(productId, deliveryOrderId, orderId).subscribe({
-        next: (response) => {
-          if (response.message === "User not found") {
-            this.toastService.showTimedAlert('Sai user', '', 'error', 2000);
-          }
-          else if (response.message === "Type not found") {
-            this.toastService.showTimedAlert('Không thể đặt hàng', '', 'error', 2000);
-          }
-          else if (response.message === "MenuItem in cart") {
-            this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
-            this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
-          }
-          else {
-            this.orderDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
-            this.toastService.showTimedAlert('Thêm thành công', '', 'success', 2000);
-
-          }
-        },
-        error: (error) => {
-          this.toastService.showTimedAlert('Thêm thất bại', error, 'error', 2000);
         }
       });
-    } else {
-      console.error("Product ID is undefined. Cannot add to cart.");
     }
   }
 
@@ -208,3 +238,5 @@ export class UserProductsComponent implements OnInit {
   }
 
 }
+
+
