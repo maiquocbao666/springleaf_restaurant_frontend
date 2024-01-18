@@ -6,9 +6,11 @@ import { BillDetail } from 'src/app/interfaces/bill-detail';
 import { Cart } from 'src/app/interfaces/cart';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { BillDetailService } from 'src/app/services/bill-detail.service';
 import { BillService } from 'src/app/services/bill.service';
 import { ProductService } from 'src/app/services/product.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-admin-bills',
@@ -17,7 +19,7 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class AdminBillsComponent {
   bills: Bill[] = [];
-  user: User[] = [];
+  users: User[] = [];
   orders: Cart[] = [];
   billForm: FormGroup;
   billDetails: BillDetail[] = [];
@@ -33,19 +35,25 @@ export class AdminBillsComponent {
   cartsUrl = 'carts';
   productsUrl = 'products';
 
+  user: User | null = null;
 
   constructor(
     private billService: BillService,
     private billDetailService: BillDetailService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private authService: AuthenticationService,
+    private userService: UserService,
 
   ) {
     this.billForm = this.formBuilder.group({
       inventoryId: ['', [Validators.required]],
       ingredientId: ['', [Validators.required]],
       supplierId: ['', [Validators.required]]
+    });
+    this.authService.getUserCache().subscribe((data) => {
+      this.user = data;
     });
   }
 
@@ -71,7 +79,8 @@ export class AdminBillsComponent {
   getBills(): void {
     this.billService.getCache().subscribe(
       (cached: any[]) => {
-        this.bills = cached;
+        this.bills = cached.filter(data => this.userService.getRestaurantIdByUserId(data.userId) === this.user?.restaurantBranchId);
+        console.log(this.userService.getRestaurantIdByUserId(2));
       }
     );
   }
@@ -136,5 +145,6 @@ export class AdminBillsComponent {
     this.keywords = event.target.value;
     this.search();
   }
+  
 
 }

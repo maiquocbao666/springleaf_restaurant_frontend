@@ -78,7 +78,7 @@ export class UserBillHistoriesComponent {
 
 
 
-  
+
 
   getBillDetails(billId: number): void {
     this.billDetailService.getBillDetailsByBillId(billId)
@@ -137,7 +137,7 @@ export class UserBillHistoriesComponent {
   }
 
   keywords = '';
-  changeSearchKeyWords(event: any){
+  changeSearchKeyWords(event: any) {
     this.keywords = event.target.value;
     this.search();
   }

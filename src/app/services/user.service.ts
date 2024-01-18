@@ -113,8 +113,23 @@ export class UserService {
       const cachedUser = this.usersCache.find(user => user.userId === id);
   
       // Return either the fullName or undefined
-      alert("bu");
+      //alert("bu");
       return cachedUser?.fullName;
+    }
+  
+    // Return undefined if usersCache is not available
+    return undefined;
+  }
+
+  getRestaurantIdByUserId(id: number): number | undefined {
+    // Check if usersCache is available
+    console.log(this.usersCache);
+    if (this.usersCache != null) {
+      const cachedUser = this.usersCache.find(user => user.userId === id);
+      //alert(cachedUser);
+  
+      // Return either the restaurantId or undefined
+      return cachedUser?.restaurantBranchId;
     }
   
     // Return undefined if usersCache is not available

@@ -101,7 +101,7 @@ export class UserReservationHistoriesComponent {
   getReservations() {
     this.reservationService.getCache().subscribe(
       data => {
-        this.reservations = data;
+        this.reservations = data.filter(data => data.userId === this.user?.userId);
       }
     );
   }
@@ -309,7 +309,7 @@ export class UserReservationHistoriesComponent {
       this.reservationService.searchByKeywords(this.keywords, this.fieldName).subscribe(
         (data) => {
           this.isSearching = true;
-          this.reservations = data;
+          this.thisUserReservations = data.filter(data => data.userId === this.user?.userId);
         }
       );
     }

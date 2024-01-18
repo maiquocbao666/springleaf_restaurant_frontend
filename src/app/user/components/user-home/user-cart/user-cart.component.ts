@@ -16,6 +16,8 @@ import { District } from 'src/app/interfaces/address/District';
 import { Ward } from 'src/app/interfaces/address/Ward';
 import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserBillHistoriesComponent } from '../user-bill-histories/user-bill-histories.component';
 
 @Component({
   selector: 'app-user-cart',
@@ -57,6 +59,8 @@ export class UserCartComponent implements OnInit {
     private authService: AuthenticationService,
     private http: HttpClient,
     private router: Router,
+    private modalService: NgbModal,
+    private authenticationService: AuthenticationService,
   ) {
     const provincesString = localStorage.getItem('Provinces');
     if (provincesString) {
@@ -424,6 +428,15 @@ export class UserCartComponent implements OnInit {
         reject(error); // Từ chối Promise nếu có lỗi
       });
     });
+  }
+
+  openUserBillHistoriesModal() {
+    if (!this.authenticationService.getUserCache()) {
+      //this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
+    } else {
+      const modalRef = this.modalService.open(UserBillHistoriesComponent, { size: 'xl', centered: true, scrollable: false });
+      modalRef.componentInstance.userId = this.user?.userId;
+    }
   }
 
 }
