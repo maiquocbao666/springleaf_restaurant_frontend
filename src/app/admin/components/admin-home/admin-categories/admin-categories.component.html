@@ -120,6 +120,11 @@
                     Thêm loại
                 </button>
             </p>
+            <p class="float-end">
+                <input type="text" (input)="changeSearchKeyWords($event)" class="input"
+                    placeholder="Nhập thông tin cần tìm..">
+                <i class="fa-solid fa-magnifying-glass" style="margin-right: 5px;"></i>
+            </p>
             <div class="collapse pb-3" id="collapseExample">
                 <div class="card card-body">
                     <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
@@ -170,35 +175,39 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Tên loại 
+                                        Tên loại
                                     </th>
                                     <th>
-                                        Mô tả 
+                                        Mô tả
                                     </th>
                                     <th>
-                                         Đang bán
+                                        Đang bán
                                     </th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>Chức năng</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let category of categories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+                                <tr
+                                    *ngFor="let category of categories | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
                                     <td scope="row">
                                         {{category.name}}
                                     </td>
                                     <td>{{category.description}}</td>
                                     <td>
                                         <div style="padding: 10px 15px; align-items: center;"
-                                         [ngClass]="category.active ? 'badge badge-warning' : 'badge badge-danger'">
+                                            [ngClass]="category.active ? 'badge badge-warning' : 'badge badge-danger'">
                                             {{ category.active ? 'Có' : 'Không' }}
                                         </div>
                                     </td>
-                                    <td style="text-align: right;">
-                                        <i class="fa fa fa-wrench edit-bu" (click)="openCategoryDetailModal(category)"></i>
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <i class="fa-solid fa-trash delete-bu" (click)="deleteCategory(category)"></i>
+                                    <td class="text-center">
+                                        <button id="PopoverCustomT-1"
+                                            class="btn waves-effect waves-light btn-info btn-outline-info mr-2 align-items-center"
+                                            (click)="openCategoryDetailModal(category)"><i
+                                                class="fa-solid fa-pen-to-square"></i></button>
+                                        <button id="PopoverCustomT-1"
+                                            class="btn waves-effect waves-light btn-danger btn-outline-danger"
+                                            (click)="deleteCategory(category)"><i
+                                                class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>

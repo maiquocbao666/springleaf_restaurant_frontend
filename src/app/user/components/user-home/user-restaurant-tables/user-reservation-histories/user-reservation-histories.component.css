@@ -9,6 +9,7 @@ body {
     background-color: #f6f9fa;
     height: 100%;
 }
+
 input[type="number"] {
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
@@ -24,11 +25,14 @@ input[type="number"] {
     width: 100%;
     border-collapse: collapse;
 }
+
 .table-container {
     overflow-x: auto;
-    max-width: 100%; /* Chắc chắn rằng div không vượt quá kích thước của phần hiển thị */
+    max-width: 100%;
+    /* Chắc chắn rằng div không vượt quá kích thước của phần hiển thị */
     height: 200px;
-  }
+}
+
 .card {
     position: relative;
     display: -webkit-box;
@@ -136,4 +140,31 @@ input[type="number"] {
     color: #fff;
 }
 
+.input {
+    line-height: 28px;
+    border: 2px solid transparent;
+    border-bottom-color: #777;
+    padding: .2rem 0;
+    outline: none;
+    background-color: transparent;
+    color: #0d0c22;
+    transition: .3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
 
+.input:focus,
+input:hover {
+    outline: none;
+    padding: .2rem 1rem;
+    border-radius: 1rem;
+    border-color: #7a9cc6;
+    margin-right: 5px;
+}
+
+.input::placeholder {
+    color: #777;
+}
+
+.input:focus::placeholder {
+    opacity: 0;
+    transition: opacity .3s;
+}

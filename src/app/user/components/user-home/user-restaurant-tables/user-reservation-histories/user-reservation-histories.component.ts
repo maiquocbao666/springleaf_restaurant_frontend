@@ -1,8 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, map } from 'rxjs';
+import { ChooseMenuItemComponent } from 'src/app/components/choose-menuItem/choose-menuitem.component';
 import { CartDetail } from 'src/app/interfaces/cart-detail';
-import { Order } from 'src/app/interfaces/order';
 import { Product } from 'src/app/interfaces/product';
 import { Reservation } from 'src/app/interfaces/reservation';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
@@ -16,7 +15,6 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 import { EditSeatingComponent } from './edit-seating/edit-seating.component';
-import { ChooseMenuItemComponent } from 'src/app/components/choose-menuItem/choose-menuitem.component';
 
 @Component({
   selector: 'app-user-reservation-histories',
@@ -35,7 +33,10 @@ export class UserReservationHistoriesComponent {
   selectedUserReservation: any;
   show: boolean = false;
   paymentStatus: string | undefined;
-
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 5;
+  tableSizes: any = [5, 10, 15, 20];
   restaurantTables: RestaurantTable[] = [];
   reservations: Reservation[] = [];
 
@@ -56,7 +57,14 @@ export class UserReservationHistoriesComponent {
       }
     );
   }
+  onTableDataChange(event: any) {
+    this.page = event;
+  }
 
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+  }
   ngOnInit(): void {
     this.reservationService.getReservationsByUserId(this.user?.userId!).subscribe(
       cached => {

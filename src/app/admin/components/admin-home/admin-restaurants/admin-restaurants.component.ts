@@ -39,7 +39,7 @@ export class AdminRestaurantsComponent {
       address: new FormControl('', Validators.required),
       phone: new FormControl('', [Validators.required, Validators.pattern('^\\d{10,11}$')]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      statusId: new FormControl('',[Validators.required]),
+      // statusId: new FormControl('',[Validators.required]),
     });
 
   }

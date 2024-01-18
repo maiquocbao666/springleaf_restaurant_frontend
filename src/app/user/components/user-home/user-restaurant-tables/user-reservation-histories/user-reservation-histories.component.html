@@ -1,123 +1,78 @@
-<div class="container">
-  <div class="modal-header">
-    <h3 class="col-lg-7 mb-0">Lịch sử đặt bàn của {{ user?.fullName }}</h3>
-    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <!-- <input class="col-lg-5 input-search" formControlName="searchKeyWord" placeholder="Search... yyyy-MM-dd HH:mm:ss"/> -->
+<div class="modal-header">
+  <h4 class="modal-title">Lịch sử đặt bàn của {{ user?.fullName }}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
   <p class="float-end">
+
     <select (change)="changeFieldName($event)" class="form-select">
-        <option value="">Bộ lọc</option>
-        <!-- <option value="reservationId">Mã đặt bàn</option> -->
-        <option value="restaurantTableId">Mã bàn</option>
-        <!-- <option value="userId">Mã người dùng</option> -->
-        <option value="reservationDate">Thời gian tới</option>
-        <!-- <option value="outTime">Thời gian đi</option> -->
-        <option value="reservationStatusName">Trạng thái</option>
-        <option value="numberOfGuests">Số lượng khách hàng</option>
-        <!-- <option value="username">Tên khách hàng</option>
-        <option value="userPhone">Số điện thoại</option> -->
+      <option value="">Bộ lọc <i class="fa-solid fa-filter"></i></option>
+      <!-- <option value="reservationId">Mã đặt bàn</option> -->
+      <option value="restaurantTableId">Mã bàn</option>
+      <!-- <option value="userId">Mã người dùng</option> -->
+      <option value="reservationDate">Thời gian tới</option>
+      <!-- <option value="outTime">Thời gian đi</option> -->
+      <option value="reservationStatusName">Trạng thái</option>
+      <option value="numberOfGuests">Số lượng khách hàng</option>
+      <!-- <option value="username">Tên khách hàng</option>
+          <option value="userPhone">Số điện thoại</option> -->
     </select>
-</p>
+  </p>
   <p class="float-end">
     <input type="text" placeholder="" (input)="changeSearchKeyWords($event)" placeholder="Nhập thông tin cần tìm..."
       class="input" />
+    <i class="fa-solid fa-magnifying-glass" style="margin-right: 5px;"></i>
   </p>
-  <div class="modal-content">
-    <div class="modal-body">
-      <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-        <thead>
-          <tr>
-            <th class="text-center">Trạng thái</th>
-            <!-- <th class="text-center">Id đặt bàn</th> -->
-            <th class="text-center">Tên bàn</th>
-            <th class="text-center">Ngày tới</th>
-            <th class="text-center">Giờ tới</th>
-            <!-- <th class="text-center">Giờ đi</th> -->
-            <th class="text-center">Số lượng khách hàng</th>
-            <th class="text-center">Chức năng</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let thisUserReservation of thisUserReservations">
-            <td class="text-center">
-              <div [ngClass]="getClassForStatus(thisUserReservation.reservationStatusName)">
-                {{ thisUserReservation.reservationStatusName }}
-              </div>
-            </td>
-            <!-- <td class="text-center">{{ thisUserReservation.reservationId }}</td> -->
-            <td class="text-center">{{ findTableNameByTableId(thisUserReservation.restaurantTableId) }}</td>
-            <td class="text-center">{{ thisUserReservation.reservationDate | date:'yyyy-MM-dd' }}</td>
-            <td class="text-center">{{ thisUserReservation.reservationDate | date:'HH:mm:ss' }}</td>
-            <!-- <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td> -->
-            <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
-            <!-- <td class="text-center">
-              <select class="form-control" [(ngModel)]="thisUserReservation.numberOfGuests">
-                <option *ngFor="let seatingCapacity of getRestaurantTables(thisUserReservation.restaurantTableId)" [value]="seatingCapacity">
-                  {{ seatingCapacity }}
-                </option>
-              </select>
-            </td> -->
-            <td>
-              <button class="btn btn-sm btn-primary" (click)="handleButtonClick(thisUserReservation.reservationId)">Đặt
-                món</button>
-            </td>
-            <td><button class="btn btn-sm btn-primary" (click)="handleCheckout(thisUserReservation.reservationId)">Thanh
-                toán</button></td>
-            <!-- <td><button class="btn btn-sm btn-primary"
-                (click)="editSeatingCapacity(thisUserReservation.restaurantTableId, thisUserReservation.reservationId!)">Sửa
-                số người</button></td> -->
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- <div class="modal fade modal-dialog modal-dialog-scrollable " id="exampleModal" tabindex="-1"
-    aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Lịch sử đặt bàn</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-            <thead>
-              <tr>
-                <th class="text-center">Trạng thái</th>
-                <th class="text-center">Id đặt bàn</th>
-                <th class="text-center">Ngày tới</th>
-                <th class="text-center">Giờ tới</th>
-                <th class="text-center">Giờ đi</th>
-                <th class="text-center">Số lượng khách hàng</th>
-                <th class="text-center">Chức năng</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let thisUserReservation of thisUserReservations">
-                <td class="text-center">
-                  <div [ngClass]="getClassForStatus(thisUserReservation.reservationStatusName)">
-                    {{ thisUserReservation.reservationStatusName }}
-                  </div>
-                </td>
-                <td class="text-center">{{ thisUserReservation.reservationId }}</td>
-                <td class="text-center">{{ thisUserReservation.reservationDate | date: 'dd-MM-yyyy' }}</td>
-                <td class="text-center">{{ thisUserReservation.reservationDate | date: 'HH-mm-ss' }}</td>
-                <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td>
-                <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
-                <td>
-                  <button class="btn btn-sm btn-primary">Đặt món</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary">Lưu</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
+  <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+    <thead>
+      <tr>
+        <th class="text-center">Trạng thái</th>
+        <!-- <th class="text-center">Id đặt bàn</th> -->
+        <th class="text-center">Tên bàn</th>
+        <th class="text-center">Ngày tới</th>
+        <th class="text-center">Giờ tới</th>
+        <!-- <th class="text-center">Giờ đi</th> -->
+        <th class="text-center">Số lượng khách hàng</th>
+        <th class="text-center">Chức năng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let thisUserReservation of thisUserReservations  | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
+        <td class="text-center">
+          <div [ngClass]="getClassForStatus(thisUserReservation.reservationStatusName)">
+            {{ thisUserReservation.reservationStatusName }}
+          </div>
+        </td>
+        <!-- <td class="text-center">{{ thisUserReservation.reservationId }}</td> -->
+        <td class="text-center">{{ findTableNameByTableId(thisUserReservation.restaurantTableId) }}</td>
+        <td class="text-center">{{ thisUserReservation.reservationDate | date:'yyyy-MM-dd' }}</td>
+        <td class="text-center">{{ thisUserReservation.reservationDate | date:'HH:mm:ss' }}</td>
+        <!-- <td class="text-center">{{ thisUserReservation.outTime | date: 'HH:mm:ss' }}</td> -->
+        <td class="text-center">{{ thisUserReservation.numberOfGuests }}</td>
+        <!-- <td class="text-center">
+            <select class="form-control" [(ngModel)]="thisUserReservation.numberOfGuests">
+              <option *ngFor="let seatingCapacity of getRestaurantTables(thisUserReservation.restaurantTableId)" [value]="seatingCapacity">
+                {{ seatingCapacity }}
+              </option>
+            </select>
+          </td> -->
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="handleButtonClick(thisUserReservation.reservationId)">Đặt
+            món</button>
+        </td>
+        <td><button class="btn btn-sm btn-primary" (click)="handleCheckout(thisUserReservation.reservationId)">Thanh
+            toán</button></td>
+        <!-- <td><button class="btn btn-sm btn-primary"
+              (click)="editSeatingCapacity(thisUserReservation.restaurantTableId, thisUserReservation.reservationId!)">Sửa
+              số người</button></td> -->
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+      (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+</div>

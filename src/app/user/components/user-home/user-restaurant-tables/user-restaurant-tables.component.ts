@@ -6,6 +6,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantTable } from 'src/app/interfaces/restaurant-table';
 import { TableStatus } from 'src/app/interfaces/table-status';
 import { TableType } from 'src/app/interfaces/table-type';
+import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { RestaurantTableService } from 'src/app/services/restaurant-table.service';
@@ -16,7 +17,6 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserMergeTablesComponent } from './user-merge-tables/user-merge-tables.component';
 import { UserReservationHistoriesComponent } from './user-reservation-histories/user-reservation-histories.component';
 import { UserRestaurantTableInfomationComponent } from './user-restaurant-table-infomation/user-restaurant-table-infomation.component';
-import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-user-table',
@@ -32,13 +32,18 @@ export class UserRestaurantTablesComponent {
   restaurants: Restaurant[] = [];
   user: User | null = null;
 
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 7;
+  tableSizes: any = [5, 10, 15, 20];
+
   restaurantId: number | null = null;
 
   constructor(
-    
+
     private modalService: NgbModal,
     private modalService2: NgbModal,
-    
+
     private restaurantTableService: RestaurantTableService,
     private tableStatusService: TableStatusService,
     private authenticationService: AuthenticationService,
@@ -113,7 +118,7 @@ export class UserRestaurantTablesComponent {
     if (this.authenticationService.getUserCache() === null) {
       this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
-      const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'xl', scrollable: true, centered: false });
+      const modalRef = this.modalService.open(UserRestaurantTableInfomationComponent, { size: 'xl'});
       modalRef.componentInstance.restaurantTable = restaurantTable;
 
       // Subscribe to the emitted event
@@ -127,7 +132,7 @@ export class UserRestaurantTablesComponent {
     if (!this.authenticationService.getUserCache()) {
       this.sweetAlertService.showTimedAlert('Không thể mở!', 'Mời đăng nhập', 'error', 3000);
     } else {
-      const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'xl', centered: true, scrollable: false });
+      const modalRef = this.modalService2.open(UserReservationHistoriesComponent, { size: 'xl' });
       modalRef.componentInstance.userId = this.user?.userId;
     }
   }
