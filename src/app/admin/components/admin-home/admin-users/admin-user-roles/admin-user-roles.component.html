@@ -1,6 +1,3 @@
-
-
-
 <div class="main-body">
     <div class="page-wrapper">
         <div class="page-header">
@@ -13,7 +10,7 @@
                     data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                     aria-controls="collapseExample">
                     <i class="fa fa-user"></i>
-                    Thêm người dùng
+                    Thêm quyền người dùng
                 </button>
             </p>
             <!-- HTML file -->
@@ -26,78 +23,43 @@
             </p>
             <div class="collapse pb-3" id="collapseExample">
                 <div class="card card-body">
-                    <!-- <form [formGroup]="userForm">
+                    <form [formGroup]="userRoleForm" (ngSubmit) = "updateUserRole()">
                         <div class="row g-3">
-                            <div class="col-md-4">
-                                <label for="exampleInputPassword1" class="form-label">Họ và tên:<span
+                            <div class="col-md-6">
+                                <label for="userId" class="form-label">Người dùng<span
                                         style="color: red;">(*)</span></label>
-                                <input type="text" formControlName="fullName" class="form-control"
-                                    placeholder="Nhập họ và tên..." [attr.disabled]="compareInputWithCodeCache">
-                                <div *ngIf="userForm.get('fullName')?.invalid && (userForm.get('fullName')?.touched || isSubmitted)"
-                                    class="text-danger"> Không bỏ trống họ và tên.
+                                <select class="form-select" formControlName="userId" id="userId">
+                                    <option value="">--Chọn người dùng-- </option>
+                                    <option *ngFor="let user of users" [value]="user.userId"> {{
+                                        user.fullName }}
+                                    </option>
+                                </select>
+                                <div *ngIf="userRoleForm.get('userId')?.invalid && (userRoleForm.get('userId')?.touched || isSubmitted)"
+                                    class="text-danger">
+                                    Người dùng là bắt buộc
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <label for="username" class="form-label">Tên đăng nhập<span
-                                        style="color: red;">(*)</span></label>
-                                <input type="text" formControlName="username" class="form-control" id="username"
-                                    placeholder="Nhập tên đăng nhập..." [attr.disabled]="compareInputWithCodeCache">
-                                <div *ngIf="userForm.get('username')?.invalid && (userForm.get('username')?.touched || isSubmitted)"
+                            <div class="col-md-6">
+                                <label for="roleId" class="form-label">Quyền<span style="color: red;">(*)</span></label>
+                                <select class="form-select" formControlName="roleId" id="roleId">
+                                    <option value="">--Chọn người dùng-- </option>
+                                    <option *ngFor="let role of roles" [value]="role.roleId"> {{
+                                        role.roleName }}
+                                    </option>
+                                </select>
+                                <div *ngIf="userRoleForm.get('roleId')?.invalid && (userRoleForm.get('roleId')?.touched || isSubmitted)"
                                     class="text-danger">
-                                    Giá là bắt buộc.
+                                    Quyền là bắt buộc
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <label for="email" class="form-label">Emai<span style="color: red;">(*)</span></label>
-                                <input type="text" formControlName="email" class="form-control" id="email"
-                                    placeholder="Nhập email..." [attr.disabled]="compareInputWithCodeCache">
-                                <div *ngIf="userForm.get('email')?.invalid && (userForm.get('email')?.touched || isSubmitted)"
-                                    class="text-danger">
-                                    Emai là bắt buộc.
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="phone" class="form-label">Số điện thoại<span
-                                        style="color: red;">(*)</span></label>
-                                <input type="text" formControlName="phone" class="form-control" id="phone"
-                                    placeholder="Nhập số điện thoại..." [attr.disabled]="compareInputWithCodeCache">
-                                <div *ngIf="userForm.get('phone')?.invalid && (userForm.get('phone')?.touched || isSubmitted)"
-                                    class="text-danger">
-                                    Số điện thoại là bắt buộc.
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="password" class="form-label">Mật khẩu<span
-                                        style="color: red;">(*)</span></label>
-                                <input type="password" formControlName="password" class="form-control" id="password"
-                                    placeholder="Nhập mật khẩu..." [attr.disabled]="compareInputWithCodeCache">
-                                <div *ngIf="userForm.get('password')?.invalid && (userForm.get('password')?.touched || isSubmitted)"
-                                    class="text-danger">
-                                    Mật khẩu là bắt buộc.
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="repassword" class="form-label">Nhập lại mật khẩu<span
-                                        style="color: red;">(*)</span></label>
-                                <input type="password" formControlName="repassword" class="form-control" id="repassword"
-                                    placeholder="Nhập lại mật khẩu..." [attr.disabled]="compareInputWithCodeCache">
-                                <div *ngIf="userForm.get('repassword')?.invalid && (userForm.get('repassword')?.touched || isSubmitted)"
-                                    class="text-danger">
-                                    Mật khẩu là bắt buộc.
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="address" class="form-label">Địa chỉ<span
-                                        style="color: red;">(*)</span></label>
-                                <input type="text" formControlName="address" class="form-control" id="address"
-                                    placeholder="Nhập mật khẩu..." [attr.disabled]="compareInputWithCodeCache">
-                                <div *ngIf="userForm.get('address')?.invalid && (userForm.get('address')?.touched || isSubmitted)"
-                                    class="text-danger">
-                                    Mật khẩu là bắt buộc.
-                                </div>
+                            <div class="submit-btn">
+                                <button class="btn waves-effect waves-light btn-success btn-outline-success pb-2">
+                                    <i class="fa fa-check"></i>
+                                    Thêm
+                                </button>
                             </div>
                         </div>
-                    </form> -->
+                    </form>
                 </div>
             </div>
         </div>
@@ -116,24 +78,23 @@
                                     <th>Ảnh</th>
                                     <th>Họ tên</th>
                                     <th>Tài khoản</th>
-                                    <th>SĐT</th>
-                                    <th>Email</th>
-                                    <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr
+                                    *ngFor="let user of users | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
                                     <td scope="row">
-                                        
+                                        <img class="d-flex align-self-center img-radius" alt="#"
+                                            [src]="'http://localhost:8080/public/getImage/' + user.image"
+                                            style="width: 50px;">
                                     </td>
-                                    <td ></td>
-                                    <td ></td>
-                                    <td ></td>
-                                    <td ></td>
-                                    
+                                    <td style="text-align: center;">{{user.fullName}}</td>
+                                    <td style="text-align: center;">{{user.username}}</td>
                                     <td style="text-align: center;">
-                                        <i class="fa fa fa-wrench"></i>
+                                        <i class="fa fa fa-wrench" (click)="openProductDetailModal(user)"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                                            aria-expanded="false" aria-controls="collapseExample"></i>
                                     </td>
                                 </tr>
                             </tbody>
