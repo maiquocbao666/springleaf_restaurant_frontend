@@ -10,28 +10,29 @@ input[type="number"] {
   border-radius: 4px;
 }
 
-*{
+* {
   margin: 0px;
   padding: 0px;
 }
 
-.modal-header{
+.modal-header {
   height: 60px;
   padding: 0px 10px;
 }
 
-.close span{
+.close span {
   transition: transform 0.3s ease-in-out;
 }
 
-.close span:hover{
+.close span:hover {
   color: red;
   transform: scale(1.1);
 }
 
 .row-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
   width: 100%;
   height: auto;
   margin: 0px;
@@ -55,16 +56,16 @@ input[type="number"] {
   margin: 10px 0px;
 }
 
-.cable-config{
+.cable-config {
   margin-bottom: 10px;
 }
 
-.cable-config h6{
+.cable-config h6 {
   color: orange;
   font-size: 20px;
 }
 
-.cart-btn{
+.cart-btn {
   border: 1px solid green;
   color: green;
   border-radius: 50px;
@@ -73,7 +74,7 @@ input[type="number"] {
   text-decoration: none;
 }
 
-.cart-btn:hover{
+.cart-btn:hover {
   border: 1px solid green;
   border-radius: 50px;
   padding: 10px 20px;
@@ -81,6 +82,16 @@ input[type="number"] {
   background-color: green;
   font-size: 18px;
   text-decoration: none;
+}
+
+.image-box {
+  overflow: hidden;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* .cart-btn:hover{
@@ -117,18 +128,18 @@ input[type="number"] {
 
 } */
 
-.like-icon{
+.like-icon {
   margin-left: 10px;
   padding-top: 15px;
   font-size: 30px;
 }
 
-.like-icon:hover{
+.like-icon:hover {
   color: red;
   cursor: pointer;
 }
 
-.product-description{
+.product-description {
   font-family: "Helvetica Neue", Helvetica, Arial, 文泉驛正黑, "WenQuanYi Zen Hei", "Hiragino Sans GB", "儷黑 Pro", "LiHei Pro", "Heiti TC", 微軟正黑體, "Microsoft JhengHei UI", "Microsoft JhengHei", sans-serif;
   color: rgba(0, 0, 0, 0.8);
   display: -webkit-box;
@@ -139,11 +150,11 @@ input[type="number"] {
 
 /* footer */
 
-.footer-title{
+.footer-title {
   padding: 10px 10px;
 }
 
-.row-footer{
+.row-footer {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -152,7 +163,7 @@ input[type="number"] {
   background-color: #f0f0f0;
 }
 
-.footer-item{
+.footer-item {
   flex-basis: calc(30%);
   box-sizing: border-box;
   text-align: left;
@@ -162,11 +173,11 @@ input[type="number"] {
   border: 1px solid #ccc;
 }
 
-.footer-item img{
+.footer-item img {
   max-height: 150px;
 }
 
-.footer-no-product{
+.footer-no-product {
   border: 1px solid #ccc;
   height: 100px;
   padding-top: 30px;
@@ -177,5 +188,5 @@ input[type="number"] {
 
 .wow,
 .animated {
-    animation-duration: 1s !important;
+  animation-duration: 1s !important;
 }

@@ -5,7 +5,7 @@
 </div>
 <div class="bill-container">
     <div class="bill-header">
-        <div class="row-item image"><img [src]="'http://localhost:8080/public/getImage/vnpay.png'"
+        <div class="row-item image" *ngIf="selected!== 'CartPaymentCOD'"><img [src]="'http://localhost:8080/public/getImage/vnpay.png'"
             #imagePreview width="80px" class="file-preview" /></div>
         <h4>Thanh toán thành công</h4>
         <div class="bill-body">
@@ -16,8 +16,9 @@
                         <b>{{billInfo}}</b>
                     </div>
                     <div>
-                        <b>Tổng tiền: </b> {{formatAmount(billPrice/100)}}
+                        <b>Tổng tiền: </b> {{ selected !== 'CartPaymentCOD' ? formatAmount(billPrice/100) : formatAmount(billPrice) }}
                     </div>
+                    
                     <div>
                         <b>Thời gian thanh toán: </b>{{getCurrentTimeFormatted()}}
                     </div>
@@ -36,7 +37,6 @@
         <div class="bill-footer">
             <div>
                 <h6>Cám ơn quý khách</h6>
-                <button>Quay về trang chủ</button>
             </div>
         </div>
     </div>

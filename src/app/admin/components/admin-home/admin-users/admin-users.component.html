@@ -223,7 +223,7 @@
                         <div class="submit-btn">
                             <button class="btn waves-effect waves-light btn-success btn-outline-success pb-2">
                                 <i class="fa fa-check"></i>
-                                Thêm quyền
+                                Thêm
                             </button>
                         </div>
                     </form>
@@ -247,7 +247,7 @@
                                     <th>Tài khoản</th>
                                     <th>SĐT</th>
                                     <th>Email</th>
-                                    <th>Địa chỉ</th>
+                                    <!-- <th>Địa chỉ</th> -->
                                     <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
@@ -257,17 +257,17 @@
                                     *ngFor="let user of users | paginate: {itemsPerPage: tableSize, currentPage: page, totalItems: count}; let i = index">
                                     <td scope="row">
                                         <img class="d-flex align-self-center img-radius" alt="#"
-                                            [src]="'http://localhost:8080/public/getImage/' + user.image"
+                                        [src]="'http://localhost:8080/public/getImage/' + user.image"
                                             style="width: 50px;">
                                     </td>
                                     <td style="text-align: center;">{{user.fullName}}</td>
                                     <td style="text-align: center;">{{user.username}}</td>
                                     <td style="text-align: center;">{{user.phone}}</td>
                                     <td style="text-align: center;">{{user.email}}</td>
-                                    <td style="text-align: center;" *ngIf="user.address !== '' && user.address !== null">{{user.address}}</td>
-                                    <td style="text-align: center;" *ngIf="user.address === '' || user.address === null">
-                                        Trống
-                                    </td>
+                                    <!-- <td style="text-align: center;" *ngIf="user.address !== '' && user.address !== null">{{user.address}}</td>
+                                    <td style="text-align: center;" *ngIf="user.address === '' || user.address === null"> -->
+                                        <!-- Trống
+                                    </td> -->
                                     <td style="text-align: center;">
                                         <div style="padding: 10px 15px;"
                                             [ngClass]="user.status ? 'badge badge-success' : 'badge badge-danger'">

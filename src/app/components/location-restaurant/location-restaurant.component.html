@@ -1,23 +1,39 @@
-<div class="container no-margin-padding">
+
+<div class="location-container">
+    <div class="logo">
+        <a class="navbar-brand" routerLink="/user/index">
+            <h3 style="font-family: 'Dancing Script', cursive;"><i class="fa-solid fa-seedling"></i> SPRINGLEAF</h3>
+        </a>
+    </div>
     <div class="location">
-        
         <form class="form-location" [formGroup]="chooseRestaurantFrom" (ngSubmit)="onSubmit()">
             <h3>Chọn nhà hàng</h3>
             <div class="select-column">
-                <select formControlName="selectedRestaurant" class="select" class="form-control mb-3">
+                <select formControlName="selectedRestaurant" class="select" class="form-control mb-3"
+                    (change)="getProductDiscounts()">
                     <option [ngValue]="null">Vui lòng chọn nhà hàng</option>
-
                     <option [disabled]="restaurant.statusId === 'Không hoạt động'"
                         *ngFor="let restaurant of restaurants" [ngValue]="restaurant.restaurantId">
                         {{ restaurant.restaurantName }} {{ restaurant.statusId === 'Không hoạt động' ? '(Đang bảo trì)'
                         : ''}}
+                    </option>
                 </select>
                 <div *ngIf="chooseRestaurantFrom.get('selectedRestaurant')?.invalid && (chooseRestaurantFrom.get('selectedRestaurant')?.touched )"
                     class="text-danger">
                     Vui lòng chọn một chi nhánh
                 </div>
             </div>
-            <button type="submit">Đồng ý</button>
+            <button class="btn waves-effect waves-light btn-success" type="submit"><i class="fa fa-check"></i>Đồng ý</button>
         </form>
     </div>
+    <div class="pro" *ngIf="discountInfo.length > 0">
+        <h5>Các sản phẩm đang được giảm giá</h5>
+        <div class="discount-product" >
+            <div class="product-info" *ngFor="let discount of discountInfo">
+                <img [src]="'http://localhost:8080/public/getImage/' + discount.imageUrl" #imagePreview
+                   class="file-preview" />
+            </div>
+        </div>
+    </div>
+    
 </div>

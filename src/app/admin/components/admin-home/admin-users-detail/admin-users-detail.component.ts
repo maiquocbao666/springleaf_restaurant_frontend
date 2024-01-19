@@ -2,6 +2,8 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/interfaces/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -17,23 +19,25 @@ export class AdminUsersDetailComponent {
   userForm: FormGroup;
   fieldNames: string[] = [];
   isSubmitted = false;
+  errorMessage: string | undefined;
 
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
     public activeModal: NgbActiveModal,
+    private authService : AuthenticationService,
+    private sweetAlertService: ToastService,
   ) {
     this.userForm = this.formBuilder.group({
-      userId: ['', [Validators.required]],
-      fullName: ['', [Validators.required]],
-      username: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
-      password: ['', [Validators.required]],
-      image: ['', [Validators.required]],
+      //userId: ['', [Validators.required]],
+      fullName: [, [Validators.required]],
+      username: [, [Validators.required]],
+      email: [, [Validators.required]],
+      phone: [, [Validators.required]],
+      image: [, [Validators.required]],
       status: [, [Validators.required]],
       restaurantBranchId: [, [Validators.required]],
-      address: [, [Validators.required]],
+      //address: [, [Validators.required]],
     });
   }
 
@@ -44,7 +48,7 @@ export class AdminUsersDetailComponent {
   setValue() {
     if (this.user) {
       this.userForm.patchValue({
-        menuItemId: this.user.userId,
+        userId: this.user.userId,
         fullName: this.user.fullName,
         username: this.user.username,
         phone: this.user.phone,
@@ -82,6 +86,8 @@ export class AdminUsersDetailComponent {
     }
   }
 
+  
+
 
   selectedFileName: string | undefined;
   selectedFile: File | undefined;
@@ -110,6 +116,48 @@ export class AdminUsersDetailComponent {
       console.log('Giá trị của imageUrlValue:', this.imageUrlValue);
     } else {
       this.imageUrlValue = '';
+    }
+  }
+
+  upperCase(str: string): string {
+    return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
+  register() {
+    if (this.userForm.valid) {
+      const userUpdate: User = {
+        userId: this.user?.userId,
+        fullName: this.userForm.get('fullName')?.value,
+        username: this.userForm.get('username')?.value,
+        password: this.user?.password!,
+        email: this.userForm.get('email')?.value,
+        address: this.user?.address!,
+        phone: this.userForm.get('phone')?.value,
+        restaurantBranchId: this.userForm.get('restaurantId')?.value,
+        image: this.selectedFileName || this.userForm.get('image')?.value,
+        status: this.user?.status!,
+      };
+
+      this.userService.updateProfile(userUpdate)
+        .subscribe(
+          (response) => {
+            if (response.error === 'Email cannot update') {
+              this.sweetAlertService.showTimedAlert('Email đã được sử dụng', '', 'error', 1500);
+            }
+            else if (response.error === 'Phone cannot update') {
+              this.sweetAlertService.showTimedAlert('Số điện thoại đã được sử dụng', '', 'error', 1500);
+            }
+            else if(response.user){
+              // Update user cache and handle success
+              this.authService.setUserCache(response.user);
+              this.onUpload();
+              this.sweetAlertService.showTimedAlert('Cập nhật thành công', '', 'success', 1500);
+            }
+          },
+          (error) => {
+            console.error('Error updating profile:', error);
+          }
+        );
     }
   }
 

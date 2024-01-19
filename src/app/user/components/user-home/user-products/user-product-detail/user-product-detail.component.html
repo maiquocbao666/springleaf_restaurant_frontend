@@ -40,8 +40,10 @@
     </div>
     <div class="row-footer" *ngIf="productsWithCategory.length > 0">
         <div class="footer-item" *ngFor="let pro of productsWithCategory.slice(0, 3)">
-            <img [src]="'http://localhost:8080/public/getImage/' + pro?.imageUrl" #imagePreview
+            <div class="image-box">
+                <img [src]="'http://localhost:8080/public/getImage/' + pro?.imageUrl" #imagePreview
                 class="file-preview img-fluid" />
+            </div>
             <div class="footer-product-name">
                 <b>{{pro?.name}}</b>
             </div>

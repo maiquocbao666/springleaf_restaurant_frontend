@@ -9,6 +9,9 @@ import { UserService } from 'src/app/services/user.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Discount } from 'src/app/interfaces/discount';
 import { Product } from 'src/app/interfaces/product';
+import { DiscountProductInfo } from 'src/app/user/components/user-home/user-discounts/user-discounts.component';
+import { ProductDiscount } from 'src/app/interfaces/product-discounts';
+import { ProductDiscountService } from 'src/app/services/product-discount.service';
 
 @Component({
   selector: 'app-location-restaurant',
@@ -18,8 +21,10 @@ import { Product } from 'src/app/interfaces/product';
 export class LocationRestaurantComponent {
 
   restaurants: Restaurant[] | null = null;
-  discounts : Discount[] = [];
-  products : Product[] = [];
+  discounts: Discount[] = [];
+  products: Product[] = [];
+  productDiscounts: ProductDiscount[] = [];
+  discountInfo: DiscountProductInfo[] = []
 
   chooseRestaurantFrom: FormGroup;
   user: User | null = null;
@@ -30,6 +35,7 @@ export class LocationRestaurantComponent {
     private formBuilder: FormBuilder,
     private authService: AuthenticationService,
     public activeModal: NgbActiveModal,
+    private productDiscountService: ProductDiscountService
   ) {
     this.chooseRestaurantFrom = this.formBuilder.group({
       selectedRestaurant: [null, Validators.required],
@@ -55,7 +61,7 @@ export class LocationRestaurantComponent {
     } else {
       console.error('No products found in local storage or the value is null.');
     }
-    console.log(this.products! , this.discounts!)
+    console.log(this.products!, this.discounts!)
   }
 
   getRestaurants(): void {
@@ -96,5 +102,41 @@ export class LocationRestaurantComponent {
         }
       });
     }
+  }
+
+  getProductDiscounts(): void {
+    let restaurantId = this.chooseRestaurantFrom.get('selectedRestaurant')?.value;
+    this.productDiscountService.getCache().subscribe(
+      (cached: ProductDiscount[]) => {
+        this.productDiscounts = cached.filter(discount => discount.restaurantId === restaurantId);
+
+        for (let product of this.products!) {
+          for (let discount of this.productDiscounts) {
+            if (discount.menuItemId === product.menuItemId) {
+              let newDiscount: DiscountProductInfo = {
+                productDiscountId: discount.productDiscountId,
+                discountValue: discount.discountValue,
+                restaurantId: discount.restaurantId,
+                menuItemId: product.menuItemId!,
+                startDate: discount.startDate,
+                endDate: discount.endDate,
+                productName: product.name,
+                imageUrl: product.imageUrl,
+                unitPrice: product.unitPrice,
+                active: discount.active
+              }
+              this.discountInfo.push(newDiscount);
+              break;
+            }
+          }
+        }
+        console.log(this.discountInfo)
+
+      }
+    );
+  }
+
+  formatAmount(amount: number): string {
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 }

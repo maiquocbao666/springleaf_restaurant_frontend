@@ -18,6 +18,10 @@ import { User } from 'src/app/interfaces/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserBillHistoriesComponent } from '../user-bill-histories/user-bill-histories.component';
+import { DiscountService } from 'src/app/services/discount.service';
+import { ProductDiscountService } from 'src/app/services/product-discount.service';
+import { ProductDiscount } from 'src/app/interfaces/product-discounts';
+import { DiscountProductInfo } from '../user-discounts/user-discounts.component';
 
 @Component({
   selector: 'app-user-cart',
@@ -40,7 +44,7 @@ export class UserCartComponent implements OnInit {
   cartInformationArray: CartInfomation[] = [];
 
   selectedItems: CartInfomation[] = [];
-  selectAllChecked : boolean = false;
+  selectAllChecked: boolean = false;
   selections: { [key: string]: boolean } = {};
 
   userAddressHouse: string = '';
@@ -50,6 +54,9 @@ export class UserCartComponent implements OnInit {
   user: User | null = null;
   ship: number | null = null;
   finalPrice2: number | null = null;
+
+  productDiscounts: ProductDiscount[] = [];
+  discountInfo: DiscountProductInfo[] = []
   constructor(
     private cartService: CartService,
     private deliveryOrderService: DeliveryOrderService,
@@ -61,6 +68,8 @@ export class UserCartComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private authenticationService: AuthenticationService,
+    private discountService: DiscountService,
+    private productDiscountService: ProductDiscountService
   ) {
     const provincesString = localStorage.getItem('Provinces');
     if (provincesString) {
@@ -76,8 +85,8 @@ export class UserCartComponent implements OnInit {
     } else {
       console.error('No products found in local storage or the value is null.');
     }
-    
-    
+
+
   }
 
   ngOnInit(): void {
@@ -110,7 +119,7 @@ export class UserCartComponent implements OnInit {
     this.cartService.wardData$.subscribe(data => {
       this.Wards = Object.values(data);
     });
-
+    this.getProductDiscounts();
   }
 
   initUserAddress() {
@@ -162,14 +171,61 @@ export class UserCartComponent implements OnInit {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   }
 
+  getProductDiscounts(): void {
+
+    this.productDiscountService.getCache().subscribe(
+      (cached: ProductDiscount[]) => {
+        this.productDiscounts = cached.filter(discount => discount.restaurantId === this.user?.restaurantBranchId);
+
+        // for (let product of this.products!) {
+
+        //   for (let discount of this.productDiscounts) {
+
+        //     if (discount.menuItemId === product.menuItemId) {
+        //       let newDiscount: DiscountProductInfo = {
+        //         productDiscountId: discount.productDiscountId,
+        //         discountValue: discount.discountValue,
+        //         restaurantId: discount.restaurantId,
+        //         menuItemId: product.menuItemId!,
+        //         startDate: discount.startDate,
+        //         endDate: discount.endDate,
+        //         productName: product.name,
+        //         imageUrl: product.imageUrl,
+        //         unitPrice: product.unitPrice,
+        //         active: discount.active
+        //       }
+        //       this.discountInfo.push(newDiscount);
+        //       break;
+        //     }
+        //   }
+        // }
+
+
+      }
+    );
+  }
+
   setCartInfomationArrays() {
     this.cartInformationArray = [];
+
     if (this.orderDetailByUser && this.products) {
       for (let i = 0; i < this.orderDetailByUser.length; i++) {
         const orderDetail = this.orderDetailByUser[i];
+        let cartInfoAdded = false;
+
         for (let j = 0; j < this.products.length; j++) {
           const product = this.products[j];
+
           if (orderDetail.menuItemId === product.menuItemId) {
+            let dis = 0;
+
+            for (let discount of this.productDiscounts) {
+              if (discount.menuItemId === orderDetail.menuItemId) {
+                dis = discount.discountValue;
+                break;
+              }
+            }
+
             const cartInfo: CartInfomation = {
               orderDetailId: orderDetail.orderDetailId,
               order: orderDetail.orderId,
@@ -178,14 +234,27 @@ export class UserCartComponent implements OnInit {
               menuItemPrice: product.unitPrice,
               menuItemImage: product.imageUrl,
               menuItemName: product.name,
-              menuItemQuantity: product.categoryId
+              menuItemQuantity: product.categoryId,
+              menuItemDiscount: dis
             };
-            this.cartInformationArray.push(cartInfo)
+
+            // Kiểm tra xem cartInfo đã được thêm vào mảng chưa
+            if (!this.cartInformationArray.some(ci => ci.menuItem === cartInfo.menuItem)) {
+              console.log(dis);
+              this.cartInformationArray.push(cartInfo);
+              cartInfoAdded = true;
+            }
           }
+        }
+
+        // Nếu không tìm thấy sản phẩm tương ứng, bạn có thể xử lý nó ở đây nếu cần.
+        if (!cartInfoAdded) {
+          console.log('Không tìm thấy sản phẩm cho orderDetail có id:', orderDetail.orderDetailId);
         }
       }
     }
   }
+
 
   validateQuantity(event: Event, cart: any): void {
     const inputElement = event.target as HTMLInputElement;
@@ -232,10 +301,10 @@ export class UserCartComponent implements OnInit {
     }
     if (this.cartInformationArray.length === 1) {
       this.selectAllChecked = !this.selectAllChecked;
-    } 
-    else if(this.cartInformationArray.length === this.selectedItems.length){
+    }
+    else if (this.cartInformationArray.length === this.selectedItems.length) {
       this.selectAllChecked = true;
-    }else if(this.cartInformationArray.length !== this.selectedItems.length){
+    } else if (this.cartInformationArray.length !== this.selectedItems.length) {
       this.selectAllChecked = false;
     }
   }
@@ -244,10 +313,18 @@ export class UserCartComponent implements OnInit {
     let totalPrice = 0;
 
     for (const cart of this.selectedItems) {
-      totalPrice += cart.menuItemPrice * cart.quantity;
+        const matchingDiscount = this.productDiscounts.find(discount => discount.menuItemId === cart.menuItem);
+
+        if (matchingDiscount) {
+            totalPrice += (cart.menuItemPrice * (100 - matchingDiscount.discountValue) / 100) * cart.quantity;
+        } else {
+            totalPrice += cart.menuItemPrice * cart.quantity;
+        }
     }
+
     return totalPrice;
-  }
+}
+
 
   createDelivery() {
     if (this.selectedItems.length > 0) {
@@ -256,13 +333,13 @@ export class UserCartComponent implements OnInit {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${jwtToken}`
       });
-      let listDetail : CartDetail[] =  [];
-      for(const item of this.selectedItems){
-        let cartDetail : CartDetail = {
-          orderDetailId : item.orderDetailId,
-          orderId : item.order,
-          menuItemId : item.menuItem,
-          quantity : item.quantity
+      let listDetail: CartDetail[] = [];
+      for (const item of this.selectedItems) {
+        let cartDetail: CartDetail = {
+          orderDetailId: item.orderDetailId,
+          orderId: item.order,
+          menuItemId: item.menuItem,
+          quantity: item.quantity
         }
         listDetail.push(cartDetail);
       }
@@ -295,6 +372,7 @@ export class UserCartComponent implements OnInit {
             next: (response) => {
               if (response.message === "Delete is success") {
                 this.cartDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
+                this.getProductDiscounts();
                 this.toastService.showTimedAlert('Xóa thành công', '', 'success', 2000);
               }
             },
@@ -313,31 +391,31 @@ export class UserCartComponent implements OnInit {
   }
 
   deleteAllCartDetail(): void {
-    if(this.selectAllChecked){
+    if (this.selectAllChecked) {
       this.toastService.showConfirmAlert('Bạn chắc chắn xóa?', '', 'warning')
-      .then((result) => {
-        if (result.isConfirmed) {
-          for (let cart of this.cartInformationArray) {
-            this.cartDetailService.delete(cart.orderDetailId as number).subscribe({
-              next: (response) => {
-                
-              },
-              error: (error) => {
-                this.toastService.showTimedAlert('Xóa thất bại', error, 'error', 2000);
-              }
-            });
-          }
-          this.toastService.showTimedAlert('Xóa thành công', '', 'success', 2000);
-          this.cartInformationArray = [];
-          this.cartDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
+        .then((result) => {
+          if (result.isConfirmed) {
+            for (let cart of this.cartInformationArray) {
+              this.cartDetailService.delete(cart.orderDetailId as number).subscribe({
+                next: (response) => {
 
-        }
-      });
-    }else{
+                },
+                error: (error) => {
+                  this.toastService.showTimedAlert('Xóa thất bại', error, 'error', 2000);
+                }
+              });
+            }
+            this.toastService.showTimedAlert('Xóa thành công', '', 'success', 2000);
+            this.cartInformationArray = [];
+            this.cartDetailService.getUserOrderDetail(this.orderByUser?.orderId as number).subscribe();
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+          }
+        });
+    } else {
       this.toastService.showTimedAlert('Vui lòng chọn sản phẩm', '', 'info', 2000);
     }
-    
+
 
   }
 
@@ -449,5 +527,6 @@ export interface CartInfomation {
   menuItemName: string;
   menuItemPrice: number;
   menuItemImage: string;
-  menuItemQuantity: number
+  menuItemQuantity: number;
+  menuItemDiscount: number;
 }

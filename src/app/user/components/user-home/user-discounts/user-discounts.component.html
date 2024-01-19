@@ -29,10 +29,10 @@
                                     {{product.productName}}
                                 </h5>
                                 <h6>
-                                    <span>20%</span> Off
+                                    <span>{{product.discountValue}}%</span> Off
                                 </h6>
                                 <h6>
-                                    <s>{{formatAmount(product.unitPrice)}}</s> {{formatAmount(product.unitPrice*product.discountValue/100)}}
+                                    <s>{{formatAmount(product.unitPrice)}}</s> {{formatAmount(product.unitPrice-(product.unitPrice*product.discountValue/100))}}
                                 </h6>
                                 <a (click)="addToCart(product.menuItemId)">
                                     <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"

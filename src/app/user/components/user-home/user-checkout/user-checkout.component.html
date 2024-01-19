@@ -9,8 +9,8 @@
             <b>Địa chỉ nhận hàng:</b> {{userAddressHouse}}, {{userWard?.WardName}}, {{userDistrict?.DistrictName}}, {{userProvince?.ProvinceName}}
           </p>
         </div>
-        <div><button type="button" class="comic-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Thay
-            đổi</button></div>
+        <!-- <div><button type="button" class="comic-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Thay
+            đổi</button></div> -->
       </div>
       </div>
     </div>
@@ -30,8 +30,12 @@
                   <span>{{cart.menuItemName}}</span>
                   <span>Số lượng : {{cart.quantity}}</span>
                 </div>
-                <div>
+                <div *ngIf="cart.menuItemDiscount===0">
                   <span>Tổng tiền: {{ formatAmount(cart.menuItemPrice * cart.quantity)}}</span>
+                </div>
+                <div *ngIf="cart.menuItemDiscount!==0">
+                  <span>Tổng tiền: {{ formatAmount((cart.menuItemPrice*(100-cart.menuItemDiscount)/100) * cart.quantity)}}</span>
+                  
                 </div>
               </li>
               <hr>

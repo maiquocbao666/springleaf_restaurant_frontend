@@ -80,7 +80,7 @@
   </a>
 </div>
 <div class="modal-body">
-  <form [formGroup]="userForm">
+  <form [formGroup]="userForm" (submit)="register()">
     <div class="row g-3">
       <div class="col-md-4">
         <label for="exampleInputPassword1" class="form-label">Họ và tên:<span style="color: red;">(*)</span></label>

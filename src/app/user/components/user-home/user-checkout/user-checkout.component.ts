@@ -22,6 +22,8 @@ import { Restaurant } from 'src/app/interfaces/restaurant';
 import { RestaurantService } from 'src/app/services/restaurant.service';
 import { DiscountService } from 'src/app/services/discount.service';
 import { Discount } from 'src/app/interfaces/discount';
+import { BillInfoComponent } from 'src/app/components/bill-info/bill-info.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-user-checkout',
@@ -68,6 +70,7 @@ import { Discount } from 'src/app/interfaces/discount';
   discounts: Discount[] = [];
   constructor(
     private vnpayService: VNPayService,
+    private modalService: NgbModal,
     private router: Router,
     private cartService: CartService,
     private orderService: OrderService,
@@ -114,6 +117,7 @@ import { Discount } from 'src/app/interfaces/discount';
     this.calculateTotalPrice();
     this.initUserRestaurantAddress();
     this.getVoucher();
+    console.log(this.cartInfos)
   }
 
   getRestaurants(): void {
@@ -216,7 +220,7 @@ import { Discount } from 'src/app/interfaces/discount';
     let totalPrice = 0;
 
     this.cartInfos.forEach((item) => {
-      totalPrice += item.quantity * item.menuItemPrice;
+      totalPrice += item.quantity * item.menuItemPrice*(1-item.menuItemDiscount/100);
     });
     this.total = totalPrice;
     return totalPrice;
@@ -245,11 +249,11 @@ import { Discount } from 'src/app/interfaces/discount';
   }
 
   payWithVNPay(): void {
-    this.orderTotal = 0; // lấy dữ liệu động tổng tiền
+    this.orderTotal = this.totalAndShip!; // lấy dữ liệu động tổng tiền
     this.orderInfo = 'CartPayment,' + this.orderByUser?.orderId?.toString() + "," || ""; // dữ liệu order detail
     const cartDetail: CartDetail[] = [];
     for (const cart of this.cartInfos) {
-      this.orderTotal += cart.menuItemPrice * cart.quantity;
+      //this.orderTotal += cart.menuItemPrice*(1-cart.menuItemDiscount/100) * cart.quantity;
       this.orderInfo += cart.orderDetailId + ",";
     }
     this.orderInfo = this.orderInfo.replace(/,$/, "");
@@ -375,6 +379,8 @@ import { Discount } from 'src/app/interfaces/discount';
           if (response.message === 'Checkout success') {
             this.toast.showTimedAlert('Thanh toán thành công', 'Cám ơn quý khách', 'success', 1500);
             this.getUserCart();
+            this.cartInfos = [];
+            this.openBillInfoModal("CartPaymentCOD", totalAmount!);
           } else if (response.message === 'Checkout failed') {
             this.toast.showTimedAlert('Thanh toán thất bại', 'Vui lòng kiểm tra lại', 'error', 1500);
           }
@@ -385,6 +391,16 @@ import { Discount } from 'src/app/interfaces/discount';
           console.error('Error:', error);
         }
       });
+  }
+
+  openBillInfoModal(
+    info: string,
+    totalPrice: number
+  ) {
+    const modalRef = this.modalService.open(BillInfoComponent, { size: 'lg' });
+    
+      modalRef.componentInstance.selected = 'ReservationPaymentReservationDeposit';
+      modalRef.componentInstance.totalPrice = totalPrice;
   }
 
 
@@ -635,7 +651,8 @@ export interface CartInfomation {
   menuItemName: string;
   menuItemPrice: number;
   menuItemImage: string;
-  menuItemQuantity: number
+  menuItemQuantity: number;
+  menuItemDiscount: number;
 }
 
 export interface Date {

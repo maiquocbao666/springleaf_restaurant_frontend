@@ -260,36 +260,36 @@ export class LoginComponent {
   //----Form đăng nhập----//
   custormValidatorUsernameLogin(control: AbstractControl) {
     const username = control.value;
-    // if (!username) {
-    //   return { 'required': true, 'message': 'Tài khoản không được để trống' };
-    // }
+    if (!username) {
+      return { 'required': true, 'message': 'Tài khoản không được để trống' };
+    }
 
-    // if (username.length < 6) {
-    //   return { 'minLength': true, 'message': 'Tài khoản phải ít nhất 6 ký tự' };
-    // }
+    if (username.length < 6) {
+      return { 'minLength': true, 'message': 'Tài khoản phải ít nhất 6 ký tự' };
+    }
 
-    // if (username.length > 12) {
-    //   return { 'maxLength': true, 'message': 'Tài khoản tối đa 12 ký tự' };
-    // }
-    // const pattern = /^[a-zA-Z0-9]+$/;
-    // if (!pattern.test(username)) {
-    //   return { 'invalidUsername': true, 'message': 'Tài khoản không hợp lệ, chỉ cho phép chữ cái và số' };
-    // }
+    if (username.length > 12) {
+      return { 'maxLength': true, 'message': 'Tài khoản tối đa 12 ký tự' };
+    }
+    const pattern = /^[a-zA-Z0-9]+$/;
+    if (!pattern.test(username)) {
+      return { 'invalidUsername': true, 'message': 'Tài khoản không hợp lệ, chỉ cho phép chữ cái và số' };
+    }
     return null;
   }
   customPasswordLoginValidator(control: AbstractControl) {
-    // const password = control.value;
-    // if (!password) {
-    //   return { 'required': true, 'message': 'Mật khẩu không được để trống' };
-    // }
+    const password = control.value;
+    if (!password) {
+      return { 'required': true, 'message': 'Mật khẩu không được để trống' };
+    }
 
-    // if (password.length < 6) {
-    //   return { 'minLength': true, 'message': 'Mật khẩu phải ít nhất 6 ký tự' };
-    // }
+    if (password.length < 6) {
+      return { 'minLength': true, 'message': 'Mật khẩu phải ít nhất 6 ký tự' };
+    }
 
-    // if (password.length > 12) {
-    //   return { 'maxLength': true, 'message': 'Mật khẩu tối đa 12 ký tự' };
-    // }
+    if (password.length > 12) {
+      return { 'maxLength': true, 'message': 'Mật khẩu tối đa 12 ký tự' };
+    }
     return null;
   }
 

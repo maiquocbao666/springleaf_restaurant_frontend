@@ -114,6 +114,8 @@ export class AuthenticationService {
     return this.http.post(`http://localhost:8080/auth/register2`, registerData);
   }
 
+  
+
   login(username: string, password: string, rememberMe: boolean): Promise<boolean> {
     
     return new Promise<boolean>((resolve, reject) => {

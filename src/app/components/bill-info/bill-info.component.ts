@@ -48,6 +48,12 @@ export class BillInfoComponent {
             this.billTime = this.getCurrentTimeFormatted();
             this.billDetail = "Thanh toán hóa đơn đặt trước bàn ăn";
         }
+        if(this.selected === "CartPaymentCOD"){
+            this.billInfo = "Thanh toán hóa đơn mua hàng";
+            this.billPrice = Number(this.totalPrice);
+            this.billTime = this.getCurrentTimeFormatted();
+            this.billDetail = "Thanh toán COD hóa đơn đặt món mang đi";
+        }
 
     }
 

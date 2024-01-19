@@ -33,8 +33,8 @@ export class UserProductsComponent implements OnInit {
 
   categories$!: Observable<Category[]>;
   products!: Product[];
-  productDiscounts!: ProductDiscount[];
-  productFinal! : DiscountProductInfo2[];
+  productDiscounts: ProductDiscount[] = [];
+  productFinal : DiscountProductInfo2[] = [];
   categories: Category[] = [];
   categoryId!: number; // Khởi tạo categoryId là undefined
   user: User | null = null;
@@ -87,7 +87,6 @@ export class UserProductsComponent implements OnInit {
       console.log(this.productDiscounts);
       //console.log( parsedProducts);
       if(parsedProducts && this.productDiscounts){
-        this.productFinal = [];
         for(let x of this.productDiscounts){
           for(let y of parsedProducts){
             if(x.menuItemId === y.menuItemId){

@@ -20,6 +20,7 @@ import { DeliveryOrder } from 'src/app/interfaces/delivery-order';
 import { Order } from 'src/app/interfaces/order';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import Swal from 'sweetalert2';
+import { CartDetail } from 'src/app/interfaces/cart-detail';
 
 @Component({
   selector: 'app-user-categories',
@@ -36,11 +37,12 @@ export class UserCategoriesComponent {
 
   cartByUser: DeliveryOrder | null = null;
   orderByUser: Order | null = null;
+  orderDetailByUser: CartDetail[] | null = null;
 
-  user : User | null= null;
+  user: User | null = null;
   products!: Product[];
-  productDiscounts!: ProductDiscount[];
-  productFinal! : DiscountProductInfo2[];
+  productDiscounts: ProductDiscount[] = [];
+  productFinal: DiscountProductInfo2[] = [];
 
   categoriesUrl = 'categories';
 
@@ -55,12 +57,19 @@ export class UserCategoriesComponent {
     private modalService: NgbModal,
     private toastService: ToastService,
     private favoriteService: FavoriteService,
-    private productDiscountService: ProductDiscountService
-    ) {
-      this.authService.getUserCache().subscribe((data) => {
-        this.user = data;
-        
-      });
+    private productDiscountService: ProductDiscountService,
+    private cartDetailService: CartDetailService,
+  ) {
+    this.authService.getUserCache().subscribe((data) => {
+      this.user = data;
+    });
+    const productsString = localStorage.getItem('products');
+    if (productsString) {
+      const parsedProducts: Product[] = JSON.parse(productsString);
+      this.products = parsedProducts;
+    } else {
+      console.error('No products found in local storage or the value is null.');
+    }
   }
 
   chunkArray(array: any[], size: number): any[] {
@@ -87,45 +96,34 @@ export class UserCategoriesComponent {
     this.getCategories();
     this.checkScreenSize();
     this.getProductDiscount();
-    const productsString = localStorage.getItem('products');
-    if (productsString) {
-      const parsedProducts: Product[] = JSON.parse(productsString);
-      console.log(this.productDiscounts);
-      //console.log( parsedProducts);
-      if(parsedProducts && this.productDiscounts){
-        this.productFinal = [];
-        for(let x of this.productDiscounts){
-          for(let y of parsedProducts){
-            if(x.menuItemId === y.menuItemId){
-              const newPro : DiscountProductInfo2 = {
-                productDiscountId : x.productDiscountId,
-                menuItemId : y.menuItemId,
-                categoryId : y.categoryId,
-                description : y.description,
-                imageUrl : y.imageUrl,
-                productName : y.name,
-                discountValue : x.discountValue,
-                unitPrice : y.unitPrice,
-                startDate : x.startDate,
-                endDate : x.endDate,
-                active : x.active,
-                restaurantId : this.user?.restaurantBranchId!,
-              }
-              this.productFinal.push(newPro);
-            }
-          }
-        }
-        console.log(this.productFinal)
-      }
-    } else {
-      console.error('No products found in local storage or the value is null.');
-    }
+    this.getUserDeliveryOrder();
   }
 
   getProductDiscount(): void {
     this.productDiscountService.getCache().subscribe(
       (cached: any[]) => {
         this.productDiscounts = cached.filter(productDiscount => productDiscount.restaurantId === this.user?.restaurantBranchId);
+        for (let discount of this.productDiscounts) {
+          for (let product of this.products) {
+            if (discount.menuItemId === product.menuItemId) {
+              let newPro: DiscountProductInfo2 = {
+                productDiscountId: discount.productDiscountId,
+                menuItemId: product.menuItemId,
+                categoryId: product.categoryId,
+                description: product.description,
+                imageUrl: product.imageUrl,
+                productName: product.name,
+                discountValue: discount.discountValue,
+                unitPrice: product.unitPrice,
+                startDate: discount.startDate,
+                endDate: discount.endDate,
+                active: discount.active,
+                restaurantId: this.user?.restaurantBranchId!,
+              }
+              this.productFinal.push(newPro);
+            }
+          }
+        }
       }
     )
   }
@@ -207,6 +205,67 @@ export class UserCategoriesComponent {
     );
   }
 
-  
+  getUserDeliveryOrder(): void {
+    this.deliveryOrderService.getUserCartCache().subscribe(
+      (cached: any | null) => {
+        if (cached === null) {
+          console.log('Lấy dữ liệu Giỏ hàng mới từ API');
+          this.deliveryOrderService.getUserCart().subscribe();
+        } else {
+          console.log('Lấy dữ liệu từ cache');
+          this.cartByUser = cached;
+          this.getUserOrders();
+        }
+
+      }
+    );
+  }
+
+  // Lấy dữ liệu order
+  getUserOrders(): void {
+    this.orderService.getUserOrderCache().subscribe(
+      (cached: any | null) => {
+        if (cached === null && this.cartByUser) {
+          console.log('Lấy dữ liệu Order mới');
+          this.orderService.getUserOrder(this.cartByUser.deliveryOrderId as number).subscribe(
+            response => {
+              this.orderByUser = response;
+              console.log(response);
+            },
+            error => {
+              console.error('Error fetching user order:', error);
+            }
+          );
+        } else if (this.cartByUser) {
+          console.log('Lấy dữ liệu từ cache' + this.orderByUser);
+          this.orderByUser = cached;
+          this.getUserOrderDetails();
+        }
+      },
+      error => {
+        console.error('Error fetching user order cache:', error);
+      }
+    );
+  }
+
+  // Lấy dữ liệu order detail của cart
+  getUserOrderDetails(): void {
+
+    this.cartDetailService.getOrderDetailsCache().subscribe(
+      (cached: any[] | null) => {
+        if (cached === null && this.orderByUser !== null) {
+          this.cartDetailService.getUserOrderDetail(this.orderByUser.orderId).subscribe();
+        } else {
+          
+          this.orderDetailByUser = cached;
+          
+
+        }
+
+      }
+    )
+  }
+
+
 
 }

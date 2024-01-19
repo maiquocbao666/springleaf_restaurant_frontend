@@ -84,14 +84,17 @@ export class UserDiscountsComponent {
     }
 
     getProductDiscounts(): void {
-        this.discountInfo = [];
+        
         this.productDiscountService.getCache().subscribe(
             (cached: ProductDiscount[]) => {
                 this.productDiscounts = cached.filter(discount => discount.restaurantId === this.user?.restaurantBranchId);
-                console.log("here" + (this.productDiscounts.length));
+                
+                for(let product of this.products!){
+                    
                 for(let discount of this.productDiscounts){
-                    for(let product of this.products!){
-                        if(discount.productDiscountId === product.menuItemId){
+                    
+                        if(discount.menuItemId === product.menuItemId){
+                            console.log("3" + discount.menuItemId + product.menuItemId)
                             let newDiscount : DiscountProductInfo = {
                                 productDiscountId : discount.productDiscountId,
                                 discountValue : discount.discountValue,
@@ -105,6 +108,7 @@ export class UserDiscountsComponent {
                                 active : discount.active
                             }
                             this.discountInfo.push(newDiscount);
+                            break;
                         }
                     }
                 }
